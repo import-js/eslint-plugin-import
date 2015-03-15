@@ -1,0 +1,33 @@
+{
+  "name": "eslint-plugin-import",
+  "version": "0.0.1",
+  "description": "Import with sanity.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --recursive tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benmosher/eslint-plugin-import"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "es6",
+    "jsnext"
+  ],
+  "author": "Ben Mosher (me@benmosher.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+  },
+  "homepage": "https://github.com/benmosher/eslint-plugin-import",
+  "devDependencies": {
+    "eslint": "^0.17.0",
+    "eslint-tester": "^0.6.0",
+    "mocha": "^2.2.1"
+  }
+}
