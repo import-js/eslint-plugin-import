@@ -1,12 +1,13 @@
 "use strict";
 
 var linter = require("eslint").linter,
-    ESLintTester = require("eslint-tester"),
-    eslintTester = new ESLintTester(linter);
+    ESLintTester = require("eslint-tester");
+
+var eslintTester = new ESLintTester(linter);
 
 eslintTester.addRuleTest("lib/rules/test-import-visitor", {
   valid: [
-    "var validVariable = true;",
+    "var validVariable = true;"
   ],
 
   invalid: [
