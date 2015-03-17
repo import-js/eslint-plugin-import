@@ -1,4 +1,7 @@
 exports.rules = {
-	"test-import-visitor": require("./lib/rules/test-import-visitor"),
   "valid-relative-path": require("./lib/rules/valid-relative-path")
+};
+
+exports.rulesConfig = {
+  "valid-relative-path": [2, [".js", ".coffee", ".es6"]]
 };

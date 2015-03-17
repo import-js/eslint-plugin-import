@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Import with sanity.",
   "main": "index.js",
   "directories": {
@@ -31,5 +31,8 @@
     "eslint-tester": "^0.6.0",
     "mocha": "^2.2.1",
     "object-assign": "^2.0.0"
+  },
+  "peerDependencies": {
+    "eslint": ">=0.16.0"
   }
 }
