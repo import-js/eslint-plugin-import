@@ -5,7 +5,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 
 Current support:
 
-* Ensures relative imports point to a file that exists. ([`valid-relative-path`][#valid-relative-path])
+* Ensures relative imports point to a file that exists. ([`valid-relative-path`](#valid-relative-path))
 
 Planned:
 
