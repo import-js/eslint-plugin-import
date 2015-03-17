@@ -1,3 +1,5 @@
 ---
-  env:
-    mocha: true
+env:
+  mocha: true
+rules:
+  no-unused-expressions: 0
