@@ -15,12 +15,12 @@ function filename(f) {
   return path.join(process.cwd(), "./files", f);
 }
 
-var ERRORS = [{message: "Imported file does not exist.", type: "Literal"}];
+var ERRORS = [{message: "Name not found in module.", type: "Identifier"}];
 
-eslintTester.addRuleTest("lib/rules/valid-path", {
+eslintTester.addRuleTest("lib/rules/named", {
   valid: [
     assign({
-      code: "import foo from './bar';",
+      code: "import { foo } from './bar';",
       filename: filename("foo.js")
     }, ecmaFeatures),
     assign({
@@ -31,10 +31,22 @@ eslintTester.addRuleTest("lib/rules/valid-path", {
   ],
 
   invalid: [
+    // assign({
+    //   code: "import foo from './bar';",
+    //   filename: filename("foo.js"),
+    //   errors: ERRORS
+    // }, ecmaFeatures),
     assign({
-      code: "import bar from './baz';",
+      code: "import { baz } from './bar';",
       filename: filename("foo.js"),
       errors: ERRORS
+    }, ecmaFeatures),
+
+    // test multiple
+    assign({
+      code: "import { baz, bop } from './bar';",
+      filename: filename("foo.js"),
+      errors: ERRORS.concat(ERRORS)
     }, ecmaFeatures)
   ]
 });

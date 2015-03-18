@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Import with sanity.",
   "main": "index.js",
   "directories": {
@@ -36,6 +36,8 @@
     "eslint": ">=0.16.0"
   },
   "dependencies": {
+    "es6-set": "^0.1.1",
+    "espree": "^1.12.0",
     "resolve": "^1.1.6"
   }
 }
