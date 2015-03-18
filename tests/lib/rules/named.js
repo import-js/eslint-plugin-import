@@ -37,6 +37,11 @@ eslintTester.addRuleTest("lib/rules/named", {
     assign({
       code: "import {a, b, d} from './common';",
       filename: FILENAME
+    }, ecmaFeatures),
+
+    assign({
+      code: "import { ActionTypes } from './qc';",
+      filename: FILENAME
     }, ecmaFeatures)
   ],
 
@@ -68,6 +73,12 @@ eslintTester.addRuleTest("lib/rules/named", {
     assign({
       code: "import { a } from './common';",
       args: [2, "es6"],
+      filename: FILENAME,
+      errors: ERRORS
+    }, ecmaFeatures),
+
+    assign({
+      code: "import { ActionTypess } from './qc';",
       filename: FILENAME,
       errors: ERRORS
     }, ecmaFeatures)
