@@ -25,7 +25,10 @@ eslintTester.addRuleTest("lib/rules/exists", {
     }, ecmaFeatures),
     assign({
       code: "import bar from './bar.js';",
-      args: [1, [""]],
+      filename: filename("foo.js")
+    }, ecmaFeatures),
+    assign({
+      code: "import {someThing} from './module';",
       filename: filename("foo.js")
     }, ecmaFeatures)
   ],

@@ -26,11 +26,16 @@ eslintTester.addRuleTest("lib/rules/named", {
     }, ecmaFeatures),
     assign({
       code: "import bar from './bar.js';",
-      args: [1, [""]],
+      settings: { "import/extensions": [".js"] },
       filename: FILENAME
     }, ecmaFeatures),
     assign({
       code: "import {a, b, d} from './named-exports';",
+      filename: FILENAME
+    }, ecmaFeatures),
+
+    assign({
+      code: "import {a, b, d} from './common';",
       filename: FILENAME
     }, ecmaFeatures)
   ],
@@ -56,6 +61,13 @@ eslintTester.addRuleTest("lib/rules/named", {
 
     assign({
       code: "import {a, b, c} from './named-exports';",
+      filename: FILENAME,
+      errors: ERRORS
+    }, ecmaFeatures),
+
+    assign({
+      code: "import { a } from './common';",
+      args: [2, "es6"],
       filename: FILENAME,
       errors: ERRORS
     }, ecmaFeatures)
