@@ -16,6 +16,7 @@ function filename(f) {
 }
 
 var ERRORS = [{message: "Name not found in module.", type: "Identifier"}];
+var FILENAME = filename("foo.js");
 
 eslintTester.addRuleTest("lib/rules/named", {
   valid: [
@@ -26,7 +27,11 @@ eslintTester.addRuleTest("lib/rules/named", {
     assign({
       code: "import bar from './bar.js';",
       args: [1, [""]],
-      filename: filename("foo.js")
+      filename: FILENAME
+    }, ecmaFeatures),
+    assign({
+      code: "import {a, b, d} from './named-exports';",
+      filename: FILENAME
     }, ecmaFeatures)
   ],
 
@@ -47,6 +52,12 @@ eslintTester.addRuleTest("lib/rules/named", {
       code: "import { baz, bop } from './bar';",
       filename: filename("foo.js"),
       errors: ERRORS.concat(ERRORS)
+    }, ecmaFeatures),
+
+    assign({
+      code: "import {a, b, c} from './named-exports';",
+      filename: FILENAME,
+      errors: ERRORS
     }, ecmaFeatures)
   ]
 });
