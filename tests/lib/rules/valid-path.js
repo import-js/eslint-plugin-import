@@ -17,11 +17,8 @@ function filename(f) {
 
 var ERRORS = [{message: "Imported file does not exist.", type: "Literal"}];
 
-eslintTester.addRuleTest("lib/rules/valid-relative-path", {
+eslintTester.addRuleTest("lib/rules/valid-path", {
   valid: [
-    assign({
-      code: "import * as foo from 'bar';" // not relative
-    }, ecmaFeatures),
     assign({
       code: "import foo from './bar';",
       filename: filename("foo.js")
@@ -34,11 +31,6 @@ eslintTester.addRuleTest("lib/rules/valid-relative-path", {
   ],
 
   invalid: [
-    assign({
-      code: "import bar from './bar.js';",
-      filename: filename("foo.js"),
-      errors: ERRORS
-    }, ecmaFeatures),
     assign({
       code: "import bar from './baz';",
       filename: filename("foo.js"),

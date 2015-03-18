@@ -1,7 +1,7 @@
 exports.rules = {
-  "valid-relative-path": require("./lib/rules/valid-relative-path")
+  "valid-path": require("./lib/rules/valid-path")
 };
 
 exports.rulesConfig = {
-  "valid-relative-path": [2, [".js", ".coffee", ".es6"]]
+  "valid-path": [2, [".js", ".coffee", ".es6"]]
 };
