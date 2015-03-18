@@ -4,6 +4,6 @@ exports.rules = {
 };
 
 exports.rulesConfig = {
-  "exists": [2, [".js", ".coffee", ".es6"]],
-  "named": [2]
+  "exists": 2,
+  "named": 2
 };
