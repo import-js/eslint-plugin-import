@@ -9,7 +9,7 @@ var linter = require("eslint").linter,
 var eslintTester = new ESLintTester(linter);
 
 
-var ecmaFeatures = {ecmaFeatures: { modules: true}};
+var ecmaFeatures = {ecmaFeatures: { modules: true }};
 
 function filename(f) {
   return path.join(process.cwd(), "./files", f);
