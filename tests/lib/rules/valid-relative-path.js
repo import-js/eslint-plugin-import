@@ -15,6 +15,8 @@ function filename(f) {
   return path.join(process.cwd(), "./files", f);
 }
 
+var ERRORS = [{message: "Imported file does not exist.", type: "Literal"}];
+
 eslintTester.addRuleTest("lib/rules/valid-relative-path", {
   valid: [
     assign({
@@ -27,8 +29,7 @@ eslintTester.addRuleTest("lib/rules/valid-relative-path", {
     assign({
       code: "import bar from './bar.js';",
       args: [1, [""]],
-      filename: filename("foo.js"),
-      errors: [{message: "Imported file does not exist."}]
+      filename: filename("foo.js")
     }, ecmaFeatures)
   ],
 
@@ -36,12 +37,12 @@ eslintTester.addRuleTest("lib/rules/valid-relative-path", {
     assign({
       code: "import bar from './bar.js';",
       filename: filename("foo.js"),
-      errors: [{message: "Imported file does not exist."}]
+      errors: ERRORS
     }, ecmaFeatures),
     assign({
       code: "import bar from './baz';",
       filename: filename("foo.js"),
-      errors: [{message: "Imported file does not exist."}]
+      errors: ERRORS
     }, ecmaFeatures)
   ]
 });
