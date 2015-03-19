@@ -4,13 +4,13 @@ eslint-plugin-import
 
 This plugin intends to support linting of ES6 import syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES6 static module syntax intends to provide, marked up in your editor.
 
-Current support:
+**Current support**:
 
 * Ensure imports point to a file/module that exists. ([`exists`](#exists))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 
-Planned:
+**Planned**:
 
 * Validate that namespace (`*`) imports exist as named exports in remote file, when dereferenced.
 * Currently, will spuriously report on named imports that are the result of re-exporting from a third file (`export * from "./baz"`).
