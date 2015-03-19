@@ -76,6 +76,12 @@ eslintTester.addRuleTest("lib/rules/named", {
     }, ecmaFeatures),
 
     assign({
+      code: "import { a } from './default-export';",
+      filename: FILENAME,
+      errors: ERRORS
+    }, ecmaFeatures),
+
+    assign({
       code: "import { a } from './common';",
       args: [2, "es6-only"],
       filename: FILENAME,
