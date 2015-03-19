@@ -5,17 +5,34 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 
 Current support:
 
-* Ensures relative imports point to a file that exists. ([`valid-relative-path`](#valid-relative-path))
+* Ensure imports point to a file/module that exists. ([`exists`](#exists))
+* Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
+* Ensure a default export is present, given a default import. ([`default`](#default))
 
 Planned:
 
-* Validate that named imports match named exports.
-* Validate that `*` imports exist as named exports in remote file, where dereferenced.
-* Validate that a default export exists, when imported.
+* Validate that namespace (`*`) imports exist as named exports in remote file, when dereferenced.
+* Currently, will spuriously report on named imports that are the result of re-exporting from a third file (`export * from "./baz"`).
 
 
 ## Rules
 
-### `valid-relative-path`
+### `exists`
 
-Ensures an imported file with a relative path exists at that path. Default search extensions are `[".js", ".coffee", ".es6"]`. Provide an alternative array if you want more or fewer. Also, note that you'll need to provide `""` as an extension if you reference your imports with the full extension inline (i.e. `import foo from './bar.js'`).
+Ensures an imported module exists, as defined by standard Node `require.resolve` behavior.
+
+### `named`
+
+Verifies that all named imports are part of the set of named exports in the referenced module.
+
+Note that if there are _no_ named exports, nor a default export, this rule will not report a mismatch, to allow Babel-style `import` of CommonJS modules.
+
+Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
+
+### `default`
+
+If a default import is requested, this rule will report if there is no default export in the imported module.
+
+Note that if there are _no_ named exports, nor a default export, this rule will not report a mismatch, to allow Babel-style `import` of CommonJS modules.
+
+Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
