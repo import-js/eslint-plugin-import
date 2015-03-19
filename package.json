@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "Import with sanity.",
   "main": "index.js",
   "directories": {
@@ -27,7 +27,6 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "chai": "^2.1.2",
-    "eslint": "^0.16.x",
     "eslint-tester": "^0.6.0",
     "mocha": "^2.2.1",
     "object-assign": "^2.0.0"
