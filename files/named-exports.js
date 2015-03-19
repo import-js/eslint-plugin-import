@@ -5,3 +5,7 @@ export {a, b};
 
 var c = 3;
 export {c as d};
+
+export class ExportedClass {
+
+}

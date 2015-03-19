@@ -35,6 +35,11 @@ eslintTester.addRuleTest("lib/rules/named", {
     }, ecmaFeatures),
 
     assign({
+      code: "import {ExportedClass} from './named-exports';",
+      filename: FILENAME
+    }, ecmaFeatures),
+
+    assign({
       code: "import {a, b, d} from './common';",
       filename: FILENAME
     }, ecmaFeatures),
