@@ -26,7 +26,6 @@ eslintTester.addRuleTest("lib/rules/named", {
     }, ecmaFeatures),
     assign({
       code: "import bar from './bar.js';",
-      settings: { "import/extensions": [".js"] },
       filename: FILENAME
     }, ecmaFeatures),
     assign({
