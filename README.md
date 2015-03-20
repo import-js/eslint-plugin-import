@@ -1,6 +1,6 @@
 eslint-plugin-import
 ---
-![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg)
+[![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg)](https://travis-ci.org/benmosher/eslint-plugin-import)
 
 This plugin intends to support linting of ES6 import syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES6 static module syntax intends to provide, marked up in your editor.
 
@@ -13,8 +13,6 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 **Planned**:
 
 * Validate that namespace (`*`) imports exist as named exports in remote file, when dereferenced.
-* Currently, will spuriously report on named imports that are the result of re-exporting from a third file (`export * from "./baz"`).
-
 
 ## Rules
 
