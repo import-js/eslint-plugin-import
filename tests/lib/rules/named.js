@@ -52,6 +52,12 @@ eslintTester.addRuleTest("lib/rules/named", {
     assign({
       code: "import {a, b, c, d} from './re-export';",
       filename: FILENAME
+    }, ecmaFeatures),
+
+    assign({
+      code: "import {foo, bar} from './re-export-names';",
+      args: [2, "es6-only"],
+      filename: FILENAME
     }, ecmaFeatures)
   ],
 
@@ -101,6 +107,13 @@ eslintTester.addRuleTest("lib/rules/named", {
 
     assign({
       code: "import {a, b, c, d, e} from './re-export';",
+      filename: FILENAME,
+      errors: ERRORS
+    }, ecmaFeatures),
+
+    assign({
+      code: "import { a } from './re-export-names';",
+      args: [2, "es6-only"],
       filename: FILENAME,
       errors: ERRORS
     }, ecmaFeatures)
