@@ -9,112 +9,53 @@ var linter = require("eslint").linter,
 var eslintTester = new ESLintTester(linter);
 
 
-var ecmaFeatures = {ecmaFeatures: { modules: true }};
-
-function filename(f) {
-  return path.join(process.cwd(), "./files", f);
+var FILENAME = path.join(process.cwd(), "./files", "foo.js");
+function test(t) {
+  return assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t);
 }
 
-var ERRORS = [{message: "Name not found in module.", type: "Identifier"}];
-var FILENAME = filename("foo.js");
+function error(name, module) {
+  return { message: name + " not found in '" + module + "'", type: "Identifier" };
+}
+
 
 eslintTester.addRuleTest("lib/rules/named", {
   valid: [
-    assign({
-      code: "import { foo } from './bar';",
-      filename: filename("foo.js")
-    }, ecmaFeatures),
-    assign({
-      code: "import bar from './bar.js';",
-      filename: FILENAME
-    }, ecmaFeatures),
-    assign({
-      code: "import {a, b, d} from './named-exports';",
-      filename: FILENAME
-    }, ecmaFeatures),
-
-    assign({
-      code: "import {ExportedClass} from './named-exports';",
-      filename: FILENAME
-    }, ecmaFeatures),
-
-    assign({
-      code: "import {a, b, d} from './common';",
-      filename: FILENAME
-    }, ecmaFeatures),
-
-    assign({
-      code: "import { ActionTypes } from './qc';",
-      filename: FILENAME
-    }, ecmaFeatures),
-
-    assign({
-      code: "import {a, b, c, d} from './re-export';",
-      filename: FILENAME
-    }, ecmaFeatures),
-
-    assign({
-      code: "import {foo, bar} from './re-export-names';",
-      args: [2, "es6-only"],
-      filename: FILENAME
-    }, ecmaFeatures)
+    test({code: "import { foo } from './bar';"}),
+    test({code: "import bar from './bar.js';"}),
+    test({code: "import {a, b, d} from './named-exports';"}),
+    test({code: "import {ExportedClass} from './named-exports';"}),
+    test({code: "import {a, b, d} from './common';"}),
+    test({code: "import { ActionTypes } from './qc';"}),
+    test({code: "import {a, b, c, d} from './re-export';"}),
+    test({code: "import {foo, bar} from './re-export-names';", args: [2, "es6-only"]})
   ],
 
   invalid: [
-    // assign({
-    //   code: "import foo from './bar';",
-    //   filename: filename("foo.js"),
-    //   errors: ERRORS
-    // }, ecmaFeatures),
-    assign({
-      code: "import { baz } from './bar';",
-      filename: filename("foo.js"),
-      errors: ERRORS
-    }, ecmaFeatures),
+    test({code: "import { baz } from './bar';",
+      errors: [error("baz", "./bar")]}),
 
     // test multiple
-    assign({
-      code: "import { baz, bop } from './bar';",
-      filename: filename("foo.js"),
-      errors: ERRORS.concat(ERRORS)
-    }, ecmaFeatures),
+    test({code: "import { baz, bop } from './bar';",
+      errors: [error("baz", "./bar"), error("bop", "./bar")]}),
 
-    assign({
-      code: "import {a, b, c} from './named-exports';",
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures),
+    test({code: "import {a, b, c} from './named-exports';",
+      errors: [error("c", "./named-exports")]}),
 
-    assign({
-      code: "import { a } from './default-export';",
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures),
+    test({code: "import { a } from './default-export';",
+      errors: [error("a", "./default-export")]}),
 
-    assign({
-      code: "import { a } from './common';",
+    test({code: "import { a } from './common';", args: [2, "es6-only"],
+      errors: [error("a", "./common")]}),
+
+    test({code: "import { ActionTypess } from './qc';",
+      errors: [error("ActionTypess", "./qc")]}),
+
+    test({code: "import {a, b, c, d, e} from './re-export';",
+      errors: [error("e", "./re-export")]}),
+
+    test({code: "import { a } from './re-export-names';",
       args: [2, "es6-only"],
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures),
-
-    assign({
-      code: "import { ActionTypess } from './qc';",
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures),
-
-    assign({
-      code: "import {a, b, c, d, e} from './re-export';",
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures),
-
-    assign({
-      code: "import { a } from './re-export-names';",
-      args: [2, "es6-only"],
-      filename: FILENAME,
-      errors: ERRORS
-    }, ecmaFeatures)
+        errors: [error("a", "./re-export-names")]})
   ]
 });
