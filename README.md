@@ -10,6 +10,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Ensure imports point to a file/module that exists. ([`exists`](#exists))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
+* Report ES6 import of CommonJS modules. ([`no-common`](#no-common))
 
 **Planned**:
 
