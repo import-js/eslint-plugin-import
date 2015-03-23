@@ -36,3 +36,7 @@ If a default import is requested, this rule will report if there is no default e
 Note that if there are _no_ named exports, nor a default export, this rule will not report a mismatch, to allow Babel-style `import` of CommonJS modules.
 
 Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
+
+### `no-common`
+
+Report for imports that are defined as CommonJS modules, identified by the presence of `module.exports` or `exports[...]` assignments at the root scope of the module. Off by default.
