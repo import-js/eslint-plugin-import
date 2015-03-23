@@ -1,0 +1,21 @@
+"use strict";
+
+var linter = require("eslint").linter,
+    ESLintTester = require("eslint-tester");
+
+var eslintTester = new ESLintTester(linter);
+
+var test = require("../../utils").test;
+
+eslintTester.addRuleTest("lib/rules/no-common", {
+  valid: [
+    test({code: "import { foo } from './bar';"})
+  ],
+
+  invalid: [
+    test({code: "import { a } from './common';",
+      errors: [{ message: "'./common' is a CommonJS module."}]}),
+    test({code: "import { a } from './export-props';",
+      errors: [{ message: "'./export-props' is a CommonJS module."}]})
+  ]
+});
