@@ -16,6 +16,8 @@ eslintTester.addRuleTest("lib/rules/no-common", {
     test({code: "import { a } from './common';",
       errors: [{ message: "'./common' is a CommonJS module."}]}),
     test({code: "import { a } from './export-props';",
-      errors: [{ message: "'./export-props' is a CommonJS module."}]})
+      errors: [{ message: "'./export-props' is a CommonJS module."}]}),
+    test({code: "import { foobar } from './exports-calc-keys';",
+      errors: [{ message: "'./exports-calc-keys' is a CommonJS module."}]})
   ]
 });
