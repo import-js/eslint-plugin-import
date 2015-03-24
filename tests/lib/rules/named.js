@@ -1,18 +1,11 @@
 "use strict";
 
-var assign = require("object-assign");
-var path = require("path");
-
 var linter = require("eslint").linter,
     ESLintTester = require("eslint-tester");
 
 var eslintTester = new ESLintTester(linter);
 
-
-var FILENAME = path.join(process.cwd(), "./files", "foo.js");
-function test(t) {
-  return assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t);
-}
+var test = require("../../utils").test;
 
 function error(name, module) {
   return { message: name + " not found in '" + module + "'", type: "Identifier" };
