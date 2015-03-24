@@ -1,5 +1,5 @@
 ---
-  env:
-    node: true
-  rules:
-  	curly: [2, "multi"]
+env:
+  node: true
+rules:
+  curly: [2, "multi"]
