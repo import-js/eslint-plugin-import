@@ -11,10 +11,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Report ES6 import of CommonJS modules. ([`no-common`](#no-common))
-
-**Planned**:
-
-* Validate that namespace (`*`) imports exist as named exports in remote file, when dereferenced.
+* Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
 
 ## Rules
 
@@ -41,3 +38,16 @@ Provide the `es6-only` option in your rule config if you would like to enforce t
 ### `no-common`
 
 Report for imports that are defined as CommonJS modules, identified by the presence of `module.exports` or `exports[...]` assignments at the root scope of the module. Off by default.
+
+### `namespace`
+
+Enforces names exist at the time they are dereferenced, when imported as a full namespace (i.e. `import * as foo from './foo'; foo.bar();` will report if `bar` is not exported by `./foo`.).
+
+If remote module is CommonJS, will not attempt to enforce.
+
+Will report at the import declaration if there are _no_ exported names found.
+
+Also, will report for computed references (i.e. `foo["bar"]()`).
+
+**Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
+
