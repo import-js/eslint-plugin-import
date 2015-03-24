@@ -37,7 +37,7 @@ Provide the `es6-only` option in your rule config if you would like to enforce t
 
 ### `no-common`
 
-Report for imports that are defined as CommonJS modules, identified by the presence of `module.exports` or `exports[...]` assignments at the root scope of the module. Off by default.
+Report for imports that are defined as CommonJS modules, identified by the presence of `module.exports` or `exports[...]` assignments within the module. Off by default.
 
 ### `namespace`
 
