@@ -1,5 +1,6 @@
 ---
 env:
   es6: true
+  jsx: true
 ecmaFeatures:
   modules: true

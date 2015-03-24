@@ -15,7 +15,8 @@ function error(name, namespace) {
 eslintTester.addRuleTest("lib/rules/namespace", {
   valid: [
     test({code: "import * as names from './named-exports'; console.log(names.a); "}),
-    test({code: "import * as names from './re-export-names'; console.log(names.foo);"})
+    test({code: "import * as names from './re-export-names'; console.log(names.foo);"}),
+    test({code: "import * as elements from './jsx';"})
   ],
 
   invalid: [
