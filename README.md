@@ -12,6 +12,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Report ES6 import of CommonJS modules. ([`no-common`](#no-common))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
+* Report assignments (at any scope) to imported names/namespaces. ([`no-reassign`](#no-reassign))
 
 ## Rules
 
@@ -51,3 +52,6 @@ Also, will report for computed references (i.e. `foo["bar"]()`).
 
 **Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
 
+### `no-reassign`
+
+Reports on assignment to an imported name (or a member of an imported namespace). Does not consider scope or shadowing, so failure to adhere to ESLint's `no-shadow` may result in spurious warnings.
