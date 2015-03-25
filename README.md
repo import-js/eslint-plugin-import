@@ -54,4 +54,5 @@ Also, will report for computed references (i.e. `foo["bar"]()`).
 
 ### `no-reassign`
 
-Reports on assignment to an imported name (or a member of an imported namespace). Does not consider scope or shadowing, so failure to adhere to ESLint's `no-shadow` may result in spurious warnings.
+Reports on assignment to an imported name (or a member of an imported namespace).
+Will also report shadowing (i.e. redeclaration as a variable, function, or parameter);
