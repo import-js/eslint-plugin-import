@@ -43,8 +43,19 @@ eslintTester.addRuleTest("lib/rules/no-reassign", {
       errors: [{ message: "Reassignment of local imported name 'foo'." }]}),
 
     test({
+      code: "import { foo } from './bar';\nimport { foo } from './common';",
+      errors: [{ message: "Reassignment of local imported name 'foo'." }]}),
+
+    test({
+      code: "import { foo } from './bar';\nimport foo from './common';",
+      errors: [{ message: "Reassignment of local imported name 'foo'." }]}),
+
+    test({
+      code: "import { foo } from './bar';\nimport * as foo from './common';",
+      errors: [{ message: "Reassignment of local imported name 'foo'." }]}),
+
+    test({
       code: "import * as foo from './bar'; foo.x = 'y';",
-      errors: [{ message: "Assignment to member of namespace 'foo'."}]
-    })
+      errors: [{ message: "Assignment to member of namespace 'foo'."}]})
   ]
 });
