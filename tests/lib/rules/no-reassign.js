@@ -10,7 +10,12 @@ var test = require("../../utils").test;
 eslintTester.addRuleTest("lib/rules/no-reassign", {
   valid: [
     test({code: "import { foo } from './bar'; bar = 42;"}),
-    test({code: "import { foo } from './bar'; function bar(foo) {};"}) // shadowing is legal
+    // may shadow
+    test({code: "import { foo } from './bar'; function bar(foo) {};"}),
+    // may assign to imported names' members
+    test({code: "import { foo } from './bar'; foo.x = 42; "}),
+    // may assign to imported namespaces' names' members
+    test({code: "import * as foo from './bar'; foo.x.y = 42; "})
   ],
 
   invalid: [
