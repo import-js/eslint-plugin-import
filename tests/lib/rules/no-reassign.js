@@ -13,7 +13,11 @@ eslintTester.addRuleTest("lib/rules/no-reassign", {
     // may assign to imported names' members
     test({code: "import { foo } from './bar'; foo.x = 42; "}),
     // may assign to imported namespaces' names' members
-    test({code: "import * as foo from './bar'; foo.x.y = 42; "})
+    test({code: "import * as foo from './bar'; foo.x.y = 42; "}),
+
+    // ensure object literals are not compromised
+    test({code: "import * as foo from './bar'; var x = {foo: 42}; "}),
+    test({code: "import * as foo from './bar'; var x = {\"foo\": 42}; "})
   ],
 
   invalid: [
@@ -56,6 +60,35 @@ eslintTester.addRuleTest("lib/rules/no-reassign", {
 
     test({
       code: "import * as foo from './bar'; foo.x = 'y';",
-      errors: [{ message: "Assignment to member of namespace 'foo'."}]})
+      errors: [{ message: "Assignment to member of namespace 'foo'."}]}),
+
+    ///////////////////
+    // destructuring //
+    ///////////////////
+
+    test({
+      code: "import { foo } from './bar'; var { foo } = {foo: 'y'};",
+      errors: [{ message: "Reassignment of local imported name 'foo'."}],
+      ecmaFeatures: {modules: true, destructuring: true}}),
+
+    test({
+      code: "import { foo } from './bar'; var [foo] = ['y'];",
+      errors: [{ message: "Reassignment of local imported name 'foo'."}],
+      ecmaFeatures: {modules: true, destructuring: true}}),
+
+    test({
+      code: "import { foo } from './bar'; var [[foo]] = [['y']];",
+      errors: [{ message: "Reassignment of local imported name 'foo'."}],
+      ecmaFeatures: {modules: true, destructuring: true}}),
+
+    test({
+      code: "import { foo } from './bar'; var [{foo}] = [{foo:'y'}];",
+      errors: [{ message: "Reassignment of local imported name 'foo'."}],
+      ecmaFeatures: {modules: true, destructuring: true}}),
+
+    test({
+      code: "import { foo } from './bar'; var {bar: [foo]} = {bar:['y']};",
+      errors: [{ message: "Reassignment of local imported name 'foo'."}],
+      ecmaFeatures: {modules: true, destructuring: true}})
   ]
 });
