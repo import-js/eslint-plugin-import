@@ -9,7 +9,8 @@ var test = require("../../utils").test;
 
 eslintTester.addRuleTest("lib/rules/no-common", {
   valid: [
-    test({code: "import { foo } from './bar';"})
+    test({code: "import { foo } from './bar';"}),
+    test({code: "import foo from './empty-folder';"})
   ],
 
   invalid: [
