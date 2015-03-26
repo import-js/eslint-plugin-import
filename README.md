@@ -50,7 +50,7 @@ Will report at the import declaration if there are _no_ exported names found.
 
 Also, will report for computed references (i.e. `foo["bar"]()`).
 
-**Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
+**Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to either `import/no-reassign` or the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
 
 ### `no-reassign`
 
