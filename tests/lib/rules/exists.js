@@ -1,43 +1,28 @@
 "use strict";
 
-var assign = require("object-assign");
-var path = require("path");
+var test = require("../../utils").test;
 
 var linter = require("eslint").linter,
     ESLintTester = require("eslint-tester");
 
 var eslintTester = new ESLintTester(linter);
 
-
-var ecmaFeatures = {ecmaFeatures: { modules: true}};
-
-function filename(f) {
-  return path.join(process.cwd(), "./files", f);
-}
-
-var ERRORS = [{message: "Imported file does not exist.", type: "Literal"}];
-
 eslintTester.addRuleTest("lib/rules/exists", {
   valid: [
-    assign({
-      code: "import foo from './bar';",
-      filename: filename("foo.js")
-    }, ecmaFeatures),
-    assign({
-      code: "import bar from './bar.js';",
-      filename: filename("foo.js")
-    }, ecmaFeatures),
-    assign({
-      code: "import {someThing} from './module';",
-      filename: filename("foo.js")
-    }, ecmaFeatures)
-  ],
+    test({
+      code: "import foo from './bar';"}),
+    test({
+      code: "import bar from './bar.js';"}),
+    test({
+      code: "import {someThing} from './module';"})
+    ],
 
   invalid: [
-    assign({
+    test({
       code: "import bar from './baz';",
-      filename: filename("foo.js"),
-      errors: ERRORS
-    }, ecmaFeatures)
+      errors: [{message: "Unable to resolve path to module './baz'.", type: "Literal"}]}),
+    test({
+      code: "import bar from './empty-folder';",
+      errors: [{message: "Unable to resolve path to module './empty-folder'.", type: "Literal"}]})
   ]
 });
