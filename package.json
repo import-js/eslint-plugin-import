@@ -32,6 +32,7 @@
     "chai": "^2.1.2",
     "eslint": "^0.17.1",
     "eslint-tester": "^0.6.0",
+    "istanbul": "^0.3.11",
     "mocha": "^2.2.1",
     "object-assign": "^2.0.0"
   },
