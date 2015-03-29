@@ -5,7 +5,9 @@ exports.rules = {
   "namespace": require("./lib/rules/namespace"),
 
   "no-reassign": require("./lib/rules/no-reassign"),
-  "no-common": require("./lib/rules/no-common")
+
+  "no-common": require("./lib/rules/no-common"),
+  "no-errors": require("./lib/rules/no-errors")
 };
 
 exports.rulesConfig = {
@@ -15,5 +17,7 @@ exports.rulesConfig = {
   "default": 2,
 
   "no-reassign": 1,
-  "no-common": 0
+
+  "no-common": 0,
+  "no-errors": 0
 };
