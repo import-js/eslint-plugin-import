@@ -22,10 +22,7 @@ eslintTester.addRuleTest("lib/rules/no-errors", {
         type: "Literal"}]}),
     test({code: "import fs from 'fs';",
       args: [1, "include-messages"],
-      errors: [{
-        message: "Errors encountered while analysing imported module \'fs\'.\n" +
-                 "Error: ENOENT, no such file or directory \'fs\'",
-        type: "Literal"}]}),
+      errors: [{type: "Literal"}]}),
     test({code: "import { a } from './test.coffee';",
       errors: [{
         message: "Errors encountered while analysing imported module './test.coffee'.",
