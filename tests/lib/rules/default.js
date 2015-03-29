@@ -12,8 +12,8 @@ eslintTester.addRuleTest("lib/rules/default", {
     test({code: "import crypto from 'crypto';"}),
     test({code: "import foo from './empty-folder';"}),
     test({code: "import { foo } from './default-export';"}),
-    test({
-      code: "import foo from './default-export';"}),
+    test({code: "import foo from './default-export';"}),
+    test({code: "import foo from './mixed-exports';"}),
     test({
       code: "import bar from './default-export';"}),
     test({
