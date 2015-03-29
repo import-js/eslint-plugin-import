@@ -15,6 +15,7 @@ function error(name, module) {
 eslintTester.addRuleTest("lib/rules/named", {
   valid: [
     test({code: "import { foo } from './bar';"}),
+    test({code: "import { foo } from './empty-module';"}),
     test({code: "import bar from './bar.js';"}),
     test({code: "import {a, b, d} from './named-exports';"}),
     test({code: "import {ExportedClass} from './named-exports';"}),
