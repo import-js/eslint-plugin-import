@@ -9,6 +9,7 @@ var test = require("../../utils").test;
 
 eslintTester.addRuleTest("lib/rules/default", {
   valid: [
+    test({code: "import crypto from 'crypto';"}),
     test({code: "import foo from './empty-folder';"}),
     test({code: "import { foo } from './default-export';"}),
     test({

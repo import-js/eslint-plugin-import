@@ -14,7 +14,9 @@ eslintTester.addRuleTest("lib/rules/exists", {
     test({
       code: "import bar from './bar.js';"}),
     test({
-      code: "import {someThing} from './module';"})
+      code: "import {someThing} from './module';"}),
+    test({
+      code: "import fs from 'fs';"})
     ],
 
   invalid: [
