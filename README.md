@@ -7,7 +7,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 
 **Current support**:
 
-* Ensure imports point to a file/module that exists. ([`exists`](#exists))
+* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](#no-unresolved))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Report ES6 import of CommonJS modules. ([`no-common`](#no-common))
@@ -16,25 +16,30 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 
 ## Rules
 
-### `exists`
+### `no-unresolved`
 
-Ensures an imported module exists, as defined by standard Node `require.resolve` behavior.
+Ensures an imported module can be resolved to a module on the local filesystem,
+as defined by standard Node `require.resolve` behavior.
 
 ### `named`
 
 Verifies that all named imports are part of the set of named exports in the referenced module.
 
-Note that if there are _no_ named exports, nor a default export, this rule will not report a mismatch, to allow Babel-style `import` of CommonJS modules.
+Note that if there are _no_ named exports, nor a default export, this rule will
+not report a mismatch, to allow Babel-style `import` of CommonJS modules.
 
 Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
 
 ### `default`
 
-If a default import is requested, this rule will report if there is no default export in the imported module.
+If a default import is requested, this rule will report if there is no default
+export in the imported module.
 
-Note that if there are _no_ named exports, nor a default export, this rule will not report a mismatch, to allow Babel-style `import` of CommonJS modules.
+Note that if there are _no_ named exports, nor a default export, this rule will
+not report a mismatch, to allow Babel-style `import` of CommonJS modules.
 
-Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
+Provide the `es6-only` option in your rule config if you would like to enforce
+this on all imports.
 
 ### `no-common`
 
