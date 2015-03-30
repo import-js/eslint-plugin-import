@@ -56,3 +56,9 @@ Also, will report for computed references (i.e. `foo["bar"]()`).
 
 Reports on assignment to an imported name (or a member of an imported namespace).
 Will also report shadowing (i.e. redeclaration as a variable, function, or parameter);
+
+### `no-errors`
+
+Reports on errors in the attempt to parse the imported module for exports.
+
+Primarily useful for debugging, in case imports are not being reported properly by the other rules.
