@@ -7,7 +7,7 @@ var linter = require("eslint").linter,
 
 var eslintTester = new ESLintTester(linter);
 
-eslintTester.addRuleTest("lib/rules/exists", {
+eslintTester.addRuleTest("lib/rules/no-unresolved", {
   valid: [
     test({
       code: "import foo from './bar';"}),

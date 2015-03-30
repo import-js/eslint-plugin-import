@@ -1,5 +1,5 @@
 exports.rules = {
-  "exists": require("./lib/rules/exists"),
+  "no-unresolved": require("./lib/rules/no-unresolved"),
   "named": require("./lib/rules/named"),
   "default": require("./lib/rules/default"),
   "namespace": require("./lib/rules/namespace"),
@@ -7,11 +7,13 @@ exports.rules = {
   "no-reassign": require("./lib/rules/no-reassign"),
 
   "no-common": require("./lib/rules/no-common"),
-  "no-errors": require("./lib/rules/no-errors")
+  "no-errors": require("./lib/rules/no-errors"),
+
+  "exists": require("./lib/rules/no-unresolved")
 };
 
 exports.rulesConfig = {
-  "exists": 2,
+  "no-unresolved": 2,
   "named": 2,
   "namespace": 2,
   "default": 2,
