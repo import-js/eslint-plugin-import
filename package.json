@@ -7,6 +7,7 @@
     "test": "tests"
   },
   "scripts": {
+    "watch": "mocha --recursive --reporter dot --watch tests/lib/",
     "test": "istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot"
   },
   "repository": {
