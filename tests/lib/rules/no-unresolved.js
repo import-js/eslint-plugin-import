@@ -1,5 +1,7 @@
 "use strict";
 
+var path = require("path");
+
 var test = require("../../utils").test;
 
 var linter = require("eslint").linter,
@@ -16,7 +18,11 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
     test({
       code: "import {someThing} from './module';"}),
     test({
-      code: "import fs from 'fs';"})
+      code: "import fs from 'fs';"}),
+
+    test({
+      code: "import { DEEP } from 'in-alternate-root';",
+      settings: {"resolve.root": path.join(process.cwd(), "tests", "files", "alternate-root")}})
     ],
 
   invalid: [
@@ -25,6 +31,11 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
       errors: [{message: "Unable to resolve path to module './baz'.", type: "Literal"}]}),
     test({
       code: "import bar from './empty-folder';",
-      errors: [{message: "Unable to resolve path to module './empty-folder'.", type: "Literal"}]})
+      errors: [{message: "Unable to resolve path to module './empty-folder'.", type: "Literal"}]}),
+
+    // sanity check that this module is _not_ found without proper settings
+    test({
+      code: "import { DEEP } from 'in-alternate-root';",
+      errors: [{message: "Unable to resolve path to module 'in-alternate-root'.", type: "Literal"}]})
   ]
 });

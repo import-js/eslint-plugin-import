@@ -16,13 +16,6 @@ eslintTester.addRuleTest("lib/rules/no-errors", {
   ],
 
   invalid: [
-    test({code: "import fs from 'fs';",
-      errors: [{
-        message: "Errors encountered while analysing imported module 'fs'.",
-        type: "Literal"}]}),
-    test({code: "import fs from 'fs';",
-      args: [1, "include-messages"],
-      errors: [{type: "Literal"}]}),
     test({code: "import { a } from './test.coffee';",
       errors: [{
         message: "Errors encountered while analysing imported module './test.coffee'.",

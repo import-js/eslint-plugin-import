@@ -25,6 +25,9 @@ eslintTester.addRuleTest("lib/rules/no-common", {
       errors: [{ message: "'./nested-common' is a CommonJS module."}]}),
 
     test({code: "import {x} from './umd';",
-      errors: [{ message: "'./umd' is a CommonJS module."}]})
+      errors: [{ message: "'./umd' is a CommonJS module."}]}),
+
+    test({code: "import fs from 'fs';",
+      errors: [{ message: "'fs' is a CommonJS module.", type: "Literal"}]})
   ]
 });
