@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "istanbul cover --dir reports/coverage _mocha tests/ -- --recursive --reporter dot"
+    "test": "istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot"
   },
   "repository": {
     "type": "git",
