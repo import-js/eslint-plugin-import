@@ -6,7 +6,6 @@ exports.rules = {
 
   "no-reassign": require("./lib/rules/no-reassign"),
 
-  "no-common": require("./lib/rules/no-common"),
   "no-errors": require("./lib/rules/no-errors"),
 
   "exists": require("./lib/rules/no-unresolved")
@@ -20,6 +19,6 @@ exports.rulesConfig = {
 
   "no-reassign": 1,
 
-  "no-common": 0,
   "no-errors": 0
 };
+
