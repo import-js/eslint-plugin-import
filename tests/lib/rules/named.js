@@ -17,15 +17,18 @@ eslintTester.addRuleTest("lib/rules/named", {
     test({code: "import { foo } from './bar';"}),
     test({code: "import { foo } from './empty-module';"}),
     test({code: "import bar from './bar.js';"}),
+    test({code: "import bar, { foo } from './bar.js';"}),
     test({code: "import {a, b, d} from './named-exports';"}),
     test({code: "import {ExportedClass} from './named-exports';"}),
-    test({code: "import {a, b, d} from './common';"}),
     test({code: "import { ActionTypes } from './qc';"}),
     test({code: "import {a, b, c, d} from './re-export';"}),
     test({code: "import {foo, bar} from './re-export-names';", args: [2, "es6-only"]})
   ],
 
   invalid: [
+    test({code: "import {a, b, d} from './common';",
+      errors: [error("a", "./common"), error("b", "./common"), error("d", "./common")]}),
+
     test({code: "import { baz } from './bar';",
       errors: [error("baz", "./bar")]}),
 

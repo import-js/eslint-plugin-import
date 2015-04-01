@@ -15,7 +15,6 @@ function error(name, namespace) {
 eslintTester.addRuleTest("lib/rules/namespace", {
   valid: [
     test({code: "import * as foo from './empty-folder';"}),
-    test({code: "import * as foo from './common';"}),
     test({code: "import * as names from './named-exports'; console.log((names.b).c); "}),
 
     test({code: "import * as names from './named-exports'; console.log(names.a); "}),
@@ -24,6 +23,8 @@ eslintTester.addRuleTest("lib/rules/namespace", {
   ],
 
   invalid: [
+    test({code: "import * as foo from './common';",
+          errors: ["No exported names found in module './common'."]}),
     test({code: "import * as names from './default-export';",
           errors: ["No exported names found in module './default-export'."]}),
 
