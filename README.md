@@ -25,14 +25,16 @@ Will attempt to resolve from one or more paths from the `resolve.root` shared se
 ```
 ---
 settings:
-  resolve.root: '...'
+  resolve.root: 'src'
 ```
 or
 ```
   resolve.root:
-    - '...'
-    - '...'
+    - 'src'
+    - 'lib'
 ```
+
+Paths may be absolute or relative to the package root (i.e., where your `package.json` is).
 
 
 ### `named`

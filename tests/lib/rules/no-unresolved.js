@@ -26,8 +26,8 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
     test({
       code: "import { DEEP } from 'in-alternate-root'; import { bar } from 'src-bar';",
       settings: {"resolve.root": [
-        path.join(process.cwd(), "tests", "files", "src-root"),
-        path.join(process.cwd(), "tests", "files", "alternate-root")
+        path.join("tests", "files", "src-root"),
+        path.join("tests", "files", "alternate-root")
       ]}})
     ],
 
