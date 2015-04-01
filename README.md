@@ -10,7 +10,6 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](#no-unresolved))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
-* Report ES6 import of CommonJS modules. ([`no-common`](#no-common))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
 * Report assignments (at any scope) to imported names/namespaces. ([`no-reassign`](#no-reassign))
 
@@ -21,35 +20,33 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 Ensures an imported module can be resolved to a module on the local filesystem,
 as defined by standard Node `require.resolve` behavior.
 
+Will attempt to resolve from one or more paths from the `resolve.root` shared setting, i.e.
+
+```
+---
+settings:
+  resolve.root: '...'
+```
+or
+```
+  resolve.root:
+    - '...'
+    - '...'
+```
+
+
 ### `named`
 
 Verifies that all named imports are part of the set of named exports in the referenced module.
-
-Note that if there are _no_ named exports, nor a default export, this rule will
-not report a mismatch, to allow Babel-style `import` of CommonJS modules.
-
-Provide the `es6-only` option in your rule config if you would like to enforce this on all imports.
 
 ### `default`
 
 If a default import is requested, this rule will report if there is no default
 export in the imported module.
 
-Note that if there are _no_ named exports, nor a default export, this rule will
-not report a mismatch, to allow Babel-style `import` of CommonJS modules.
-
-Provide the `es6-only` option in your rule config if you would like to enforce
-this on all imports.
-
-### `no-common`
-
-Report for imports that are defined as CommonJS modules, identified by the presence of `module.exports` or `exports[...]` assignments within the module. Off by default.
-
 ### `namespace`
 
 Enforces names exist at the time they are dereferenced, when imported as a full namespace (i.e. `import * as foo from './foo'; foo.bar();` will report if `bar` is not exported by `./foo`.).
-
-If remote module is CommonJS, will not attempt to enforce.
 
 Will report at the import declaration if there are _no_ exported names found.
 
