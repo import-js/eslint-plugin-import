@@ -2,4 +2,4 @@
 env:
   node: true
 rules:
-  curly: [2, "multi"]
+  curly: [2, "multi-line"]
