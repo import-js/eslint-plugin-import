@@ -31,8 +31,8 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "chai": "^2.1.2",
-    "eslint": "^0.17.1",
-    "eslint-tester": "^0.6.0",
+    "eslint": ">=0.16.0",
+    "eslint-tester": ">=0.6.0",
     "istanbul": "^0.3.11",
     "mocha": "^2.2.1",
     "object-assign": "^2.0.0"
@@ -41,10 +41,10 @@
     "eslint": ">=0.16.0"
   },
   "dependencies": {
-    "array.prototype.find": "^1.0.0",
-    "es6-map": "^0.1.1",
-    "es6-set": "^0.1.1",
-    "espree": "^1.12.0",
-    "resolve": "^1.1.6"
+    "array.prototype.find": "1.0.0",
+    "es6-map": "0.1.1",
+    "es6-set": "0.1.1",
+    "espree": "2.0.1",
+    "resolve": "1.1.6"
   }
 }
