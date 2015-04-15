@@ -2,4 +2,7 @@
 env:
   node: true
 rules:
+  max-len: [2, 80, 2]
+  semi: [2, "never"]
+  quotes: [2, "single"]
   curly: [2, "multi-line"]
