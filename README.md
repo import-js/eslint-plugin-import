@@ -13,6 +13,20 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
 * Report assignments (at any scope) to imported names/namespaces. ([`no-reassign`](#no-reassign))
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
+* Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
+
+## Installation
+
+```sh
+npm install eslint-plugin-import -g
+```
+
+or if you manage ESLint as a dev dependency:
+
+```sh
+# inside your project's working tree
+npm install eslint-plugin-import --save-dev
+```
 
 ## Rules
 
@@ -65,6 +79,34 @@ Will also report shadowing (i.e. redeclaration as a variable, function, or param
 ### `no-require`
 
 Reports `require` of modules with ES named or default exports. Off by default.
+
+### `no-named-as-default`
+
+Reports use of an exported name as the locally imported name of a default export.
+
+Given:
+```js
+// foo.js
+export default 'foo';
+export const bar = 'baz';
+```
+
+...this would be valid:
+```js
+import foo from './foo.js';
+```
+
+...and this would be reported:
+```js
+// message: Using exported name 'bar' as identifier for default export.
+import bar from './foo.js';
+```
+
+Rationale: using an exported name as the name of the default export is likely
+
+- misleading: others familiar with `foo.js` probably expect the name to be `foo`
+- a mistake: only needed to import `bar` and forgot the brackets (the case that is prompting this)
+
 
 ## Debugging
 
