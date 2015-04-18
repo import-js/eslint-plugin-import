@@ -1,0 +1,34 @@
+{
+  "name": "eslint-import-core",
+  "version": "1.0.0",
+  "description": "ESLint plugin helper for analyzing imported modules.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --recursive tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benmosher/eslint-import-core"
+  },
+  "keywords": [
+    "eslintplugin",
+    "eslint"
+  ],
+  "author": "Ben Mosher <me@benmosher.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benmosher/eslint-import-core/issues"
+  },
+  "homepage": "https://github.com/benmosher/eslint-import-core",
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "mocha": "^2.2.4"
+  },
+  "dependencies": {
+    "es6-set": "^0.1.1",
+    "resolve": "^1.1.6"
+  }
+}
