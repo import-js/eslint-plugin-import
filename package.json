@@ -1,6 +1,6 @@
 {
   "name": "eslint-import-core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "ESLint plugin helper for analyzing imported modules.",
   "main": "index.js",
   "directories": {
