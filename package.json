@@ -44,7 +44,6 @@
     "array.prototype.find": "1.0.0",
     "es6-map": "0.1.1",
     "es6-set": "0.1.1",
-    "espree": "2.0.1",
-    "resolve": "1.1.6"
+    "eslint-import-core": "^0.1.0"
   }
 }
