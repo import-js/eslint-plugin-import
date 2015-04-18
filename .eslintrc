@@ -2,7 +2,8 @@
 env:
   node: true
 rules:
-  max-len: [2, 80, 2]
+  no-native-reassign: 1
+  max-len: [1, 80, 2]
   semi: [2, "never"]
   quotes: [2, "single"]
   curly: [2, "multi-line"]
