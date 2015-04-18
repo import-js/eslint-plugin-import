@@ -1,2 +1,2 @@
-exports.getExports = require('./lib/getExports')
-exports.importDeclaration = require('./lib/importDeclaration')
+exports.getExports = require('./getExports')
+exports.resolve = require('./resolve')

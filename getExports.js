@@ -3,7 +3,7 @@
 var
   Map = require("es6-map"),
   Set = require("es6-set"),
-  parse = require("./parse"),
+  parse = require("./lib/parse"),
   resolve = require("./resolve"),
   isCore = require("resolve").isCore;
 

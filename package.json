@@ -28,7 +28,9 @@
     "mocha": "^2.2.4"
   },
   "dependencies": {
+    "es6-map": "^0.1.1",
     "es6-set": "^0.1.1",
+    "espree": "^2.0.1",
     "resolve": "^1.1.6"
   }
 }
