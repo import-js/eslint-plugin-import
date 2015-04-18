@@ -23,6 +23,9 @@ eslintTester.addRuleTest("lib/rules/no-errors", {
     test({code: "import foo from './malformed.js'",
       errors: [{
         message: "Errors encountered while analysing imported module './malformed.js'.",
-        type: "Literal"}]})
+        type: "Literal"}]}),
+    test({code: "import foo from './malformed.js'",
+      args: [2, "include-messages"],
+      errors: [{type: "Literal"}]})
   ]
 });
