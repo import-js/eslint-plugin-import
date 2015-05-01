@@ -24,6 +24,10 @@ eslintTester.addRuleTest('lib/rules/no-reassign', {
          , ecmaFeatures: { destructuring: true } })
   , test({ code: 'var [, y] = ["foo", 42];'
          , ecmaFeatures: { destructuring: true } })
+
+    // valid destructuring
+  , test({ code: 'import * as foo from \'./bar\'; var { foo: bar } = {foo: 42};'
+         , ecmaFeatures: { destructuring: true, modules: true } })
   ],
 
   invalid: [
@@ -75,6 +79,11 @@ eslintTester.addRuleTest('lib/rules/no-reassign', {
 
     test({
       code: 'import { foo } from \'./bar\'; var { foo } = {foo: \'y\'};',
+      errors: [{ message: 'Reassignment of local imported name \'foo\'.'}],
+      ecmaFeatures: {modules: true, destructuring: true}}),
+
+    test({
+      code: 'import { foo } from \'./bar\'; var { bar: foo } = { bar: \'y\' };',
       errors: [{ message: 'Reassignment of local imported name \'foo\'.'}],
       ecmaFeatures: {modules: true, destructuring: true}}),
 
