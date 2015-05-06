@@ -9,8 +9,8 @@ var
 
 var exportCache = new Map();
 
-function ExportMap(context) {
-  this.context = context;
+function ExportMap(settings) {
+  this.settings = settings
 
   this.hasDefault = false;
   this.named = new Set();
@@ -20,24 +20,28 @@ function ExportMap(context) {
 
 ExportMap.get = function (source, context) {
 
-  var path = resolve(source, context);
-  if (path == null) return null;
+  var path = resolve(source, context)
+  if (path == null) return null
 
-  var exportMap = exportCache.get(path);
-  if (exportMap != null) return exportMap;
+  return ExportMap.for(path, context.settings)
+}
 
-  exportMap = ExportMap.parse(path, context);
+ExportMap.for = function (path, settings) {
+  var exportMap = exportCache.get(path)
+  if (exportMap != null) return exportMap
 
-  exportCache.set(path, exportMap);
+  exportMap = ExportMap.parse(path, settings)
+
+  exportCache.set(path, exportMap)
 
   // Object.freeze(exportMap);
   // Object.freeze(exportMap.named);
 
-  return exportMap;
-};
+  return exportMap
+}
 
-ExportMap.parse = function (path, context) {
-  var m = new ExportMap(context);
+ExportMap.parse = function (path, settings) {
+  var m = new ExportMap(settings)
 
   if (isCore(path)) return m; // skip parsing
 
@@ -63,12 +67,16 @@ ExportMap.prototype.captureDefault = function (n) {
   this.hasDefault = true;
 };
 
-ExportMap.prototype.captureAll = function (n) {
-  if (n.type !== "ExportAllDeclaration") return;
+ExportMap.prototype.captureAll = function (n, path) {
+  if (n.type !== "ExportAllDeclaration") return
 
-  var remoteMap = ExportMap.get(n.source.value, this.context);
-  remoteMap.named.forEach(function (name) { this.named.add(name); }.bind(this));
-};
+  var remotePath = resolve.relative(n.source.value, path)
+  if (remotePath == null) return
+
+  var remoteMap = ExportMap.for(remotePath, this.settings)
+
+  remoteMap.named.forEach(function (name) { this.named.add(name) }.bind(this))
+}
 
 ExportMap.prototype.captureNamedDeclaration = function (n) {
   if (n.type !== "ExportNamedDeclaration") return;

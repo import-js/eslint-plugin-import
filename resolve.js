@@ -30,3 +30,19 @@ module.exports = function (p, context) {
     throw err;
   }
 };
+
+module.exports.relative = function (p, r) {
+  try {
+
+    return resolve.sync(p, {
+      basedir: path.dirname(r)
+    })
+
+  } catch (err) {
+
+    if (err.message.indexOf('Cannot find module') === 0) return null
+
+    throw err // else
+
+  }
+}

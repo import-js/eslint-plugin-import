@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --recursive tests/"
+    "test": "mocha tests/"
   },
   "repository": {
     "type": "git",
