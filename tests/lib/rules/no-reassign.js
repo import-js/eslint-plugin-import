@@ -11,9 +11,15 @@ eslintTester.addRuleTest('lib/rules/no-reassign', {
   valid: [
     test({code: 'import { foo } from \'./bar\'; bar = 42;'})
     // may assign to imported names\' members
-  , test({code: 'import { foo } from \'./bar\'; foo.x = 42; '}),
+  , test({code: 'import { foo } from \'./bar\'; foo.x = 42; '})
     // may assign to imported namespaces\' names\' members
-    test({code: 'import * as foo from \'./bar\'; foo.x.y = 42; '})
+  , test({code: 'import * as foo from \'./bar\'; foo.x.y = 42; '})
+
+    // ensure unnamed imports work
+  , test({code: 'import \'./bar\'; '})
+
+    // support anonymous default function
+  , test({code: 'export default function () { }'})
 
     // ensure object literals are not compromised
   , test({code: 'import * as foo from \'./bar\'; var x = {foo: 42}; '})
