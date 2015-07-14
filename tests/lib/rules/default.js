@@ -19,11 +19,23 @@ eslintTester.addRuleTest('lib/rules/default', {
       code: 'import CoolClass from "./default-class";'}),
     test({
       code: 'import bar, { baz } from "./default-export";'})
+
+  , test({ code: 'import common from "./common";'
+         , settings: { 'import.ignore': ['common'] } })
+  , test({ code: 'import crypto from "crypto";'
+         , settings: { 'import.ignore': ['crypto'] } })
+  , test({ code: 'import crypto2 from "crypto";'
+         , settings: { 'import.ignore': ['^cry', 'foo'] } })
   ],
 
   invalid: [
     test({
       code: 'import crypto from "crypto";',
+      errors: [{ message: 'No default export found in module.'
+               , type: 'ImportDefaultSpecifier'}]}),
+    test({
+      code: 'import crypto from "crypto";',
+      settings: { 'import.ignore': ['common'] },
       errors: [{ message: 'No default export found in module.'
                , type: 'ImportDefaultSpecifier'}]}),
     test({
