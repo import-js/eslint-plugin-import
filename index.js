@@ -13,7 +13,7 @@ exports.rules = {
 }
 
 exports.rulesConfig = {
-  'no-unresolved': 2
+  'no-unresolved': [2, 'all']
 , 'named': 2
 , 'namespace': 2
 , 'default': 2

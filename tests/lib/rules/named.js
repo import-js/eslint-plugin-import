@@ -36,10 +36,16 @@ eslintTester.addRuleTest('lib/rules/named', {
          }),
     test({ code: 'import { baz } from "./bar"'
          , settings: { 'import.ignore': ['/bar'] }
-         })
+         }),
+
+    // ignore node modules by default
+    test({ code: 'import { foo } from "crypto"' })
   ],
 
   invalid: [
+    test({ code: 'import { foo } from "crypto"'
+         , args: [2, 'all']
+         , errors: [ error('foo', 'crypto') ]}),
     test({code: 'import {a, b, d} from "./common"',
       errors: [ error('a', './common')
               , error('b', './common')
