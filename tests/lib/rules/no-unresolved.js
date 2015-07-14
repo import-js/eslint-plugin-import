@@ -28,10 +28,19 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
       settings: {"resolve.root": [
         path.join("tests", "files", "src-root"),
         path.join("tests", "files", "alternate-root")
-      ]}})
+      ]}}),
+
+    test({ code: 'import foo from "fake/module"'
+         , settings: { 'import.ignore': [ '^fake/' ] }
+         })
     ],
 
   invalid: [
+    test({ code: 'import reallyfake from "reallyfake/module"'
+         , settings: { 'import.ignore': ['^fake/'] }
+         , errors: [ 'Unable to resolve path to module \'fake/module\'.' ]
+         }),
+
     test({
       code: "import bar from './baz';",
       errors: [{message: "Unable to resolve path to module './baz'.", type: "Literal"}]}),
