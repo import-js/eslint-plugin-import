@@ -15,6 +15,37 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 
+**Settings**:
+
+- Global (from `.eslintrc/settings`)
+  - `import.ignore`: a list of regex strings that will be ignored across all rules.
+  - `resolve.root`: a path (or list of paths) to assist in absolute module lookup.
+    (see `no-unresolved`)
+
+- on individual rules:
+  - `all`/`relative-only` indicate whether a given rule should
+    attempt to parse/lint absolute (`all`) vs. just relative paths (`relative-only`).
+
+By default, all rules use `relative-only` behavior, with the exception of `no-unresolved`.
+
+You can set this behavior on a rule-by-rule basis from your `.eslintrc` when configuring
+rule levels, as follows:
+
+```yaml
+plugins:
+  - import
+
+rules:
+  import/default: [2, 'all']
+  import/no-unresolved: [2, 'relative-only']  # needed since default for this rule is 'all'
+  import/no-require: 1  # uses default 'relative-only'
+
+settings:
+  import.ignore:
+  	- '^common'
+  	- 'es5'
+```
+
 ## Installation
 
 ```sh
