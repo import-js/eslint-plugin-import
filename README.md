@@ -149,19 +149,6 @@ Reports on errors in the attempt to parse the imported module for exports.
 Primarily useful for determining why imports are not being reported properly by the other rules.
 Pass `include-messages` as an option to include error descriptions in the report.
 
-## [`eslint-import-core`](https://github.com/benmosher/eslint-import-core)
-
-The guts of resolving and traversing external imports for markers (so far,
-exported names/defaults) have been extracted to a separate module,
-`eslint-import-core`.
-
-With your input and feedback, it could become a useful building block for more
-library-specific cases, i.e. checking whether an imported parent class is a
-descendent of some meaningful root class (`React.Component` comes to mind).
-
-So far, it's just a merged reduction of the history of this project, but I hope
-to see it grow to become more than just that.
-
 ## SublimeLinter-eslint
 
 Recently, SublimeLinter-eslint introduced a change to support `.eslintignore` files
