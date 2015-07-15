@@ -21,8 +21,9 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 
 - Global (from `.eslintrc/settings`)
   - `import.ignore`: a list of regex strings that will be ignored across all rules.
-  - `resolve.root`: a path (or list of paths) to assist in absolute module lookup.
-    (see `no-unresolved`)
+  - `import.resolve`: a passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
+
+[resolve]: https://www.npmjs.com/package/resolve#resolve-sync-id-opts
 
 - on individual rules:
   - `all`/`relative-only` indicate whether a given rule should
@@ -44,8 +45,23 @@ rules:
 
 settings:
   import.ignore:
+    # any imported module path matching one of these patterns will not be parsed
   	- '^common'
   	- 'es5'
+
+  import.resolve:
+
+    extensions:
+      # if unset, default is just '.js', but it must be re-added explicitly if set
+      - .js
+      - .jsx
+      - .es6
+      - .coffee
+
+    paths:
+      # an array of absolute paths which will also be searched
+      # think NODE_PATH
+      - /usr/local/share/global_modules
 ```
 
 ## Installation
