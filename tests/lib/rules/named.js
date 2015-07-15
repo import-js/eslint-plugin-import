@@ -39,10 +39,16 @@ eslintTester.addRuleTest('lib/rules/named', {
          }),
 
     // ignore node modules by default
-    test({ code: 'import { foo } from "crypto"' })
+    test({ code: 'import { foo } from "crypto"' }),
+
+    test({ code: 'import { someThing } from "./module"' })
   ],
 
   invalid: [
+    test({ code: 'import { somethingElse } from "./module"'
+         , errors: [ error('somethingElse', './module') ]
+         }),
+
     test({ code: 'import { foo } from "crypto"'
          , args: [2, 'all']
          , errors: [ error('foo', 'crypto') ]}),
