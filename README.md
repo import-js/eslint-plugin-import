@@ -5,6 +5,8 @@ eslint-plugin-import
 
 This plugin intends to support linting of ES6 import syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES6 static module syntax intends to provide, marked up in your editor.
 
+**IF YOU ARE USING THIS WITH SUBLIME**: see the [bottom section](#sublimelinter-eslint) for important info.
+
 **Current support**:
 
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](#no-unresolved))
@@ -159,3 +161,36 @@ descendent of some meaningful root class (`React.Component` comes to mind).
 
 So far, it's just a merged reduction of the history of this project, but I hope
 to see it grow to become more than just that.
+
+## SublimeLinter-eslint
+
+Recently, SublimeLinter-eslint introduced a change to support `.eslintignore` files
+which altered the way file paths are passed to ESLint when linting during editing.
+
+See roadhump/SublimeLinter-eslint#58 for more details, but essentially, you may find
+you need to add the following to a `.sublimelinterrc` file:
+
+```json
+{
+  "linters": {
+    "eslint": {
+      "args": ["--stdin-filename", "@"]
+    }
+  }
+}
+```
+
+I also found that I needed to set `rc_search_limit` to `null`, which removes the file
+hierarchy search limit when looking up the directory tree for `.sublimelinterrc`:
+
+In Package Settings / SublimeLinter / User Settings:
+```json
+{
+  "user": {
+    "rc_search_limit": null
+  }
+}
+```
+
+I believe this defaults to `3`, so you may not need to alter it depending on your
+project folder max depth.
