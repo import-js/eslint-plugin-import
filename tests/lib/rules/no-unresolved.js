@@ -24,27 +24,23 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
 
     test({
       code: "import { DEEP } from 'in-alternate-root';",
-      args: [2, 'all'],
       settings: {
-        "import.resolve": {
+        "import/resolve": {
           "paths": [path.join(process.cwd(), "tests", "files", "alternate-root")]
         }
       }
     }),
     test({
       code: "import { DEEP } from 'in-alternate-root'; import { bar } from 'src-bar';",
-      settings: {"import.resolve": { 'paths': [
+      settings: {"import/resolve": { 'paths': [
         path.join("tests", "files", "src-root"),
         path.join("tests", "files", "alternate-root")
       ]}}}),
 
-    test({ code: 'import * as foo from "a"'
-         , args: [2, 'all']
-         }),
+    test({ code: 'import * as foo from "a"' }),
 
     test({ code: 'import * as foo from "jsx-module/foo"'
-         , args: [2, 'all']
-         , settings: { 'import.resolve': { 'extensions': ['.jsx'] } }
+         , settings: { 'import/resolve': { 'extensions': ['.jsx'] } }
          , errors: [ {message:'Unable to resolve path to module \'jsx-module/foo\'.'} ]
          })
     ],
@@ -52,13 +48,12 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
   invalid: [
     // should fail for jsx by default
     test({ code: 'import * as foo from "jsx-module/foo"'
-         , args: [2, 'all']
          , errors: [ {message:'Unable to resolve path to module \'jsx-module/foo\'.'} ]
          }),
 
 
     test({ code: 'import reallyfake from "./reallyfake/module"'
-         , settings: { 'import.ignore': ['^\\./fake/'] }
+         , settings: { 'import/ignore': ['^\\./fake/'] }
          , errors: [ 'Unable to resolve path to module \'fake/module\'.' ]
          }),
 

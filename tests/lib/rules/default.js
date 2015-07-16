@@ -24,13 +24,13 @@ eslintTester.addRuleTest('lib/rules/default', {
   , test({ code: 'import crypto from "crypto";' })
 
   , test({ code: 'import common from "./common";'
-         , settings: { 'import.ignore': ['common'] } })
+         , settings: { 'import/ignore': ['common'] } })
   ],
 
   invalid: [
     test({
       code: 'import crypto from "./common";',
-      settings: { 'import.ignore': ['foo'] },
+      settings: { 'import/ignore': ['foo'] },
       errors: [{ message: 'No default export found in module.'
                , type: 'ImportDefaultSpecifier'}]}),
     test({

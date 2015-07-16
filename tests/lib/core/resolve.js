@@ -10,9 +10,9 @@ describe('resolve', function () {
     expect(resolve.bind(null, null, null)).to.throw(Error)
   })
 
-  it('respects import.resolve[extensions]', function () {
+  it('respects import/resolve extensions', function () {
     var file = resolve( './jsx/MyCoolComponent'
-                      , utils.testContext({ 'import.resolve': { 'extensions': ['.jsx'] }})
+                      , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
                       )
 
     expect(file).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'))

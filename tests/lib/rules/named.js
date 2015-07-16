@@ -25,7 +25,7 @@ eslintTester.addRuleTest('lib/rules/named', {
     test({code: 'import {a, b, c, d} from "./re-export"'}),
 
     test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"'
-         , settings: { 'import.resolve': { 'extensions': ['.js', '.jsx'] } }
+         , settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } }
          }),
 
     // validate that eslint-disable-line silences this properly
@@ -36,10 +36,10 @@ eslintTester.addRuleTest('lib/rules/named', {
          , args: [2, 'es6-only']}),
 
     test({ code: 'import { foo, bar } from "./common"'
-         , settings: { 'import.ignore': ['/common'] }
+         , settings: { 'import/ignore': ['/common'] }
          }),
     test({ code: 'import { baz } from "./bar"'
-         , settings: { 'import.ignore': ['/bar'] }
+         , settings: { 'import/ignore': ['/bar'] }
          }),
 
     // ignore core modules by default
@@ -51,7 +51,7 @@ eslintTester.addRuleTest('lib/rules/named', {
 
   invalid: [
     test({ code: 'import { zoob } from "a"'
-         , settings: { 'import.ignore': [] }
+         , settings: { 'import/ignore': [] }
          , errors: [ error('zoob', 'a') ]
          }),
 

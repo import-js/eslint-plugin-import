@@ -17,53 +17,6 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 
-**Settings**:
-
-- Global (from `.eslintrc/settings`)
-  - `import.ignore`: a list of regex strings that will be ignored across all rules.
-  - `import.resolve`: a passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
-
-[resolve]: https://www.npmjs.com/package/resolve#resolve-sync-id-opts
-
-- on individual rules:
-  - `all`/`relative-only` indicate whether a given rule should
-    attempt to parse/lint absolute (`all`) vs. just relative paths (`relative-only`).
-
-By default, all rules use `relative-only` behavior, with the exception of `no-unresolved`.
-
-You can set this behavior on a rule-by-rule basis from your `.eslintrc` when configuring
-rule levels, as follows:
-
-```yaml
-plugins:
-  - import
-
-rules:
-  import/default: [2, 'all']
-  import/no-unresolved: [2, 'relative-only']  # needed since default for this rule is 'all'
-  import/no-require: 1  # uses default 'relative-only'
-
-settings:
-  import.ignore:
-    # any imported module path matching one of these patterns will not be parsed
-  	- '^common'
-  	- 'es5'
-
-  import.resolve:
-
-    extensions:
-      # if unset, default is just '.js', but it must be re-added explicitly if set
-      - .js
-      - .jsx
-      - .es6
-      - .coffee
-
-    paths:
-      # an array of absolute paths which will also be searched
-      # think NODE_PATH
-      - /usr/local/share/global_modules
-```
-
 ## Installation
 
 ```sh
@@ -84,21 +37,8 @@ npm install eslint-plugin-import --save-dev
 Ensures an imported module can be resolved to a module on the local filesystem,
 as defined by standard Node `require.resolve` behavior.
 
-Will attempt to resolve from one or more paths from the `resolve.root` shared setting, i.e.
-
-```
----
-settings:
-  resolve.root: 'src'
-```
-or
-```
-  resolve.root:
-    - 'src'
-    - 'lib'
-```
-
-Paths may be absolute or relative to the package root (i.e., where your `package.json` is).
+See [settings](#settings) for customization options for the resolution (i.e.
+additional filetypes, `NODE_PATH`, etc.)
 
 
 ### `named`
@@ -156,6 +96,61 @@ Rationale: using an exported name as the name of the default export is likely
 - misleading: others familiar with `foo.js` probably expect the name to be `foo`
 - a mistake: only needed to import `bar` and forgot the brackets (the case that is prompting this)
 
+## Settings
+
+You may set the following settings in your `.eslintrc`:
+
+#### `import/ignore`
+
+A list of regex strings that, if matched by a path, will
+  not parse the matching module. In practice, this means rules other than
+  `no-unresolved` will not report on the `import` in question.
+#### `import/resolve`
+
+A passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
+
+[resolve]: https://www.npmjs.com/package/resolve#resolve-sync-id-opts
+
+Here is an example `.eslintrc` for reference:
+
+```yaml
+plugins:
+  - import
+
+rules:
+  import/default: 2
+  import/no-unresolved: 1
+
+settings:
+  import/ignore:
+    # any imported module path matching one of these patterns will not be parsed
+    - 'node_modules' # this is the default, but must be included if overwritten
+    - '\\.es5$'
+
+  import/resolve:
+
+    extensions:
+      # if unset, default is just '.js', but it must be re-added explicitly if set
+      - .js
+      - .jsx
+      - .es6
+      - .coffee
+
+    paths:
+      # an array of absolute paths which will also be searched
+      # think NODE_PATH
+      - /usr/local/share/global_modules
+
+    # this is technically for identifying `node_modules` alternate names
+    moduleDirectory:
+
+      - node_modules # defaults to 'node_modules', but...
+      - bower_components
+
+      - project/src  # can add a path segment here that will act like
+                     # a source root, for in-project aliasing (i.e.
+                     # `import MyStore from 'stores/my-store'`)
+```
 
 ## Debugging
 

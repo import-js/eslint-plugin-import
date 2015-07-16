@@ -21,7 +21,7 @@ eslintTester.addRuleTest("lib/rules/namespace", {
     test({code: "import * as names from './re-export-names'; console.log(names.foo);"}),
     test({code: "import * as elements from './jsx';"}),
     test({ code: "import * as foo from './common';"
-         , settings: { 'import.ignore': ['common'] }
+         , settings: { 'import/ignore': ['common'] }
          })
   ],
 
