@@ -24,6 +24,10 @@ eslintTester.addRuleTest('lib/rules/named', {
     test({code: 'import { ActionTypes } from "./qc"'}),
     test({code: 'import {a, b, c, d} from "./re-export"'}),
 
+    test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"'
+         , settings: { 'import.resolve': { 'extensions': ['.js', '.jsx'] } }
+         }),
+
     // validate that eslint-disable-line silences this properly
     test({code: 'import {a, b, d} from "./common"; ' +
                 '// eslint-disable-line named' }),
