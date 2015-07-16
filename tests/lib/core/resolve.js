@@ -17,4 +17,13 @@ describe('resolve', function () {
 
     expect(file).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'))
   })
+
+  it('should test case sensitivity', function () {
+    // Note the spelling error 'MyUncoolComponent' vs 'MyUnCoolComponent'
+    var file = resolve( './jsx/MyUncoolComponent'
+                      , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
+                      )
+
+    expect(file).to.equal(null)
+  })
 })
