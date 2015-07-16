@@ -42,20 +42,23 @@ eslintTester.addRuleTest('lib/rules/named', {
          , settings: { 'import.ignore': ['/bar'] }
          }),
 
-    // ignore node modules by default
+    // ignore core modules by default
     test({ code: 'import { foo } from "crypto"' }),
+    test({ code: 'import { zoob } from "a"' }),
 
     test({ code: 'import { someThing } from "./module"' })
   ],
 
   invalid: [
+    test({ code: 'import { zoob } from "a"'
+         , settings: { 'import.ignore': [] }
+         , errors: [ error('zoob', 'a') ]
+         }),
+
     test({ code: 'import { somethingElse } from "./module"'
          , errors: [ error('somethingElse', './module') ]
          }),
 
-    test({ code: 'import { foo } from "crypto"'
-         , args: [2, 'all']
-         , errors: [ error('foo', 'crypto') ]}),
     test({code: 'import {a, b, d} from "./common"',
       errors: [ error('a', './common')
               , error('b', './common')

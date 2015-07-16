@@ -33,14 +33,10 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
     }),
     test({
       code: "import { DEEP } from 'in-alternate-root'; import { bar } from 'src-bar';",
-      settings: {"resolve.root": [
+      settings: {"import.resolve": { 'paths': [
         path.join("tests", "files", "src-root"),
         path.join("tests", "files", "alternate-root")
-      ]}}),
-
-    test({ code: 'import foo from "./fake/module"'
-         , settings: { 'import.ignore': [ '^\\./fake/' ] }
-         }),
+      ]}}}),
 
     test({ code: 'import * as foo from "a"'
          , args: [2, 'all']

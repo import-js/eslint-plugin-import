@@ -20,21 +20,14 @@ eslintTester.addRuleTest('lib/rules/default', {
     test({
       code: 'import bar, { baz } from "./default-export";'})
 
-    // by default, ignores node modules
+    // core modules always have a default
   , test({ code: 'import crypto from "crypto";' })
 
   , test({ code: 'import common from "./common";'
          , settings: { 'import.ignore': ['common'] } })
-  , test({ code: 'import crypto2 from "./common";'
-         , settings: { 'import.ignore': ['foo', 'comm'] } })
   ],
 
   invalid: [
-    test({
-      code: 'import crypto from "crypto";',
-      args: [2, 'all'],
-      errors: [{ message: 'No default export found in module.'
-               , type: 'ImportDefaultSpecifier'}]}),
     test({
       code: 'import crypto from "./common";',
       settings: { 'import.ignore': ['foo'] },
