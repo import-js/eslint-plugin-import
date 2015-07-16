@@ -40,14 +40,32 @@ eslintTester.addRuleTest("lib/rules/no-unresolved", {
 
     test({ code: 'import foo from "./fake/module"'
          , settings: { 'import.ignore': [ '^\\./fake/' ] }
+         }),
+
+    test({ code: 'import * as foo from "a"'
+         , args: [2, 'all']
+         }),
+
+    test({ code: 'import * as foo from "jsx-module/foo"'
+         , args: [2, 'all']
+         , settings: { 'import.resolve': { 'extensions': ['.jsx'] } }
+         , errors: [ {message:'Unable to resolve path to module \'jsx-module/foo\'.'} ]
          })
     ],
 
   invalid: [
+    // should fail for jsx by default
+    test({ code: 'import * as foo from "jsx-module/foo"'
+         , args: [2, 'all']
+         , errors: [ {message:'Unable to resolve path to module \'jsx-module/foo\'.'} ]
+         }),
+
+
     test({ code: 'import reallyfake from "./reallyfake/module"'
          , settings: { 'import.ignore': ['^\\./fake/'] }
          , errors: [ 'Unable to resolve path to module \'fake/module\'.' ]
          }),
+
 
     test({
       code: "import bar from './baz';",
