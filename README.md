@@ -103,13 +103,26 @@ You may set the following settings in your `.eslintrc`:
 #### `import/ignore`
 
 A list of regex strings that, if matched by a path, will
-  not parse the matching module. In practice, this means rules other than
-  `no-unresolved` will not report on the `import` in question.
+not parse the matching module. In practice, this means rules other than
+`no-unresolved` will not report on the `import` in question.
+
 #### `import/resolve`
 
 A passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
 
 [resolve]: https://www.npmjs.com/package/resolve#resolve-sync-id-opts
+
+#### `import/parser`
+
+Analogous to ESLint's [custom parser] setting from the top level of `.eslintrc`.
+Like ESLint proper, the default here is Espree.
+
+If you're using [babel-eslint] or some other parser for ESLint, you'll likely want to
+configure it here, too, assuming your imports include any experimental syntax not
+directly supported by Espree.
+
+[custom parser]: https://github.com/eslint/eslint/blob/master/docs/user-guide/configuring.md#specifying-parser
+[babel-eslint]: https://github.com/babel/babel-eslint
 
 Here is an example `.eslintrc` for reference:
 
@@ -122,6 +135,7 @@ rules:
   import/no-unresolved: 1
 
 settings:
+
   import/ignore:
     # any imported module path matching one of these patterns will not be parsed
     - 'node_modules' # this is the default, but must be included if overwritten
@@ -150,6 +164,8 @@ settings:
       - project/src  # can add a path segment here that will act like
                      # a source root, for in-project aliasing (i.e.
                      # `import MyStore from 'stores/my-store'`)
+
+  import/parser: babel-eslint  # again, default is 'espree'. configure at your own risk
 ```
 
 ## Debugging
