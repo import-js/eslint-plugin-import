@@ -7,8 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "watch": "mocha --recursive --reporter dot --watch tests/lib/",
-    "test": "eslint ./lib && istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot"
+    "watch": "mocha --recursive --reporter dot --watch tests/lib/ tests/core/",
+    "test": "eslint ./lib && istanbul cover --dir reports/coverage _mocha tests/lib/ tests/core/ -- --recursive --reporter dot"
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
+    "babel-eslint": "^3.1.23",
     "chai": "^2.2.0",
     "eslint": ">=0.16.0",
     "eslint-tester": ">=0.6.0",
