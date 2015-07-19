@@ -47,9 +47,18 @@ eslintTester.addRuleTest('lib/rules/named', {
     test({ code: 'import { zoob } from "a"' }),
 
     test({ code: 'import { someThing } from "./module"' })
+
+    // node_modules/a only exports 'foo', should be ignored though
+  , test({ code: 'import { zoob } from "a"' })
+
+    // parses / correctly verifies if settings remove node_modules from ignore list
+  , test({ code: 'import { foo } from "a"'
+         , settings: { 'import/ignore': [] }
+         })
   ],
 
   invalid: [
+
     test({ code: 'import { zoob } from "a"'
          , settings: { 'import/ignore': [] }
          , errors: [ error('zoob', 'a') ]
