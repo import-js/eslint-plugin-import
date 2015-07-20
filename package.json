@@ -2,7 +2,7 @@
   "name": "eslint-plugin-import",
   "version": "0.7.2",
   "description": "Import with sanity.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "directories": {
     "test": "tests"
   },
