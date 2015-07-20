@@ -7,8 +7,8 @@
     "test": "tests"
   },
   "scripts": {
-    "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/lib/ tests/core/ tests/src/",
-    "test": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/lib/ tests/core/ tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
+    "test": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "npm run compile"
