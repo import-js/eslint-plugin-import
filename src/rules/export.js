@@ -44,6 +44,11 @@ export default function (context) {
 
       remoteExports.captureAll(node, context.getFilename())
 
+      if (remoteExports.named.size === 0) {
+        context.report(node.source,
+          `No named exports found in module '${node.source.value}'.`)
+      }
+
       for (let name of remoteExports.named) {
         addNamed(name, node)
       }

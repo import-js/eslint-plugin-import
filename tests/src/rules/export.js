@@ -12,6 +12,7 @@ eslintTester.addRuleTest('lib/rules/export', {
   , test({ code: 'export var foo = "foo"; export var bar = "bar";'})
   , test({ code: 'export { foo, foo as bar }' })
   , test({ code: 'export { bar }; export * from "./export-all"' })
+  , test({ code: 'export * from "./export-all"' })
   ],
 
   invalid: [
@@ -42,5 +43,12 @@ eslintTester.addRuleTest('lib/rules/export', {
   , test({ code: 'export { foo }; export * from "./export-all"'
          , errors: 2
          })
+  , test({ code: 'export * from "./default-export"'
+         , errors: [ { message: 'No named exports found in module ' +
+                                '\'./default-export\'.'
+                     , type: 'Literal'
+                     } ]
+         })
+
   ]
 })
