@@ -1,0 +1,13 @@
+# files
+src/
+reports/
+
+# config
+.eslintrc
+.travis.yml
+.editorconfig
+.gitignore
+
+# project stuff
+*.sublime-*
+tests/
