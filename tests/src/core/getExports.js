@@ -2,10 +2,10 @@
 
 var expect = require('chai').expect
   , path = require('path')
-var ExportMap = require('../../lib/core/getExports')
+var ExportMap = require('../../../src/core/getExports')
 
 function getFilename(file) {
-  return path.join(__dirname, '..', 'files', file || 'foo.js')
+  return path.join(__dirname, '..', '..', 'files', file || 'foo.js')
 }
 
 describe('getExports', function () {
