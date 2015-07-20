@@ -16,6 +16,7 @@ This plugin intends to support linting of ES6 import syntax, and prevent issues 
 * Report assignments (at any scope) to imported names/namespaces. ([`no-reassign`](#no-reassign))
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
+* Report any invalid exports, i.e. re-export of the same name ([`export`](#export))
 
 ## Installation
 
@@ -91,10 +92,34 @@ import foo from './foo.js';
 import bar from './foo.js';
 ```
 
-Rationale: using an exported name as the name of the default export is likely
+Rationale: using an exported name as the name of the default export is likely...
 
-- misleading: others familiar with `foo.js` probably expect the name to be `foo`
-- a mistake: only needed to import `bar` and forgot the brackets (the case that is prompting this)
+- *misleading*: others familiar with `foo.js` probably expect the name to be `foo`
+- *a mistake*: only needed to import `bar` and forgot the brackets (the case that is prompting this)
+
+### `export`
+
+Reports funny business with exports, such as
+
+```js
+export default class MyClass { /*...*/ } // Multiple default exports.
+
+function makeClass() { return new MyClass(...arguments) }
+
+export default makeClass // Multiple default exports.
+```
+
+or
+```js
+export const foo = function () { /*...*/ } // Multiple exports of name 'foo'.
+
+function bar() { /*...*/ }
+export { bar as foo } // Multiple exports of name 'foo'.
+```
+
+In the case of named/default re-export, all `n` re-exports will be reported,
+as at least `n-1` of them are clearly mistakes, but it is not clear which one (if any) is intended. Could be the result of copy/paste, code duplication with intent to rename, etc.
+
 
 ## Settings
 
