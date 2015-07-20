@@ -29,3 +29,6 @@ node_modules
 
 # added by GitSavvy
 *.sublime-workspace
+
+# generated output
+lib/
