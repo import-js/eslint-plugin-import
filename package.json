@@ -7,8 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "watch": "mocha --recursive --reporter dot --watch tests/lib/ tests/core/",
-    "test": "eslint ./lib && istanbul cover --dir reports/coverage _mocha tests/lib/ tests/core/ -- --recursive --reporter dot"
+    "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/lib/ tests/core/ tests/src/",
+    "test": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/lib/ tests/core/ tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
+    "pretest": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -42,6 +45,7 @@
   },
   "dependencies": {
     "array.prototype.find": "1.0.0",
+    "babel": "^5.6.23",
     "es6-map": "0.1.1",
     "es6-set": "0.1.1",
     "espree": "^2.0.1",

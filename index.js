@@ -10,6 +10,8 @@ exports.rules = {
 , 'no-require': require('./lib/rules/no-require')
 
 , 'exists': require('./lib/rules/no-unresolved')
+
+, 'export': require('./lib/rules/export')
 }
 
 exports.rulesConfig = {
@@ -18,6 +20,7 @@ exports.rulesConfig = {
 , 'namespace': 2
 , 'default': 2
 , 'no-named-as-default': 2
+, 'export': 2
 
 , 'no-reassign': 1
 
