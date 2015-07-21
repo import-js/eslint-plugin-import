@@ -1,27 +1,27 @@
-'use strict'
+import { get as getExports } from '../core/getExports'
+import importDeclaration from '../importDeclaration'
 
-var getExports = require('../core/getExports').get
-  , importDeclaration = require('../importDeclaration')
+// not sure if this is needed with Babel
+import 'array.prototype.find'
 
-require('array.prototype.find')
+export default function (context) {
+  function checkDefault(nameKey, defaultSpecifier) {
+    var declaration = importDeclaration(context)
 
-module.exports = function (context) {
-  return {
-    'ImportDefaultSpecifier': function (defaultSpecifier) {
+    var imports = getExports(declaration.source.value, context)
+    if (imports == null) return
 
-      var declaration = importDeclaration(context)
+    if (imports.hasDefault &&
+        imports.named.has(defaultSpecifier[nameKey].name)) {
 
-      var imports = getExports(declaration.source.value, context)
-      if (imports == null) return
+      context.report(defaultSpecifier,
+        'Using exported name \'' + defaultSpecifier[nameKey].name +
+        '\' as identifier for default export.')
 
-      if (imports.hasDefault &&
-          imports.named.has(defaultSpecifier.local.name)) {
-
-        context.report(defaultSpecifier,
-          'Using exported name \'' + defaultSpecifier.local.name +
-          '\' as identifier for default export.')
-
-      }
     }
+  }
+  return {
+    'ImportDefaultSpecifier': checkDefault.bind(null, 'local'),
+    'ExportDefaultSpecifier': checkDefault.bind(null, 'exported')
   }
 }
