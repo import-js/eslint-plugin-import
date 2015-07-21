@@ -25,6 +25,14 @@ eslintTester.addRuleTest('lib/rules/default', {
 
   , test({ code: 'import common from "./common";'
          , settings: { 'import/ignore': ['common'] } })
+
+    // es7 export syntax
+  , test({ code: 'export bar from "./bar"'
+         , parser: 'babel-eslint'
+         })
+
+    // sanity check
+  , test({ code: 'export {a} from "./named-exports"' })
   ],
 
   invalid: [
@@ -42,5 +50,11 @@ eslintTester.addRuleTest('lib/rules/default', {
       code: 'import bar from "./common";',
       errors: [{ message: 'No default export found in module.'
                , type: 'ImportDefaultSpecifier'}]})
+
+    // es7 export syntax
+  , test({ code: 'export baz from "./named-exports"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
   ]
 })
