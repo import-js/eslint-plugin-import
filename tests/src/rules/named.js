@@ -51,10 +51,16 @@ eslintTester.addRuleTest('lib/rules/named', {
     // node_modules/a only exports 'foo', should be ignored though
   , test({ code: 'import { zoob } from "a"' })
 
-    // parses / correctly verifies if settings remove node_modules from ignore list
+    // parses / correctly verifies if settings remove node_modules
+    // from ignore list
   , test({ code: 'import { foo } from "a"'
          , settings: { 'import/ignore': [] }
          })
+
+    // export tests
+  , test({ code: 'export { foo } from "./bar"' })
+  , test({ code: 'export { foo as bar } from "./bar"' })
+  , test({ code: 'export { foo } from "./does-not-exist"' })
   ],
 
   invalid: [
@@ -98,5 +104,10 @@ eslintTester.addRuleTest('lib/rules/named', {
     test({code: 'import { a } from "./re-export-names"',
       args: [2, 'es6-only'],
         errors: [error('a', './re-export-names')]})
+
+    // export tests
+  , test({ code: 'export { bar } from "./bar"'
+         , errors: 1
+         })
   ]
 })
