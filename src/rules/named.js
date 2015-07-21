@@ -3,7 +3,7 @@
 var getExports = require('../core/getExports').get
 
 module.exports = function (context) {
-  function checkSpecifiers(key, type) { return function (node) {
+  function checkSpecifiers(key, type, node) {
     if (!node.specifiers
           .some(function (im) { return im.type === type })) {
       return // no named imports
@@ -22,10 +22,18 @@ module.exports = function (context) {
           im[key].name + ' not found in \'' + node.source.value + '\'')
       }
     })
-  }}
+  }
 
   return {
-    'ImportDeclaration': checkSpecifiers('imported', 'ImportSpecifier'),
-    'ExportNamedDeclaration': checkSpecifiers('local', 'ExportSpecifier')
+    'ImportDeclaration': checkSpecifiers.bind( null
+                                             , 'imported'
+                                             , 'ImportSpecifier'
+                                             ),
+
+    'ExportNamedDeclaration': checkSpecifiers.bind( null
+                                                  , 'local'
+                                                  , 'ExportSpecifier'
+                                                  )
   }
+
 }
