@@ -3,7 +3,7 @@ eslint-plugin-import
 [![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg)](https://travis-ci.org/benmosher/eslint-plugin-import)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
 
-This plugin intends to support linting of ES6 import syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES6 static module syntax intends to provide, marked up in your editor.
+This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES2015+ static module syntax intends to provide, marked up in your editor.
 
 **IF YOU ARE USING THIS WITH SUBLIME**: see the [bottom section](#sublimelinter-eslint) for important info.
 
@@ -46,10 +46,15 @@ additional filetypes, `NODE_PATH`, etc.)
 
 Verifies that all named imports are part of the set of named exports in the referenced module.
 
+For `export`, verifies that all named exports exist in the referenced module.
+
 ### `default`
 
 If a default import is requested, this rule will report if there is no default
 export in the imported module.
+
+For [ES7], reports if a default is named and exported but is not found in the
+referenced module.
 
 ### `namespace`
 
@@ -60,6 +65,8 @@ Will report at the import declaration if there are _no_ exported names found.
 Also, will report for computed references (i.e. `foo["bar"]()`).
 
 **Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to either `import/no-reassign` or the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
+
+For [ES7], reports if an exported namespace would be empty (no names exported from the referenced module.)
 
 ### `no-reassign`
 
@@ -97,6 +104,16 @@ Rationale: using an exported name as the name of the default export is likely...
 - *misleading*: others familiar with `foo.js` probably expect the name to be `foo`
 - *a mistake*: only needed to import `bar` and forgot the brackets (the case that is prompting this)
 
+For [ES7], this also prevents exporting the default from a referenced module as a name within than module, for the same reasons:
+
+```js
+// valid:
+export foo from './foo.js'
+
+// message: Using exported name 'bar' as identifier for default export.
+export bar from './foo.js';
+```
+
 ### `export`
 
 Reports funny business with exports, such as
@@ -119,6 +136,9 @@ export { bar as foo } // Multiple exports of name 'foo'.
 
 In the case of named/default re-export, all `n` re-exports will be reported,
 as at least `n-1` of them are clearly mistakes, but it is not clear which one (if any) is intended. Could be the result of copy/paste, code duplication with intent to rename, etc.
+
+
+[ES7]: https://github.com/leebyron/ecmascript-more-export-from
 
 
 ## Settings
