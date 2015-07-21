@@ -1,28 +1,39 @@
-'use strict'
+// not sure if these are needed with Babel?
+import Map from 'es6-map'
+import 'array.prototype.find'
 
-var Map = require('es6-map')
-  , getExports = require('../core/getExports').get
-  , importDeclaration = require('../importDeclaration')
+import { get as getExports } from '../core/getExports'
+import importDeclaration from '../importDeclaration'
 
-module.exports = function (context) {
+export default function (context) {
 
-  var namespaces = new Map()
+  const namespaces = new Map()
+
+  function getImportsAndReport(namespace) {
+    var declaration = importDeclaration(context)
+
+    var imports = getExports(declaration.source.value, context)
+    if (imports == null) return null
+
+    if (imports.named.size === 0) {
+      context.report(namespace,
+        'No exported names found in module \'' +
+        declaration.source.value + '\'.')
+    }
+
+    return imports
+  }
 
   return {
     'ImportNamespaceSpecifier': function (namespace) {
-
-      var declaration = importDeclaration(context)
-
-      var imports = getExports(declaration.source.value, context)
+      const imports = getImportsAndReport(namespace)
       if (imports == null) return
-
-      if (imports.named.size === 0) {
-        context.report(namespace,
-          'No exported names found in module \'' +
-          declaration.source.value + '\'.')
-      }
-
       namespaces.set(namespace.local.name, imports.named)
+    },
+
+    // same as above, but does not add names to local map
+    'ExportNamespaceSpecifier': function (namespace) {
+      getImportsAndReport(namespace)
     },
 
     // todo: check for possible redefinition

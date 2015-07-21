@@ -27,6 +27,20 @@ eslintTester.addRuleTest('lib/rules/namespace', {
     test({ code: "import * as foo from './common';"
          , settings: { 'import/ignore': ['common'] }
          })
+
+    /////////
+    // es7 //
+    /////////
+  , test({ code: 'export * as names from "./named-exports"'
+         , parser: 'babel-eslint'
+         })
+  , test({ code: 'export defport, * as names from "./named-exports"'
+         , parser: 'babel-eslint'
+         })
+    // non-existent is handled by no-unresolved
+  , test({ code: 'export * as names from "./does-not-exist"'
+         , parser: 'babel-eslint'
+         })
   ],
 
   invalid: [
@@ -42,6 +56,18 @@ eslintTester.addRuleTest('lib/rules/namespace', {
 
     test({ code: "import * as names from './named-exports';" +
                  " console.log(names['a']);"
+         , errors: 1
+         })
+
+    /////////
+    // es7 //
+    /////////
+  , test({ code: 'export * as names from "./default-export"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
+  , test({ code: 'export defport, * as names from "./default-export"'
+         , parser: 'babel-eslint'
          , errors: 1
          })
   ]
