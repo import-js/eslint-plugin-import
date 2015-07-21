@@ -13,6 +13,7 @@ eslintTester.addRuleTest('lib/rules/export', {
   , test({ code: 'export { foo, foo as bar }' })
   , test({ code: 'export { bar }; export * from "./export-all"' })
   , test({ code: 'export * from "./export-all"' })
+  , test({ code: 'export * from "./does-not-exist"' })
   ],
 
   invalid: [

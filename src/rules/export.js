@@ -42,7 +42,8 @@ export default function (context) {
     'ExportAllDeclaration': function (node) {
       let remoteExports = new ExportMap(context.settings)
 
-      remoteExports.captureAll(node, context.getFilename())
+      // if false (unresolved), ignore
+      if (!remoteExports.captureAll(node, context.getFilename())) return
 
       if (remoteExports.named.size === 0) {
         context.report(node.source,

@@ -69,15 +69,28 @@ ExportMap.prototype.captureDefault = function (n) {
   this.hasDefault = true
 }
 
+/**
+ * capture all named exports from remote module.
+ *
+ * returns null if this node wasn't an ExportAllDeclaration
+ * returns false if it was not resolved
+ * returns true if it was resolved + parsed
+ *
+ * @param  {node} n
+ * @param  {string} path - the path of the module currently parsing
+ * @return {boolean?}
+ */
 ExportMap.prototype.captureAll = function (n, path) {
-  if (n.type !== 'ExportAllDeclaration') return
+  if (n.type !== 'ExportAllDeclaration') return null
 
   var remotePath = resolve.relative(n.source.value, path, this.settings)
-  if (remotePath == null) return
+  if (remotePath == null) return false
 
   var remoteMap = ExportMap.for(remotePath, this.settings)
 
   remoteMap.named.forEach(function (name) { this.named.add(name) }.bind(this))
+
+  return true
 }
 
 ExportMap.prototype.captureNamedDeclaration = function (n) {
