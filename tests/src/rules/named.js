@@ -61,6 +61,11 @@ eslintTester.addRuleTest('lib/rules/named', {
   , test({ code: 'export { foo } from "./bar"' })
   , test({ code: 'export { foo as bar } from "./bar"' })
   , test({ code: 'export { foo } from "./does-not-exist"' })
+
+    // es7
+  , test({ code: 'export bar, { foo } from "./bar"'
+         , parser: 'babel-eslint'
+         })
   ],
 
   invalid: [
@@ -107,6 +112,12 @@ eslintTester.addRuleTest('lib/rules/named', {
 
     // export tests
   , test({ code: 'export { bar } from "./bar"'
+         , errors: 1
+         })
+
+    // es7
+  , test({ code: 'export bar2, { bar } from "./bar"'
+         , parser: 'babel-eslint'
          , errors: 1
          })
   ]

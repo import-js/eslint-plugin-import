@@ -30,6 +30,12 @@ eslintTester.addRuleTest('lib/rules/default', {
   , test({ code: 'export bar from "./bar"'
          , parser: 'babel-eslint'
          })
+  , test({ code: 'export bar, { foo } from "./bar"'
+         , parser: 'babel-eslint'
+         })
+  , test({ code: 'export bar, * as names from "./bar"'
+         , parser: 'babel-eslint'
+         })
 
     // sanity check
   , test({ code: 'export {a} from "./named-exports"' })
@@ -53,6 +59,14 @@ eslintTester.addRuleTest('lib/rules/default', {
 
     // es7 export syntax
   , test({ code: 'export baz from "./named-exports"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
+  , test({ code: 'export baz, { bar } from "./named-exports"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
+  , test({ code: 'export baz, * as names from "./named-exports"'
          , parser: 'babel-eslint'
          , errors: 1
          })
