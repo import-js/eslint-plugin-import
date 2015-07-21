@@ -36,7 +36,19 @@ eslintTester.addRuleTest('lib/rules/no-unresolved', {
     test({ code: 'import * as foo from "jsx-module/foo"'
          , settings: { 'import/resolve': { 'extensions': ['.jsx'] } }
          })
-    ],
+
+  , test({ code: 'export { foo } from "./bar"' })
+  , test({ code: 'export * from "./bar"' })
+  , test({ code: 'export { foo }' })
+
+    // stage 1 proposal for export symmetry
+  , test({ code: 'export * as bar from "./bar"'
+         , parser: 'babel-eslint'
+         })
+  , test({ code: 'export bar from "./bar"'
+         , parser: 'babel-eslint'
+         })
+  ],
 
   invalid: [
     // should fail for jsx by default
@@ -75,5 +87,22 @@ eslintTester.addRuleTest('lib/rules/no-unresolved', {
                           "module 'in-alternate-root'."
                , type: 'Literal'
                }]})
+
+  , test({ code: 'export { foo } from "./does-not-exist"'
+         , errors: 1
+         })
+  , test({ code: 'export * from "./does-not-exist"'
+         , errors: 1
+         })
+
+    // export symmetry proposal
+  , test({ code: 'export * as bar from "./does-not-exist"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
+  , test({ code: 'export bar from "./does-not-exist"'
+         , parser: 'babel-eslint'
+         , errors: 1
+         })
   ]
 })
