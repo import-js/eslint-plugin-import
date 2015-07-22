@@ -4,12 +4,14 @@ var getExports = require('../core/getExports').get
 
 module.exports = function (context) {
   function checkSpecifiers(key, type, node) {
+    if (node.source == null) return // local export, ignore
+
     if (!node.specifiers
           .some(function (im) { return im.type === type })) {
-      return // no named imports
+      return // no named imports/exports
     }
 
-    var imports = getExports(node.source.value, context)
+    const imports = getExports(node.source.value, context)
     if (imports == null) return
 
     var names = imports.named

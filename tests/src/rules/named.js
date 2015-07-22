@@ -66,6 +66,9 @@ eslintTester.addRuleTest('lib/rules/named', {
   , test({ code: 'export bar, { foo } from "./bar"'
          , parser: 'babel-eslint'
          })
+
+    // regression tests
+  , test({ code: 'export { foo as bar }'})
   ],
 
   invalid: [
