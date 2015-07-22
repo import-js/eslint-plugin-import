@@ -59,6 +59,14 @@ eslintTester.addRuleTest('lib/rules/namespace', {
          , errors: 1
          })
 
+    // assignment warning (from no-reassign)
+  , test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';'
+         , errors: [{ message: 'Assignment to member of namespace \'foo\'.'}]
+         })
+  , test({ code: 'import * as foo from \'./bar\'; foo.x = \'y\';'
+         , errors: 2
+         })
+
     /////////
     // es7 //
     /////////

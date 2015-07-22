@@ -3,7 +3,6 @@ export const rules = {
 , 'named': require('./rules/named')
 , 'default': require('./rules/default')
 , 'namespace': require('./rules/namespace')
-, 'no-reassign': require('./rules/no-reassign')
 , 'no-named-as-default': require('./rules/no-named-as-default')
 
 , 'no-errors': require('./rules/no-errors')
@@ -21,8 +20,6 @@ export const rulesConfig = {
 , 'default': 2
 , 'no-named-as-default': 2
 , 'export': 2
-
-, 'no-reassign': 1
 
 , 'no-errors': 0
 , 'no-require': 0

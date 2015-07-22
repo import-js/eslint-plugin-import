@@ -17,8 +17,7 @@ export default function (context) {
 
     if (imports.named.size === 0) {
       context.report(namespace,
-        'No exported names found in module \'' +
-        declaration.source.value + '\'.')
+        `No exported names found in module '${declaration.source.value}'.`)
     }
 
     return imports
@@ -41,6 +40,12 @@ export default function (context) {
     'MemberExpression': function (dereference) {
       if (dereference.object.type !== 'Identifier') return
       if (!namespaces.has(dereference.object.name)) return
+
+      if (dereference.parent.type === 'AssignmentExpression' &&
+          dereference.parent.left === dereference) {
+          context.report(dereference.parent,
+              `Assignment to member of namespace '${dereference.object.name}'.`)
+      }
 
       if (dereference.computed) {
         context.report(dereference.property,
