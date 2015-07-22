@@ -13,7 +13,6 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
-* Report assignments (at any scope) to imported names/namespaces. ([`no-reassign`](#no-reassign))
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 * Report any invalid exports, i.e. re-export of the same name ([`export`](#export))
@@ -64,14 +63,13 @@ Will report at the import declaration if there are _no_ exported names found.
 
 Also, will report for computed references (i.e. `foo["bar"]()`).
 
-**Implementation note**: currently, this rule does not check for possible redefinition of the namespace in an intermediate scope. Adherence to either `import/no-reassign` or the ESLint `no-shadow` rule for namespaces will prevent this from being a problem.
+Reports on assignment to a member of an imported namespace.
+
+**Implementation note**: currently, this rule does not check for possible
+redefinition of the namespace in an intermediate scope. Adherence to the ESLint
+`no-shadow` rule for namespaces will prevent this from being a problem.
 
 For [ES7], reports if an exported namespace would be empty (no names exported from the referenced module.)
-
-### `no-reassign`
-
-Reports on assignment to an imported name (or a member of an imported namespace).
-Will also report shadowing (i.e. redeclaration as a variable, function, or parameter);
 
 ### `no-require`
 
