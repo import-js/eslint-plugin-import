@@ -11,6 +11,9 @@ export const rules = {
 , 'exists': require('./rules/no-unresolved')
 
 , 'export': require('./rules/export')
+
+  // removed
+, 'no-reassign': function () { return {} }
 }
 
 export const rulesConfig = {
@@ -23,4 +26,7 @@ export const rulesConfig = {
 
 , 'no-errors': 0
 , 'no-require': 0
+
+  // removed
+, 'no-reassign': 0
 }
