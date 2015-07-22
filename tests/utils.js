@@ -1,25 +1,18 @@
-'use strict'
+import assign from 'object-assign'
+import path from 'path'
 
-var assign = require('object-assign')
-  , path = require('path')
-
-
-function testFilePath(relativePath) {
+export function testFilePath(relativePath) {
     return path.join(process.cwd(), './tests/files', relativePath)
 }
-exports.testFilePath = testFilePath
 
+export const FILENAME = testFilePath('foo.js')
 
-var FILENAME = testFilePath('foo.js')
-exports.FILENAME = FILENAME
-
-
-exports.test = function test(t) {
+export function test(t) {
   return assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t)
 }
 
-exports.testContext = function (settings) {
-    return { getFilename: function () { return FILENAME }
-           , settings: settings || {}
-           }
+export function testContext(settings) {
+  return { getFilename: function () { return FILENAME }
+         , settings: settings || {}
+         }
 }

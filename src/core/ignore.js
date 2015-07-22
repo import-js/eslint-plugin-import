@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = function ignore(path, context) {
+export default function ignore(path, context) {
   // ignore node_modules by default
   var ignoreStrings = context.settings['import/ignore']
     ? [].concat(context.settings['import/ignore'])
