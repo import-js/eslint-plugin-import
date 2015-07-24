@@ -7,7 +7,7 @@ var eslintTester = new ESLintTester(linter);
 
 var test = require("../../utils").test;
 
-eslintTester.addRuleTest("lib/rules/no-errors", {
+eslintTester.addRuleTest("src/rules/no-errors", {
   valid: [
     test({code: "import { foo } from './bar';"}),
     test({code: "import { foo } from './empty-folder';"}),
@@ -35,6 +35,9 @@ eslintTester.addRuleTest("lib/rules/no-errors", {
         type: "Literal"}]}),
     test({code: "import foo from './malformed.js'",
       args: [2, "include-messages"],
+      errors: [{type: "Literal"}]}),
+    test({code: "import foo from './malformed.js'",
+      args: [2, "include-stack"],
       errors: [{type: "Literal"}]})
   ]
 });

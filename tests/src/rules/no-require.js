@@ -7,7 +7,7 @@ var linter = require("eslint").linter,
 
 var eslintTester = new ESLintTester(linter);
 
-eslintTester.addRuleTest("lib/rules/no-require",
+eslintTester.addRuleTest("src/rules/no-require",
 { valid:
   [ test({code: "var foo = require('./common');"})
   , test({code: "var fs = require('fs');"})

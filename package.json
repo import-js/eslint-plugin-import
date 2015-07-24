@@ -8,10 +8,9 @@
   },
   "scripts": {
     "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
-    "test": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "test": "eslint ./src && babel-istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
     "compile": "babel -d lib/ src/",
-    "prepublish": "npm run compile",
-    "pretest": "npm run compile"
+    "prepublish": "npm run compile"
   },
   "repository": {
     "type": "git",
@@ -35,10 +34,10 @@
   "devDependencies": {
     "babel": "^5.6.23",
     "babel-eslint": "^3.1.23",
+    "babel-istanbul": "^0.2.10",
     "chai": "^2.2.0",
     "eslint": ">=0.16.0",
     "eslint-tester": ">=0.6.0",
-    "istanbul": "^0.3.11",
     "mocha": "^2.2.1"
   },
   "peerDependencies": {

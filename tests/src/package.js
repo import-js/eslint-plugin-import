@@ -1,21 +1,24 @@
-"use strict";
-
 var expect = require("chai").expect;
 
 var path = require("path")
   , fs = require("fs");
 
 describe("package", function () {
+  let pkg
+
+  before(function () {
+    pkg = path.join(process.cwd(), 'src')
+  })
 
   it("is importable", function () {
-    expect(require(process.cwd())).to.exist;
+    expect(require(pkg)).to.exist;
   });
 
   it("has every rule", function (done) {
-    var module = require(process.cwd());
+    var module = require(pkg);
 
     fs.readdir(
-      path.join(process.cwd(), "lib", "rules")
+      path.join(pkg, "rules")
     , function (err, files) {
         expect(err).not.to.exist;
 
@@ -29,10 +32,10 @@ describe("package", function () {
   });
 
   it("has config for every rule", function (done) {
-    var module = require(process.cwd());
+    var module = require(pkg);
 
     fs.readdir(
-      path.join(process.cwd(), "lib", "rules")
+      path.join(pkg, "rules")
     , function (err, files) {
         expect(err).not.to.exist;
 

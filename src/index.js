@@ -8,12 +8,13 @@ export const rules = {
 , 'no-errors': require('./rules/no-errors')
 , 'no-require': require('./rules/no-require')
 
-, 'exists': require('./rules/no-unresolved')
 
 , 'export': require('./rules/export')
 
   // removed
 , 'no-reassign': function () { return {} }
+  // should remove this undocumented alias
+, 'exists': require('./rules/no-unresolved')
 }
 
 export const rulesConfig = {

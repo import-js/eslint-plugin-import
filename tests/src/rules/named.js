@@ -13,7 +13,7 @@ function error(name, module) {
 }
 
 
-eslintTester.addRuleTest('lib/rules/named', {
+eslintTester.addRuleTest('src/rules/named', {
   valid: [
     test({code: 'import { foo } from "./bar"'}),
     test({code: 'import { foo } from "./empty-module"'}),

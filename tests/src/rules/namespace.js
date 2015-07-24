@@ -10,7 +10,7 @@ function error(name, namespace) {
 }
 
 
-eslintTester.addRuleTest('lib/rules/namespace', {
+eslintTester.addRuleTest('src/rules/namespace', {
   valid: [
     test({ code: "import * as foo from './empty-folder';"}),
     test({ code: 'import * as names from "./named-exports"; ' +

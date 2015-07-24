@@ -1,7 +1,7 @@
 'use strict'
 
 var expect = require('chai').expect
-  , resolve = require('../../../lib/core/resolve')
+  , resolve = require('../../../src/core/resolve')
 
 var utils = require('../../utils')
 

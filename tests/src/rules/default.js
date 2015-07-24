@@ -7,7 +7,7 @@ var eslintTester = new ESLintTester(linter)
 
 var test = require('../../utils').test
 
-eslintTester.addRuleTest('lib/rules/default', {
+eslintTester.addRuleTest('src/rules/default', {
   valid: [
     test({code: 'import foo from "./empty-folder";'}),
     test({code: 'import { foo } from "./default-export";'}),

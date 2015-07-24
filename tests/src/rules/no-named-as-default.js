@@ -5,7 +5,7 @@ var eslintTester = new ESLintTester(linter)
 
 var test = require('../../utils').test
 
-eslintTester.addRuleTest('lib/rules/no-named-as-default', {
+eslintTester.addRuleTest('src/rules/no-named-as-default', {
   valid: [ test({code: 'import bar, { foo } from "./bar";'})
          , test({code: 'import bar, { foo } from "./empty-folder";'})
 

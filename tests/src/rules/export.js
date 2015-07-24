@@ -5,7 +5,7 @@ import ESLintTester from 'eslint-tester'
 
 const eslintTester = new ESLintTester(linter)
 
-eslintTester.addRuleTest('lib/rules/export', {
+eslintTester.addRuleTest('src/rules/export', {
   valid: [
     // default
     test({ code: 'var foo = "foo"; export default foo;' })
