@@ -10,6 +10,8 @@ module.exports = function (context) {
 
     if (context.options[0] === 'include-messages') {
       m += '\n' + errors.join('\n')
+    } else if (context.options[0] === 'include-stack') {
+      m += '\n' + errors.map(e => e.stack).join('\n')
     }
 
     return m
