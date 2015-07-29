@@ -1,4 +1,3 @@
-import assign from 'object-assign'
 import path from 'path'
 
 export function testFilePath(relativePath) {
@@ -8,7 +7,7 @@ export function testFilePath(relativePath) {
 export const FILENAME = testFilePath('foo.js')
 
 export function test(t) {
-  return assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t)
+  return Object.assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t)
 }
 
 export function testContext(settings) {

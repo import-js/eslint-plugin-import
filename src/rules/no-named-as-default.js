@@ -1,9 +1,6 @@
 import { get as getExports } from '../core/getExports'
 import importDeclaration from '../importDeclaration'
 
-// not sure if this is needed with Babel
-import 'array.prototype.find'
-
 export default function (context) {
   function checkDefault(nameKey, defaultSpecifier) {
     var declaration = importDeclaration(context)

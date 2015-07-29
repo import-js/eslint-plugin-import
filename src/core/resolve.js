@@ -3,7 +3,6 @@
 var fs = require('fs')
   , path = require('path')
   , resolve = require('resolve')
-  , assign = require('object-assign')
 
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath) {
@@ -18,10 +17,10 @@ function fileExistsWithCaseSync(filepath) {
 
 function opts(basedir, settings) {
   // pulls all items from 'import/resolve'
-  return assign( { }
-               , settings['import/resolve']
-               , { basedir: basedir }
-               )
+  return Object.assign( { }
+                      , settings['import/resolve']
+                      , { basedir: basedir }
+                      )
 }
 
 /**

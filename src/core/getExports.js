@@ -1,8 +1,6 @@
 'use strict'
 
 var
-  Map = require('es6-map'),
-  Set = require('es6-set'),
   parse = require('./parse'),
   resolve = require('./resolve'),
   isCore = require('resolve').isCore,

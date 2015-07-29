@@ -2,7 +2,6 @@
 env:
   node: true
 rules:
-  no-native-reassign: 0
   max-len: [1, 80, 2]
   semi: [2, "never"]
   quotes: [2, "single"]

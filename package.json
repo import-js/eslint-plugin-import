@@ -44,11 +44,8 @@
     "eslint": ">=0.16.0 || ~1.0.0-rc-0"
   },
   "dependencies": {
-    "array.prototype.find": "1.0.0",
-    "es6-map": "0.1.1",
-    "es6-set": "0.1.1",
+    "babel-runtime": "5.8.19",
     "espree": "^2.0.1",
-    "object-assign": "^2.0.0",
     "resolve": "^1.1.6"
   }
 }

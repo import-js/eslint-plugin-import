@@ -1,7 +1,3 @@
-// not sure if these are needed with Babel?
-import Map from 'es6-map'
-import 'array.prototype.find'
-
 import { get as getExports } from '../core/getExports'
 import importDeclaration from '../importDeclaration'
 
