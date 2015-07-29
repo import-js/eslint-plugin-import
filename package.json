@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Import with sanity.",
   "main": "lib/index.js",
   "directories": {
