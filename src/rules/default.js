@@ -3,8 +3,15 @@ import { get as getExports } from '../core/getExports'
 export default function (context) {
 
   function checkDefault(specifierType, node) {
-    var defaultSpecifier = node.specifiers
-      .find(function (n) { return n.type === specifierType })
+
+    // poor man's Array.find
+    let defaultSpecifier
+    node.specifiers.some((n) => {
+      if (n.type === specifierType) {
+        defaultSpecifier = n
+        return true
+      }
+    })
 
     if (!defaultSpecifier) return
     var imports = getExports(node.source.value, context)
