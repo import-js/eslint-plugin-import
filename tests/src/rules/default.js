@@ -1,13 +1,14 @@
 'use strict'
 
-var linter = require('eslint').linter,
-    ESLintTester = require('eslint-tester')
-
-var eslintTester = new ESLintTester(linter)
-
 var test = require('../../utils').test
 
-eslintTester.addRuleTest('src/rules/default', {
+var linter = require('eslint').linter,
+    RuleTester = require('eslint').RuleTester
+
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/default')
+
+ruleTester.run('default', rule, {
   valid: [
     test({code: 'import foo from "./empty-folder";'}),
     test({code: 'import { foo } from "./default-export";'}),

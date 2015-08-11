@@ -1,11 +1,12 @@
-var linter = require('eslint').linter,
-    ESLintTester = require('eslint-tester')
-
-var eslintTester = new ESLintTester(linter)
-
 var test = require('../../utils').test
 
-eslintTester.addRuleTest('src/rules/no-named-as-default', {
+var linter = require('eslint').linter,
+    RuleTester = require('eslint').RuleTester
+
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/no-named-as-default')
+
+ruleTester.run('no-named-as-default', rule, {
   valid: [ test({code: 'import bar, { foo } from "./bar";'})
          , test({code: 'import bar, { foo } from "./empty-folder";'})
 

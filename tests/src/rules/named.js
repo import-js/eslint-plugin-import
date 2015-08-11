@@ -1,19 +1,18 @@
 'use strict'
 
-var linter = require('eslint').linter,
-    ESLintTester = require('eslint-tester')
-
-var eslintTester = new ESLintTester(linter)
-
 var test = require('../../utils').test
+var linter = require('eslint').linter,
+    RuleTester = require('eslint').RuleTester
+
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/named')
 
 function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''
          , type: 'Identifier' }
 }
 
-
-eslintTester.addRuleTest('src/rules/named', {
+ruleTester.run('named', rule, {
   valid: [
     test({code: 'import { foo } from "./bar"'}),
     test({code: 'import { foo } from "./empty-module"'}),

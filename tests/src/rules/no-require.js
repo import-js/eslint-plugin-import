@@ -1,36 +1,36 @@
-"use strict";
-
-var test = require("../../utils").test;
+var test = require("../../utils").test
 
 var linter = require("eslint").linter,
-    ESLintTester = require("eslint-tester");
+    RuleTester = require('eslint').RuleTester
 
-var eslintTester = new ESLintTester(linter);
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/no-require')
 
-eslintTester.addRuleTest("src/rules/no-require",
-{ valid:
-  [ test({code: "var foo = require('./common');"})
-  , test({code: "var fs = require('fs');"})
-  , test({code: "var bar = require('./bar', true);"})
-  , test({code: "var bar = proxyquire('./bar');"})
-  , test({code: "var baz = require('./baz');"})
-  , test({code: "var bar = require('./ba' + 'r');"})
-  , test({code: "var zero = require(0);"})
+ruleTester.run('no-require', rule, {
+  valid:
+    [ test({code: "var foo = require('./common');"})
+    , test({code: "var fs = require('fs');"})
+    , test({code: "var bar = require('./bar', true);"})
+    , test({code: "var bar = proxyquire('./bar');"})
+    , test({code: "var baz = require('./baz');"})
+    , test({code: "var bar = require('./ba' + 'r');"})
+    , test({code: "var zero = require(0);"})
+    ],
+
+  invalid:
+    [ test({ code: "var bar = require('./bar');"
+           , errors:
+             [ { message: "CommonJS require of ES module './bar'."
+               , type: "Identifier"
+               }
+             ]
+           })
+    , test({ code: "(function () { var bar = require('./bar'); }());"
+           , errors:
+             [ { message: "CommonJS require of ES module './bar'."
+               , type: "Identifier"
+               }
+             ]
+           })
   ]
-, invalid:
-  [ test({ code: "var bar = require('./bar');"
-         , errors:
-           [ { message: "CommonJS require of ES module './bar'."
-             , type: "Identifier"
-             }
-           ]
-         })
-  , test({ code: "(function () { var bar = require('./bar'); }());"
-         , errors:
-           [ { message: "CommonJS require of ES module './bar'."
-             , type: "Identifier"
-             }
-           ]
-         })
-  ]
-});
+})

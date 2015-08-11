@@ -1,20 +1,19 @@
-"use strict";
+var test = require("../../utils").test
 
 var linter = require("eslint").linter,
-    ESLintTester = require("eslint-tester");
+    RuleTester = require('eslint').RuleTester
 
-var eslintTester = new ESLintTester(linter);
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/no-errors')
 
-var test = require("../../utils").test;
-
-eslintTester.addRuleTest("src/rules/no-errors", {
+ruleTester.run('no-errors', rule, {
   valid: [
     test({code: "import { foo } from './bar';"}),
     test({code: "import { foo } from './empty-folder';"}),
     test({code: "import { foo } from './does-not-exist';"}),
     test({code: "import { a } from './test'"})
 
-  , test({ code: "import Foo from './jsx/FooES7.js';", args: [0] })
+  // , test({ code: "import Foo from './jsx/FooES7.js';", parser: 'babel-eslint' })
   ],
 
   invalid: [
@@ -40,4 +39,4 @@ eslintTester.addRuleTest("src/rules/no-errors", {
       args: [2, "include-stack"],
       errors: [{type: "Literal"}]})
   ]
-});
+})

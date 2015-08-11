@@ -3,11 +3,12 @@ var path = require('path')
 var test = require('../../utils').test
 
 var linter = require('eslint').linter,
-    ESLintTester = require('eslint-tester')
+    RuleTester = require('eslint').RuleTester
 
-var eslintTester = new ESLintTester(linter)
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/no-unresolved')
 
-eslintTester.addRuleTest('src/rules/no-unresolved', {
+ruleTester.run('no-unresolved', rule, {
   valid: [
     test({ code: 'import foo from "./bar";' }),
     test({ code: "import bar from './bar.js';" }),

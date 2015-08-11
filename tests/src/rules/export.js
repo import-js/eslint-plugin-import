@@ -1,11 +1,11 @@
 import { test } from '../../utils'
 
-import { linter } from 'eslint'
-import ESLintTester from 'eslint-tester'
+import { linter, RuleTester } from 'eslint'
 
-const eslintTester = new ESLintTester(linter)
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/export')
 
-eslintTester.addRuleTest('src/rules/export', {
+ruleTester.run('export', rule, {
   valid: [
     // default
     test({ code: 'var foo = "foo"; export default foo;' })

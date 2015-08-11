@@ -1,16 +1,18 @@
-var linter = require('eslint').linter,
-    ESLintTester = require('eslint-tester')
-
-var eslintTester = new ESLintTester(linter)
-
 var test = require('../../utils').test
+
+var linter = require('eslint').linter,
+    RuleTester = require('eslint').RuleTester
+
+var ruleTester = new RuleTester()
+  , rule = require('../../../src/rules/namespace')
+
 
 function error(name, namespace) {
   return { message: `'${name}' not found in imported namespace ${namespace}.` }
 }
 
 
-eslintTester.addRuleTest('src/rules/namespace', {
+ruleTester.run('namespace', rule, {
   valid: [
     test({ code: "import * as foo from './empty-folder';"}),
     test({ code: 'import * as names from "./named-exports"; ' +
