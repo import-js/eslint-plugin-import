@@ -49,10 +49,6 @@ ruleTester.run('no-unresolved', rule, {
   , test({ code: 'export bar from "./bar"'
          , parser: 'babel-eslint'
          })
-
-  , test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
-         , options: []
-         })
   , test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"'
          , options: ['case-sensitive']
          })
