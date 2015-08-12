@@ -22,7 +22,6 @@ describe('resolve', function () {
     // Note the spelling error 'MyUncoolComponent' vs 'MyUnCoolComponent'
     var file = resolve( './jsx/MyUncoolComponent'
                       , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
-                      , true
                       )
 
     expect(file).to.equal(null)

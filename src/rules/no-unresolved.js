@@ -5,12 +5,11 @@
 import resolve from '../core/resolve'
 
 export default function (context) {
-  const caseSensitive = context.options[0] === 'case-sensitive'
 
   function checkSource(node) {
     if (node.source == null) return
 
-    if (resolve(node.source.value, context, caseSensitive) == null) {
+    if (resolve(node.source.value, context) == null) {
       context.report(node.source,
         'Unable to resolve path to module \'' + node.source.value + '\'.')
     }

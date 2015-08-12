@@ -40,15 +40,6 @@ as defined by standard Node `require.resolve` behavior.
 See [settings](#settings) for customization options for the resolution (i.e.
 additional filetypes, `NODE_PATH`, etc.)
 
-If you are working in an environment with a case-insensitive filesystem (i.e. OSX)
-but deploying somewhere case-sensitive (i.e. Linux) and would like to ensure
-case-sensitive resolution checking, pass `case-sensitive` as the first option:
-
-```yaml
-# .eslintrc
-rules:
-  import/no-unresolved: [2, case-sensitive]
-```
 
 ### `named`
 

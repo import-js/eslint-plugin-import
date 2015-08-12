@@ -2,6 +2,8 @@ var fs = require('fs')
   , path = require('path')
   , resolve = require('resolve')
 
+const CASE_INSENSITIVE = fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath) {
   // shortcut exit
@@ -16,8 +18,8 @@ function fileExistsWithCaseSync(filepath) {
   return fileExistsWithCaseSync(dir)
 }
 
-function fileExists(filepath, caseSensitive = false) {
-  if (caseSensitive) {
+function fileExists(filepath) {
+  if (CASE_INSENSITIVE) {
     return fileExistsWithCaseSync(filepath)
   } else {
     return fs.existsSync(filepath)
@@ -38,14 +40,14 @@ function opts(basedir, settings) {
  * @param  {object} context - ESLint context
  * @return {string} - the full module filesystem path
  */
-module.exports = function (p, context, considerCase) {
+module.exports = function (p, context) {
   // resolve just returns the core module id, which won't appear to exist
   if (resolve.isCore(p)) return p
 
   try {
     var file = resolve.sync(p, opts( path.dirname(context.getFilename())
                                    , context.settings))
-    if (!fileExists(file, considerCase)) return null
+    if (!fileExists(file)) return null
     return file
   } catch (err) {
     if (err.message.indexOf('Cannot find module') === 0) {
