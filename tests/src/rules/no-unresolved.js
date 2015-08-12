@@ -49,6 +49,9 @@ ruleTester.run('no-unresolved', rule, {
   , test({ code: 'export bar from "./bar"'
          , parser: 'babel-eslint'
          })
+  , test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"'
+         , options: ['case-sensitive']
+         })
   ],
 
   invalid: [
@@ -103,6 +106,11 @@ ruleTester.run('no-unresolved', rule, {
          })
   , test({ code: 'export bar from "./does-not-exist"'
          , parser: 'babel-eslint'
+         , errors: 1
+         })
+
+  , test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
+         , options: ['case-sensitive']
          , errors: 1
          })
   ]

@@ -8,9 +8,11 @@
   },
   "scripts": {
     "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
-    "test": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "cover": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "test": "mocha --timeout 5000 --recursive --reporter dot --compilers js:babel/register tests/src/",
     "compile": "babel -d lib/ src/",
-    "prepublish": "npm run compile"
+    "prepublish": "npm run compile",
+    "pretest": "eslint ./src"
   },
   "repository": {
     "type": "git",

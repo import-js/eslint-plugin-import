@@ -35,10 +35,10 @@ ruleTester.run('named', rule, {
          , args: [2, 'es6-only']}),
 
     test({ code: 'import { foo, bar } from "./common"'
-         , settings: { 'import/ignore': ['/common'] }
+         , settings: { 'import/ignore': ['common'] }
          }),
     test({ code: 'import { baz } from "./bar"'
-         , settings: { 'import/ignore': ['/bar'] }
+         , settings: { 'import/ignore': ['bar'] }
          }),
 
     // ignore core modules by default

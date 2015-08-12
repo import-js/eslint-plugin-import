@@ -2,12 +2,10 @@
  * @fileOverview Ensures that an imported path exists, given resolution rules.
  * @author Ben Mosher
  */
+import resolve from '../core/resolve'
 
-'use strict'
+export default function (context) {
 
-var resolve = require('../core/resolve')
-
-module.exports = function (context) {
   function checkSource(node) {
     if (node.source == null) return
 
