@@ -111,7 +111,12 @@ ExportMap.prototype.captureNamedDeclaration = function (n) {
 
   // capture specifiers
   n.specifiers.forEach(function (s) {
-    this.named.add(s.exported.name)
+    if (s.type === 'ExportDefaultSpecifier') {
+      // for ES7 'export default from "..."'
+      this.hasDefault = true
+    } else {
+      this.named.add(s.exported.name)
+    }
   }.bind(this))
 }
 

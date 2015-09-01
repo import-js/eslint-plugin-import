@@ -40,6 +40,11 @@ ruleTester.run('default', rule, {
 
     // sanity check
   , test({ code: 'export {a} from "./named-exports"' })
+
+  , test({ code: 'import twofer from "./trampoline"'
+         , settings: { 'import/parser': 'babel-eslint' }
+         })
+
   ],
 
   invalid: [
