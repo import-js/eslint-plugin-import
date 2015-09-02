@@ -1,0 +1,27 @@
+{
+  "name": "eslint-plugin-modules",
+  "version": "1.0.0",
+  "description": "ESLint rules for JavaScript modules (amd, es6, cjs, etc)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xjamundx/eslint-plugin-modules.git"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin"
+  ],
+  "author": "Jamund Ferguson <jamund@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xjamundx/eslint-plugin-modules/issues"
+  },
+  "homepage": "https://github.com/xjamundx/eslint-plugin-modules#readme",
+  "devDependencies": {
+    "eslint": "^1.3.1",
+    "mocha": "^2.3.0"
+  }
+}
