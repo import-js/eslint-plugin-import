@@ -7,6 +7,7 @@
 module.exports = {
   rules: {
       'no-cjs': require('./rules/no-cjs'),
+      'no-exports-typo': require('./rules/no-exports-typo'),
       'no-define': require('./rules/no-define')
   },
   rulesConfig: {
