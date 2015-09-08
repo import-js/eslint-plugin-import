@@ -11,6 +11,7 @@ export const rules = {
 , 'export': require('./rules/export')
 
 , 'no-duplicates': require('./rules/no-duplicates')
+, 'imports-first': require('./rules/imports-first')
 
   // removed
 , 'no-reassign': function () { return {} }
@@ -27,6 +28,7 @@ export const rulesConfig = {
 , 'export': 2
 
   // optional
+, 'imports-first': 0
 , 'no-duplicates': 0
 , 'no-errors': 0
 , 'no-require': 0
