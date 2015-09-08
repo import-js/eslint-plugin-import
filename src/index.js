@@ -8,8 +8,9 @@ export const rules = {
 , 'no-errors': require('./rules/no-errors')
 , 'no-require': require('./rules/no-require')
 
-
 , 'export': require('./rules/export')
+
+, 'no-duplicates': require('./rules/no-duplicates')
 
   // removed
 , 'no-reassign': function () { return {} }
@@ -25,6 +26,8 @@ export const rulesConfig = {
 , 'no-named-as-default': 2
 , 'export': 2
 
+  // optional
+, 'no-duplicates': 0
 , 'no-errors': 0
 , 'no-require': 0
 
