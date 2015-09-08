@@ -76,5 +76,10 @@ ruleTester.run('default', rule, {
          , parser: 'babel-eslint'
          , errors: 1
          })
+    // exports default from a module with no default
+  , test({ code: 'import twofer from "./broken-trampoline"'
+         , settings: { 'import/parser': 'babel-eslint' }
+         , errors: 1
+         })
   ]
 })

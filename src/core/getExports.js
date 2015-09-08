@@ -55,10 +55,17 @@ ExportMap.parse = function (path, settings) {
   ast.body.forEach(function (n) {
     m.captureDefault(n)
     m.captureAll(n, path)
-    m.captureNamedDeclaration(n)
+    m.captureNamedDeclaration(n, path)
   })
 
   return m
+}
+
+ExportMap.prototype.resolveReExport = function (node, base) {
+  var remotePath = resolve.relative(node.source.value, base, this.settings)
+  if (remotePath == null) return null
+
+  return ExportMap.for(remotePath, this.settings)
 }
 
 ExportMap.prototype.captureDefault = function (n) {
@@ -81,17 +88,15 @@ ExportMap.prototype.captureDefault = function (n) {
 ExportMap.prototype.captureAll = function (n, path) {
   if (n.type !== 'ExportAllDeclaration') return null
 
-  var remotePath = resolve.relative(n.source.value, path, this.settings)
-  if (remotePath == null) return false
-
-  var remoteMap = ExportMap.for(remotePath, this.settings)
+  var remoteMap = this.resolveReExport(n, path)
+  if (remoteMap == null) return false
 
   remoteMap.named.forEach(function (name) { this.named.add(name) }.bind(this))
 
   return true
 }
 
-ExportMap.prototype.captureNamedDeclaration = function (n) {
+ExportMap.prototype.captureNamedDeclaration = function (n, path) {
   if (n.type !== 'ExportNamedDeclaration') return
 
   // capture declaration
@@ -112,8 +117,10 @@ ExportMap.prototype.captureNamedDeclaration = function (n) {
   // capture specifiers
   n.specifiers.forEach(function (s) {
     if (s.type === 'ExportDefaultSpecifier') {
+      if (this.hasDefault) return // already has one
       // for ES7 'export default from "..."'
-      this.hasDefault = true
+      var remoteMap = this.resolveReExport(n, path)
+      this.hasDefault = remoteMap && remoteMap.hasDefault
     } else {
       this.named.add(s.exported.name)
     }
