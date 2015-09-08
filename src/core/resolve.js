@@ -41,21 +41,35 @@ function opts(basedir, settings) {
  * @return {string} - the full module filesystem path
  */
 module.exports = function (p, context) {
-  // resolve just returns the core module id, which won't appear to exist
-  if (resolve.isCore(p)) return p
+  function withResolver(resolver) {
+    // resolve just returns the core module id, which won't appear to exist
+    if (resolver.isCore(p)) return p
 
-  try {
-    var file = resolve.sync(p, opts( path.dirname(context.getFilename())
-                                   , context.settings))
-    if (!fileExists(file)) return null
-    return file
-  } catch (err) {
-    if (err.message.indexOf('Cannot find module') === 0) {
-      return null
+    try {
+      var file = resolver.sync(p, opts( path.dirname(context.getFilename())
+                                     , context.settings))
+      if (!fileExists(file)) return null
+      return file
+    } catch (err) {
+
+      // probably want something more general here
+      if (err.message.indexOf('Cannot find module') === 0) {
+        return null
+      }
+
+      throw err
     }
-
-    throw err
   }
+
+  const resolvers = (context.settings['import/resolvers'] || ['resolve'])
+    .map(require)
+
+  for (let resolver of resolvers) {
+    let file = withResolver(resolver)
+    if (file) return file
+  }
+
+  return null
 }
 
 module.exports.relative = function (p, r, settings) {
