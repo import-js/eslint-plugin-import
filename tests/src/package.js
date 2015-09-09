@@ -7,7 +7,7 @@ describe("package", function () {
   let pkg
 
   before(function () {
-    pkg = path.join(process.cwd(), 'src')
+    pkg = path.join(process.cwd(), 'lib')
   })
 
   it("is importable", function () {

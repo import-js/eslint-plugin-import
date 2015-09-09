@@ -1,9 +1,9 @@
-import { test } from '../../utils'
+import { test } from '../utils'
 
 import { linter, RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../src/rules/imports-first')
+    , rule = require('../../../lib/rules/imports-first')
 
 ruleTester.run('imports-first', rule, {
   valid: [

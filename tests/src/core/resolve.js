@@ -1,9 +1,9 @@
 'use strict'
 
 var expect = require('chai').expect
-  , resolve = require('../../../src/core/resolve')
+  , resolve = require('../../../lib/core/resolve')
 
-var utils = require('../../utils')
+var utils = require('../utils')
 
 describe('resolve', function () {
   it('should throw on bad parameters.', function () {

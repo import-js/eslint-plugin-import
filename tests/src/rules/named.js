@@ -1,11 +1,11 @@
 'use strict'
 
-var test = require('../../utils').test
+var test = require('../utils').test
 var linter = require('eslint').linter,
     RuleTester = require('eslint').RuleTester
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../src/rules/named')
+  , rule = require('../../../lib/rules/named')
 
 function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''

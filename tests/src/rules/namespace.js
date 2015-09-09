@@ -1,10 +1,10 @@
-var test = require('../../utils').test
+var test = require('../utils').test
 
 var linter = require('eslint').linter,
     RuleTester = require('eslint').RuleTester
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../src/rules/namespace')
+  , rule = require('../../../lib/rules/namespace')
 
 
 function error(name, namespace) {

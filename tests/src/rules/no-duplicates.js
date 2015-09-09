@@ -1,10 +1,10 @@
 import * as path from 'path'
-import { test } from '../../utils'
+import { test } from '../utils'
 
 import { linter, RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../src/rules/no-duplicates')
+    , rule = require('../../../lib/rules/no-duplicates')
 
 ruleTester.run('no-duplicates', rule, {
   valid: [

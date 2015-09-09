@@ -1,12 +1,12 @@
 var path = require('path')
 
-var test = require('../../utils').test
+var test = require('../utils').test
 
 var linter = require('eslint').linter,
     RuleTester = require('eslint').RuleTester
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../src/rules/no-unresolved')
+  , rule = require('../../../lib/rules/no-unresolved')
 
 ruleTester.run('no-unresolved', rule, {
   valid: [

@@ -1,12 +1,12 @@
 'use strict'
 
-var test = require('../../utils').test
+var test = require('../utils').test
 
 var linter = require('eslint').linter,
     RuleTester = require('eslint').RuleTester
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../src/rules/default')
+  , rule = require('../../../lib/rules/default')
 
 ruleTester.run('default', rule, {
   valid: [
