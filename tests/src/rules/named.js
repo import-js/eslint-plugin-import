@@ -65,6 +65,10 @@ ruleTester.run('named', rule, {
   , test({ code: 'export bar, { foo } from "./bar"'
          , parser: 'babel-eslint'
          })
+  , test({ code: 'import { foo, bar } from "./named-trampoline"'
+         , parser: 'babel-eslint'
+         , settings: { 'import/parser': 'babel-eslint' }
+         })
 
     // regression tests
   , test({ code: 'export { foo as bar }'})
@@ -120,6 +124,16 @@ ruleTester.run('named', rule, {
     // es7
   , test({ code: 'export bar2, { bar } from "./bar"'
          , parser: 'babel-eslint'
+         , errors: 1
+         })
+  , test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
+         , parser: 'babel-eslint'
+         , settings: { 'import/parser': 'babel-eslint' }
+         , errors: 1
+         })
+  , test({ code: 'import { baz } from "./broken-trampoline"'
+         , parser: 'babel-eslint'
+         , settings: { 'import/parser': 'babel-eslint' }
          , errors: 1
          })
   ]

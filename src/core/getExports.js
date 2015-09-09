@@ -115,12 +115,21 @@ ExportMap.prototype.captureNamedDeclaration = function (n, path) {
   }
 
   // capture specifiers
+  let remoteMap
+  if (n.source) remoteMap = this.resolveReExport(n, path)
+
   n.specifiers.forEach(function (s) {
     if (s.type === 'ExportDefaultSpecifier') {
-      if (this.hasDefault) return // already has one
-      // for ES7 'export default from "..."'
-      var remoteMap = this.resolveReExport(n, path)
-      this.hasDefault = remoteMap && remoteMap.hasDefault
+      // don't add it if it is not present in the exported module
+      if (!remoteMap || !remoteMap.hasDefault) return
+
+      if (s.exported.name === 'default') {
+        // export default from "..."
+        this.hasDefault = true
+      } else {
+        // export bar from "..."
+        this.named.add(s.exported.name)
+      }
     } else {
       this.named.add(s.exported.name)
     }
