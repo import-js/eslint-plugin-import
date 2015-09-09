@@ -1,11 +1,16 @@
+import resolve from '../core/resolve'
+
 export default function (context) {
   const imported = new Map()
   return {
     "ImportDeclaration": function (n) {
-      if (imported.has(n.source.value)) {
-        imported.get(n.source.value).add(n.source)
+      // resolved path will cover aliased duplicates
+      let resolvedPath = resolve(n.source.value, context)
+
+      if (imported.has(resolvedPath)) {
+        imported.get(resolvedPath).add(n.source)
       } else {
-        imported.set(n.source.value, new Set([n.source]))
+        imported.set(resolvedPath, new Set([n.source]))
       }
     },
 
