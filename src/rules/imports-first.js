@@ -3,7 +3,7 @@ export default function (context) {
     "Program": function (n) {
       const body = n.body
       let last = -1
-      for (let [i, node] of body.entries()) {
+      body.forEach(function (node, i){
         if (node.type === "ImportDeclaration") {
           if (i === last + 1) {
             last++
@@ -11,7 +11,7 @@ export default function (context) {
             context.report(node, 'Import in body of module; reorder to top.')
           }
         }
-      }
+      })
     }
   }
 }
