@@ -27,9 +27,11 @@ export const rulesConfig = {
 , 'no-named-as-default': 2
 , 'export': 2
 
+  // warnings
+, 'no-duplicates': 1
+
   // optional
 , 'imports-first': 0
-, 'no-duplicates': 0
 , 'no-errors': 0
 , 'no-require': 0
 
