@@ -17,6 +17,8 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 * Report any invalid exports, i.e. re-export of the same name ([`export`](#export))
+* Report repeated import of the same module in multiple places ([`no-duplicates`](#no-duplicates), warning by default)
+* Ensure all imports appear before other statements ([`imports-first`](#imports-first), off by default)
 
 ## Installation
 
@@ -134,10 +136,66 @@ export { bar as foo } // Multiple exports of name 'foo'.
 ```
 
 In the case of named/default re-export, all `n` re-exports will be reported,
-as at least `n-1` of them are clearly mistakes, but it is not clear which one (if any) is intended. Could be the result of copy/paste, code duplication with intent to rename, etc.
+as at least `n-1` of them are clearly mistakes, but it is not clear which one
+(if any) is intended. Could be the result of copy/paste, code duplication with
+intent to rename, etc.
 
 
 [ES7]: https://github.com/leebyron/ecmascript-more-export-from
+
+
+### `no-duplicates`
+
+Reports if a resolved path is imported more than once.
+
+Valid:
+```js
+import SomeDefaultClass, * as names from './mod'
+```
+
+...whereas here, both `./mod` imports will be reported:
+
+```js
+import SomeDefaultClass from './mod'
+
+// oops, some other import separated these lines
+import foo from './some-other-mod'
+
+import * as names from './mod'
+```
+
+The motivation is that this is likely a result of two developers importing different
+names from the same module at different times (and potentially largely different
+locations in the file.) This rule brings both (or n-many) to attention.
+
+This rule is only set to a warning, by default.
+
+
+### `imports-first`
+
+By popular demand, this rule reports any imports that come after non-import
+statments:
+
+```js
+import foo from './foo'
+
+// some module-level initializer
+initWith(foo)
+
+import bar from './bar' // <- reported
+```
+
+Providing `absolute-first` as an option will report any absolute imports (i.e.
+packages) that come after any relative imports:
+
+```js
+import foo from 'foo'
+import bar from './bar'
+
+import * as _ from 'lodash' // <- reported
+```
+
+This rule is disabled by default.
 
 
 ## Settings

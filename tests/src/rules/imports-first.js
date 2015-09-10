@@ -10,6 +10,7 @@ ruleTester.run('imports-first', rule, {
     test({ code: "import { x } from './foo'; import { y } from './bar';\
                   export { x, y }" })
   , test({ code: "import { x } from 'foo'; import { y } from './bar'" })
+  , test({ code: "import { x } from './foo'; import { y } from 'bar'" })
   ],
   invalid: [
     test({ code: "import { x } from './foo';\
