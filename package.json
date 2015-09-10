@@ -12,7 +12,7 @@
     "test": "mocha --recursive --reporter dot tests/lib/",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
-    "pretest": "eslint ./src; npm run compile; babel -d tests/lib/ tests/src/;"
+    "pretest": "eslint ./src && npm run compile && babel -d tests/lib/ tests/src/"
   },
   "repository": {
     "type": "git",
