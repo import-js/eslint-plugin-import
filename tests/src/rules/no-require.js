@@ -9,10 +9,8 @@ var ruleTester = new RuleTester()
 ruleTester.run('no-require', rule, {
   valid:
     [ test({code: "var foo = require('./common');"})
-    , test({code: "var fs = require('fs');"})
     , test({code: "var bar = require('./bar', true);"})
     , test({code: "var bar = proxyquire('./bar');"})
-    , test({code: "var baz = require('./baz');"})
     , test({code: "var bar = require('./ba' + 'r');"})
     , test({code: "var zero = require(0);"})
     ],

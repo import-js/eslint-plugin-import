@@ -15,9 +15,7 @@ module.exports = function (context) {
       if (typeof module.value !== 'string') return
 
       var imports = getExports(module.value, context)
-      if (imports == null) return
-
-      if (imports.hasDefault || imports.named.size > 0) {
+      if (!imports || imports.hasDefault || imports.named.size > 0) {
         context.report(call.callee,
           'CommonJS require of ES module \'' + module.value + '\'.')
       }
