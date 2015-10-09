@@ -30,5 +30,13 @@ ruleTester.run('no-require', rule, {
                }
              ]
            })
+      // enforce no-require on system modules
+    , test({ code: "var fs = require('fs');"
+           , errors: 1
+           })
+      // will be enforced on modules not resolved, too
+    , test({ code: "var baz = require('./missing-module');"
+           , errors: 1
+           })
   ]
 })
