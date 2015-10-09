@@ -78,6 +78,36 @@ For [ES7], reports if an exported namespace would be empty (no names exported fr
 
 Reports `require` of modules with ES named or default exports. Off by default.
 
+Will warn on core modules and unresolved modules, but will not warn on a userland
+module that is obviously CommonJS.
+
+Given:
+```js
+// ./mod.js
+export const foo = 'bar'
+export function bar() { return foo }
+
+// ./common.js
+exports.something = 'whatever'
+```
+
+...this is valid:
+```js
+import { foo, bar } from './mod'
+const { something } = require('common')
+
+import fs from 'fs' // core module
+import { whatever } from './not-found'
+```
+
+...and this would be reported:
+
+```js
+var mod = require('./mod')
+  , fs = require('fs')
+  , whateverModule = require('./not-found')
+```
+
 ### `no-named-as-default`
 
 Reports use of an exported name as the locally imported name of a default export.
