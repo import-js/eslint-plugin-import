@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-modules",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "ESLint rules for JavaScript modules (amd, es6, cjs, etc)",
   "main": "index.js",
   "scripts": {
