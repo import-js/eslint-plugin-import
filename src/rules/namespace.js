@@ -11,7 +11,7 @@ export default function (context) {
     var imports = getExports(declaration.source.value, context)
     if (imports == null) return null
 
-    if (imports.named.size === 0) {
+    if (!imports.hasNamed) {
       context.report(namespace,
         `No exported names found in module '${declaration.source.value}'.`)
     }

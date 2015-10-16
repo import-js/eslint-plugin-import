@@ -45,7 +45,7 @@ export default function (context) {
       // if false (unresolved), ignore
       if (!remoteExports.captureAll(node, context.getFilename())) return
 
-      if (remoteExports.named.size === 0) {
+      if (!remoteExports.hasNamed) {
         context.report(node.source,
           `No named exports found in module '${node.source.value}'.`)
       }

@@ -45,6 +45,9 @@ ruleTester.run('default', rule, {
          , settings: { 'import/parser': 'babel-eslint' }
          })
 
+    // #54: import of named export default
+  , test({ code: 'import foo from "./named-default-export"' })
+
   ],
 
   invalid: [
