@@ -64,7 +64,8 @@ ruleTester.run('no-unresolved', rule, {
 
     test({ code: 'import reallyfake from "./reallyfake/module"'
          , settings: { 'import/ignore': ['^\\./fake/'] }
-         , errors: [ 'Unable to resolve path to module \'fake/module\'.' ]
+         , errors: [{ message: 'Unable to resolve path to module ' +
+                               '\'./reallyfake/module\'.' }]
          }),
 
 
