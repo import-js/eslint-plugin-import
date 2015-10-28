@@ -10,6 +10,7 @@
     "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
     "cover": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
     "test": "mocha --recursive --reporter dot tests/lib/",
+    "debug": "mocha debug --recursive --reporter dot tests/lib/",
     "compile": "babel -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "eslint ./src && npm run compile && babel -d tests/lib/ tests/src/"
