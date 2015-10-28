@@ -25,6 +25,18 @@ export default function (context) {
            namespace.name + '.'
   }
 
+  function declaredScope(name) {
+    let references = context.getScope().references
+      , i
+    for (i = 0; i < references.length; i++) {
+      if (references[i].identifier.name === name) {
+        break
+      }
+    }
+    if (!references[i]) return undefined
+    return references[i].resolved.scope.type
+  }
+
   return {
     'ImportNamespaceSpecifier': function (namespace) {
       const imports = getImportsAndReport(namespace)
@@ -68,6 +80,9 @@ export default function (context) {
       if (id.type !== 'ObjectPattern') return
       if (init.type !== 'Identifier') return
       if (!namespaces.has(init.name)) return
+
+      // check for redefinition in intermediate scopes
+      if (declaredScope(init.name) !== 'module') return
 
       const namespace = namespaces.get(init.name)
 

@@ -43,7 +43,17 @@ ruleTester.run('namespace', rule, {
     // deep destructuring only cares about top level
   , test({ code: 'import * as names from "./named-exports";' +
                  'const { ExportedClass: { length } } = names'
-         , errors: 1
+         })
+
+    // detect scope redefinition
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'function b(names) { const { c } = names }'
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'function b() { let names = null; const { c } = names }'
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const x = function names() { const { c } = names }'
          })
 
 
