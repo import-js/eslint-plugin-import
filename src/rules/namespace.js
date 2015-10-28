@@ -19,6 +19,12 @@ export default function (context) {
     return imports
   }
 
+  function message(identifier, namespace) {
+    return '\'' + identifier.name +
+           '\' not found in imported namespace ' +
+           namespace.name + '.'
+  }
+
   return {
     'ImportNamespaceSpecifier': function (namespace) {
       const imports = getImportsAndReport(namespace)
@@ -52,10 +58,28 @@ export default function (context) {
 
       var namespace = namespaces.get(dereference.object.name)
       if (!namespace.has(dereference.property.name)) {
-        context.report(dereference.property,
-        '\'' + dereference.property.name +
-        '\' not found in imported namespace ' +
-        dereference.object.name + '.')
+        context.report( dereference.property
+                      , message(dereference.property, dereference.object)
+                      )
+      }
+    },
+
+    'VariableDeclarator': function ({ id, init }) {
+      if (id.type !== 'ObjectPattern') return
+      if (init.type !== 'Identifier') return
+      if (!namespaces.has(init.name)) return
+
+      const namespace = namespaces.get(init.name)
+
+      for (let property of id.properties) {
+        if (property.key.type !== 'Identifier') {
+          context.report( property
+                        , "Only destructure top-level names.")
+        } else if (!namespace.has(property.key.name)) {
+          context.report( property
+                        , message(property.key, init)
+                        )
+        }
       }
     }
   }

@@ -1,9 +1,7 @@
 var test = require('../utils').test
+import { RuleTester } from 'eslint'
 
-var linter = require('eslint').linter,
-    RuleTester = require('eslint').RuleTester
-
-var ruleTester = new RuleTester()
+var ruleTester = new RuleTester({ env: { es6: true }})
   , rule = require('../../../lib/rules/namespace')
 
 
@@ -29,6 +27,25 @@ ruleTester.run('namespace', rule, {
     test({ code: "import * as foo from './common';"
          , settings: { 'import/ignore': ['common'] }
          })
+
+    // destructuring namespaces
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { a } = names'
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { d: c } = names'
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { c } = foo\n' +
+                 '    , { length } = "names"\n' +
+                 '    , alt = names'
+         })
+    // deep destructuring only cares about top level
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { ExportedClass: { length } } = names'
+         , errors: 1
+         })
+
 
     /////////
     // es7 //
@@ -69,6 +86,24 @@ ruleTester.run('namespace', rule, {
          , errors: 2
          })
 
+    // invalid destructuring
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { c } = names'
+         , errors: [{ type: 'Property' }]
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'function b() { const { c } = names }'
+         , errors: [{ type: 'Property' }]
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { c: d } = names'
+         , errors: [{ type: 'Property' }]
+         })
+  , test({ code: 'import * as names from "./named-exports";' +
+                 'const { c: { d } } = names'
+         , errors: [{ type: 'Property' }]
+         })
+
     /////////
     // es7 //
     /////////
@@ -80,5 +115,7 @@ ruleTester.run('namespace', rule, {
          , parser: 'babel-eslint'
          , errors: 1
          })
+
+
   ]
 })
