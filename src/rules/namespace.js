@@ -77,6 +77,7 @@ export default function (context) {
     },
 
     'VariableDeclarator': function ({ id, init }) {
+      if (init == null) return
       if (id.type !== 'ObjectPattern') return
       if (init.type !== 'Identifier') return
       if (!namespaces.has(init.name)) return
