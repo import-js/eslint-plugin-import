@@ -15,21 +15,17 @@ export const rules = {
 }
 
 export const rulesConfig = {
-  'no-unresolved': 2
-, 'named': 2
-, 'namespace': 2
-, 'default': 2
-, 'no-named-as-default': 2
-, 'export': 2
 
-  // warnings
-, 'no-duplicates': 1
-
-  // optional
+  'no-unresolved': 0
+, 'named': 0
+, 'namespace': 0
+, 'default': 0
+, 'export': 0
+, 'no-named-as-default': 0
+, 'no-duplicates': 0
 , 'imports-first': 0
-, 'no-errors': 0
 , 'no-require': 0
 
-  // removed
-, 'no-reassign': 0
+  // basically just a debugging rule
+, 'no-errors': 0
 }
