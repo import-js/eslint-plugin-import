@@ -1,5 +1,5 @@
-eslint-plugin-import
----
+# eslint-plugin-import
+
 [![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg?branch=master)](https://travis-ci.org/benmosher/eslint-plugin-import)
 [![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/benmosher/eslint-plugin-import/branch/master)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
@@ -8,17 +8,23 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **IF YOU ARE USING THIS WITH SUBLIME**: see the [bottom section](#sublimelinter-eslint) for important info.
 
-**Current support**:
+## Rules
 
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](#no-unresolved))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
-* Report CommonJS `require` of ES6 module. ([`no-require`](#no-require), off by default)
-* Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 * Report any invalid exports, i.e. re-export of the same name ([`export`](#export))
+
+Helpful warnings:
+
+* Report CommonJS `require` of ES6 module. ([`no-require`](#no-require))
+* Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 * Report repeated import of the same module in multiple places ([`no-duplicates`](#no-duplicates), warning by default)
-* Ensure all imports appear before other statements ([`imports-first`](#imports-first), off by default)
+
+Style rules:
+
+* Ensure all imports appear before other statements ([`imports-first`](#imports-first))
 
 ## Installation
 
@@ -33,7 +39,31 @@ or if you manage ESLint as a dev dependency:
 npm install eslint-plugin-import --save-dev
 ```
 
-## Rules
+As of v0.9, all rules are off by default. However, you may configure them manually
+in your `.eslintrc`, or extend one of the canned base configs from the `eslint-config-import`
+package:
+
+```yaml
+---
+extends:
+  - "eslint:recommended"
+  - import/warnings  # after `npm i -D eslint-config-import`-ing
+
+# or configure manually:
+plugins:
+  - import
+
+rules:
+  import/no-unresolved: 2
+  import/named: 2
+  import/namespace: 2
+  import/default: 2
+  import/export: 2
+  # etc...
+```
+
+
+## Rule Details
 
 ### `no-unresolved`
 
@@ -246,19 +276,28 @@ A passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
 
 #### `import/parser`
 
-Analogous to ESLint's [custom parser] setting from the top level of `.eslintrc`.
-Like ESLint proper, the default here is Espree.
+This setting allows you to provide a custom parser module, in the event your
+project uses syntax not understood by Babel.
 
-If you're using [babel-eslint] or some other parser for ESLint, you'll likely want to
-configure it here, too, assuming your imports include any experimental syntax not
-directly supported by Espree.
+This plugin defaults to using `babel-core`, but is also compatible with Espree's
+AST. As long as the import nodes follow [ESTree], any parser should work.
+
+If you're using [babel-eslint], you probably don't need to specify it here (as of
+v0.9).
 
 [custom parser]: https://github.com/eslint/eslint/blob/master/docs/user-guide/configuring.md#specifying-parser
 [babel-eslint]: https://github.com/babel/babel-eslint
+[ESTree]: https://github.com/estree/estree
 
 Here is an example `.eslintrc` for reference:
 
 ```yaml
+
+extends:
+  - "eslint:recommended"
+  - import/warnings  # optionally start from eslint-config-import
+
+# if not using the `extends` package, make sure to add the plugin here:
 plugins:
   - import
 
@@ -297,7 +336,7 @@ settings:
                      # a source root, for in-project aliasing (i.e.
                      # `import MyStore from 'stores/my-store'`)
 
-  import/parser: babel-eslint  # again, default is 'espree'. configure at your own risk
+  import/parser: esprima-fb  # default is 'babel-core'. change if needed.
 ```
 
 ## Debugging
