@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
-    "babel": "5.8.29",
+    "babel": "6.0.0",
     "babel-eslint": "^4.1.3",
     "chai": "^3.4.0",
     "eslint": ">=1.6.0",
