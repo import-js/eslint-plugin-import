@@ -12,11 +12,6 @@ export const rules = {
 
 , 'no-duplicates': require('./rules/no-duplicates')
 , 'imports-first': require('./rules/imports-first')
-
-  // removed
-, 'no-reassign': function () { return {} }
-  // should remove this undocumented alias
-, 'exists': require('./rules/no-unresolved')
 }
 
 export const rulesConfig = {
