@@ -1,16 +1,16 @@
 import { test } from '../utils'
-import { linter, RuleTester } from 'eslint'
+import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
     , rule = require('../../../lib/rules/no-require')
 
 ruleTester.run('no-require', rule, {
   valid:
-    [ test({code: "var foo = require('./common');"})
-    , test({code: "var bar = require('./bar', true);"})
-    , test({code: "var bar = proxyquire('./bar');"})
-    , test({code: "var bar = require('./ba' + 'r');"})
-    , test({code: 'var zero = require(0);'})
+    [ test({ code: "var foo = require('./common');" })
+    , test({ code: "var bar = require('./bar', true);" })
+    , test({ code: "var bar = proxyquire('./bar');" })
+    , test({ code: "var bar = require('./ba' + 'r');" })
+    , test({ code: 'var zero = require(0);' })
     ],
 
   invalid:

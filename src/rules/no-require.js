@@ -1,8 +1,6 @@
-'use strict'
+import { get as getExports } from '../core/getExports'
 
-var getExports = require('../core/getExports').get
-
-module.exports = function (context) {
+export default function (context) {
   return {
     'CallExpression': function (call) {
       if (call.callee.type !== 'Identifier') return
