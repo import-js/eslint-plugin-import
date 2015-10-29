@@ -1,7 +1,6 @@
 var test = require("../utils").test
 
-var linter = require("eslint").linter,
-    RuleTester = require('eslint').RuleTester
+var RuleTester = require('eslint').RuleTester
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/no-errors')
@@ -13,16 +12,11 @@ ruleTester.run('no-errors', rule, {
     test({code: "import { foo } from './does-not-exist';"}),
     test({code: "import { a } from './test'"})
 
-  // , test({ code: "import Foo from './jsx/FooES7.js';", parser: 'babel-eslint' })
+    // babel-core is default parser, now
+  , test({ code: "import Foo from './jsx/FooES7.js';" })
   ],
 
   invalid: [
-    test({ code: "import Foo from './jsx/FooES7.js';",
-      errors: [{
-        message: "Errors encountered while analysing imported module './jsx/FooES7.js'.",
-        type: "Literal"}]}),
-
-
     test({code: "import { a } from './test.coffee';",
       errors: [{
         message: "Errors encountered while analysing imported module './test.coffee'.",
