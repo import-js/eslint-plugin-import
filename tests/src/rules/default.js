@@ -1,9 +1,5 @@
-'use strict'
-
-var test = require('../utils').test
-
-var linter = require('eslint').linter,
-    RuleTester = require('eslint').RuleTester
+import { test } from '../utils'
+import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/default')
@@ -31,9 +27,11 @@ ruleTester.run('default', rule, {
   , test({ code: 'export bar from "./bar"'
          , parser: 'babel-eslint'
          })
+  , test({ code: 'export { default as bar } from "./bar"' })
   , test({ code: 'export bar, { foo } from "./bar"'
          , parser: 'babel-eslint'
          })
+  , test({ code: 'export { default as bar, foo } from "./bar"' })
   , test({ code: 'export bar, * as names from "./bar"'
          , parser: 'babel-eslint'
          })
