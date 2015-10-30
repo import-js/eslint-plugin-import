@@ -12,6 +12,7 @@ export default function parse(path, settings) {
                                        , "classProperties"
                                        , "objectRestSpread"
                                        , "exportExtensions"
+                                       , "exponentiationOperator"
                                        ]
                             }
                           )
