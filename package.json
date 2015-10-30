@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "babel-core": "5.x",
-    "babel-runtime": "5.8.29",
+    "babel-runtime": "6.0.14",
     "resolve": "1.1.6"
   }
 }
