@@ -52,8 +52,8 @@
     "eslint": ">=0.16.0"
   },
   "dependencies": {
-    "babel-cli": "^6.0.12",
-    "babel-runtime": "^6.0.12",
+    "babel-runtime": "6.0.12",
+    "babylon": "6.0.2",
     "resolve": "1.1.6"
   }
 }
