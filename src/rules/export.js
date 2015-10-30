@@ -1,6 +1,6 @@
 import ExportMap from '../core/getExports'
 
-export default function (context) {
+module.exports = function (context) {
   const defaults = new Set()
       , named = new Map()
 

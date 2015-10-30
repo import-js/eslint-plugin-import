@@ -1,6 +1,6 @@
-import { get as getExports } from '../core/getExports'
+import Exports from '../core/getExports'
 
-export default function (context) {
+module.exports = function (context) {
 
   function checkDefault(specifierType, node) {
 
@@ -14,7 +14,7 @@ export default function (context) {
     })
 
     if (!defaultSpecifier) return
-    var imports = getExports(node.source.value, context)
+    var imports = Exports.get(node.source.value, context)
     if (imports == null) return
 
     if (!imports.hasDefault) {

@@ -1,8 +1,7 @@
-'use strict'
+import { expect } from  'chai'
+import path from 'path'
 
-var expect = require('chai').expect
-  , path = require('path')
-var ExportMap = require('../../../lib/core/getExports')
+import ExportMap from '../../../lib/core/getExports'
 
 function getFilename(file) {
   return path.join(__dirname, '..', '..', 'files', file || 'foo.js')

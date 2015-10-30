@@ -4,7 +4,7 @@
  */
 import resolve from '../core/resolve'
 
-export default function (context) {
+module.exports = function (context) {
 
   function checkSource(node) {
     if (node.source == null) return

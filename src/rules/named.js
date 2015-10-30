@@ -1,6 +1,4 @@
-'use strict'
-
-var getExports = require('../core/getExports').get
+import Exports from '../core/getExports'
 
 module.exports = function (context) {
   function checkSpecifiers(key, type, node) {
@@ -11,7 +9,7 @@ module.exports = function (context) {
       return // no named imports/exports
     }
 
-    const imports = getExports(node.source.value, context)
+    const imports = Exports.get(node.source.value, context)
     if (imports == null) return
 
     var names = imports.named

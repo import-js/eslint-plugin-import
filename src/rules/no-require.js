@@ -1,6 +1,6 @@
-import { get as getExports } from '../core/getExports'
+import Exports from '../core/getExports'
 
-export default function (context) {
+module.exports = function (context) {
   return {
     'CallExpression': function (call) {
       if (call.callee.type !== 'Identifier') return
@@ -12,7 +12,7 @@ export default function (context) {
       if (module.type !== 'Literal') return
       if (typeof module.value !== 'string') return
 
-      var imports = getExports(module.value, context)
+      var imports = Exports.get(module.value, context)
       if (!imports || imports.hasDefault || imports.hasNamed) {
         context.report(call.callee,
           'CommonJS require of ES module \'' + module.value + '\'.')
