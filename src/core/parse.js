@@ -13,6 +13,7 @@ export default function parse(path, settings) {
                                        , "objectRestSpread"
                                        , "exportExtensions"
                                        , "exponentiationOperator"
+                                       , "trailingFunctionCommas"
                                        ]
                             }
                           )
