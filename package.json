@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
+    "acorn-to-esprima": "github:benmosher/acorn-to-esprima#bugfix/infinite-rule-recursion",
     "babel": "5.8.29",
     "babel-eslint": "^4.1.3",
     "chai": "^3.4.0",
