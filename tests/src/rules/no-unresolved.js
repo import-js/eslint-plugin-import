@@ -1,9 +1,8 @@
 var path = require('path')
 
-var test = require('../utils').test
+import { test } from '../utils'
 
-var linter = require('eslint').linter,
-    RuleTester = require('eslint').RuleTester
+import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/no-unresolved')

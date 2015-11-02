@@ -1,4 +1,4 @@
-export default function (context) {
+module.exports = function (context) {
   return {
     "Program": function (n) {
       const body = n.body

@@ -38,9 +38,8 @@ ruleTester.run('default', rule, {
 
     // sanity check
   , test({ code: 'export {a} from "./named-exports"' })
-
   , test({ code: 'import twofer from "./trampoline"'
-         , settings: { 'import/parser': 'babel-eslint' }
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          })
 
     // #54: import of named export default
@@ -79,7 +78,6 @@ ruleTester.run('default', rule, {
          })
     // exports default from a module with no default
   , test({ code: 'import twofer from "./broken-trampoline"'
-         , settings: { 'import/parser': 'babel-eslint' }
          , errors: 1
          })
   ]

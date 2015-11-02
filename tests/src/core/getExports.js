@@ -1,8 +1,7 @@
-'use strict'
+import { expect } from  'chai'
+import path from 'path'
 
-var expect = require('chai').expect
-  , path = require('path')
-var ExportMap = require('../../../lib/core/getExports')
+import ExportMap from '../../../lib/core/getExports'
 
 function getFilename(file) {
   return path.join(__dirname, '..', '..', 'files', file || 'foo.js')
@@ -53,6 +52,23 @@ describe('getExports', function () {
   it('finds exports for an ES7 module with babel-eslint', function () {
     var imports = ExportMap.parse( getFilename('jsx/FooES7.js')
                                  , { 'import/parser': 'babel-eslint' })
+
+    expect(imports).to.exist
+    expect(imports).to.have.property('hasDefault', true)
+    expect(imports.named.has('Bar')).to.be.true
+  })
+
+  it('finds exports for an ES7 module with proper parse options', function () {
+    var imports = ExportMap.parse(getFilename('jsx/FooES7.js'), {
+      'import/parse-options': {
+        plugins: [
+          'decorators',
+          'jsx',
+          'classProperties',
+          'objectRestSpread'
+        ]
+      }
+    })
 
     expect(imports).to.exist
     expect(imports).to.have.property('hasDefault', true)

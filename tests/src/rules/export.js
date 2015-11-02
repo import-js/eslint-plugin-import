@@ -1,6 +1,6 @@
 import { test } from '../utils'
 
-import { linter, RuleTester } from 'eslint'
+import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/export')

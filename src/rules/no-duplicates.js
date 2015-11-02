@@ -1,6 +1,6 @@
 import resolve from '../core/resolve'
 
-export default function (context) {
+module.exports = function (context) {
   const imported = new Map()
   return {
     "ImportDeclaration": function (n) {

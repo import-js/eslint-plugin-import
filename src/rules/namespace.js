@@ -1,14 +1,14 @@
-import { get as getExports } from '../core/getExports'
+import Exports from '../core/getExports'
 import importDeclaration from '../importDeclaration'
 
-export default function (context) {
+module.exports = function (context) {
 
   const namespaces = new Map()
 
   function getImportsAndReport(namespace) {
     var declaration = importDeclaration(context)
 
-    var imports = getExports(declaration.source.value, context)
+    var imports = Exports.get(declaration.source.value, context)
     if (imports == null) return null
 
     if (!imports.hasNamed) {

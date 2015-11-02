@@ -1,6 +1,4 @@
-'use strict'
-
-var getExports = require('../core/getExports').get
+import Exports from '../core/getExports'
 
 module.exports = function (context) {
   function message(node, errors) {
@@ -19,7 +17,7 @@ module.exports = function (context) {
 
   return {
     'ImportDeclaration': function (node) {
-      var imports = getExports(node.source.value, context)
+      var imports = Exports.get(node.source.value, context)
       if (imports == null) return
 
       if (imports.errors.length > 0) {
