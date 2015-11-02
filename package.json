@@ -8,7 +8,7 @@
   },
   "scripts": {
     "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
-    "cover": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel/register",
+    "cover": "eslint ./src && istanbul cover --dir reports/coverage _mocha tests/src/ -- --recursive --reporter dot --compilers js:babel-core/register",
     "test": "mocha --recursive --reporter dot tests/lib/",
     "debug": "mocha debug --recursive --reporter dot tests/lib/",
     "compile": "babel -d lib/ src/",
@@ -36,13 +36,10 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "acorn-to-esprima": "^1.0.5",
-    "babel": "^6.0.12",
     "babel-cli": "^6.0.12",
     "babel-eslint": "^4.1.3",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.0.12",
     "babel-plugin-transform-runtime": "^6.0.2",
     "babel-preset-es2015": "^6.0.12",
-    "babel-types": "^6.0.13",
     "chai": "^3.4.0",
     "eslint": ">=1.8.0",
     "istanbul": "^0.4.0",
@@ -52,7 +49,7 @@
     "eslint": ">=0.16.0"
   },
   "dependencies": {
-    "babel-runtime": "6.0.12",
+    "babel-runtime": "6.0.14",
     "babylon": "6.0.2",
     "resolve": "1.1.6"
   }
