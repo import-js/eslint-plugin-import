@@ -66,7 +66,7 @@ ruleTester.run('named', rule, {
          , parser: 'babel-eslint'
          })
   , test({ code: 'import { foo, bar } from "./named-trampoline"'
-         , parser: 'babel-eslint'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }}
          })
 
     // regression tests
@@ -126,6 +126,7 @@ ruleTester.run('named', rule, {
          , errors: 1
          })
   , test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }}
          , parser: 'babel-eslint'
          , errors: 1
          })

@@ -1,6 +1,5 @@
-var test = require("../utils").test
-
-var RuleTester = require('eslint').RuleTester
+import { test } from '../utils'
+import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/no-errors')
@@ -13,7 +12,15 @@ ruleTester.run('no-errors', rule, {
     test({code: "import { a } from './test'"})
 
     // babel-core is default parser, now
-  , test({ code: "import Foo from './jsx/FooES7.js';" })
+  , test({ code: "import Foo from './jsx/FooES7.js';",
+           settings: { 'import/parse-options': { plugins: [ 'decorators'
+                                                          , 'jsx'
+                                                          , 'classProperties'
+                                                          , 'objectRestSpread'
+                                                          ]
+                                               }
+                     }
+         })
   ],
 
   invalid: [

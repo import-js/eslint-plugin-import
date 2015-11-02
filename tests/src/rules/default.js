@@ -38,7 +38,9 @@ ruleTester.run('default', rule, {
 
     // sanity check
   , test({ code: 'export {a} from "./named-exports"' })
-  , test({ code: 'import twofer from "./trampoline"' })
+  , test({ code: 'import twofer from "./trampoline"'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
+         })
 
     // #54: import of named export default
   , test({ code: 'import foo from "./named-default-export"' })
