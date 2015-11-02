@@ -58,4 +58,21 @@ describe('getExports', function () {
     expect(imports.named.has('Bar')).to.be.true
   })
 
+  it('finds exports for an ES7 module with proper parse options', function () {
+    var imports = ExportMap.parse(getFilename('jsx/FooES7.js'), {
+      'import/parse-options': {
+        plugins: [
+          'decorators',
+          'jsx',
+          'classProperties',
+          'objectRestSpread'
+        ]
+      }
+    })
+
+    expect(imports).to.exist
+    expect(imports).to.have.property('hasDefault', true)
+    expect(imports.named.has('Bar')).to.be.true
+  })
+
 })
