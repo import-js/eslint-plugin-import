@@ -1,12 +1,9 @@
 import fs from 'fs'
 
-export default function parse(path, settings) {
-  var parser = require(settings['import/parser'] || "babylon")
-
-  // todo: parser option setting
-  const ast = parser.parse( fs.readFileSync(path, {encoding: 'utf8'})
-                          , { ecmaVersion: 6
+const defaultParseOptions = { ecmaVersion: 6  // for espree, esprima. not needed
+                                              // for babylon
                             , sourceType: "module"
+                              // default plugins
                             , plugins: [ "decorators"
                                        , "jsx"
                                        , "classProperties"
@@ -16,6 +13,13 @@ export default function parse(path, settings) {
                                        , "trailingFunctionCommas"
                                        ]
                             }
+
+export default function parse(path, settings) {
+  const parser = require(settings['import/parser'] || "babylon")
+      , options = settings['import/parse-options'] || defaultParseOptions
+
+  const ast = parser.parse( fs.readFileSync(path, {encoding: 'utf8'})
+                          , options
                           )
 
   // bablyon returns top-level "File" node.
