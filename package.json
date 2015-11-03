@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "babel-runtime": "5.x",
-    "babylon": "6.0.2",
+    "babylon": "6.0.18",
     "resolve": "1.1.6"
   }
 }
