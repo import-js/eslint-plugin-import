@@ -279,11 +279,12 @@ A passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
 This setting allows you to provide a custom parser module, in the event your
 project uses syntax not understood by Babel.
 
-This plugin defaults to using `babel-core`, but is also compatible with Espree's
-AST. As long as the import nodes follow [ESTree], any parser should work.
+This plugin defaults to using Babylon, Babel's internal parser, but is also
+compatible with Espree's AST. As long as the import nodes follow [ESTree],
+any parser should work.
 
-If you're using [babel-eslint], you probably don't need to specify it here (as of
-v0.9).
+If you're using [babel-eslint] as ESLint's parser, you probably don't need to
+specify it here (anymore, as of v0.9).
 
 [custom parser]: https://github.com/eslint/eslint/blob/master/docs/user-guide/configuring.md#specifying-parser
 [babel-eslint]: https://github.com/babel/babel-eslint
