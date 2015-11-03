@@ -290,6 +290,16 @@ specify it here (anymore, as of v0.9).
 [babel-eslint]: https://github.com/babel/babel-eslint
 [ESTree]: https://github.com/estree/estree
 
+#### `import/parse-options`
+
+This setting will be merged 1-level deep (think `Object.assign`) with the default
+parse options and passed as the second parameter to the parser: `parse(file, options)`.
+See the [`import/es7-jsx`](https://github.com/benmosher/eslint-plugin-import/tree/master/config)
+config file for an example of explicit parse options for Babylon.
+
+Or, if you are using another parser, you may want to set these options as well.
+(and maybe contribute another config file! i.e. `eslint-config-import/espree`)
+
 Here is an example `.eslintrc` for reference:
 
 ```yaml
