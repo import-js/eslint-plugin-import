@@ -35,9 +35,8 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
-    "acorn-to-esprima": "^1.0.5",
     "babel": "5.x",
-    "babel-eslint": "^4.1.3",
+    "babel-eslint": "^4.1.4",
     "chai": "^3.4.0",
     "eslint": ">=1.8.0",
     "istanbul": "^0.4.0",
