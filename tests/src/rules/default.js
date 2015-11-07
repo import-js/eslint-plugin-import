@@ -44,6 +44,8 @@ ruleTester.run('default', rule, {
 
     // #54: import of named export default
   , test({ code: 'import foo from "./named-default-export"' })
+    // #94: redux export of execution result
+  , test({ code: 'import connectedApp from "./redux"' })
 
   ],
 
