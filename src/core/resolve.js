@@ -10,7 +10,7 @@ function fileExistsWithCaseSync(filepath) {
   if (!fs.existsSync(filepath)) return false
 
   var dir = path.dirname(filepath)
-  if (dir === '/' || dir === '.' || /^[A-Z]:\\$/.test(dir)) return true
+  if (dir === '/' || dir === '.' || /^[A-Z]:\\$/i.test(dir)) return true
   var filenames = fs.readdirSync(dir)
   if (filenames.indexOf(path.basename(filepath)) === -1) {
       return false
