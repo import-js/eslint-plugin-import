@@ -87,6 +87,7 @@ ruleTester.run('default', rule, {
          })
     // exports default from a module with no default
   , test({ code: 'import twofer from "./broken-trampoline"'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          , errors: 1
          })
   ]

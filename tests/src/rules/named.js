@@ -1,8 +1,5 @@
-'use strict'
-
-var test = require('../utils').test
-var linter = require('eslint').linter,
-    RuleTester = require('eslint').RuleTester
+import { test } from '../utils'
+import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/named')
@@ -126,12 +123,11 @@ ruleTester.run('named', rule, {
          , errors: 1
          })
   , test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }}
-         , parser: 'babel-eslint'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          , errors: 1
          })
   , test({ code: 'import { baz } from "./broken-trampoline"'
-         , parser: 'babel-eslint'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          , errors: 1
          })
   ]
