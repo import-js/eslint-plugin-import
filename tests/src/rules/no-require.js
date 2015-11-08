@@ -11,6 +11,10 @@ ruleTester.run('no-require', rule, {
     , test({ code: "var bar = proxyquire('./bar');" })
     , test({ code: "var bar = require('./ba' + 'r');" })
     , test({ code: 'var zero = require(0);' })
+
+    , test({ code: 'function () { var bar = require("./bar"); }' })
+    , test({ code: 'var bar = require("./bar")'
+           , settings: { 'import/ignore': ['bar'] } })
     ],
 
   invalid:
