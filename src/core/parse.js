@@ -5,15 +5,27 @@ const defaultParseOptions = { ecmaVersion: 6  // for espree, esprima. not needed
                             , sourceType: "module"
                             }
 
-export default function parse(path, settings) {
-  const parser = require(settings['import/parser'] || "babylon")
+export default function parse(path, context) {
+  const { settings } = context
+      , parser = settings['import/parser'] || "babylon"
+
+  const { parse } = require(parser)
       , options = Object.assign( {}
                                , defaultParseOptions
                                , settings['import/parse-options'])
 
-  const ast = parser.parse( fs.readFileSync(path, {encoding: 'utf8'})
-                          , options
-                          )
+  // detect and handle "jsx" ecmaFeature
+  if (context.ecmaFeatures && parser === "babylon") {
+    const { jsx } = context.ecmaFeatures
+    if (jsx && (!options.plugins || options.plugins.indexOf('jsx') < 0)) {
+      if (!options.plugins) options.plugins = ['jsx']
+      else options.plugins.push('jsx')
+    }
+  }
+
+  const ast = parse( fs.readFileSync(path, {encoding: 'utf8'})
+                   , options
+                   )
 
   // bablyon returns top-level "File" node.
   return ast.type === 'File' ? ast.program : ast

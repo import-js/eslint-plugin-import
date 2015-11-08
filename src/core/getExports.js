@@ -6,12 +6,14 @@ import isIgnored from './ignore'
 var exportCache = new Map()
 
 export default class ExportMap {
-  constructor(settings) {
-    this.settings = settings
+  constructor(context) {
+    this.context = context
     this.named = new Set()
 
     this.errors = []
   }
+
+  get settings() { return this.context && this.context.settings }
 
   get hasDefault() { return this.named.has('default') }
   get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
@@ -23,14 +25,14 @@ export default class ExportMap {
     var path = resolve(source, context)
     if (path == null || isIgnored(path, context)) return null
 
-    return ExportMap.for(path, context.settings)
+    return ExportMap.for(path, context)
   }
 
-  static for(path, settings) {
+  static for(path, context) {
     var exportMap = exportCache.get(path)
     if (exportMap != null) return exportMap
 
-    exportMap = ExportMap.parse(path, settings)
+    exportMap = ExportMap.parse(path, context)
 
     exportCache.set(path, exportMap)
 
@@ -40,11 +42,11 @@ export default class ExportMap {
     return exportMap
   }
 
-  static parse(path, settings) {
-    var m = new ExportMap(settings)
+  static parse(path, context) {
+    var m = new ExportMap(context)
 
     try {
-      var ast = parse(path, settings)
+      var ast = parse(path, context)
     } catch (err) {
       m.errors.push(err)
       return m // can't continue
@@ -63,7 +65,7 @@ export default class ExportMap {
     var remotePath = resolve.relative(node.source.value, base, this.settings)
     if (remotePath == null) return null
 
-    return ExportMap.for(remotePath, this.settings)
+    return ExportMap.for(remotePath, this.context)
   }
 
   captureDefault(n) {
@@ -125,3 +127,4 @@ export default class ExportMap {
     }.bind(this))
   }
 }
+//

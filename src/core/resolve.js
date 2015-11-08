@@ -29,7 +29,7 @@ function fileExists(filepath) {
 function opts(basedir, settings) {
   // pulls all items from 'import/resolve'
   return Object.assign( { }
-                      , settings['import/resolve']
+                      , settings && settings['import/resolve']
                       , { basedir: basedir }
                       )
 }

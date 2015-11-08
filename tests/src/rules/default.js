@@ -41,12 +41,19 @@ ruleTester.run('default', rule, {
   , test({ code: 'import twofer from "./trampoline"'
          , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          })
+    // jsx
+  , test({ code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"'
+         , ecmaFeatures: { jsx: true, modules: true }
+         })
 
     // #54: import of named export default
   , test({ code: 'import foo from "./named-default-export"' })
+
     // #94: redux export of execution result
   , test({ code: 'import connectedApp from "./redux"' })
-
+  , test({ code: 'import App from "./jsx/App"'
+         , ecmaFeatures: { jsx: true, modules: true }
+         })
   ],
 
   invalid: [
