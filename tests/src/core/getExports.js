@@ -51,7 +51,7 @@ describe('getExports', function () {
 
   it('finds exports for an ES7 module with babel-eslint', function () {
     var imports = ExportMap.parse( getFilename('jsx/FooES7.js')
-                                 , { 'import/parser': 'babel-eslint' })
+                                 , { settings: { 'import/parser': 'babel-eslint' } })
 
     expect(imports).to.exist
     expect(imports).to.have.property('hasDefault', true)
@@ -59,7 +59,7 @@ describe('getExports', function () {
   })
 
   it('finds exports for an ES7 module with proper parse options', function () {
-    var imports = ExportMap.parse(getFilename('jsx/FooES7.js'), {
+    var imports = ExportMap.parse(getFilename('jsx/FooES7.js'), { settings: {
       'import/parse-options': {
         plugins: [
           'decorators',
@@ -68,7 +68,7 @@ describe('getExports', function () {
           'objectRestSpread'
         ]
       }
-    })
+    }})
 
     expect(imports).to.exist
     expect(imports).to.have.property('hasDefault', true)
