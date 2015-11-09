@@ -1,5 +1,3 @@
-import Exports from '../core/getExports'
-
 module.exports = function (context) {
   return {
     'CallExpression': function (call) {
@@ -12,11 +10,11 @@ module.exports = function (context) {
       if (module.type !== 'Literal') return
       if (typeof module.value !== 'string') return
 
-      var imports = Exports.get(module.value, context)
-      if (!imports || imports.hasDefault || imports.hasNamed) {
-        context.report(call.callee,
-          'CommonJS require of ES module \'' + module.value + '\'.')
-      }
+      // keeping it simple: all 1-string-arg `require` calls are reported
+      context.report({
+        node: call.callee,
+        message: `CommonJS require of module '${module.value}'.`
+      })
     }
   }
 }

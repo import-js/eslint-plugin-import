@@ -18,7 +18,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 Helpful warnings:
 
-* Report CommonJS `require` of ES6 module. ([`no-require`](#no-require))
+* Report CommonJS `require` calls. ([`no-require`](#no-require))
 * Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
 * Report repeated import of the same module in multiple places ([`no-duplicates`](#no-duplicates), warning by default)
 
@@ -106,10 +106,10 @@ For [ES7], reports if an exported namespace would be empty (no names exported fr
 
 ### `no-require`
 
-Reports `require` of modules with ES named or default exports. Off by default.
+Reports `require([string])` function calls. Will not report if >1 argument,
+or single argument is not a literal string.
 
-Will warn on core modules and unresolved modules, but will not warn on a userland
-module that is obviously CommonJS.
+Intended for temporary use when migrating to pure ES6 modules.
 
 Given:
 ```js
@@ -121,19 +121,11 @@ export function bar() { return foo }
 exports.something = 'whatever'
 ```
 
-...this is valid:
-```js
-import { foo, bar } from './mod'
-const { something } = require('common')
-
-import fs from 'fs' // core module
-import { whatever } from './not-found'
-```
-
-...and this would be reported:
+This would be reported:
 
 ```js
 var mod = require('./mod')
+  , common = require('./common')
   , fs = require('fs')
   , whateverModule = require('./not-found')
 ```

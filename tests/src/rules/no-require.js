@@ -6,28 +6,32 @@ const ruleTester = new RuleTester()
 
 ruleTester.run('no-require', rule, {
   valid:
-    [ test({ code: "var foo = require('./common');" })
-    , test({ code: "var bar = require('./bar', true);" })
+    [ test({ code: "var bar = require('./bar', true);" })
     , test({ code: "var bar = proxyquire('./bar');" })
     , test({ code: "var bar = require('./ba' + 'r');" })
     , test({ code: 'var zero = require(0);' })
-
-    , test({ code: 'function () { var bar = require("./bar"); }' })
-    , test({ code: 'var bar = require("./bar")'
-           , settings: { 'import/ignore': ['bar'] } })
     ],
 
   invalid:
-    [ test({ code: "var bar = require('./bar');"
+    [ test({ code: "var foo = require('./common');"
+           , errors: 1 })
+      // future: maybe a rule option that doesn't report on anything
+      //         but top-level scoped requires?
+    , test({ code: 'function () { var bar = require("./bar"); }'
+           , errors: 1 })
+    , test({ code: 'var bar = require("./bar")'
+           , settings: { 'import/ignore': ['bar'] }
+           , errors: 1 })
+    , test({ code: "var bar = require('./bar');"
            , errors:
-             [ { message: "CommonJS require of ES module './bar'."
+             [ { message: "CommonJS require of module './bar'."
                , type: 'Identifier'
                }
              ]
            })
     , test({ code: "(function () { var bar = require('./bar'); }());"
            , errors:
-             [ { message: "CommonJS require of ES module './bar'."
+             [ { message: "CommonJS require of module './bar'."
                , type: 'Identifier'
                }
              ]
