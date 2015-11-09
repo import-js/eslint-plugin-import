@@ -7,3 +7,4 @@ rules:
   semi: [2, "never"]
   quotes: [2, "single"]
   curly: [2, "multi-line"]
+  comma-dangle: [2, always-multiline]
