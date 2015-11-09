@@ -1,9 +1,9 @@
 import fs from 'fs'
 
-const defaultParseOptions = { ecmaVersion: 6  // for espree, esprima. not needed
-                                              // for babylon
-                            , sourceType: 'module',
-                            }
+const defaultParseOptions = {
+  ecmaVersion: 6,  // for espree, esprima. not needed for babylon
+  sourceType: 'module',
+}
 
 export default function parse(path, context) {
   const { settings } = context

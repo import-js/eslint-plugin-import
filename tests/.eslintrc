@@ -8,3 +8,4 @@ ecmaFeatures:
 rules:
   no-unused-expressions: 0
   quotes: [2, 'single', 'avoid-escape']
+  max-len: 0

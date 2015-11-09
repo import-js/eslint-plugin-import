@@ -89,12 +89,15 @@ module.exports = function (context) {
 
       for (let property of id.properties) {
         if (property.key.type !== 'Identifier') {
-          context.report( property
-                        , 'Only destructure top-level names.')
+          context.report({
+            node: property,
+            message: 'Only destructure top-level names.',
+          })
         } else if (!namespace.has(property.key.name)) {
-          context.report( property
-                        , message(property.key, init)
-                        )
+          context.report({
+            node: property,
+            message: message(property.key, init),
+          })
         }
       }
     },

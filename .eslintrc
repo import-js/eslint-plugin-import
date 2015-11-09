@@ -2,6 +2,9 @@
 extends: eslint:recommended
 env:
   node: true
+  es6: true
+ecmaFeatures:
+  modules: true
 rules:
   max-len: [1, 99, 2]
   semi: [2, "never"]

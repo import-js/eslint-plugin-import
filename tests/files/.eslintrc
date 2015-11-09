@@ -2,6 +2,6 @@
 parser: 'babel-eslint'
 env:
   es6: true
-  jsx: true
 ecmaFeatures:
+  jsx: true
   modules: true
