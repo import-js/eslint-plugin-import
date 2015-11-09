@@ -40,7 +40,7 @@ module.exports = function (context) {
     },
 
     'ExportAllDeclaration': function (node) {
-      let remoteExports = new ExportMap(context.settings)
+      let remoteExports = new ExportMap(context)
 
       // if false (unresolved), ignore
       if (!remoteExports.captureAll(node, context.getFilename())) return
