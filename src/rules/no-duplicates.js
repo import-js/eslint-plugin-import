@@ -5,7 +5,7 @@ module.exports = function (context) {
   return {
     "ImportDeclaration": function (n) {
       // resolved path will cover aliased duplicates
-      let resolvedPath = resolve(n.source.value, context)
+      let resolvedPath = resolve(n.source.value, context) || n.source.value
 
       if (imported.has(resolvedPath)) {
         imported.get(resolvedPath).add(n.source)
