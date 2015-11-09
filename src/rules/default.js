@@ -17,7 +17,13 @@ module.exports = function (context) {
     var imports = Exports.get(node.source.value, context)
     if (imports == null) return
 
-    if (!imports.hasDefault) {
+    if (imports.errors.length) {
+      context.report({
+        node: node.source,
+        message: `Parse errors in imported module ` +
+                 `'${node.source.value}'.`,
+      })
+    } else if (!imports.hasDefault) {
       context.report(defaultSpecifier, 'No default export found in module.')
     }
   }

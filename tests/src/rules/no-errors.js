@@ -5,19 +5,6 @@
 //   , rule = require('../../../lib/rules/no-errors')
 
 // ruleTester.run('no-errors', rule, {
-//   valid: [
-//     test({
-//       code: "import Foo from './jsx/FooES7.js';",
-//       settings: { 'import/parse-options': {
-//         plugins: [
-//           'decorators',
-//           'jsx',
-//           'classProperties',
-//           'objectRestSpread',
-//         ],
-//       }},
-//     }),
-//   ],
 
 //   invalid: [
 //     test({code: "import { a } from './test.coffee';",
