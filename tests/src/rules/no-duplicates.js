@@ -42,8 +42,8 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import foo from 'non-existent'; import bar from 'non-existent';",
       errors: [
-        "Module 'non-existent' imported multiple times.",
-        "Module 'non-existent' imported multiple times.",
+        "'non-existent' imported multiple times.",
+        "'non-existent' imported multiple times.",
       ],
     }),
   ],
