@@ -34,16 +34,37 @@ module.exports = function (context) {
     checkSourceValue(modulePath)
   }
 
+  function checkAMD(call) {
+    if (call.callee.type !== 'Identifier') return
+    if (call.callee.name !== 'require' &&
+        call.callee.name !== 'define') return
+    if (call.arguments.length !== 2) return
+
+    const modules = call.arguments[0]
+    if (modules.type !== 'ArrayExpression') return
+
+    for (let element of modules.elements) {
+      if (element.type !== 'Literal') continue
+      if (typeof element.value !== 'string') continue
+
+      checkSourceValue(element)
+    }
+  }
+
   const visitors = {
     'ImportDeclaration': checkSource,
     'ExportNamedDeclaration': checkSource,
-    'ExportAllDeclaration': checkSource
+    'ExportAllDeclaration': checkSource,
   }
 
   if (context.options[0] != null) {
-    const { commonjs } = context.options[0]
-    if (commonjs) {
-      visitors['CallExpression'] = checkCommon
+    const { commonjs, amd } = context.options[0]
+
+    if (commonjs || amd) {
+      visitors['CallExpression'] = function (call) {
+        if (commonjs) checkCommon(call)
+        if (amd) checkAMD(call)
+      }
     }
   }
 
@@ -52,12 +73,11 @@ module.exports = function (context) {
 
 module.exports.schema = [
   {
-    "type": "object",
-    "properties": {
-      "commonjs": {
-        "type": "boolean"
-      }
+    'type': 'object',
+    'properties': {
+      'commonjs': { 'type': 'boolean' },
+      'amd': { 'type': 'boolean' },
     },
-    "additionalProperties": false
-  }
+    'additionalProperties': false,
+  },
 ]

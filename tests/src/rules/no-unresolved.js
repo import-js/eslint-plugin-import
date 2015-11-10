@@ -54,11 +54,21 @@ ruleTester.run('no-unresolved', rule, {
          , options: [{ commonjs: true }]}),
     test({ code: 'require("./bar")'
          , options: [{ commonjs: true }]}),
-
-    // validate it doesn't check if turned off (default)
     test({ code: 'require("./does-not-exist")'
          , options: [{ commonjs: false }]}),
     test({ code: 'require("./does-not-exist")' }),
+
+    // amd setting
+    test({ code: 'require(["./bar"], function (bar) {})'
+         , options: [{ amd: true }]}),
+    test({ code: 'define(["./bar"], function (bar) {})'
+         , options: [{ amd: true }]}),
+    test({ code: 'require(["./does-not-exist"], function (bar) {})'
+         , options: [{ amd: false }]}),
+    // don't validate without callback param
+    test({ code: 'require(["./does-not-exist"])'
+         , options: [{ amd: true }]}),
+    test({ code: 'define(["./does-not-exist"], function (bar) {})' }),
   ],
 
   invalid: [
@@ -136,6 +146,35 @@ ruleTester.run('no-unresolved', rule, {
       options: [{ commonjs: true }],
       errors: [{
         message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      }],
+    }),
+
+    // amd
+    test({
+      code: 'require(["./baz"], function (bar) {})',
+      options: [{ amd: true }],
+      errors: [{
+        message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      }],
+    }),
+    test({
+      code: 'define(["./baz"], function (bar) {})',
+      options: [{ amd: true }],
+      errors: [{
+        message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      }],
+    }),
+    test({
+      code: 'define(["./baz", "./bar", "./does-not-exist"], function (bar) {})',
+      options: [{ amd: true }],
+      errors: [{
+        message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      },{
+        message: "Unable to resolve path to module './does-not-exist'.",
         type: 'Literal',
       }],
     }),
