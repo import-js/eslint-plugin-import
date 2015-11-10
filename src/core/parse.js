@@ -2,12 +2,12 @@ import fs from 'fs'
 
 const defaultParseOptions = { ecmaVersion: 6  // for espree, esprima. not needed
                                               // for babylon
-                            , sourceType: "module"
+                            , sourceType: 'module'
                             }
 
 export default function parse(path, context) {
   const { settings } = context
-      , parser = settings['import/parser'] || "babylon"
+      , parser = settings['import/parser'] || 'babylon'
 
   const { parse } = require(parser)
       , options = Object.assign( {}
@@ -15,7 +15,7 @@ export default function parse(path, context) {
                                , settings['import/parse-options'])
 
   // detect and handle "jsx" ecmaFeature
-  if (context.ecmaFeatures && parser === "babylon") {
+  if (context.ecmaFeatures && parser === 'babylon') {
     const { jsx } = context.ecmaFeatures
     if (jsx && (!options.plugins || options.plugins.indexOf('jsx') < 0)) {
       if (!options.plugins) options.plugins = ['jsx']

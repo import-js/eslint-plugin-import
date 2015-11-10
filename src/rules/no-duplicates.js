@@ -3,7 +3,7 @@ import resolve from '../core/resolve'
 module.exports = function (context) {
   const imported = new Map()
   return {
-    "ImportDeclaration": function (n) {
+    'ImportDeclaration': function (n) {
       // resolved path will cover aliased duplicates
       let resolvedPath = resolve(n.source.value, context) || n.source.value
 
@@ -14,7 +14,7 @@ module.exports = function (context) {
       }
     },
 
-    "Program:exit": function () {
+    'Program:exit': function () {
       for (let [module, nodes] of imported.entries()) {
         if (nodes.size > 1) {
           for (let node of nodes) {
