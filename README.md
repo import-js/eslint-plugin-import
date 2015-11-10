@@ -54,7 +54,7 @@ plugins:
   - import
 
 rules:
-  import/no-unresolved: 2
+  import/no-unresolved: [2, {commonjs: true, amd: true}]
   import/named: 2
   import/namespace: 2
   import/default: 2
@@ -73,6 +73,10 @@ as defined by standard Node `require.resolve` behavior.
 See [settings](#settings) for customization options for the resolution (i.e.
 additional filetypes, `NODE_PATH`, etc.)
 
+This rule can also optionally report on unresolved modules in CommonJS `require('./foo')` calls and AMD `require(['./foo'], function (foo){...})` and `define(['./foo'], function (foo){...})`.
+
+To enable this, send `{ commonjs: true/false, amd: true/false }` as a rule option.
+Both are disabled by default.
 
 ### `named`
 
