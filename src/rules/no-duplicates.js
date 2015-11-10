@@ -22,6 +22,6 @@ module.exports = function (context) {
           }
         }
       }
-    }
+    },
   }
 }

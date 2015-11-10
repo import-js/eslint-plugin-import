@@ -23,6 +23,6 @@ module.exports = function (context) {
       if (imports.errors.length > 0) {
         context.report(node.source, message(node, imports.errors))
       }
-    }
+    },
   }
 }

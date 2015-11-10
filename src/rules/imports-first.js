@@ -11,14 +11,20 @@ module.exports = function (context) {
             if (/^\./.test(node.source.value)) {
               anyRelative = true
             } else if (anyRelative) {
-              context.report(node.source, 'Absolute imports should come before relative imports.')
+              context.report({
+                node: node.source,
+                message: 'Absolute imports should come before relative imports.',
+              })
             }
           }
           if (i !== ++last) {
-            context.report(node, 'Import in body of module; reorder to top.')
+            context.report({
+              node,
+              message: 'Import in body of module; reorder to top.',
+            })
           }
         }
       })
-    }
+    },
   }
 }

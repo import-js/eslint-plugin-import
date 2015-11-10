@@ -69,6 +69,6 @@ module.exports = function (context) {
           context.report(node, `Multiple exports of name '${name}'.`)
         }
       }
-    }
+    },
   }
 }

@@ -97,6 +97,6 @@ module.exports = function (context) {
                         )
         }
       }
-    }
+    },
   }
 }

@@ -33,7 +33,7 @@ module.exports = function (context) {
     'ExportNamedDeclaration': checkSpecifiers.bind( null
                                                   , 'local'
                                                   , 'ExportSpecifier'
-                                                  )
+                                                  ),
   }
 
 }

@@ -13,8 +13,8 @@ module.exports = function (context) {
       // keeping it simple: all 1-string-arg `require` calls are reported
       context.report({
         node: call.callee,
-        message: `CommonJS require of module '${module.value}'.`
+        message: `CommonJS require of module '${module.value}'.`,
       })
-    }
+    },
   }
 }

@@ -19,6 +19,6 @@ module.exports = function (context) {
   }
   return {
     'ImportDefaultSpecifier': checkDefault.bind(null, 'local'),
-    'ExportDefaultSpecifier': checkDefault.bind(null, 'exported')
+    'ExportDefaultSpecifier': checkDefault.bind(null, 'exported'),
   }
 }

@@ -24,6 +24,6 @@ module.exports = function (context) {
 
   return {
     'ImportDeclaration': checkDefault.bind(null, 'ImportDefaultSpecifier'),
-    'ExportNamedDeclaration': checkDefault.bind(null, 'ExportDefaultSpecifier')
+    'ExportNamedDeclaration': checkDefault.bind(null, 'ExportDefaultSpecifier'),
   }
 }
