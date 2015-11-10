@@ -8,3 +8,4 @@ rules:
   quotes: [2, "single"]
   curly: [2, "multi-line"]
   comma-dangle: [2, always-multiline]
+  eqeqeq: [2, "allow-null"]
