@@ -47,39 +47,43 @@ ruleTester.run('no-unresolved', rule, {
          , parser: 'babel-eslint' }),
     test({ code: 'export bar from "./bar"'
          , parser: 'babel-eslint' }),
-    test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"'
-         , options: ['case-sensitive'] }),
+    test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
+
+    // commonjs setting
+    test({ code: 'var foo = require("./bar")'
+         , options: [{ commonjs: true }]}),
   ],
 
   invalid: [
     // should fail for jsx by default
-    test({ code: 'import * as foo from "jsx-module/foo"'
-         , errors: [ {message: 'Unable to resolve path to ' +
-                               'module \'jsx-module/foo\'.'} ]
-         }),
+    test({
+      code: 'import * as foo from "jsx-module/foo"',
+      errors: [ {message: 'Unable to resolve path to ' +
+                          'module \'jsx-module/foo\'.'} ],
+    }),
 
 
-    test({ code: 'import reallyfake from "./reallyfake/module"'
-         , settings: { 'import/ignore': ['^\\./fake/'] }
-         , errors: [{ message: 'Unable to resolve path to module ' +
-                               '\'./reallyfake/module\'.' }]
-         }),
+    test({
+      code: 'import reallyfake from "./reallyfake/module"',
+      settings: { 'import/ignore': ['^\\./fake/'] },
+      errors: [{ message: 'Unable to resolve path to module ' +
+                          '\'./reallyfake/module\'.' }],
+    }),
 
 
     test({
       code: "import bar from './baz';",
       errors: [{ message: "Unable to resolve path to module './baz'."
-               , type: 'Literal'
-               }]}),
+               , type: 'Literal' }],
+    }),
     test({ code: "import bar from './baz';"
          , errors: [{ message: "Unable to resolve path to module './baz'."
-                    , type: 'Literal'
-                    }]
-         }),
+                    , type: 'Literal',
+                    }] }),
     test({
       code: "import bar from './empty-folder';",
       errors: [{ message: "Unable to resolve path to module './empty-folder'."
-               , type: 'Literal'
+               , type: 'Literal',
                }]}),
 
     // sanity check that this module is _not_ found without proper settings
@@ -87,29 +91,27 @@ ruleTester.run('no-unresolved', rule, {
       code: "import { DEEP } from 'in-alternate-root';",
       errors: [{ message: 'Unable to resolve path to ' +
                           "module 'in-alternate-root'."
-               , type: 'Literal'
-               }]})
+               , type: 'Literal',
+               }]}),
 
-  , test({ code: 'export { foo } from "./does-not-exist"'
-         , errors: 1
-         })
-  , test({ code: 'export * from "./does-not-exist"'
-         , errors: 1
-         })
+    test({ code: 'export { foo } from "./does-not-exist"'
+         , errors: 1 }),
+    test({
+      code: 'export * from "./does-not-exist"',
+      errors: 1,
+    }),
 
     // export symmetry proposal
-  , test({ code: 'export * as bar from "./does-not-exist"'
+    test({ code: 'export * as bar from "./does-not-exist"'
          , parser: 'babel-eslint'
-         , errors: 1
-         })
-  , test({ code: 'export bar from "./does-not-exist"'
+         , errors: 1,
+         }),
+    test({ code: 'export bar from "./does-not-exist"'
          , parser: 'babel-eslint'
-         , errors: 1
-         })
+         , errors: 1,
+         }),
 
-  , test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
-         , options: ['case-sensitive']
-         , errors: 1
-         })
-  ]
+    test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
+         , errors: 1 }),
+  ],
 })

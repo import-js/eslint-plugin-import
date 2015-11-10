@@ -6,13 +6,17 @@ import resolve from '../core/resolve'
 
 module.exports = function (context) {
 
-  function checkSource(node) {
-    if (node.source == null) return
+  function checkSourceValue(source) {
+    if (source == null) return
 
-    if (resolve(node.source.value, context) == null) {
-      context.report(node.source,
-        'Unable to resolve path to module \'' + node.source.value + '\'.')
+    if (resolve(source.value, context) == null) {
+      context.report(source,
+        'Unable to resolve path to module \'' + source.value + '\'.')
     }
+  }
+
+  function checkSource(node) {
+    checkSourceValue(node.source)
   }
 
   return {
@@ -21,3 +25,15 @@ module.exports = function (context) {
     'ExportAllDeclaration': checkSource
   }
 }
+
+module.exports.schema = [
+  {
+    "type": "object",
+    "properties": {
+      "commonjs": {
+        "type": "boolean"
+      }
+    },
+    "additionalProperties": false
+  }
+]
