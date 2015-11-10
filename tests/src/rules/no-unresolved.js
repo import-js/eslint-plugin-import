@@ -52,6 +52,13 @@ ruleTester.run('no-unresolved', rule, {
     // commonjs setting
     test({ code: 'var foo = require("./bar")'
          , options: [{ commonjs: true }]}),
+    test({ code: 'require("./bar")'
+         , options: [{ commonjs: true }]}),
+
+    // validate it doesn't check if turned off (default)
+    test({ code: 'require("./does-not-exist")'
+         , options: [{ commonjs: false }]}),
+    test({ code: 'require("./does-not-exist")' }),
   ],
 
   invalid: [
@@ -113,5 +120,24 @@ ruleTester.run('no-unresolved', rule, {
 
     test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
          , errors: 1 }),
+
+
+    // commonjs setting
+    test({
+      code: 'var bar = require("./baz")',
+      options: [{ commonjs: true }],
+      errors: [{
+        message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      }],
+    }),
+    test({
+      code: 'require("./baz")',
+      options: [{ commonjs: true }],
+      errors: [{
+        message: "Unable to resolve path to module './baz'.",
+        type: 'Literal',
+      }],
+    }),
   ],
 })
