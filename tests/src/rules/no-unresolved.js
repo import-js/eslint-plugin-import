@@ -19,38 +19,36 @@ ruleTester.run('no-unresolved', rule, {
       settings: {
         'import/resolve': {
           'paths': [path.join( process.cwd()
-                             , 'tests', 'files', 'alternate-root')]
-        }
-      }
+                             , 'tests', 'files', 'alternate-root')],
+        },
+      },
     }),
     test({
       code: "import { DEEP } from 'in-alternate-root'; " +
             "import { bar } from 'src-bar';",
       settings: {'import/resolve': { 'paths': [
         path.join('tests', 'files', 'src-root'),
-        path.join('tests', 'files', 'alternate-root')
+        path.join('tests', 'files', 'alternate-root'),
       ]}}}),
 
     test({ code: 'import * as foo from "a"' }),
 
-    test({ code: 'import * as foo from "jsx-module/foo"'
-         , settings: { 'import/resolve': { 'extensions': ['.jsx'] } }
-         })
+    test({
+      code: 'import * as foo from "jsx-module/foo"',
+      settings: { 'import/resolve': { 'extensions': ['.jsx'] } },
+    }),
 
-  , test({ code: 'export { foo } from "./bar"' })
-  , test({ code: 'export * from "./bar"' })
-  , test({ code: 'export { foo }' })
+    test({ code: 'export { foo } from "./bar"' }),
+    test({ code: 'export * from "./bar"' }),
+    test({ code: 'export { foo }' }),
 
-    // stage 1 proposal for export symmetry
-  , test({ code: 'export * as bar from "./bar"'
-         , parser: 'babel-eslint'
-         })
-  , test({ code: 'export bar from "./bar"'
-         , parser: 'babel-eslint'
-         })
-  , test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"'
-         , options: ['case-sensitive']
-         })
+    // stage 1 proposal for export symmetry,
+    test({ code: 'export * as bar from "./bar"'
+         , parser: 'babel-eslint' }),
+    test({ code: 'export bar from "./bar"'
+         , parser: 'babel-eslint' }),
+    test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"'
+         , options: ['case-sensitive'] }),
   ],
 
   invalid: [
