@@ -118,5 +118,14 @@ ruleTester.run('named', rule, {
     test({ code: 'import { baz } from "./broken-trampoline"'
          , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
          , errors: 1 }),
+
+    // parse errors
+    test({
+      code: "import { a } from './test.coffee';",
+      errors: [{
+        message: "Parse errors in imported module './test.coffee'.",
+        type: 'Literal',
+      }],
+    }),
   ],
 })

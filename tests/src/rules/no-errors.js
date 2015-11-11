@@ -6,14 +6,6 @@
 
 // ruleTester.run('no-errors', rule, {
 
-//   invalid: [
-//     test({code: "import { a } from './test.coffee';",
-//       errors: [{
-//         message: "Errors encountered while analysing imported module './test.coffee'.",
-//         type: 'Literal',
-//       }],
-//     }),
-
 //     test({code: "import foo from './malformed.js'",
 //       errors: [{
 //         message: "Errors encountered while analysing imported module './malformed.js'.",

@@ -12,6 +12,15 @@ module.exports = function (context) {
     const imports = Exports.get(node.source.value, context)
     if (imports == null) return
 
+    if (imports.errors.length) {
+      context.report({
+        node: node.source,
+        message: `Parse errors in imported module ` +
+                 `'${node.source.value}'.`,
+      })
+      return
+    }
+
     var names = imports.named
 
     node.specifiers.forEach(function (im) {
