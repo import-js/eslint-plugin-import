@@ -11,6 +11,16 @@ module.exports = function (context) {
     var imports = Exports.get(declaration.source.value, context)
     if (imports == null) return null
 
+
+    if (imports.errors.length) {
+      context.report({
+        node: declaration.source,
+        message: `Parse errors in imported module ` +
+                 `'${declaration.source.value}'.`,
+      })
+      return
+    }
+
     if (!imports.hasNamed) {
       context.report(namespace,
         `No exported names found in module '${declaration.source.value}'.`)

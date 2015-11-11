@@ -103,5 +103,14 @@ ruleTester.run('namespace', rule, {
          , parser: 'babel-eslint'
          , errors: 1 }),
 
+
+    // parse errors
+    test({
+      code: "import * as namespace from './malformed.js';",
+      errors: [{
+        message: "Parse errors in imported module './malformed.js'.",
+        type: 'Literal',
+      }],
+    }),
   ],
 })
