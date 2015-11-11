@@ -18,3 +18,7 @@ export function testContext(settings) {
          , settings: settings || {}
          }
 }
+
+export function getFilename(file) {
+  return path.join(__dirname, '..', 'files', file || 'foo.js')
+}
