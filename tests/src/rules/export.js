@@ -51,5 +51,13 @@ ruleTester.run('export', rule, {
                                '\'./default-export\'.'
                     , type: 'Literal' }] }),
 
+    test({
+      code: 'export * from "./malformed.js"',
+      errors: [{
+        message: "Parse errors in imported module './malformed.js'.",
+        type: 'Literal',
+      }],
+    }),
+
   ],
 })
