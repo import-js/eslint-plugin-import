@@ -41,5 +41,13 @@ ruleTester.run('no-named-as-default', rule, {
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
     , type: 'ExportDefaultSpecifier' } ] }),
+
+    test({
+      code: 'import foo from "./malformed.js"',
+      errors: [{
+        message: "Parse errors in imported module './malformed.js'.",
+        type: 'Literal',
+      }],
+    }),
   ],
 })
