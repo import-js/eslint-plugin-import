@@ -1,48 +1,45 @@
-var test = require('../utils').test
+import { test } from '../utils'
+import { RuleTester } from 'eslint'
 
-var linter = require('eslint').linter,
-    RuleTester = require('eslint').RuleTester
-
-var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/no-named-as-default')
+const ruleTester = new RuleTester()
+    , rule = require('../../../lib/rules/no-named-as-default')
 
 ruleTester.run('no-named-as-default', rule, {
-  valid: [ test({code: 'import bar, { foo } from "./bar";'})
-         , test({code: 'import bar, { foo } from "./empty-folder";'})
+  valid: [
+    test({code: 'import bar, { foo } from "./bar";'}),
+    test({code: 'import bar, { foo } from "./empty-folder";'}),
 
-           // es7
-         , test({ code: 'export bar, { foo } from "./bar";'
-                , parser: 'babel-eslint'
-                })
-         , test({ code: 'export bar from "./bar";'
-                , parser: 'babel-eslint'
-                })
-         ]
+    // es7
+    test({ code: 'export bar, { foo } from "./bar";'
+         , parser: 'babel-eslint' }),
+    test({ code: 'export bar from "./bar";'
+         , parser: 'babel-eslint' }),
+  ],
 
-, invalid: [
+  invalid: [
     test({
       code: 'import foo from "./bar";',
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] })
-  , test({
+      , type: 'ImportDefaultSpecifier' } ] }),
+    test({
       code: 'import foo, { foo as bar } from "./bar";',
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] })
+      , type: 'ImportDefaultSpecifier' } ] }),
 
     // es7
-  , test({
+    test({
       code: 'export foo from "./bar";',
       parser: 'babel-eslint',
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ExportDefaultSpecifier' } ] })
-  , test({
+      , type: 'ExportDefaultSpecifier' } ] }),
+    test({
       code: 'export foo, { foo as bar } from "./bar";',
       parser: 'babel-eslint',
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ExportDefaultSpecifier' } ] })
-  ]
+    , type: 'ExportDefaultSpecifier' } ] }),
+  ],
 })

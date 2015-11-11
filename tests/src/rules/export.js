@@ -25,40 +25,31 @@ ruleTester.run('export', rule, {
   invalid: [
     // multiple defaults
     test({ code: 'export default foo; export default bar'
-         , errors: 2
-         })
-  , test({ code: 'export default function foo() {}; ' +
+         , errors: 2 }),
+    test({ code: 'export default function foo() {}; ' +
                  'export default function bar() {}'
-         , errors: 2
-         })
-  , test({ code: 'export function foo() {}; ' +
+         , errors: 2 }),
+    test({ code: 'export function foo() {}; ' +
                  'export { bar as foo }'
-         , errors: 2
-         })
-  , test({ code: 'export {foo}; export {foo};'
-         , errors: 2
-         })
-  , test({ code: 'export {foo}; export {bar as foo};'
-         , errors: 2
-         })
-  , test({ code: 'export var foo = "foo"; export var foo = "bar";'
-         , errors: 2
-         })
-  , test({ code: 'export var foo = "foo", foo = "bar";'
-         , errors: 2
-         })
-  , test({
+         , errors: 2 }),
+    test({ code: 'export {foo}; export {foo};'
+         , errors: 2 }),
+    test({ code: 'export {foo}; export {bar as foo};'
+         , errors: 2 }),
+    test({ code: 'export var foo = "foo"; export var foo = "bar";'
+         , errors: 2 }),
+    test({ code: 'export var foo = "foo", foo = "bar";'
+         , errors: 2 }),
+    test({
       code: 'export { foo }; export * from "./export-all"',
       settings: { 'import/parse-options': { plugins: ['exportExtensions']}},
       errors: ['Multiple exports of name \'foo\'.',
                'Multiple exports of name \'foo\'.'],
     }),
     test({ code: 'export * from "./default-export"'
-         , errors: [ { message: 'No named exports found in module ' +
-                                '\'./default-export\'.'
-                     , type: 'Literal'
-                     } ]
-         })
+         , errors: [{ message: 'No named exports found in module ' +
+                               '\'./default-export\'.'
+                    , type: 'Literal' }] }),
 
   ],
 })
