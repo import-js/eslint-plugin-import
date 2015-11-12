@@ -1,3 +1,3 @@
-export const c = "foo";
+export const c = 'foo'
 
-export * from "./named-exports";
+export * from './named-exports'

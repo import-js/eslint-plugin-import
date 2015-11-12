@@ -1,7 +1,7 @@
 export default function() {
-  return "foo";
+  return 'foo'
 }
 
 export function bar() {
-  return "bar";
+  return 'bar'
 }

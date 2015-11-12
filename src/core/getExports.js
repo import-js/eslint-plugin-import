@@ -29,8 +29,11 @@ export default class ExportMap {
   }
 
   static for(path, context) {
-    var exportMap = exportCache.get(path)
-    if (exportMap != null) return exportMap
+    // todo: compile out with Babel?
+    if (process.env.NODE_ENV !== 'testing') {
+      var exportMap = exportCache.get(path)
+      if (exportMap != null) return exportMap
+    }
 
     exportMap = ExportMap.parse(path, context)
 
@@ -127,4 +130,3 @@ export default class ExportMap {
     }.bind(this))
   }
 }
-//

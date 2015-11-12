@@ -21,8 +21,7 @@ ruleTester.run('named', rule, {
     test({code: 'import {a, b, c, d} from "./re-export"'}),
 
     test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"'
-         , settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } }
-         }),
+         , settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } } }),
 
     // validate that eslint-disable-line silences this properly
     test({code: 'import {a, b, d} from "./common"; ' +
@@ -32,54 +31,47 @@ ruleTester.run('named', rule, {
          , args: [2, 'es6-only']}),
 
     test({ code: 'import { foo, bar } from "./common"'
-         , settings: { 'import/ignore': ['common'] }
-         }),
+         , settings: { 'import/ignore': ['common'] } }),
     test({ code: 'import { baz } from "./bar"'
-         , settings: { 'import/ignore': ['bar'] }
-         }),
+         , settings: { 'import/ignore': ['bar'] } }),
 
     // ignore core modules by default
     test({ code: 'import { foo } from "crypto"' }),
     test({ code: 'import { zoob } from "a"' }),
 
-    test({ code: 'import { someThing } from "./module"' })
+    test({ code: 'import { someThing } from "./module"' }),
 
     // node_modules/a only exports 'foo', should be ignored though
-  , test({ code: 'import { zoob } from "a"' })
+    test({ code: 'import { zoob } from "a"' }),
 
     // parses / correctly verifies if settings remove node_modules
     // from ignore list
-  , test({ code: 'import { foo } from "a"'
-         , settings: { 'import/ignore': [] }
-         })
+    test({ code: 'import { foo } from "a"'
+         , settings: { 'import/ignore': [] } }),
 
     // export tests
-  , test({ code: 'export { foo } from "./bar"' })
-  , test({ code: 'export { foo as bar } from "./bar"' })
-  , test({ code: 'export { foo } from "./does-not-exist"' })
+    test({ code: 'export { foo } from "./bar"' }),
+    test({ code: 'export { foo as bar } from "./bar"' }),
+    test({ code: 'export { foo } from "./does-not-exist"' }),
 
     // es7
-  , test({ code: 'export bar, { foo } from "./bar"'
-         , parser: 'babel-eslint'
-         })
-  , test({ code: 'import { foo, bar } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }}
-         })
+    test({ code: 'export bar, { foo } from "./bar"'
+         , parser: 'babel-eslint' }),
+    test({ code: 'import { foo, bar } from "./named-trampoline"'
+         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }} }),
 
     // regression tests
-  , test({ code: 'export { foo as bar }'})
+    test({ code: 'export { foo as bar }'}),
   ],
 
   invalid: [
 
     test({ code: 'import { zoob } from "a"'
          , settings: { 'import/ignore': [] }
-         , errors: [ error('zoob', 'a') ]
-         }),
+         , errors: [ error('zoob', 'a') ] }),
 
     test({ code: 'import { somethingElse } from "./module"'
-         , errors: [ error('somethingElse', './module') ]
-         }),
+         , errors: [ error('somethingElse', './module') ] }),
 
     test({code: 'import {a, b, d} from "./common"',
       errors: [ error('a', './common')
@@ -110,25 +102,30 @@ ruleTester.run('named', rule, {
 
     test({code: 'import { a } from "./re-export-names"',
       args: [2, 'es6-only'],
-        errors: [error('a', './re-export-names')]})
+        errors: [error('a', './re-export-names')]}),
 
     // export tests
-  , test({ code: 'export { bar } from "./bar"'
-         , errors: 1
-         })
+    test({ code: 'export { bar } from "./bar"'
+         , errors: 1 }),
 
     // es7
-  , test({ code: 'export bar2, { bar } from "./bar"'
+    test({ code: 'export bar2, { bar } from "./bar"'
          , parser: 'babel-eslint'
-         , errors: 1
-         })
-  , test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
+         , errors: 1 }),
+    test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
          , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1
-         })
-  , test({ code: 'import { baz } from "./broken-trampoline"'
+         , errors: 1 }),
+    test({ code: 'import { baz } from "./broken-trampoline"'
          , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1
-         })
-  ]
+         , errors: 1 }),
+
+    // parse errors
+    test({
+      code: "import { a } from './test.coffee';",
+      errors: [{
+        message: "Parse errors in imported module './test.coffee'.",
+        type: 'Literal',
+      }],
+    }),
+  ],
 })

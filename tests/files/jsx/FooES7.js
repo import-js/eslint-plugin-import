@@ -6,7 +6,7 @@ class Foo {
     static bar = true;
 }
 
-export default Foo;
+export default Foo
 
 export class Bar {
     static baz = false;

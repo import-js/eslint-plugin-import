@@ -8,6 +8,15 @@ module.exports = function (context) {
     var imports = Exports.get(declaration.source.value, context)
     if (imports == null) return
 
+    if (imports.errors.length) {
+      context.report({
+        node: declaration.source,
+        message: `Parse errors in imported module ` +
+                 `'${declaration.source.value}'.`,
+      })
+      return
+    }
+
     if (imports.hasDefault &&
         imports.named.has(defaultSpecifier[nameKey].name)) {
 

@@ -11,6 +11,15 @@ module.exports = function (context) {
     var imports = Exports.get(declaration.source.value, context)
     if (imports == null) return null
 
+    if (imports.errors.length) {
+      context.report({
+        node: declaration.source,
+        message: `Parse errors in imported module ` +
+                 `'${declaration.source.value}'.`,
+      })
+      return
+    }
+
     if (!imports.hasNamed) {
       context.report(namespace,
         `No exported names found in module '${declaration.source.value}'.`)
@@ -89,12 +98,15 @@ module.exports = function (context) {
 
       for (let property of id.properties) {
         if (property.key.type !== 'Identifier') {
-          context.report( property
-                        , 'Only destructure top-level names.')
+          context.report({
+            node: property,
+            message: 'Only destructure top-level names.',
+          })
         } else if (!namespace.has(property.key.name)) {
-          context.report( property
-                        , message(property.key, init)
-                        )
+          context.report({
+            node: property,
+            message: message(property.key, init),
+          })
         }
       }
     },

@@ -1,5 +1,5 @@
 (function () {
 
-  exports.x = "foo";
+  exports.x = 'foo'
 
-}());
+}())

@@ -6,4 +6,4 @@ import React, { Component } from 'react'
   // }
 // }
 
-export default connect()(App);
+export default connect()(App)

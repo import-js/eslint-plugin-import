@@ -40,10 +40,19 @@ module.exports = function (context) {
     },
 
     'ExportAllDeclaration': function (node) {
-      let remoteExports = new ExportMap(context)
+      if (node.source == null) return // not sure if this is ever true
 
-      // if false (unresolved), ignore
-      if (!remoteExports.captureAll(node, context.getFilename())) return
+      const remoteExports = ExportMap.get(node.source.value, context)
+      if (remoteExports == null) return
+
+      if (remoteExports.errors.length) {
+        context.report({
+          node: node.source,
+          message: `Parse errors in imported module ` +
+                   `'${node.source.value}'.`,
+        })
+        return
+      }
 
       if (!remoteExports.hasNamed) {
         context.report(node.source,
