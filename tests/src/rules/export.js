@@ -58,6 +58,5 @@ ruleTester.run('export', rule, {
         type: 'Literal',
       }],
     }),
-
   ],
 })
