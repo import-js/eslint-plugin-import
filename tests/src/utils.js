@@ -10,13 +10,15 @@ export function testFilePath(relativePath) {
 export const FILENAME = testFilePath('foo.js')
 
 export function test(t) {
-  return Object.assign({filename: FILENAME, ecmaFeatures: {modules: true}}, t)
+  return Object.assign({
+    filename: FILENAME,
+    ecmaFeatures: {modules: true, destructuring: true},
+  }, t)
 }
 
 export function testContext(settings) {
   return { getFilename: function () { return FILENAME }
-         , settings: settings || {}
-         }
+         , settings: settings || {} }
 }
 
 export function getFilename(file) {

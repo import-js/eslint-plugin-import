@@ -10,6 +10,11 @@ ruleTester.run('export', rule, {
     // default
     test({ code: 'var foo = "foo"; export default foo;' }),
     test({ code: 'export var foo = "foo"; export var bar = "bar";'}),
+    test({ code: 'export var foo = "foo", bar = "bar";' }),
+    test({ code: 'export var { foo, bar } = object;' }),
+    test({ code: 'export var [ foo, bar ] = array;' }),
+    test({ code: 'export var { foo, bar } = object;' }),
+    test({ code: 'export var [ foo, bar ] = array;' }),
     test({ code: 'export { foo, foo as bar }' }),
     test({
       code: 'export { bar }; export * from "./export-all"',
@@ -58,5 +63,27 @@ ruleTester.run('export', rule, {
         type: 'Literal',
       }],
     }),
+
+    test({
+      code: 'export var { foo, bar } = object; export var foo = "bar"',
+      errors: ['Multiple exports of name \'foo\'.',
+               'Multiple exports of name \'foo\'.'],
+    }),
+    test({
+      code: 'export var { bar: { foo } } = object; export var foo = "bar"',
+      errors: ['Multiple exports of name \'foo\'.',
+               'Multiple exports of name \'foo\'.'],
+    }),
+    test({
+      code: 'export var [ foo, bar ] = array; export var bar = "baz"',
+      errors: ['Multiple exports of name \'bar\'.',
+               'Multiple exports of name \'bar\'.'],
+    }),
+    test({
+      code: 'export var [ foo, /*sparse*/, { bar } ] = array; export var bar = "baz"',
+      errors: ['Multiple exports of name \'bar\'.',
+               'Multiple exports of name \'bar\'.'],
+    }),
+
   ],
 })

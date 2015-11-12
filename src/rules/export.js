@@ -15,6 +15,34 @@ module.exports = function (context) {
     nodes.add(node)
   }
 
+  function recursivePatternCapture(pattern) {
+    switch (pattern.type) {
+      case 'ObjectPattern':
+        captureObject(pattern); break
+      case 'ArrayPattern':
+        captureArray(pattern); break
+    }
+  }
+
+  function captureObject({ properties }) {
+    properties.forEach(({ value }) => {
+      if (value.type === 'Identifier') {
+        addNamed(value.name, value)
+      } else {
+        // must be a deeper pattern
+        recursivePatternCapture(value)
+      }
+    })
+  }
+
+  function captureArray({ elements }) {
+    elements.forEach((element) => {
+      if (element == null) return
+      if (element.type === 'Identifier') addNamed(element.name, element)
+      else recursivePatternCapture(element)
+    })
+  }
+
   return {
     'ExportDefaultDeclaration': function (node) {
       defaults.add(node)
@@ -33,8 +61,15 @@ module.exports = function (context) {
 
       if (node.declaration.declarations != null) {
         for (let declaration of node.declaration.declarations) {
-          if (declaration.id == null) continue
-          addNamed(declaration.id.name, declaration.id)
+          switch(declaration.id.type) {
+            case 'Identifier':
+              addNamed(declaration.id.name, declaration.id)
+              break
+            case 'ObjectPattern':
+            case 'ArrayPattern':
+              recursivePatternCapture(declaration.id)
+              break
+          }
         }
       }
     },
