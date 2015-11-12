@@ -109,9 +109,8 @@ export default class ExportMap {
           this.named.add(n.declaration.id.name)
           break
         case 'VariableDeclaration':
-          n.declaration.declarations.forEach(function (d) {
-            this.named.add(d.id.name)
-          }.bind(this))
+          n.declaration.declarations.forEach((d) =>
+            recursivePatternCapture(d.id, id => this.named.add(id.name)))
           break
       }
     }
@@ -128,5 +127,34 @@ export default class ExportMap {
 
       this.named.add(s.exported.name)
     }.bind(this))
+  }
+}
+
+
+/**
+ * Traverse a patter/identifier node, calling 'callback'
+ * for each leaf identifier.
+ * @param  {node}   pattern
+ * @param  {Function} callback
+ * @return {void}
+ */
+export function recursivePatternCapture(pattern, callback) {
+  switch (pattern.type) {
+    case 'Identifier': // base case
+      callback(pattern)
+      break
+
+    case 'ObjectPattern':
+      pattern.properties.forEach(({ value }) => {
+        recursivePatternCapture(value, callback)
+      })
+      break
+
+    case 'ArrayPattern':
+      pattern.elements.forEach((element) => {
+        if (element == null) return
+        recursivePatternCapture(element, callback)
+      })
+      break
   }
 }

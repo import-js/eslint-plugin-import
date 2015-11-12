@@ -9,3 +9,11 @@ export {c as d}
 export class ExportedClass {
 
 }
+
+
+// destructuring exports
+
+export var { destructuredProp } = {}
+         , [ arrayKeyProp ] = []
+         , [ { deepProp } ] = []
+         , { arr: [ ,, deepSparseElement ] } = {}

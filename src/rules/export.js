@@ -1,4 +1,4 @@
-import ExportMap from '../core/getExports'
+import ExportMap, { recursivePatternCapture } from '../core/getExports'
 
 module.exports = function (context) {
   const defaults = new Set()
@@ -13,34 +13,6 @@ module.exports = function (context) {
     }
 
     nodes.add(node)
-  }
-
-  function recursivePatternCapture(pattern) {
-    switch (pattern.type) {
-      case 'ObjectPattern':
-        captureObject(pattern); break
-      case 'ArrayPattern':
-        captureArray(pattern); break
-    }
-  }
-
-  function captureObject({ properties }) {
-    properties.forEach(({ value }) => {
-      if (value.type === 'Identifier') {
-        addNamed(value.name, value)
-      } else {
-        // must be a deeper pattern
-        recursivePatternCapture(value)
-      }
-    })
-  }
-
-  function captureArray({ elements }) {
-    elements.forEach((element) => {
-      if (element == null) return
-      if (element.type === 'Identifier') addNamed(element.name, element)
-      else recursivePatternCapture(element)
-    })
   }
 
   return {
@@ -61,15 +33,7 @@ module.exports = function (context) {
 
       if (node.declaration.declarations != null) {
         for (let declaration of node.declaration.declarations) {
-          switch(declaration.id.type) {
-            case 'Identifier':
-              addNamed(declaration.id.name, declaration.id)
-              break
-            case 'ObjectPattern':
-            case 'ArrayPattern':
-              recursivePatternCapture(declaration.id)
-              break
-          }
+          recursivePatternCapture(declaration.id, v => addNamed(v.name, v))
         }
       }
     },

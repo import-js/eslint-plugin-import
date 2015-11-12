@@ -62,6 +62,12 @@ ruleTester.run('named', rule, {
 
     // regression tests
     test({ code: 'export { foo as bar }'}),
+
+    // destructured exports
+    test({ code: 'import { destructuredProp } from "./named-exports"' }),
+    test({ code: 'import { arrayKeyProp } from "./named-exports"' }),
+    test({ code: 'import { deepProp } from "./named-exports"' }),
+    test({ code: 'import { deepSparseElement } from "./named-exports"' }),
   ],
 
   invalid: [
