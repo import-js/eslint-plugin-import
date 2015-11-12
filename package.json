@@ -47,7 +47,7 @@
     "eslint": ">=1.4.0"
   },
   "dependencies": {
-    "babel-runtime": "5.x",
+    "babel-runtime": "6.1.18",
     "babylon": "6.1.2",
     "resolve": "1.1.6"
   }
