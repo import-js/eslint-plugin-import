@@ -1,4 +1,4 @@
-import ExportMap from '../core/getExports'
+import ExportMap, { recursivePatternCapture } from '../core/getExports'
 
 module.exports = function (context) {
   const defaults = new Set()
@@ -33,8 +33,7 @@ module.exports = function (context) {
 
       if (node.declaration.declarations != null) {
         for (let declaration of node.declaration.declarations) {
-          if (declaration.id == null) continue
-          addNamed(declaration.id.name, declaration.id)
+          recursivePatternCapture(declaration.id, v => addNamed(v.name, v))
         }
       }
     },

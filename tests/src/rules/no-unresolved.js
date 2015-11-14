@@ -69,6 +69,21 @@ ruleTester.run('no-unresolved', rule, {
     test({ code: 'require(["./does-not-exist"])'
          , options: [{ amd: true }]}),
     test({ code: 'define(["./does-not-exist"], function (bar) {})' }),
+
+    // stress tests
+    test({ code: 'require("./does-not-exist", "another arg")'
+         , options: [{ commonjs: true, amd: true }]}),
+    test({ code: 'proxyquire("./does-not-exist")'
+         , options: [{ commonjs: true, amd: true }]}),
+    test({ code: '(function() {})("./does-not-exist")'
+         , options: [{ commonjs: true, amd: true }]}),
+    test({ code: 'define([0, foo], function (bar) {})'
+         , options: [{ amd: true }]}),
+    test({ code: 'require(0)'
+         , options: [{ commonjs: true }]}),
+    test({ code: 'require(foo)'
+         , options: [{ commonjs: true }]}),
+
   ],
 
   invalid: [

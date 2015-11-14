@@ -5,9 +5,8 @@ const defaultParseOptions = {
   sourceType: 'module',
 }
 
-export default function parse(path, context) {
-  const { settings } = context
-      , parser = settings['import/parser'] || 'babylon'
+export default function parse(path, { settings = {}, ecmaFeatures = {} } = {}) {
+  const parser = settings['import/parser'] || 'babylon'
 
   const { parse } = require(parser)
       , options = Object.assign( {}
@@ -15,8 +14,8 @@ export default function parse(path, context) {
                                , settings['import/parse-options'])
 
   // detect and handle "jsx" ecmaFeature
-  if (context.ecmaFeatures && parser === 'babylon') {
-    const { jsx } = context.ecmaFeatures
+  if (ecmaFeatures && parser === 'babylon') {
+    const { jsx } = ecmaFeatures
     if (jsx && (!options.plugins || options.plugins.indexOf('jsx') < 0)) {
       if (!options.plugins) options.plugins = ['jsx']
       else options.plugins.push('jsx')
