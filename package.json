@@ -15,7 +15,7 @@
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "prepublish": "npm run compile",
     "pretest": "eslint ./src && npm run compile && babel -d tests/lib/ tests/src/",
-    "coveralls": "npm run cover && cat ./reports/coverage/lcov.info | coveralls"
+    "coveralls": "istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot && remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov.info --type lcovonly && cat ./reports/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
