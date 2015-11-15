@@ -1,0 +1,36 @@
+{
+  "name": "resolve-webpack",
+  "version": "0.0.0",
+  "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-core/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benmosher/eslint-plugin-import.git"
+  },
+  "keywords": [
+    "eslint-plugin-import",
+    "eslint",
+    "jsnext",
+    "modules",
+    "webpack"
+  ],
+  "author": "Ben Mosher (me@benmosher.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+  },
+  "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
+  "dependencies": {
+    "find-root": "^0.1.1",
+    "resolve": "^1.1.6"
+  },
+  "devDependencies": {
+    "babel-core": "^6.1.21",
+    "babel-preset-es2015": "^6.1.18",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3"
+  }
+}
