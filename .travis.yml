@@ -7,7 +7,9 @@ node_js:
 env:
  - NODE_PATH=./lib
 
-script: "npm run-script ci-test"
+script:
+  - "npm run-script ci-test"
+  - "cd resolvers/webpack && npm install && npm test"
 
 after_success:
   - npm run coveralls
