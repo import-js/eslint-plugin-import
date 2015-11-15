@@ -29,7 +29,11 @@ export default function resolveImport(source, file) {
   if (findExternal(source, webpackConfig.externals)) return null
 
   // otherwise, resolve "normally"
-  return resolve.sync(source, { basedir: path.dirname(file) })
+  return resolve.sync(source, {
+    basedir: path.dirname(file),
+    // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
+    extensions: webpackConfig.resolve.extensions || ['', '.webpack.js', '.web.js', '.js'],
+  })
 }
 
 function findExternal(source, externals) {
