@@ -1,6 +1,6 @@
 import findRoot from 'find-root'
 import path from 'path'
-
+import resolve from 'resolve'
 
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
@@ -27,6 +27,9 @@ export default function resolveImport(source, file) {
 
   // externals
   if (findExternal(source, webpackConfig.externals)) return null
+
+  // otherwise, resolve "normally"
+  return resolve.sync(source, { basedir: path.dirname(file) })
 }
 
 function findExternal(source, externals) {
