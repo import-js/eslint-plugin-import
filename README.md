@@ -347,14 +347,6 @@ settings:
   import/parser: esprima-fb  # default is 'babel-core'. change if needed.
 ```
 
-## Debugging
-
-### `no-errors`
-
-Reports on errors in the attempt to parse the imported module for exports.
-Primarily useful for determining why imports are not being reported properly by the other rules.
-Pass `include-messages` as an option to include error descriptions in the report.
-
 ## SublimeLinter-eslint
 
 Recently, SublimeLinter-eslint introduced a change to support `.eslintignore` files
