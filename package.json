@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Import with sanity.",
   "main": "lib/index.js",
   "directories": {
@@ -54,5 +54,10 @@
     "babylon": "^6.1.2",
     "resolve": "1.1.6"
   },
-  "greenkeeper": { "ignore": ["babel", "babel-runtime"] }
+  "greenkeeper": {
+    "ignore": [
+      "babel",
+      "babel-runtime"
+    ]
+  }
 }
