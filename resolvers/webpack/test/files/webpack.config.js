@@ -6,4 +6,9 @@ module.exports = {
       'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
     },
   },
+
+  externals: [
+    { 'jquery': 'jQuery' },
+    'bootstrap',
+  ],
 }
