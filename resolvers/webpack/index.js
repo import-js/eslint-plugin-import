@@ -28,13 +28,23 @@ export default function resolveImport(source, file) {
   // externals
   if (findExternal(source, webpackConfig.externals)) return null
 
+  const paths = []
+  // root as first alternate path
+  if (webpackConfig.resolve.root) {
+    paths.push(webpackConfig.resolve.root)
+  }
+
   // otherwise, resolve "normally"
   return resolve.sync(source, {
     basedir: path.dirname(file),
+
     // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
     extensions: webpackConfig.resolve.extensions || ['', '.webpack.js', '.web.js', '.js'],
+
     // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-    moduleDirectory: webpackConfig.resolve.modulesDirectories || ['web_modules', 'node_modules']
+    moduleDirectory: webpackConfig.resolve.modulesDirectories || ['web_modules', 'node_modules'],
+
+    paths,
   })
 }
 
