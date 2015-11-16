@@ -33,6 +33,8 @@ export default function resolveImport(source, file) {
     basedir: path.dirname(file),
     // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
     extensions: webpackConfig.resolve.extensions || ['', '.webpack.js', '.web.js', '.js'],
+    // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
+    moduleDirectory: webpackConfig.resolve.modulesDirectories || ['web_modules', 'node_modules']
   })
 }
 

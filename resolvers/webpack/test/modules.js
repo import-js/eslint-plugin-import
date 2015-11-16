@@ -9,4 +9,8 @@ describe("resolve.moduleDirectories", () => {
     expect(resolve('some-module', file)).to.exist
       .and.equal(path.join(__dirname, 'files', 'node_modules', 'some-module', 'index.js'))
   })
+  it("finds a bower module", () => {
+    expect(resolve('typeahead.js', file)).to.exist
+      .and.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'))
+  })
 })
