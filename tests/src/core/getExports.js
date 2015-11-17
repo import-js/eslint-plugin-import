@@ -1,13 +1,15 @@
 import { expect } from  'chai'
 import ExportMap from '../../../lib/core/getExports'
 
+import * as fs from 'fs'
+
 import { getFilename } from '../utils'
 
 describe('getExports', function () {
-  it('should handle ExportAllDeclaration', function () {
-    var fakeContext = { getFilename: getFilename
+  const fakeContext = { getFilename: getFilename
                       , settings: {} }
 
+  it('should handle ExportAllDeclaration', function () {
     var imports
     expect(function () {
       imports = ExportMap.get('./export-all', fakeContext)
@@ -18,10 +20,38 @@ describe('getExports', function () {
 
   })
 
-  it('should not throw for a missing file', function () {
-    var fakeContext = { getFilename: getFilename
-                      , settings: {} }
+  it('should return a cached copy on subsequent requests', function () {
+    expect(ExportMap.get('./named-exports', fakeContext))
+      .to.exist.and.equal(ExportMap.get('./named-exports', fakeContext))
+  })
 
+  it('should not return a cached copy after modification', (done) => {
+    const firstAccess = ExportMap.get('./mutator', fakeContext)
+    expect(firstAccess).to.exist
+
+    // mutate (update modified time)
+    fs.utimes(getFilename('mutator.js'), Date.now(), Date.now(), (error) => {
+      expect(error).not.to.exist
+      expect(ExportMap.get('./mutator', fakeContext)).not.to.equal(firstAccess)
+      done()
+    })
+  })
+
+  it('should not return a cached copy with different settings', () => {
+    const firstAccess = ExportMap.get('./named-exports', fakeContext)
+    expect(firstAccess).to.exist
+
+    const differentSettings = Object.assign(
+      {},
+      fakeContext,
+      { settings: { 'import/parser': 'babel-eslint' } })
+
+    expect(ExportMap.get('./named-exports', differentSettings))
+      .to.exist.and
+      .not.to.equal(firstAccess)
+  })
+
+  it('should not throw for a missing file', function () {
     var imports
     expect(function () {
       imports = ExportMap.get('./does-not-exist', fakeContext)
@@ -32,9 +62,6 @@ describe('getExports', function () {
   })
 
   it('should export explicit names for a missing file in exports', function () {
-    var fakeContext = { getFilename: getFilename
-                      , settings: {} }
-
     var imports
     expect(function () {
       imports = ExportMap.get('./exports-missing', fakeContext)

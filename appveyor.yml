@@ -1,6 +1,5 @@
 # Test against this version of Node.js
 environment:
-  NODE_ENV: testing
   NODE_PATH: ./lib
   # NODE_PATH: ./lib
   matrix:
