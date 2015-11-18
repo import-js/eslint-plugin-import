@@ -1,0 +1,29 @@
+{
+  "name": "eslint-import-resolver-node",
+  "version": "0.0.0",
+  "description": "Node default behavior import resolution plugin for eslint-plugin-import.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benmosher/eslint-plugin-import"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "esnext",
+    "modules",
+    "eslint-plugin-import"
+  ],
+  "author": "Ben Mosher (me@benmosher.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+  },
+  "homepage": "https://github.com/benmosher/eslint-plugin-import",
+  "dependencies": {
+    "resolve": "^1.1.6"
+  }
+}
