@@ -52,7 +52,7 @@ function findExternal(source, externals) {
   if (!externals) return false
 
   // string match
-  if (source === externals) return true
+  if (typeof externals === 'string') return (source === externals)
 
   // array: recurse
   if (externals instanceof Array) {

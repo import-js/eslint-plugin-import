@@ -9,7 +9,7 @@ const file = path.join(__dirname, 'files', 'dummy.js')
 describe("extensions", () => {
   it("respects the defaults", () => {
     expect(resolve('./foo', file)).to.exist
-        .and.equal(path.join(__dirname, 'files', 'foo.web.js'))
+      .and.equal(path.join(__dirname, 'files', 'foo.web.js'))
   })
 
   describe("resolve.extensions set", () => {
