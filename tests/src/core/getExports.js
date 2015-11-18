@@ -30,7 +30,8 @@ describe('getExports', function () {
     expect(firstAccess).to.exist
 
     // mutate (update modified time)
-    fs.utimes(getFilename('mutator.js'), Date.now(), Date.now(), (error) => {
+    const newDate = new Date()
+    fs.utimes(getFilename('mutator.js'), newDate, newDate, (error) => {
       expect(error).not.to.exist
       expect(ExportMap.get('./mutator', fakeContext)).not.to.equal(firstAccess)
       done()
@@ -88,9 +89,9 @@ describe('getExports', function () {
           'decorators',
           'jsx',
           'classProperties',
-          'objectRestSpread'
-        ]
-      }
+          'objectRestSpread',
+        ],
+      },
     }})
 
     expect(imports).to.exist

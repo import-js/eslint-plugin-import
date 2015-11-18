@@ -21,7 +21,7 @@ module.exports = function (context) {
   }
 
   // for CommonJS `require` calls
-  // adapted from https://github.com/mctep/eslint-plugin-import/commit/acd4b4508d551f7f800fdd06e5c64ec01f3d1113
+  // adapted from @mctep: http://git.io/v4rAu
   function checkCommon(call) {
     if (call.callee.type !== 'Identifier') return
     if (call.callee.name !== 'require') return
