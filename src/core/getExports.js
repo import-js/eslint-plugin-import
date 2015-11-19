@@ -1,9 +1,14 @@
+import * as fs from 'fs'
+
+import { createHash } from 'crypto'
+
 import parse from './parse'
 import resolve from './resolve'
 import { isCore } from 'resolve'
 import isIgnored from './ignore'
 
-var exportCache = new Map()
+// map from settings sha1 => path => export map objects
+const exportCaches = new Map()
 
 export default class ExportMap {
   constructor(context) {
@@ -29,18 +34,29 @@ export default class ExportMap {
   }
 
   static for(path, context) {
-    // todo: compile out with Babel?
-    if (process.env.NODE_ENV !== 'testing') {
-      var exportMap = exportCache.get(path)
-      if (exportMap != null) return exportMap
+    let exportMap
+    const stats = fs.statSync(path)
+
+    const cacheKey = hashObject(context.settings)
+    let exportCache = exportCaches.get(cacheKey)
+    if (exportCache === undefined) {
+      exportCache = new Map()
+      exportCaches.set(cacheKey, exportCache)
+    }
+
+    exportMap = exportCache.get(path)
+    if (exportMap != null) {
+      // date equality check
+      if (exportMap.mtime - stats.mtime === 0) {
+        return exportMap
+      }
+      // future: check content equality?
     }
 
     exportMap = ExportMap.parse(path, context)
 
     exportCache.set(path, exportMap)
-
-    // Object.freeze(exportMap)
-    // Object.freeze(exportMap.named)
+    exportMap.mtime = stats.mtime
 
     return exportMap
   }
@@ -157,4 +173,10 @@ export function recursivePatternCapture(pattern, callback) {
       })
       break
   }
+}
+
+function hashObject(object) {
+  const settingsShasum = createHash('sha1')
+  settingsShasum.update(JSON.stringify(object))
+  return settingsShasum.digest('hex')
 }

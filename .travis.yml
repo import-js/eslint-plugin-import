@@ -5,7 +5,7 @@ node_js:
   - iojs
   - stable
 env:
- - NODE_ENV=testing NODE_PATH=./lib
+ - NODE_PATH=./lib
 
 script: "npm run-script ci-test"
 
