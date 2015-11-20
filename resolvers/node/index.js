@@ -1,9 +1,10 @@
-import resolve from 'resolve'
+var resolve = require('resolve')
+  , path = require('path')
 
-export default function resolveImport(source, file, settings) {
+exports.resolveImport = function resolveImport(source, file, settings) {
   if (resolve.isCore(source)) return null
 
-  return resolve.sync(source, opts(file, settings))
+  return resolve.sync(source, opts(path.dirname(file), settings))
 }
 
 function opts(basedir, settings) {

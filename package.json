@@ -13,8 +13,8 @@
     "ci-test": "npm run-script pretest && mocha --recursive --reporter dot tests/lib/",
     "debug": "mocha debug --recursive --reporter dot tests/lib/",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
-    "prepublish": "npm run compile",
-    "pretest": "eslint ./src && npm run compile && babel -d tests/lib/ tests/src/",
+    "prepublish": "eslint ./src && npm run compile",
+    "pretest": "npm run compile && babel -d tests/lib/ tests/src/",
     "coveralls": "istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot; remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov.info --type lcovonly && cat ./reports/coverage/lcov.info | coveralls"
   },
   "repository": {

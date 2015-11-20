@@ -1,18 +1,16 @@
-var fs = require('fs')
-  , path = require('path')
-  , resolve = require('resolve')
+import fs from 'fs'
+import { dirname, basename, join } from 'path'
 
-const CASE_INSENSITIVE = fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+import * as defaultResolve from '../../resolvers/node'
+
+const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath) {
-  // shortcut exit
-  if (!fs.existsSync(filepath)) return false
-
-  var dir = path.dirname(filepath)
+  var dir = dirname(filepath)
   if (dir === '/' || dir === '.' || /^[A-Z]:\\$/i.test(dir)) return true
   var filenames = fs.readdirSync(dir)
-  if (filenames.indexOf(path.basename(filepath)) === -1) {
+  if (filenames.indexOf(basename(filepath)) === -1) {
       return false
   }
   return fileExistsWithCaseSync(dir)
@@ -20,70 +18,52 @@ function fileExistsWithCaseSync(filepath) {
 
 function fileExists(filepath) {
   if (CASE_INSENSITIVE) {
-    return fileExistsWithCaseSync(filepath)
+    // short-circuit if path doesn't exist, ignoring case
+    return !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath))
   } else {
     return fs.existsSync(filepath)
   }
 }
 
-function opts(basedir, settings) {
-  // pulls all items from 'import/resolve'
-  return Object.assign( { }
-                      , settings && settings['import/resolve']
-                      , { basedir: basedir }
-                      )
-}
+export function relative(modulePath, sourceFile, settings) {
 
-/**
- * wrapper around resolve
- * @param  {string} p - module path
- * @param  {object} context - ESLint context
- * @return {string} - the full module filesystem path
- */
-module.exports = function (p, context) {
   function withResolver(resolver) {
     // resolve just returns the core module id, which won't appear to exist
-    if (resolver.isCore(p)) return p
-
     try {
-      var file = resolver.sync(p, opts( path.dirname(context.getFilename())
-                                     , context.settings))
-      if (!fileExists(file)) return null
-      return file
+      const filePath = resolver.resolveImport(modulePath, sourceFile, settings)
+      if (filePath === null) return null
+
+      if (filePath === undefined || !fileExists(filePath)) return undefined
+
+      return filePath
     } catch (err) {
-
-      // probably want something more general here
-      if (err.message.indexOf('Cannot find module') === 0) {
-        return null
-      }
-
-      throw err
+      return undefined
     }
   }
 
-  const resolvers = (context.settings['import/resolvers'] || ['resolve'])
-    .map(require)
+  // const resolvers = (context.settings['import/resolvers'] || ['resolve'])
+  //   .map(require)
+  const resolvers = [ defaultResolve ]
 
   for (let resolver of resolvers) {
-    let file = withResolver(resolver)
-    if (file) return file
+    let fullPath = withResolver(resolver)
+    if (fullPath !== undefined) return fullPath
   }
 
-  return null
 }
 
-module.exports.relative = function (p, r, settings) {
-  try {
-
-    var file = resolve.sync(p, opts(path.dirname(r), settings))
-    if (!fileExists(file)) return null
-    return file
-
-  } catch (err) {
-
-    if (err.message.indexOf('Cannot find module') === 0) return null
-
-    throw err // else
-
-  }
+/**
+ * Givent
+ * @param  {string} p - module path
+ * @param  {object} context - ESLint context
+ * @return {string} - the full module filesystem path;
+ *                    null if package is core;
+ *                    undefined if not found
+ */
+export default function resolve(p, context) {
+  return relative( p
+                 , context.getFilename()
+                 , context.settings
+                 )
 }
+resolve.relative = relative

@@ -1,9 +1,7 @@
-'use strict'
+import { expect } from 'chai'
+import resolve from 'core/resolve'
 
-var expect = require('chai').expect
-  , resolve = require('../../../lib/core/resolve')
-
-var utils = require('../utils')
+import * as utils from '../utils'
 
 describe('resolve', function () {
   it('should throw on bad parameters.', function () {
@@ -24,6 +22,6 @@ describe('resolve', function () {
                       , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
                       )
 
-    expect(file).to.equal(null)
+    expect(file, 'path to ./jsx/MyUncoolComponent').to.be.undefined
   })
 })
