@@ -9,7 +9,8 @@ env:
 
 install:
   - npm install
-  - "cd resolvers/webpack && npm install && cd ../.."
+  # install all resolver deps
+  - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
 
 script:
   - "npm run-script ci-test"
