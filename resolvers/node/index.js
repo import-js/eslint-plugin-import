@@ -1,5 +1,6 @@
 var resolve = require('resolve')
   , path = require('path')
+  , assign = require('object-assign')
 
 exports.resolveImport = function resolveImport(source, file, settings) {
   if (resolve.isCore(source)) return null
@@ -9,9 +10,9 @@ exports.resolveImport = function resolveImport(source, file, settings) {
 
 function opts(basedir, settings) {
   // pulls all items from 'import/resolve'
-  return Object.assign( {}
-                      , settings && settings['import/resolve']
-                      , { basedir: basedir }
-                      )
+  return assign( {}
+               , settings && settings['import/resolve']
+               , { basedir: basedir }
+               )
 }
 
