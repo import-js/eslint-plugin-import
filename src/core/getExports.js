@@ -122,6 +122,7 @@ export default class ExportMap {
       switch (n.declaration.type) {
         case 'FunctionDeclaration':
         case 'ClassDeclaration':
+        case 'TypeAlias': // flowtype with babel-eslint parser
           this.named.add(n.declaration.id.name)
           break
         case 'VariableDeclaration':
