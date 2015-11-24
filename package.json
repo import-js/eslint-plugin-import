@@ -44,7 +44,9 @@
     "eslint": ">=1.8.0",
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
-    "remap-istanbul": "^0.4.0"
+    "remap-istanbul": "^0.4.0",
+    "eslint-import-resolver-webpack": "file:./resolvers/webpack",
+    "eslint-import-resolver-node": "file:./resolvers/node"
   },
   "peerDependencies": {
     "eslint": ">=1.4.0"

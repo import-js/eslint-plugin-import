@@ -1,8 +1,6 @@
 import fs from 'fs'
 import { dirname, basename, join } from 'path'
 
-import * as defaultResolve from '../../resolvers/node'
-
 const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 // http://stackoverflow.com/a/27382838
@@ -41,9 +39,8 @@ export function relative(modulePath, sourceFile, settings) {
     }
   }
 
-  // const resolvers = (context.settings['import/resolvers'] || ['resolve'])
-  //   .map(require)
-  const resolvers = [ defaultResolve ]
+  const resolvers = (settings['import/resolvers'] || ['node'])
+    .map(suffix => require(`eslint-import-resolver-${suffix}`))
 
   for (let resolver of resolvers) {
     let fullPath = withResolver(resolver)
