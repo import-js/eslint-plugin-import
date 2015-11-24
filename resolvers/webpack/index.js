@@ -1,6 +1,7 @@
 const findRoot = require('find-root')
     , path = require('path')
     , resolve = require('resolve')
+    , get = require('lodash.get')
 
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
@@ -13,36 +14,43 @@ const findRoot = require('find-root')
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
 exports.resolveImport = function resolveImport(source, file) {
-  const packageDir = findRoot(file)
-  if (!packageDir) throw new Error('package not found above ' + file)
 
-  const webpackConfig = require(path.join(packageDir, 'webpack.config.js'))
-  if (!webpackConfig.resolve) throw new Error('no custom webpack resolve config')
+  var webpackConfig
+  try {
+    var packageDir = findRoot(file)
+    if (!packageDir) throw new Error('package not found above ' + file)
+
+    webpackConfig = require(path.join(packageDir, 'webpack.config.js'))
+  } catch (err) {
+    webpackConfig = {}
+  }
 
   // simple alias lookup
-  if (webpackConfig.resolve.alias &&
-      source in webpackConfig.resolve.alias) {
-    return webpackConfig.resolve.alias[source]
+  var resolveAliases = get(webpackConfig, 'resolve.alias')
+  if (resolveAliases && source in resolveAliases) {
+    return resolveAliases[source]
   }
 
   // externals
   if (findExternal(source, webpackConfig.externals)) return null
 
-  const paths = []
+  var paths = []
+
   // root as first alternate path
-  if (webpackConfig.resolve.root) {
-    paths.push(webpackConfig.resolve.root)
-  }
+  var rootPath = get(webpackConfig, 'resolve.root')
+  if (rootPath) paths.push(rootPath)
 
   // otherwise, resolve "normally"
   return resolve.sync(source, {
     basedir: path.dirname(file),
 
     // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
-    extensions: webpackConfig.resolve.extensions || ['', '.webpack.js', '.web.js', '.js'],
+    extensions: get(webpackConfig, 'resolve.extensions')
+      || ['', '.webpack.js', '.web.js', '.js'],
 
     // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-    moduleDirectory: webpackConfig.resolve.modulesDirectories || ['web_modules', 'node_modules'],
+    moduleDirectory: get(webpackConfig, 'resolve.modulesDirectories')
+      || ['web_modules', 'node_modules'],
 
     paths,
   })
