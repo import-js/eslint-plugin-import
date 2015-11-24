@@ -15,6 +15,8 @@ const findRoot = require('find-root')
  */
 exports.resolveImport = function resolveImport(source, file) {
 
+  if (resolve.isCore(source)) return null
+
   var webpackConfig
   try {
     var packageDir = findRoot(file)
