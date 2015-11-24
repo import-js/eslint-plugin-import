@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import resolve from '../index'
+import { resolveImport as resolve } from '../index'
 import path from 'path'
 
 const file = path.join(__dirname, 'files', 'dummy.js')

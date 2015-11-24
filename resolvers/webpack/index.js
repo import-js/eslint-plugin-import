@@ -1,6 +1,6 @@
-import findRoot from 'find-root'
-import path from 'path'
-import resolve from 'resolve'
+const findRoot = require('find-root')
+    , path = require('path')
+    , resolve = require('resolve')
 
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
@@ -12,7 +12,7 @@ import resolve from 'resolve'
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
-export default function resolveImport(source, file) {
+exports.resolveImport = function resolveImport(source, file) {
   const packageDir = findRoot(file)
   if (!packageDir) throw new Error('package not found above ' + file)
 
