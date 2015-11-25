@@ -13,7 +13,7 @@ const findRoot = require('find-root')
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
-exports.resolveImport = function resolveImport(source, file) {
+exports.resolveImport = function resolveImport(source, file, settings) {
 
   if (resolve.isCore(source)) return null
 
@@ -22,7 +22,7 @@ exports.resolveImport = function resolveImport(source, file) {
     var packageDir = findRoot(file)
     if (!packageDir) throw new Error('package not found above ' + file)
 
-    webpackConfig = require(path.join(packageDir, 'webpack.config.js'))
+    webpackConfig = require(path.join(packageDir, get(settings, 'config', 'webpack.config.js')))
   } catch (err) {
     webpackConfig = {}
   }

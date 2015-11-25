@@ -12,3 +12,4 @@ rules:
   curly: [2, "multi-line"]
   comma-dangle: [2, always-multiline]
   eqeqeq: [2, "allow-null"]
+  no-shadow: 1

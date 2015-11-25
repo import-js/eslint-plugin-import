@@ -2,16 +2,15 @@ var resolve = require('resolve')
   , path = require('path')
   , assign = require('object-assign')
 
-exports.resolveImport = function resolveImport(source, file, settings) {
+exports.resolveImport = function resolveImport(source, file, config) {
   if (resolve.isCore(source)) return null
 
-  return resolve.sync(source, opts(path.dirname(file), settings))
+  return resolve.sync(source, opts(path.dirname(file), config))
 }
 
-function opts(basedir, settings) {
-  // pulls all items from 'import/resolve'
+function opts(basedir, config) {
   return assign( {}
-               , settings && settings['import/resolve']
+               , config
                , { basedir: basedir }
                )
 }

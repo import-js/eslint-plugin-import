@@ -25,10 +25,10 @@ function fileExists(filepath) {
 
 export function relative(modulePath, sourceFile, settings) {
 
-  function withResolver(resolver) {
+  function withResolver(resolver, config) {
     // resolve just returns the core module id, which won't appear to exist
     try {
-      const filePath = resolver.resolveImport(modulePath, sourceFile, settings)
+      const filePath = resolver.resolveImport(modulePath, sourceFile, config)
       if (filePath === null) return null
 
       if (filePath === undefined || !fileExists(filePath)) return undefined
@@ -39,14 +39,39 @@ export function relative(modulePath, sourceFile, settings) {
     }
   }
 
-  const resolvers = (settings['import/resolvers'] || ['node'])
-    .map(suffix => require(`eslint-import-resolver-${suffix}`))
+  const configResolvers = (settings['import/resolvers']
+    || { 'node': settings['import/resolve'] }) // backward compatibility
 
-  for (let resolver of resolvers) {
-    let fullPath = withResolver(resolver)
+  const resolvers = resolverReducer(configResolvers, new Map())
+
+  for (let [name, config] of resolvers.entries()) {
+    const resolver = require(`eslint-import-resolver-${name}`)
+
+    let fullPath = withResolver(resolver, config)
     if (fullPath !== undefined) return fullPath
   }
 
+}
+
+function resolverReducer(resolvers, map) {
+  if (resolvers instanceof Array) {
+    resolvers.forEach(r => resolverReducer(r, map))
+    return map
+  }
+
+  if (typeof resolvers === 'string') {
+    map.set(resolvers, null)
+    return map
+  }
+
+  if (typeof resolvers === 'object') {
+    for (let key in resolvers) {
+      map.set(key, resolvers[key])
+    }
+    return map
+  }
+
+  throw new Error('invalid resolver config')
 }
 
 /**

@@ -181,7 +181,7 @@ function runResolverTests(resolver) {
 
 ['node', 'webpack'].forEach(runResolverTests)
 
-ruleTester.run('no-unresolved (node-specific)', rule, {
+ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
   valid: [
     test({
       code: "import { DEEP } from 'in-alternate-root';",
@@ -224,6 +224,13 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
     }),
   ],
   invalid: [
-    // todo: alternate empty config shouldn't find it
+    test({
+      // default webpack config in files/webpack.config.js knows about jsx
+      code: 'import * as foo from "jsx-module/foo"',
+      settings: {
+        'import/resolvers': { 'webpack': { 'config': 'webpack.empty.config.js' } },
+      },
+      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+    }),
   ],
 })
