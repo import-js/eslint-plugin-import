@@ -18,7 +18,7 @@ export default function parse(path, { settings = {}, ecmaFeatures = {} } = {}) {
     const { jsx } = ecmaFeatures
     if (jsx && (!options.plugins || options.plugins.indexOf('jsx') < 0)) {
       if (!options.plugins) options.plugins = ['jsx']
-      else options.plugins.push('jsx')
+      else options.plugins = options.plugins.concat('jsx')
     }
   }
 
