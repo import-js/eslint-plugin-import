@@ -15,6 +15,13 @@ const findRoot = require('find-root')
  */
 exports.resolveImport = function resolveImport(source, file, settings) {
 
+  // strip loaders
+  const finalBang = source.lastIndexOf('!')
+  if (finalBang >= 0) {
+    source = source.slice(finalBang + 1)
+  }
+
+
   if (resolve.isCore(source)) return null
 
   var webpackConfig

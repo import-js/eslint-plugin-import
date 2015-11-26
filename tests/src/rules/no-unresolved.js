@@ -222,6 +222,11 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
       code: 'import * as foo from "jsx-module/foo"',
       settings: { 'import/resolvers': [ 'webpack' ] },
     }),
+    test({
+      // should ignore loaders
+      code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
+      settings: { 'import/resolvers': [ 'webpack' ] },
+    }),
   ],
   invalid: [
     test({
