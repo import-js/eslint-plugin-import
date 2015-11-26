@@ -61,7 +61,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     moduleDirectory: get(webpackConfig, 'resolve.modulesDirectories')
       || ['web_modules', 'node_modules'],
 
-    paths,
+    paths: paths,
   })
 }
 
