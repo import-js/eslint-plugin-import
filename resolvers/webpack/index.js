@@ -1,7 +1,7 @@
-const findRoot = require('find-root')
-    , path = require('path')
-    , resolve = require('resolve')
-    , get = require('lodash.get')
+var findRoot = require('find-root')
+  , path = require('path')
+  , resolve = require('resolve')
+  , get = require('lodash.get')
 
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
@@ -16,7 +16,7 @@ const findRoot = require('find-root')
 exports.resolveImport = function resolveImport(source, file, settings) {
 
   // strip loaders
-  const finalBang = source.lastIndexOf('!')
+  var finalBang = source.lastIndexOf('!')
   if (finalBang >= 0) {
     source = source.slice(finalBang + 1)
   }
@@ -73,7 +73,7 @@ function findExternal(source, externals) {
 
   // array: recurse
   if (externals instanceof Array) {
-    return externals.some(e => findExternal(source, e))
+    return externals.some(function (e) { return findExternal(source, e) })
   }
 
   if (externals instanceof RegExp) {
@@ -85,5 +85,5 @@ function findExternal(source, externals) {
   }
 
   // else, vanilla object
-  return Object.keys(externals).some(e => source === e)
+  return Object.keys(externals).some(function (e) { return source === e })
 }
