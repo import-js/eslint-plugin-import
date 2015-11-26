@@ -68,6 +68,10 @@ ruleTester.run('named', rule, {
     test({ code: 'import { arrayKeyProp } from "./named-exports"' }),
     test({ code: 'import { deepProp } from "./named-exports"' }),
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
+
+    // flow types
+    test({ code: 'import type { MyType } from "./flowtypes"'
+         , settings: { 'import/parser': 'babel-eslint' }}),
   ],
 
   invalid: [
@@ -133,5 +137,13 @@ ruleTester.run('named', rule, {
         type: 'Literal',
       }],
     }),
+
+    // flow types
+    test({ code: 'import type { MissingType } from "./flowtypes"'
+         , settings: { 'import/parser': 'babel-eslint' }
+         , errors: [{
+           message: "MissingType not found in './flowtypes'",
+           type: 'Identifier',
+         }]}),
   ],
 })
