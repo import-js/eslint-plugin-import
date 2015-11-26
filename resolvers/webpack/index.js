@@ -3,6 +3,8 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , get = require('lodash.get')
 
+var resolveAlias = require('./resolve-alias')
+
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
  *
@@ -34,14 +36,11 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     webpackConfig = {}
   }
 
-  // simple alias lookup
-  var resolveAliases = get(webpackConfig, 'resolve.alias')
-  if (resolveAliases && source in resolveAliases) {
-    return resolveAliases[source]
-  }
-
   // externals
   if (findExternal(source, webpackConfig.externals)) return null
+
+  // replace alias if needed
+  source = resolveAlias(source, get(webpackConfig, 'resolve.alias'))
 
   var paths = []
 

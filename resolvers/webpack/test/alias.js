@@ -1,13 +1,14 @@
-import { expect } from 'chai'
-import { resolveImport as resolve } from '../index'
+var chai = require('chai')
+  , expect = chai.expect
+  , path = require('path')
 
-import path from 'path'
+var webpack = require('../index')
 
-const file = path.join(__dirname, 'files', 'dummy.js')
+var file = path.join(__dirname, 'files', 'dummy.js')
 
-describe("resolve.alias", () => {
-  it("works", () => {
-    expect(resolve('foo', file)).to.exist
+describe("resolve.alias", function () {
+  it("works", function () {
+    expect(webpack.resolveImport('foo', file)).to.exist
       .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'))
   })
 })
