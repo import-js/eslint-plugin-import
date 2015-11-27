@@ -39,7 +39,7 @@ export function relative(modulePath, sourceFile, settings) {
     }
   }
 
-  const configResolvers = (settings['import/resolvers']
+  const configResolvers = (settings['import/resolver']
     || { 'node': settings['import/resolve'] }) // backward compatibility
 
   const resolvers = resolverReducer(configResolvers, new Map())

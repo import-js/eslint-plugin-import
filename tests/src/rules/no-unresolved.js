@@ -13,7 +13,7 @@ function runResolverTests(resolver) {
   function rest(specs) {
     specs.settings = Object.assign({},
       specs.settings,
-      { 'import/resolvers': [ resolver ] }
+      { 'import/resolver': resolver }
     )
 
     return test(specs)
@@ -220,12 +220,12 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
     test({
       // default webpack config in files/webpack.config.js knows about jsx
       code: 'import * as foo from "jsx-module/foo"',
-      settings: { 'import/resolvers': [ 'webpack' ] },
+      settings: { 'import/resolver': 'webpack' },
     }),
     test({
       // should ignore loaders
       code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
-      settings: { 'import/resolvers': [ 'webpack' ] },
+      settings: { 'import/resolver': 'webpack' },
     }),
   ],
   invalid: [
@@ -233,7 +233,7 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
       // default webpack config in files/webpack.config.js knows about jsx
       code: 'import * as foo from "jsx-module/foo"',
       settings: {
-        'import/resolvers': { 'webpack': { 'config': 'webpack.empty.config.js' } },
+        'import/resolver': { 'webpack': { 'config': 'webpack.empty.config.js' } },
       },
       errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
     }),
