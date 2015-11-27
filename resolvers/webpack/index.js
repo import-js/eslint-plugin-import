@@ -40,7 +40,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
   if (findExternal(source, webpackConfig.externals)) return null
 
   // replace alias if needed
-  source = resolveAlias(source, get(webpackConfig, 'resolve.alias'))
+  source = resolveAlias(source, get(webpackConfig, 'resolve.alias', {}))
 
   var paths = []
 
