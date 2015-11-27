@@ -23,7 +23,6 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     source = source.slice(finalBang + 1)
   }
 
-
   if (resolve.isCore(source)) return null
 
   var webpackConfig
@@ -40,12 +39,12 @@ exports.resolveImport = function resolveImport(source, file, settings) {
   if (findExternal(source, webpackConfig.externals)) return null
 
   // replace alias if needed
-  source = resolveAlias(source, get(webpackConfig, 'resolve.alias', {}))
+  source = resolveAlias(source, get(webpackConfig, ['resolve', 'alias'], {}))
 
   var paths = []
 
   // root as first alternate path
-  var rootPath = get(webpackConfig, 'resolve.root')
+  var rootPath = get(webpackConfig, ['resolve', 'root'])
   if (rootPath) paths.push(rootPath)
 
   // otherwise, resolve "normally"
@@ -53,11 +52,11 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     basedir: path.dirname(file),
 
     // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
-    extensions: get(webpackConfig, 'resolve.extensions')
+    extensions: get(webpackConfig, ['resolve', 'extensions'])
       || ['', '.webpack.js', '.web.js', '.js'],
 
     // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-    moduleDirectory: get(webpackConfig, 'resolve.modulesDirectories')
+    moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
       || ['web_modules', 'node_modules'],
 
     paths: paths,
