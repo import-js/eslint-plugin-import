@@ -5,22 +5,11 @@ const defaultParseOptions = {
   sourceType: 'module',
 }
 
-export default function parse(path, { settings = {}, ecmaFeatures = {} } = {}) {
-  const parser = settings['import/parser'] || 'babylon'
+export default function (path, { settings, ecmaFeatures } = {}) {
+  const parser = (settings && settings['import/parser']) || 'babylon'
 
   const { parse } = require(parser)
-      , options = Object.assign( {}
-                               , defaultParseOptions
-                               , settings['import/parse-options'])
-
-  // detect and handle "jsx" ecmaFeature
-  if (ecmaFeatures && parser === 'babylon') {
-    const { jsx } = ecmaFeatures
-    if (jsx && (!options.plugins || options.plugins.indexOf('jsx') < 0)) {
-      if (!options.plugins) options.plugins = ['jsx']
-      else options.plugins = options.plugins.concat('jsx')
-    }
-  }
+      , options = getOptions(parser, settings, ecmaFeatures)
 
   const ast = parse( fs.readFileSync(path, {encoding: 'utf8'})
                    , options
@@ -28,4 +17,29 @@ export default function parse(path, { settings = {}, ecmaFeatures = {} } = {}) {
 
   // bablyon returns top-level "File" node.
   return ast.type === 'File' ? ast.program : ast
+}
+
+
+function getOptions(parser, settings, ecmaFeatures) {
+
+  let options = Object.assign( {}
+                             , defaultParseOptions
+                             , settings && settings['import/parse-options'])
+
+  function inferFeature(feat) {
+    if (ecmaFeatures[feat] && (options.plugins.indexOf(feat) < 0)) {
+      options.plugins.push(feat)
+    }
+  }
+
+  // detect and handle "jsx" ecmaFeature
+  if (parser === 'babylon') {
+    if (ecmaFeatures) {
+      options.plugins = options.plugins ? options.plugins.slice() : []
+      inferFeature('jsx')
+      inferFeature('flow')
+    }
+  }
+
+  return options
 }

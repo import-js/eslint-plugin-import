@@ -11,7 +11,7 @@
     "cover": "npm run pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot; remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov-report --type html",
     "test": "NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/",
     "ci-test": "npm run-script pretest && mocha --recursive --reporter dot tests/lib/",
-    "debug": "mocha debug --recursive --reporter dot tests/lib/",
+    "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "compile": "rm -rf lib/ && babel -d lib/ src/",
     "prepublish": "eslint ./src && npm run compile",
     "pretest": "npm run compile && babel -d tests/lib/ tests/src/",

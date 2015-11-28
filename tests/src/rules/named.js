@@ -72,6 +72,17 @@ ruleTester.run('named', rule, {
     // flow types
     test({ code: 'import type { MyType } from "./flowtypes"'
          , settings: { 'import/parser': 'babel-eslint' }}),
+    // infer flow from ecmaFeatures
+    test({
+      code: 'import type { MyType } from "./flowtypes"',
+      ecmaFeatures: { flow: true, modules: true },
+    }),
+    // ...or explicit parser plugin
+    test({
+      code: 'import type { MyType } from "./flowtypes"',
+      settings: { 'import/parse-options': { plugins: [ 'flow' ] } },
+    }),
+
   ],
 
   invalid: [
@@ -145,5 +156,13 @@ ruleTester.run('named', rule, {
            message: "MissingType not found in './flowtypes'",
            type: 'Identifier',
          }]}),
+    // infer flow from ecmaFeatures
+    test({
+      code: 'import type { MissingType } from "./flowtypes"',
+      ecmaFeatures: { flow: true, modules: true },
+      errors: [{
+        message: "MissingType not found in './flowtypes'",
+        type: 'Identifier',
+      }]}),
   ],
 })
