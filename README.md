@@ -64,7 +64,7 @@ rules:
 ```
 
 
-## Rule Details
+# Rule Details
 
 ### `no-unresolved`
 
@@ -78,6 +78,8 @@ This rule can also optionally report on unresolved modules in CommonJS `require(
 
 To enable this, send `{ commonjs: true/false, amd: true/false }` as a rule option.
 Both are disabled by default.
+
+If you are using Webpack, see the section on [resolver plugins](#resolver-plugins).
 
 ### `named`
 
@@ -254,8 +256,85 @@ import * as _ from 'lodash' // <- reported
 
 This rule is disabled by default.
 
+# Resolver plugins
 
-## Settings
+With the advent of module bundlers and the current state of modules and module
+syntax specs, it's not always obvious where `import x from 'module'` should look
+to find the file behind `module`.
+
+Up through v0.10ish, this plugin has directly used substack's [`resolve`] plugin,
+which implements Node's import behavior. This works pretty well in most cases.
+
+However, Webpack allows a number of things in import module source strings that
+Node does not, such as loaders (`import 'file!./whatever'`) and a number of
+aliasing schemes, such as [`externals`]: mapping a module id to a global name at
+runtime (allowing some modules to be included more traditionally via script tags).
+
+In the interest of supporting both of these, v0.11 introduces resolver plugins.
+At the moment, these are modules exporting a single function:
+
+```js
+
+exports.resolveImport = function (source, file, config) {
+  // return source's absolute path given
+  // - file: absolute path of importing module
+  // - config: optional config provided for this resolver
+
+  // return `null` if source is a "core" module (i.e. "fs", "crypto") that
+  // can't be found on the filesystem
+}
+```
+
+The default `node` plugin that uses [`resolve`] is a handful of lines:
+
+```js
+var resolve = require('resolve')
+  , path = require('path')
+  , assign = require('object-assign')
+
+exports.resolveImport = function resolveImport(source, file, config) {
+  if (resolve.isCore(source)) return null
+
+  return resolve.sync(source, opts(path.dirname(file), config))
+}
+
+function opts(basedir, config) {
+  return assign( {}
+               , config
+               , { basedir: basedir }
+               )
+}
+```
+
+It essentially just uses the current file to get a reference base directory (`basedir`)
+and then passes through any explicit config from the `.eslintrc`; things like
+non-standard file extensions, module directories, etc.
+
+Currently [Node] and [Webpack] resolution have been implemented, but the
+resolvers are just npm packages, so third party packages are supported (and encouraged!).
+
+Just install a resolver as `eslint-import-resolver-foo` and reference it as such:
+
+```yaml
+settings:
+  import/resolver: foo
+```
+
+or with a config object:
+
+```yaml
+settings:
+  import/resolver:
+    foo: { someConfigKey: value }
+```
+
+[`resolve`]: https://www.npmjs.com/package/resolve
+[`externals`]: http://webpack.github.io/docs/library-and-externals.html
+
+[Node]: https://www.npmjs.com/package/eslint-import-resolver-node
+[Webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
+
+# Settings
 
 You may set the following settings in your `.eslintrc`:
 
@@ -265,11 +344,9 @@ A list of regex strings that, if matched by a path, will
 not parse the matching module. In practice, this means rules other than
 `no-unresolved` will not report on the `import` in question.
 
-#### `import/resolve`
+#### `import/resolver`
 
-A passthrough to [resolve]'s `opts` parameter for `resolve.sync`.
-
-[resolve]: https://www.npmjs.com/package/resolve#resolve-sync-id-opts
+See [resolver plugins](#resolver-plugins).
 
 #### `import/parser`
 
@@ -320,31 +397,9 @@ settings:
     - 'node_modules' # this is the default, but must be included if overwritten
     - '\\.es5$'
 
-  import/resolve:
+  import/resolver: webpack # will use 'node' if not specified
 
-    extensions:
-      # if unset, default is just '.js', but it must be re-added explicitly if set
-      - .js
-      - .jsx
-      - .es6
-      - .coffee
-
-    paths:
-      # an array of absolute paths which will also be searched
-      # think NODE_PATH
-      - /usr/local/share/global_modules
-
-    # this is technically for identifying `node_modules` alternate names
-    moduleDirectory:
-
-      - node_modules # defaults to 'node_modules', but...
-      - bower_components
-
-      - project/src  # can add a path segment here that will act like
-                     # a source root, for in-project aliasing (i.e.
-                     # `import MyStore from 'stores/my-store'`)
-
-  import/parser: esprima-fb  # default is 'babel-core'. change if needed.
+  import/parser: esprima-fb  # default is 'babylon'. change if needed.
 ```
 
 ## SublimeLinter-eslint

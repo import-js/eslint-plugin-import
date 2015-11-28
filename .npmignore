@@ -1,6 +1,7 @@
 # files
 src/
 reports/
+resolvers/
 
 # config
 .eslintrc

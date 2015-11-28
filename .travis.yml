@@ -2,12 +2,21 @@ language: node_js
 node_js:
   - 0.10
   - 0.12
-  - iojs
+  - 4
   - stable
 env:
  - NODE_PATH=./lib
 
-script: "npm run-script ci-test"
+install:
+  - npm -g install npm@2
+  - npm install
+  # install all resolver deps
+  - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
+
+script:
+  - "npm run-script ci-test"
+  - "cd resolvers/webpack && npm test"
+  - "cd ../.."  # come back out of resolvers folder
 
 after_success:
   - npm run coveralls

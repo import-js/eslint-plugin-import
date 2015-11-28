@@ -4,7 +4,6 @@ import { createHash } from 'crypto'
 
 import parse from './parse'
 import resolve from './resolve'
-import { isCore } from 'resolve'
 import isIgnored from './ignore'
 
 // map from settings sha1 => path => export map objects
@@ -24,8 +23,6 @@ export default class ExportMap {
   get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
 
   static get(source, context) {
-    // no use trying to parse core modules
-    if (isCore(source)) return null
 
     var path = resolve(source, context)
     if (path == null || isIgnored(path, context)) return null

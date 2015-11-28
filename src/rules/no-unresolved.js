@@ -9,7 +9,7 @@ module.exports = function (context) {
   function checkSourceValue(source) {
     if (source == null) return
 
-    if (resolve(source.value, context) == null) {
+    if (resolve(source.value, context) === undefined) {
       context.report(source,
         'Unable to resolve path to module \'' + source.value + '\'.')
     }

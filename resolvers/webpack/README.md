@@ -1,0 +1,27 @@
+# eslint-import-resolver-webpack
+
+[![npm](https://img.shields.io/npm/v/eslint-import-resolver-webpack.svg)](https://www.npmjs.com/package/eslint-import-resolver-webpack)
+
+Webpack-literate module resolution plugin for [`eslint-plugin-import`](https://www.npmjs.com/package/eslint-plugin-import).
+
+Published separately to allow pegging to a specific version in case of breaking
+changes.
+
+Will look for `webpack.config.js` as a sibling of the first ancestral `package.json`,
+or a `config` parameter may be provided with another filename/path relative to the
+`package.json`.
+
+```yaml
+---
+settings:
+  import/resolver: webpack  # take all defaults
+```
+
+or with explicit config file name:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack: { config: 'webpack.dev.config.js' }
+```

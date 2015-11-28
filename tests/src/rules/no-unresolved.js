@@ -7,13 +7,182 @@ import { RuleTester } from 'eslint'
 var ruleTester = new RuleTester()
   , rule = require('../../../lib/rules/no-unresolved')
 
-ruleTester.run('no-unresolved', rule, {
-  valid: [
-    test({ code: 'import foo from "./bar";' }),
-    test({ code: "import bar from './bar.js';" }),
-    test({ code: "import {someThing} from './module';" }),
-    test({ code: "import fs from 'fs';" }),
+function runResolverTests(resolver) {
+  // redefine 'test' to set a resolver
+  // thus 'rest'. needed something 4-chars-long for formatting simplicity
+  function rest(specs) {
+    specs.settings = Object.assign({},
+      specs.settings,
+      { 'import/resolver': resolver }
+    )
 
+    return test(specs)
+  }
+
+  ruleTester.run(`no-unresolved (${resolver})`, rule, {
+    valid: [
+      rest({ code: 'import foo from "./bar";' }),
+      rest({ code: "import bar from './bar.js';" }),
+      rest({ code: "import {someThing} from './module';" }),
+      rest({ code: "import fs from 'fs';" }),
+
+      rest({ code: 'import * as foo from "a"' }),
+
+      rest({ code: 'export { foo } from "./bar"' }),
+      rest({ code: 'export * from "./bar"' }),
+      rest({ code: 'export { foo }' }),
+
+      // stage 1 proposal for export symmetry,
+      rest({ code: 'export * as bar from "./bar"'
+           , parser: 'babel-eslint' }),
+      rest({ code: 'export bar from "./bar"'
+           , parser: 'babel-eslint' }),
+      rest({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
+
+      // commonjs setting
+      rest({ code: 'var foo = require("./bar")'
+           , options: [{ commonjs: true }]}),
+      rest({ code: 'require("./bar")'
+           , options: [{ commonjs: true }]}),
+      rest({ code: 'require("./does-not-exist")'
+           , options: [{ commonjs: false }]}),
+      rest({ code: 'require("./does-not-exist")' }),
+
+      // amd setting
+      rest({ code: 'require(["./bar"], function (bar) {})'
+           , options: [{ amd: true }]}),
+      rest({ code: 'define(["./bar"], function (bar) {})'
+           , options: [{ amd: true }]}),
+      rest({ code: 'require(["./does-not-exist"], function (bar) {})'
+           , options: [{ amd: false }]}),
+      // don't validate without callback param
+      rest({ code: 'require(["./does-not-exist"])'
+           , options: [{ amd: true }]}),
+      rest({ code: 'define(["./does-not-exist"], function (bar) {})' }),
+
+      // stress tests
+      rest({ code: 'require("./does-not-exist", "another arg")'
+           , options: [{ commonjs: true, amd: true }]}),
+      rest({ code: 'proxyquire("./does-not-exist")'
+           , options: [{ commonjs: true, amd: true }]}),
+      rest({ code: '(function() {})("./does-not-exist")'
+           , options: [{ commonjs: true, amd: true }]}),
+      rest({ code: 'define([0, foo], function (bar) {})'
+           , options: [{ amd: true }]}),
+      rest({ code: 'require(0)'
+           , options: [{ commonjs: true }]}),
+      rest({ code: 'require(foo)'
+           , options: [{ commonjs: true }]}),
+
+    ],
+
+    invalid: [
+      rest({
+        code: 'import reallyfake from "./reallyfake/module"',
+        settings: { 'import/ignore': ['^\\./fake/'] },
+        errors: [{ message: 'Unable to resolve path to module ' +
+                            '\'./reallyfake/module\'.' }],
+      }),
+
+
+      rest({
+        code: "import bar from './baz';",
+        errors: [{ message: "Unable to resolve path to module './baz'."
+                 , type: 'Literal' }],
+      }),
+      rest({ code: "import bar from './baz';"
+           , errors: [{ message: "Unable to resolve path to module './baz'."
+                      , type: 'Literal',
+                      }] }),
+      rest({
+        code: "import bar from './empty-folder';",
+        errors: [{ message: "Unable to resolve path to module './empty-folder'."
+                 , type: 'Literal',
+                 }]}),
+
+      // sanity check that this module is _not_ found without proper settings
+      rest({
+        code: "import { DEEP } from 'in-alternate-root';",
+        errors: [{ message: 'Unable to resolve path to ' +
+                            "module 'in-alternate-root'."
+                 , type: 'Literal',
+                 }]}),
+
+      rest({ code: 'export { foo } from "./does-not-exist"'
+           , errors: 1 }),
+      rest({
+        code: 'export * from "./does-not-exist"',
+        errors: 1,
+      }),
+
+      // export symmetry proposal
+      rest({ code: 'export * as bar from "./does-not-exist"'
+           , parser: 'babel-eslint'
+           , errors: 1,
+           }),
+      rest({ code: 'export bar from "./does-not-exist"'
+           , parser: 'babel-eslint'
+           , errors: 1,
+           }),
+
+      rest({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
+           , errors: 1 }),
+
+
+      // commonjs setting
+      rest({
+        code: 'var bar = require("./baz")',
+        options: [{ commonjs: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'require("./baz")',
+        options: [{ commonjs: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+
+      // amd
+      rest({
+        code: 'require(["./baz"], function (bar) {})',
+        options: [{ amd: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'define(["./baz"], function (bar) {})',
+        options: [{ amd: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'define(["./baz", "./bar", "./does-not-exist"], function (bar) {})',
+        options: [{ amd: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        },{
+          message: "Unable to resolve path to module './does-not-exist'.",
+          type: 'Literal',
+        }],
+      }),
+    ],
+  })
+}
+
+['node', 'webpack'].forEach(runResolverTests)
+
+ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
+  valid: [
     test({
       code: "import { DEEP } from 'in-alternate-root';",
       settings: {
@@ -23,6 +192,7 @@ ruleTester.run('no-unresolved', rule, {
         },
       },
     }),
+
     test({
       code: "import { DEEP } from 'in-alternate-root'; " +
             "import { bar } from 'src-bar';",
@@ -31,167 +201,41 @@ ruleTester.run('no-unresolved', rule, {
         path.join('tests', 'files', 'alternate-root'),
       ]}}}),
 
-    test({ code: 'import * as foo from "a"' }),
-
     test({
       code: 'import * as foo from "jsx-module/foo"',
       settings: { 'import/resolve': { 'extensions': ['.jsx'] } },
     }),
-
-    test({ code: 'export { foo } from "./bar"' }),
-    test({ code: 'export * from "./bar"' }),
-    test({ code: 'export { foo }' }),
-
-    // stage 1 proposal for export symmetry,
-    test({ code: 'export * as bar from "./bar"'
-         , parser: 'babel-eslint' }),
-    test({ code: 'export bar from "./bar"'
-         , parser: 'babel-eslint' }),
-    test({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
-
-    // commonjs setting
-    test({ code: 'var foo = require("./bar")'
-         , options: [{ commonjs: true }]}),
-    test({ code: 'require("./bar")'
-         , options: [{ commonjs: true }]}),
-    test({ code: 'require("./does-not-exist")'
-         , options: [{ commonjs: false }]}),
-    test({ code: 'require("./does-not-exist")' }),
-
-    // amd setting
-    test({ code: 'require(["./bar"], function (bar) {})'
-         , options: [{ amd: true }]}),
-    test({ code: 'define(["./bar"], function (bar) {})'
-         , options: [{ amd: true }]}),
-    test({ code: 'require(["./does-not-exist"], function (bar) {})'
-         , options: [{ amd: false }]}),
-    // don't validate without callback param
-    test({ code: 'require(["./does-not-exist"])'
-         , options: [{ amd: true }]}),
-    test({ code: 'define(["./does-not-exist"], function (bar) {})' }),
-
-    // stress tests
-    test({ code: 'require("./does-not-exist", "another arg")'
-         , options: [{ commonjs: true, amd: true }]}),
-    test({ code: 'proxyquire("./does-not-exist")'
-         , options: [{ commonjs: true, amd: true }]}),
-    test({ code: '(function() {})("./does-not-exist")'
-         , options: [{ commonjs: true, amd: true }]}),
-    test({ code: 'define([0, foo], function (bar) {})'
-         , options: [{ amd: true }]}),
-    test({ code: 'require(0)'
-         , options: [{ commonjs: true }]}),
-    test({ code: 'require(foo)'
-         , options: [{ commonjs: true }]}),
-
   ],
 
   invalid: [
-    // should fail for jsx by default
     test({
       code: 'import * as foo from "jsx-module/foo"',
-      errors: [ {message: 'Unable to resolve path to ' +
-                          'module \'jsx-module/foo\'.'} ],
+      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
     }),
+  ],
+})
 
-
+ruleTester.run('no-unresolved (webpack-specific)', rule, {
+  valid: [
     test({
-      code: 'import reallyfake from "./reallyfake/module"',
-      settings: { 'import/ignore': ['^\\./fake/'] },
-      errors: [{ message: 'Unable to resolve path to module ' +
-                          '\'./reallyfake/module\'.' }],
-    }),
-
-
-    test({
-      code: "import bar from './baz';",
-      errors: [{ message: "Unable to resolve path to module './baz'."
-               , type: 'Literal' }],
-    }),
-    test({ code: "import bar from './baz';"
-         , errors: [{ message: "Unable to resolve path to module './baz'."
-                    , type: 'Literal',
-                    }] }),
-    test({
-      code: "import bar from './empty-folder';",
-      errors: [{ message: "Unable to resolve path to module './empty-folder'."
-               , type: 'Literal',
-               }]}),
-
-    // sanity check that this module is _not_ found without proper settings
-    test({
-      code: "import { DEEP } from 'in-alternate-root';",
-      errors: [{ message: 'Unable to resolve path to ' +
-                          "module 'in-alternate-root'."
-               , type: 'Literal',
-               }]}),
-
-    test({ code: 'export { foo } from "./does-not-exist"'
-         , errors: 1 }),
-    test({
-      code: 'export * from "./does-not-exist"',
-      errors: 1,
-    }),
-
-    // export symmetry proposal
-    test({ code: 'export * as bar from "./does-not-exist"'
-         , parser: 'babel-eslint'
-         , errors: 1,
-         }),
-    test({ code: 'export bar from "./does-not-exist"'
-         , parser: 'babel-eslint'
-         , errors: 1,
-         }),
-
-    test({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
-         , errors: 1 }),
-
-
-    // commonjs setting
-    test({
-      code: 'var bar = require("./baz")',
-      options: [{ commonjs: true }],
-      errors: [{
-        message: "Unable to resolve path to module './baz'.",
-        type: 'Literal',
-      }],
+      // default webpack config in files/webpack.config.js knows about jsx
+      code: 'import * as foo from "jsx-module/foo"',
+      settings: { 'import/resolver': 'webpack' },
     }),
     test({
-      code: 'require("./baz")',
-      options: [{ commonjs: true }],
-      errors: [{
-        message: "Unable to resolve path to module './baz'.",
-        type: 'Literal',
-      }],
+      // should ignore loaders
+      code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
+      settings: { 'import/resolver': 'webpack' },
     }),
-
-    // amd
+  ],
+  invalid: [
     test({
-      code: 'require(["./baz"], function (bar) {})',
-      options: [{ amd: true }],
-      errors: [{
-        message: "Unable to resolve path to module './baz'.",
-        type: 'Literal',
-      }],
-    }),
-    test({
-      code: 'define(["./baz"], function (bar) {})',
-      options: [{ amd: true }],
-      errors: [{
-        message: "Unable to resolve path to module './baz'.",
-        type: 'Literal',
-      }],
-    }),
-    test({
-      code: 'define(["./baz", "./bar", "./does-not-exist"], function (bar) {})',
-      options: [{ amd: true }],
-      errors: [{
-        message: "Unable to resolve path to module './baz'.",
-        type: 'Literal',
-      },{
-        message: "Unable to resolve path to module './does-not-exist'.",
-        type: 'Literal',
-      }],
+      // default webpack config in files/webpack.config.js knows about jsx
+      code: 'import * as foo from "jsx-module/foo"',
+      settings: {
+        'import/resolver': { 'webpack': { 'config': 'webpack.empty.config.js' } },
+      },
+      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
     }),
   ],
 })
