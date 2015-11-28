@@ -53,7 +53,8 @@
   },
   "dependencies": {
     "babel-runtime": "5.x",
-    "babylon": "^6.1.2"
+    "babylon": "^6.1.2",
+    "eslint-import-resolver-node": "^0.1.0"
   },
   "greenkeeper": {
     "ignore": [
