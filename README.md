@@ -11,7 +11,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
-* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](#no-unresolved))
+* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](./docs/rules/no-unresolved.md))
 * Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
@@ -66,20 +66,7 @@ rules:
 
 # Rule Details
 
-### `no-unresolved`
 
-Ensures an imported module can be resolved to a module on the local filesystem,
-as defined by standard Node `require.resolve` behavior.
-
-See [settings](#settings) for customization options for the resolution (i.e.
-additional filetypes, `NODE_PATH`, etc.)
-
-This rule can also optionally report on unresolved modules in CommonJS `require('./foo')` calls and AMD `require(['./foo'], function (foo){...})` and `define(['./foo'], function (foo){...})`.
-
-To enable this, send `{ commonjs: true/false, amd: true/false }` as a rule option.
-Both are disabled by default.
-
-If you are using Webpack, see the section on [resolver plugins](#resolver-plugins).
 
 ### `named`
 
