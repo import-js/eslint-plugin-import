@@ -23,7 +23,7 @@ function runResolverTests(resolver) {
     valid: [
       rest({ code: 'import foo from "./bar";' }),
       rest({ code: "import bar from './bar.js';" }),
-      rest({ code: "import {someThing} from './module';" }),
+      rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
 
       rest({ code: 'import * as foo from "a"' }),
@@ -55,6 +55,10 @@ function runResolverTests(resolver) {
            , options: [{ amd: true }]}),
       rest({ code: 'require(["./does-not-exist"], function (bar) {})'
            , options: [{ amd: false }]}),
+      // magic modules: http://git.io/vByan
+      rest({ code: 'define(["require", "exports", "module"], function (r, e, m) { })'
+           , options: [{ amd: true }]}),
+
       // don't validate without callback param
       rest({ code: 'require(["./does-not-exist"])'
            , options: [{ amd: true }]}),

@@ -47,6 +47,9 @@ module.exports = function (context) {
       if (element.type !== 'Literal') continue
       if (typeof element.value !== 'string') continue
 
+      if (element.value === 'require' ||
+          element.value === 'exports') continue // magic modules: http://git.io/vByan
+
       checkSourceValue(element)
     }
   }
