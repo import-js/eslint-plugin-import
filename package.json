@@ -42,11 +42,12 @@
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "eslint": ">=1.8.0",
+    "eslint-import-resolver-node": "file:./resolvers/node",
+    "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
-    "remap-istanbul": "^0.4.0",
-    "eslint-import-resolver-webpack": "file:./resolvers/webpack",
-    "eslint-import-resolver-node": "file:./resolvers/node"
+    "redux": "^3.0.4",
+    "remap-istanbul": "^0.4.0"
   },
   "peerDependencies": {
     "eslint": ">=1.4.0"

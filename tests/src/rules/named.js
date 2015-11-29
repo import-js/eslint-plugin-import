@@ -83,6 +83,12 @@ ruleTester.run('named', rule, {
       settings: { 'import/parse-options': { plugins: [ 'flow' ] } },
     }),
 
+    // jsnext
+    test({
+      code: '//jsnext\n import { createStore } from "redux"',
+      settings: { 'import/ignore': [] },
+    }),
+
   ],
 
   invalid: [
@@ -164,5 +170,12 @@ ruleTester.run('named', rule, {
         message: "MissingType not found in './flowtypes'",
         type: 'Identifier',
       }]}),
+
+    // jsnext
+    test({
+      code: '//jsnext\n import { createSnorlax } from "redux"',
+      settings: { 'import/ignore': [] },
+      errors: ["createSnorlax not found in 'redux'"],
+    }),
   ],
 })
