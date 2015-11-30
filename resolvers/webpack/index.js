@@ -27,12 +27,17 @@ exports.resolveImport = function resolveImport(source, file, settings) {
 
   var webpackConfig
   try {
-    var packageDir = findRoot(file)
-    if (!packageDir) throw new Error('package not found above ' + file)
+    // see if we've got an absolute path
+    webpackConfig = require(get(settings, 'config', null))
+  } catch(err) {
+    try {
+      var packageDir = findRoot(file)
+      if (!packageDir) throw new Error('package not found above ' + file)
 
-    webpackConfig = require(path.join(packageDir, get(settings, 'config', 'webpack.config.js')))
-  } catch (err) {
-    webpackConfig = {}
+      webpackConfig = require(path.join(packageDir, get(settings, 'config', 'webpack.config.js')))
+    } catch (err) {
+      webpackConfig = {}
+    }
   }
 
   // externals
