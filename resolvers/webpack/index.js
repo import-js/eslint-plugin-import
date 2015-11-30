@@ -109,7 +109,7 @@ function packageFilter(config, pkg) {
       function (m) { return typeof get(pkg, m) === 'string' })
 
     if (altMain) {
-      pkg['main'] = pkg[altMain]
+      pkg['main'] = get(pkg, altMain)
     }
   }
 

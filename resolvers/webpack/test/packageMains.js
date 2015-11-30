@@ -19,6 +19,11 @@ describe("packageMains", function () {
       .to.equal(path.join(__dirname, 'package-mains', 'webpack', 'webpack.js'))
   })
 
+  it("captures jam (array path)", function () {
+    expect(webpack.resolveImport('./jam', file))
+      .to.equal(path.join(__dirname, 'package-mains', 'jam', 'jam.js'))
+  })
+
   it("uses configured packageMains, if provided", function () {
     expect(webpack.resolveImport('./webpack', file, { config: 'webpack.alt.config.js' }))
       .to.equal(path.join(__dirname, 'package-mains', 'webpack', 'index.js'))
