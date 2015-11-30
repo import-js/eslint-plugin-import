@@ -1,11 +1,11 @@
 # files
-src/
 reports/
 resolvers/
 
 # config
 .eslintrc
 .travis.yml
+appveyor.yml
 .editorconfig
 .gitignore
 
