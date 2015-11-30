@@ -2,6 +2,7 @@ var findRoot = require('find-root')
   , path = require('path')
   , resolve = require('resolve')
   , get = require('lodash.get')
+  , find = require('array-find')
 
 var resolveAlias = require('./resolve-alias')
 
@@ -60,6 +61,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
       || ['web_modules', 'node_modules'],
 
     paths: paths,
+    packageFilter: packageFilter.bind(null, webpackConfig),
   })
 }
 
@@ -84,4 +86,33 @@ function findExternal(source, externals) {
 
   // else, vanilla object
   return Object.keys(externals).some(function (e) { return source === e })
+}
+
+/**
+ * webpack defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
+ * @type {Array}
+ */
+var defaultMains = [
+  'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
+]
+
+function packageFilter(config, pkg) {
+  var altMain
+
+  // check for rollup-style first
+  if (pkg['jsnext:main']) {
+    pkg['main'] = pkg['jsnext:main']
+  } else {
+    // check for configured/default alternative main fields
+    altMain = find(
+      get(config, ['resolve', 'packageMains']) || defaultMains,
+      function (m) { return get(pkg, m) })
+
+    if (altMain) {
+      pkg['main'] = pkg[altMain]
+    }
+  }
+
+
+  return pkg
 }
