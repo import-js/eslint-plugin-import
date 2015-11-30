@@ -106,7 +106,7 @@ function packageFilter(config, pkg) {
     // check for configured/default alternative main fields
     altMain = find(
       get(config, ['resolve', 'packageMains']) || defaultMains,
-      function (m) { return get(pkg, m) })
+      function (m) { return typeof get(pkg, m) === 'string' })
 
     if (altMain) {
       pkg['main'] = pkg[altMain]
