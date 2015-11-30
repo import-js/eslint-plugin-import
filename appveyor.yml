@@ -2,11 +2,12 @@
 environment:
   NODE_PATH: ./lib
   # NODE_PATH: ./lib
-  matrix:
-  - nodejs_version: "0.10"
-  - nodejs_version: "0.12"
-  - nodejs_version: "4"
-  - nodejs_version: "5"
+  nodejs_version: "4"
+  # killing build matrix in the interest of turnaround time
+  # matrix:
+  # - nodejs_version: "0.10"
+  # - nodejs_version: "0.12"
+  # - nodejs_version: "5"
 
   # - nodejs_version: "2"
 
