@@ -8,8 +8,8 @@ Published separately to allow pegging to a specific version in case of breaking
 changes.
 
 Will look for `webpack.config.js` as a sibling of the first ancestral `package.json`,
-or a `config` parameter may be provided with another filename/path relative to the
-`package.json`.
+or a `config` parameter may be provided with another filename/path either relative to the
+`package.json`, or a complete, absolute path.
 
 ```yaml
 ---
