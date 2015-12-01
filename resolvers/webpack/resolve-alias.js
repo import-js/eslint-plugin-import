@@ -13,10 +13,12 @@ module.exports = function resolveAlias(source, aliases) {
   return source
 }
 
+// using '/' only for consistency with Webpack docs
+var sep = '/'
 function matchAlias(source, alias, value) {
   var isExact = (alias[alias.length - 1] === '$')
     , isFile = (path.extname(value) !== '')
-    , segments = source.split(path.sep)
+    , segments = source.split(sep)
 
   if (isExact) alias = alias.slice(0, -1)
 
@@ -30,7 +32,7 @@ function matchAlias(source, alias, value) {
     }
 
     // otherwise, prefix match is fine for non-file paths
-    if (!isExact && !isFile) return [value].concat(segments.slice(1)).join(path.sep)
+    if (!isExact && !isFile) return [value].concat(segments.slice(1)).join(sep)
   }
 
 }
