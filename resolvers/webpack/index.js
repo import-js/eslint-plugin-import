@@ -34,7 +34,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     // see if we've got an absolute path
     if (!isAbsolute(configPath)) {
       // if not, find ancestral package.json and use its directory as base for the path
-      var packageDir = findRoot(file)
+      var packageDir = findRoot(path.resolve(file))
       if (!packageDir) throw new Error('package not found above ' + file)
 
       configPath = path.join(packageDir, configPath)
