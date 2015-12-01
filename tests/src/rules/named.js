@@ -32,8 +32,6 @@ ruleTester.run('named', rule, {
 
     test({ code: 'import { foo, bar } from "./common"'
          , settings: { 'import/ignore': ['common'] } }),
-    test({ code: 'import { baz } from "./bar"'
-         , settings: { 'import/ignore': ['bar'] } }),
 
     // ignore core modules by default
     test({ code: 'import { foo } from "crypto"' }),
@@ -43,11 +41,6 @@ ruleTester.run('named', rule, {
 
     // node_modules/a only exports 'foo', should be ignored though
     test({ code: 'import { zoob } from "a"' }),
-
-    // parses / correctly verifies if settings remove node_modules
-    // from ignore list
-    test({ code: 'import { foo } from "a"'
-         , settings: { 'import/ignore': [] } }),
 
     // export tests
     test({ code: 'export { foo } from "./bar"' }),
@@ -82,6 +75,19 @@ ruleTester.run('named', rule, {
       code: 'import type { MyType } from "./flowtypes"',
       settings: { 'import/parse-options': { plugins: [ 'flow' ] } },
     }),
+
+    // jsnext
+    test({
+      code: '/*jsnext*/ import { createStore } from "redux"',
+      settings: { 'import/ignore': [] },
+    }),
+    // should work without ignore
+    test({
+      code: '/*jsnext*/ import { createStore } from "redux"',
+    }),
+
+    // ignore is ignored if exports are found
+    test({ code: 'import { foo } from "es6-module"' }),
 
   ],
 
@@ -164,5 +170,28 @@ ruleTester.run('named', rule, {
         message: "MissingType not found in './flowtypes'",
         type: 'Identifier',
       }]}),
+
+    // jsnext
+    test({
+      code: '/*jsnext*/ import { createSnorlax } from "redux"',
+      settings: { 'import/ignore': [] },
+      errors: ["createSnorlax not found in 'redux'"],
+    }),
+    // should work without ignore
+    test({
+      code: '/*jsnext*/ import { createSnorlax } from "redux"',
+      errors: ["createSnorlax not found in 'redux'"],
+    }),
+
+    // ignore is ignored if exports are found
+    test({
+      code: 'import { baz } from "es6-module"',
+      errors: ["baz not found in 'es6-module'"],
+    }),
+    test({
+      code: 'import { baz } from "./bar"',
+      settings: { 'import/ignore': ['bar'] },
+      errors: ["baz not found in './bar'"],
+    }),
   ],
 })

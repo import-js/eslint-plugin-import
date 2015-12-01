@@ -1,0 +1,4 @@
+{
+  "webpack": "webpack.js",
+  "main": "index.js"
+}

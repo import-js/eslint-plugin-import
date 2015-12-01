@@ -25,14 +25,13 @@ export default class ExportMap {
   static get(source, context) {
 
     var path = resolve(source, context)
-    if (path == null || isIgnored(path, context)) return null
+    if (path == null) return null
 
     return ExportMap.for(path, context)
   }
 
   static for(path, context) {
     let exportMap
-    const stats = fs.statSync(path)
 
     const cacheKey = hashObject(context.settings)
     let exportCache = exportCaches.get(cacheKey)
@@ -42,6 +41,10 @@ export default class ExportMap {
     }
 
     exportMap = exportCache.get(path)
+    // return cached ignore
+    if (exportMap === null) return null
+
+    const stats = fs.statSync(path)
     if (exportMap != null) {
       // date equality check
       if (exportMap.mtime - stats.mtime === 0) {
@@ -51,9 +54,14 @@ export default class ExportMap {
     }
 
     exportMap = ExportMap.parse(path, context)
+    exportMap.mtime = stats.mtime
+
+    // ignore empties, optionally
+    if (exportMap.named.size === 0 && isIgnored(path, context)) {
+      exportMap = null
+    }
 
     exportCache.set(path, exportMap)
-    exportMap.mtime = stats.mtime
 
     return exportMap
   }

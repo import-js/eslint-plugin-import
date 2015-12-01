@@ -9,9 +9,18 @@ exports.resolveImport = function resolveImport(source, file, config) {
 }
 
 function opts(basedir, config) {
-  return assign( {}
-               , config
-               , { basedir: basedir }
-               )
+  return assign({},
+    config,
+    {
+      basedir: basedir,
+      packageFilter: packageFilter,
+
+    })
 }
 
+function packageFilter(pkg) {
+  if (pkg['jsnext:main']) {
+    pkg['main'] = pkg['jsnext:main']
+  }
+  return pkg
+}
