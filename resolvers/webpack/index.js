@@ -2,6 +2,8 @@ var findRoot = require('find-root')
   , path = require('path')
   , resolve = require('resolve')
   , get = require('lodash.get')
+  // not available on 0.10.x
+  , isAbsolute = path.isAbsolute || require('is-absolute')
 
 var resolveAlias = require('./resolve-alias')
 
@@ -29,7 +31,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     , webpackConfig
   try {
     // see if we've got an absolute path
-    if (!path.isAbsolute(configPath)) {
+    if (!isAbsolute(configPath)) {
       // if not, find ancestral package.json and use its directory as base for the path
       var packageDir = findRoot(file)
       if (!packageDir) throw new Error('package not found above ' + file)
