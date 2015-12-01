@@ -3,6 +3,8 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , get = require('lodash.get')
   , find = require('array-find')
+  // not available on 0.10.x
+  , isAbsolute = path.isAbsolute || require('is-absolute')
 
 var resolveAlias = require('./resolve-alias')
 
@@ -26,12 +28,19 @@ exports.resolveImport = function resolveImport(source, file, settings) {
 
   if (resolve.isCore(source)) return null
 
-  var webpackConfig
+  var configPath = get(settings, 'config', 'webpack.config.js')
+    , webpackConfig
   try {
-    var packageDir = findRoot(file)
-    if (!packageDir) throw new Error('package not found above ' + file)
+    // see if we've got an absolute path
+    if (!isAbsolute(configPath)) {
+      // if not, find ancestral package.json and use its directory as base for the path
+      var packageDir = findRoot(file)
+      if (!packageDir) throw new Error('package not found above ' + file)
 
-    webpackConfig = require(path.join(packageDir, get(settings, 'config', 'webpack.config.js')))
+      configPath = path.join(packageDir, configPath)
+    }
+
+    webpackConfig = require(configPath)
   } catch (err) {
     webpackConfig = {}
   }
