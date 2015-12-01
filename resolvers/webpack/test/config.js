@@ -7,7 +7,7 @@ import path from 'path'
 
 var file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js')
 var absoluteSettings = {
-  config: path.join(__dirname, 'files/some/absolute.path.webpack.config.js')
+  config: path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js'),
 }
 
 describe("config", function () {
