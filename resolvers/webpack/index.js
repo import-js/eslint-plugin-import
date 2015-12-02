@@ -55,7 +55,10 @@ exports.resolveImport = function resolveImport(source, file, settings) {
 
   // root as first alternate path
   var rootPath = get(webpackConfig, ['resolve', 'root'])
-  if (rootPath) paths.push(rootPath)
+  if (rootPath) {
+    if (typeof rootPath === 'string') paths.push(rootPath)
+    else paths.push.apply(paths, rootPath)
+  }
 
   // otherwise, resolve "normally"
   return resolve.sync(source, {
