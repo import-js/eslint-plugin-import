@@ -94,7 +94,11 @@ function findExternal(source, externals) {
   }
 
   // else, vanilla object
-  return Object.keys(externals).some(function (e) { return source === e })
+  for (var key in externals) {
+    if (!externals.hasOwnProperty(key)) continue
+    if (source === key) return true
+  }
+  return false
 }
 
 /**
