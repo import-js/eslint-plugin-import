@@ -1,9 +1,9 @@
 var chai =  require('chai')
   , expect = chai.expect
+  , path = require('path')
 
-import { resolveImport as resolve } from '../index'
+var resolve = require('../index').resolveImport
 
-import path from 'path'
 
 var file = path.join(__dirname, 'files', 'src', 'dummy.js')
 

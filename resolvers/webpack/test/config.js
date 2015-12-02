@@ -1,9 +1,8 @@
 var chai =  require('chai')
   , expect = chai.expect
+  , path = require('path')
 
-import { resolveImport as resolve } from '../index'
-
-import path from 'path'
+var resolve = require('../index').resolveImport
 
 var file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js')
 var absoluteSettings = {
