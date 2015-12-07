@@ -11,11 +11,14 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
-* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`](./docs/rules/no-unresolved.md))
-* Ensure named imports correspond to a named export in the remote file. ([`named`](#named))
+* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])
+* Ensure named imports correspond to a named export in the remote file. ([`named`])
 * Ensure a default export is present, given a default import. ([`default`](#default))
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`](#namespace))
 * Report any invalid exports, i.e. re-export of the same name ([`export`](#export))
+
+[`no-unresolved`]: ./docs/rules/no-unresolved.md
+[`named`]: ./docs/rules/named.md
 
 Helpful warnings:
 
@@ -66,13 +69,6 @@ rules:
 
 # Rule Details
 
-
-
-### `named`
-
-Verifies that all named imports are part of the set of named exports in the referenced module.
-
-For `export`, verifies that all named exports exist in the referenced module.
 
 ### `default`
 
