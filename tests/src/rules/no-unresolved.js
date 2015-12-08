@@ -183,63 +183,101 @@ function runResolverTests(resolver) {
   })
 }
 
-['node', 'webpack'].forEach(runResolverTests)
+describe('Webpack resolver', function () {
+  runResolverTests('webpack')
 
-ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
-  valid: [
-    test({
-      code: "import { DEEP } from 'in-alternate-root';",
-      settings: {
-        'import/resolve': {
-          'paths': [path.join( process.cwd()
-                             , 'tests', 'files', 'alternate-root')],
+  ruleTester.run('no-unresolved, webpack-specific', rule, {
+    valid: [
+      test({
+        // default webpack config in files/webpack.config.js knows about jsx
+        code: 'import * as foo from "jsx-module/foo"',
+        settings: { 'import/resolver': 'webpack' },
+      }),
+      test({
+        // should ignore loaders
+        code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
+        settings: { 'import/resolver': 'webpack' },
+      }),
+    ],
+    invalid: [
+      test({
+        // default webpack config in files/webpack.config.js knows about jsx
+        code: 'import * as foo from "jsx-module/foo"',
+        settings: {
+          'import/resolver': { 'webpack': { 'config': 'webpack.empty.config.js' } },
         },
-      },
-    }),
+        errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+      }),
+    ],
+  })
 
-    test({
-      code: "import { DEEP } from 'in-alternate-root'; " +
-            "import { bar } from 'src-bar';",
-      settings: {'import/resolve': { 'paths': [
-        path.join('tests', 'files', 'src-root'),
-        path.join('tests', 'files', 'alternate-root'),
-      ]}}}),
-
-    test({
-      code: 'import * as foo from "jsx-module/foo"',
-      settings: { 'import/resolve': { 'extensions': ['.jsx'] } },
-    }),
-  ],
-
-  invalid: [
-    test({
-      code: 'import * as foo from "jsx-module/foo"',
-      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
-    }),
-  ],
 })
 
-ruleTester.run('no-unresolved (webpack-specific)', rule, {
-  valid: [
-    test({
-      // default webpack config in files/webpack.config.js knows about jsx
-      code: 'import * as foo from "jsx-module/foo"',
-      settings: { 'import/resolver': 'webpack' },
-    }),
-    test({
-      // should ignore loaders
-      code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
-      settings: { 'import/resolver': 'webpack' },
-    }),
-  ],
-  invalid: [
-    test({
-      // default webpack config in files/webpack.config.js knows about jsx
-      code: 'import * as foo from "jsx-module/foo"',
-      settings: {
-        'import/resolver': { 'webpack': { 'config': 'webpack.empty.config.js' } },
-      },
-      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
-    }),
-  ],
+var initialNodePath = process.env.NODE_PATH
+before(function () { process.env.NODE_PATH = undefined })
+after(function () { if (initialNodePath !== undefined) process.env.NODE_PATH = initialNodePath })
+
+describe('Node resolver', function () {
+
+  runResolverTests('node')
+
+  ruleTester.run('import/resolve legacy', rule, {
+    valid: [
+      test({
+        code: "import { DEEP } from 'in-alternate-root';",
+        settings: {
+          'import/resolve': {
+            'paths': [path.join( process.cwd()
+                               , 'tests', 'files', 'alternate-root')],
+          },
+        },
+      }),
+
+      test({
+        code: "import { DEEP } from 'in-alternate-root'; " +
+              "import { bar } from 'src-bar';",
+        settings: {'import/resolve': { 'paths': [
+          path.join('tests', 'files', 'src-root'),
+          path.join('tests', 'files', 'alternate-root'),
+        ]}}}),
+
+      test({
+        code: 'import * as foo from "jsx-module/foo"',
+        settings: { 'import/resolve': { 'extensions': ['.jsx'] } },
+      }),
+    ],
+
+    invalid: [
+      test({
+        code: 'import * as foo from "jsx-module/foo"',
+        errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+      }),
+    ],
+  })
+
+  ruleTester.run('no-unresolved', rule, {
+    valid: [
+      test({
+        // default webpack config in files/webpack.config.js knows about jsx
+        code: 'import * as foo from "jsx-module/foo"',
+        settings: { 'import/resolver': 'webpack' },
+      }),
+      test({
+        // should ignore loaders
+        code: 'import * as foo from "some-loader?with=args!jsx-module/foo"',
+        settings: { 'import/resolver': 'webpack' },
+      }),
+    ],
+    invalid: [
+      test({
+        // default webpack config in files/webpack.config.js knows about jsx
+        code: 'import * as foo from "jsx-module/foo"',
+        settings: {
+          'import/resolver': { 'webpack': { 'config': 'webpack.empty.config.js' } },
+        },
+        errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+      }),
+    ],
+  })
+
 })
