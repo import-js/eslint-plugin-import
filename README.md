@@ -342,6 +342,15 @@ A list of regex strings that, if matched by a path, will
 not parse the matching module. In practice, this means rules other than
 `no-unresolved` will not report on the `import` in question.
 
+This will replace the default of `node_modules`, so you may need to include it in your own list. Example:
+
+```yaml
+settings:
+  import/ignore:
+    - node_modules
+    - coffee$
+```
+
 #### `import/resolver`
 
 See [resolver plugins](#resolver-plugins).
