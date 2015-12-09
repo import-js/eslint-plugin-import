@@ -20,9 +20,9 @@ install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
 
-  # update npm
-  - npm -g install npm@2
-  - set PATH=%APPDATA%\npm;%PATH%
+  # update npm (only needed for Node 0.10)
+  # - npm -g install npm@2
+  # - set PATH=%APPDATA%\npm;%PATH%
 
   # install modules
   - npm install
@@ -37,11 +37,11 @@ test_script:
   - node --version
   - npm --version
   # Lint
-  - eslint ./src
+  - $(npm bin)/eslint ./src
   # Compile
   - npm run-script pretest
   # core tests
-  - mocha tests/lib/ --recursive --reporter dot
+  - $(npm bin)/mocha tests/lib/ --recursive --reporter dot
   # resolver tests
   - cd .\resolvers\webpack && npm test && cd ..\..
   - cd .\resolvers\node && npm test && cd ..\..
