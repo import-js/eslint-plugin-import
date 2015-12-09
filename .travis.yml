@@ -15,8 +15,7 @@ install:
 
 script:
   - "npm run-script ci-test"
-  - "cd resolvers/webpack && npm test"
-  - "cd ../.."  # come back out of resolvers folder
+  - "for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done"
 
 after_success:
   - npm run coveralls
