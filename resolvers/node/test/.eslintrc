@@ -1,0 +1,6 @@
+---
+env:
+  mocha: true
+  es6: false
+rules:
+  quotes: 0
