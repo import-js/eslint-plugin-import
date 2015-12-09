@@ -37,11 +37,11 @@ test_script:
   - node --version
   - npm --version
   # Lint
-  - $(npm bin)/eslint ./src
+  - ./node_modules/.bin/eslint ./src
   # Compile
   - npm run-script pretest
   # core tests
-  - $(npm bin)/mocha tests/lib/ --recursive --reporter dot
+  - ./node_modules/.bin/mocha tests/lib/ --recursive --reporter dot
   # resolver tests
   - cd .\resolvers\webpack && npm test && cd ..\..
   - cd .\resolvers\node && npm test && cd ..\..
