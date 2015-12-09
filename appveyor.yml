@@ -26,16 +26,25 @@ install:
 
   # install modules
   - npm install
+
+  # todo: learn how to do this for all .\resolvers\* on Windows
   - cd .\resolvers\webpack && npm install && cd ..\..
+  - cd .\resolvers\node && npm install && cd ..\..
 
 # Post-install test scripts.
 test_script:
   # Output useful info for debugging.
   - node --version
   - npm --version
-  # run tests
-  - npm run-script ci-test
-  - cd .\resolvers\webpack && npm test
+  # Lint
+  - eslint ./src
+  # Compile
+  - npm run-script pretest
+  # core tests
+  - mocha tests/lib/ --recursive --reporter dot
+  # resolver tests
+  - cd .\resolvers\webpack && npm test && cd ..\..
+  - cd .\resolvers\node && npm test && cd ..\..
 
 # Don't actually build.
 build: off
