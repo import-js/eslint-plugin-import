@@ -47,7 +47,7 @@
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
     "redux": "^3.0.4",
-    "remap-istanbul": "^0.4.0"
+    "remap-istanbul": "^0.5.1"
   },
   "peerDependencies": {
     "eslint": ">=1.4.0"
