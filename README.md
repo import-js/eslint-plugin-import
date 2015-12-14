@@ -413,11 +413,53 @@ settings:
 
 ## SublimeLinter-eslint
 
-Recently, SublimeLinter-eslint introduced a change to support `.eslintignore` files
+SublimeLinter-eslint introduced a change to support `.eslintignore` files
 which altered the way file paths are passed to ESLint when linting during editing.
+This change sends a relative path instead of the absolute path to the file (as ESLint
+normally provides), which can make it impossible for this plugin to resolve dependencies
+on the filesystem.
 
-See roadhump/SublimeLinter-eslint#58 for more details, but essentially, you may find
-you need to add the following to a `.sublimelinterrc` file:
+This workaround should no longer be necessary with the release of ESLint 2.0, when
+`.eslintignore` will be updated to work more like a `.gitignore`, which should
+support proper ignoring of absolute paths via `--stdin-filename`.
+
+In the meantime, see [roadhump/SublimeLinter-eslint#58](https://github.com/roadhump/SublimeLinter-eslint/issues/58)
+for more details and discussion, but essentially, you may find you need to add the following
+`SublimeLinter` config to your Sublime project file:
+
+```json
+{
+    "folders":
+    [
+        {
+            "path": "code"
+        }
+    ],
+    "SublimeLinter":
+    {
+        "linters":
+        {
+            "eslint":
+            {
+                "chdir": "${project}/code"
+            }
+        }
+    }
+}
+```
+
+Note that `${project}/code` matches the `code` provided at `folders[0].path`.
+
+The purpose of the `chdir` setting, in this case, is to set the working directory
+from which ESLint is executed to be the same as the directory on which SublimeLinter-eslint
+bases the relative path it provides.
+
+See the SublimeLinter docs on [`chdir`](http://www.sublimelinter.com/en/latest/linter_settings.html#chdir)
+for more information, in case this does not work with your project.
+
+If you are not using `.eslintignore`, or don't have a Sublime project file, you can also
+do the following via a `.sublimelinterrc` file in some ancestor directory of your
+code:
 
 ```json
 {
