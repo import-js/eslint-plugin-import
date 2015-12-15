@@ -69,15 +69,6 @@ rules:
 
 # Rule Details
 
-
-### `default`
-
-If a default import is requested, this rule will report if there is no default
-export in the imported module.
-
-For [ES7], reports if a default is named and exported but is not found in the
-referenced module.
-
 ### `namespace`
 
 Enforces names exist at the time they are dereferenced, when imported as a full namespace (i.e. `import * as foo from './foo'; foo.bar();` will report if `bar` is not exported by `./foo`.).
