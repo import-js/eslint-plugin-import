@@ -33,9 +33,10 @@ Style guide:
 
 * Report CommonJS `require` calls. ([`no-require`])
 * Ensure all imports appear before other statements ([`imports-first`](#imports-first))
-* Report repeated import of the same module in multiple places ([`no-duplicates`](#no-duplicates))
+* Report repeated import of the same module in multiple places ([`no-duplicates`])
 
 [`no-require`]: ./docs/rules/no-require.md
+[`no-duplicates`]: ./docs/rules/no-duplicates.md
 
 ## Installation
 
@@ -75,35 +76,6 @@ rules:
 
 
 # Rule Details
-
-
-
-### `no-duplicates`
-
-Reports if a resolved path is imported more than once.
-
-Valid:
-```js
-import SomeDefaultClass, * as names from './mod'
-```
-
-...whereas here, both `./mod` imports will be reported:
-
-```js
-import SomeDefaultClass from './mod'
-
-// oops, some other import separated these lines
-import foo from './some-other-mod'
-
-import * as names from './mod'
-```
-
-The motivation is that this is likely a result of two developers importing different
-names from the same module at different times (and potentially largely different
-locations in the file.) This rule brings both (or n-many) to attention.
-
-This rule is only set to a warning, by default.
-
 
 ### `imports-first`
 
