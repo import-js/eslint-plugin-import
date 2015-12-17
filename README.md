@@ -32,10 +32,11 @@ Helpful warnings:
 Style guide:
 
 * Report CommonJS `require` calls. ([`no-require`])
-* Ensure all imports appear before other statements ([`imports-first`](#imports-first))
+* Ensure all imports appear before other statements ([`imports-first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 
 [`no-require`]: ./docs/rules/no-require.md
+[`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 
 ## Installation
@@ -73,35 +74,6 @@ rules:
   import/export: 2
   # etc...
 ```
-
-
-# Rule Details
-
-### `imports-first`
-
-By popular demand, this rule reports any imports that come after non-import
-statments:
-
-```js
-import foo from './foo'
-
-// some module-level initializer
-initWith(foo)
-
-import bar from './bar' // <- reported
-```
-
-Providing `absolute-first` as an option will report any absolute imports (i.e.
-packages) that come after any relative imports:
-
-```js
-import foo from 'foo'
-import bar from './bar'
-
-import * as _ from 'lodash' // <- reported
-```
-
-This rule is disabled by default.
 
 # Resolver plugins
 
