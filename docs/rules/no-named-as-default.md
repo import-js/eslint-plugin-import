@@ -1,4 +1,4 @@
-# `no-named-as-default`
+# no-named-as-default
 
 Reports use of an exported name as the locally imported name of a default export.
 

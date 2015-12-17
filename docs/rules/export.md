@@ -1,4 +1,4 @@
-# `export`
+# export
 
 Reports funny business with exports, like repeated exports of names or defaults.
 

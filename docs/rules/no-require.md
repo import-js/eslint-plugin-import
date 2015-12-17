@@ -1,4 +1,4 @@
-# `no-require`
+# no-require
 
 Reports `require([string])` function calls. Will not report if >1 argument,
 or single argument is not a literal string.
