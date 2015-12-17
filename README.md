@@ -24,7 +24,9 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 Helpful warnings:
 
-* Report use of exported name as identifier of default export ([`no-named-as-default`](#no-named-as-default))
+* Report use of exported name as identifier of default export ([`no-named-as-default`])
+
+[`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 
 Style guide:
 
@@ -72,45 +74,6 @@ rules:
 
 
 # Rule Details
-
-
-
-### `no-named-as-default`
-
-Reports use of an exported name as the locally imported name of a default export.
-
-Given:
-```js
-// foo.js
-export default 'foo';
-export const bar = 'baz';
-```
-
-...this would be valid:
-```js
-import foo from './foo.js';
-```
-
-...and this would be reported:
-```js
-// message: Using exported name 'bar' as identifier for default export.
-import bar from './foo.js';
-```
-
-Rationale: using an exported name as the name of the default export is likely...
-
-- *misleading*: others familiar with `foo.js` probably expect the name to be `foo`
-- *a mistake*: only needed to import `bar` and forgot the brackets (the case that is prompting this)
-
-For [ES7], this also prevents exporting the default from a referenced module as a name within than module, for the same reasons:
-
-```js
-// valid:
-export foo from './foo.js'
-
-// message: Using exported name 'bar' as identifier for default export.
-export bar from './foo.js';
-```
 
 ### `export`
 
