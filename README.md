@@ -172,8 +172,9 @@ may need to include it in your own list if you still want to ignore it. Example:
 ```yaml
 settings:
   import/ignore:
-    - node_modules  # mostly CommonJS (ignored by default)
-    - \.coffee$     # fraught with parse errors
+    - node_modules       # mostly CommonJS (ignored by default)
+    - \.coffee$          # fraught with parse errors
+    - \.(scss|less|css)$ # can't parse unprocessed CSS modules, either
 ```
 
 [`jsnext:main`]: https://github.com/rollup/rollup/wiki/jsnext:main
