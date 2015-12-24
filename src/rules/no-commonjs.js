@@ -3,10 +3,8 @@
  * @author Jamund Ferguson
  */
 
-'use strict';
-
-var EXPORT_MESSAGE = 'Expected "export" or "export default"',
-	IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
+const EXPORT_MESSAGE = 'Expected "export" or "export default"'
+    , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -15,30 +13,39 @@ var EXPORT_MESSAGE = 'Expected "export" or "export default"',
 
 module.exports = function(context) {
 
-	return {
+  return {
 
-		'MemberExpression': function(node) {
+    'MemberExpression': function(node) {
 
-			// module.exports
-			if (node.object.name === 'module' && node.property.name === 'exports') {
-				context.report(node, EXPORT_MESSAGE);
-			}
+      // module.exports
+      if (node.object.name === 'module' && node.property.name === 'exports') {
+        context.report({ node, message: EXPORT_MESSAGE })
+      }
 
-			// exports.
-			if (node.object.name === 'exports') {
-				context.report(node, EXPORT_MESSAGE);
-			}
+      // exports.
+      if (node.object.name === 'exports') {
+        context.report({ node, message: EXPORT_MESSAGE })
+      }
 
-		},
-		'CallExpression': function(node) {
-			if (node.callee.name === 'require') {
-				if (node.arguments.length === 1 && node.arguments[0].type === 'Literal') {
-					if (node.parent.parent.type === 'Program' || node.parent.parent.parent.type === 'Program') {
-						context.report(node, IMPORT_MESSAGE);
-					}
-				}
-			}
-		}
-	};
+    },
+    'CallExpression': function (call) {
+      if (context.getScope().type !== 'module') return
 
-};
+      if (call.callee.type !== 'Identifier') return
+      if (call.callee.name !== 'require') return
+
+      if (call.arguments.length !== 1) return
+      var module = call.arguments[0]
+
+      if (module.type !== 'Literal') return
+      if (typeof module.value !== 'string') return
+
+      // keeping it simple: all 1-string-arg `require` calls are reported
+      context.report({
+        node: call.callee,
+        message: IMPORT_MESSAGE,
+      })
+    },
+  }
+
+}

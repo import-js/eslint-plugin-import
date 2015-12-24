@@ -3,8 +3,6 @@
  * @author Jamund Ferguson
  */
 
-'use strict';
-
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -16,9 +14,9 @@ module.exports = function(context) {
 		'CallExpression': function(node) {
 
 			if (node.callee.name === 'define') {
-				context.report(node, 'Expected require() instead of define().');
+				context.report(node, 'Expected imports instead of define().')
 			}
-		}
-	};
+		},
+	}
 
-};
+}

@@ -7,7 +7,8 @@ export const rules = {
 
   'no-named-as-default': require('./rules/no-named-as-default'),
 
-  'no-require': require('./rules/no-require'),
+  'no-commonjs': require('./rules/no-commonjs'),
+  'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
   'imports-first': require('./rules/imports-first'),
 }
@@ -21,7 +22,8 @@ export const rulesConfig = {
 
   'no-named-as-default': 0,
 
-  'no-require': 0,
+  'no-commonjs': 0,
+  'no-amd': 0,
   'no-duplicates': 0,
   'imports-first': 0,
 }
