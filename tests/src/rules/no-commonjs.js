@@ -27,6 +27,9 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: "var bar = proxyquire('./bar');" },
     { code: "var bar = require('./ba' + 'r');" },
     { code: 'var zero = require(0);' },
+
+    { code: 'module.exports = function () {}', options: ['allow-primitive-modules'] },
+    { code: 'module.exports = "foo"', options: ['allow-primitive-modules'] },
   ],
 
   invalid: [
@@ -41,5 +44,9 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: 'module.exports = face', errors: [ { message: EXPORT_MESSAGE }] },
     { code: 'exports = module.exports = {}', errors: [ { message: EXPORT_MESSAGE }] },
     { code: 'var x = module.exports = {}', errors: [ { message: EXPORT_MESSAGE }] },
+    { code: 'module.exports = {}',
+      options: ['allow-primitive-modules'],
+      errors: [ { message: EXPORT_MESSAGE }],
+    },
   ],
 })

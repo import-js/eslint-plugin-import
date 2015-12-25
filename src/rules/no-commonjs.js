@@ -11,14 +11,15 @@ const EXPORT_MESSAGE = 'Expected "export" or "export default"'
 //------------------------------------------------------------------------------
 
 
-module.exports = function(context) {
+module.exports = function (context) {
 
   return {
 
-    'MemberExpression': function(node) {
+    'MemberExpression': function (node) {
 
       // module.exports
       if (node.object.name === 'module' && node.property.name === 'exports') {
+        if (allowPrimitive(node, context)) return
         context.report({ node, message: EXPORT_MESSAGE })
       }
 
@@ -48,4 +49,11 @@ module.exports = function(context) {
     },
   }
 
+}
+
+  // allow non-objects as module.exports
+function allowPrimitive(node, context) {
+  if (context.options.indexOf('allow-primitive-modules') < 0) return false
+  if (node.parent.type !== 'AssignmentExpression') return false
+  return (node.parent.right.type !== 'ObjectExpression')
 }

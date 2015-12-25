@@ -21,6 +21,27 @@ module.exports = { a: "b" }
 exports.c = "d"
 ```
 
+If `allow-primitive-modules` is provided as an option, the following is valid:
+
+```js
+/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+
+module.exports = "foo"
+module.exports = function rule(context) { return { /* ... */ } }
+```
+
+but this is still reported:
+
+```js
+/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+
+module.exports = { x: "y" }
+exports.z = function boop() { /* ... */ }
+```
+
+This is useful for things like ESLint rule modules, which must export a function as
+the module.
+
 ## When Not To Use It
 
 If you don't mind mixing module systems (sometimes this is useful), you probably
