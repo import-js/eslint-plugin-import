@@ -31,11 +31,13 @@ Helpful warnings:
 
 Style guide:
 
-* Report CommonJS `require` calls. ([`no-require`])
+* Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
+* Report AMD `require` and `define` calls. ([`no-amd`])
 * Ensure all imports appear before other statements ([`imports-first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 
-[`no-require`]: ./docs/rules/no-require.md
+[`no-commonjs`]: ./docs/rules/no-commonjs.md
+[`no-amd`]: ./docs/rules/no-amd.md
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 
