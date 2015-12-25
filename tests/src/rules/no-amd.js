@@ -7,7 +7,13 @@ ruleTester.run('no-amd', require('rules/no-amd'), {
 		{ code: 'import "x";', ecmaFeatures: { modules: true } },
 		{ code: 'import x from "x"', ecmaFeatures: { modules: true } },
 		'var x = require("x")',
-		'require("x")',
+    'require("x")',
+    // 2-args, not an array
+		'require("x", "y")',
+    // random other function
+    'setTimeout(foo, 100)',
+    // non-identifier callee
+    '(a || b)(1, 2, 3)',
 
     // nested scope is fine
     'function x() { define(["a"], function (a) {}) }',
