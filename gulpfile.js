@@ -77,7 +77,7 @@ gulp.task('tests', function () {
 gulp.task('pretest', ['src', 'tests', 'wipe-extras'])
 
 gulp.task('test', ['pretest'], function () {
-  return gulp.src('tests/lib/**/*.js')
+  return gulp.src('tests/lib/**/*.js', { read: false })
     .pipe(mocha({ reporter: 'dot' }))
   // NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/
 })
