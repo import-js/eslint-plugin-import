@@ -38,10 +38,8 @@ test_script:
   - npm --version
   # Lint
   - ./node_modules/.bin/eslint ./src
-  # Compile
-  - npm run-script pretest
   # core tests
-  - ./node_modules/.bin/mocha tests/lib/ --recursive --reporter dot
+  - ./node_modules/.bin/gulp test
   # resolver tests
   - cd .\resolvers\webpack && npm test && cd ..\..
   - cd .\resolvers\node && npm test && cd ..\..
