@@ -1,6 +1,7 @@
 var gulp = require('gulp')
   , changed = require('gulp-changed')
   , babel = require('gulp-babel')
+  , mocha = require('gulp-mocha')
   , path = require('path')
   , glob = require('glob')
   , fs = require('fs')
@@ -64,7 +65,6 @@ gulp.task('wipe-extras', function (done) {
 })
 
 gulp.task('prepublish', ['src', 'wipe-extras'])
-gulp.task('default', ['prepublish'])
 
 gulp.task('tests', function () {
   return gulp.src('tests/src/**/*.js')
@@ -73,6 +73,16 @@ gulp.task('tests', function () {
     .pipe(gulp.dest('tests/lib'))
 })
 
+// used externally by Istanbul, too
 gulp.task('pretest', ['src', 'tests', 'wipe-extras'])
 
-gulp.task('all', ['default', 'pretest'])
+gulp.task('test', ['pretest'], function () {
+  return gulp.src('tests/lib/**/*.js')
+    .pipe(mocha({ reporter: 'dot' }))
+  // NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/
+})
+
+gulp.task('watch-test', function () {
+  gulp.watch(SRC, ['test'])
+  gulp.watch('tests/' + SRC, ['test'])
+})

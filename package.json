@@ -7,13 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
+    "watch": "NODE_PATH=./lib gulp watch-test",
     "cover": "gulp pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
-    "test": "NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/",
+    "test": "NODE_PATH=./lib gulp test",
     "ci-test": "eslint ./src && gulp pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
     "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "prepublish": "eslint ./src && gulp prepublish",
-    "pretest": "gulp pretest",
     "coveralls": "remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov.info --type lcovonly && cat ./reports/coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -47,6 +46,7 @@
     "gulp": "^3.9.0",
     "gulp-babel": "5.x",
     "gulp-changed": "^1.3.0",
+    "gulp-mocha": "^2.2.0",
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
     "redux": "^3.0.4",
