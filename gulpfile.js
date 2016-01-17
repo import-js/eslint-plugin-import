@@ -15,9 +15,16 @@ gulp.task('src', function () {
     .pipe(gulp.dest(DEST))
 })
 
-gulp.task('wipe-extras', function (done) {
+/**
+ * Delete any file under `dest` that has no corresponding file in `src`.
+ * I.E. remove generated files that have been orphaned via deletion of their source.
+ * @param  {string}   src
+ * @param  {string}   dest
+ * @param  {Function} done - callback upon completion
+ */
+function wipeExtras(src, dest, done) {
   // glob into 'lib' and delete whatever isn't there
-  glob(DEST + '/**/*.js', function (err, files) {
+  glob(dest + '/**/*.js', function (err, files) {
     if (err) {
       done(err); return
     }
@@ -28,13 +35,13 @@ gulp.task('wipe-extras', function (done) {
       }
 
       var libFilename = files[index]
-        , srcFilename = path.resolve('src', path.relative(path.resolve(DEST), libFilename))
+        , srcFilename = path.resolve(src, path.relative(path.resolve(dest), libFilename))
 
       fs.stat(srcFilename, function (err) {
         if (err) {
           fs.unlink(libFilename, function () {
             checkFile(index + 1)
-          })  
+          })
         } else {
           checkFile(index + 1)
         }
@@ -44,6 +51,16 @@ gulp.task('wipe-extras', function (done) {
 
     checkFile(0)
   })
+}
+
+gulp.task('wipe-extras', function (done) {
+  var unfinished = 2
+  function megadone(err) {
+    if (err) { done(err); return }
+    if (--unfinished === 0) done()
+  }
+  wipeExtras('src', DEST, megadone)
+  wipeExtras('tests/src', 'tests/lib', megadone)
 })
 
 gulp.task('prepublish', ['src', 'wipe-extras'])
@@ -56,6 +73,6 @@ gulp.task('tests', function () {
     .pipe(gulp.dest('tests/lib'))
 })
 
-gulp.task('pretest', ['src', 'tests'])
+gulp.task('pretest', ['src', 'tests', 'wipe-extras'])
 
 gulp.task('all', ['default', 'pretest'])
