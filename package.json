@@ -8,9 +8,9 @@
   },
   "scripts": {
     "watch": "babel -d lib/ src/ --watch & mocha --recursive --reporter dot --compilers js:babel/register --watch tests/src/",
-    "cover": "npm run pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot; remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov-report --type html",
+    "cover": "gulp pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
     "test": "NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/",
-    "ci-test": "eslint ./src && npm run-script pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
+    "ci-test": "eslint ./src && gulp pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
     "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "prepublish": "eslint ./src && gulp prepublish",
     "pretest": "gulp pretest",
