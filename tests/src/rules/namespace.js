@@ -6,7 +6,7 @@ var ruleTester = new RuleTester({ env: { es6: true }})
 
 
 function error(name, namespace) {
-  return { message: `'${name}' not found in imported namespace ${namespace}.` }
+  return { message: `'${name}' not found in imported namespace '${namespace}'.` }
 }
 
 
@@ -57,6 +57,12 @@ ruleTester.run('namespace', rule, {
     // non-existent is handled by no-unresolved
     test({ code: 'export * as names from "./does-not-exist"'
          , parser: 'babel-eslint' }),
+
+    ///////////////////////
+    // deep dereferences //
+    ///////////////////////
+
+    test({ code: 'import * as a from "./deep/a"; console.log(a.b.c.d.e)' }),
   ],
 
   invalid: [
@@ -111,6 +117,19 @@ ruleTester.run('namespace', rule, {
         message: "Parse errors in imported module './malformed.js'.",
         type: 'Literal',
       }],
+    }),
+
+
+    ///////////////////////
+    // deep dereferences //
+    ///////////////////////
+    test({
+      code: 'import * as a from "./deep/a"; console.log(a.b.e)',
+      errors: [ "'e' not found in deeply imported namespace 'a.b'." ],
+    }),
+    test({
+      code: 'import * as a from "./deep/a"; console.log(a.b.c.e)',
+      errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
     }),
   ],
 })

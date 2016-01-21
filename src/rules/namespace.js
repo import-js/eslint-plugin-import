@@ -14,8 +14,7 @@ module.exports = function (context) {
     if (imports.errors.length) {
       context.report({
         node: declaration.source,
-        message: `Parse errors in imported module ` +
-                 `'${declaration.source.value}'.`,
+        message: `Parse errors in imported module '${declaration.source.value}'.`,
       })
       return
     }
@@ -29,9 +28,7 @@ module.exports = function (context) {
   }
 
   function message(identifier, namespace) {
-    return '\'' + identifier.name +
-           '\' not found in imported namespace ' +
-           namespace.name + '.'
+    return `'${identifier.name}' not found in imported namespace ${namespace}.`
   }
 
   function declaredScope(name) {
@@ -70,19 +67,35 @@ module.exports = function (context) {
               `Assignment to member of namespace '${dereference.object.name}'.`)
       }
 
-      if (dereference.computed) {
-        context.report(dereference.property,
-          'Unable to validate computed reference to imported namespace \'' +
-          dereference.object.name + '\'.')
-        return
+      // go deep
+      var namespace = namespaces.get(dereference.object.name)
+      var namepath = [dereference.object.name]
+      // while property is namespace and parent is member expression, keep validating
+      while (namespace instanceof Map &&
+             dereference.type === 'MemberExpression') {
+
+        if (dereference.computed) {
+          context.report(dereference.property,
+            'Unable to validate computed reference to imported namespace \'' +
+            dereference.object.name + '\'.')
+          return
+        }
+
+        if (!namespace.has(dereference.property.name)) {
+          context.report(
+            dereference.property,
+            `'${dereference.property.name}' not found in` +
+            (namepath.length > 1 ? ' deeply ' : ' ') +
+            `imported namespace '${namepath.join('.')}'.`)
+          break
+        }
+
+        // stash and pop
+        namepath.push(dereference.property.name)
+        namespace = namespace.get(dereference.property.name)
+        dereference = dereference.parent
       }
 
-      var namespace = namespaces.get(dereference.object.name)
-      if (!namespace.has(dereference.property.name)) {
-        context.report( dereference.property
-                      , message(dereference.property, dereference.object)
-                      )
-      }
     },
 
     'VariableDeclarator': function ({ id, init }) {
@@ -105,7 +118,7 @@ module.exports = function (context) {
         } else if (!namespace.has(property.key.name)) {
           context.report({
             node: property,
-            message: message(property.key, init),
+            message: message(property.key, init.name),
           })
         }
       }

@@ -12,7 +12,7 @@ const exportCaches = new Map()
 export default class ExportMap {
   constructor(context) {
     this.context = context
-    this.named = new Set()
+    this.named = new Map()
 
     this.errors = []
   }
@@ -76,10 +76,12 @@ export default class ExportMap {
       return m // can't continue
     }
 
+    const namespaces = new Map()
+
     ast.body.forEach(function (n) {
       m.captureDefault(n)
       m.captureAll(n, path)
-      m.captureNamedDeclaration(n, path)
+      m.captureNamedDeclaration(n, path, namespaces)
     })
 
     return m
@@ -94,7 +96,7 @@ export default class ExportMap {
 
   captureDefault(n) {
     if (n.type !== 'ExportDefaultDeclaration') return
-    this.named.add('default')
+    this.named.set('default', null)
   }
 
   /**
@@ -114,12 +116,19 @@ export default class ExportMap {
     var remoteMap = this.resolveReExport(n, path)
     if (remoteMap == null) return false
 
-    remoteMap.named.forEach(function (name) { this.named.add(name) }.bind(this))
+    remoteMap.named.forEach((val, name) => { this.named.set(name, val) })
 
     return true
   }
 
-  captureNamedDeclaration(n, path) {
+  captureNamedDeclaration(n, path, namespaces) {
+    // capture namespaces in case of later export
+    if (n.type === 'ImportDeclaration') {
+      let ns
+      if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
+        namespaces.set(ns.local.name, n)
+      }
+    }
     if (n.type !== 'ExportNamedDeclaration') return
 
     // capture declaration
@@ -128,11 +137,11 @@ export default class ExportMap {
         case 'FunctionDeclaration':
         case 'ClassDeclaration':
         case 'TypeAlias': // flowtype with babel-eslint parser
-          this.named.add(n.declaration.id.name)
+          this.named.set(n.declaration.id.name, null) // todo: capture type info
           break
         case 'VariableDeclaration':
           n.declaration.declarations.forEach((d) =>
-            recursivePatternCapture(d.id, id => this.named.add(id.name)))
+            recursivePatternCapture(d.id, id => this.named.set(id.name, null)))
           break
       }
     }
@@ -141,20 +150,24 @@ export default class ExportMap {
     let remoteMap
     if (n.source) remoteMap = this.resolveReExport(n, path)
 
-    n.specifiers.forEach(function (s) {
+    n.specifiers.forEach((s) => {
+      let type = null
       if (s.type === 'ExportDefaultSpecifier') {
         // don't add it if it is not present in the exported module
         if (!remoteMap || !remoteMap.hasDefault) return
+      } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
+        let namespace = this.resolveReExport(namespaces.get(s.local.name), path)
+        if (namespace) type = namespace.named
       }
 
-      this.named.add(s.exported.name)
-    }.bind(this))
+      this.named.set(s.exported.name, type)
+    })
   }
 }
 
 
 /**
- * Traverse a patter/identifier node, calling 'callback'
+ * Traverse a pattern/identifier node, calling 'callback'
  * for each leaf identifier.
  * @param  {node}   pattern
  * @param  {Function} callback
