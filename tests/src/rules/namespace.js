@@ -63,6 +63,7 @@ ruleTester.run('namespace', rule, {
     ///////////////////////
 
     test({ code: 'import * as a from "./deep/a"; console.log(a.b.c.d.e)' }),
+    test({ code: 'import * as a from "./deep/a"; console.log(a.b.c.d.e.f)' }),
     test({ code: 'import * as a from "./deep/a"; var {b:{c:{d:{e}}}} = a' }),
   ],
 
