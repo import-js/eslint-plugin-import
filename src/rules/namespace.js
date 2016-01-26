@@ -27,11 +27,7 @@ module.exports = function (context) {
     return imports
   }
 
-  function message(identifier, namespace) {
-    return `'${identifier.name}' not found in imported namespace ${namespace}.`
-  }
-
-  function deepMessage(last, namepath) {
+  function makeMessage(last, namepath) {
      return `'${last.name}' not found in` +
             (namepath.length > 1 ? ' deeply ' : ' ') +
             `imported namespace '${namepath.join('.')}'.`
@@ -90,7 +86,7 @@ module.exports = function (context) {
         if (!namespace.has(dereference.property.name)) {
           context.report(
             dereference.property,
-            deepMessage(dereference.property, namepath))
+            makeMessage(dereference.property, namepath))
           break
         }
 
@@ -128,7 +124,7 @@ module.exports = function (context) {
           if (!namespace.has(property.key.name)) {
             context.report({
               node: property,
-              message: deepMessage(property.key, path),
+              message: makeMessage(property.key, path),
             })
             continue
           }
