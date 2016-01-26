@@ -63,6 +63,7 @@ ruleTester.run('namespace', rule, {
     ///////////////////////
 
     test({ code: 'import * as a from "./deep/a"; console.log(a.b.c.d.e)' }),
+    test({ code: 'import * as a from "./deep/a"; var {b:{c:{d:{e}}}} = a' }),
   ],
 
   invalid: [
@@ -129,6 +130,14 @@ ruleTester.run('namespace', rule, {
     }),
     test({
       code: 'import * as a from "./deep/a"; console.log(a.b.c.e)',
+      errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
+    }),
+    test({
+      code: 'import * as a from "./deep/a"; var {b:{ e }} = a',
+      errors: [ "'e' not found in deeply imported namespace 'a.b'." ],
+    }),
+    test({
+      code: 'import * as a from "./deep/a"; var {b:{c:{ e }}} = a',
       errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
     }),
   ],

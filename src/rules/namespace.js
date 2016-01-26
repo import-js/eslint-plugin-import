@@ -31,6 +31,12 @@ module.exports = function (context) {
     return `'${identifier.name}' not found in imported namespace ${namespace}.`
   }
 
+  function deepMessage(last, namepath) {
+     return `'${last.name}' not found in` +
+            (namepath.length > 1 ? ' deeply ' : ' ') +
+            `imported namespace '${namepath.join('.')}'.`
+  }
+
   function declaredScope(name) {
     let references = context.getScope().references
       , i
@@ -84,9 +90,7 @@ module.exports = function (context) {
         if (!namespace.has(dereference.property.name)) {
           context.report(
             dereference.property,
-            `'${dereference.property.name}' not found in` +
-            (namepath.length > 1 ? ' deeply ' : ' ') +
-            `imported namespace '${namepath.join('.')}'.`)
+            deepMessage(dereference.property, namepath))
           break
         }
 
@@ -100,28 +104,42 @@ module.exports = function (context) {
 
     'VariableDeclarator': function ({ id, init }) {
       if (init == null) return
-      if (id.type !== 'ObjectPattern') return
       if (init.type !== 'Identifier') return
       if (!namespaces.has(init.name)) return
 
       // check for redefinition in intermediate scopes
       if (declaredScope(init.name) !== 'module') return
 
-      const namespace = namespaces.get(init.name)
+      // DFS traverse child namespaces
+      function testKey(pattern, namespace, path = [init.name]) {
+        if (!(namespace instanceof Map)) return
+        if (pattern.type !== 'ObjectPattern') return
 
-      for (let property of id.properties) {
-        if (property.key.type !== 'Identifier') {
-          context.report({
-            node: property,
-            message: 'Only destructure top-level names.',
-          })
-        } else if (!namespace.has(property.key.name)) {
-          context.report({
-            node: property,
-            message: message(property.key, init.name),
-          })
+        for (let property of pattern.properties) {
+
+          if (property.key.type !== 'Identifier') {
+            context.report({
+              node: property,
+              message: 'Only destructure top-level names.',
+            })
+            continue
+          }
+
+          if (!namespace.has(property.key.name)) {
+            context.report({
+              node: property,
+              message: deepMessage(property.key, path),
+            })
+            continue
+          }
+
+          path.push(property.key.name)
+          testKey(property.value, namespace.get(property.key.name), path)
+          path.pop()
         }
       }
+
+      testKey(id, namespaces.get(init.name))
     },
   }
 }
