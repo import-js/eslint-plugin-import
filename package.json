@@ -44,7 +44,7 @@
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
     "gulp": "^3.9.0",
-    "gulp-babel": "5.x",
+    "gulp-babel": "6.1.2",
     "gulp-changed": "^1.3.0",
     "gulp-mocha": "^2.2.0",
     "istanbul": "^0.4.0",
