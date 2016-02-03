@@ -47,16 +47,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
         extension : chosen
     }, '')
 
-    var moduleName = interpret.extensions[ext]
-
-    if (moduleName) {
-      var compiler = require(moduleName)
-      var register = interpret.register[moduleName]
-      var config = interpret.configurations[moduleName]
-      if (register) {
-        register(compiler, config)
-      }
-    }
+    registerCompiler(interpret.extensions[ext])
 
     webpackConfig = require(configPath)
   } catch (err) {
@@ -149,4 +140,23 @@ function packageFilter(config, pkg) {
 
 
   return pkg
+}
+
+function registerCompiler(moduleDescriptor) {
+  if(moduleDescriptor) {
+    if(typeof moduleDescriptor === 'string') {
+      require(moduleDescriptor)
+    } else if(!Array.isArray(moduleDescriptor)) {
+      moduleDescriptor.register(require(moduleDescriptor.module))
+    } else {
+      for(var i = 0; i < moduleDescriptor.length; i++) {
+        try {
+          registerCompiler(moduleDescriptor[i])
+          break
+        } catch(e) {
+          // do nothing
+        }
+      }
+    }
+  }
 }
