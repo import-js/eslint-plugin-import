@@ -3,6 +3,7 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , get = require('lodash.get')
   , find = require('array-find')
+  , interpret = require('interpret')
   // not available on 0.10.x
   , isAbsolute = path.isAbsolute || require('is-absolute')
 
@@ -38,6 +39,23 @@ exports.resolveImport = function resolveImport(source, file, settings) {
       if (!packageDir) throw new Error('package not found above ' + file)
 
       configPath = path.join(packageDir, configPath)
+    }
+
+    var ext = Object.keys(interpret.extensions).reduce(function (chosen, extension) {
+      var extlen = extension.length
+      return ( (configPath.substr(-extlen) === extension) && (extlen > chosen.length)) ?
+        extension : chosen
+    }, '')
+
+    var moduleName = interpret.extensions[ext]
+
+    if (moduleName) {
+      var compiler = require(moduleName)
+      var register = interpret.register[moduleName]
+      var config = interpret.configurations[moduleName]
+      if (register) {
+        register(compiler, config)
+      }
     }
 
     webpackConfig = require(configPath)
