@@ -73,3 +73,60 @@ describe("webpack alias spec", function () {
   tableLine( { xyz$: "xyz/dir" }
            , 'xyz/dir', 'xyz/file' )
 })
+
+describe("nested module names", function () {
+  // from table: http://webpack.github.io/docs/configuration.html#resolve-alias
+  function nestedName(alias, xyz, xyzFile) {
+    describe(JSON.stringify(alias), function () {
+      it("top/xyz: " + xyz, function () {
+        expect(resolveAlias('top/xyz', alias)).to.equal(xyz)
+      })
+      it("top/xyz/file: " + (xyzFile.name || xyzFile), function () {
+        if (xyzFile === Error) {
+          expect(resolveAlias.bind(null, 'top/xyz/file', alias)).to.throw(xyzFile)
+        } else {
+          expect(resolveAlias('top/xyz/file', alias)).to.equal(xyzFile)
+        }
+      })
+    })
+  }
+
+  nestedName( { 'top/xyz': "/absolute/path/to/file.js" }
+      , '/absolute/path/to/file.js', 'top/xyz/file' )
+
+  nestedName( { 'top/xyz$': "/absolute/path/to/file.js" }
+      ,  "/absolute/path/to/file.js", Error )
+
+  nestedName( { 'top/xyz': "./dir/file.js" }
+      , './dir/file.js',  'top/xyz/file' )
+
+  nestedName( { 'top/xyz$': "./dir/file.js" }
+      , './dir/file.js', Error )
+
+  nestedName( { 'top/xyz': "/some/dir" }
+      , '/some/dir', '/some/dir/file' )
+
+  nestedName( { 'top/xyz$': "/some/dir" }
+      , '/some/dir', 'top/xyz/file' )
+
+  nestedName( { 'top/xyz': "./dir" }
+      , './dir', './dir/file' )
+
+  nestedName( { 'top/xyz': "modu" }
+      , 'modu', 'modu/file' )
+
+  nestedName( { 'top/xyz$': "modu" }
+      , 'modu', 'top/xyz/file' )
+
+  nestedName( { 'top/xyz': "modu/some/file.js" }
+      , 'modu/some/file.js', Error )
+
+  nestedName( { 'top/xyz': "modu/dir" }
+      , 'modu/dir', 'modu/dir/file' )
+
+  nestedName( { 'top/xyz': "top/xyz/dir" }
+      , 'top/xyz/dir',  'top/xyz/dir/file' )
+
+  nestedName( { 'top/xyz$': "top/xyz/dir" }
+      , 'top/xyz/dir', 'top/xyz/file' )
+})
