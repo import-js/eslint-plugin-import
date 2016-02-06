@@ -14,7 +14,7 @@ module.exports = function (context) {
     if (imports.errors.length) {
       context.report({
         node: declaration.source,
-        message: `Parse errors in imported module '${declaration.source.value}'.`,
+        message: `Parse errors in imported module '${declaration.source.value}'.` + JSON.stringify(imports.errors),
       })
       return
     }
