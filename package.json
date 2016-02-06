@@ -36,10 +36,10 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "babel": "5.x",
-    "babel-eslint": "^4.1.4",
+    "babel-eslint": "^4.1.8",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "eslint": ">=1.8.0",
+    "eslint": ">=2.0.0-rc.0",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
@@ -53,7 +53,7 @@
     "remap-istanbul": "^0.5.1"
   },
   "peerDependencies": {
-    "eslint": ">=1.4.0"
+    "eslint": ">=2.0.0-rc.0"
   },
   "dependencies": {
     "babel-runtime": "5.x",

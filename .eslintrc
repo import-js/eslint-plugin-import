@@ -3,12 +3,11 @@ extends: eslint:recommended
 env:
   node: true
   es6: true
-ecmaFeatures:
-  modules: true
+parserOptions:
+  sourceType: module
 rules:
   max-len: [1, 99, 2]
   semi: [2, "never"]
-  quotes: [2, "single"]
   curly: [2, "multi-line"]
   comma-dangle: [2, always-multiline]
   eqeqeq: [2, "allow-null"]
