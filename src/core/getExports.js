@@ -150,6 +150,13 @@ export default class ExportMap {
       this.named.add(s.exported.name)
     }.bind(this))
   }
+
+  reportErrors(context, declaration) {
+    context.report({
+      node: declaration.source,
+      message: `Parse errors in imported module '${declaration.source.value}': ${this.errors.join(', ')}`,
+    })
+  }
 }
 
 
