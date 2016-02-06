@@ -1,11 +1,3 @@
 ---
-extends: '../.eslintrc'
-
-env:
-  es6: true
-
-ecmaFeatures:
-  modules: true
-
 rules:
   comma-dangle: [1, "always-multiline"]

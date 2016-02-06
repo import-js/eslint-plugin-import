@@ -9,14 +9,14 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   valid: [
 
     // imports
-    { code: 'import "x";', ecmaFeatures: { modules: true } },
-    { code: 'import x from "x"', ecmaFeatures: { modules: true } },
-    { code: 'import x from "x"', ecmaFeatures: { modules: true } },
-    { code: 'import { x } from "x"', ecmaFeatures: { modules: true } },
+    { code: 'import "x";', parserOptions: { sourceType: 'module' } },
+    { code: 'import x from "x"', parserOptions: { sourceType: 'module' } },
+    { code: 'import x from "x"', parserOptions: { sourceType: 'module' } },
+    { code: 'import { x } from "x"', parserOptions: { sourceType: 'module' } },
 
     // exports
-    { code: 'export default "x"', ecmaFeatures: { modules: true } },
-    { code: 'export function house() {}', ecmaFeatures: { modules: true } },
+    { code: 'export default "x"', parserOptions: { sourceType: 'module' } },
+    { code: 'export function house() {}', parserOptions: { sourceType: 'module' } },
 
     // allowed requires
     { code: 'function a() { var x = require("y"); }' }, // nested requires allowed

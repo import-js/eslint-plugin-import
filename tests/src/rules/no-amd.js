@@ -3,10 +3,11 @@ import { RuleTester } from 'eslint'
 var ruleTester = new RuleTester()
 
 ruleTester.run('no-amd', require('rules/no-amd'), {
-	valid: [
-		{ code: 'import "x";', ecmaFeatures: { modules: true } },
-		{ code: 'import x from "x"', ecmaFeatures: { modules: true } },
-		'var x = require("x")',
+  valid: [
+    { code: 'import "x";', parserOptions: { sourceType: 'module' } },
+    { code: 'import x from "x"', parserOptions: { sourceType: 'module' } },
+    'var x = require("x")',
+
     'require("x")',
     // 2-args, not an array
 		'require("x", "y")',
