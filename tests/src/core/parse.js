@@ -11,16 +11,4 @@ describe('parse(path, { settings, ecmaFeatures })', function () {
     expect(() => parse(getFilename('jsx.js'), { parserPath: 'espree', parserOptions: { sourceType: 'module', ecmaFeatures: { jsx: true } } }))
       .not.to.throw(Error)
   })
-  // it('adds plugin if not found', function () {
-  //   expect(() => parse(getFilename('jsx.js'), {
-  //     ecmaFeatures: { jsx: true },
-  //     settings: { 'import/parse-options': { plugins: ['exportExtentions'] } },
-  //   })).not.to.throw(Error)
-  // })
-  // it('keeps plugin if found', function () {
-  //   expect(() => parse(getFilename('jsx.js'), {
-  //     ecmaFeatures: { jsx: true },
-  //     settings: { 'import/parse-options': { plugins: ['jsx'] } },
-  //   })).not.to.throw(Error)
-  // })
 })

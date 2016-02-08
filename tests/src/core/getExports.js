@@ -48,7 +48,7 @@ describe('getExports', function () {
     const differentSettings = Object.assign(
       {},
       fakeContext,
-      { settings: { 'import/parser': 'babel-eslint' } })
+      { parserPath: 'espree' })
 
     expect(ExportMap.get('./named-exports', differentSettings))
       .to.exist.and

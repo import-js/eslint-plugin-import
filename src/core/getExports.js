@@ -35,7 +35,7 @@ export default class ExportMap {
 
     const cacheKey = hashObject({
       settings: context.settings,
-      parser: context.parserPath,
+      parserPath: context.parserPath,
       parserOptions: context.parserOptions,
     })
     let exportCache = exportCaches.get(cacheKey)

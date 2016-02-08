@@ -123,30 +123,40 @@ ruleTester.run('named', rule, {
     test({code: 'import {a, b, c, d, e} from "./re-export"',
       errors: [error('e', './re-export')]}),
 
-    test({code: 'import { a } from "./re-export-names"',
+    test({
+      code: 'import { a } from "./re-export-names"',
       args: [2, 'es6-only'],
-        errors: [error('a', './re-export-names')]}),
+      errors: [error('a', './re-export-names')],
+    }),
 
     // export tests
-    test({ code: 'export { bar } from "./bar"'
-         , errors: 1 }),
+    test({
+      code: 'export { bar } from "./bar"',
+      errors: ["bar not found in './bar'"],
+    }),
 
     // es7
-    test({ code: 'export bar2, { bar } from "./bar"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
-    test({ code: 'import { baz } from "./broken-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
+    test({
+      code: 'export bar2, { bar } from "./bar"',
+      parser: 'babel-eslint',
+      errors: ["bar not found in './bar'"],
+    }),
+    test({
+      code: 'import { foo, bar, baz } from "./named-trampoline"',
+      parser: 'babel-eslint',
+      errors: ["baz not found in './named-trampoline'"],
+    }),
+    test({
+      code: 'import { baz } from "./broken-trampoline"',
+      parser: 'babel-eslint',
+      errors: ["baz not found in './broken-trampoline'"],
+    }),
 
     // parse errors
     test({
       code: "import { a } from './test.coffee';",
       errors: [{
-        message: "Parse errors in imported module './test.coffee'.",
+        message: "Parse errors in imported module './test.coffee': Unexpected token > (1:20)",
         type: 'Literal',
       }],
     }),

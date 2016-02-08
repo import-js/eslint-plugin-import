@@ -16,14 +16,8 @@ ruleTester.run('export', rule, {
     test({ code: 'export var { foo, bar } = object;' }),
     test({ code: 'export var [ foo, bar ] = array;' }),
     test({ code: 'export { foo, foo as bar }' }),
-    test({
-      code: 'export { bar }; export * from "./export-all"',
-      settings: { 'import/parse-options': { plugins: ['exportExtensions']}},
-    }),
-    test({
-      code: 'export * from "./export-all"',
-      settings: { 'import/parse-options': { plugins: ['exportExtensions']}},
-    }),
+    test({ code: 'export { bar }; export * from "./export-all"' }),
+    test({ code: 'export * from "./export-all"' }),
     test({ code: 'export * from "./does-not-exist"' }),
   ],
 
@@ -47,7 +41,6 @@ ruleTester.run('export', rule, {
          , errors: 2 }),
     test({
       code: 'export { foo }; export * from "./export-all"',
-      settings: { 'import/parse-options': { plugins: ['exportExtensions']}},
       errors: ['Multiple exports of name \'foo\'.',
                'Multiple exports of name \'foo\'.'],
     }),
@@ -59,7 +52,7 @@ ruleTester.run('export', rule, {
     test({
       code: 'export * from "./malformed.js"',
       errors: [{
-        message: "Parse errors in imported module './malformed.js'.",
+        message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
         type: 'Literal',
       }],
     }),
