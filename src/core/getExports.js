@@ -33,7 +33,11 @@ export default class ExportMap {
   static for(path, context) {
     let exportMap
 
-    const cacheKey = hashObject(context.settings)
+    const cacheKey = hashObject({
+      settings: context.settings,
+      parser: context.parserPath,
+      parserOptions: context.parserOptions,
+    })
     let exportCache = exportCaches.get(cacheKey)
     if (exportCache === undefined) {
       exportCache = new Map()
