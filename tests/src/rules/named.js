@@ -48,10 +48,14 @@ ruleTester.run('named', rule, {
     test({ code: 'export { foo } from "./does-not-exist"' }),
 
     // es7
-    test({ code: 'export bar, { foo } from "./bar"'
-         , parser: 'babel-eslint' }),
-    test({ code: 'import { foo, bar } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }} }),
+    test({
+      code: 'export bar, { foo } from "./bar"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import { foo, bar } from "./named-trampoline"',
+      parser: 'babel-eslint',
+    }),
 
     // regression tests
     test({ code: 'export { foo as bar }'}),
@@ -63,17 +67,9 @@ ruleTester.run('named', rule, {
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
 
     // flow types
-    test({ code: 'import type { MyType } from "./flowtypes"'
-         , settings: { 'import/parser': 'babel-eslint' }}),
-    // infer flow from ecmaFeatures
     test({
       code: 'import type { MyType } from "./flowtypes"',
-      ecmaFeatures: { flow: true, modules: true },
-    }),
-    // ...or explicit parser plugin
-    test({
-      code: 'import type { MyType } from "./flowtypes"',
-      settings: { 'import/parse-options': { plugins: [ 'flow' ] } },
+      'parser': 'babel-eslint',
     }),
 
     // jsnext
@@ -156,20 +152,14 @@ ruleTester.run('named', rule, {
     }),
 
     // flow types
-    test({ code: 'import type { MissingType } from "./flowtypes"'
-         , settings: { 'import/parser': 'babel-eslint' }
-         , errors: [{
-           message: "MissingType not found in './flowtypes'",
-           type: 'Identifier',
-         }]}),
-    // infer flow from ecmaFeatures
     test({
       code: 'import type { MissingType } from "./flowtypes"',
-      ecmaFeatures: { flow: true, modules: true },
+      parser: 'babel-eslint',
       errors: [{
         message: "MissingType not found in './flowtypes'",
         type: 'Identifier',
-      }]}),
+      }],
+    }),
 
     // jsnext
     test({

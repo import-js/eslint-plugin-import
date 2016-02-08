@@ -20,8 +20,13 @@ ruleTester.run('namespace', rule, {
                  'console.log(names.a);' }),
     test({ code: 'import * as names from "./re-export-names"; ' +
                  'console.log(names.foo);' }),
-    test({ code: "import * as elements from './jsx';"
-         , settings: { 'import/parse-options': { plugins: ['jsx'] }}}),
+    test({
+      code: "import * as elements from './jsx';",
+      parserOptions: {
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
+    }),
     test({ code: "import * as foo from './common';"
          , settings: { 'import/ignore': ['common'] } }),
 
@@ -80,19 +85,22 @@ ruleTester.run('namespace', rule, {
          , errors: 2 }),
 
     // invalid destructuring
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c } = names'
-         , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'function b() { const { c } = names }'
-         , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c: d } = names'
-         , errors: [{ type: 'Property' }] }),
+    test({
+      code: 'import * as names from "./named-exports"; const { c } = names',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
+    test({
+      code: 'import * as names from "./named-exports"; function b() { const { c } = names }',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
+    test({
+      code: 'import * as names from "./named-exports"; const { c: d } = names',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
     test({
       code: 'import * as names from "./named-exports";' +
              'const { c: { d } } = names',
-      errors: [{ type: 'Property', message: 'foo' }],
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
     }),
 
     /////////

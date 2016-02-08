@@ -66,7 +66,7 @@ ruleTester.run('default', rule, {
 
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      ecmaFeatures: { modules: true, jsx: true },
+      parser: 'babel-eslint'
     }),
   ],
 
@@ -88,7 +88,7 @@ ruleTester.run('default', rule, {
 
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      errors: ["Parse errors in imported module './jsx/FooES7.js'."],
+      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
     }),
 
     // es7 export syntax
