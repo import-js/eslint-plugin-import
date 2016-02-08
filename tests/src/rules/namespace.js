@@ -2,7 +2,7 @@ var test = require('../utils').test
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester({ env: { es6: true }})
-  , rule = require('../../../lib/rules/namespace')
+  , rule = require('rules/namespace')
 
 
 function error(name, namespace) {
@@ -76,13 +76,13 @@ ruleTester.run('namespace', rule, {
 
     test({ code: "import * as names from './named-exports';" +
                  " console.log(names['a']);"
-         , errors: 1 }),
+         , errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
 
     // assignment warning (from no-reassign)
     test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';'
          , errors: [{ message: 'Assignment to member of namespace \'foo\'.'}] }),
     test({ code: 'import * as foo from \'./bar\'; foo.x = \'y\';'
-         , errors: 2 }),
+         , errors: ['Assignment to member of namespace \'foo\'.', '\'x\' not found in imported namespace foo.'] }),
 
     // invalid destructuring
     test({
@@ -108,10 +108,10 @@ ruleTester.run('namespace', rule, {
     /////////
     test({ code: 'export * as names from "./default-export"'
          , parser: 'babel-eslint'
-         , errors: 1 }),
+         , errors: ["No exported names found in module './default-export'."] }),
     test({ code: 'export defport, * as names from "./default-export"'
          , parser: 'babel-eslint'
-         , errors: 1 }),
+         , errors: ["No exported names found in module './default-export'."] }),
 
 
     // parse errors

@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/default')
+  , rule = require('rules/default')
 
 ruleTester.run('default', rule, {
   valid: [
@@ -63,14 +63,14 @@ ruleTester.run('default', rule, {
       code: "import Foo from './jsx/FooES7.js';",
       parser: 'babel-eslint',
     }),
-
-    test({
-      code: "import Foo from './jsx/FooES7.js';",
-      parser: 'babel-eslint'
-    }),
   ],
 
   invalid: [
+    test({
+      code: "import Foo from './jsx/FooES7.js';",
+      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
+    }),
+
     test({
       code: 'import crypto from "./common";',
       settings: { 'import/ignore': ['foo'] },
@@ -92,20 +92,26 @@ ruleTester.run('default', rule, {
     }),
 
     // es7 export syntax
-    test({ code: 'export baz from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'export baz, { bar } from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'export baz, * as names from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
+    test({
+      code: 'export baz from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
+    test({
+      code: 'export baz, { bar } from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
+    test({
+      code: 'export baz, * as names from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
     // exports default from a module with no default
     test({
       code: 'import twofer from "./broken-trampoline"',
       parser: 'babel-eslint',
-      errors: 1,
+      errors: ['No default export found in module.'],
     }),
   ],
 })

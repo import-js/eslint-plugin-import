@@ -4,7 +4,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../lib/rules/no-duplicates')
+    , rule = require('rules/no-duplicates')
 
 ruleTester.run('no-duplicates', rule, {
   valid: [
@@ -17,25 +17,22 @@ ruleTester.run('no-duplicates', rule, {
   invalid: [
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
-      errors: 2,
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
-      code: "import { x } from './foo';\
-             import { y } from './foo';\
-             import { z } from './foo'",
-      errors: 3,
+      code: "import { x } from './foo'; import { y } from './foo'; import { z } from './foo'",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     // ensure resolved path results in warnings
     test({
-      code: "import { x } from './bar';\
-             import { y } from 'bar';",
+      code: "import { x } from './bar'; import { y } from 'bar';",
       settings: { 'import/resolve': {
         paths: [path.join( process.cwd()
                          , 'tests', 'files'
                          )] }},
-      errors: 2,
+      errors: 2, // path ends up hardcoded
      }),
 
     // #86: duplicate unresolved modules should be flagged

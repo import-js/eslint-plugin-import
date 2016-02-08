@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/named')
+  , rule = require('rules/named')
 
 function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''

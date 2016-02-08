@@ -3,7 +3,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/export')
+  , rule = require('rules/export')
 
 ruleTester.run('export', rule, {
   valid: [
@@ -23,22 +23,36 @@ ruleTester.run('export', rule, {
 
   invalid: [
     // multiple defaults
-    test({ code: 'export default foo; export default bar'
-         , errors: 2 }),
-    test({ code: 'export default function foo() {}; ' +
-                 'export default function bar() {}'
-         , errors: 2 }),
-    test({ code: 'export function foo() {}; ' +
-                 'export { bar as foo }'
-         , errors: 2 }),
-    test({ code: 'export {foo}; export {foo};'
-         , errors: 2 }),
-    test({ code: 'export {foo}; export {bar as foo};'
-         , errors: 2 }),
-    test({ code: 'export var foo = "foo"; export var foo = "bar";'
-         , errors: 2 }),
-    test({ code: 'export var foo = "foo", foo = "bar";'
-         , errors: 2 }),
+    test({
+      code: 'export default foo; export default bar',
+      errors: ['Multiple default exports.', 'Multiple default exports.'],
+    }),
+    test({
+      code: 'export default function foo() {}; ' +
+                 'export default function bar() {}',
+      errors: ['Multiple default exports.', 'Multiple default exports.'],
+    }),
+    test({
+      code: 'export function foo() {}; ' +
+                 'export { bar as foo }',
+      errors: ["Multiple exports of name 'foo'.", "Multiple exports of name 'foo'."],
+    }),
+    test({
+      code: 'export {foo}; export {foo};',
+      errors: ["Multiple exports of name 'foo'.", "Multiple exports of name 'foo'."],
+    }),
+    test({
+      code: 'export {foo}; export {bar as foo};',
+      errors: ["Multiple exports of name 'foo'.", "Multiple exports of name 'foo'."],
+    }),
+    test({
+      code: 'export var foo = "foo"; export var foo = "bar";',
+      errors: ["Multiple exports of name 'foo'.", "Multiple exports of name 'foo'."],
+    }),
+    test({
+      code: 'export var foo = "foo", foo = "bar";',
+      errors: ["Multiple exports of name 'foo'.", "Multiple exports of name 'foo'."],
+    }),
     test({
       code: 'export { foo }; export * from "./export-all"',
       errors: ['Multiple exports of name \'foo\'.',
