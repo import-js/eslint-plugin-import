@@ -5,6 +5,7 @@ env:
   es6: true
 parserOptions:
   sourceType: module
+  ecmaVersion: 6
 rules:
   max-len: [1, 99, 2]
   semi: [2, "never"]

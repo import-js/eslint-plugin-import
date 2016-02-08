@@ -14,7 +14,7 @@ export function test(t) {
     filename: FILENAME,
     parserOptions: {
       sourceType: 'module',
-      ecmaFeatures: { destructuring: true },
+      ecmaVersion: 6,
     },
   }, t)
 }
