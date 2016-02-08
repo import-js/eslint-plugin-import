@@ -35,11 +35,20 @@ ruleTester.run('default', rule, {
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
-    test({ code: 'import twofer from "./trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}} }),
+    test({
+      code: 'import twofer from "./trampoline"',
+      parser: 'babel-eslint',
+    }),
+
     // jsx
-    test({ code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"'
-         , ecmaFeatures: { jsx: true, modules: true } }),
+    test({
+      code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"',
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 6,
+        ecmaFeatures: { jsx: true },
+      },
+    }),
 
     // #54: import of named export default
     test({ code: 'import foo from "./named-default-export"' }),
@@ -52,26 +61,12 @@ ruleTester.run('default', rule, {
     // from no-errors
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      settings: { 'import/parse-options': {
-        plugins: [
-          'decorators',
-          'jsx',
-          'classProperties',
-          'objectRestSpread',
-        ],
-      }},
+      parser: 'babel-eslint',
     }),
 
     test({
       code: "import Foo from './jsx/FooES7.js';",
       ecmaFeatures: { modules: true, jsx: true },
-      settings: { 'import/parse-options': {
-        plugins: [
-          'decorators',
-          'classProperties',
-          'objectRestSpread',
-        ],
-      }},
     }),
   ],
 
@@ -107,8 +102,10 @@ ruleTester.run('default', rule, {
          , parser: 'babel-eslint'
          , errors: 1 }),
     // exports default from a module with no default
-    test({ code: 'import twofer from "./broken-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
+    test({
+      code: 'import twofer from "./broken-trampoline"',
+      parser: 'babel-eslint',
+      errors: 1,
+    }),
   ],
 })
