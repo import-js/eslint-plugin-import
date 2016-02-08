@@ -89,9 +89,11 @@ ruleTester.run('namespace', rule, {
     test({ code: 'import * as names from "./named-exports";' +
                  'const { c: d } = names'
          , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c: { d } } = names'
-         , errors: [{ type: 'Property' }] }),
+    test({
+      code: 'import * as names from "./named-exports";' +
+             'const { c: { d } } = names',
+      errors: [{ type: 'Property', message: 'foo' }],
+    }),
 
     /////////
     // es7 //
@@ -108,7 +110,7 @@ ruleTester.run('namespace', rule, {
     test({
       code: "import * as namespace from './malformed.js';",
       errors: [{
-        message: "Parse errors in imported module './malformed.js'.",
+        message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
         type: 'Literal',
       }],
     }),

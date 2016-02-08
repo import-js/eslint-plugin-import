@@ -154,7 +154,10 @@ export default class ExportMap {
   reportErrors(context, declaration) {
     context.report({
       node: declaration.source,
-      message: `Parse errors in imported module '${declaration.source.value}': ${this.errors.join(', ')}`,
+      message: `Parse errors in imported module '${declaration.source.value}': ` +
+                  `${this.errors
+                        .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
+                        .join(', ')}`,
     })
   }
 }
