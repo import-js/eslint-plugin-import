@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-import",
-  "version": "0.9.1",
+  "version": "0.13.0",
   "description": "Sibling config package for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+  },
+  "peerDependencies": {
+    "eslint-plugin-import": "0.13.x"
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import#readme"
 }

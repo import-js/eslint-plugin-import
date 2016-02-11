@@ -49,3 +49,15 @@ describe('package', function () {
   })
 })
 
+describe('shared configs', function () {
+  it('has only rules that exist', function () {
+    let preamble = 'import/'
+    for (let configFile of ['index', 'warnings']) {
+      for (let rule in require('../../config/'+configFile).rules) {
+        expect(() => require('rules/'+rule.slice(preamble.length)))
+          .not.to.throw(Error)
+      }
+    }
+  })
+})
+
