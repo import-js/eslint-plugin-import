@@ -39,7 +39,7 @@
     "babel-eslint": "^4.1.4",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "eslint": ">=1.8.0",
+    "eslint": ">=2.0.0",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
