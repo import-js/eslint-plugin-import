@@ -13,7 +13,7 @@
     "ci-test": "eslint ./src && gulp pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
     "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "prepublish": "eslint ./src && gulp prepublish",
-    "coveralls": "remap-istanbul -i reports/coverage/coverage.json -o reports/coverage/lcov.info --type lcovonly && cat ./reports/coverage/lcov.info | coveralls"
+    "coveralls": "cat ./reports/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -54,7 +54,6 @@
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
     "redux": "^3.0.4",
-    "remap-istanbul": "^0.5.1",
     "rimraf": "2.5.2"
   },
   "peerDependencies": {
