@@ -43,7 +43,7 @@
     "babel-preset-stage-1": "6.5.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "eslint": ">=2.0.0-rc.0",
+    "eslint": "2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
@@ -58,7 +58,7 @@
     "rimraf": "2.5.2"
   },
   "peerDependencies": {
-    "eslint": ">=2.0.0-rc.0"
+    "eslint": "2.x"
   },
   "dependencies": {
     "babel-runtime": "6.5.0",
