@@ -5,6 +5,7 @@ var gulp = require('gulp')
   , path = require('path')
   , glob = require('glob')
   , fs = require('fs')
+  , rimraf = require('rimraf')
 
 var SRC = 'src/**/*.js'
   , DEST = 'lib'
@@ -53,6 +54,16 @@ function wipeExtras(src, dest, done) {
     checkFile(0)
   })
 }
+
+gulp.task('clean-src', function (done) {
+  rimraf(DEST, done)
+})
+
+gulp.task('clean-tests', function (done) {
+  rimraf('tests/lib', done)
+})
+
+gulp.task('clean', ['clean-src', 'clean-tests'])
 
 gulp.task('wipe-extras', function (done) {
   var unfinished = 2
