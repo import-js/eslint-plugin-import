@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../lib/rules/no-named-as-default')
+    , rule = require('rules/no-named-as-default')
 
 ruleTester.run('no-named-as-default', rule, {
   valid: [

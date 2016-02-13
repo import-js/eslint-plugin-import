@@ -1,5 +1,5 @@
 import { expect } from  'chai'
-import ExportMap from '../../../lib/core/getExports'
+import ExportMap from 'core/getExports'
 
 import * as fs from 'fs'
 
