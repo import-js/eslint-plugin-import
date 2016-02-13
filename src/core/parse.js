@@ -36,7 +36,7 @@ function requireParser(p) {
     // attempt to get espree relative to eslint
     const eslintPath = require.resolve('eslint')
     const eslintModule = createModule(eslintPath)
-    return require(Module._resolveFilename('espree', eslintModule))
+    return require(Module._resolveFilename(p, eslintModule))
   } catch(err) { /* ignore */ }
 
   try {
