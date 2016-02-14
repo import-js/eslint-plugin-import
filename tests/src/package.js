@@ -31,22 +31,6 @@ describe('package', function () {
       })
   })
 
-  it('has config for every rule', function (done) {
-    var module = require(pkg)
-
-    fs.readdir(
-      path.join(pkg, 'rules')
-    , function (err, files) {
-        expect(err).not.to.exist
-
-        files.forEach(function (f) {
-          expect(module.rulesConfig).to.have
-            .property(path.basename(f, '.js'))
-        })
-
-        done()
-      })
-  })
 })
 
 describe('shared configs', function () {
