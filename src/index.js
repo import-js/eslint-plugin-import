@@ -12,3 +12,8 @@ export const rules = {
   'no-duplicates': require('./rules/no-duplicates'),
   'imports-first': require('./rules/imports-first'),
 }
+
+export const configs = {
+  'errors': require('../config/errors'),
+  'warnings': require('../config/warnings'),
+}

@@ -4,18 +4,18 @@ var path = require('path')
   , fs = require('fs')
 
 describe('package', function () {
-  let pkg
+  let pkg = path.join(process.cwd(), 'lib')
+    , module
 
-  before(function () {
-    pkg = path.join(process.cwd(), 'lib')
+  before('is importable', function () {
+    module = require(pkg)
   })
 
-  it('is importable', function () {
-    expect(require(pkg)).to.exist
+  it('exists', function () {
+    expect(module).to.exist
   })
 
   it('has every rule', function (done) {
-    var module = require(pkg)
 
     fs.readdir(
       path.join(pkg, 'rules')
@@ -31,17 +31,16 @@ describe('package', function () {
       })
   })
 
-})
+  it('has configs only for rules that exist', function () {
+    for (let configFile in module.configs) {
+      let preamble = 'import/'
 
-describe('shared configs', function () {
-  it('has only rules that exist', function () {
-    let preamble = 'import/'
-    for (let configFile of ['index', 'warnings']) {
-      for (let rule in require('../../config/'+configFile).rules) {
+      for (let rule in module.configs[configFile].rules) {
         expect(() => require('rules/'+rule.slice(preamble.length)))
           .not.to.throw(Error)
       }
     }
   })
+
 })
 
