@@ -54,15 +54,15 @@ or if you manage ESLint as a dev dependency:
 npm install eslint-plugin-import --save-dev
 ```
 
-As of v0.9, all rules are off by default. However, you may configure them manually
-in your `.eslintrc`, or extend one of the canned base configs from the `eslint-config-import`
-package:
+All rules are off by default. However, you may configure them manually
+in your `.eslintrc.(yml|json|js)`, or extend one of the canned configs:
 
 ```yaml
 ---
 extends:
-  - "eslint:recommended"
-  - import/warnings  # after `npm i -D eslint-config-import`-ing
+  - eslint:recommended
+  - plugin:import/errors
+  - plugin:import/warnings
 
 # or configure manually:
 plugins:
