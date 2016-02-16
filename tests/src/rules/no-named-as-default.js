@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../lib/rules/no-named-as-default')
+    , rule = require('rules/no-named-as-default')
 
 ruleTester.run('no-named-as-default', rule, {
   valid: [
@@ -45,7 +45,7 @@ ruleTester.run('no-named-as-default', rule, {
     test({
       code: 'import foo from "./malformed.js"',
       errors: [{
-        message: "Parse errors in imported module './malformed.js'.",
+        message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
         type: 'Literal',
       }],
     }),

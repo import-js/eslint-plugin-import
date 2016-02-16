@@ -5,6 +5,7 @@ var gulp = require('gulp')
   , path = require('path')
   , glob = require('glob')
   , fs = require('fs')
+  , rimraf = require('rimraf')
 
 var SRC = 'src/**/*.js'
   , DEST = 'lib'
@@ -54,6 +55,16 @@ function wipeExtras(src, dest, done) {
   })
 }
 
+gulp.task('clean-src', function (done) {
+  rimraf(DEST, done)
+})
+
+gulp.task('clean-tests', function (done) {
+  rimraf('tests/lib', done)
+})
+
+gulp.task('clean', ['clean-src', 'clean-tests'])
+
 gulp.task('wipe-extras', function (done) {
   var unfinished = 2
   function megadone(err) {
@@ -78,7 +89,7 @@ gulp.task('pretest', ['src', 'tests', 'wipe-extras'])
 
 gulp.task('test', ['pretest'], function () {
   return gulp.src('tests/lib/**/*.js', { read: false })
-    .pipe(mocha({ reporter: 'dot' }))
+    .pipe(mocha({ reporter: 'spec', grep: process.env.TEST_GREP }))
   // NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/
 })
 

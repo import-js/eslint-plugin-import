@@ -17,6 +17,5 @@ script:
   - "npm run-script ci-test"
   - "for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done"
 
-# something broke remap-istanbul :-(
-# after_success:
-#   - npm run coveralls
+after_success:
+  - npm run coveralls

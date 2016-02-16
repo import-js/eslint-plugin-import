@@ -1,10 +1,6 @@
 ---
-extends: '../.eslintrc'
 env:
   mocha: true
-  es6: true
-ecmaFeatures:
-  modules: true
 rules:
   no-unused-expressions: 0
   quotes: [2, 'single', 'avoid-escape']

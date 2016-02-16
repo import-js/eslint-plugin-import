@@ -33,7 +33,11 @@ export default class ExportMap {
   static for(path, context) {
     let exportMap
 
-    const cacheKey = hashObject(context.settings)
+    const cacheKey = hashObject({
+      settings: context.settings,
+      parserPath: context.parserPath,
+      parserOptions: context.parserOptions,
+    })
     let exportCache = exportCaches.get(cacheKey)
     if (exportCache === undefined) {
       exportCache = new Map()
@@ -149,6 +153,16 @@ export default class ExportMap {
 
       this.named.add(s.exported.name)
     }.bind(this))
+  }
+
+  reportErrors(context, declaration) {
+    context.report({
+      node: declaration.source,
+      message: `Parse errors in imported module '${declaration.source.value}': ` +
+                  `${this.errors
+                        .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
+                        .join(', ')}`,
+    })
   }
 }
 

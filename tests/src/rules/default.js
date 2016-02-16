@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/default')
+  , rule = require('rules/default')
 
 ruleTester.run('default', rule, {
   valid: [
@@ -35,11 +35,20 @@ ruleTester.run('default', rule, {
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
-    test({ code: 'import twofer from "./trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}} }),
+    test({
+      code: 'import twofer from "./trampoline"',
+      parser: 'babel-eslint',
+    }),
+
     // jsx
-    test({ code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"'
-         , ecmaFeatures: { jsx: true, modules: true } }),
+    test({
+      code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"',
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 6,
+        ecmaFeatures: { jsx: true },
+      },
+    }),
 
     // #54: import of named export default
     test({ code: 'import foo from "./named-default-export"' }),
@@ -52,30 +61,16 @@ ruleTester.run('default', rule, {
     // from no-errors
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      settings: { 'import/parse-options': {
-        plugins: [
-          'decorators',
-          'jsx',
-          'classProperties',
-          'objectRestSpread',
-        ],
-      }},
-    }),
-
-    test({
-      code: "import Foo from './jsx/FooES7.js';",
-      ecmaFeatures: { modules: true, jsx: true },
-      settings: { 'import/parse-options': {
-        plugins: [
-          'decorators',
-          'classProperties',
-          'objectRestSpread',
-        ],
-      }},
+      parser: 'babel-eslint',
     }),
   ],
 
   invalid: [
+    test({
+      code: "import Foo from './jsx/FooES7.js';",
+      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
+    }),
+
     test({
       code: 'import crypto from "./common";',
       settings: { 'import/ignore': ['foo'] },
@@ -93,22 +88,30 @@ ruleTester.run('default', rule, {
 
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      errors: ["Parse errors in imported module './jsx/FooES7.js'."],
+      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
     }),
 
     // es7 export syntax
-    test({ code: 'export baz from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'export baz, { bar } from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'export baz, * as names from "./named-exports"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
+    test({
+      code: 'export baz from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
+    test({
+      code: 'export baz, { bar } from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
+    test({
+      code: 'export baz, * as names from "./named-exports"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
     // exports default from a module with no default
-    test({ code: 'import twofer from "./broken-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
+    test({
+      code: 'import twofer from "./broken-trampoline"',
+      parser: 'babel-eslint',
+      errors: ['No default export found in module.'],
+    }),
   ],
 })

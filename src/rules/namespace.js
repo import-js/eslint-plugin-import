@@ -12,11 +12,7 @@ module.exports = function (context) {
     if (imports == null) return null
 
     if (imports.errors.length) {
-      context.report({
-        node: declaration.source,
-        message: `Parse errors in imported module ` +
-                 `'${declaration.source.value}'.`,
-      })
+      imports.reportErrors(context, declaration)
       return
     }
 

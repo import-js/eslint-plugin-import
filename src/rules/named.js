@@ -13,11 +13,7 @@ module.exports = function (context) {
     if (imports == null) return
 
     if (imports.errors.length) {
-      context.report({
-        node: node.source,
-        message: `Parse errors in imported module ` +
-                 `'${node.source.value}'.`,
-      })
+      imports.reportErrors(context, node)
       return
     }
 

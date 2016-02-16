@@ -2,7 +2,7 @@ var test = require('../utils').test
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester({ env: { es6: true }})
-  , rule = require('../../../lib/rules/namespace')
+  , rule = require('rules/namespace')
 
 
 function error(name, namespace) {
@@ -20,8 +20,13 @@ ruleTester.run('namespace', rule, {
                  'console.log(names.a);' }),
     test({ code: 'import * as names from "./re-export-names"; ' +
                  'console.log(names.foo);' }),
-    test({ code: "import * as elements from './jsx';"
-         , settings: { 'import/parse-options': { plugins: ['jsx'] }}}),
+    test({
+      code: "import * as elements from './jsx';",
+      parserOptions: {
+        sourceType: 'module',
+        ecmaFeatures: { jsx: true },
+      },
+    }),
     test({ code: "import * as foo from './common';"
          , settings: { 'import/ignore': ['common'] } }),
 
@@ -71,44 +76,49 @@ ruleTester.run('namespace', rule, {
 
     test({ code: "import * as names from './named-exports';" +
                  " console.log(names['a']);"
-         , errors: 1 }),
+         , errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
 
     // assignment warning (from no-reassign)
     test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';'
          , errors: [{ message: 'Assignment to member of namespace \'foo\'.'}] }),
     test({ code: 'import * as foo from \'./bar\'; foo.x = \'y\';'
-         , errors: 2 }),
+         , errors: ['Assignment to member of namespace \'foo\'.', '\'x\' not found in imported namespace foo.'] }),
 
     // invalid destructuring
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c } = names'
-         , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'function b() { const { c } = names }'
-         , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c: d } = names'
-         , errors: [{ type: 'Property' }] }),
-    test({ code: 'import * as names from "./named-exports";' +
-                 'const { c: { d } } = names'
-         , errors: [{ type: 'Property' }] }),
+    test({
+      code: 'import * as names from "./named-exports"; const { c } = names',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
+    test({
+      code: 'import * as names from "./named-exports"; function b() { const { c } = names }',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
+    test({
+      code: 'import * as names from "./named-exports"; const { c: d } = names',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
+    test({
+      code: 'import * as names from "./named-exports";' +
+             'const { c: { d } } = names',
+      errors: [{ type: 'Property', message: "'c' not found in imported namespace names." }],
+    }),
 
     /////////
     // es7 //
     /////////
     test({ code: 'export * as names from "./default-export"'
          , parser: 'babel-eslint'
-         , errors: 1 }),
+         , errors: ["No exported names found in module './default-export'."] }),
     test({ code: 'export defport, * as names from "./default-export"'
          , parser: 'babel-eslint'
-         , errors: 1 }),
+         , errors: ["No exported names found in module './default-export'."] }),
 
 
     // parse errors
     test({
       code: "import * as namespace from './malformed.js';",
       errors: [{
-        message: "Parse errors in imported module './malformed.js'.",
+        message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
         type: 'Literal',
       }],
     }),
