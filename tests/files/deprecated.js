@@ -15,3 +15,11 @@ export function fn() { return null }
 export default class TerribleClass {
 
 }
+
+/**
+ * this one is fine
+ * @return {String} - great!
+ */
+export function fine() { return "great!" }
+
+export function _undocumented() { return "sneaky!" }

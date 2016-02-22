@@ -12,6 +12,9 @@ export default function (p, context) {
   parserOptions = Object.assign({}, parserOptions)
   parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
 
+  // always attach comments
+  parserOptions.attachComment = true
+
   // require the parser relative to the main module (i.e., ESLint)
   const parser = requireParser(parserPath)
 

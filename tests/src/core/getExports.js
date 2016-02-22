@@ -5,14 +5,6 @@ import * as fs from 'fs'
 
 import { getFilename } from '../utils'
 
-const fakeDefaultContext = {
-  parserPath: 'espree',
-  parserOptions: {
-    sourceType: 'module',
-    attachComment: true,
-  },
-}
-
 describe('getExports', function () {
   const fakeContext = {
     getFilename: getFilename,
