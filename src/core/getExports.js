@@ -106,7 +106,7 @@ export default class ExportMap {
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, null)))
+                recursivePatternCapture(d.id, id => m.named.set(id.name, captureMetadata(n))))
               break
           }
         }

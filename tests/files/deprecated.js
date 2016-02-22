@@ -17,6 +17,13 @@ export default class TerribleClass {
 }
 
 /**
+ * some flux action type maybe
+ * @deprecated please stop sending/handling this action type.
+ * @type {String}
+ */
+export const MY_TERRIBLE_ACTION = "ugh"
+
+/**
  * this one is fine
  * @return {String} - great!
  */

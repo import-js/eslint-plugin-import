@@ -115,6 +115,16 @@ describe('getExports', function () {
         expect(importMeta).to.have.deep.property('doc.tags[0].title', 'deprecated')
         expect(importMeta).to.have.deep.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
       })
+
+      it('works with variables.', function () {
+        expect(imports.named.has('MY_TERRIBLE_ACTION')).to.be.true
+        const importMeta = imports.named.get('MY_TERRIBLE_ACTION')
+
+        expect(importMeta).to.have.deep.property(
+          'doc.tags[0].title', 'deprecated')
+        expect(importMeta).to.have.deep.property(
+          'doc.tags[0].description', 'please stop sending/handling this action type.')
+      })
     }
 
     context('default parser', function () {

@@ -23,5 +23,9 @@ ruleTester.run('no-deprecated', rule, {
       code: "import TerribleClass from './deprecated'",
       errors: ["Deprecated: this is awful, use NotAsBadClass."],
     }),
+    test({
+      code: "import { MY_TERRIBLE_ACTION } from './deprecated'",
+      errors: ["Deprecated: please stop sending/handling this action type."],
+    }),
   ],
 })
