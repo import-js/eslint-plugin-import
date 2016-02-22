@@ -5,6 +5,14 @@ import * as fs from 'fs'
 
 import { getFilename } from '../utils'
 
+const fakeDefaultContext = {
+  parserPath: 'espree',
+  parserOptions: {
+    sourceType: 'module',
+    attachComment: true,
+  },
+}
+
 describe('getExports', function () {
   const fakeContext = {
     getFilename: getFilename,
@@ -87,22 +95,55 @@ describe('getExports', function () {
     expect(imports.named.has('Bar')).to.be.true
   })
 
-  // it('finds exports for an ES7 module with proper parse options', function () {
-  //   var imports = ExportMap.parse(
-  //     getFilename('jsx/FooES7.js'),
-  //     {
-  //       parserPath: 'espree',
-  //       parserOptions: {
-  //         ecmaVersion: 7,
-  //         ecmaFeatures: { jsx: true },
-  //       },
-  //     }
-  //   )
+  context('deprecation metadata', function () {
 
-  //   expect(imports).to.exist
-  //   expect(imports.errors).to.be.empty
-  //   expect(imports).to.have.property('hasDefault', true)
-  //   expect(imports.named.has('Bar')).to.be.true
-  // })
+    function jsdocTests(parseContext) {
+      let imports
+      before('parse file', function () {
+        imports = ExportMap.parse(
+          getFilename('deprecated.js'), parseContext)
+
+        // sanity checks
+        expect(imports.errors).to.be.empty
+      })
+
+      it('works with named imports.', function () {
+        expect(imports.named.has('fn')).to.be.true
+
+        expect(imports.named.get('fn'))
+          .to.have.deep.property('doc.tags[0].title', 'deprecated')
+        expect(imports.named.get('fn'))
+          .to.have.deep.property('doc.tags[0].description', "please use 'x' instead.")
+      })
+
+      it('works with default imports.', function () {
+        expect(imports.named.has('default')).to.be.true
+        const importMeta = imports.named.get('default')
+
+        expect(importMeta).to.have.deep.property('doc.tags[0].title', 'deprecated')
+        expect(importMeta).to.have.deep.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
+      })
+    }
+
+    context('default parser', function () {
+      jsdocTests({
+        parserPath: 'espree',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+      })
+    })
+
+    context('babel-eslint', function () {
+      jsdocTests({
+        parserPath: 'babel-eslint',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+      })
+    })
+  })
 
 })

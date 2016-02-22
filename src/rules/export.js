@@ -54,7 +54,7 @@ module.exports = function (context) {
           `No named exports found in module '${node.source.value}'.`)
       }
 
-      for (let name of remoteExports.named) {
+      for (let name of remoteExports.named.keys()) {
         addNamed(name, node)
       }
     },

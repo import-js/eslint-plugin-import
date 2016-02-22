@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 
 import { createHash } from 'crypto'
+import * as doctrine from 'doctrine'
 
 import parse from './parse'
 import resolve from './resolve'
@@ -12,7 +13,7 @@ const exportCaches = new Map()
 export default class ExportMap {
   constructor(context) {
     this.context = context
-    this.named = new Set()
+    this.named = new Map()
 
     this.errors = []
   }
@@ -81,32 +82,31 @@ export default class ExportMap {
     }
 
     ast.body.forEach(function (n) {
+
       if (n.type === 'ExportDefaultDeclaration') {
-        m.named.add('default')
+        m.named.set('default', captureMetadata(n))
         return
       }
 
       if (n.type === 'ExportAllDeclaration') {
         let remoteMap = m.resolveReExport(n, path)
         if (remoteMap == null) return
-
-        remoteMap.named.forEach((name) => { m.named.add(name) })
+        remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
         return
       }
 
       if (n.type === 'ExportNamedDeclaration'){
-
         // capture declaration
         if (n.declaration != null) {
           switch (n.declaration.type) {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.named.add(n.declaration.id.name)
+              m.named.set(n.declaration.id.name, captureMetadata(n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.add(id.name)))
+                recursivePatternCapture(d.id, id => m.named.set(id.name, null)))
               break
           }
         }
@@ -120,8 +120,7 @@ export default class ExportMap {
             // don't add it if it is not present in the exported module
             if (!remoteMap || !remoteMap.hasDefault) return
           }
-
-          m.named.add(s.exported.name)
+          m.named.set(s.exported.name, null)
         })
       }
 
@@ -148,6 +147,23 @@ export default class ExportMap {
   }
 }
 
+function captureMetadata(n) {
+  const metadata = {}
+  // capture XSDoc
+  if (n.leadingComments) {
+    n.leadingComments.forEach(comment => {
+      // skip non-block comments
+      if (comment.value.slice(0, 4) !== "*\n *") return
+      try {
+        metadata.doc = doctrine.parse(comment.value, { unwrap: true })
+      } catch (err) {
+        /* don't care, for now? maybe add to `errors?` */
+      }
+    })
+  }
+
+  return metadata
+}
 
 /**
  * Traverse a patter/identifier node, calling 'callback'

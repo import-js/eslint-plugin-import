@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "babel-runtime": "6.5.0",
+    "doctrine": "1.2.0",
     "eslint-import-resolver-node": "^0.1.0"
   },
   "greenkeeper": {
