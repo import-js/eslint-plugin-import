@@ -81,9 +81,50 @@ export default class ExportMap {
     }
 
     ast.body.forEach(function (n) {
-      m.captureDefault(n)
-      m.captureAll(n, path)
-      m.captureNamedDeclaration(n, path)
+      if (n.type === 'ExportDefaultDeclaration') {
+        m.named.add('default')
+        return
+      }
+
+      if (n.type === 'ExportAllDeclaration') {
+        let remoteMap = m.resolveReExport(n, path)
+        if (remoteMap == null) return
+
+        remoteMap.named.forEach((name) => { m.named.add(name) })
+        return
+      }
+
+      if (n.type === 'ExportNamedDeclaration'){
+
+        // capture declaration
+        if (n.declaration != null) {
+          switch (n.declaration.type) {
+            case 'FunctionDeclaration':
+            case 'ClassDeclaration':
+            case 'TypeAlias': // flowtype with babel-eslint parser
+              m.named.add(n.declaration.id.name)
+              break
+            case 'VariableDeclaration':
+              n.declaration.declarations.forEach((d) =>
+                recursivePatternCapture(d.id, id => m.named.add(id.name)))
+              break
+          }
+        }
+
+        // capture specifiers
+        let remoteMap
+        if (n.source) remoteMap = m.resolveReExport(n, path)
+
+        n.specifiers.forEach(function (s) {
+          if (s.type === 'ExportDefaultSpecifier') {
+            // don't add it if it is not present in the exported module
+            if (!remoteMap || !remoteMap.hasDefault) return
+          }
+
+          m.named.add(s.exported.name)
+        })
+      }
+
     })
 
     return m
@@ -94,65 +135,6 @@ export default class ExportMap {
     if (remotePath == null) return null
 
     return ExportMap.for(remotePath, this.context)
-  }
-
-  captureDefault(n) {
-    if (n.type !== 'ExportDefaultDeclaration') return
-    this.named.add('default')
-  }
-
-  /**
-   * capture all named exports from remote module.
-   *
-   * returns null if this node wasn't an ExportAllDeclaration
-   * returns false if it was not resolved
-   * returns true if it was resolved + parsed
-   *
-   * @param  {node} n
-   * @param  {string} path - the path of the module currently parsing
-   * @return {boolean?}
-   */
-  captureAll(n, path) {
-    if (n.type !== 'ExportAllDeclaration') return null
-
-    var remoteMap = this.resolveReExport(n, path)
-    if (remoteMap == null) return false
-
-    remoteMap.named.forEach(function (name) { this.named.add(name) }.bind(this))
-
-    return true
-  }
-
-  captureNamedDeclaration(n, path) {
-    if (n.type !== 'ExportNamedDeclaration') return
-
-    // capture declaration
-    if (n.declaration != null) {
-      switch (n.declaration.type) {
-        case 'FunctionDeclaration':
-        case 'ClassDeclaration':
-        case 'TypeAlias': // flowtype with babel-eslint parser
-          this.named.add(n.declaration.id.name)
-          break
-        case 'VariableDeclaration':
-          n.declaration.declarations.forEach((d) =>
-            recursivePatternCapture(d.id, id => this.named.add(id.name)))
-          break
-      }
-    }
-
-    // capture specifiers
-    let remoteMap
-    if (n.source) remoteMap = this.resolveReExport(n, path)
-
-    n.specifiers.forEach(function (s) {
-      if (s.type === 'ExportDefaultSpecifier') {
-        // don't add it if it is not present in the exported module
-        if (!remoteMap || !remoteMap.hasDefault) return
-      }
-
-      this.named.add(s.exported.name)
-    }.bind(this))
   }
 
   reportErrors(context, declaration) {
