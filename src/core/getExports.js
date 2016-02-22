@@ -106,7 +106,7 @@ export default class ExportMap {
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, captureMetadata(n))))
+                recursivePatternCapture(d.id, id => m.named.set(id.name, captureMetadata(d, n))))
               break
           }
         }
@@ -147,10 +147,19 @@ export default class ExportMap {
   }
 }
 
-function captureMetadata(n) {
+/**
+ * parse JSDoc from the first node that has leading comments
+ * @param  {...[type]} nodes [description]
+ * @return {[type]}          [description]
+ */
+function captureMetadata(...nodes) {
   const metadata = {}
-  // capture XSDoc
-  if (n.leadingComments) {
+
+  // 'some' short-circuits on first 'true'
+  nodes.some(n => {
+    if (!n.leadingComments) return false
+
+    // capture XSDoc
     n.leadingComments.forEach(comment => {
       // skip non-block comments
       if (comment.value.slice(0, 4) !== "*\n *") return
@@ -160,8 +169,8 @@ function captureMetadata(n) {
         /* don't care, for now? maybe add to `errors?` */
       }
     })
-  }
-
+    return true
+  })
   return metadata
 }
 

@@ -125,6 +125,36 @@ describe('getExports', function () {
         expect(importMeta).to.have.deep.property(
           'doc.tags[0].description', 'please stop sending/handling this action type.')
       })
+
+      context('multi-line variables', function () {
+        it('works for the first one', function () {
+          expect(imports.named.has('CHAIN_A')).to.be.true
+          const importMeta = imports.named.get('CHAIN_A')
+
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].description', 'this chain is awful')
+        })
+        it('works for the second one', function () {
+          expect(imports.named.has('CHAIN_B')).to.be.true
+          const importMeta = imports.named.get('CHAIN_B')
+
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].description', 'so awful')
+        })
+        it('works for the third one, etc.', function () {
+          expect(imports.named.has('CHAIN_C')).to.be.true
+          const importMeta = imports.named.get('CHAIN_C')
+
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].description', 'still terrible')
+        })
+      })
     }
 
     context('default parser', function () {

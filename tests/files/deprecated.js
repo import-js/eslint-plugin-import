@@ -24,6 +24,23 @@ export default class TerribleClass {
 export const MY_TERRIBLE_ACTION = "ugh"
 
 /**
+ * @deprecated this chain is awful
+ * @type {String}
+ */
+export const CHAIN_A = "a"
+/**
+ * @deprecated so awful
+ * @type {String}
+ */
+           , CHAIN_B = "b"
+
+/**
+ * @deprecated still terrible
+ * @type {String}
+ */
+           , CHAIN_C = "C"
+
+/**
  * this one is fine
  * @return {String} - great!
  */
