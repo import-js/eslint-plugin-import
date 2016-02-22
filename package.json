@@ -9,7 +9,7 @@
   "scripts": {
     "watch": "NODE_PATH=./lib gulp watch-test",
     "cover": "gulp pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
-    "pretest": "eslint ./src",
+    "posttest": "eslint ./src",
     "test": "NODE_PATH=./lib gulp test",
     "ci-test": "eslint ./src && gulp pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
     "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
