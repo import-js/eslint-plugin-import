@@ -11,6 +11,9 @@ export const rules = {
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
   'imports-first': require('./rules/imports-first'),
+
+  // metadata-based
+  'no-deprecated': require('./rules/no-deprecated'),
 }
 
 export const configs = {
