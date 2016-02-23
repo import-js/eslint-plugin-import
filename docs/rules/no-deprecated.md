@@ -24,10 +24,17 @@ will report as such:
 
 ```js
 import { multiply } from './answer' // Deprecated: need to restart the experiment
+
+function whatever(y, z) {
+  return multiply(y, z) // Deprecated: need to restart the experiment
+}
 ```
 
 ### Worklist
 
 - [x] report explicit imports on the import node
 - [ ] support namespaces
-- [ ] report explicit imports at reference time (at the identifier) similar to namespace
+  - [ ] should bubble up through deep namespaces (#157)
+- [x] report explicit imports at reference time (at the identifier) similar to namespace
+- [ ] mark module deprecated if file JSDoc has a @deprecated tag?
+
