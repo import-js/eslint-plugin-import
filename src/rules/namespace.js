@@ -1,5 +1,6 @@
 import Exports from '../core/getExports'
 import importDeclaration from '../importDeclaration'
+import declaredScope from '../core/declaredScope'
 
 module.exports = function (context) {
 
@@ -28,18 +29,6 @@ module.exports = function (context) {
     return '\'' + identifier.name +
            '\' not found in imported namespace ' +
            namespace.name + '.'
-  }
-
-  function declaredScope(name) {
-    let references = context.getScope().references
-      , i
-    for (i = 0; i < references.length; i++) {
-      if (references[i].identifier.name === name) {
-        break
-      }
-    }
-    if (!references[i]) return undefined
-    return references[i].resolved.scope.type
   }
 
   return {
@@ -88,7 +77,7 @@ module.exports = function (context) {
       if (!namespaces.has(init.name)) return
 
       // check for redefinition in intermediate scopes
-      if (declaredScope(init.name) !== 'module') return
+      if (declaredScope(context, init.name) !== 'module') return
 
       const namespace = namespaces.get(init.name)
 
