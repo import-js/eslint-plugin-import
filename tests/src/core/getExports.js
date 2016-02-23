@@ -87,22 +87,112 @@ describe('getExports', function () {
     expect(imports.named.has('Bar')).to.be.true
   })
 
-  // it('finds exports for an ES7 module with proper parse options', function () {
-  //   var imports = ExportMap.parse(
-  //     getFilename('jsx/FooES7.js'),
-  //     {
-  //       parserPath: 'espree',
-  //       parserOptions: {
-  //         ecmaVersion: 7,
-  //         ecmaFeatures: { jsx: true },
-  //       },
-  //     }
-  //   )
+  context('deprecation metadata', function () {
 
-  //   expect(imports).to.exist
-  //   expect(imports.errors).to.be.empty
-  //   expect(imports).to.have.property('hasDefault', true)
-  //   expect(imports.named.has('Bar')).to.be.true
-  // })
+    function jsdocTests(parseContext) {
+      context('deprecated imports', function () {
+        let imports
+        before('parse file', function () {
+          imports = ExportMap.parse(
+            getFilename('deprecated.js'), parseContext)
+
+          // sanity checks
+          expect(imports.errors).to.be.empty
+        })
+
+        it('works with named imports.', function () {
+          expect(imports.named.has('fn')).to.be.true
+
+          expect(imports.named.get('fn'))
+            .to.have.deep.property('doc.tags[0].title', 'deprecated')
+          expect(imports.named.get('fn'))
+            .to.have.deep.property('doc.tags[0].description', "please use 'x' instead.")
+        })
+
+        it('works with default imports.', function () {
+          expect(imports.named.has('default')).to.be.true
+          const importMeta = imports.named.get('default')
+
+          expect(importMeta).to.have.deep.property('doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.deep.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
+        })
+
+        it('works with variables.', function () {
+          expect(imports.named.has('MY_TERRIBLE_ACTION')).to.be.true
+          const importMeta = imports.named.get('MY_TERRIBLE_ACTION')
+
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.deep.property(
+            'doc.tags[0].description', 'please stop sending/handling this action type.')
+        })
+
+        context('multi-line variables', function () {
+          it('works for the first one', function () {
+            expect(imports.named.has('CHAIN_A')).to.be.true
+            const importMeta = imports.named.get('CHAIN_A')
+
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].title', 'deprecated')
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].description', 'this chain is awful')
+          })
+          it('works for the second one', function () {
+            expect(imports.named.has('CHAIN_B')).to.be.true
+            const importMeta = imports.named.get('CHAIN_B')
+
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].title', 'deprecated')
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].description', 'so awful')
+          })
+          it('works for the third one, etc.', function () {
+            expect(imports.named.has('CHAIN_C')).to.be.true
+            const importMeta = imports.named.get('CHAIN_C')
+
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].title', 'deprecated')
+            expect(importMeta).to.have.deep.property(
+              'doc.tags[0].description', 'still terrible')
+          })
+        })
+      })
+
+      context('full module', function () {
+        let imports
+        before('parse file', function () {
+          imports = ExportMap.parse(
+            getFilename('deprecated-file.js'), parseContext)
+
+          // sanity checks
+          expect(imports.errors).to.be.empty
+        })
+
+        it('has JSDoc metadata', function () {
+          expect(imports.doc).to.exist
+        })
+      })
+    }
+
+    context('default parser', function () {
+      jsdocTests({
+        parserPath: 'espree',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+      })
+    })
+
+    context('babel-eslint', function () {
+      jsdocTests({
+        parserPath: 'babel-eslint',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+      })
+    })
+  })
 
 })

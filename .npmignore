@@ -3,14 +3,12 @@ reports/
 resolvers/
 
 # config
-.babelrc
 .eslintrc.yml
 .travis.yml
 appveyor.yml
 .coveralls.yml
 .editorconfig
 .gitignore
-gulpfile.js
 
 # project stuff
 *.sublime-*
