@@ -36,5 +36,5 @@ function whatever(y, z) {
 - [ ] support namespaces
   - [ ] should bubble up through deep namespaces (#157)
 - [x] report explicit imports at reference time (at the identifier) similar to namespace
-- [ ] mark module deprecated if file JSDoc has a @deprecated tag?
+- [x] mark module deprecated if file JSDoc has a @deprecated tag?
 

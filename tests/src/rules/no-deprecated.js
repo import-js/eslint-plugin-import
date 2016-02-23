@@ -62,5 +62,13 @@ ruleTester.run('no-deprecated', rule, {
         { type: 'Identifier', message: 'Deprecated: please stop sending/handling this action type.' },
       ],
     }),
+
+    // deprecated full module
+    test({
+      code: "import Thing from './deprecated-file'",
+      errors: [
+        { type: 'ImportDeclaration', message: 'Deprecated: this module is the worst.' },
+      ],
+    }),
   ],
 })

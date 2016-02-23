@@ -10,6 +10,12 @@ module.exports = function (context) {
     const imports = Exports.get(node.source.value, context)
     if (imports == null) return
 
+    let moduleDeprecation
+    if (imports.doc &&
+        imports.doc.tags.some(t => t.title === 'deprecated' && (moduleDeprecation = t))) {
+      context.report({ node, message: message(moduleDeprecation) })
+    }
+
     if (imports.errors.length) {
       imports.reportErrors(context, node)
       return

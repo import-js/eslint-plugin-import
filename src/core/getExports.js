@@ -81,6 +81,20 @@ export default class ExportMap {
       return m // can't continue
     }
 
+    // attempt to collect module doc
+    ast.comments.some(c => {
+      if (c.type !== 'Block') return false
+      try {
+        const doc = doctrine.parse(c.value, { unwrap: true })
+        if (doc.tags.some(t => t.title === 'module')) {
+          m.doc = doc
+          return true
+        }
+      } catch (err) { /* ignore */ }
+      return false
+    })
+
+
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
