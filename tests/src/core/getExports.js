@@ -195,4 +195,23 @@ describe('getExports', function () {
     })
   })
 
+  context('exported static namespaces', function () {
+    const espreeContext = { parserPath: 'espree', parserOptions: { sourceType: 'module' }, settings: {} }
+    const babelContext = { parserPath: 'babel-eslint', parserOptions: { sourceType: 'module' }, settings: {} }
+
+    it('works with espree & traditional namespace exports', function () {
+      const a = ExportMap.parse(getFilename('deep/a.js'), espreeContext)
+      expect(a.errors).to.be.empty
+      expect(a.named.get('b').namespace).to.exist
+      expect(a.named.get('b').namespace.has('c')).to.be.true
+    })
+
+    it('works with babel-eslint & ES7 namespace exports', function () {
+      const a = ExportMap.parse(getFilename('deep-es7/a.js'), babelContext)
+      expect(a.errors).to.be.empty
+      expect(a.named.get('b').namespace).to.exist
+      expect(a.named.get('b').namespace.has('c')).to.be.true
+    })
+  })
+
 })

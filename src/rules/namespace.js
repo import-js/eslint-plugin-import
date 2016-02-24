@@ -25,10 +25,10 @@ module.exports = function (context) {
     return imports
   }
 
-  function message(identifier, namespace) {
-    return '\'' + identifier.name +
-           '\' not found in imported namespace ' +
-           namespace.name + '.'
+  function makeMessage(last, namepath) {
+     return `'${last.name}' not found in` +
+            (namepath.length > 1 ? ' deeply ' : ' ') +
+            `imported namespace '${namepath.join('.')}'.`
   }
 
   return {
@@ -55,45 +55,74 @@ module.exports = function (context) {
               `Assignment to member of namespace '${dereference.object.name}'.`)
       }
 
-      if (dereference.computed) {
-        context.report(dereference.property,
-          'Unable to validate computed reference to imported namespace \'' +
-          dereference.object.name + '\'.')
-        return
+      // go deep
+      var namespace = namespaces.get(dereference.object.name)
+      var namepath = [dereference.object.name]
+      // while property is namespace and parent is member expression, keep validating
+      while (namespace instanceof Map &&
+             dereference.type === 'MemberExpression') {
+
+        if (dereference.computed) {
+          context.report(dereference.property,
+            'Unable to validate computed reference to imported namespace \'' +
+            dereference.object.name + '\'.')
+          return
+        }
+
+        if (!namespace.has(dereference.property.name)) {
+          context.report(
+            dereference.property,
+            makeMessage(dereference.property, namepath))
+          break
+        }
+
+        // stash and pop
+        namepath.push(dereference.property.name)
+        namespace = namespace.get(dereference.property.name).namespace
+        dereference = dereference.parent
       }
 
-      var namespace = namespaces.get(dereference.object.name)
-      if (!namespace.has(dereference.property.name)) {
-        context.report( dereference.property
-                      , message(dereference.property, dereference.object)
-                      )
-      }
     },
 
     'VariableDeclarator': function ({ id, init }) {
       if (init == null) return
-      if (id.type !== 'ObjectPattern') return
       if (init.type !== 'Identifier') return
       if (!namespaces.has(init.name)) return
 
       // check for redefinition in intermediate scopes
       if (declaredScope(context, init.name) !== 'module') return
 
-      const namespace = namespaces.get(init.name)
+      // DFS traverse child namespaces
+      function testKey(pattern, namespace, path = [init.name]) {
+        if (!(namespace instanceof Map)) return
 
-      for (let property of id.properties) {
-        if (property.key.type !== 'Identifier') {
-          context.report({
-            node: property,
-            message: 'Only destructure top-level names.',
-          })
-        } else if (!namespace.has(property.key.name)) {
-          context.report({
-            node: property,
-            message: message(property.key, init),
-          })
+        if (pattern.type !== 'ObjectPattern') return
+
+        for (let property of pattern.properties) {
+
+          if (property.key.type !== 'Identifier') {
+            context.report({
+              node: property,
+              message: 'Only destructure top-level names.',
+            })
+            continue
+          }
+
+          if (!namespace.has(property.key.name)) {
+            context.report({
+              node: property,
+              message: makeMessage(property.key, path),
+            })
+            continue
+          }
+
+          path.push(property.key.name)
+          testKey(property.value, namespace.get(property.key.name).namespace, path)
+          path.pop()
         }
       }
+
+      testKey(id, namespaces.get(init.name))
     },
   }
 }

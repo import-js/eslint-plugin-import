@@ -81,6 +81,7 @@ export default class ExportMap {
       return m // can't continue
     }
 
+
     // attempt to collect module doc
     ast.comments.some(c => {
       if (c.type !== 'Block') return false
@@ -94,11 +95,12 @@ export default class ExportMap {
       return false
     })
 
+    const namespaces = new Map()
 
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
-        m.named.set('default', captureMetadata(n))
+        m.named.set('default', captureDoc(n))
         return
       }
 
@@ -109,6 +111,15 @@ export default class ExportMap {
         return
       }
 
+      // capture namespaces in case of later export
+      if (n.type === 'ImportDeclaration') {
+        let ns
+        if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
+          namespaces.set(ns.local.name, n)
+        }
+        return
+      }
+
       if (n.type === 'ExportNamedDeclaration'){
         // capture declaration
         if (n.declaration != null) {
@@ -116,11 +127,11 @@ export default class ExportMap {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.named.set(n.declaration.id.name, captureMetadata(n))
+              m.named.set(n.declaration.id.name, captureDoc(n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, captureMetadata(d, n))))
+                recursivePatternCapture(d.id, id => m.named.set(id.name, captureDoc(d, n))))
               break
           }
         }
@@ -129,15 +140,23 @@ export default class ExportMap {
         let remoteMap
         if (n.source) remoteMap = m.resolveReExport(n, path)
 
-        n.specifiers.forEach(function (s) {
+        n.specifiers.forEach((s) => {
+          const exportMeta = {}
+
           if (s.type === 'ExportDefaultSpecifier') {
             // don't add it if it is not present in the exported module
             if (!remoteMap || !remoteMap.hasDefault) return
+          } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
+            let namespace = m.resolveReExport(namespaces.get(s.local.name), path)
+            if (namespace) exportMeta.namespace = namespace.named
+          } else if (s.type === 'ExportNamespaceSpecifier') {
+            exportMeta.namespace = remoteMap.named
           }
-          m.named.set(s.exported.name, null)
+
+          // todo: JSDoc
+          m.named.set(s.exported.name, exportMeta)
         })
       }
-
     })
 
     return m
@@ -164,9 +183,9 @@ export default class ExportMap {
 /**
  * parse JSDoc from the first node that has leading comments
  * @param  {...[type]} nodes [description]
- * @return {[type]}          [description]
+ * @return {{doc: object}}
  */
-function captureMetadata(...nodes) {
+function captureDoc(...nodes) {
   const metadata = {}
 
   // 'some' short-circuits on first 'true'
@@ -185,11 +204,12 @@ function captureMetadata(...nodes) {
     })
     return true
   })
+
   return metadata
 }
 
 /**
- * Traverse a patter/identifier node, calling 'callback'
+ * Traverse a pattern/identifier node, calling 'callback'
  * for each leaf identifier.
  * @param  {node}   pattern
  * @param  {Function} callback
