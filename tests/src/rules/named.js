@@ -2,7 +2,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/named')
+  , rule = require('rules/named')
 
 function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''
@@ -48,10 +48,14 @@ ruleTester.run('named', rule, {
     test({ code: 'export { foo } from "./does-not-exist"' }),
 
     // es7
-    test({ code: 'export bar, { foo } from "./bar"'
-         , parser: 'babel-eslint' }),
-    test({ code: 'import { foo, bar } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions'] }} }),
+    test({
+      code: 'export bar, { foo } from "./bar"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import { foo, bar } from "./named-trampoline"',
+      parser: 'babel-eslint',
+    }),
 
     // regression tests
     test({ code: 'export { foo as bar }'}),
@@ -63,17 +67,9 @@ ruleTester.run('named', rule, {
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
 
     // flow types
-    test({ code: 'import type { MyType } from "./flowtypes"'
-         , settings: { 'import/parser': 'babel-eslint' }}),
-    // infer flow from ecmaFeatures
     test({
       code: 'import type { MyType } from "./flowtypes"',
-      ecmaFeatures: { flow: true, modules: true },
-    }),
-    // ...or explicit parser plugin
-    test({
-      code: 'import type { MyType } from "./flowtypes"',
-      settings: { 'import/parse-options': { plugins: [ 'flow' ] } },
+      'parser': 'babel-eslint',
     }),
 
     // jsnext
@@ -127,49 +123,53 @@ ruleTester.run('named', rule, {
     test({code: 'import {a, b, c, d, e} from "./re-export"',
       errors: [error('e', './re-export')]}),
 
-    test({code: 'import { a } from "./re-export-names"',
+    test({
+      code: 'import { a } from "./re-export-names"',
       args: [2, 'es6-only'],
-        errors: [error('a', './re-export-names')]}),
+      errors: [error('a', './re-export-names')],
+    }),
 
     // export tests
-    test({ code: 'export { bar } from "./bar"'
-         , errors: 1 }),
+    test({
+      code: 'export { bar } from "./bar"',
+      errors: ["bar not found in './bar'"],
+    }),
 
     // es7
-    test({ code: 'export bar2, { bar } from "./bar"'
-         , parser: 'babel-eslint'
-         , errors: 1 }),
-    test({ code: 'import { foo, bar, baz } from "./named-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
-    test({ code: 'import { baz } from "./broken-trampoline"'
-         , settings: { 'import/parse-options': { plugins: ['exportExtensions']}}
-         , errors: 1 }),
+    test({
+      code: 'export bar2, { bar } from "./bar"',
+      parser: 'babel-eslint',
+      errors: ["bar not found in './bar'"],
+    }),
+    test({
+      code: 'import { foo, bar, baz } from "./named-trampoline"',
+      parser: 'babel-eslint',
+      errors: ["baz not found in './named-trampoline'"],
+    }),
+    test({
+      code: 'import { baz } from "./broken-trampoline"',
+      parser: 'babel-eslint',
+      errors: ["baz not found in './broken-trampoline'"],
+    }),
 
     // parse errors
     test({
       code: "import { a } from './test.coffee';",
       errors: [{
-        message: "Parse errors in imported module './test.coffee'.",
+        message: "Parse errors in imported module './test.coffee': Unexpected token > (1:20)",
         type: 'Literal',
       }],
     }),
 
     // flow types
-    test({ code: 'import type { MissingType } from "./flowtypes"'
-         , settings: { 'import/parser': 'babel-eslint' }
-         , errors: [{
-           message: "MissingType not found in './flowtypes'",
-           type: 'Identifier',
-         }]}),
-    // infer flow from ecmaFeatures
     test({
       code: 'import type { MissingType } from "./flowtypes"',
-      ecmaFeatures: { flow: true, modules: true },
+      parser: 'babel-eslint',
       errors: [{
         message: "MissingType not found in './flowtypes'",
         type: 'Identifier',
-      }]}),
+      }],
+    }),
 
     // jsnext
     test({

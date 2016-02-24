@@ -3,9 +3,8 @@
  * @type {Object}
  */
 module.exports = {
-  extends: 'import',
+  plugins: ['import'],
   rules: { 'import/no-named-as-default': 1
          , 'import/no-duplicates': 1
-         , 'import/no-require': 1
          }
 }

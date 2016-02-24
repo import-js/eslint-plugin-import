@@ -12,7 +12,10 @@ export const FILENAME = testFilePath('foo.js')
 export function test(t) {
   return Object.assign({
     filename: FILENAME,
-    ecmaFeatures: {modules: true, destructuring: true},
+    parserOptions: {
+      sourceType: 'module',
+      ecmaVersion: 6,
+    },
   }, t)
 }
 

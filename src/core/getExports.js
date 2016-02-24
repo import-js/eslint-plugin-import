@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 
 import { createHash } from 'crypto'
+import * as doctrine from 'doctrine'
 
 import parse from './parse'
 import resolve from './resolve'
@@ -33,7 +34,11 @@ export default class ExportMap {
   static for(path, context) {
     let exportMap
 
-    const cacheKey = hashObject(context.settings)
+    const cacheKey = hashObject({
+      settings: context.settings,
+      parserPath: context.parserPath,
+      parserOptions: context.parserOptions,
+    })
     let exportCache = exportCaches.get(cacheKey)
     if (exportCache === undefined) {
       exportCache = new Map()
@@ -76,12 +81,80 @@ export default class ExportMap {
       return m // can't continue
     }
 
+
+    // attempt to collect module doc
+    ast.comments.some(c => {
+      if (c.type !== 'Block') return false
+      try {
+        const doc = doctrine.parse(c.value, { unwrap: true })
+        if (doc.tags.some(t => t.title === 'module')) {
+          m.doc = doc
+          return true
+        }
+      } catch (err) { /* ignore */ }
+      return false
+    })
+
     const namespaces = new Map()
 
     ast.body.forEach(function (n) {
-      m.captureDefault(n)
-      m.captureAll(n, path)
-      m.captureNamedDeclaration(n, path, namespaces)
+
+      if (n.type === 'ExportDefaultDeclaration') {
+        m.named.set('default', captureDoc(n))
+        return
+      }
+
+      if (n.type === 'ExportAllDeclaration') {
+        let remoteMap = m.resolveReExport(n, path)
+        if (remoteMap == null) return
+        remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
+        return
+      }
+
+      // capture namespaces in case of later export
+      if (n.type === 'ImportDeclaration') {
+        let ns
+        if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
+          namespaces.set(ns.local.name, n)
+        }
+        return
+      }
+
+      if (n.type === 'ExportNamedDeclaration'){
+        // capture declaration
+        if (n.declaration != null) {
+          switch (n.declaration.type) {
+            case 'FunctionDeclaration':
+            case 'ClassDeclaration':
+            case 'TypeAlias': // flowtype with babel-eslint parser
+              m.named.set(n.declaration.id.name, captureDoc(n))
+              break
+            case 'VariableDeclaration':
+              n.declaration.declarations.forEach((d) =>
+                recursivePatternCapture(d.id, id => m.named.set(id.name, captureDoc(d, n))))
+              break
+          }
+        }
+
+        // capture specifiers
+        let remoteMap
+        if (n.source) remoteMap = m.resolveReExport(n, path)
+
+        n.specifiers.forEach((s) => {
+          const exportMeta = {}
+
+          if (s.type === 'ExportDefaultSpecifier') {
+            // don't add it if it is not present in the exported module
+            if (!remoteMap || !remoteMap.hasDefault) return
+          } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
+            let namespace = m.resolveReExport(namespaces.get(s.local.name), path)
+            if (namespace) exportMeta.namespace = namespace.named
+          }
+
+          // todo: JSDoc
+          m.named.set(s.exported.name, exportMeta)
+        })
+      }
     })
 
     return m
@@ -94,77 +167,44 @@ export default class ExportMap {
     return ExportMap.for(remotePath, this.context)
   }
 
-  captureDefault(n) {
-    if (n.type !== 'ExportDefaultDeclaration') return
-    this.named.set('default', null)
-  }
-
-  /**
-   * capture all named exports from remote module.
-   *
-   * returns null if this node wasn't an ExportAllDeclaration
-   * returns false if it was not resolved
-   * returns true if it was resolved + parsed
-   *
-   * @param  {node} n
-   * @param  {string} path - the path of the module currently parsing
-   * @return {boolean?}
-   */
-  captureAll(n, path) {
-    if (n.type !== 'ExportAllDeclaration') return null
-
-    var remoteMap = this.resolveReExport(n, path)
-    if (remoteMap == null) return false
-
-    remoteMap.named.forEach((val, name) => { this.named.set(name, val) })
-
-    return true
-  }
-
-  captureNamedDeclaration(n, path, namespaces) {
-    // capture namespaces in case of later export
-    if (n.type === 'ImportDeclaration') {
-      let ns
-      if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
-        namespaces.set(ns.local.name, n)
-      }
-    }
-    if (n.type !== 'ExportNamedDeclaration') return
-
-    // capture declaration
-    if (n.declaration != null) {
-      switch (n.declaration.type) {
-        case 'FunctionDeclaration':
-        case 'ClassDeclaration':
-        case 'TypeAlias': // flowtype with babel-eslint parser
-          this.named.set(n.declaration.id.name, null) // todo: capture type info
-          break
-        case 'VariableDeclaration':
-          n.declaration.declarations.forEach((d) =>
-            recursivePatternCapture(d.id, id => this.named.set(id.name, null)))
-          break
-      }
-    }
-
-    // capture specifiers
-    let remoteMap
-    if (n.source) remoteMap = this.resolveReExport(n, path)
-
-    n.specifiers.forEach((s) => {
-      let type = null
-      if (s.type === 'ExportDefaultSpecifier') {
-        // don't add it if it is not present in the exported module
-        if (!remoteMap || !remoteMap.hasDefault) return
-      } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
-        let namespace = this.resolveReExport(namespaces.get(s.local.name), path)
-        if (namespace) type = namespace.named
-      }
-
-      this.named.set(s.exported.name, type)
+  reportErrors(context, declaration) {
+    context.report({
+      node: declaration.source,
+      message: `Parse errors in imported module '${declaration.source.value}': ` +
+                  `${this.errors
+                        .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
+                        .join(', ')}`,
     })
   }
 }
 
+/**
+ * parse JSDoc from the first node that has leading comments
+ * @param  {...[type]} nodes [description]
+ * @return {{doc: object}}
+ */
+function captureDoc(...nodes) {
+  const metadata = {}
+
+  // 'some' short-circuits on first 'true'
+  nodes.some(n => {
+    if (!n.leadingComments) return false
+
+    // capture XSDoc
+    n.leadingComments.forEach(comment => {
+      // skip non-block comments
+      if (comment.value.slice(0, 4) !== "*\n *") return
+      try {
+        metadata.doc = doctrine.parse(comment.value, { unwrap: true })
+      } catch (err) {
+        /* don't care, for now? maybe add to `errors?` */
+      }
+    })
+    return true
+  })
+
+  return metadata
+}
 
 /**
  * Traverse a pattern/identifier node, calling 'callback'

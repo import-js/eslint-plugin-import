@@ -3,7 +3,7 @@ import { test } from '../utils'
 import { linter, RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../lib/rules/imports-first')
+    , rule = require('rules/imports-first')
 
 ruleTester.run('imports-first', rule, {
   valid: [

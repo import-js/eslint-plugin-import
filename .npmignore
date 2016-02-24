@@ -3,9 +3,10 @@ reports/
 resolvers/
 
 # config
-.eslintrc
+.eslintrc.yml
 .travis.yml
 appveyor.yml
+.coveralls.yml
 .editorconfig
 .gitignore
 

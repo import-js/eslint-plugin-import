@@ -1,5 +1,6 @@
 import Exports from '../core/getExports'
 import importDeclaration from '../importDeclaration'
+import declaredScope from '../core/declaredScope'
 
 module.exports = function (context) {
 
@@ -12,10 +13,7 @@ module.exports = function (context) {
     if (imports == null) return null
 
     if (imports.errors.length) {
-      context.report({
-        node: declaration.source,
-        message: `Parse errors in imported module '${declaration.source.value}'.` + JSON.stringify(imports.errors),
-      })
+      imports.reportErrors(context, declaration)
       return
     }
 
@@ -31,18 +29,6 @@ module.exports = function (context) {
      return `'${last.name}' not found in` +
             (namepath.length > 1 ? ' deeply ' : ' ') +
             `imported namespace '${namepath.join('.')}'.`
-  }
-
-  function declaredScope(name) {
-    let references = context.getScope().references
-      , i
-    for (i = 0; i < references.length; i++) {
-      if (references[i].identifier.name === name) {
-        break
-      }
-    }
-    if (!references[i]) return undefined
-    return references[i].resolved.scope.type
   }
 
   return {
@@ -92,7 +78,7 @@ module.exports = function (context) {
 
         // stash and pop
         namepath.push(dereference.property.name)
-        namespace = namespace.get(dereference.property.name)
+        namespace = namespace.get(dereference.property.name).namespace
         dereference = dereference.parent
       }
 
@@ -104,11 +90,12 @@ module.exports = function (context) {
       if (!namespaces.has(init.name)) return
 
       // check for redefinition in intermediate scopes
-      if (declaredScope(init.name) !== 'module') return
+      if (declaredScope(context, init.name) !== 'module') return
 
       // DFS traverse child namespaces
       function testKey(pattern, namespace, path = [init.name]) {
         if (!(namespace instanceof Map)) return
+
         if (pattern.type !== 'ObjectPattern') return
 
         for (let property of pattern.properties) {
@@ -130,7 +117,7 @@ module.exports = function (context) {
           }
 
           path.push(property.key.name)
-          testKey(property.value, namespace.get(property.key.name), path)
+          testKey(property.value, namespace.get(property.key.name).namespace, path)
           path.pop()
         }
       }

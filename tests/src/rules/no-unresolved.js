@@ -5,7 +5,7 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
-  , rule = require('../../../lib/rules/no-unresolved')
+  , rule = require('rules/no-unresolved')
 
 function runResolverTests(resolver) {
   // redefine 'test' to set a resolver
@@ -113,24 +113,24 @@ function runResolverTests(resolver) {
                  }]}),
 
       rest({ code: 'export { foo } from "./does-not-exist"'
-           , errors: 1 }),
+           , errors: ["Unable to resolve path to module './does-not-exist'."] }),
       rest({
         code: 'export * from "./does-not-exist"',
-        errors: 1,
+        errors: ["Unable to resolve path to module './does-not-exist'."],
       }),
 
       // export symmetry proposal
       rest({ code: 'export * as bar from "./does-not-exist"'
            , parser: 'babel-eslint'
-           , errors: 1,
+           , errors: ["Unable to resolve path to module './does-not-exist'."],
            }),
       rest({ code: 'export bar from "./does-not-exist"'
            , parser: 'babel-eslint'
-           , errors: 1,
+           , errors: ["Unable to resolve path to module './does-not-exist'."],
            }),
 
       rest({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
-           , errors: 1 }),
+           , errors: ["Unable to resolve path to module './jsx/MyUncoolComponent.jsx'."] }),
 
 
       // commonjs setting

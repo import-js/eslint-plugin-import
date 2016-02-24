@@ -11,19 +11,12 @@ export const rules = {
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
   'imports-first': require('./rules/imports-first'),
+
+  // metadata-based
+  'no-deprecated': require('./rules/no-deprecated'),
 }
 
-export const rulesConfig = {
-  'no-unresolved': 0,
-  'named': 0,
-  'namespace': 0,
-  'default': 0,
-  'export': 0,
-
-  'no-named-as-default': 0,
-
-  'no-commonjs': 0,
-  'no-amd': 0,
-  'no-duplicates': 0,
-  'imports-first': 0,
+export const configs = {
+  'errors': require('../config/errors'),
+  'warnings': require('../config/warnings'),
 }

@@ -18,13 +18,23 @@ var sep = '/'
 function matchAlias(source, alias, value) {
   var isExact = (alias[alias.length - 1] === '$')
     , isFile = (path.extname(value) !== '')
-    , segments = source.split(sep)
+    , sourceSegments = source.split(sep)
+    , ptr = 0
+    , aliasSegments
 
   if (isExact) alias = alias.slice(0, -1)
 
-  if (segments[0] === alias) {
+  aliasSegments = alias.split(sep)
+
+  // look for a common prefix
+  while(sourceSegments[ptr] == aliasSegments[ptr] && ptr < sourceSegments.length && ptr < aliasSegments.length) {
+    ptr++;
+  }
+
+  // the common prefix must be the entirety of the alias
+  if (ptr === aliasSegments.length) {
     // always return exact match
-    if (segments.length === 1) return value
+    if (sourceSegments.length === aliasSegments.length) return value
 
     // prefix match on exact match for file is an error
     if (isFile && (isExact || !/^[./]/.test(value))) {
@@ -32,7 +42,7 @@ function matchAlias(source, alias, value) {
     }
 
     // otherwise, prefix match is fine for non-file paths
-    if (!isExact && !isFile) return [value].concat(segments.slice(1)).join(sep)
+    if (!isExact && !isFile) return [value].concat(sourceSegments.slice(ptr)).join(sep)
   }
 
 }

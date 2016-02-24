@@ -54,15 +54,15 @@ or if you manage ESLint as a dev dependency:
 npm install eslint-plugin-import --save-dev
 ```
 
-As of v0.9, all rules are off by default. However, you may configure them manually
-in your `.eslintrc`, or extend one of the canned base configs from the `eslint-config-import`
-package:
+All rules are off by default. However, you may configure them manually
+in your `.eslintrc.(yml|json|js)`, or extend one of the canned configs:
 
 ```yaml
 ---
 extends:
-  - "eslint:recommended"
-  - import/warnings  # after `npm i -D eslint-config-import`-ing
+  - eslint:recommended
+  - plugin:import/errors
+  - plugin:import/warnings
 
 # or configure manually:
 plugins:
@@ -184,76 +184,6 @@ settings:
 #### `import/resolver`
 
 See [resolver plugins](#resolver-plugins).
-
-#### `import/parser`
-
-This setting allows you to provide a custom parser module, in the event your
-project uses syntax not understood by Babel.
-
-This plugin defaults to using Babylon, Babel's internal parser, but is also
-compatible with Espree's AST. As long as the import nodes follow [ESTree],
-any parser should work.
-
-If you're using [babel-eslint] as ESLint's parser, and especially if you are using
-any ES7+ features (object spread, decorators, etc.) you should specify it here, as
-well:
-
-```yaml
-settings:
-  import/parser: babel-eslint
-```
-
-If you're using the shared config `eslint-config-import`, you can also check out [`import/es7-jsx`],
-which enables JSX and all current Babylon ES7 features.
-
-I am hoping to obviate this setting (and `import/parse-options`) entirely via
-[a pull request](https://github.com/eslint/eslint/pull/4649) whereby I can just
-use whatever parser is configured for ESLint proper. Coming to you whenever
-ESLint 2.0 is released. 😎
-
-[custom parser]: https://github.com/eslint/eslint/blob/master/docs/user-guide/configuring.md#specifying-parser
-[babel-eslint]: https://github.com/babel/babel-eslint
-[ESTree]: https://github.com/estree/estree
-
-#### `import/parse-options`
-
-This setting will be merged 1-level deep (think `Object.assign`) with the default
-parse options and passed as the second parameter to the parser: `parse(file, options)`.
-See the [`import/es7-jsx`]
-config file for an example of explicit parse options for Babylon.
-
-Or, if you are using another parser, you may want to set these options as well.
-(and maybe contribute another config file! i.e. `eslint-config-import/espree`)
-
-[`import/es7-jsx`]: https://github.com/benmosher/eslint-plugin-import/tree/master/config
-
-Here is an example `.eslintrc` for reference:
-
-```yaml
-
-extends:
-  - "eslint:recommended"
-  - import/warnings  # optionally start from eslint-config-import
-
-# if not using the `extends` package, make sure to add the plugin here:
-plugins:
-  - import
-
-rules:
-  import/default: 2
-  import/no-unresolved: 1
-
-settings:
-
-  import/ignore:
-    # any imported module path matching one of these patterns will not be parsed
-    - 'node_modules' # this is the default, but must be included if overwritten
-    - '\\.es5$'
-
-  import/resolver: webpack # will use 'node' if not specified
-
-  import/parser: esprima-fb  # default is 'babylon'. change if needed.
-```
 
 ## SublimeLinter-eslint
 

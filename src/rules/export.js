@@ -45,11 +45,7 @@ module.exports = function (context) {
       if (remoteExports == null) return
 
       if (remoteExports.errors.length) {
-        context.report({
-          node: node.source,
-          message: `Parse errors in imported module ` +
-                   `'${node.source.value}'.`,
-        })
+        remoteExports.reportErrors(context, node)
         return
       }
 
@@ -58,7 +54,7 @@ module.exports = function (context) {
           `No named exports found in module '${node.source.value}'.`)
       }
 
-      for (let [name] of remoteExports.named) {
+      for (let name of remoteExports.named.keys()) {
         addNamed(name, node)
       }
     },
