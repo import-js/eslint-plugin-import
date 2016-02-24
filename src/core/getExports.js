@@ -149,6 +149,8 @@ export default class ExportMap {
           } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
             let namespace = m.resolveReExport(namespaces.get(s.local.name), path)
             if (namespace) exportMeta.namespace = namespace.named
+          } else if (s.type === 'ExportNamespaceSpecifier') {
+            exportMeta.namespace = remoteMap.named
           }
 
           // todo: JSDoc
