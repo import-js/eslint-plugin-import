@@ -97,10 +97,21 @@ export default class ExportMap {
 
     const namespaces = new Map()
 
+    function getNamespace(identifier) {
+      if (!namespaces.has(identifier.name)) return
+
+      let namespace = m.resolveReExport(namespaces.get(identifier.name), path)
+      if (namespace) return { namespace: namespace.named }
+    }
+
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
-        m.named.set('default', captureDoc(n))
+        const exportMeta = captureDoc(n)
+        if (n.declaration.type === 'Identifier') {
+          Object.assign(exportMeta, getNamespace(n.declaration))
+        }
+        m.named.set('default', exportMeta)
         return
       }
 
@@ -146,9 +157,8 @@ export default class ExportMap {
           if (s.type === 'ExportDefaultSpecifier') {
             // don't add it if it is not present in the exported module
             if (!remoteMap || !remoteMap.hasDefault) return
-          } else if (s.type === 'ExportSpecifier' && namespaces.has(s.local.name)){
-            let namespace = m.resolveReExport(namespaces.get(s.local.name), path)
-            if (namespace) exportMeta.namespace = namespace.named
+          } else if (s.type === 'ExportSpecifier'){
+            Object.assign(exportMeta, getNamespace(s.local))
           } else if (s.type === 'ExportNamespaceSpecifier') {
             exportMeta.namespace = remoteMap.named
           }

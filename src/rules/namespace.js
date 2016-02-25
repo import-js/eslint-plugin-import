@@ -6,25 +6,6 @@ module.exports = function (context) {
 
   const namespaces = new Map()
 
-  function getImportsAndReport(namespace) {
-    var declaration = importDeclaration(context)
-
-    var imports = Exports.get(declaration.source.value, context)
-    if (imports == null) return null
-
-    if (imports.errors.length) {
-      imports.reportErrors(context, declaration)
-      return
-    }
-
-    if (!imports.hasNamed) {
-      context.report(namespace,
-        `No exported names found in module '${declaration.source.value}'.`)
-    }
-
-    return imports
-  }
-
   function makeMessage(last, namepath) {
      return `'${last.name}' not found in` +
             (namepath.length > 1 ? ' deeply ' : ' ') +
@@ -32,15 +13,54 @@ module.exports = function (context) {
   }
 
   return {
-    'ImportNamespaceSpecifier': function (namespace) {
-      const imports = getImportsAndReport(namespace)
-      if (imports == null) return
-      namespaces.set(namespace.local.name, imports.named)
+
+    'ImportDeclaration': function (declaration) {
+      const imports = Exports.get(declaration.source.value, context)
+      if (imports == null) return null
+
+      if (imports.errors.length) {
+        imports.reportErrors(context, declaration)
+        return
+      }
+
+      for (let specifier of declaration.specifiers) {
+        switch (specifier.type) {
+          case 'ImportNamespaceSpecifier':
+            if (!imports.hasNamed) {
+              context.report(specifier,
+                `No exported names found in module '${declaration.source.value}'.`)
+            }
+            namespaces.set(specifier.local.name, imports.named)
+            break
+          case 'ImportDefaultSpecifier':
+          case 'ImportSpecifier': {
+            const meta = imports.named.get(
+              // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
+              specifier.imported ? specifier.imported.name : 'default')
+            if (!meta || !meta.namespace) break
+            namespaces.set(specifier.local.name, meta.namespace)
+            break
+          }
+        }
+      }
     },
 
     // same as above, but does not add names to local map
     'ExportNamespaceSpecifier': function (namespace) {
-      getImportsAndReport(namespace)
+      var declaration = importDeclaration(context)
+
+      var imports = Exports.get(declaration.source.value, context)
+      if (imports == null) return null
+
+      if (imports.errors.length) {
+        imports.reportErrors(context, declaration)
+        return
+      }
+
+      if (!imports.hasNamed) {
+        context.report(namespace,
+          `No exported names found in module '${declaration.source.value}'.`)
+      }
     },
 
     // todo: check for possible redefinition

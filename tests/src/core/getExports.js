@@ -206,6 +206,13 @@ describe('getExports', function () {
       expect(a.named.get('b').namespace.has('c')).to.be.true
     })
 
+    it('captures namespace exported as default', function () {
+      const def = ExportMap.parse(getFilename('deep/default.js'), espreeContext)
+      expect(def.errors).to.be.empty
+      expect(def.named.get('default').namespace).to.exist
+      expect(def.named.get('default').namespace.has('c')).to.be.true
+    })
+
     it('works with babel-eslint & ES7 namespace exports', function () {
       const a = ExportMap.parse(getFilename('deep-es7/a.js'), babelContext)
       expect(a.errors).to.be.empty

@@ -120,6 +120,10 @@ const invalid = [
     }],
   }),
 
+  test({
+    code: "import b from './deep/default'; console.log(b.e)",
+    errors: [ "'e' not found in imported namespace 'b'." ],
+  }),
 ]
 
 ///////////////////////
@@ -128,8 +132,10 @@ const invalid = [
 ;[['deep', 'espree'], ['deep-es7', 'babel-eslint']].forEach(function ([folder, parser]) { // close over params
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
+    test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e.f)` }),
-    test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }))
+    test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }),
+    test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }))
 
   invalid.push(
     test({
@@ -139,8 +145,18 @@ const invalid = [
     }),
     test({
       parser,
+      code: `import { b } from "./${folder}/a"; console.log(b.e)`,
+      errors: [ "'e' not found in imported namespace 'b'." ],
+    }),
+    test({
+      parser,
       code: `import * as a from "./${folder}/a"; console.log(a.b.c.e)`,
       errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
+    }),
+    test({
+      parser,
+      code: `import { b } from "./${folder}/a"; console.log(b.c.e)`,
+      errors: [ "'e' not found in deeply imported namespace 'b.c'." ],
     }),
     test({
       parser,
