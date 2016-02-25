@@ -19,4 +19,7 @@ export const rules = {
 export const configs = {
   'errors': require('../config/errors'),
   'warnings': require('../config/warnings'),
+
+  // shhhh... work in progress "secret" rules
+  'stage-0': require('../config/stage-0'),
 }

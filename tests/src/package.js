@@ -31,6 +31,17 @@ describe('package', function () {
       })
   })
 
+  it('exports all configs', function (done) {
+    fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
+      if (err) { done(err); return }
+      for (let file of files) {
+        if (file[0] === '.') continue
+        expect(module.configs).to.have.property(file.slice(0, -3)) // drop '.js'
+      }
+      done()
+    })
+  })
+
   it('has configs only for rules that exist', function () {
     for (let configFile in module.configs) {
       let preamble = 'import/'
