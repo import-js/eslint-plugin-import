@@ -41,6 +41,14 @@ Style guide:
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 
+Work in progress:
+
+* Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
+
+Note that the WIP rules may change drastically, and without a major version bump, but are included in the published version in the interest of gathering feedback (and hopefully being useful as-is).
+
+[`no-deprecated`]: ./docs/rules/no-deprecated.md
+
 ## Installation
 
 ```sh
