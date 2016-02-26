@@ -8,6 +8,8 @@ const ruleTester = new RuleTester()
 
 ruleTester.run('no-duplicates', rule, {
   valid: [
+    test({ code: 'import "./malformed.js"' }),
+
     test({ code: "import { x } from './foo'; import { y } from './bar'" }),
 
     // #86: every unresolved module should not show up as 'null' and duplicate

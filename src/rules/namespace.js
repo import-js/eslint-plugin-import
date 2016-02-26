@@ -15,6 +15,8 @@ module.exports = function (context) {
   return {
 
     'ImportDeclaration': function (declaration) {
+      if (declaration.specifiers.length === 0) return
+
       const imports = Exports.get(declaration.source.value, context)
       if (imports == null) return null
 

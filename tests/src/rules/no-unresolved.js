@@ -21,6 +21,8 @@ function runResolverTests(resolver) {
 
   ruleTester.run(`no-unresolved (${resolver})`, rule, {
     valid: [
+      test({ code: 'import "./malformed.js"' }),
+
       rest({ code: 'import foo from "./bar";' }),
       rest({ code: "import bar from './bar.js';" }),
       rest({ code: "import {someThing} from './test-module';" }),

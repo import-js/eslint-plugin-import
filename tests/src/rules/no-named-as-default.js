@@ -6,6 +6,8 @@ const ruleTester = new RuleTester()
 
 ruleTester.run('no-named-as-default', rule, {
   valid: [
+    test({ code: 'import "./malformed.js"' }),
+
     test({code: 'import bar, { foo } from "./bar";'}),
     test({code: 'import bar, { foo } from "./empty-folder";'}),
 

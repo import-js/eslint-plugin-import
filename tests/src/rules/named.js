@@ -11,6 +11,8 @@ function error(name, module) {
 
 ruleTester.run('named', rule, {
   valid: [
+    test({ code: 'import "./malformed.js"' }),
+
     test({code: 'import { foo } from "./bar"'}),
     test({code: 'import { foo } from "./empty-module"'}),
     test({code: 'import bar from "./bar.js"'}),

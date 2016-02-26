@@ -10,6 +10,8 @@ function error(name, namespace) {
 }
 
 const valid = [
+  test({ code: 'import "./malformed.js"' }),
+
   test({ code: "import * as foo from './empty-folder';"}),
   test({ code: 'import * as names from "./named-exports"; ' +
                'console.log((names.b).c); ' }),

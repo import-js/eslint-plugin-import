@@ -7,6 +7,8 @@ var ruleTester = new RuleTester()
 
 ruleTester.run('export', rule, {
   valid: [
+    test({ code: 'import "./malformed.js"' }),
+
     // default
     test({ code: 'var foo = "foo"; export default foo;' }),
     test({ code: 'export var foo = "foo"; export var bar = "bar";'}),

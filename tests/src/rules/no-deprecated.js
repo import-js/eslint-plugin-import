@@ -18,6 +18,9 @@ ruleTester.run('no-deprecated', rule, {
   ],
   invalid: [
 
+    // reports on parse errors even without specifiers
+    test({ code: "import './malformed.js'", errors: 1 }),
+
     test({
       code: "import { fn } from './deprecated'",
       errors: ["Deprecated: please use 'x' instead."],
