@@ -3,6 +3,7 @@ import declaredScope from '../core/declaredScope'
 
 module.exports = function (context) {
   const deprecated = new Map()
+      , namespaces = new Map()
 
   function checkSpecifiers(node) {
     if (node.source == null) return // local export, ignore
@@ -21,30 +22,16 @@ module.exports = function (context) {
       return
     }
 
-    function getDeprecation(imported) {
-      const metadata = imports.named.get(imported)
-      if (!metadata || !metadata.doc) return
-
-      let deprecation
-      if (metadata.doc.tags.some(t => t.title === 'deprecated' && (deprecation = t))) {
-        return deprecation
-      }
-    }
-
     node.specifiers.forEach(function (im) {
       let imported, local
       switch (im.type) {
 
-        // case 'ImportNamespaceSpecifier':{
-        //   const submap = new Map()
-        //   for (let name in imports.named) {
-        //     const deprecation = getDeprecation(name)
-        //     if (!deprecation) continue
-        //     submap.set(name, deprecation)
-        //   }
-        //   if (submap.size > 0) deprecated.set(im.local.name, submap)
-        //   return
-        // }
+
+        case 'ImportNamespaceSpecifier':{
+          if (!imports.named.size) return
+          namespaces.set(im.local.name, imports.named)
+          return
+        }
 
         case 'ImportDefaultSpecifier':
           imported = 'default'
@@ -62,7 +49,11 @@ module.exports = function (context) {
       // unknown thing can't be deprecated
       if (!imports.named.has(imported)) return
 
-      const deprecation = getDeprecation(imported)
+      // capture named import of deep namespace
+      const { namespace } = imports.named.get(imported)
+      if (namespace) namespaces.set(local, namespace)
+
+      const deprecation = getDeprecation(imports.named.get(imported))
       if (!deprecation) return
 
       context.report({ node: im, message: message(deprecation) })
@@ -76,6 +67,10 @@ module.exports = function (context) {
     'ImportDeclaration': checkSpecifiers,
 
     'Identifier': function (node) {
+      if (node.parent.type === 'MemberExpression' && node.parent.property === node) {
+        return // handled by MemberExpression
+      }
+
       // ignore specifier identifiers
       if (node.parent.type.slice(0, 6) === 'Import') return
 
@@ -87,9 +82,50 @@ module.exports = function (context) {
         message: message(deprecated.get(node.name)),
       })
     },
+
+    'MemberExpression': function (dereference) {
+      if (dereference.object.type !== 'Identifier') return
+      if (!namespaces.has(dereference.object.name)) return
+
+      if (declaredScope(context, dereference.object.name) !== 'module') return
+
+      // go deep
+      var namespace = namespaces.get(dereference.object.name)
+      var namepath = [dereference.object.name]
+      // while property is namespace and parent is member expression, keep validating
+      while (namespace instanceof Map &&
+             dereference.type === 'MemberExpression') {
+
+        // ignore computed parts for now
+        if (dereference.computed) return
+
+        const metadata = namespace.get(dereference.property.name)
+
+        if (!metadata) break
+        const deprecation = getDeprecation(metadata)
+
+        if (deprecation) {
+          context.report({ node: dereference.property, message: message(deprecation) })
+        }
+
+        // stash and pop
+        namepath.push(dereference.property.name)
+        namespace = metadata.namespace
+        dereference = dereference.parent
+      }
+    },
   }
 }
 
 function message(deprecation) {
   return 'Deprecated' + (deprecation.description ? ': ' + deprecation.description : '.')
+}
+
+function getDeprecation(metadata) {
+  if (!metadata || !metadata.doc) return
+
+  let deprecation
+  if (metadata.doc.tags.some(t => t.title === 'deprecated' && (deprecation = t))) {
+    return deprecation
+  }
 }
