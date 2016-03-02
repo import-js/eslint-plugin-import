@@ -55,7 +55,7 @@ export default class ExportMap {
       if (exportMap.mtime - stats.mtime === 0) {
         return exportMap
       }
-      // future: check content equality?
+      // todo: check content equality?
     }
 
     exportMap = ExportMap.parse(path, context)
@@ -269,7 +269,7 @@ function loadFSCaches(filename) {
 
     const wet = new ExportMap()
     wet.namespace = new Map(dry.namespace.map(rehydrateNamespace))
-    wet.mtime = dry.mtime
+    wet.mtime = new Date(dry.mtime)
     return [key, wet]
   }
 

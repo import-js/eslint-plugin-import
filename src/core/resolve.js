@@ -3,6 +3,7 @@ import { dirname, basename, join } from 'path'
 
 const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
+// todo: cheaper way to do this (or f'real async)
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath) {
   var dir = dirname(filepath)
