@@ -11,14 +11,11 @@ import isIgnored from './ignore'
 const exportCaches = new Map()
 
 export default class ExportMap {
-  constructor(context) {
-    this.context = context
+  constructor() {
     this.named = new Map()
-
     this.errors = []
   }
 
-  get settings() { return this.context && this.context.settings }
 
   get hasDefault() { return this.named.has('default') }
   get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
@@ -100,7 +97,7 @@ export default class ExportMap {
     function getNamespace(identifier) {
       if (!namespaces.has(identifier.name)) return
 
-      let namespace = m.resolveReExport(namespaces.get(identifier.name), path)
+      let namespace = m.resolveReExport(context, namespaces.get(identifier.name), path)
       if (namespace) return { namespace: namespace.named }
     }
 
@@ -116,7 +113,7 @@ export default class ExportMap {
       }
 
       if (n.type === 'ExportAllDeclaration') {
-        let remoteMap = m.resolveReExport(n, path)
+        let remoteMap = m.resolveReExport(context, n, path)
         if (remoteMap == null) return
         remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
         return
@@ -149,7 +146,7 @@ export default class ExportMap {
 
         // capture specifiers
         let remoteMap
-        if (n.source) remoteMap = m.resolveReExport(n, path)
+        if (n.source) remoteMap = m.resolveReExport(context, n, path)
 
         n.specifiers.forEach((s) => {
           const exportMeta = {}
@@ -172,11 +169,11 @@ export default class ExportMap {
     return m
   }
 
-  resolveReExport(node, base) {
-    var remotePath = resolve.relative(node.source.value, base, this.settings)
+  resolveReExport(context, node, base) {
+    var remotePath = resolve.relative(node.source.value, base, context.settings)
     if (remotePath == null) return null
 
-    return ExportMap.for(remotePath, this.context)
+    return ExportMap.for(remotePath, context)
   }
 
   reportErrors(context, declaration) {
