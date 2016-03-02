@@ -7,18 +7,20 @@ import parse from './parse'
 import resolve from './resolve'
 import isIgnored from './ignore'
 
-// map from settings sha1 => path => export map objects
-const exportCaches = new Map()
-
 export default class ExportMap {
   constructor() {
-    this.named = new Map()
+    this.namespace = new Map()
     this.errors = []
   }
 
 
-  get hasDefault() { return this.named.has('default') }
-  get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
+  /**
+   * @deprecated use 'namespace'
+   * @return {Map}
+   */
+  get named() { return this.namespace }
+  get hasDefault() { return this.namespace.has('default') }
+  get hasNamed() { return this.namespace.size > (this.hasDefault ? 1 : 0) }
 
   static get(source, context) {
 
@@ -46,6 +48,7 @@ export default class ExportMap {
     // return cached ignore
     if (exportMap === null) return null
 
+    // todo: evict ENOENT cache entries
     const stats = fs.statSync(path)
     if (exportMap != null) {
       // date equality check
@@ -59,11 +62,14 @@ export default class ExportMap {
     exportMap.mtime = stats.mtime
 
     // ignore empties, optionally
-    if (exportMap.named.size === 0 && isIgnored(path, context)) {
+    if (exportMap.namespace.size === 0 && isIgnored(path, context)) {
       exportMap = null
     }
 
     exportCache.set(path, exportMap)
+
+    // queues a save of the caches
+    queueCacheSave(CACHE_FILE, exportCaches)
 
     return exportMap
   }
@@ -98,7 +104,7 @@ export default class ExportMap {
       if (!namespaces.has(identifier.name)) return
 
       let namespace = m.resolveReExport(context, namespaces.get(identifier.name), path)
-      if (namespace) return { namespace: namespace.named }
+      if (namespace) return { namespace: namespace.namespace }
     }
 
     ast.body.forEach(function (n) {
@@ -108,14 +114,14 @@ export default class ExportMap {
         if (n.declaration.type === 'Identifier') {
           Object.assign(exportMeta, getNamespace(n.declaration))
         }
-        m.named.set('default', exportMeta)
+        m.namespace.set('default', exportMeta)
         return
       }
 
       if (n.type === 'ExportAllDeclaration') {
         let remoteMap = m.resolveReExport(context, n, path)
         if (remoteMap == null) return
-        remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
+        remoteMap.namespace.forEach((value, name) => { m.namespace.set(name, value) })
         return
       }
 
@@ -135,11 +141,11 @@ export default class ExportMap {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.named.set(n.declaration.id.name, captureDoc(n))
+              m.namespace.set(n.declaration.id.name, captureDoc(n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, captureDoc(d, n))))
+                recursivePatternCapture(d.id, id => m.namespace.set(id.name, captureDoc(d, n))))
               break
           }
         }
@@ -157,11 +163,11 @@ export default class ExportMap {
           } else if (s.type === 'ExportSpecifier'){
             Object.assign(exportMeta, getNamespace(s.local))
           } else if (s.type === 'ExportNamespaceSpecifier') {
-            exportMeta.namespace = remoteMap.named
+            exportMeta.namespace = remoteMap.namespace
           }
 
           // todo: JSDoc
-          m.named.set(s.exported.name, exportMeta)
+          m.namespace.set(s.exported.name, exportMeta)
         })
       }
     })
@@ -247,4 +253,84 @@ function hashObject(object) {
   const settingsShasum = createHash('sha1')
   settingsShasum.update(JSON.stringify(object))
   return settingsShasum.digest('hex')
+}
+
+// map from settings sha1 => path => export map objects
+const CACHE_FILE = "import.cache"
+const exportCaches = loadFSCaches(CACHE_FILE)
+
+import { readFileSync, writeFile } from 'fs'
+
+// TODO: save as directory structure and load on demand?
+
+function loadFSCaches(filename) {
+  function rehydrateExports([key, dry]) {
+    if (!dry) return [key, dry] // null map
+
+    const wet = new ExportMap()
+    wet.namespace = new Map(dry.namespace.map(rehydrateNamespace))
+    wet.mtime = dry.mtime
+    return [key, wet]
+  }
+
+  try {
+    const caches = JSON.parse(readFileSync(filename))
+        , map = new Map()
+    for (let key in caches) {
+      map.set(key, new Map(caches[key].map(rehydrateExports)))
+    }
+    return map
+  } catch (err) {
+    /* ??? */
+    return new Map()
+  }
+}
+
+function saveFSCaches(filename, caches) {
+  const dry = {}
+  for (let [hash, maps] of caches) {
+    dry[hash] = Array.from(maps, dehydrate)
+  }
+  // fire and forget
+  writeFile(filename, JSON.stringify(dry), () => null)
+}
+
+let queued
+/**
+ * only write the cache a maximum of
+ * @param  {[type]} caches [description]
+ * @return {[type]}        [description]
+ */
+function queueCacheSave(filename, caches) {
+  function S() {
+    saveFSCaches(filename, queued)
+    queued = null
+  }
+  if (!queued) process.nextTick(S)
+  queued = caches
+}
+
+function rehydrateNamespace(o) {
+  if (o.namespace) o.namespace = new Map(o.namespace.map(rehydrateNamespace))
+  return o
+}
+
+function dehydrate([key, map]) {
+  return [ key, map && {
+    mtime: map.mtime,
+    namespace: Array.from(map.namespace, dehydrateMapKeys),
+  } ]
+}
+
+function dehydrateMapKeys([k, o]) {
+  const dry = {}
+  for (let key in o) {
+    const val = o[key]
+    if (val instanceof Map) {
+      dry[key] = Array.from(val, dehydrateMapKeys)
+    } else {
+      dry[key] = val
+    }
+  }
+  return [k, dry]
 }

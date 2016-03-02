@@ -4,6 +4,8 @@
  */
 import resolve from '../core/resolve'
 
+// todo: check ExportMap for existence first?
+
 module.exports = function (context) {
 
   function checkSourceValue(source) {
