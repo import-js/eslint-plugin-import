@@ -62,6 +62,12 @@ const valid = [
   // non-existent is handled by no-unresolved
   test({ code: 'export * as names from "./does-not-exist"'
        , parser: 'babel-eslint' }),
+
+  test({
+    code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Users)',
+    parser: 'babel-eslint',
+  }),
+
 ]
 
 const invalid = [
@@ -112,6 +118,12 @@ const invalid = [
   test({ code: 'export defport, * as names from "./default-export"'
        , parser: 'babel-eslint'
        , errors: ["No exported names found in module './default-export'."] }),
+
+  test({
+    code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Foo)',
+    parser: 'babel-eslint',
+    errors: ["'Foo' not found in imported namespace 'Endpoints'."],
+  }),
 
   // parse errors
   test({
