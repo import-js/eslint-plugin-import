@@ -221,4 +221,35 @@ describe('getExports', function () {
     })
   })
 
+  context('deep namespace caching', function () {
+    const espreeContext = { parserPath: 'espree', parserOptions: { sourceType: 'module' }, settings: {} }
+    let a
+    before('sanity check and prime cache', function (done) {
+      // first version
+      fs.writeFileSync(getFilename('deep/cache-2.js'),
+        fs.readFileSync(getFilename('deep/cache-2a.js')))
+
+      a = ExportMap.parse(getFilename('deep/cache-1.js'), espreeContext)
+      expect(a.errors).to.be.empty
+
+      expect(a.get('b').namespace).to.exist
+      expect(a.get('b').namespace.has('c')).to.be.true
+
+      // wait ~1s, cache check is 1s resolution
+      setTimeout(function reup() {
+        fs.unlinkSync(getFilename('deep/cache-2.js'))
+        // swap in a new file and touch it
+        fs.writeFileSync(getFilename('deep/cache-2.js'),
+          fs.readFileSync(getFilename('deep/cache-2b.js')))
+        done()
+      }, 1100)
+    })
+
+    it('works', function () {
+      expect(a.get('b').namespace.has('c')).to.be.false
+    })
+
+    after('remove test file', (done) => fs.unlink(getFilename('deep/cache-2.js'), done))
+  })
+
 })

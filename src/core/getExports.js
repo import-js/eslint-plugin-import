@@ -13,15 +13,22 @@ const exportCaches = new Map()
 export default class ExportMap {
   constructor() {
     this.namespace = new Map()
+    this.reexports = new Map()
+    this.dependencies = new Map()
     this.errors = []
   }
 
   /**
-   * @deprecated use namespace
+   * @deprecated use ExportMap directly
    * @return {Map}
    */
-  get named() { return this.namespace }
-  get hasDefault() { return this.namespace.has('default') }
+  get named() { return this }
+  get hasDefault() { return this.has('default') }
+
+  /**
+   * @deprecated too expensive, and unneccesary
+   * @return {Boolean} [description]
+   */
   get hasNamed() { return this.namespace.size > (this.hasDefault ? 1 : 0) }
 
   static get(source, context) {
@@ -73,7 +80,7 @@ export default class ExportMap {
   }
 
   static parse(path, context) {
-    var m = new ExportMap(context)
+    var m = new ExportMap()
 
     try {
       var ast = parse(path, context)
@@ -98,28 +105,49 @@ export default class ExportMap {
 
     const namespaces = new Map()
 
+    function remotePath(node) {
+      return resolve.relative(node.source.value, path, context.settings)
+    }
+
+    function resolveImport(node) {
+      const rp = remotePath(node)
+      if (rp == null) return null
+      return ExportMap.for(rp, context)
+    }
+
     function getNamespace(identifier) {
       if (!namespaces.has(identifier.name)) return
 
-      let namespace = m.resolveReExport(context, namespaces.get(identifier.name), path)
-      if (namespace) return { namespace: namespace.namespace }
+      return function () {
+        return resolveImport(namespaces.get(identifier.name))
+      }
     }
+
+    function addNamespace(object, identifier) {
+      const nsfn = getNamespace(identifier)
+      if (nsfn) {
+        Object.defineProperty(object, 'namespace', { get: nsfn })
+      }
+
+      return object
+    }
+
 
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
         const exportMeta = captureDoc(n)
         if (n.declaration.type === 'Identifier') {
-          Object.assign(exportMeta, getNamespace(n.declaration))
+          addNamespace(exportMeta, n.declaration)
         }
         m.namespace.set('default', exportMeta)
         return
       }
 
       if (n.type === 'ExportAllDeclaration') {
-        let remoteMap = m.resolveReExport(context, n, path)
+        let remoteMap = remotePath(n)
         if (remoteMap == null) return
-        remoteMap.namespace.forEach((value, name) => { m.namespace.set(name, value) })
+        m.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
         return
       }
 
@@ -148,24 +176,30 @@ export default class ExportMap {
           }
         }
 
-        // capture specifiers
-        let remoteMap
-        if (n.source) remoteMap = m.resolveReExport(context, n, path)
-
         n.specifiers.forEach((s) => {
           const exportMeta = {}
+          let local = s.local
 
-          if (s.type === 'ExportDefaultSpecifier') {
-            // don't add it if it is not present in the exported module
-            if (!remoteMap || !remoteMap.hasDefault) return
-          } else if (s.type === 'ExportSpecifier'){
-            Object.assign(exportMeta, getNamespace(s.local))
-          } else if (s.type === 'ExportNamespaceSpecifier') {
-            exportMeta.namespace = remoteMap.namespace
+          switch (s.type) {
+            case 'ExportDefaultSpecifier':
+              if (!n.source) return
+              local = 'default'
+              break
+            case 'ExportSpecifier':
+              if (!n.source) {
+                m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
+                return
+              }
+              break
+            case 'ExportNamespaceSpecifier':
+              m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+                get() { return resolveImport(n) },
+              }))
+              return
           }
 
           // todo: JSDoc
-          m.namespace.set(s.exported.name, exportMeta)
+          m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(n) })
         })
       }
     })
@@ -173,11 +207,41 @@ export default class ExportMap {
     return m
   }
 
-  resolveReExport(context, node, base) {
-    var remotePath = resolve.relative(node.source.value, base, context.settings)
-    if (remotePath == null) return null
+  has(name) {
+    if (this.namespace.has(name)) return true
+    if (this.reexports.has(name)) return true
 
-    return ExportMap.for(remotePath, context)
+    for (let dep of this.dependencies.values()) {
+      let innerMap = dep()
+
+      // todo: report as unresolved?
+      if (!innerMap) continue
+
+      if (innerMap.has(name)) return true
+    }
+
+    return false
+  }
+
+  get(name) {
+    if (this.namespace.has(name)) return this.namespace.get(name)
+
+    if (this.reexports.has(name)) {
+      const { local, getImport } = this.reexports.get(name)
+          , imported = getImport()
+      if (imported == null) return undefined
+      return imported.get(local)
+    }
+
+    for (let dep of this.dependencies.values()) {
+      let innerMap = dep()
+      // todo: report as unresolved?
+      if (!innerMap) continue
+      let innerValue = innerMap.get(name)
+      if (innerValue !== undefined) return innerValue
+    }
+
+    return undefined
   }
 
   reportErrors(context, declaration) {
@@ -252,3 +316,4 @@ function hashObject(object) {
   settingsShasum.update(JSON.stringify(object))
   return settingsShasum.digest('hex')
 }
+``
