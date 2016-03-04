@@ -12,13 +12,17 @@ const exportCaches = new Map()
 
 export default class ExportMap {
   constructor() {
-    this.named = new Map()
+    this.namespace = new Map()
     this.errors = []
   }
 
-
-  get hasDefault() { return this.named.has('default') }
-  get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
+  /**
+   * @deprecated use namespace
+   * @return {Map}
+   */
+  get named() { return this.namespace }
+  get hasDefault() { return this.namespace.has('default') }
+  get hasNamed() { return this.namespace.size > (this.hasDefault ? 1 : 0) }
 
   static get(source, context) {
 
@@ -59,7 +63,7 @@ export default class ExportMap {
     exportMap.mtime = stats.mtime
 
     // ignore empties, optionally
-    if (exportMap.named.size === 0 && isIgnored(path, context)) {
+    if (exportMap.namespace.size === 0 && isIgnored(path, context)) {
       exportMap = null
     }
 
@@ -98,7 +102,7 @@ export default class ExportMap {
       if (!namespaces.has(identifier.name)) return
 
       let namespace = m.resolveReExport(context, namespaces.get(identifier.name), path)
-      if (namespace) return { namespace: namespace.named }
+      if (namespace) return { namespace: namespace.namespace }
     }
 
     ast.body.forEach(function (n) {
@@ -108,14 +112,14 @@ export default class ExportMap {
         if (n.declaration.type === 'Identifier') {
           Object.assign(exportMeta, getNamespace(n.declaration))
         }
-        m.named.set('default', exportMeta)
+        m.namespace.set('default', exportMeta)
         return
       }
 
       if (n.type === 'ExportAllDeclaration') {
         let remoteMap = m.resolveReExport(context, n, path)
         if (remoteMap == null) return
-        remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
+        remoteMap.namespace.forEach((value, name) => { m.namespace.set(name, value) })
         return
       }
 
@@ -135,11 +139,11 @@ export default class ExportMap {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.named.set(n.declaration.id.name, captureDoc(n))
+              m.namespace.set(n.declaration.id.name, captureDoc(n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, captureDoc(d, n))))
+                recursivePatternCapture(d.id, id => m.namespace.set(id.name, captureDoc(d, n))))
               break
           }
         }
@@ -157,11 +161,11 @@ export default class ExportMap {
           } else if (s.type === 'ExportSpecifier'){
             Object.assign(exportMeta, getNamespace(s.local))
           } else if (s.type === 'ExportNamespaceSpecifier') {
-            exportMeta.namespace = remoteMap.named
+            exportMeta.namespace = remoteMap.namespace
           }
 
           // todo: JSDoc
-          m.named.set(s.exported.name, exportMeta)
+          m.namespace.set(s.exported.name, exportMeta)
         })
       }
     })
