@@ -30,10 +30,15 @@ ruleTester.run('export', rule, {
       errors: ['Multiple default exports.', 'Multiple default exports.'],
     }),
     test({
+      code: 'export default foo; export * from "./default-export"',
+      errors: ['Multiple default exports.', 'Multiple default exports.'],
+    }),
+    test({
       code: 'export default function foo() {}; ' +
                  'export default function bar() {}',
       errors: ['Multiple default exports.', 'Multiple default exports.'],
     }),
+
     test({
       code: 'export function foo() {}; ' +
                  'export { bar as foo }',
@@ -60,10 +65,10 @@ ruleTester.run('export', rule, {
       errors: ['Multiple exports of name \'foo\'.',
                'Multiple exports of name \'foo\'.'],
     }),
-    test({ code: 'export * from "./default-export"'
-         , errors: [{ message: 'No named exports found in module ' +
-                               '\'./default-export\'.'
-                    , type: 'Literal' }] }),
+    // test({ code: 'export * from "./default-export"'
+    //      , errors: [{ message: 'No named exports found in module ' +
+    //                            '\'./default-export\'.'
+    //                 , type: 'Literal' }] }),
 
     test({
       code: 'export * from "./malformed.js"',

@@ -13,6 +13,7 @@ const exportCaches = new Map()
 export default class ExportMap {
   constructor() {
     this.namespace = new Map()
+    // todo: restructure to key on path, value is resolver + map of names
     this.reexports = new Map()
     this.dependencies = new Map()
     this.errors = []
@@ -243,6 +244,19 @@ export default class ExportMap {
 
     return undefined
   }
+
+  forEach(callback, thisArg) {
+    this.namespace.forEach((v, n) =>
+      callback.call(thisArg, v, n, this))
+
+    this.reexports.forEach(({ getImport, local }, name) =>
+      callback.call(thisArg, getImport().get(local), name, this))
+
+    this.dependencies.forEach(dep => dep().forEach((v, n) =>
+      callback.call(thisArg, v, n, this)))
+  }
+
+  // todo: keys, values, entries?
 
   reportErrors(context, declaration) {
     context.report({

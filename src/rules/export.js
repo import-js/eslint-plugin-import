@@ -1,8 +1,7 @@
 import ExportMap, { recursivePatternCapture } from '../core/getExports'
 
 module.exports = function (context) {
-  const defaults = new Set()
-      , named = new Map()
+  const named = new Map()
 
   function addNamed(name, node) {
     let nodes = named.get(name)
@@ -16,9 +15,7 @@ module.exports = function (context) {
   }
 
   return {
-    'ExportDefaultDeclaration': function (node) {
-      defaults.add(node)
-    },
+    'ExportDefaultDeclaration': (node) => addNamed('default', node),
 
     'ExportSpecifier': function (node) {
       addNamed(node.exported.name, node.exported)
@@ -48,29 +45,23 @@ module.exports = function (context) {
         remoteExports.reportErrors(context, node)
         return
       }
+      let any = false
+      remoteExports.forEach((v, name) => (any = true) && addNamed(name, node))
 
-      if (!remoteExports.hasNamed) {
+      if (!any) {
         context.report(node.source,
           `No named exports found in module '${node.source.value}'.`)
-      }
-
-      for (let name of remoteExports.named.keys()) {
-        addNamed(name, node)
       }
     },
 
     'Program:exit': function () {
-      if (defaults.size > 1) {
-        for (let node of defaults) {
-          context.report(node, 'Multiple default exports.')
-        }
-      }
-
       for (let [name, nodes] of named) {
         if (nodes.size <= 1) continue
 
         for (let node of nodes) {
-          context.report(node, `Multiple exports of name '${name}'.`)
+          if (name === 'default') {
+            context.report(node, 'Multiple default exports.')
+          } else context.report(node, `Multiple exports of name '${name}'.`)
         }
       }
     },
