@@ -264,4 +264,18 @@ describe('getExports', function () {
     })
   })
 
+  context('issue #210: self-reference', function () {
+    it("doesn't crash", function () {
+      expect(() => ExportMap.get('./narcissist', fakeContext)).not.to.throw(Error)
+    })
+    it("'has' circular reference", function () {
+      expect(ExportMap.get('./narcissist', fakeContext))
+        .to.exist.and.satisfy(m => m.has('soGreat'))
+    })
+    it("can 'get' circular reference", function () {
+      expect(ExportMap.get('./narcissist', fakeContext))
+        .to.exist.and.satisfy(m => m.get('soGreat') != null)
+    })
+  })
+
 })

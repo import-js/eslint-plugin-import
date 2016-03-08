@@ -86,6 +86,9 @@ ruleTester.run('named', rule, {
     // ignore is ignored if exports are found
     test({ code: 'import { foo } from "es6-module"' }),
 
+    // issue #210: shameless self-reference
+    test({ code: 'import { me, soGreat } from "./narcissist"' }),
+
   ],
 
   invalid: [
