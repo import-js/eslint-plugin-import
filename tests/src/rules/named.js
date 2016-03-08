@@ -29,8 +29,7 @@ ruleTester.run('named', rule, {
     test({code: 'import {a, b, d} from "./common"; ' +
                 '// eslint-disable-line named' }),
 
-    test({ code: 'import {foo, bar} from "./re-export-names"'
-         , args: [2, 'es6-only']}),
+    test({ code: 'import { foo, bar } from "./re-export-names"' }),
 
     test({ code: 'import { foo, bar } from "./common"'
          , settings: { 'import/ignore': ['common'] } }),

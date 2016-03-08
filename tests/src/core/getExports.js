@@ -19,7 +19,7 @@ describe('getExports', function () {
     }).not.to.throw(Error)
 
     expect(imports).to.exist
-    expect(imports.named.has('foo')).to.be.true
+    expect(imports.has('foo')).to.be.true
 
   })
 
@@ -72,7 +72,7 @@ describe('getExports', function () {
     }).not.to.throw(Error)
 
     expect(imports).to.exist
-    expect(imports.named.has('bar')).to.be.true
+    expect(imports.has('bar')).to.be.true
 
   })
 
@@ -83,8 +83,8 @@ describe('getExports', function () {
     )
 
     expect(imports).to.exist
-    expect(imports).to.have.property('hasDefault', true)
-    expect(imports.named.has('Bar')).to.be.true
+    expect(imports.get('default')).to.exist
+    expect(imports.has('Bar')).to.be.true
   })
 
   context('deprecation metadata', function () {
@@ -101,25 +101,25 @@ describe('getExports', function () {
         })
 
         it('works with named imports.', function () {
-          expect(imports.named.has('fn')).to.be.true
+          expect(imports.has('fn')).to.be.true
 
-          expect(imports.named.get('fn'))
+          expect(imports.get('fn'))
             .to.have.deep.property('doc.tags[0].title', 'deprecated')
-          expect(imports.named.get('fn'))
+          expect(imports.get('fn'))
             .to.have.deep.property('doc.tags[0].description', "please use 'x' instead.")
         })
 
         it('works with default imports.', function () {
-          expect(imports.named.has('default')).to.be.true
-          const importMeta = imports.named.get('default')
+          expect(imports.has('default')).to.be.true
+          const importMeta = imports.get('default')
 
           expect(importMeta).to.have.deep.property('doc.tags[0].title', 'deprecated')
           expect(importMeta).to.have.deep.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
         })
 
         it('works with variables.', function () {
-          expect(imports.named.has('MY_TERRIBLE_ACTION')).to.be.true
-          const importMeta = imports.named.get('MY_TERRIBLE_ACTION')
+          expect(imports.has('MY_TERRIBLE_ACTION')).to.be.true
+          const importMeta = imports.get('MY_TERRIBLE_ACTION')
 
           expect(importMeta).to.have.deep.property(
             'doc.tags[0].title', 'deprecated')
@@ -129,8 +129,8 @@ describe('getExports', function () {
 
         context('multi-line variables', function () {
           it('works for the first one', function () {
-            expect(imports.named.has('CHAIN_A')).to.be.true
-            const importMeta = imports.named.get('CHAIN_A')
+            expect(imports.has('CHAIN_A')).to.be.true
+            const importMeta = imports.get('CHAIN_A')
 
             expect(importMeta).to.have.deep.property(
               'doc.tags[0].title', 'deprecated')
@@ -138,8 +138,8 @@ describe('getExports', function () {
               'doc.tags[0].description', 'this chain is awful')
           })
           it('works for the second one', function () {
-            expect(imports.named.has('CHAIN_B')).to.be.true
-            const importMeta = imports.named.get('CHAIN_B')
+            expect(imports.has('CHAIN_B')).to.be.true
+            const importMeta = imports.get('CHAIN_B')
 
             expect(importMeta).to.have.deep.property(
               'doc.tags[0].title', 'deprecated')
@@ -147,8 +147,8 @@ describe('getExports', function () {
               'doc.tags[0].description', 'so awful')
           })
           it('works for the third one, etc.', function () {
-            expect(imports.named.has('CHAIN_C')).to.be.true
-            const importMeta = imports.named.get('CHAIN_C')
+            expect(imports.has('CHAIN_C')).to.be.true
+            const importMeta = imports.get('CHAIN_C')
 
             expect(importMeta).to.have.deep.property(
               'doc.tags[0].title', 'deprecated')
@@ -202,22 +202,22 @@ describe('getExports', function () {
     it('works with espree & traditional namespace exports', function () {
       const a = ExportMap.parse(getFilename('deep/a.js'), espreeContext)
       expect(a.errors).to.be.empty
-      expect(a.named.get('b').namespace).to.exist
-      expect(a.named.get('b').namespace.has('c')).to.be.true
+      expect(a.get('b').namespace).to.exist
+      expect(a.get('b').namespace.has('c')).to.be.true
     })
 
     it('captures namespace exported as default', function () {
       const def = ExportMap.parse(getFilename('deep/default.js'), espreeContext)
       expect(def.errors).to.be.empty
-      expect(def.named.get('default').namespace).to.exist
-      expect(def.named.get('default').namespace.has('c')).to.be.true
+      expect(def.get('default').namespace).to.exist
+      expect(def.get('default').namespace.has('c')).to.be.true
     })
 
     it('works with babel-eslint & ES7 namespace exports', function () {
       const a = ExportMap.parse(getFilename('deep-es7/a.js'), babelContext)
       expect(a.errors).to.be.empty
-      expect(a.named.get('b').namespace).to.exist
-      expect(a.named.get('b').namespace.has('c')).to.be.true
+      expect(a.get('b').namespace).to.exist
+      expect(a.get('b').namespace.has('c')).to.be.true
     })
   })
 
@@ -250,6 +250,18 @@ describe('getExports', function () {
     })
 
     after('remove test file', (done) => fs.unlink(getFilename('deep/cache-2.js'), done))
+  })
+
+  context('Map API', function () {
+    context('#size', function () {
+
+      it('counts the names', () => expect(ExportMap.get('./named-exports', fakeContext))
+        .to.have.property('size', 8))
+
+      it('includes exported namespace size', () => expect(ExportMap.get('./export-all', fakeContext))
+        .to.have.property('size', 1))
+
+    })
   })
 
 })

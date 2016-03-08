@@ -19,18 +19,13 @@ export default class ExportMap {
     this.errors = []
   }
 
-  /**
-   * @deprecated use ExportMap directly
-   * @return {Map}
-   */
-  get named() { return this }
-  get hasDefault() { return this.has('default') }
+  get hasDefault() { return this.get('default') != null } // stronger than this.has
 
-  /**
-   * @deprecated too expensive, and unneccesary
-   * @return {Boolean} [description]
-   */
-  get hasNamed() { return this.namespace.size > (this.hasDefault ? 1 : 0) }
+  get size() {
+    let size = this.namespace.size + this.reexports.size
+    this.dependencies.forEach(dep => size += dep().size)
+    return size
+  }
 
   static get(source, context) {
 
@@ -179,24 +174,27 @@ export default class ExportMap {
 
         n.specifiers.forEach((s) => {
           const exportMeta = {}
-          let local = s.local
+          let local
 
           switch (s.type) {
             case 'ExportDefaultSpecifier':
               if (!n.source) return
               local = 'default'
               break
-            case 'ExportSpecifier':
-              if (!n.source) {
-                m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
-                return
-              }
-              break
             case 'ExportNamespaceSpecifier':
               m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
                 get() { return resolveImport(n) },
               }))
               return
+            case 'ExportSpecifier':
+              if (!n.source) {
+                m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
+                return
+              }
+              // else falls through
+            default:
+              local = s.local.name
+              break
           }
 
           // todo: JSDoc
@@ -208,6 +206,13 @@ export default class ExportMap {
     return m
   }
 
+  /**
+   * Note that this does not check explicitly re-exported names for existence
+   * in the base namespace, but it will expand all `export * from '...'` exports
+   * if not found in the explicit namespace.
+   * @param  {string}  name
+   * @return {Boolean} true if `name` is exported by this module.
+   */
   has(name) {
     if (this.namespace.has(name)) return true
     if (this.reexports.has(name)) return true

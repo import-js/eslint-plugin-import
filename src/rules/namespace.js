@@ -32,15 +32,15 @@ module.exports = function (context) {
         for (let specifier of declaration.specifiers) {
           switch (specifier.type) {
             case 'ImportNamespaceSpecifier':
-              if (!imports.hasNamed) {
+              if (!imports.size) {
                 context.report(specifier,
                   `No exported names found in module '${declaration.source.value}'.`)
               }
-              namespaces.set(specifier.local.name, imports.named)
+              namespaces.set(specifier.local.name, imports)
               break
             case 'ImportDefaultSpecifier':
             case 'ImportSpecifier': {
-              const meta = imports.named.get(
+              const meta = imports.get(
                 // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
                 specifier.imported ? specifier.imported.name : 'default')
               if (!meta || !meta.namespace) break
@@ -65,7 +65,7 @@ module.exports = function (context) {
         return
       }
 
-      if (!imports.hasNamed) {
+      if (!imports.size) {
         context.report(namespace,
           `No exported names found in module '${declaration.source.value}'.`)
       }
@@ -87,7 +87,7 @@ module.exports = function (context) {
       var namespace = namespaces.get(dereference.object.name)
       var namepath = [dereference.object.name]
       // while property is namespace and parent is member expression, keep validating
-      while (namespace instanceof Map &&
+      while (namespace instanceof Exports &&
              dereference.type === 'MemberExpression') {
 
         if (dereference.computed) {
@@ -122,7 +122,7 @@ module.exports = function (context) {
 
       // DFS traverse child namespaces
       function testKey(pattern, namespace, path = [init.name]) {
-        if (!(namespace instanceof Map)) return
+        if (!(namespace instanceof Exports)) return
 
         if (pattern.type !== 'ObjectPattern') return
 

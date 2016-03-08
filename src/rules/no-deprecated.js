@@ -29,8 +29,8 @@ module.exports = function (context) {
 
 
         case 'ImportNamespaceSpecifier':{
-          if (!imports.named.size) return
-          namespaces.set(im.local.name, imports.named)
+          if (!imports.size) return
+          namespaces.set(im.local.name, imports)
           return
         }
 
@@ -48,13 +48,13 @@ module.exports = function (context) {
       }
 
       // unknown thing can't be deprecated
-      if (!imports.named.has(imported)) return
+      if (!imports.has(imported)) return
 
-      // capture named import of deep namespace
-      const { namespace } = imports.named.get(imported)
+      // capture import of deep namespace
+      const { namespace } = imports.get(imported)
       if (namespace) namespaces.set(local, namespace)
 
-      const deprecation = getDeprecation(imports.named.get(imported))
+      const deprecation = getDeprecation(imports.get(imported))
       if (!deprecation) return
 
       context.report({ node: im, message: message(deprecation) })
@@ -94,7 +94,7 @@ module.exports = function (context) {
       var namespace = namespaces.get(dereference.object.name)
       var namepath = [dereference.object.name]
       // while property is namespace and parent is member expression, keep validating
-      while (namespace instanceof Map &&
+      while (namespace instanceof Exports &&
              dereference.type === 'MemberExpression') {
 
         // ignore computed parts for now
