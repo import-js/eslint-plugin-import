@@ -11,7 +11,8 @@ import isIgnored from './ignore'
 const exportCaches = new Map()
 
 export default class ExportMap {
-  constructor() {
+  constructor(path) {
+    this.path = path
     this.namespace = new Map()
     // todo: restructure to key on path, value is resolver + map of names
     this.reexports = new Map()
@@ -76,7 +77,7 @@ export default class ExportMap {
   }
 
   static parse(path, context) {
-    var m = new ExportMap()
+    var m = new ExportMap(path)
 
     try {
       var ast = parse(path, context)
@@ -236,6 +237,10 @@ export default class ExportMap {
       const { local, getImport } = this.reexports.get(name)
           , imported = getImport()
       if (imported == null) return undefined
+
+      // safeguard against cycles, only if name matches
+      if (imported.path === this.path && local === name) return undefined
+
       return imported.get(local)
     }
 
@@ -243,6 +248,10 @@ export default class ExportMap {
       let innerMap = dep()
       // todo: report as unresolved?
       if (!innerMap) continue
+
+      // safeguard against cycles
+      if (innerMap.path === this.path) continue
+
       let innerValue = innerMap.get(name)
       if (innerValue !== undefined) return innerValue
     }

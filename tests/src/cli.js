@@ -6,7 +6,6 @@ import { CLIEngine } from 'eslint'
 
 describe('CLI regression tests', function () {
   describe('issue #210', function () {
-    this.timeout(10000)
     let cli
     before(function () {
       cli = new CLIEngine({
