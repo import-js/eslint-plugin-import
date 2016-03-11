@@ -14,37 +14,43 @@ module.exports = function (context) {
 
   return {
 
-    'ImportDeclaration': function (declaration) {
-      if (declaration.specifiers.length === 0) return
+    // pick up all imports at body entry time, to properly respect hoisting
+    'Program': function ({ body }) {
+      function processBodyStatement(declaration) {
+        if (declaration.type !== 'ImportDeclaration') return
 
-      const imports = Exports.get(declaration.source.value, context)
-      if (imports == null) return null
+        if (declaration.specifiers.length === 0) return
 
-      if (imports.errors.length) {
-        imports.reportErrors(context, declaration)
-        return
-      }
+        const imports = Exports.get(declaration.source.value, context)
+        if (imports == null) return null
 
-      for (let specifier of declaration.specifiers) {
-        switch (specifier.type) {
-          case 'ImportNamespaceSpecifier':
-            if (!imports.hasNamed) {
-              context.report(specifier,
-                `No exported names found in module '${declaration.source.value}'.`)
+        if (imports.errors.length) {
+          imports.reportErrors(context, declaration)
+          return
+        }
+
+        for (let specifier of declaration.specifiers) {
+          switch (specifier.type) {
+            case 'ImportNamespaceSpecifier':
+              if (!imports.hasNamed) {
+                context.report(specifier,
+                  `No exported names found in module '${declaration.source.value}'.`)
+              }
+              namespaces.set(specifier.local.name, imports.named)
+              break
+            case 'ImportDefaultSpecifier':
+            case 'ImportSpecifier': {
+              const meta = imports.named.get(
+                // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
+                specifier.imported ? specifier.imported.name : 'default')
+              if (!meta || !meta.namespace) break
+              namespaces.set(specifier.local.name, meta.namespace)
+              break
             }
-            namespaces.set(specifier.local.name, imports.named)
-            break
-          case 'ImportDefaultSpecifier':
-          case 'ImportSpecifier': {
-            const meta = imports.named.get(
-              // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
-              specifier.imported ? specifier.imported.name : 'default')
-            if (!meta || !meta.namespace) break
-            namespaces.set(specifier.local.name, meta.namespace)
-            break
           }
         }
       }
+      body.forEach(processBodyStatement)
     },
 
     // same as above, but does not add names to local map

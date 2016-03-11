@@ -68,6 +68,13 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // respect hoisting
+  test({
+    code:
+      'function x() { console.log((names.b).c); } ' +
+      'import * as names from "./named-exports"; ',
+  }),
+
 ]
 
 const invalid = [
@@ -138,6 +145,21 @@ const invalid = [
     code: "import b from './deep/default'; console.log(b.e)",
     errors: [ "'e' not found in imported namespace 'b'." ],
   }),
+
+  // respect hoisting
+  test({
+    code:
+      'console.log(names.c);' +
+      "import * as names from './named-exports'; ",
+    errors: [error('c', 'names')],
+  }),
+  test({
+    code:
+      'function x() { console.log(names.c) } ' +
+      "import * as names from './named-exports'; ",
+    errors: [error('c', 'names')],
+  }),
+
 ]
 
 ///////////////////////

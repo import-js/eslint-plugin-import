@@ -134,3 +134,25 @@ ruleTester.run('no-deprecated', rule, {
     }),
   ],
 })
+
+ruleTester.run('no-deprecated: hoisting', rule, {
+  valid: [
+
+    test({
+      code: "function x(deepDep) { console.log(deepDep.MY_TERRIBLE_ACTION) } import { deepDep } from './deep-deprecated'",
+    }),
+
+  ],
+
+  invalid: [
+
+    test({
+      code: "console.log(MY_TERRIBLE_ACTION); import { MY_TERRIBLE_ACTION } from './deprecated'",
+      errors: [
+        { type: 'Identifier', message: 'Deprecated: please stop sending/handling this action type.' },
+        { type: 'ImportSpecifier', message: 'Deprecated: please stop sending/handling this action type.' },
+      ],
+    }),
+
+  ],
+})
