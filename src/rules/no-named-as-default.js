@@ -13,8 +13,8 @@ module.exports = function (context) {
       return
     }
 
-    if (imports.hasDefault &&
-        imports.named.has(defaultSpecifier[nameKey].name)) {
+    if (imports.has('default') &&
+        imports.has(defaultSpecifier[nameKey].name)) {
 
       context.report(defaultSpecifier,
         'Using exported name \'' + defaultSpecifier[nameKey].name +

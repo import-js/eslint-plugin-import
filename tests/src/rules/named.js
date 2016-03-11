@@ -29,8 +29,7 @@ ruleTester.run('named', rule, {
     test({code: 'import {a, b, d} from "./common"; ' +
                 '// eslint-disable-line named' }),
 
-    test({ code: 'import {foo, bar} from "./re-export-names"'
-         , args: [2, 'es6-only']}),
+    test({ code: 'import { foo, bar } from "./re-export-names"' }),
 
     test({ code: 'import { foo, bar } from "./common"'
          , settings: { 'import/ignore': ['common'] } }),
@@ -86,6 +85,9 @@ ruleTester.run('named', rule, {
 
     // ignore is ignored if exports are found
     test({ code: 'import { foo } from "es6-module"' }),
+
+    // issue #210: shameless self-reference
+    test({ code: 'import { me, soGreat } from "./narcissist"' }),
 
   ],
 

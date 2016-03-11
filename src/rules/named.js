@@ -17,12 +17,10 @@ module.exports = function (context) {
       return
     }
 
-    var names = imports.named
-
     node.specifiers.forEach(function (im) {
       if (im.type !== type) return
 
-      if (!names.has(im[key].name)) {
+      if (!imports.get(im[key].name)) {
         context.report(im[key],
           im[key].name + ' not found in \'' + node.source.value + '\'')
       }

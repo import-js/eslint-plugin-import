@@ -75,13 +75,22 @@ const valid = [
       'import * as names from "./named-exports"; ',
   }),
 
+  // names.default is valid export
+  test({ code: "import * as names from './default-export';" }),
+  test({
+   code: 'export * as names from "./default-export"',
+   parser: 'babel-eslint',
+  }),
+  test({
+    code: 'export defport, * as names from "./default-export"',
+    parser: 'babel-eslint',
+  }),
+
 ]
 
 const invalid = [
   test({code: "import * as foo from './common';",
         errors: ["No exported names found in module './common'."]}),
-  test({code: "import * as names from './default-export';",
-        errors: ["No exported names found in module './default-export'."]}),
 
   test({ code: "import * as names from './named-exports'; " +
                ' console.log(names.c);'
@@ -119,12 +128,6 @@ const invalid = [
   /////////
   // es7 //
   /////////
-  test({ code: 'export * as names from "./default-export"'
-       , parser: 'babel-eslint'
-       , errors: ["No exported names found in module './default-export'."] }),
-  test({ code: 'export defport, * as names from "./default-export"'
-       , parser: 'babel-eslint'
-       , errors: ["No exported names found in module './default-export'."] }),
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Foo)',

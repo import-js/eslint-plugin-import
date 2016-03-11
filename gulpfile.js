@@ -87,13 +87,16 @@ gulp.task('tests', function () {
 // used externally by Istanbul, too
 gulp.task('pretest', ['src', 'tests', 'wipe-extras'])
 
+var reporter = 'spec'
+
 gulp.task('test', ['pretest'], function () {
   return gulp.src('tests/lib/**/*.js', { read: false })
-    .pipe(mocha({ reporter: 'spec', grep: process.env.TEST_GREP }))
+    .pipe(mocha({ reporter: reporter, grep: process.env.TEST_GREP }))
   // NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/
 })
 
 gulp.task('watch-test', function () {
+  reporter = 'progress'
   gulp.watch(SRC, ['test'])
   gulp.watch('tests/' + SRC, ['test'])
 })

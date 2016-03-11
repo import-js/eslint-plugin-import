@@ -11,17 +11,22 @@ import isIgnored from './ignore'
 const exportCaches = new Map()
 
 export default class ExportMap {
-  constructor(context) {
-    this.context = context
-    this.named = new Map()
-
+  constructor(path) {
+    this.path = path
+    this.namespace = new Map()
+    // todo: restructure to key on path, value is resolver + map of names
+    this.reexports = new Map()
+    this.dependencies = new Map()
     this.errors = []
   }
 
-  get settings() { return this.context && this.context.settings }
+  get hasDefault() { return this.get('default') != null } // stronger than this.has
 
-  get hasDefault() { return this.named.has('default') }
-  get hasNamed() { return this.named.size > (this.hasDefault ? 1 : 0) }
+  get size() {
+    let size = this.namespace.size + this.reexports.size
+    this.dependencies.forEach(dep => size += dep().size)
+    return size
+  }
 
   static get(source, context) {
 
@@ -62,7 +67,7 @@ export default class ExportMap {
     exportMap.mtime = stats.mtime
 
     // ignore empties, optionally
-    if (exportMap.named.size === 0 && isIgnored(path, context)) {
+    if (exportMap.namespace.size === 0 && isIgnored(path, context)) {
       exportMap = null
     }
 
@@ -72,7 +77,7 @@ export default class ExportMap {
   }
 
   static parse(path, context) {
-    var m = new ExportMap(context)
+    var m = new ExportMap(path)
 
     try {
       var ast = parse(path, context)
@@ -97,28 +102,49 @@ export default class ExportMap {
 
     const namespaces = new Map()
 
+    function remotePath(node) {
+      return resolve.relative(node.source.value, path, context.settings)
+    }
+
+    function resolveImport(node) {
+      const rp = remotePath(node)
+      if (rp == null) return null
+      return ExportMap.for(rp, context)
+    }
+
     function getNamespace(identifier) {
       if (!namespaces.has(identifier.name)) return
 
-      let namespace = m.resolveReExport(namespaces.get(identifier.name), path)
-      if (namespace) return { namespace: namespace.named }
+      return function () {
+        return resolveImport(namespaces.get(identifier.name))
+      }
     }
+
+    function addNamespace(object, identifier) {
+      const nsfn = getNamespace(identifier)
+      if (nsfn) {
+        Object.defineProperty(object, 'namespace', { get: nsfn })
+      }
+
+      return object
+    }
+
 
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
         const exportMeta = captureDoc(n)
         if (n.declaration.type === 'Identifier') {
-          Object.assign(exportMeta, getNamespace(n.declaration))
+          addNamespace(exportMeta, n.declaration)
         }
-        m.named.set('default', exportMeta)
+        m.namespace.set('default', exportMeta)
         return
       }
 
       if (n.type === 'ExportAllDeclaration') {
-        let remoteMap = m.resolveReExport(n, path)
+        let remoteMap = remotePath(n)
         if (remoteMap == null) return
-        remoteMap.named.forEach((value, name) => { m.named.set(name, value) })
+        m.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
         return
       }
 
@@ -138,33 +164,42 @@ export default class ExportMap {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.named.set(n.declaration.id.name, captureDoc(n))
+              m.namespace.set(n.declaration.id.name, captureDoc(n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.named.set(id.name, captureDoc(d, n))))
+                recursivePatternCapture(d.id, id => m.namespace.set(id.name, captureDoc(d, n))))
               break
           }
         }
 
-        // capture specifiers
-        let remoteMap
-        if (n.source) remoteMap = m.resolveReExport(n, path)
-
         n.specifiers.forEach((s) => {
           const exportMeta = {}
+          let local
 
-          if (s.type === 'ExportDefaultSpecifier') {
-            // don't add it if it is not present in the exported module
-            if (!remoteMap || !remoteMap.hasDefault) return
-          } else if (s.type === 'ExportSpecifier'){
-            Object.assign(exportMeta, getNamespace(s.local))
-          } else if (s.type === 'ExportNamespaceSpecifier') {
-            exportMeta.namespace = remoteMap.named
+          switch (s.type) {
+            case 'ExportDefaultSpecifier':
+              if (!n.source) return
+              local = 'default'
+              break
+            case 'ExportNamespaceSpecifier':
+              m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+                get() { return resolveImport(n) },
+              }))
+              return
+            case 'ExportSpecifier':
+              if (!n.source) {
+                m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
+                return
+              }
+              // else falls through
+            default:
+              local = s.local.name
+              break
           }
 
           // todo: JSDoc
-          m.named.set(s.exported.name, exportMeta)
+          m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(n) })
         })
       }
     })
@@ -172,12 +207,70 @@ export default class ExportMap {
     return m
   }
 
-  resolveReExport(node, base) {
-    var remotePath = resolve.relative(node.source.value, base, this.settings)
-    if (remotePath == null) return null
+  /**
+   * Note that this does not check explicitly re-exported names for existence
+   * in the base namespace, but it will expand all `export * from '...'` exports
+   * if not found in the explicit namespace.
+   * @param  {string}  name
+   * @return {Boolean} true if `name` is exported by this module.
+   */
+  has(name) {
+    if (this.namespace.has(name)) return true
+    if (this.reexports.has(name)) return true
 
-    return ExportMap.for(remotePath, this.context)
+    for (let dep of this.dependencies.values()) {
+      let innerMap = dep()
+
+      // todo: report as unresolved?
+      if (!innerMap) continue
+
+      if (innerMap.has(name)) return true
+    }
+
+    return false
   }
+
+  get(name) {
+    if (this.namespace.has(name)) return this.namespace.get(name)
+
+    if (this.reexports.has(name)) {
+      const { local, getImport } = this.reexports.get(name)
+          , imported = getImport()
+      if (imported == null) return undefined
+
+      // safeguard against cycles, only if name matches
+      if (imported.path === this.path && local === name) return undefined
+
+      return imported.get(local)
+    }
+
+    for (let dep of this.dependencies.values()) {
+      let innerMap = dep()
+      // todo: report as unresolved?
+      if (!innerMap) continue
+
+      // safeguard against cycles
+      if (innerMap.path === this.path) continue
+
+      let innerValue = innerMap.get(name)
+      if (innerValue !== undefined) return innerValue
+    }
+
+    return undefined
+  }
+
+  forEach(callback, thisArg) {
+    this.namespace.forEach((v, n) =>
+      callback.call(thisArg, v, n, this))
+
+    this.reexports.forEach(({ getImport, local }, name) =>
+      callback.call(thisArg, getImport().get(local), name, this))
+
+    this.dependencies.forEach(dep => dep().forEach((v, n) =>
+      callback.call(thisArg, v, n, this)))
+  }
+
+  // todo: keys, values, entries?
 
   reportErrors(context, declaration) {
     context.report({
@@ -251,3 +344,4 @@ function hashObject(object) {
   settingsShasum.update(JSON.stringify(object))
   return settingsShasum.digest('hex')
 }
+``
