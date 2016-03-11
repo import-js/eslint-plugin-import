@@ -6,6 +6,7 @@ module.exports = function (context) {
       , namespaces = new Map()
 
   function checkSpecifiers(node) {
+    if (node.type !== 'ImportDeclaration') return
     if (node.source == null) return // local export, ignore
 
     const imports = Exports.get(node.source.value, context)
@@ -64,7 +65,7 @@ module.exports = function (context) {
   }
 
   return {
-    'ImportDeclaration': checkSpecifiers,
+    'Program': ({ body }) => body.forEach(checkSpecifiers),
 
     'Identifier': function (node) {
       if (node.parent.type === 'MemberExpression' && node.parent.property === node) {
