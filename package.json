@@ -44,7 +44,7 @@
     "babel-preset-stage-1": "6.5.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "eslint": "2.x",
+    "eslint": "2.2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
