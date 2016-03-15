@@ -1,7 +1,5 @@
 # Test against this version of Node.js
 environment:
-  NODE_PATH: ./lib
-  # NODE_PATH: ./lib
   nodejs_version: "4"
   # killing build matrix in the interest of turnaround time
   # matrix:

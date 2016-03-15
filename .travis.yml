@@ -4,8 +4,6 @@ node_js:
   - 0.12
   - 4
   - stable
-env:
- - NODE_PATH=./lib
 
 install:
   - npm -g install npm@2
@@ -14,7 +12,7 @@ install:
   - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
 
 script:
-  - "npm run-script ci-test"
+  - "npm test"
   - "for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done"
 
 after_success:

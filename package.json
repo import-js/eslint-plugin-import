@@ -7,12 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "watch": "NODE_PATH=./lib gulp watch-test",
-    "cover": "gulp pretest && NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
+    "watch": "cross-env NODE_PATH=./lib gulp watch-test",
+    "cover": "gulp pretest && cross-env NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
     "posttest": "eslint ./src",
-    "test": "NODE_PATH=./lib gulp test",
-    "ci-test": "eslint ./src && gulp pretest && istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
-    "debug": "NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
+    "test": "cross-env NODE_PATH=./lib gulp test",
+    "ci-test": "eslint ./src && gulp pretest && cross-env NODE_PATH=./lib istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
+    "debug": "cross-env NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "prepublish": "gulp prepublish",
     "coveralls": "cat ./reports/coverage/lcov.info | coveralls"
   },
@@ -44,6 +44,7 @@
     "babel-preset-stage-1": "6.5.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
+    "cross-env": "^1.0.7",
     "eslint": "2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
