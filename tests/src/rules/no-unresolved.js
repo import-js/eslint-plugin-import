@@ -245,3 +245,41 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
     }),
   ],
 })
+
+
+ruleTester.run('no-unresolved ignore list', rule, {
+  valid: [
+    test({
+      code: 'import "./malformed.js"',
+      options: [{ ignore: ['\.png$', '\.gif$']}],
+    }),
+    test({
+      code: 'import "./test.giffy"',
+      options: [{ ignore: ['\.png$', '\.gif$']}],
+    }),
+
+    test({
+      code: 'import "./test.gif"',
+      options: [{ ignore: ['\.png$', '\.gif$']}],
+    }),
+
+    test({
+      code: 'import "./test.png"',
+      options: [{ ignore: ['\.png$', '\.gif$']}],
+    }),
+  ],
+
+  invalid:[
+    test({
+      code: 'import "./test.gif"',
+      options: [{ ignore: ['\.png$']}],
+      errors: [ "Unable to resolve path to module './test.gif'." ],
+    }),
+
+    test({
+      code: 'import "./test.png"',
+      options: [{ ignore: ['\.gif$']}],
+      errors: [ "Unable to resolve path to module './test.png'." ],
+    }),
+  ],
+})

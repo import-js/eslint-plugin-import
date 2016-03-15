@@ -6,8 +6,15 @@ import resolve from '../core/resolve'
 
 module.exports = function (context) {
 
+  let ignoreRegExps = []
+  if (context.options[0] != null && context.options[0].ignore != null) {
+    ignoreRegExps = context.options[0].ignore.map(p => new RegExp(p))
+  }
+
   function checkSourceValue(source) {
     if (source == null) return
+
+    if (ignoreRegExps.some(re => re.test(source.value))) return
 
     if (resolve(source.value, context) === undefined) {
       context.report(source,
@@ -80,6 +87,12 @@ module.exports.schema = [
     'properties': {
       'commonjs': { 'type': 'boolean' },
       'amd': { 'type': 'boolean' },
+      'ignore': {
+        'type': 'array',
+        'minItems': 1,
+        'items': { 'type': 'string' },
+        'uniqueItems': true,
+      },
     },
     'additionalProperties': false,
   },

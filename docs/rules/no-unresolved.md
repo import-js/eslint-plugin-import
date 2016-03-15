@@ -53,6 +53,21 @@ define(['./foo'], function (foo) { /*...*/ }) // reported if './foo' is not foun
 require(['./foo'], function (foo) { /*...*/ }) // reported if './foo' is not found
 ```
 
+#### `ignore`
+
+This rule has its own ignore list, separate from [`import/ignore`]. This is because you may want to know whether a module can be located, regardless of whether it can be parsed for exports: `node_modules`, CoffeeScript files, etc. are all good to resolve properly, but will not be parsed if configured as such via [`import/ignore`].
+
+To suppress errors from files that may not be properly resolved by your [resolver settings](../../README.md#resolver-plugins), you may add an `ignore` key with an array of `RegExp` pattern strings:
+
+```js
+/*eslint import/no-unresolved: [2, { ignore: ['\.img$'] }]*/
+
+import { x } from './mod' // may be reported, if not resolved to a module
+
+import coolImg from '../../img/coolImg.img' // will not be reported, even if not found
+```
+
+
 ## When Not To Use It
 
 If you're using a module bundler other than Node or Webpack, you may end up with
@@ -63,3 +78,6 @@ a lot of false positive reports of missing dependencies.
 - [Resolver plugins](../../README.md#resolver-plugins)
 - [Node resolver](https://npmjs.com/package/eslint-import-resolver-node) (default)
 - [Webpack resolver](https://npmjs.com/package/eslint-import-resolver-webpack)
+- [`import/ignore`] global setting
+
+[`import/ignore`]: ../../README.md#import/ignore
