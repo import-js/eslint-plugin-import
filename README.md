@@ -171,10 +171,12 @@ You may set the following settings in your `.eslintrc`:
 
 A list of regex strings that, if matched by a path, will
 not report the matching module if no `export`s are found.
-In practice, this means rules other than `no-unresolved` will not report on any
+In practice, this means rules other than [`no-unresolved`](./docs/rules/no-unresolved.md#ignore) will not report on any
 `import`s with (absolute) paths matching this pattern, _unless_ `export`s were
 found when parsing. This allows you to ignore `node_modules` but still properly
 lint packages that define a [`jsnext:main`] in `package.json` (Redux, D3's v4 packages, etc.).
+
+`no-unresolved` has its own [`ignore`](./docs/rules/no-unresolved.md#ignore) setting.
 
 **Note**: setting this explicitly will replace the default of `node_modules`, so you
 may need to include it in your own list if you still want to ignore it. Example:
