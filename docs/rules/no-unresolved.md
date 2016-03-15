@@ -80,4 +80,4 @@ a lot of false positive reports of missing dependencies.
 - [Webpack resolver](https://npmjs.com/package/eslint-import-resolver-webpack)
 - [`import/ignore`] global setting
 
-[`import/ignore`]: ../../README.md#import/ignore
+[`import/ignore`]: ../../README.md#importignore
