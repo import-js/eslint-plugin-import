@@ -77,134 +77,21 @@ export default class ExportMap {
   }
 
   static parse(path, context) {
-    var m = new ExportMap(path)
+    const exportMap = new ExportMap(path)
+    let ast
 
     try {
-      var ast = parse(path, context)
+      ast = parse(path, context)
     } catch (err) {
-      m.errors.push(err)
-      return m // can't continue
+      exportMap.errors.push(err)
+      return exportMap // can't continue
     }
 
+    const collect = determineAppropriateCollector(ast)
 
-    // attempt to collect module doc
-    ast.comments.some(c => {
-      if (c.type !== 'Block') return false
-      try {
-        const doc = doctrine.parse(c.value, { unwrap: true })
-        if (doc.tags.some(t => t.title === 'module')) {
-          m.doc = doc
-          return true
-        }
-      } catch (err) { /* ignore */ }
-      return false
-    })
+    collect(exportMap, ast, context)
 
-    const namespaces = new Map()
-
-    function remotePath(node) {
-      return resolve.relative(node.source.value, path, context.settings)
-    }
-
-    function resolveImport(node) {
-      const rp = remotePath(node)
-      if (rp == null) return null
-      return ExportMap.for(rp, context)
-    }
-
-    function getNamespace(identifier) {
-      if (!namespaces.has(identifier.name)) return
-
-      return function () {
-        return resolveImport(namespaces.get(identifier.name))
-      }
-    }
-
-    function addNamespace(object, identifier) {
-      const nsfn = getNamespace(identifier)
-      if (nsfn) {
-        Object.defineProperty(object, 'namespace', { get: nsfn })
-      }
-
-      return object
-    }
-
-
-    ast.body.forEach(function (n) {
-
-      if (n.type === 'ExportDefaultDeclaration') {
-        const exportMeta = captureDoc(n)
-        if (n.declaration.type === 'Identifier') {
-          addNamespace(exportMeta, n.declaration)
-        }
-        m.namespace.set('default', exportMeta)
-        return
-      }
-
-      if (n.type === 'ExportAllDeclaration') {
-        let remoteMap = remotePath(n)
-        if (remoteMap == null) return
-        m.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
-        return
-      }
-
-      // capture namespaces in case of later export
-      if (n.type === 'ImportDeclaration') {
-        let ns
-        if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
-          namespaces.set(ns.local.name, n)
-        }
-        return
-      }
-
-      if (n.type === 'ExportNamedDeclaration'){
-        // capture declaration
-        if (n.declaration != null) {
-          switch (n.declaration.type) {
-            case 'FunctionDeclaration':
-            case 'ClassDeclaration':
-            case 'TypeAlias': // flowtype with babel-eslint parser
-              m.namespace.set(n.declaration.id.name, captureDoc(n))
-              break
-            case 'VariableDeclaration':
-              n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.namespace.set(id.name, captureDoc(d, n))))
-              break
-          }
-        }
-
-        n.specifiers.forEach((s) => {
-          const exportMeta = {}
-          let local
-
-          switch (s.type) {
-            case 'ExportDefaultSpecifier':
-              if (!n.source) return
-              local = 'default'
-              break
-            case 'ExportNamespaceSpecifier':
-              m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-                get() { return resolveImport(n) },
-              }))
-              return
-            case 'ExportSpecifier':
-              if (!n.source) {
-                m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
-                return
-              }
-              // else falls through
-            default:
-              local = s.local.name
-              break
-          }
-
-          // todo: JSDoc
-          m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(n) })
-        })
-      }
-    })
-
-    return m
+    return exportMap
   }
 
   /**
@@ -282,6 +169,154 @@ export default class ExportMap {
     })
   }
 }
+
+// collectors
+
+function determineAppropriateCollector(ast) {
+  // use first viable collector
+  for (let collector of [collectESModuleExports]) {
+    if (collector.isAppropriate(ast)) {
+      return collector
+    }
+  }
+
+  // can't collect anything
+  return noopCollect
+}
+
+function noopCollect() { }
+
+function collectESModuleExports(exportMap, ast, context) {
+
+  // attempt to collect module doc
+  ast.comments.some(c => {
+    if (c.type !== 'Block') return false
+    try {
+      const doc = doctrine.parse(c.value, { unwrap: true })
+      if (doc.tags.some(t => t.title === 'module')) {
+        exportMap.doc = doc
+        return true
+      }
+    } catch (err) { /* ignore */ }
+    return false
+  })
+
+  const namespaces = new Map()
+
+  function remotePath(node) {
+    return resolve.relative(node.source.value, exportMap.path, context.settings)
+  }
+
+  function resolveImport(node) {
+    const rp = remotePath(node)
+    if (rp == null) return null
+    return ExportMap.for(rp, context)
+  }
+
+  function getNamespace(identifier) {
+    if (!namespaces.has(identifier.name)) return
+
+    return function () {
+      return resolveImport(namespaces.get(identifier.name))
+    }
+  }
+
+  function addNamespace(object, identifier) {
+    const nsfn = getNamespace(identifier)
+    if (nsfn) {
+      Object.defineProperty(object, 'namespace', { get: nsfn })
+    }
+
+    return object
+  }
+
+
+  ast.body.forEach(function (n) {
+
+    if (n.type === 'ExportDefaultDeclaration') {
+      const exportMeta = captureDoc(n)
+      if (n.declaration.type === 'Identifier') {
+        addNamespace(exportMeta, n.declaration)
+      }
+      exportMap.namespace.set('default', exportMeta)
+      return
+    }
+
+    if (n.type === 'ExportAllDeclaration') {
+      let remoteMap = remotePath(n)
+      if (remoteMap == null) return
+      exportMap.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
+      return
+    }
+
+    // capture namespaces in case of later export
+    if (n.type === 'ImportDeclaration') {
+      let ns
+      if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
+        namespaces.set(ns.local.name, n)
+      }
+      return
+    }
+
+    if (n.type === 'ExportNamedDeclaration'){
+      // capture declaration
+      if (n.declaration != null) {
+        switch (n.declaration.type) {
+          case 'FunctionDeclaration':
+          case 'ClassDeclaration':
+          case 'TypeAlias': // flowtype with babel-eslint parser
+            exportMap.namespace.set(n.declaration.id.name, captureDoc(n))
+            break
+          case 'VariableDeclaration':
+            n.declaration.declarations.forEach(d => recursivePatternCapture(
+              d.id, id => exportMap.namespace.set(id.name, captureDoc(d, n))))
+            break
+        }
+      }
+
+      n.specifiers.forEach((s) => {
+        const exportMeta = {}
+        let local
+
+        switch (s.type) {
+          case 'ExportDefaultSpecifier':
+            if (!n.source) return
+            local = 'default'
+            break
+          case 'ExportNamespaceSpecifier':
+            exportMap.namespace.set(s.exported.name,
+              Object.defineProperty(exportMeta, 'namespace', {
+                get() { return resolveImport(n) },
+              }))
+            return
+          case 'ExportSpecifier':
+            if (!n.source) {
+              exportMap.namespace.set(s.exported.name, addNamespace(exportMeta, s.local))
+              return
+            }
+            // else falls through
+          default:
+            local = s.local.name
+            break
+        }
+
+        // todo: JSDoc
+        exportMap.reexports.set(s.exported.name, { local, getImport: () => resolveImport(n) })
+      })
+    }
+  })
+
+  return exportMap
+}
+
+const moduleExportTypes = new Set([
+  'ExportNamedDeclaration',
+  'ExportDefaultDeclaration',
+  'ExportAllDeclaration',
+])
+
+collectESModuleExports.isAppropriate = ast => ast.body.some(n => moduleExportTypes.has(n.type))
+
 
 /**
  * parse JSDoc from the first node that has leading comments
