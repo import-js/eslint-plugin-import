@@ -14,13 +14,22 @@ function fileExistsWithCaseSync(filepath) {
   return fileExistsWithCaseSync(dir)
 }
 
+const fileExistsCache = new Map()
+
 function fileExists(filepath) {
+  if (fileExistsCache.has(filepath)) {
+    return fileExistsCache.get(filepath)
+  }
+
+  let result
   if (CASE_INSENSITIVE) {
     // short-circuit if path doesn't exist, ignoring case
-    return !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath))
+    result = !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath))
   } else {
-    return fs.existsSync(filepath)
+    result = fs.existsSync(filepath)
   }
+  fileExistsCache.set(filepath, result)
+  return result
 }
 
 export function relative(modulePath, sourceFile, settings) {
