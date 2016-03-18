@@ -51,15 +51,31 @@ describe('resolve', function () {
       expect(resolve(changedCase, context)).not.to.exist
     })
 
-    it('gets correct values after cache lifetime', function (done) {
+    // special behavior for infinity
+    describe('infinite cache', function () {
       this.timeout(1200)
-      setTimeout(function () {
-        try {
-          expect(resolve(originalCase, context)).not.to.exist
-          expect(resolve(changedCase, context)).to.exist
-          done()
-        } catch(e) { done(e) }
-      }, 1100)
+      before((done) => setTimeout(done, 1100))
+
+      const lifetimes = [ '∞', 'Infinity' ]
+      lifetimes.forEach(inf => {
+        const infiniteContext =  utils.testContext({
+          'import/cache': { 'lifetime': inf },
+        })
+
+        it(`lifetime: ${inf} still gets cached values after ~1s`, function () {
+          expect(resolve(originalCase, infiniteContext)).to.exist
+          expect(resolve(changedCase, infiniteContext)).not.to.exist
+        })
+      })
+    })
+
+    describe('finite cache', function () {
+      this.timeout(1200)
+      before((done) => setTimeout(done, 1000))
+      it('gets correct values after cache lifetime', function () {
+        expect(resolve(originalCase, context)).not.to.exist
+        expect(resolve(changedCase, context)).to.exist
+      })
     })
 
     after('restore original case', function (done) {
@@ -69,4 +85,5 @@ describe('resolve', function () {
         done)
     })
   })
+
 })

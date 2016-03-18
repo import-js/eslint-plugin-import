@@ -61,6 +61,11 @@ export function relative(modulePath, sourceFile, settings) {
     lifetime: 30,  // seconds
   }, settings['import/cache'])
 
+  // parse infinity
+  if (cacheSettings.lifetime === '∞' || cacheSettings.lifetime === 'Infinity') {
+    cacheSettings.lifetime = Infinity
+  }
+
   function withResolver(resolver, config) {
     // resolve just returns the core module id, which won't appear to exist
     try {
