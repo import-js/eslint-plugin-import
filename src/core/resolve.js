@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { dirname, basename, join } from 'path'
 
-const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
+export const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 const fileExistsCache = new Map()
 
@@ -41,21 +41,6 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
   return result
 }
 
-function fileExists(filepath, cacheSettings) {
-  let result = checkCache(filepath, cacheSettings)
-  if (result != null) return result
-
-  result = fs.existsSync(filepath)
-
-  // short-circuit if path doesn't exist, ignoring case
-  if (result && CASE_INSENSITIVE) {
-    result = fileExistsWithCaseSync(filepath, cacheSettings)
-  }
-
-  cachePath(filepath, result)
-  return result
-}
-
 export function relative(modulePath, sourceFile, settings) {
 
   const cacheSettings = Object.assign({
@@ -68,12 +53,12 @@ export function relative(modulePath, sourceFile, settings) {
   }
 
   function withResolver(resolver, config) {
-    // resolve just returns the core module id, which won't appear to exist
     try {
       const filePath = resolver.resolveImport(modulePath, sourceFile, config)
-      if (filePath === null) return null
+      if (filePath == null) return filePath
 
-      if (filePath === undefined || !fileExists(filePath, cacheSettings)) return undefined
+      // resolvers imply file existence, this double-check just ensures the case matches
+      if (CASE_INSENSITIVE && !fileExistsWithCaseSync(filePath, cacheSettings)) return undefined
 
       return filePath
     } catch (err) {
