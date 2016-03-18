@@ -3,18 +3,29 @@ import { dirname, basename, join } from 'path'
 
 const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
+const fileExistsCache = new Map()
+
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath) {
-  var dir = dirname(filepath)
-  if (dir === '/' || dir === '.' || /^[A-Z]:\\$/i.test(dir)) return true
-  var filenames = fs.readdirSync(dir)
-  if (filenames.indexOf(basename(filepath)) === -1) {
-      return false
-  }
-  return fileExistsWithCaseSync(dir)
-}
+  const dir = dirname(filepath)
 
-const fileExistsCache = new Map()
+  let result = fileExistsCache.get(filepath)
+  if (result != null) return result
+
+  // base case
+  if (dir === '/' || dir === '.' || /^[A-Z]:\\$/i.test(dir)) {
+    result = true
+  } else {
+    const filenames = fs.readdirSync(dir)
+    if (filenames.indexOf(basename(filepath)) === -1) {
+        result = false
+    } else {
+      result = fileExistsWithCaseSync(dir)
+    }
+  }
+  fileExistsCache.set(filepath, result)
+  return result
+}
 
 function fileExists(filepath) {
   if (fileExistsCache.has(filepath)) {
