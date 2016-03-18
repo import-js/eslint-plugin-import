@@ -5,11 +5,25 @@ const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 const fileExistsCache = new Map()
 
+function cachePath(filepath, result) {
+  fileExistsCache.set(filepath, { result, lastSeen: Date.now() })
+}
+
+function checkCache(filepath, { lifetime }) {
+  if (fileExistsCache.has(filepath)) {
+    const { result, lastSeen } = fileExistsCache.get(filepath)
+    // check fresness
+    if (Date.now() - lastSeen < (lifetime * 1000)) return result
+  }
+  // cache miss
+  return null
+}
+
 // http://stackoverflow.com/a/27382838
-function fileExistsWithCaseSync(filepath) {
+function fileExistsWithCaseSync(filepath, cacheSettings) {
   const dir = dirname(filepath)
 
-  let result = fileExistsCache.get(filepath)
+  let result = checkCache(filepath, cacheSettings)
   if (result != null) return result
 
   // base case
@@ -18,32 +32,34 @@ function fileExistsWithCaseSync(filepath) {
   } else {
     const filenames = fs.readdirSync(dir)
     if (filenames.indexOf(basename(filepath)) === -1) {
-        result = false
+      result = false
     } else {
-      result = fileExistsWithCaseSync(dir)
+      result = fileExistsWithCaseSync(dir, cacheSettings)
     }
   }
-  fileExistsCache.set(filepath, result)
+  cachePath(filepath, result)
   return result
 }
 
-function fileExists(filepath) {
-  if (fileExistsCache.has(filepath)) {
-    return fileExistsCache.get(filepath)
-  }
+function fileExists(filepath, cacheSettings) {
+  let result = checkCache(filepath, cacheSettings)
+  if (result != null) return result
 
-  let result
   if (CASE_INSENSITIVE) {
     // short-circuit if path doesn't exist, ignoring case
-    result = !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath))
+    result = !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath, cacheSettings))
   } else {
     result = fs.existsSync(filepath)
   }
-  fileExistsCache.set(filepath, result)
+  cachePath(filepath, result)
   return result
 }
 
 export function relative(modulePath, sourceFile, settings) {
+
+  const cacheSettings = Object.assign({
+    lifetime: 30,  // seconds
+  }, settings['import/cache'])
 
   function withResolver(resolver, config) {
     // resolve just returns the core module id, which won't appear to exist
@@ -51,7 +67,7 @@ export function relative(modulePath, sourceFile, settings) {
       const filePath = resolver.resolveImport(modulePath, sourceFile, config)
       if (filePath === null) return null
 
-      if (filePath === undefined || !fileExists(filePath)) return undefined
+      if (filePath === undefined || !fileExists(filePath, cacheSettings)) return undefined
 
       return filePath
     } catch (err) {
