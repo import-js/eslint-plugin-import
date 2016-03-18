@@ -195,6 +195,35 @@ settings:
 
 See [resolver plugins](#resolver-plugins).
 
+#### `import/cache`
+
+Settings for cache behavior. Memoization is used at various levels to avoid the copious amount of `fs.statSync`/module parse calls required to correctly report errors.
+
+For normal `eslint` console runs, the cache lifetime is irrelevant, as we can strongly assume that files should not be changing during the lifetime of the linter process (and thus, the cache in memory)
+
+For long-lasting processes, like [`eslint_d`] or [`eslint-loader`], however, it's important that there be some notion of staleness.
+
+If you never use [`eslint_d`] or [`eslint-loader`], you may set the cache lifetime to `Infinity` and everything should be fine:
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/cache:
+    lifetime: ∞  # or Infinity
+```
+
+Otherwise, set some integer, and cache entries will be evicted after that many seconds have elapsed:
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/cache:
+    lifetime: 5  # 30 is the default
+```
+
+[`eslint_d`]: https://www.npmjs.com/package/eslint_d
+[`eslint-loader`]: https://www.npmjs.com/package/eslint-loader
+
 ## SublimeLinter-eslint
 
 SublimeLinter-eslint introduced a change to support `.eslintignore` files
