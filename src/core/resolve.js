@@ -45,12 +45,13 @@ function fileExists(filepath, cacheSettings) {
   let result = checkCache(filepath, cacheSettings)
   if (result != null) return result
 
-  if (CASE_INSENSITIVE) {
-    // short-circuit if path doesn't exist, ignoring case
-    result = !(!fs.existsSync(filepath) || !fileExistsWithCaseSync(filepath, cacheSettings))
-  } else {
-    result = fs.existsSync(filepath)
+  result = fs.existsSync(filepath)
+
+  // short-circuit if path doesn't exist, ignoring case
+  if (result && CASE_INSENSITIVE) {
+    result = fileExistsWithCaseSync(filepath, cacheSettings)
   }
+
   cachePath(filepath, result)
   return result
 }
