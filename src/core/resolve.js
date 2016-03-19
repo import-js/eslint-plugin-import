@@ -5,18 +5,18 @@ export const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 const fileExistsCache = new Map()
 
-function cachePath(filepath, result) {
-  fileExistsCache.set(filepath, { result, lastSeen: Date.now() })
+function cachePath(cacheKey, result) {
+  fileExistsCache.set(cacheKey, { result, lastSeen: Date.now() })
 }
 
-function checkCache(filepath, { lifetime }) {
-  if (fileExistsCache.has(filepath)) {
-    const { result, lastSeen } = fileExistsCache.get(filepath)
+function checkCache(cacheKey, { lifetime }) {
+  if (fileExistsCache.has(cacheKey)) {
+    const { result, lastSeen } = fileExistsCache.get(cacheKey)
     // check fresness
     if (Date.now() - lastSeen < (lifetime * 1000)) return result
   }
   // cache miss
-  return null
+  return undefined
 }
 
 // http://stackoverflow.com/a/27382838
@@ -43,6 +43,9 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 
 export function relative(modulePath, sourceFile, settings) {
 
+  const sourceDir = dirname(sourceFile)
+      , cacheKey = sourceDir + hashObject(settings) + modulePath
+
   const cacheSettings = Object.assign({
     lifetime: 30,  // seconds
   }, settings['import/cache'])
@@ -50,6 +53,14 @@ export function relative(modulePath, sourceFile, settings) {
   // parse infinity
   if (cacheSettings.lifetime === '∞' || cacheSettings.lifetime === 'Infinity') {
     cacheSettings.lifetime = Infinity
+  }
+
+  const cachedPath = checkCache(cacheKey, cacheSettings)
+  if (cachedPath !== undefined) return cachedPath
+
+  function cache(path) {
+    cachePath(cacheKey, path)
+    return path
   }
 
   function withResolver(resolver, config) {
@@ -75,9 +86,12 @@ export function relative(modulePath, sourceFile, settings) {
     const resolver = require(`eslint-import-resolver-${name}`)
 
     let fullPath = withResolver(resolver, config)
-    if (fullPath !== undefined) return fullPath
+    if (fullPath !== undefined) {
+      return cache(fullPath)
+    }
   }
 
+  return cache(undefined)
 }
 
 function resolverReducer(resolvers, map) {
@@ -116,3 +130,11 @@ export default function resolve(p, context) {
                  )
 }
 resolve.relative = relative
+
+
+import { createHash } from 'crypto'
+function hashObject(object) {
+  const settingsShasum = createHash('sha1')
+  settingsShasum.update(JSON.stringify(object))
+  return settingsShasum.digest('hex')
+}

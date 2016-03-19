@@ -344,4 +344,3 @@ function hashObject(object) {
   settingsShasum.update(JSON.stringify(object))
   return settingsShasum.digest('hex')
 }
-``
