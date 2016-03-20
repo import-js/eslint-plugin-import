@@ -7,6 +7,8 @@ import parse from './parse'
 import resolve from './resolve'
 import isIgnored from './ignore'
 
+import { hashObject } from './hash'
+
 // map from settings sha1 => path => export map objects
 const exportCaches = new Map()
 
@@ -39,11 +41,14 @@ export default class ExportMap {
   static for(path, context) {
     let exportMap
 
-    const cacheKey = hashObject({
+    const hash = createHash('sha256')
+    hashObject(hash, {
       settings: context.settings,
       parserPath: context.parserPath,
       parserOptions: context.parserOptions,
     })
+    const cacheKey = hash.digest('hex')
+
     let exportCache = exportCaches.get(cacheKey)
     if (exportCache === undefined) {
       exportCache = new Map()
@@ -337,10 +342,4 @@ export function recursivePatternCapture(pattern, callback) {
       })
       break
   }
-}
-
-function hashObject(object) {
-  const settingsShasum = createHash('sha1')
-  settingsShasum.update(JSON.stringify(object))
-  return settingsShasum.digest('hex')
 }

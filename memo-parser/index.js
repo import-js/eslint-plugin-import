@@ -1,7 +1,8 @@
 "use strict"
 
 const crypto = require('crypto')
-    , moduleRequire = require('../lib/core/module-require')
+    , moduleRequire = require('../lib/core/module-require').default
+    , hashObject = require('../lib/core/hash').hashObject
 
 const cache = new Map()
 
@@ -13,22 +14,6 @@ const parserOptions = {
   tokens: true,
   comment: true,
   attachComment: true,
-}
-
-function hashObject(hash, options) {
-  hash.update("{")
-  Object.keys(options).sort().forEach(key => {
-    hash.update(JSON.stringify(key))
-    hash.update(':')
-    const value = options[key]
-    if (value instanceof Object) {
-      hashObject(hash, value)
-    } else {
-      hash.update(JSON.stringify(value))
-    }
-    hash.update(",")
-  })
-  hash.update("}")
 }
 
 exports.parse = function parse(content, options) {
@@ -44,7 +29,7 @@ exports.parse = function parse(content, options) {
   let ast = cache.get(key)
   if (ast != null) return ast
 
-  const realParser = moduleRequire.default(options.parser)
+  const realParser = moduleRequire(options.parser)
 
   ast = realParser.parse(content, options)
   cache.set(key, ast)
