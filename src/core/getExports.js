@@ -9,8 +9,7 @@ import isIgnored from './ignore'
 
 import { hashObject } from './hash'
 
-// map from settings sha1 => path => export map objects
-const exportCaches = new Map()
+const exportCache = new Map()
 
 export default class ExportMap {
   constructor(path) {
@@ -41,21 +40,15 @@ export default class ExportMap {
   static for(path, context) {
     let exportMap
 
-    const hash = createHash('sha256')
-    hashObject(hash, {
+    const cacheKey = hashObject(createHash('sha256'), {
       settings: context.settings,
       parserPath: context.parserPath,
       parserOptions: context.parserOptions,
-    })
-    const cacheKey = hash.digest('hex')
+      path,
+    }).digest('hex')
 
-    let exportCache = exportCaches.get(cacheKey)
-    if (exportCache === undefined) {
-      exportCache = new Map()
-      exportCaches.set(cacheKey, exportCache)
-    }
+    exportMap = exportCache.get(cacheKey)
 
-    exportMap = exportCache.get(path)
     // return cached ignore
     if (exportMap === null) return null
 
@@ -76,7 +69,7 @@ export default class ExportMap {
       exportMap = null
     }
 
-    exportCache.set(path, exportMap)
+    exportCache.set(cacheKey, exportMap)
 
     return exportMap
   }

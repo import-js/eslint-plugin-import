@@ -13,6 +13,8 @@ export default function hashify(hash, value) {
   } else {
     hash.update(stringify(value) || 'undefined')
   }
+
+  return hash
 }
 
 export function hashArray(hash, array) {
@@ -22,6 +24,8 @@ export function hashArray(hash, array) {
     hash.update(',')
   }
   hash.update(']')
+
+  return hash
 }
 
 export function hashObject(hash, object) {
@@ -33,4 +37,6 @@ export function hashObject(hash, object) {
     hash.update(",")
   })
   hash.update("}")
+
+  return hash
 }
