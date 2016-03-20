@@ -67,18 +67,20 @@ export default class ExportMap {
       // future: check content equality?
     }
 
-    exportMap = ExportMap.parse(path, context)
+    const content = fs.readFileSync(path, { encoding: 'utf8' })
+
+    exportMap = ExportMap.parse(path, content, context)
     exportMap.mtime = stats.mtime
 
     exportCache.set(cacheKey, exportMap)
     return exportMap
   }
 
-  static parse(path, context) {
+  static parse(path, content, context) {
     var m = new ExportMap(path)
 
     try {
-      var ast = parse(path, context)
+      var ast = parse(content, context)
     } catch (err) {
       m.errors.push(err)
       return m // can't continue

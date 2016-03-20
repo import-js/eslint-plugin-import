@@ -1,7 +1,6 @@
-import fs from 'fs'
 import moduleRequire from './module-require'
 
-export default function (p, context) {
+export default function (content, context) {
 
   if (context == null) throw new Error("need context to parse properly")
 
@@ -19,7 +18,5 @@ export default function (p, context) {
   // require the parser relative to the main module (i.e., ESLint)
   const parser = moduleRequire(parserPath)
 
-  return parser.parse(
-    fs.readFileSync(p, {encoding: 'utf8'}),
-    parserOptions)
+  return parser.parse(content, parserOptions)
 }
