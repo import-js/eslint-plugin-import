@@ -4,10 +4,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Added
-- this change log ([#216])
-- experimental memoizing [parser](./memo-parser/README.md)
+Major perf improvements. Between parsing only once and ignoring gigantic, non-module `node_modules`,
+there is very little added time.
 
+My test project takes 17s to lint completely, down from 55s, when using the
+memoizing parser, and takes only 27s with naked `babel-eslint` (thus, reparsing local modules).
+
+### Added
+- This change log ([#216])
+- Experimental memoizing [parser](./memo-parser/README.md)
+
+### Fixed
+- Huge reduction in execution time by _only_ ignoring [`import/ignore` setting] if
+  something that looks like an `export` is detected in the module content.
 
 ## [1.2.0] - 2016-03-19
 Thanks @lencioni for identifying a huge amount of rework in resolve and kicking

@@ -11,6 +11,14 @@ import { hashObject } from './hash'
 
 const exportCache = new Map()
 
+/**
+ * detect exports without a full parse.
+ * used primarily to ignore the import/ignore setting, iif it looks like
+ * there might be something there (i.e., jsnext:main is set).
+ * @type {RegExp}
+ */
+const hasExports = new RegExp('(^|[\\n;])\\s*export\\s[\\w{*]')
+
 export default class ExportMap {
   constructor(path) {
     this.path = path
@@ -52,12 +60,6 @@ export default class ExportMap {
     // return cached ignore
     if (exportMap === null) return null
 
-    // check for and cache ignore
-    if (isIgnored(path, context)) {
-      exportCache.set(cacheKey, null)
-      return null
-    }
-
     const stats = fs.statSync(path)
     if (exportMap != null) {
       // date equality check
@@ -68,6 +70,12 @@ export default class ExportMap {
     }
 
     const content = fs.readFileSync(path, { encoding: 'utf8' })
+
+    // check for and cache ignore
+    if (isIgnored(path, context) && !hasExports.test(content)) {
+      exportCache.set(cacheKey, null)
+      return null
+    }
 
     exportMap = ExportMap.parse(path, content, context)
     exportMap.mtime = stats.mtime
@@ -85,7 +93,6 @@ export default class ExportMap {
       m.errors.push(err)
       return m // can't continue
     }
-
 
     // attempt to collect module doc
     ast.comments.some(c => {
