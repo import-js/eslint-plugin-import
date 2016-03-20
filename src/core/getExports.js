@@ -52,6 +52,12 @@ export default class ExportMap {
     // return cached ignore
     if (exportMap === null) return null
 
+    // check for and cache ignore
+    if (isIgnored(path, context)) {
+      exportCache.set(cacheKey, null)
+      return null
+    }
+
     const stats = fs.statSync(path)
     if (exportMap != null) {
       // date equality check
@@ -64,13 +70,7 @@ export default class ExportMap {
     exportMap = ExportMap.parse(path, context)
     exportMap.mtime = stats.mtime
 
-    // ignore empties, optionally
-    if (exportMap.namespace.size === 0 && isIgnored(path, context)) {
-      exportMap = null
-    }
-
     exportCache.set(cacheKey, exportMap)
-
     return exportMap
   }
 
