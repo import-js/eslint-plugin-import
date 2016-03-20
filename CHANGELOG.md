@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - this change log ([#216])
+- experimental memoizing [parser](./memo-parser/README.md)
 
 
 ## [1.2.0] - 2016-03-19
