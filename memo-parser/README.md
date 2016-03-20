@@ -1,4 +1,4 @@
-# eslint-plugin-import/parser
+# eslint-plugin-import/memo-parser
 
 This parser is just a memoizing wrapper around some actual parser.
 
