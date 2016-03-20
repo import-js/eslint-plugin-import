@@ -1,4 +1,5 @@
 import fs from 'fs'
+import moduleRequire from './module-require'
 
 export default function (p, context) {
 
@@ -16,37 +17,9 @@ export default function (p, context) {
   parserOptions.attachComment = true
 
   // require the parser relative to the main module (i.e., ESLint)
-  const parser = requireParser(parserPath)
+  const parser = moduleRequire(parserPath)
 
   return parser.parse(
     fs.readFileSync(p, {encoding: 'utf8'}),
     parserOptions)
-}
-
-import Module from 'module'
-import * as path from 'path'
-
-// borrowed from babel-eslint
-function createModule(filename) {
-  var mod = new Module(filename)
-  mod.filename = filename
-  mod.paths = Module._nodeModulePaths(path.dirname(filename))
-  return mod
-}
-
-function requireParser(p) {
-  try {
-    // attempt to get espree relative to eslint
-    const eslintPath = require.resolve('eslint')
-    const eslintModule = createModule(eslintPath)
-    return require(Module._resolveFilename(p, eslintModule))
-  } catch(err) { /* ignore */ }
-
-  try {
-    // try relative to entry point
-    return require.main.require(p)
-  } catch(err) { /* ignore */ }
-
-  // finally, try from here
-  return require(p)
 }
