@@ -1,3 +1,4 @@
+import assign from 'object-assign'
 import { expect } from  'chai'
 import ExportMap from 'core/getExports'
 
@@ -45,7 +46,7 @@ describe('getExports', function () {
     const firstAccess = ExportMap.get('./named-exports', fakeContext)
     expect(firstAccess).to.exist
 
-    const differentSettings = Object.assign(
+    const differentSettings = assign(
       {},
       fakeContext,
       { parserPath: 'espree' })

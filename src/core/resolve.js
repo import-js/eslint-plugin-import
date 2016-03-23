@@ -1,3 +1,7 @@
+import 'es6-symbol/implement'
+import Map from 'es6-map'
+import assign from 'object-assign'
+
 import fs from 'fs'
 import { dirname, basename, join } from 'path'
 
@@ -46,7 +50,7 @@ export function relative(modulePath, sourceFile, settings) {
   const sourceDir = dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
 
-  const cacheSettings = Object.assign({
+  const cacheSettings = assign({
     lifetime: 30,  // seconds
   }, settings['import/cache'])
 
@@ -82,7 +86,7 @@ export function relative(modulePath, sourceFile, settings) {
 
   const resolvers = resolverReducer(configResolvers, new Map())
 
-  for (let [name, config] of resolvers.entries()) {
+  for (let [name, config] of resolvers) {
     const resolver = require(`eslint-import-resolver-${name}`)
 
     let fullPath = withResolver(resolver, config)

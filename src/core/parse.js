@@ -1,4 +1,5 @@
 import moduleRequire from './module-require'
+import assign from 'object-assign'
 
 export default function (content, context) {
 
@@ -9,8 +10,8 @@ export default function (content, context) {
   if (!parserPath) throw new Error("parserPath is required!")
 
   // hack: espree blows up with frozen options
-  parserOptions = Object.assign({}, parserOptions)
-  parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
+  parserOptions = assign({}, parserOptions)
+  parserOptions.ecmaFeatures = assign({}, parserOptions.ecmaFeatures)
 
   // always attach comments
   parserOptions.attachComment = true
