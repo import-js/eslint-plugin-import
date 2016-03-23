@@ -7,8 +7,13 @@ var webpack = require('../index')
 var file = path.join(__dirname, 'files', 'dummy.js')
 
 describe("resolve.alias", function () {
-  it("works", function () {
-    expect(webpack.resolveImport('foo', file)).to.exist
+  var resolved
+  before(function () { resolved = webpack.resolve('foo', file) })
+
+  it("is found", () => expect(resolved).to.have.property('found', true))
+
+  it("is correct", function () {
+    expect(resolved).to.have.property('path')
       .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'))
   })
 })

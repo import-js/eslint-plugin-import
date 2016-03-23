@@ -20,7 +20,7 @@ exports.interfaceVersion = 2
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
-exports.resolve = function resolve(source, file, settings) {
+exports.resolve = function (source, file, settings) {
 
   // strip loaders
   var finalBang = source.lastIndexOf('!')
