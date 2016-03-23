@@ -6,6 +6,10 @@
   "directories": {
     "test": "tests"
   },
+  "files": [
+    "lib",
+    "config"
+  ],
   "scripts": {
     "watch": "cross-env NODE_PATH=./lib gulp watch-test",
     "cover": "gulp pretest && cross-env NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
