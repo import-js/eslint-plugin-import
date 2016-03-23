@@ -1,3 +1,7 @@
+import 'es6-symbol/implement'
+import Map from 'es6-map'
+import Set from 'es6-set'
+
 import resolve from '../core/resolve'
 
 module.exports = function (context) {

@@ -1,3 +1,5 @@
+import 'es6-symbol/implement'
+
 var expect = require('chai').expect
 
 var path = require('path')

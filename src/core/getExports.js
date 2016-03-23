@@ -1,3 +1,6 @@
+import 'es6-symbol/implement'
+import Map from 'es6-map'
+
 import * as fs from 'fs'
 
 import { createHash } from 'crypto'

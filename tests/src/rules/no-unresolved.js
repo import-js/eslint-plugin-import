@@ -1,5 +1,6 @@
-var path = require('path')
+import * as path from 'path'
 
+import assign from 'object-assign'
 import { test } from '../utils'
 
 import { RuleTester } from 'eslint'
@@ -11,7 +12,7 @@ function runResolverTests(resolver) {
   // redefine 'test' to set a resolver
   // thus 'rest'. needed something 4-chars-long for formatting simplicity
   function rest(specs) {
-    specs.settings = Object.assign({},
+    specs.settings = assign({},
       specs.settings,
       { 'import/resolver': resolver }
     )

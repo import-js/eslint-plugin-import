@@ -1,3 +1,6 @@
+import 'es6-symbol/implement'
+import Map from 'es6-map'
+
 import Exports from '../core/getExports'
 import importDeclaration from '../importDeclaration'
 import declaredScope from '../core/declaredScope'

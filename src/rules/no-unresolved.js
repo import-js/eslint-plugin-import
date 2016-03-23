@@ -2,6 +2,9 @@
  * @fileOverview Ensures that an imported path exists, given resolution rules.
  * @author Ben Mosher
  */
+
+import 'es6-symbol/implement'
+
 import resolve from '../core/resolve'
 
 module.exports = function (context) {
