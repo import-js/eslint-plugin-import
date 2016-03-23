@@ -68,16 +68,28 @@ export function relative(modulePath, sourceFile, settings) {
   }
 
   function withResolver(resolver, config) {
-    try {
-      const filePath = resolver.resolveImport(modulePath, sourceFile, config)
-      if (filePath == null) return filePath
 
-      // resolvers imply file existence, this double-check just ensures the case matches
-      if (CASE_INSENSITIVE && !fileExistsWithCaseSync(filePath, cacheSettings)) return undefined
+    function v1() {
+      try {
+        const path = resolver.resolveImport(modulePath, sourceFile, config)
+        if (path === undefined) return { found: false }
+        return { found: true, path }
+      } catch (err) {
+        return { found: false }
+      }
+    }
 
-      return filePath
-    } catch (err) {
-      return undefined
+    function v2() {
+      return resolver.resolve(modulePath, sourceFile, config)
+    }
+
+    switch (resolver.interfaceVersion) {
+      case 2:
+        return v2()
+
+      default:
+      case 1:
+        return v1()
     }
   }
 
@@ -89,10 +101,15 @@ export function relative(modulePath, sourceFile, settings) {
   for (let [name, config] of resolvers) {
     const resolver = require(`eslint-import-resolver-${name}`)
 
-    let fullPath = withResolver(resolver, config)
-    if (fullPath !== undefined) {
-      return cache(fullPath)
+    let { path: fullPath, found } = withResolver(resolver, config)
+
+    // resolvers imply file existence, this double-check just ensures the case matches
+    if (found && CASE_INSENSITIVE && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
+      // reject resolved path
+      fullPath = undefined
     }
+
+    if (found) return cache(fullPath)
   }
 
   return cache(undefined)

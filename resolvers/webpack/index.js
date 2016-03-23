@@ -8,6 +8,8 @@ var findRoot = require('find-root')
 
 var resolveAlias = require('./resolve-alias')
 
+exports.interfaceVersion = 2
+
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
  *
@@ -18,7 +20,7 @@ var resolveAlias = require('./resolve-alias')
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
-exports.resolveImport = function resolveImport(source, file, settings) {
+exports.resolve = function resolve(source, file, settings) {
 
   // strip loaders
   var finalBang = source.lastIndexOf('!')
@@ -26,7 +28,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
     source = source.slice(finalBang + 1)
   }
 
-  if (resolve.isCore(source)) return null
+  if (resolve.isCore(source)) return { found: true, path: null }
 
   var configPath = get(settings, 'config', 'webpack.config.js')
     , webpackConfig
@@ -46,7 +48,7 @@ exports.resolveImport = function resolveImport(source, file, settings) {
   }
 
   // externals
-  if (findExternal(source, webpackConfig.externals)) return null
+  if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
 
   // replace alias if needed
   source = resolveAlias(source, get(webpackConfig, ['resolve', 'alias'], {}))
@@ -61,20 +63,24 @@ exports.resolveImport = function resolveImport(source, file, settings) {
   }
 
   // otherwise, resolve "normally"
-  return resolve.sync(source, {
-    basedir: path.dirname(file),
+  try {
+    return { found: true, path: resolve.sync(source, {
+      basedir: path.dirname(file),
 
-    // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
-    extensions: get(webpackConfig, ['resolve', 'extensions'])
-      || ['', '.webpack.js', '.web.js', '.js'],
+      // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
+      extensions: get(webpackConfig, ['resolve', 'extensions'])
+        || ['', '.webpack.js', '.web.js', '.js'],
 
-    // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-    moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
-      || ['web_modules', 'node_modules'],
+      // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
+      moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
+        || ['web_modules', 'node_modules'],
 
-    paths: paths,
-    packageFilter: packageFilter.bind(null, webpackConfig),
-  })
+      paths: paths,
+      packageFilter: packageFilter.bind(null, webpackConfig),
+    }) }
+  } catch (err) {
+    return { found: false }
+  }
 }
 
 function findExternal(source, externals) {

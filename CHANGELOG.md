@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
+  Still backwards-compatible with the original version of the resolver spec.
+
 ### Changed
 - using `package.json/files` instead of `.npmignore` for package file inclusion ([#228], thanks [@mathieudutour])
 
