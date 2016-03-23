@@ -15,7 +15,7 @@
     "watch": "cross-env NODE_PATH=./lib gulp watch-test",
     "cover": "gulp pretest && cross-env NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
     "posttest": "eslint ./src",
-    "test": "cross-env NODE_PATH=./lib gulp test",
+    "test": "cross-env NODE_PATH=./lib gulp test && for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done",
     "ci-test": "eslint ./src && gulp pretest && cross-env NODE_PATH=./lib istanbul cover --report lcovonly --dir reports/coverage _mocha tests/lib/ -- --recursive --reporter dot",
     "debug": "cross-env NODE_PATH=./lib mocha debug --recursive --reporter dot tests/lib/",
     "prepublish": "gulp prepublish",
