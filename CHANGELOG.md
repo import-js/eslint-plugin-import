@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
   Still backwards-compatible with the original version of the resolver spec.
+- [Resolver documentation](./resolvers/README.md)
 
 ### Changed
 - using `package.json/files` instead of `.npmignore` for package file inclusion ([#228], thanks [@mathieudutour])
