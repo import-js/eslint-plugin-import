@@ -10,7 +10,7 @@ describe("resolve.alias", function () {
   var resolved
   before(function () { resolved = webpack.resolve('foo', file) })
 
-  it("is found", () => expect(resolved).to.have.property('found', true))
+  it("is found", function () { expect(resolved).to.have.property('found', true) })
 
   it("is correct", function () {
     expect(resolved).to.have.property('path')
