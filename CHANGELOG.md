@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- using `package.json/files` instead of `.npmignore` for package file inclusion ([#228], thanks [@mathieudutour])
 
 ## [1.3.0] - 2016-03-20
 Major perf improvements. Between parsing only once and ignoring gigantic, non-module `node_modules`,
@@ -120,6 +122,7 @@ for info on changes for earlier releases.
 [`no-amd`]: ./docs/rules/no-amd.md
 [`namespace`]: ./docs/rules/namespace.md
 
+[#228]: https://github.com/benmosher/eslint-plugin-import/pull/228
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
@@ -149,3 +152,5 @@ for info on changes for earlier releases.
 [0.12.1]: https://github.com/benmosher/eslint-plugin-import/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
+
+[@mathieudutour]: https://github.com/mathieudutour
