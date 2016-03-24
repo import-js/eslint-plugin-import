@@ -8,7 +8,8 @@
   },
   "files": [
     "lib",
-    "config"
+    "config",
+    "memo-parser"
   ],
   "scripts": {
     "watch": "cross-env NODE_PATH=./lib gulp watch-test",
