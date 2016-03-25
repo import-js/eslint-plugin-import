@@ -1,7 +1,5 @@
 language: node_js
 node_js:
-  - 0.10
-  # - 0.12 # assume 0.12 works if 0.10 does.
   - 4
   - 6
 
