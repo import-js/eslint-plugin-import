@@ -284,3 +284,31 @@ ruleTester.run('no-unresolved ignore list', rule, {
     }),
   ],
 })
+
+ruleTester.run('no-unresolved unknown resolver', rule, {
+  valid: [],
+
+  invalid:[
+
+    // logs resolver load error
+    test({
+      code: 'import "./malformed.js"',
+      settings: { 'import/resolver': 'foo' },
+      errors: [
+        `Resolve error: unable to load resolver "foo".`,
+        `Unable to resolve path to module './malformed.js'.`,
+      ],
+    }),
+
+    // only logs resolver message once
+    test({
+      code: 'import "./malformed.js"; import "./fake.js"',
+      settings: { 'import/resolver': 'foo' },
+      errors: [
+        `Resolve error: unable to load resolver "foo".`,
+        `Unable to resolve path to module './malformed.js'.`,
+        `Unable to resolve path to module './fake.js'.`,
+      ],
+    }),
+  ],
+})

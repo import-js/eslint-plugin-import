@@ -1,5 +1,6 @@
 import 'es6-symbol/implement'
 import Map from 'es6-map'
+import Set from 'es6-set'
 import assign from 'object-assign'
 
 import fs from 'fs'
@@ -99,7 +100,7 @@ export function relative(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map())
 
   for (let [name, config] of resolvers) {
-    const resolver = require(`eslint-import-resolver-${name}`)
+    const resolver = requireResolver(name)
 
     let { path: fullPath, found } = withResolver(resolver, config)
 
@@ -136,8 +137,18 @@ function resolverReducer(resolvers, map) {
   throw new Error('invalid resolver config')
 }
 
+function requireResolver(name) {
+  try {
+    return require(`eslint-import-resolver-${name}`)
+  } catch (err) {
+    throw new Error(`unable to load resolver "${name}".`)
+  }
+}
+
+const erroredContexts = new Set()
+
 /**
- * Givent
+ * Given
  * @param  {string} p - module path
  * @param  {object} context - ESLint context
  * @return {string} - the full module filesystem path;
@@ -145,10 +156,20 @@ function resolverReducer(resolvers, map) {
  *                    undefined if not found
  */
 export default function resolve(p, context) {
-  return relative( p
-                 , context.getFilename()
-                 , context.settings
-                 )
+  try {
+    return relative( p
+                   , context.getFilename()
+                   , context.settings
+                   )
+  } catch (err) {
+    if (!erroredContexts.has(context)) {
+      context.report({
+        message: `Resolve error: ${err.message}`,
+        loc: { line: 1, col: 0 },
+      })
+      erroredContexts.add(context)
+    }
+  }
 }
 resolve.relative = relative
 
