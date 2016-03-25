@@ -27,6 +27,9 @@
     "object-assign": "^4.0.1",
     "resolve": "^1.1.6"
   },
+  "peerDependencies": {
+    "eslint-plugin-import": ">=1.4.0"
+  },
   "devDependencies": {
     "chai": "^3.4.1",
     "mocha": "^2.3.4"
