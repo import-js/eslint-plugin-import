@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - using `package.json/files` instead of `.npmignore` for package file inclusion ([#228], thanks [@mathieudutour])
+- using `es6-*` ponyfills instead of `babel-runtime`
 
 ## [1.3.0] - 2016-03-20
 Major perf improvements. Between parsing only once and ignoring gigantic, non-module `node_modules`,
