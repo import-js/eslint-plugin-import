@@ -6,7 +6,7 @@ node_js:
   - stable
 
 install:
-  - npm -g install npm@2
+  - npm -g install npm@3
   - npm install
   # install all resolver deps
   - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"

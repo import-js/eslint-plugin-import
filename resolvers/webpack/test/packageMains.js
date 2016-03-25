@@ -10,27 +10,27 @@ var file = path.join(__dirname, 'package-mains', 'dummy.js')
 describe("packageMains", function () {
 
   it("captures jsnext", function () {
-    expect(webpack.resolveImport('./jsnext', file))
+    expect(webpack.resolve('./jsnext', file)).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'jsnext', 'src', 'index.js'))
   })
 
   it("captures webpack", function () {
-    expect(webpack.resolveImport('./webpack', file))
+    expect(webpack.resolve('./webpack', file)).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'webpack', 'webpack.js'))
   })
 
   it("captures jam (array path)", function () {
-    expect(webpack.resolveImport('./jam', file))
+    expect(webpack.resolve('./jam', file)).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'jam', 'jam.js'))
   })
 
   it("uses configured packageMains, if provided", function () {
-    expect(webpack.resolveImport('./webpack', file, { config: 'webpack.alt.config.js' }))
+    expect(webpack.resolve('./webpack', file, { config: 'webpack.alt.config.js' })).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'webpack', 'index.js'))
   })
 
   it("always defers to jsnext:main, regardless of config", function () {
-    expect(webpack.resolveImport('./jsnext', file, { config: 'webpack.alt.config.js' }))
+    expect(webpack.resolve('./jsnext', file, { config: 'webpack.alt.config.js' })).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'jsnext', 'src', 'index.js'))
   })
 

@@ -2,10 +2,15 @@ var resolve = require('resolve')
   , path = require('path')
   , assign = require('object-assign')
 
-exports.resolveImport = function resolveImport(source, file, config) {
-  if (resolve.isCore(source)) return null
+exports.interfaceVersion = 2
 
-  return resolve.sync(source, opts(file, config))
+exports.resolve = function (source, file, config) {
+  if (resolve.isCore(source)) return { found: true, path: null }
+  try {
+    return { found: true, path: resolve.sync(source, opts(file, config)) }
+  } catch (err) {
+    return { found: false }
+  }
 }
 
 function opts(file, config) {

@@ -85,7 +85,7 @@ rules:
   # etc...
 ```
 
-# Resolver plugins
+# Resolvers
 
 With the advent of module bundlers and the current state of modules and module
 syntax specs, it's not always obvious where `import x from 'module'` should look
@@ -99,48 +99,10 @@ Node does not, such as loaders (`import 'file!./whatever'`) and a number of
 aliasing schemes, such as [`externals`]: mapping a module id to a global name at
 runtime (allowing some modules to be included more traditionally via script tags).
 
-In the interest of supporting both of these, v0.11 introduces resolver plugins.
-At the moment, these are modules exporting a single function:
-
-```js
-
-exports.resolveImport = function (source, file, config) {
-  // return source's absolute path given
-  // - file: absolute path of importing module
-  // - config: optional config provided for this resolver
-
-  // return `null` if source is a "core" module (i.e. "fs", "crypto") that
-  // can't be found on the filesystem
-}
-```
-
-The default `node` plugin that uses [`resolve`] is a handful of lines:
-
-```js
-var resolve = require('resolve')
-  , path = require('path')
-  , assign = require('object-assign')
-
-exports.resolveImport = function resolveImport(source, file, config) {
-  if (resolve.isCore(source)) return null
-
-  return resolve.sync(source, opts(path.dirname(file), config))
-}
-
-function opts(basedir, config) {
-  return assign( {}
-               , config
-               , { basedir: basedir }
-               )
-}
-```
-
-It essentially just uses the current file to get a reference base directory (`basedir`)
-and then passes through any explicit config from the `.eslintrc`; things like
-non-standard file extensions, module directories, etc.
+In the interest of supporting both of these, v0.11 introduces resolvers.
 
 Currently [Node] and [Webpack] resolution have been implemented, but the
-resolvers are just npm packages, so third party packages are supported (and encouraged!).
+resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
 Just install a resolver as `eslint-import-resolver-foo` and reference it as such:
 
@@ -156,6 +118,8 @@ settings:
   import/resolver:
     foo: { someConfigKey: value }
 ```
+
+If you are interesting in writing a resolver, see the [spec](./resolvers/README.md) for more details.
 
 [`resolve`]: https://www.npmjs.com/package/resolve
 [`externals`]: http://webpack.github.io/docs/library-and-externals.html
@@ -193,7 +157,7 @@ settings:
 
 #### `import/resolver`
 
-See [resolver plugins](#resolver-plugins).
+See [resolvers](#resolvers).
 
 #### `import/cache`
 
