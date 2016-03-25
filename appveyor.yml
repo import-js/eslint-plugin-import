@@ -19,7 +19,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
 
   # update npm (only needed for Node 0.10)
-  # - npm -g install npm@2
+  - npm -g install npm@3
   # - set PATH=%APPDATA%\npm;%PATH%
 
   # install modules
