@@ -1,6 +1,3 @@
-import 'es6-symbol/implement'
-import Map from 'es6-map'
-import Set from 'es6-set'
 import assign from 'object-assign'
 
 import fs from 'fs'

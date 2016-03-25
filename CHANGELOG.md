@@ -7,6 +7,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - report resolver errors at the top of the linted file
 
+### Removed
+- support for Node 0.10, via `es6-*` ponyfills. Using native Map/Set/Symbol.
+
 ## [1.4.0] - 2016-03-25
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
