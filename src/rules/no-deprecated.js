@@ -1,5 +1,3 @@
-import Map from 'es6-map'
-
 import Exports from '../core/getExports'
 import declaredScope from '../core/declaredScope'
 
