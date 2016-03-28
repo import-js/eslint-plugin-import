@@ -1,4 +1,4 @@
-import Exports from '../core/getExports'
+import Exports from 'eslint-module-utils/ExportMap'
 
 module.exports = function (context) {
   function checkSpecifiers(key, type, node) {

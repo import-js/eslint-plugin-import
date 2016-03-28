@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import { expect } from 'chai'
-import parse from 'core/parse'
+import parse from 'eslint-module-utils/parse'
 
 import { getFilename } from '../utils'
 

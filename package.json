@@ -51,6 +51,7 @@
     "eslint": "2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
+    "eslint-module-utils": "file:./utils",
     "glob": "^6.0.2",
     "gulp": "^3.9.0",
     "gulp-babel": "6.1.2",
@@ -66,7 +67,6 @@
   },
   "dependencies": {
     "doctrine": "1.2.0",
-    "eslint-import-resolver-node": "^0.2.0",
-    "object-assign": "^4.0.1"
+    "eslint-import-resolver-node": "^0.2.0"
   }
 }

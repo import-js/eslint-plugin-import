@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import resolve, { CASE_INSENSITIVE } from 'core/resolve'
+import resolve, { CASE_INSENSITIVE } from 'eslint-module-utils/resolve'
 
 import * as fs from 'fs'
 import * as utils from '../utils'

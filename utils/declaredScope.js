@@ -1,4 +1,7 @@
-export default function declaredScope(context, name) {
+"use strict"
+exports.__esModule = true
+
+exports.default = function declaredScope(context, name) {
   let references = context.getScope().references
     , i
   for (i = 0; i < references.length; i++) {

@@ -1,4 +1,4 @@
-import resolve from '../core/resolve'
+import resolve from 'eslint-module-utils/resolve'
 
 module.exports = function (context) {
   const imported = new Map()
