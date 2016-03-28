@@ -1,4 +1,4 @@
-import Exports from '../core/getExports'
+import Exports from 'eslint-module-utils/ExportMap'
 import importDeclaration from '../importDeclaration'
 
 module.exports = function (context) {

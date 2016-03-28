@@ -1,6 +1,6 @@
-import Exports from '../core/getExports'
+import Exports from 'eslint-module-utils/ExportMap'
 import importDeclaration from '../importDeclaration'
-import declaredScope from '../core/declaredScope'
+import declaredScope from 'eslint-module-utils/declaredScope'
 
 module.exports = function (context) {
 

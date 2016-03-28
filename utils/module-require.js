@@ -1,15 +1,18 @@
-import Module from 'module'
-import * as path from 'path'
+"use strict"
+exports.__esModule = true
+
+const Module = require('module')
+const path = require('path')
 
 // borrowed from babel-eslint
 function createModule(filename) {
-  var mod = new Module(filename)
+  const mod = new Module(filename)
   mod.filename = filename
   mod.paths = Module._nodeModulePaths(path.dirname(filename))
   return mod
 }
 
-export default function moduleRequire(p) {
+exports.default = function moduleRequire(p) {
   try {
     // attempt to get espree relative to eslint
     const eslintPath = require.resolve('eslint')

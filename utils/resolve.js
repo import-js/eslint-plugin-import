@@ -1,10 +1,15 @@
-import assign from 'object-assign'
-import pkgDir from 'pkg-dir'
+"use strict"
+exports.__esModule = true
 
-import fs from 'fs'
-import * as path from 'path'
+const pkgDir = require('pkg-dir')
 
-export const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+const fs = require('fs')
+const path = require('path')
+
+const hashObject = require('./hash').hashObject
+
+const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 
 const fileExistsCache = new Map()
 
@@ -12,11 +17,11 @@ function cachePath(cacheKey, result) {
   fileExistsCache.set(cacheKey, { result, lastSeen: Date.now() })
 }
 
-function checkCache(cacheKey, { lifetime }) {
+function checkCache(cacheKey, settings) {
   if (fileExistsCache.has(cacheKey)) {
-    const { result, lastSeen } = fileExistsCache.get(cacheKey)
+    const f = fileExistsCache.get(cacheKey)
     // check fresness
-    if (Date.now() - lastSeen < (lifetime * 1000)) return result
+    if (Date.now() - f.lastSeen < (settings.lifetime * 1000)) return f.result
   }
   // cache miss
   return undefined
@@ -50,7 +55,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
   return result
 }
 
-export function relative(modulePath, sourceFile, settings) {
+function relative(modulePath, sourceFile, settings) {
   return fullResolve(modulePath, sourceFile, settings).path
 }
 
@@ -60,9 +65,9 @@ function fullResolve(modulePath, sourceFile, settings) {
   if (coreSet != null && coreSet.has(modulePath)) return { found: true, path: null }
 
   const sourceDir = path.dirname(sourceFile)
-      , cacheKey = sourceDir + hashObject(settings) + modulePath
+      , cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath
 
-  const cacheSettings = assign({
+  const cacheSettings = Object.assign({
     lifetime: 30,  // seconds
   }, settings['import/cache'])
 
@@ -109,7 +114,9 @@ function fullResolve(modulePath, sourceFile, settings) {
 
   const resolvers = resolverReducer(configResolvers, new Map())
 
-  for (let [name, config] of resolvers) {
+  for (let pair of resolvers) {
+    let name = pair[0]
+      , config = pair[1]
     const resolver = requireResolver(name, sourceFile)
         , resolved = withResolver(resolver, config)
 
@@ -127,6 +134,7 @@ function fullResolve(modulePath, sourceFile, settings) {
   // cache(undefined)
   return { found: false }
 }
+exports.relative = relative
 
 function resolverReducer(resolvers, map) {
   if (resolvers instanceof Array) {
@@ -182,7 +190,7 @@ const erroredContexts = new Set()
  *                    null if package is core;
  *                    undefined if not found
  */
-export default function resolve(p, context) {
+function resolve(p, context) {
   try {
     return relative( p
                    , context.getFilename()
@@ -199,11 +207,4 @@ export default function resolve(p, context) {
   }
 }
 resolve.relative = relative
-
-
-import { createHash } from 'crypto'
-function hashObject(object) {
-  const settingsShasum = createHash('sha1')
-  settingsShasum.update(JSON.stringify(object))
-  return settingsShasum.digest('hex')
-}
+exports.default = resolve

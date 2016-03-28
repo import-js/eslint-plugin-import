@@ -1,7 +1,7 @@
 import path from 'path'
 import endsWith from 'lodash.endswith'
 
-import resolve from '../core/resolve'
+import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn } from '../core/importType'
 
 module.exports = function (context) {

@@ -1,17 +1,20 @@
-import moduleRequire from './module-require'
-import assign from 'object-assign'
+"use strict"
+exports.__esModule = true
 
-export default function (content, context) {
+const moduleRequire = require('./module-require').default
+
+exports.default = function parse(content, context) {
 
   if (context == null) throw new Error('need context to parse properly')
 
-  let { parserOptions, parserPath } = context
+  let parserOptions = context.parserOptions
+    , parserPath = context.parserPath
 
   if (!parserPath) throw new Error('parserPath is required!')
 
   // hack: espree blows up with frozen options
-  parserOptions = assign({}, parserOptions)
-  parserOptions.ecmaFeatures = assign({}, parserOptions.ecmaFeatures)
+  parserOptions = Object.assign({}, parserOptions)
+  parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
 
   // always attach comments
   parserOptions.attachComment = true

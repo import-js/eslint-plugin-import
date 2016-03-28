@@ -1,25 +1,27 @@
-import { extname } from 'path'
-import Set from 'es6-set'
+"use strict"
+exports.__esModule = true
+
+const extname = require('path').extname
 
 // one-shot memoized
 let cachedSet, lastSettings
-function validExtensions({ settings }) {
-  if (cachedSet && settings === lastSettings) {
+function validExtensions(context) {
+  if (cachedSet && context.settings === lastSettings) {
     return cachedSet
   }
 
   // todo: add 'mjs'?
-  lastSettings = settings
+  lastSettings = context.settings
   // breaking: default to '.js'
-  // cachedSet = new Set(settings['import/extensions'] || [ '.js' ])
-  cachedSet = 'import/extensions' in settings
-    ? new Set(settings['import/extensions'])
+  // cachedSet = new Set(context.settings['import/extensions'] || [ '.js' ])
+  cachedSet = 'import/extensions' in context.settings
+    ? new Set(context.settings['import/extensions'])
     : { has: () => true } // the set of all elements
 
   return cachedSet
 }
 
-export default function ignore(path, context) {
+exports.default = function ignore(path, context) {
   // ignore node_modules by default
   const ignoreStrings = context.settings['import/ignore']
     ? [].concat(context.settings['import/ignore'])
@@ -30,8 +32,8 @@ export default function ignore(path, context) {
 
   if (ignoreStrings.length === 0) return false
 
-  for (var i = 0; i < ignoreStrings.length; i++) {
-    var regex = new RegExp(ignoreStrings[i])
+  for (let i = 0; i < ignoreStrings.length; i++) {
+    const regex = new RegExp(ignoreStrings[i])
     if (regex.test(path)) return true
   }
 

@@ -2,7 +2,7 @@ import cond from 'lodash.cond'
 import builtinModules from 'builtin-modules'
 import { join } from 'path'
 
-import resolve from './resolve'
+import resolve from 'eslint-module-utils/resolve'
 
 function constant(value) {
   return () => value

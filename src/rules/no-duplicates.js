@@ -1,4 +1,4 @@
-import resolve from '../core/resolve'
+import resolve from 'eslint-module-utils/resolve'
 
 function checkImports(imported, context) {
   for (let [module, nodes] of imported.entries()) {
