@@ -1,6 +1,7 @@
 {
   "name": "eslint-module-utils",
-  "version": "0.2.1",
+  "engines": { "node": ">=4" },
+  "version": "0.2.2",
   "description": "Core utilities to support eslint-plugin-import and other module-related plugins.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
