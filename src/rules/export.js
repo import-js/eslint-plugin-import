@@ -1,4 +1,4 @@
-import ExportMap, { recursivePatternCapture } from 'eslint-module-utils/ExportMap'
+import ExportMap, { recursivePatternCapture } from '../ExportMap'
 
 module.exports = function (context) {
   const named = new Map()
