@@ -5,31 +5,18 @@ const fs = require('fs')
 const path = require('path')
 
 const hashObject = require('./hash').hashObject
+    , ModuleCache = require('./ModuleCache').default
 
 const CASE_INSENSITIVE = fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
 exports.CASE_INSENSITIVE = CASE_INSENSITIVE
 
-const fileExistsCache = new Map()
-
-function cachePath(cacheKey, result) {
-  fileExistsCache.set(cacheKey, { result, lastSeen: Date.now() })
-}
-
-function checkCache(cacheKey, settings) {
-  if (fileExistsCache.has(cacheKey)) {
-    const f = fileExistsCache.get(cacheKey)
-    // check fresness
-    if (Date.now() - f.lastSeen < (settings.lifetime * 1000)) return f.result
-  }
-  // cache miss
-  return undefined
-}
+const fileExistsCache = new ModuleCache()
 
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath, cacheSettings) {
   const dir = path.dirname(filepath)
 
-  let result = checkCache(filepath, cacheSettings)
+  let result = fileExistsCache.get(filepath, cacheSettings)
   if (result != null) return result
 
   // base case
@@ -43,7 +30,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
       result = fileExistsWithCaseSync(dir, cacheSettings)
     }
   }
-  cachePath(filepath, result)
+  fileExistsCache.set(filepath, result)
   return result
 }
 
@@ -52,20 +39,13 @@ function relative(modulePath, sourceFile, settings) {
   const sourceDir = path.dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath
 
-  const cacheSettings = Object.assign({
-    lifetime: 30,  // seconds
-  }, settings['import/cache'])
+  const cacheSettings = ModuleCache.getSettings(settings)
 
-  // parse infinity
-  if (cacheSettings.lifetime === '∞' || cacheSettings.lifetime === 'Infinity') {
-    cacheSettings.lifetime = Infinity
-  }
-
-  const cachedPath = checkCache(cacheKey, cacheSettings)
+  const cachedPath = fileExistsCache.get(cacheKey, cacheSettings)
   if (cachedPath !== undefined) return cachedPath
 
   function cache(p) {
-    cachePath(cacheKey, p)
+    fileExistsCache.set(cacheKey, p)
     return p
   }
 
