@@ -2,6 +2,7 @@
   "name": "eslint-plugin-import",
   "version": "1.10.1",
   "description": "Import with sanity.",
+  "engines": { "node": ">=4" },
   "main": "lib/index.js",
   "directories": {
     "test": "tests"
