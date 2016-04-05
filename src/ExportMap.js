@@ -1,15 +1,15 @@
-"use strict"
+'use strict'
 exports.__esModule = true
 
 const fs = require('fs')
 
 const doctrine = require('doctrine')
 
-const parse = require('./parse').default
-const resolve = require('./resolve').default
-const isIgnored = require('./ignore').default
+const parse = require('eslint-module-utils/parse').default
+const resolve = require('eslint-module-utils/resolve').default
+const isIgnored = require('eslint-module-utils/ignore').default
 
-const hashObject = require('./hash').hashObject
+const hashObject = require('eslint-module-utils/hash').hashObject
 
 const exportCache = new Map()
 

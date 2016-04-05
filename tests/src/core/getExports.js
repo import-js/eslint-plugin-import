@@ -1,5 +1,5 @@
 import { expect } from  'chai'
-import ExportMap from 'eslint-module-utils/ExportMap'
+import ExportMap from '../../../src/ExportMap'
 
 import * as fs from 'fs'
 

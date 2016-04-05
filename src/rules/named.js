@@ -1,5 +1,5 @@
 import * as path from 'path'
-import Exports from 'eslint-module-utils/ExportMap'
+import Exports from '../ExportMap'
 
 module.exports = function (context) {
   function checkSpecifiers(key, type, node) {
