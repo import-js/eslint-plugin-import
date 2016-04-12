@@ -35,11 +35,13 @@ Style guide:
 * Report AMD `require` and `define` calls. ([`no-amd`])
 * Ensure all imports appear before other statements ([`imports-first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
+* Report namespace imports ([`no-namespace`])
 
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-amd`]: ./docs/rules/no-amd.md
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
+[`no-namespace`]: ./docs/rules/no-namespace.md
 
 Work in progress:
 
