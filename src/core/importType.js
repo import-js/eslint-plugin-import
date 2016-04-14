@@ -15,12 +15,12 @@ function isBuiltIn(name) {
 const externalModuleRegExp = /^\w/
 function isExternalModule(name, path) {
   if (!externalModuleRegExp.test(name)) return false
-  return (!path || path.includes(join('node_modules', name)))
+  return (!path || -1 < path.indexOf(join('node_modules', name)))
 }
 
 function isProjectModule(name, path) {
   if (!externalModuleRegExp.test(name)) return false
-  return (path && !path.includes(join('node_modules', name)))
+  return (path && -1 === path.indexOf(join('node_modules', name)))
 }
 
 function isRelativeToParent(name) {
