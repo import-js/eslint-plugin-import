@@ -1,4 +1,5 @@
 import { test } from '../utils'
+import * as path from 'path'
 
 import { RuleTester } from 'eslint'
 
@@ -19,6 +20,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'var foo = require("pkg-up")'}),
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
+
+    // 'project' type
+    test({
+      code: 'import "importType"',
+      settings: { "import/resolver": { node: { paths: [ path.join(__dirname, '../../files') ] } } },
+    }),
   ],
   invalid: [
     test({

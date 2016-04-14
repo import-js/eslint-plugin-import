@@ -1,1 +1,13 @@
-{ "dummy": true }
+{
+  "dummy": true,
+  "devDependencies": {
+    "eslint": "2.x"
+  },
+  "peerDependencies": {
+    "eslint": "2.x"
+  },
+  "dependencies": {
+    "lodash.cond": "^4.3.0",
+    "pkg-up": "^1.0.0"
+  }
+}

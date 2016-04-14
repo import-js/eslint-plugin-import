@@ -3,8 +3,8 @@ import pkgUp from 'pkg-up'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
-function getDependencies() {
-  const filepath = pkgUp.sync()
+function getDependencies(context) {
+  const filepath = pkgUp.sync(context.getFilename())
 	if (!filepath) {
 		return null
 	}
@@ -30,7 +30,7 @@ function devDepErrorMessage(packageName) {
 }
 
 function reportIfMissing(context, deps, allowDevDeps, node, name) {
-  if (importType(name) !== 'external') {
+  if (importType(name, context) !== 'external') {
     return
   }
   const packageName = name.split('/')[0]
@@ -47,12 +47,13 @@ function reportIfMissing(context, deps, allowDevDeps, node, name) {
 module.exports = function (context) {
   const options = context.options[0] || {}
   const allowDevDeps = options.devDependencies !== false
-  const deps = getDependencies()
+  const deps = getDependencies(context)
 
   if (!deps) {
     return {}
   }
 
+  // todo: use module visitor from module-utils core
   return {
     ImportDeclaration: function (node) {
       reportIfMissing(context, deps, allowDevDeps, node, node.source.value)
