@@ -7,6 +7,7 @@ export const rules = {
   'export': require('./rules/export'),
 
   'no-named-as-default': require('./rules/no-named-as-default'),
+  'no-named-as-default-member': require('./rules/no-named-as-default-member'),
 
   'no-commonjs': require('./rules/no-commonjs'),
   'no-amd': require('./rules/no-amd'),

@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - report resolver errors at the top of the linted file
 - add `no-namespace` rule
+- add `no-named-as-default-member` rule
 
 ## [1.4.0] - 2016-03-25
 ### Added

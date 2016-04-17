@@ -26,8 +26,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 Helpful warnings:
 
 * Report use of exported name as identifier of default export ([`no-named-as-default`])
+* Report use of exported name as property of default export ([`no-named-as-default-member`])
 
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
+[`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 
 Style guide:
 
