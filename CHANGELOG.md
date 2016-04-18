@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`no-named-as-default-member`] to `warnings` canned config
 
 ## [1.5.0] - 2016-04-18
 ### Added
