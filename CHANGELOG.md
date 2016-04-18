@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 - add [`extensions`] rule ([#250], thanks [@lo1tuma])
 - add [`no-nodejs-modules`] rule ([#261], thanks [@jfmengels])
+- add [`import-order`] rule ([#247], thanks [@jfmengels])
 - consider `resolve.fallback` config option in the webpack resolver ([#254])
 
 ### Changed
@@ -155,9 +156,6 @@ for info on changes for earlier releases.
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
-[#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
-[#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
-[#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
@@ -198,5 +196,3 @@ for info on changes for earlier releases.
 [@singles]: https://github.com/singles
 [@jfmengels]: https://github.com/jfmengels
 [@dmnd]: https://github.com/dmnd
-[@lo1tuma]: https://github.com/lo1tuma
-[@lemonmade]: https://github.com/lemonmade

@@ -36,21 +36,17 @@ describe('importType(name)', function () {
   it("should return 'sibling' for internal modules that are connected to one of the siblings", function() {
     expect(importType('./foo', context)).to.equal('sibling')
     expect(importType('./foo/bar', context)).to.equal('sibling')
+    expect(importType('./importType', context)).to.equal('sibling')
+    expect(importType('./importType/', context)).to.equal('sibling')
+    expect(importType('./importType/index', context)).to.equal('sibling')
+    expect(importType('./importType/index.js', context)).to.equal('sibling')
   })
 
-  describe("should return 'index' for sibling index file when", function() {
-    it("resolves", function() {
-      expect(importType('./importType', context)).to.equal('index')
-      expect(importType('./importType/', context)).to.equal('index')
-      expect(importType('./importType/index', context)).to.equal('index')
-      expect(importType('./importType/index.js', context)).to.equal('index')
-    })
-    it("doesn't resolve", function() {
-      expect(importType('.', context)).to.equal('index')
-      expect(importType('./', context)).to.equal('index')
-      expect(importType('./index', context)).to.equal('index')
-      expect(importType('./index.js', context)).to.equal('index')
-    })
+  describe("should return 'index' for sibling index file", function() {
+    expect(importType('.', context)).to.equal('index')
+    expect(importType('./', context)).to.equal('index')
+    expect(importType('./index', context)).to.equal('index')
+    expect(importType('./index.js', context)).to.equal('index')
   })
 
   it("should return 'unknown' for any unhandled cases", function() {

@@ -1,6 +1,6 @@
 import cond from 'lodash.cond'
 import builtinModules from 'builtin-modules'
-import { basename, join } from 'path'
+import { join } from 'path'
 
 import resolve from './resolve'
 
@@ -28,8 +28,7 @@ function isRelativeToParent(name) {
 }
 
 const indexFiles = ['.', './', './index', './index.js']
-function isIndex(name, path) {
-  if (path) return basename(path).split('.')[0] === 'index'
+function isIndex(name) {
   return indexFiles.indexOf(name) !== -1
 }
 
