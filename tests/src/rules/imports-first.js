@@ -47,5 +47,33 @@ ruleTester.run('imports-first', rule, {
              message: 'Absolute imports should come before relative imports.'
            } ],
          })
+  , test({ code: "import { x } from './foo';\nimport { y } from 'bar';"
+         , options: ['absolute-first', 'absolute-first-group']
+         , errors: [
+           {
+             line: 2,
+             message: 'Absolute imports should come before relative imports.'
+           },
+           {
+              line: 2,
+              message: 'There should be one empty line between ' +
+                       'absolute and relative import sections.'
+           }
+         ],
+      })
+  , test({ code: "import { x } from './foo';\n\n\n\nimport { y } from 'bar';"
+         , options: ['absolute-first', 'absolute-first-group']
+         , errors: [
+           {
+             line: 5,
+             message: 'Absolute imports should come before relative imports.'
+           },
+           {
+             line: 5,
+             message: 'There should be one empty line between ' +
+                      'absolute and relative import sections.'
+           }
+         ],
+      })
   ]
 })
