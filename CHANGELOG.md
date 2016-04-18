@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [1.5.0] - 2016-04-18
 ### Added
 - report resolver errors at the top of the linted file
 - add `no-namespace` rule
@@ -152,7 +154,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.1.0...v1.2.0
