@@ -24,6 +24,31 @@ import bar from './bar'
 import * as _ from 'lodash' // <- reported
 ```
 
+You can also provide `absolute-first-group` option if you would like to visually group your imports. While enabled,
+this code will be considered valid:
+
+```js
+import foo from 'foo'
+
+import bar from './bar'
+```
+
+while those ones not:
+
+```js
+import foo from 'foo'
+import bar from './bar'
+```
+
+```js
+import foo from 'foo'
+
+
+import bar from './bar'
+```
+
+**NOTE**: This option will work only if `absolute-first` is enabled (hence prefix in option name).
+
 TODO: add explanation of imported name hoisting
 
 ## When Not To Use It

@@ -16,17 +16,64 @@ ruleTester.run('imports-first', rule, {
     test({ code: "import { x } from './foo';\
                   export { x };\
                   import { y } from './foo';"
-         , errors: 1
+         , errors: [ {
+             line: 1,
+             column: 76,
+             message: 'Import in body of module; reorder to top.'
+         } ],
          })
   , test({ code: "import { x } from './foo';\
                   export { x };\
                   import { y } from './bar';\
                   import { z } from './baz';"
-         , errors: 2
+         , errors: [
+             {
+               line: 1,
+               column: 76,
+               message: 'Import in body of module; reorder to top.'
+             },
+             {
+               line: 1,
+               column: 120,
+               message: 'Import in body of module; reorder to top.'
+             }
+         ],
          })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'"
          , options: ['absolute-first']
-         , errors: 1
+         , errors: [ {
+             line: 1,
+             column: 46,
+             message: 'Absolute imports should come before relative imports.'
+           } ],
          })
+  , test({ code: "import { x } from './foo';\nimport { y } from 'bar';"
+         , options: ['absolute-first', 'absolute-first-group']
+         , errors: [
+           {
+             line: 2,
+             message: 'Absolute imports should come before relative imports.'
+           },
+           {
+              line: 2,
+              message: 'There should be one empty line between ' +
+                       'absolute and relative import sections.'
+           }
+         ],
+      })
+  , test({ code: "import { x } from './foo';\n\n\n\nimport { y } from 'bar';"
+         , options: ['absolute-first', 'absolute-first-group']
+         , errors: [
+           {
+             line: 5,
+             message: 'Absolute imports should come before relative imports.'
+           },
+           {
+             line: 5,
+             message: 'There should be one empty line between ' +
+                      'absolute and relative import sections.'
+           }
+         ],
+      })
   ]
 })
