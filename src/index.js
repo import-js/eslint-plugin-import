@@ -17,6 +17,7 @@ export const rules = {
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
   'order': require('./rules/order'),
+  'newline-after-import': require('./rules/newline-after-import'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
