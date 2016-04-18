@@ -5,28 +5,28 @@ import isStaticRequire from '../core/staticRequire'
 
 function getDependencies(context) {
   const filepath = pkgUp.sync(context.getFilename())
-	if (!filepath) {
-		return null
-	}
+  if (!filepath) {
+    return null
+  }
 
-	try {
-		const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
-		return {
+  try {
+    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    return {
       dependencies: packageContent.dependencies || {},
       devDependencies: packageContent.devDependencies || {},
     }
-	} catch (e) {
-		return null
-	}
+  } catch (e) {
+    return null
+  }
 }
 
 function missingErrorMessage(packageName) {
-	return `'${packageName}' is not listed in the project's dependencies. ` +
-		`Run 'npm i -S ${packageName}' to add it`
+  return `'${packageName}' is not listed in the project's dependencies. ` +
+  `Run 'npm i -S ${packageName}' to add it`
 }
 
 function devDepErrorMessage(packageName) {
-	return `'${packageName}' is not listed in the project's dependencies, not devDependencies.`
+  return `'${packageName}' is not listed in the project's dependencies, not devDependencies.`
 }
 
 function reportIfMissing(context, deps, allowDevDeps, node, name) {
