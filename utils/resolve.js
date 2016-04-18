@@ -1,34 +1,22 @@
-import 'es6-symbol/implement'
-import Map from 'es6-map'
-import Set from 'es6-set'
-import assign from 'object-assign'
+"use strict"
+exports.__esModule = true
 
-import fs from 'fs'
-import { dirname, basename, join } from 'path'
+const fs = require('fs')
+const path = require('path')
 
-export const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
+const hashObject = require('./hash').hashObject
+    , ModuleCache = require('./ModuleCache').default
 
-const fileExistsCache = new Map()
+const CASE_INSENSITIVE = fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+exports.CASE_INSENSITIVE = CASE_INSENSITIVE
 
-function cachePath(cacheKey, result) {
-  fileExistsCache.set(cacheKey, { result, lastSeen: Date.now() })
-}
-
-function checkCache(cacheKey, { lifetime }) {
-  if (fileExistsCache.has(cacheKey)) {
-    const { result, lastSeen } = fileExistsCache.get(cacheKey)
-    // check fresness
-    if (Date.now() - lastSeen < (lifetime * 1000)) return result
-  }
-  // cache miss
-  return undefined
-}
+const fileExistsCache = new ModuleCache()
 
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath, cacheSettings) {
-  const dir = dirname(filepath)
+  const dir = path.dirname(filepath)
 
-  let result = checkCache(filepath, cacheSettings)
+  let result = fileExistsCache.get(filepath, cacheSettings)
   if (result != null) return result
 
   // base case
@@ -36,36 +24,29 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
     result = true
   } else {
     const filenames = fs.readdirSync(dir)
-    if (filenames.indexOf(basename(filepath)) === -1) {
+    if (filenames.indexOf(path.basename(filepath)) === -1) {
       result = false
     } else {
       result = fileExistsWithCaseSync(dir, cacheSettings)
     }
   }
-  cachePath(filepath, result)
+  fileExistsCache.set(filepath, result)
   return result
 }
 
-export function relative(modulePath, sourceFile, settings) {
+function relative(modulePath, sourceFile, settings) {
 
-  const sourceDir = dirname(sourceFile)
-      , cacheKey = sourceDir + hashObject(settings) + modulePath
+  const sourceDir = path.dirname(sourceFile)
+      , cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath
 
-  const cacheSettings = assign({
-    lifetime: 30,  // seconds
-  }, settings['import/cache'])
+  const cacheSettings = ModuleCache.getSettings(settings)
 
-  // parse infinity
-  if (cacheSettings.lifetime === '∞' || cacheSettings.lifetime === 'Infinity') {
-    cacheSettings.lifetime = Infinity
-  }
-
-  const cachedPath = checkCache(cacheKey, cacheSettings)
+  const cachedPath = fileExistsCache.get(cacheKey, cacheSettings)
   if (cachedPath !== undefined) return cachedPath
 
-  function cache(path) {
-    cachePath(cacheKey, path)
-    return path
+  function cache(p) {
+    fileExistsCache.set(cacheKey, p)
+    return p
   }
 
   function withResolver(resolver, config) {
@@ -99,22 +80,27 @@ export function relative(modulePath, sourceFile, settings) {
 
   const resolvers = resolverReducer(configResolvers, new Map())
 
-  for (let [name, config] of resolvers) {
+  for (let pair of resolvers) {
+    let name = pair[0]
+      , config = pair[1]
+
     const resolver = requireResolver(name)
 
-    let { path: fullPath, found } = withResolver(resolver, config)
+    const resolved = withResolver(resolver, config)
+    let resolvedPath = resolved.path
 
     // resolvers imply file existence, this double-check just ensures the case matches
-    if (found && CASE_INSENSITIVE && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
+    if (resolved.found && CASE_INSENSITIVE && !fileExistsWithCaseSync(resolvedPath, cacheSettings)) {
       // reject resolved path
-      fullPath = undefined
+      resolvedPath = undefined
     }
 
-    if (found) return cache(fullPath)
+    if (resolved.found) return cache(resolvedPath)
   }
 
   return cache(undefined)
 }
+exports.relative = relative
 
 function resolverReducer(resolvers, map) {
   if (resolvers instanceof Array) {
@@ -155,7 +141,7 @@ const erroredContexts = new Set()
  *                    null if package is core;
  *                    undefined if not found
  */
-export default function resolve(p, context) {
+function resolve(p, context) {
   try {
     return relative( p
                    , context.getFilename()
@@ -172,11 +158,4 @@ export default function resolve(p, context) {
   }
 }
 resolve.relative = relative
-
-
-import { createHash } from 'crypto'
-function hashObject(object) {
-  const settingsShasum = createHash('sha1')
-  settingsShasum.update(JSON.stringify(object))
-  return settingsShasum.digest('hex')
-}
+exports.default = resolve

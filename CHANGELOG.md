@@ -16,6 +16,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - Rearranged rule groups in README in preparation for more style guide rules
 
+### Removed
+- support for Node 0.10, via `es6-*` ponyfills. Using native Map/Set/Symbol.
+
 ## [1.4.0] - 2016-03-25
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
