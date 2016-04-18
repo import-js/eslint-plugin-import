@@ -8,8 +8,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [1.5.0] - 2016-04-18
 ### Added
 - report resolver errors at the top of the linted file
-- add `no-namespace` rule
-- add `no-named-as-default-member` rule
+- add [`no-namespace`] rule
+- add [`no-named-as-default-member`] rule
 
 ### Changed
 - Rearranged rule groups in README in preparation for more style guide rules
@@ -138,6 +138,8 @@ for info on changes for earlier releases.
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-amd`]: ./docs/rules/no-amd.md
 [`namespace`]: ./docs/rules/namespace.md
+[`no-namespace`]: ./docs/rules/no-namespace.md
+[`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 
 [#228]: https://github.com/benmosher/eslint-plugin-import/pull/228
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
