@@ -9,6 +9,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add `no-namespace` rule
 - add `no-named-as-default-member` rule
 
+### Changed
+- Rearranged rule groups in README in preparation for more style guide rules
+
 ## [1.4.0] - 2016-03-25
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.

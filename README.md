@@ -11,47 +11,48 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
+**Static analysis:**
+
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])
 * Ensure named imports correspond to a named export in the remote file. ([`named`])
 * Ensure a default export is present, given a default import. ([`default`])
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])
-* Report any invalid exports, i.e. re-export of the same name ([`export`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
 [`default`]: ./docs/rules/default.md
 [`namespace`]: ./docs/rules/namespace.md
-[`export`]: ./docs/rules/export.md
 
-Helpful warnings:
+**Helpful warnings:**
 
+* Report any invalid exports, i.e. re-export of the same name ([`export`])
 * Report use of exported name as identifier of default export ([`no-named-as-default`])
 * Report use of exported name as property of default export ([`no-named-as-default-member`])
+* Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
 
+[`export`]: ./docs/rules/export.md
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
+[`no-deprecated`]: ./docs/rules/no-deprecated.md
 
-Style guide:
+**Module systems:**
 
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
 * Report AMD `require` and `define` calls. ([`no-amd`])
+
+[`no-commonjs`]: ./docs/rules/no-commonjs.md
+[`no-amd`]: ./docs/rules/no-amd.md
+
+**Style guide:**
+
 * Ensure all imports appear before other statements ([`imports-first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
 
-[`no-commonjs`]: ./docs/rules/no-commonjs.md
-[`no-amd`]: ./docs/rules/no-amd.md
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 
-Work in progress:
-
-* Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
-
-Note that the WIP rules may change drastically, and without a major version bump, but are included in the published version in the interest of gathering feedback (and hopefully being useful as-is).
-
-[`no-deprecated`]: ./docs/rules/no-deprecated.md
 
 ## Installation
 
