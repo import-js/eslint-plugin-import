@@ -16,17 +16,36 @@ ruleTester.run('imports-first', rule, {
     test({ code: "import { x } from './foo';\
                   export { x };\
                   import { y } from './foo';"
-         , errors: 1
+         , errors: [ {
+             line: 1,
+             column: 76,
+             message: 'Import in body of module; reorder to top.'
+         } ],
          })
   , test({ code: "import { x } from './foo';\
                   export { x };\
                   import { y } from './bar';\
                   import { z } from './baz';"
-         , errors: 2
+         , errors: [
+             {
+               line: 1,
+               column: 76,
+               message: 'Import in body of module; reorder to top.'
+             },
+             {
+               line: 1,
+               column: 120,
+               message: 'Import in body of module; reorder to top.'
+             }
+         ],
          })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'"
          , options: ['absolute-first']
-         , errors: 1
+         , errors: [ {
+             line: 1,
+             column: 46,
+             message: 'Absolute imports should come before relative imports.'
+           } ],
          })
   ]
 })
