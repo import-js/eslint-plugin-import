@@ -29,11 +29,13 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Report use of exported name as identifier of default export ([`no-named-as-default`])
 * Report use of exported name as property of default export ([`no-named-as-default-member`])
 * Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
+* Forbid the use of extraneous packages ([`no-extraneous-dependencies`])
 
 [`export`]: ./docs/rules/export.md
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
+[`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 
 **Module systems:**
 
@@ -48,12 +50,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure all imports appear before other statements ([`imports-first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
-* Forbid the use of extraneous packages ([`no-extraneous-dependencies`])
 
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
-[`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 
 
 ## Installation
