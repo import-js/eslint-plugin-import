@@ -74,5 +74,5 @@ The default value is `["builtin", "external", "internal", "parent", "sibling", "
 You can set the options like this:
 
 ```js
-"import-order/import-order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
+"import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```

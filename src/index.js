@@ -16,7 +16,7 @@ export const rules = {
   'imports-first': require('./rules/imports-first'),
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
-  'import-order': require('./rules/import-order'),
+  'order': require('./rules/order'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),

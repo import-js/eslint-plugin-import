@@ -3,9 +3,9 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/import-order')
+    , rule = require('rules/order')
 
-ruleTester.run('import-order', rule, {
+ruleTester.run('order', rule, {
   valid: [
     // Default order using require
     test({
@@ -168,7 +168,7 @@ ruleTester.run('import-order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -179,7 +179,7 @@ ruleTester.run('import-order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -190,7 +190,7 @@ ruleTester.run('import-order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -201,7 +201,7 @@ ruleTester.run('import-order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`async` import should occur before import of `../parent`',
       }],
     }),
@@ -212,7 +212,7 @@ ruleTester.run('import-order', rule, {
         var parent = require('../parent');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`../parent` import should occur before import of `./sibling`',
       }],
     }),
@@ -223,7 +223,7 @@ ruleTester.run('import-order', rule, {
         var sibling = require('./sibling');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`./sibling` import should occur before import of `./`',
       }],
     }),
@@ -235,10 +235,10 @@ ruleTester.run('import-order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`async` import should occur before import of `./sibling`',
       }, {
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `./sibling`',
       }],
     }),
@@ -253,7 +253,7 @@ ruleTester.run('import-order', rule, {
         var bar = require('bar');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`./` import should occur after import of `bar`',
       }],
     }),
@@ -265,7 +265,7 @@ ruleTester.run('import-order', rule, {
       `,
       options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`./` import should occur before import of `fs`',
       }],
     }),
@@ -276,7 +276,7 @@ ruleTester.run('import-order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     }),
@@ -287,7 +287,7 @@ ruleTester.run('import-order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     }),
@@ -304,7 +304,7 @@ ruleTester.run('import-order', rule, {
         ['sibling', 'parent', 'external'],
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`path` import should occur before import of `./foo`',
       }],
     }),
@@ -320,7 +320,7 @@ ruleTester.run('import-order', rule, {
         // missing 'builtin'
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: '`async` import should occur before import of `path`',
       }],
     }),
@@ -336,7 +336,7 @@ ruleTester.run('import-order', rule, {
         ['sibling', 'parent', 'UNKNOWN', 'internal'],
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
       }],
     }),
@@ -351,7 +351,7 @@ ruleTester.run('import-order', rule, {
         ['sibling', 'parent', ['builtin'], 'internal'],
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
       }],
     }),
@@ -366,7 +366,7 @@ ruleTester.run('import-order', rule, {
         ['sibling', 'parent', 2, 'internal'],
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `2`',
       }],
     }),
@@ -381,7 +381,7 @@ ruleTester.run('import-order', rule, {
         ['sibling', 'parent', 'parent', 'internal'],
       ]}],
       errors: [{
-        ruleId: 'import-order',
+        ruleId: 'order',
         message: 'Incorrect configuration of the rule: `parent` is duplicated',
       }],
     }),

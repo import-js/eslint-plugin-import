@@ -9,7 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 - add [`extensions`] rule ([#250], thanks [@lo1tuma])
 - add [`no-nodejs-modules`] rule ([#261], thanks [@jfmengels])
-- add [`import-order`] rule ([#247], thanks [@jfmengels])
+- add [`order`] rule ([#247], thanks [@jfmengels])
 - consider `resolve.fallback` config option in the webpack resolver ([#254])
 
 ### Changed

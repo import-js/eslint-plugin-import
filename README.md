@@ -53,13 +53,13 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
 * Ensure consistent use of file extension within the import path ([`extensions`])
-* Enforce a convention in module import order ([`import-order`])
+* Enforce a convention in module import order ([`order`])
 
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`extensions`]: ./docs/rules/extensions.md
-[`import-order`]: ./docs/rules/import-order.md
+[`order`]: ./docs/rules/order.md
 
 
 ## Installation
