@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-named-as-default-member`] to `warnings` canned config
+- add [`no-extraneous-dependencies`] rule
 
 ## [1.5.0] - 2016-04-18
 ### Added
