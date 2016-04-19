@@ -6,13 +6,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-named-as-default-member`] to `warnings` canned config
-- add [`no-extraneous-dependencies`] rule
+- add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 
 ## [1.5.0] - 2016-04-18
 ### Added
 - report resolver errors at the top of the linted file
-- add [`no-namespace`] rule
-- add [`no-named-as-default-member`] rule
+- add [`no-namespace`] rule ([#239], thanks [@singles])
+- add [`no-named-as-default-member`] rule ([#243], thanks [@dmnd])
 
 ### Changed
 - Rearranged rule groups in README in preparation for more style guide rules
@@ -143,7 +143,11 @@ for info on changes for earlier releases.
 [`namespace`]: ./docs/rules/namespace.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
+[`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 
+[#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
+[#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
+[#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
 [#228]: https://github.com/benmosher/eslint-plugin-import/pull/228
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
@@ -178,3 +182,6 @@ for info on changes for earlier releases.
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
 
 [@mathieudutour]: https://github.com/mathieudutour
+[@singles]: https://github.com/singles
+[@jfmengels]: https://github.com/jfmengels
+[@dmnd]: https://github.com/dmnd
