@@ -1,0 +1,85 @@
+# extensions - Ensure consistent use of file extension within the import path
+
+Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default. Depending on the resolver you can configure more extensions to get resolved automatically.
+
+In order to provide a consistent use of file extensions across your code base, this rule can enforce or disallow the use of certain file extensions.
+
+## Rule Details
+
+This rule has one option which could be either a string or an object. If it is `"never"` (the default value) the rule forbids the use for any extension. If `"always"` then the rule enforces the use of extensions for all import statements.
+
+By providing an object you can configure each extension separately, so for example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+
+### Exception
+
+When disallowing the use of certain extensions this rule makes an exception and allows the use of extension when the file would not be resolvable without extension.
+
+For example, given the following folder structure:
+
+```
+├── foo
+│   ├── bar.js
+│   ├── bar.json
+```
+
+and this import statement:
+
+```js
+import bar from './foo/bar.json';
+```
+
+then the extension can’t be omitted because it would then resolve to `./foo/bar.js`.
+
+### Examples
+
+The following patterns are considered problems when configuration set to "never":
+
+```js
+import foo from './foo.js';
+
+import bar from './bar.json';
+
+import Component from './Component.jsx'
+
+import express from 'express/index.js';
+```
+
+The following patterns are not considered problems when configuration set to "never":
+
+```js
+import foo from './foo';
+
+import bar from './bar';
+
+import Component from './Component'
+
+import express from 'express/index';
+```
+
+The following patterns are considered problems when configuration set to "always":
+
+```js
+import foo from './foo';
+
+import bar from './bar';
+
+import Component from './Component'
+
+import express from 'express';
+```
+
+The following patterns are not considered problems when configuration set to "always":
+
+```js
+import foo from './foo.js';
+
+import bar from './bar.json';
+
+import Component from './Component.jsx'
+
+import express from 'express/index.js';
+```
+
+## When Not To Use It
+
+If you are not concerned about a consistent usage of file extension.
