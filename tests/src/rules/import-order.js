@@ -60,7 +60,7 @@ ruleTester.run('import-order', rule, {
         var async = require('async');
         var fs = require('fs');
       `,
-      options: [{order: ['index', 'sibling', 'parent', 'external', 'builtin']}],
+      options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
     }),
     // Ignore dynamic requires
     test({
@@ -130,6 +130,35 @@ ruleTester.run('import-order', rule, {
         }
         var foo;
     `}),
+    // Grouping import types
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+
+        var sibling = require('./foo');
+        var relParent3 = require('../');
+        var async = require('async');
+        var relParent1 = require('../foo');
+      `,
+      options: [{groups: [
+        ['builtin', 'index'],
+        ['sibling', 'parent', 'external'],
+      ]}],
+    }),
+    // Omitted types should implicitly be considered as the last type
+    test({
+      code: `
+        var index = require('./');
+        var path = require('path');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', 'external'],
+        // missing 'builtin'
+      ]}],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -234,7 +263,7 @@ ruleTester.run('import-order', rule, {
         var fs = require('fs');
         var index = require('./');
       `,
-      options: [{order: ['index', 'sibling', 'parent', 'external', 'builtin']}],
+      options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
       errors: [{
         ruleId: 'import-order',
         message: '`./` import should occur before import of `fs`',
@@ -260,6 +289,100 @@ ruleTester.run('import-order', rule, {
       errors: [{
         ruleId: 'import-order',
         message: '`fs` import should occur before import of `./foo`',
+      }],
+    }),
+    // Grouping import types
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var sibling = require('./foo');
+        var path = require('path');
+      `,
+      options: [{groups: [
+        ['builtin', 'index'],
+        ['sibling', 'parent', 'external'],
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: '`path` import should occur before import of `./foo`',
+      }],
+    }),
+    // Omitted types should implicitly be considered as the last type
+    test({
+      code: `
+        var path = require('path');
+        var async = require('async');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', 'external', 'internal'],
+        // missing 'builtin'
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: '`async` import should occur before import of `path`',
+      }],
+    }),
+    // Setting the order for an unknown type
+    // should make the rule trigger an error and do nothing else
+    test({
+      code: `
+        var async = require('async');
+        var index = require('./');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', 'UNKNOWN', 'internal'],
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
+      }],
+    }),
+    // Type in an array can't be another array, too much nesting
+    test({
+      code: `
+        var async = require('async');
+        var index = require('./');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', ['builtin'], 'internal'],
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
+      }],
+    }),
+    // No numbers
+    test({
+      code: `
+        var async = require('async');
+        var index = require('./');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', 2, 'internal'],
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: 'Incorrect configuration of the rule: Unknown type `2`',
+      }],
+    }),
+    // Duplicate
+    test({
+      code: `
+        var async = require('async');
+        var index = require('./');
+      `,
+      options: [{groups: [
+        'index',
+        ['sibling', 'parent', 'parent', 'internal'],
+      ]}],
+      errors: [{
+        ruleId: 'import-order',
+        message: 'Incorrect configuration of the rule: `parent` is duplicated',
       }],
     }),
   ],

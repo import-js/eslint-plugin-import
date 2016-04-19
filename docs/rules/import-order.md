@@ -9,13 +9,16 @@ import path from 'path';
 // 2. "external" modules
 import _ from 'lodash';
 import chalk from 'chalk';
-// 3. modules from a "parent" directory
+// 3. "internal" modules
+// (if you have configured your path or webpack to handle your internal paths differently)
+import foo from 'src/foo';
+// 4. modules from a "parent" directory
 import foo from '../foo';
 import qux from '../../foo/qux';
-// 4. "sibling" modules from the same or a sibling's directory
+// 5. "sibling" modules from the same or a sibling's directory
 import bar from './bar';
 import baz from './bar/baz';
-// 5. "index" of the current directory
+// 6. "index" of the current directory
 import main from './';
 ```
 
@@ -57,10 +60,19 @@ var path = require('path');
 
 This rule supports the following options:
 
-`order`: The order to respect. It needs to contain only and all of the following elements: `"builtin", "external", "parent", "sibling", "index"`, which is the default value.
+`groups`: How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+```js
+[
+  'builtin', // Built-in types are first
+  ['sibling', 'parent'], // Then sibling and parent types. They can be mingled together
+  'index', // Then the index file
+  // Then the rest: internal and external type
+]
+```
+The default value is `["builtin", "external", "internal", "parent", "sibling", "index"]`.
 
 You can set the options like this:
 
 ```js
-"import-order/import-order": ["error", {"order": ["index", "sibling", "parent", "external", "builtin"]}]
+"import-order/import-order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```

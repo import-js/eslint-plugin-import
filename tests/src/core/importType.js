@@ -22,9 +22,9 @@ describe('importType(name)', function () {
     expect(importType('lodash/fp', context)).to.equal('external')
   })
 
-  it("should return 'project' for non-builtins resolved outside of node_modules", function () {
+  it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
     const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
-    expect(importType('importType', pathContext)).to.equal('project')
+    expect(importType('importType', pathContext)).to.equal('internal')
   })
 
   it("should return 'parent' for internal modules that go through the parent", function() {

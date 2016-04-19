@@ -18,7 +18,7 @@ function isExternalModule(name, path) {
   return (!path || -1 < path.indexOf(join('node_modules', name)))
 }
 
-function isProjectModule(name, path) {
+function isInternalModule(name, path) {
   if (!externalModuleRegExp.test(name)) return false
   return (path && -1 === path.indexOf(join('node_modules', name)))
 }
@@ -39,7 +39,7 @@ function isRelativeToSibling(name) {
 const typeTest = cond([
   [isBuiltIn, constant('builtin')],
   [isExternalModule, constant('external')],
-  [isProjectModule, constant('project')],
+  [isInternalModule, constant('internal')],
   [isRelativeToParent, constant('parent')],
   [isIndex, constant('index')],
   [isRelativeToSibling, constant('sibling')],
