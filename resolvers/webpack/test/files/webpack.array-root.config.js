@@ -4,4 +4,8 @@ exports.resolve = {
     path.join(__dirname, 'src'),
     path.join(__dirname, 'bower_components'),
   ],
+  fallback: [
+    path.join(__dirname, 'fallback'),
+    path.join(__dirname, 'bower_components'),
+  ],
 }
