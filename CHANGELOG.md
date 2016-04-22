@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
+- add [`extensions`] rule ([#250], thanks [@lo1tuma])
 - consider `resolve.fallback` config option in the webpack resolver ([#254])
 
 ### Changed
@@ -149,10 +150,12 @@ for info on changes for earlier releases.
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`extensions`]: ./docs/rules/extensions.md
 [`imports-first`]: ./docs/rules/imports-first.md
 
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
+[#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
@@ -193,4 +196,5 @@ for info on changes for earlier releases.
 [@singles]: https://github.com/singles
 [@jfmengels]: https://github.com/jfmengels
 [@dmnd]: https://github.com/dmnd
+[@lo1tuma]: https://github.com/lo1tuma
 [@lemonmade]: https://github.com/lemonmade
