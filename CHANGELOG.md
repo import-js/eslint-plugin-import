@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
+- consider [`resolve.fallback`] config option in the webpack resolver ([#254])
 
 ## [1.5.0] - 2016-04-18
 ### Added
