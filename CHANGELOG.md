@@ -146,6 +146,7 @@ for info on changes for earlier releases.
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 
+[#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
