@@ -1,11 +1,24 @@
 module.exports = function (context) {
+  function isPossibleDirective (node) {
+    return node.type === 'ExpressionStatement' &&
+      node.expression.type === 'Literal' &&
+      typeof node.expression.value === 'string'
+  }
+
   return {
     'Program': function (n) {
       const body = n.body
           , absoluteFirst = context.options[0] === 'absolute-first'
-      let last = -1
+      let nonImportCount = 0
+        , anyExpressions = false
         , anyRelative = false
-      body.forEach(function (node, i){
+      body.forEach(function (node){
+        if (!anyExpressions && isPossibleDirective(node)) {
+          return
+        }
+
+        anyExpressions = true
+         
         if (node.type === 'ImportDeclaration') {
           if (absoluteFirst) {
             if (/^\./.test(node.source.value)) {
@@ -17,12 +30,14 @@ module.exports = function (context) {
               })
             }
           }
-          if (i !== ++last) {
+          if (nonImportCount > 0) {
             context.report({
               node,
               message: 'Import in body of module; reorder to top.',
             })
           }
+        } else {
+          nonImportCount++
         }
       })
     },

@@ -11,6 +11,9 @@ ruleTester.run('imports-first', rule, {
                   export { x, y }" })
   , test({ code: "import { x } from 'foo'; import { y } from './bar'" })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'" })
+  , test({ code: "'use directive';\
+                  import { x } from 'foo';" })
+  ,
   ],
   invalid: [
     test({ code: "import { x } from './foo';\
@@ -28,5 +31,11 @@ ruleTester.run('imports-first', rule, {
          , options: ['absolute-first']
          , errors: 1
          })
+  , test({ code: "import { x } from 'foo';\
+                  'use directive';\
+                  import { y } from 'bar';"
+         , errors: 1
+         })
+  ,
   ]
 })
