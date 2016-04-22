@@ -1,6 +1,6 @@
 # imports-first
 
-By popular demand, this rule reports any imports that come after non-import
+This rule reports any imports that come after non-import
 statments.
 
 ## Rule Details
@@ -24,9 +24,37 @@ import bar from './bar'
 import * as _ from 'lodash' // <- reported
 ```
 
-TODO: add explanation of imported name hoisting
+Notably, `import`s are hoisted, which means the imported modules will be evaluated
+before any of the statements interspersed between them. Keeping all `import`s together
+at the top of the file may prevent surprises resulting from this part of the spec.
+
+### On directives
+
+Directives are allowed as long as they occur strictly before any `import` declarations,
+as follows:
+
+```js
+'use super-mega-strict'
+
+import { suchFoo } from 'lame-fake-module-name'  // no report here
+```
+
+A directive in this case is assumed to be a single statement that contains only
+a literal string-valued expression.
+
+`'use strict'` would be a good example, except that [modules are always in strict
+mode](http://www.ecma-international.org/ecma-262/6.0/#sec-strict-mode-code) so it would be surprising to see a `'use strict'` sharing a file with `import`s and
+`export`s.
+
+Given that, see [#255] for the reasoning.
 
 ## When Not To Use It
 
 If you don't mind imports being sprinkled throughout, you may not want to
 enable this rule.
+
+## Further Reading
+
+- Issue [#255]
+
+[#255]: https://github.com/benmosher/eslint-plugin-import/issues/255
