@@ -61,6 +61,13 @@ exports.resolve = function (source, file, settings) {
     if (typeof rootPath === 'string') paths.push(rootPath)
     else paths.push.apply(paths, rootPath)
   }
+  // set fallback paths
+  var fallbackPath = get(webpackConfig, ['resolve', 'fallback'])
+  if (fallbackPath) {
+    if (typeof fallbackPath === 'string') paths.push(fallbackPath)
+    else paths.push.apply(paths, fallbackPath)
+  }
+
 
   // otherwise, resolve "normally"
   try {
