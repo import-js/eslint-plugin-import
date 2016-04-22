@@ -8,6 +8,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 
+### Changed
+- [`imports-first`] now allows directives (i.e. `'use strict'`) strictly before
+  any imports ([#256], thanks [@lemonmade])
+
 ## [1.5.0] - 2016-04-18
 ### Added
 - report resolver errors at the top of the linted file
@@ -144,7 +148,9 @@ for info on changes for earlier releases.
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`imports-first`]: ./docs/rules/imports-first.md
 
+[#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
@@ -185,3 +191,4 @@ for info on changes for earlier releases.
 [@singles]: https://github.com/singles
 [@jfmengels]: https://github.com/jfmengels
 [@dmnd]: https://github.com/dmnd
+[@lemonmade]: https://github.com/lemonmade
