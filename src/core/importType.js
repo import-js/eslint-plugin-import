@@ -18,6 +18,11 @@ function isExternalModule(name, path) {
   return (!path || -1 < path.indexOf(join('node_modules', name)))
 }
 
+const scopedRegExp = /^@\w+\/\w+/
+function isScoped(name) {
+  return scopedRegExp.test(name)
+}
+
 function isInternalModule(name, path) {
   if (!externalModuleRegExp.test(name)) return false
   return (path && -1 === path.indexOf(join('node_modules', name)))
@@ -39,6 +44,7 @@ function isRelativeToSibling(name) {
 const typeTest = cond([
   [isBuiltIn, constant('builtin')],
   [isExternalModule, constant('external')],
+  [isScoped, constant('external')],
   [isInternalModule, constant('internal')],
   [isRelativeToParent, constant('parent')],
   [isIndex, constant('index')],

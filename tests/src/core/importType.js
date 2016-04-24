@@ -22,6 +22,11 @@ describe('importType(name)', function () {
     expect(importType('lodash/fp', context)).to.equal('external')
   })
 
+  it("should return 'external' for scopes packages", function() {
+    expect(importType('@cycle/core', context)).to.equal('external')
+    expect(importType('@cycle/dom', context)).to.equal('external')
+  })
+
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
     const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
     expect(importType('importType', pathContext)).to.equal('internal')
