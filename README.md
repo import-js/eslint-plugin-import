@@ -41,9 +41,11 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
 * Report AMD `require` and `define` calls. ([`no-amd`])
+* No Node.js builtin modules. ([`no-nodejs-modules`])
 
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-amd`]: ./docs/rules/no-amd.md
+[`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
 **Style guide:**
 
