@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 - add [`extensions`] rule ([#250], thanks [@lo1tuma])
+- add [`no-nodejs-modules`] rule ([#261], thanks [@jfmengels])
 - consider `resolve.fallback` config option in the webpack resolver ([#254])
 
 ### Changed
@@ -152,6 +153,7 @@ for info on changes for earlier releases.
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`extensions`]: ./docs/rules/extensions.md
 [`imports-first`]: ./docs/rules/imports-first.md
+[`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
