@@ -29,17 +29,6 @@ ruleTester.run('order', rule, {
         import sibling, {foo3} from './foo';
         import index from './';`,
       }),
-    // Default order using both require and import
-    test({
-      code: `
-        var fs = require('fs');
-        import async, {foo1} from 'async';
-        var relParent1 = require('../foo');
-        import relParent2, {foo2} from '../foo/bar';
-        var relParent3 = require('../');
-        import sibling, {foo3} from './foo';
-        var index = require('./');`,
-      }),
     // Multiple module of the same rank next to each other
     test({
       code: `
@@ -158,6 +147,18 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 'external'],
         // missing 'builtin'
       ]}],
+    }),
+    // Mixing require and import should have import up top
+    test({
+      code: `
+        import async, {foo1} from 'async';
+        import relParent2, {foo2} from '../foo/bar';
+        import sibling, {foo3} from './foo';
+        var fs = require('fs');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var index = require('./');
+      `,
     }),
   ],
   invalid: [
@@ -383,6 +384,33 @@ ruleTester.run('order', rule, {
       errors: [{
         ruleId: 'order',
         message: 'Incorrect configuration of the rule: `parent` is duplicated',
+      }],
+    }),
+    // Mixing require and import should have import up top
+    test({
+      code: `
+        import async, {foo1} from 'async';
+        import relParent2, {foo2} from '../foo/bar';
+        var fs = require('fs');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        import sibling, {foo3} from './foo';
+        var index = require('./');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./foo` import should occur before import of `fs`',
+      }],
+    }),
+    test({
+      code: `
+        var fs = require('fs');
+        import async, {foo1} from 'async';
+        import relParent2, {foo2} from '../foo/bar';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur after import of `../foo/bar`',
       }],
     }),
   ],

@@ -22,7 +22,9 @@ import baz from './bar/baz';
 import main from './';
 ```
 
-Unassigned imports are not accounted for, as the order they are imported in may be important.
+Unassigned imports are ignored, as the order they are imported in may be important.
+
+Statements using the ES6 `import` syntax must appear before any `require()` statements.
 
 
 ## Fail
@@ -35,6 +37,11 @@ import path from 'path'; // `path` import should occur before import of `lodash`
 
 var _ = require('lodash');
 var path = require('path'); // `path` import should occur before import of `lodash`
+
+// -----
+
+var path = require('path');
+import foo from './foo'; // `import` statements must be before `require` statement
 ```
 
 
@@ -53,6 +60,12 @@ var _ = require('lodash');
 
 // Allowed as ̀`babel-register` is not assigned.
 require('babel-register');
+var path = require('path');
+
+// -----
+
+// Allowed as `import` must be before `require`
+import foo from './foo';
 var path = require('path');
 ```
 

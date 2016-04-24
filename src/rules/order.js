@@ -59,14 +59,15 @@ function makeReport(context, imported) {
 
 // DETECTING
 
-function computeRank(context, ranks, name) {
-  return ranks[importType(name, context)]
+function computeRank(context, ranks, name, type) {
+  return ranks[importType(name, context)] +
+    (type === 'import' ? 0 : 100)
 }
 
-function registerNode(context, node, name, ranks, imported) {
-  const rank = computeRank(context, ranks, name)
+function registerNode(context, node, name, type, ranks, imported) {
+  const rank = computeRank(context, ranks, name, type)
   if (rank !== -1) {
-    imported.push({name: name, rank: rank, node: node})
+    imported.push({name, rank, node})
   }
 }
 
@@ -136,7 +137,7 @@ module.exports = function importOrderRule (context) {
     ImportDeclaration: function handleImports(node) {
       if (node.specifiers.length) { // Ignoring unassigned imports
         const name = node.source.value
-        registerNode(context, node, name, ranks, imported)
+        registerNode(context, node, name, 'import', ranks, imported)
       }
     },
     CallExpression: function handleRequires(node) {
@@ -144,7 +145,7 @@ module.exports = function importOrderRule (context) {
         return
       }
       const name = node.arguments[0].value
-      registerNode(context, node, name, ranks, imported)
+      registerNode(context, node, name, 'require', ranks, imported)
     },
     'Program:exit': function reportAndReset() {
       makeReport(context, imported)
