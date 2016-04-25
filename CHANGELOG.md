@@ -16,6 +16,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`imports-first`] now allows directives (i.e. `'use strict'`) strictly before
   any imports ([#256], thanks [@lemonmade])
 
+### Fixed
+- [`named`] now properly ignores the source module if a name is re-exported from
+  an ignored file (i.e. `node_modules`). Also improved the reported error.
+
 ## [1.5.0] - 2016-04-18
 ### Added
 - report resolver errors at the top of the linted file
