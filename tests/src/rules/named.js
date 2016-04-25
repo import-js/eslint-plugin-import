@@ -89,6 +89,13 @@ ruleTester.run('named', rule, {
     // issue #210: shameless self-reference
     test({ code: 'import { me, soGreat } from "./narcissist"' }),
 
+    // issue #251: re-export default as named
+    test({ code: 'import { foo, bar, baz } from "./re-export-default"' }),
+    test({
+      code: 'import { common } from "./re-export-default"',
+      settings: { 'import/ignore': ['common'] },
+    }),
+
   ],
 
   invalid: [
@@ -196,6 +203,17 @@ ruleTester.run('named', rule, {
       code: 'import { baz } from "./bar"',
       settings: { 'import/ignore': ['bar'] },
       errors: ["baz not found in './bar'"],
+    }),
+
+    // issue #251
+    test({
+      code: 'import { foo, bar, bap } from "./re-export-default"',
+      errors: ["bap not found in './re-export-default'"],
+    }),
+    test({
+      code: 'import { common } from "./re-export-default"',
+      // todo: better error message
+      errors: ["common not found in './re-export-default'"],
     }),
   ],
 })
