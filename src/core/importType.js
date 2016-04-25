@@ -1,6 +1,6 @@
 import cond from 'lodash.cond'
 import builtinModules from 'builtin-modules'
-import { basename, join } from 'path'
+import { join } from 'path'
 
 import resolve from './resolve'
 
@@ -18,7 +18,12 @@ function isExternalModule(name, path) {
   return (!path || -1 < path.indexOf(join('node_modules', name)))
 }
 
-function isProjectModule(name, path) {
+const scopedRegExp = /^@\w+\/\w+/
+function isScoped(name) {
+  return scopedRegExp.test(name)
+}
+
+function isInternalModule(name, path) {
   if (!externalModuleRegExp.test(name)) return false
   return (path && -1 === path.indexOf(join('node_modules', name)))
 }
@@ -28,8 +33,7 @@ function isRelativeToParent(name) {
 }
 
 const indexFiles = ['.', './', './index', './index.js']
-function isIndex(name, path) {
-  if (path) return basename(path).split('.')[0] === 'index'
+function isIndex(name) {
   return indexFiles.indexOf(name) !== -1
 }
 
@@ -40,7 +44,8 @@ function isRelativeToSibling(name) {
 const typeTest = cond([
   [isBuiltIn, constant('builtin')],
   [isExternalModule, constant('external')],
-  [isProjectModule, constant('project')],
+  [isScoped, constant('external')],
+  [isInternalModule, constant('internal')],
   [isRelativeToParent, constant('parent')],
   [isIndex, constant('index')],
   [isRelativeToSibling, constant('sibling')],
