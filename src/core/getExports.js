@@ -240,13 +240,57 @@ export default class ExportMap {
     return false
   }
 
+  /**
+   * ensure that imported name fully resolves.
+   * @param  {[type]}  name [description]
+   * @return {Boolean}      [description]
+   */
+  hasDeep(name) {
+    if (this.namespace.has(name)) return { found: true, path: [this] }
+
+    if (this.reexports.has(name)) {
+      const { local, getImport } = this.reexports.get(name)
+          , imported = getImport()
+
+      // if import is ignored, return explicit 'null'
+      if (imported == null) return { found: true, path: [this] }
+
+      // safeguard against cycles, only if name matches
+      if (imported.path === this.path && local === name) return { found: false, path: [this] }
+
+      const deep = imported.hasDeep(local)
+      deep.path.unshift(this)
+
+      return deep
+    }
+
+    for (let dep of this.dependencies.values()) {
+      let innerMap = dep()
+      // todo: report as unresolved?
+      if (!innerMap) continue
+
+      // safeguard against cycles
+      if (innerMap.path === this.path) continue
+
+      let innerValue = innerMap.hasDeep(name)
+      if (innerValue.found) {
+        innerValue.path.unshift(this)
+        return innerValue
+      }
+    }
+
+    return { found: false, path: [this] }
+  }
+
   get(name) {
     if (this.namespace.has(name)) return this.namespace.get(name)
 
     if (this.reexports.has(name)) {
       const { local, getImport } = this.reexports.get(name)
           , imported = getImport()
-      if (imported == null) return undefined
+
+      // if import is ignored, return explicit 'null'
+      if (imported == null) return null
 
       // safeguard against cycles, only if name matches
       if (imported.path === this.path && local === name) return undefined

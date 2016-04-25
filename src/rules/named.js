@@ -1,3 +1,4 @@
+import * as path from 'path'
 import Exports from '../core/getExports'
 
 module.exports = function (context) {
@@ -20,9 +21,20 @@ module.exports = function (context) {
     node.specifiers.forEach(function (im) {
       if (im.type !== type) return
 
-      if (!imports.get(im[key].name)) {
-        context.report(im[key],
-          im[key].name + ' not found in \'' + node.source.value + '\'')
+      const deepLookup = imports.hasDeep(im[key].name)
+
+      if (!deepLookup.found) {
+        if (deepLookup.path.length > 1) {
+          const deepPath = deepLookup.path
+            .map(i => path.relative(path.dirname(context.getFilename()), i.path))
+            .join(' -> ')
+
+          context.report(im[key],
+            `${im[key].name} not found via ${deepPath}`)
+        } else {
+          context.report(im[key],
+            im[key].name + ' not found in \'' + node.source.value + '\'')
+        }
       }
     })
   }

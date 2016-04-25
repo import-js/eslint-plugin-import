@@ -160,7 +160,7 @@ ruleTester.run('named', rule, {
     test({
       code: 'import { baz } from "./broken-trampoline"',
       parser: 'babel-eslint',
-      errors: ["baz not found in './broken-trampoline'"],
+      errors: ["baz not found via broken-trampoline.js -> named-exports.js"],
     }),
 
     // parse errors
@@ -213,7 +213,7 @@ ruleTester.run('named', rule, {
     test({
       code: 'import { common } from "./re-export-default"',
       // todo: better error message
-      errors: ["common not found in './re-export-default'"],
+      errors: ["common not found via re-export-default.js -> common.js"],
     }),
   ],
 })
