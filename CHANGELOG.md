@@ -3,9 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
-## [Unreleased]
+## [1.6.0] - 2016-04-25
 ### Added
-- [`no-named-as-default-member`] to `warnings` canned config
+- add [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
 - add [`extensions`] rule ([#250], thanks [@lo1tuma])
 - add [`no-nodejs-modules`] rule ([#261], thanks [@jfmengels])
@@ -18,7 +18,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`named`] now properly ignores the source module if a name is re-exported from
-  an ignored file (i.e. `node_modules`). Also improved the reported error.
+  an ignored file (i.e. `node_modules`). Also improved the reported error. (thanks to [@jimbolla] for reporting)
+- [`no-named-as-default-member`] had a crash on destructuring in loops (thanks for heads up from [@lemonmade])
 
 ## [1.5.0] - 2016-04-18
 ### Added
@@ -159,7 +160,12 @@ for info on changes for earlier releases.
 [`extensions`]: ./docs/rules/extensions.md
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
+[`order`]: ./docs/rules/order.md
+[`named`]: ./docs/rules/named.md
 
+[#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
+[#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
+[#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
@@ -178,7 +184,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.5.0...1.6.0
 [1.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.2.0...v1.3.0
@@ -199,4 +206,7 @@ for info on changes for earlier releases.
 [@mathieudutour]: https://github.com/mathieudutour
 [@singles]: https://github.com/singles
 [@jfmengels]: https://github.com/jfmengels
+[@lo1tuma]: https://github.com/lo1tuma
 [@dmnd]: https://github.com/dmnd
+[@lemonmade]: https://github.com/lemonmade
+[@jimbolla]: https://github.com/jimbolla
