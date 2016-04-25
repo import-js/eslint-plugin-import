@@ -49,6 +49,8 @@ module.exports = function(context) {
   }
 
   function handleDestructuringAssignment(node) {
+    if (!node.init) return
+
     const isDestructure = (
       node.id.type === 'ObjectPattern' && node.init.type === 'Identifier'
     )
