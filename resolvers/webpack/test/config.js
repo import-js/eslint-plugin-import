@@ -18,4 +18,14 @@ describe("config", function () {
     expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
   })
+
+  it("finds compile-to-js configs", function () {
+    var settings = {
+      config: path.join(__dirname, './files/webpack.config.babel.js'),
+    }
+
+    expect(resolve('main-module', file, settings))
+      .to.have.property('path')
+      .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
+  })
 })

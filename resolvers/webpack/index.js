@@ -3,6 +3,7 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , get = require('lodash.get')
   , find = require('array-find')
+  , interpret = require('interpret')
   // not available on 0.10.x
   , isAbsolute = path.isAbsolute || require('is-absolute')
 
@@ -32,6 +33,7 @@ exports.resolve = function (source, file, settings) {
 
   var configPath = get(settings, 'config', 'webpack.config.js')
     , webpackConfig
+
   try {
     // see if we've got an absolute path
     if (!isAbsolute(configPath)) {
@@ -42,7 +44,19 @@ exports.resolve = function (source, file, settings) {
       configPath = path.join(packageDir, configPath)
     }
 
+    var ext = Object.keys(interpret.extensions).reduce(function (chosen, extension) {
+      var extlen = extension.length
+      return ((configPath.substr(-extlen) === extension) && (extlen > chosen.length))
+        ? extension : chosen
+    }, '')
+
+    registerCompiler(interpret.extensions[ext])
+
     webpackConfig = require(configPath)
+    
+    if (webpackConfig && webpackConfig.default) {
+      webpackConfig = webpackConfig.default
+    }
   } catch (err) {
     webpackConfig = {}
   }
@@ -57,10 +71,12 @@ exports.resolve = function (source, file, settings) {
 
   // root as first alternate path
   var rootPath = get(webpackConfig, ['resolve', 'root'])
+
   if (rootPath) {
     if (typeof rootPath === 'string') paths.push(rootPath)
     else paths.push.apply(paths, rootPath)
   }
+
   // set fallback paths
   var fallbackPath = get(webpackConfig, ['resolve', 'fallback'])
   if (fallbackPath) {
@@ -71,6 +87,7 @@ exports.resolve = function (source, file, settings) {
 
   // otherwise, resolve "normally"
   try {
+
     return { found: true, path: resolve.sync(source, {
       basedir: path.dirname(file),
 
@@ -144,4 +161,24 @@ function packageFilter(config, pkg) {
 
 
   return pkg
+}
+
+
+function registerCompiler(moduleDescriptor) {
+  if(moduleDescriptor) {
+    if(typeof moduleDescriptor === 'string') {
+      require(moduleDescriptor)
+    } else if(!Array.isArray(moduleDescriptor)) {
+      moduleDescriptor.register(require(moduleDescriptor.module))
+    } else {
+      for(var i = 0; i < moduleDescriptor.length; i++) {
+        try {
+          registerCompiler(moduleDescriptor[i])
+          break
+        } catch(e) {
+          // do nothing
+        }
+      }
+    }
+  }
 }
