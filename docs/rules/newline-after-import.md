@@ -1,8 +1,10 @@
 # newline-after-import
 
-Reports if there's no new line after last import in group.
+Reports if there's no new line after last import/require in group.
 
 ## Rule Details
+
+**NOTE**: In each of those examples you can replace `import` call with `require`.
 
 Valid:
 
