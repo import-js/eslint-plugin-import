@@ -27,10 +27,6 @@ ruleTester.run('imports-first', rule, {
                   import { z } from './baz';"
          , errors: 2
          })
-  , test({ code: "import { x } from './foo'; import { y } from 'bar'"
-         , options: ['absolute-first']
-         , errors: 1
-         })
   , test({ code: "import { x } from 'foo';\
                   'use directive';\
                   import { y } from 'bar';"
