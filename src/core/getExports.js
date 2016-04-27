@@ -352,7 +352,7 @@ function captureDoc(...nodes) {
     // capture XSDoc
     n.leadingComments.forEach(comment => {
       // skip non-block comments
-      if (comment.value.slice(0, 4) !== "*\n *") return
+      if (comment.value.slice(0, 4) !== '*\n *') return
       try {
         metadata.doc = doctrine.parse(comment.value, { unwrap: true })
       } catch (err) {

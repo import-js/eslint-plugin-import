@@ -3,11 +3,11 @@ import assign from 'object-assign'
 
 export default function (content, context) {
 
-  if (context == null) throw new Error("need context to parse properly")
+  if (context == null) throw new Error('need context to parse properly')
 
   let { parserOptions, parserPath } = context
 
-  if (!parserPath) throw new Error("parserPath is required!")
+  if (!parserPath) throw new Error('parserPath is required!')
 
   // hack: espree blows up with frozen options
   parserOptions = assign({}, parserOptions)

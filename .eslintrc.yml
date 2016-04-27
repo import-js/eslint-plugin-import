@@ -13,3 +13,7 @@ rules:
   comma-dangle: [2, always-multiline]
   eqeqeq: [2, "allow-null"]
   no-shadow: 1
+  quotes:
+    - 2
+    - single
+    - allowTemplateLiterals: true
