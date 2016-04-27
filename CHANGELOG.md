@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## resolvers/webpack/0.2.2 - 2016-04-27
+### Added
+- `interpret` configs (such as `.babel.js`).
+  Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
+
 ## [1.6.0] - 2016-04-25
 ### Added
 - add [`no-named-as-default-member`] to `warnings` canned config
@@ -163,6 +168,7 @@ for info on changes for earlier releases.
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
 
+[#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
 [#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
@@ -172,6 +178,7 @@ for info on changes for earlier releases.
 [#228]: https://github.com/benmosher/eslint-plugin-import/pull/228
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
@@ -204,9 +211,11 @@ for info on changes for earlier releases.
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
 
 [@mathieudutour]: https://github.com/mathieudutour
+[@gausie]: https://github.com/gausie
 [@singles]: https://github.com/singles
 [@jfmengels]: https://github.com/jfmengels
 [@lo1tuma]: https://github.com/lo1tuma
 [@dmnd]: https://github.com/dmnd
 [@lemonmade]: https://github.com/lemonmade
 [@jimbolla]: https://github.com/jimbolla
+[@jquense]: https://github.com/jquense
