@@ -29,14 +29,14 @@ export function hashArray(hash, array) {
 }
 
 export function hashObject(hash, object) {
-  hash.update("{")
+  hash.update('{')
   Object.keys(object).sort().forEach(key => {
     hash.update(stringify(key))
     hash.update(':')
     hashify(hash, object[key])
-    hash.update(",")
+    hash.update(',')
   })
-  hash.update("}")
+  hash.update('}')
 
   return hash
 }
