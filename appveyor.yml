@@ -1,6 +1,7 @@
 # Test against this version of Node.js
 environment:
-  nodejs_version: "4"
+  - nodejs_version: "4"
+  - nodejs_version: "6"
   # killing build matrix in the interest of turnaround time
   # matrix:
   # - nodejs_version: "0.10"
