@@ -6,6 +6,7 @@ var findRoot = require('find-root')
   , interpret = require('interpret')
   // not available on 0.10.x
   , isAbsolute = path.isAbsolute || require('is-absolute')
+  , fs = require('fs')
 
 var resolveAlias = require('./resolve-alias')
 
@@ -31,29 +32,60 @@ exports.resolve = function (source, file, settings) {
 
   if (resolve.isCore(source)) return { found: true, path: null }
 
-  var configPath = get(settings, 'config', 'webpack.config.js')
-    , webpackConfig
+  var webpackConfig
+
+  var extensions = Object.keys(interpret.extensions).sort(function(a, b) {
+    return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length
+  })
 
   try {
-    // see if we've got an absolute path
-    if (!isAbsolute(configPath)) {
-      // if not, find ancestral package.json and use its directory as base for the path
-      var packageDir = findRoot(path.resolve(file))
-      if (!packageDir) throw new Error('package not found above ' + file)
+    var configPath = get(settings, 'config')
+      , packageDir
+      , extension
 
-      configPath = path.join(packageDir, configPath)
+    // see if we've got an absolute path
+    if (!configPath || !isAbsolute(configPath)) {
+      // if not, find ancestral package.json and use its directory as base for the path
+      packageDir = findRoot(path.resolve(file))
+      if (!packageDir) throw new Error('package not found above ' + file)
     }
 
-    var ext = Object.keys(interpret.extensions).reduce(function (chosen, extension) {
-      var extlen = extension.length
-      return ((configPath.substr(-extlen) === extension) && (extlen > chosen.length))
-        ? extension : chosen
-    }, '')
+    if (configPath) {
+      // extensions is not reused below, so safe to mutate it here.
+      extensions.reverse()
+      extensions.forEach(function (maybeExtension) {
+        if (extension) {
+          return
+        }
 
-    registerCompiler(interpret.extensions[ext])
+        if (configPath.substr(-maybeExtension.length) === maybeExtension) {
+          extension = maybeExtension
+        }
+      })
 
+      // see if we've got an absolute path
+      if (!isAbsolute(configPath)) {
+        configPath = path.join(packageDir, configPath)
+      }
+    } else {
+      extensions.forEach(function (maybeExtension) {
+        if (extension) {
+          return
+        }
+
+        var maybePath = path.resolve(
+          path.join(packageDir, 'webpack.config' + maybeExtension)
+        )
+        if (fs.existsSync(maybePath)) {
+          configPath = maybePath
+          extension = maybeExtension
+        }
+      })
+    }
+
+    registerCompiler(interpret.extensions[extension])
     webpackConfig = require(configPath)
-    
+
     if (webpackConfig && webpackConfig.default) {
       webpackConfig = webpackConfig.default
     }
