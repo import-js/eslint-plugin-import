@@ -5,6 +5,8 @@ var chai =  require('chai')
 var resolve = require('../index').resolve
 
 var file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js')
+var extensionFile = path.join(__dirname, 'config-extensions', 'src', 'dummy.js')
+
 var absoluteSettings = {
   config: path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js'),
 }
@@ -27,5 +29,11 @@ describe("config", function () {
     expect(resolve('main-module', file, settings))
       .to.have.property('path')
       .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
+  })
+
+  it("finds compile-to-js config in parent directories", function () {
+    expect(resolve('main-module', extensionFile))
+      .to.have.property('path')
+      .and.equal(path.join(__dirname, 'config-extensions', 'src', 'main-module.js'))
   })
 })
