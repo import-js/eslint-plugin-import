@@ -105,7 +105,7 @@ export function relative(modulePath, sourceFile, settings) {
     let { path: fullPath, found } = withResolver(resolver, config)
 
     // resolvers imply file existence, this double-check just ensures the case matches
-    if (found && CASE_INSENSITIVE && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
+    if (found && CASE_INSENSITIVE && fullPath !== null && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
       // reject resolved path
       fullPath = undefined
     }
