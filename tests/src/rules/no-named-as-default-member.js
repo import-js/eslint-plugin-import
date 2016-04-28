@@ -1,4 +1,4 @@
-import {test} from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 import {RuleTester} from 'eslint'
 import rule from 'rules/no-named-as-default-member'
 
@@ -11,8 +11,7 @@ ruleTester.run('no-named-as-default-member', rule, {
     test({code: 'import {foo} from "./bar"; const baz = foo.baz;'}),
     test({code: 'import * as named from "./named-exports"; const a = named.a'}),
 
-    // issue #249
-    test({code: 'for (const {foo, bar} of baz) {}'}),
+    ...SYNTAX_CASES,
   ],
 
   invalid: [

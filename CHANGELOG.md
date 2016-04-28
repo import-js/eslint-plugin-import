@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+### Fixed
+- [`no-named-as-default-member`] don't crash on rest props. ([#281], thanks [@SimenB])
+
 ## resolvers/webpack: Unreleased
 ### Changed
 - automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
@@ -194,6 +198,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
+[#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
 [#210]: https://github.com/benmosher/eslint-plugin-import/issues/210
