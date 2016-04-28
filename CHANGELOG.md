@@ -5,7 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## resolvers/webpack: Unreleased
 ### Changed
-- automatically find webpack config with `interpret`-able extensions ([#287], thanks @taion)
+- automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
 
 ## resolvers/webpack/0.2.3 - 2016-04-28
 ### Fixed
@@ -178,9 +178,12 @@ for info on changes for earlier releases.
 [`named`]: ./docs/rules/named.md
 
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
+[#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
 [#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
+[#261]: https://github.com/benmosher/eslint-plugin-import/pull/261
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
+[#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
@@ -231,3 +234,5 @@ for info on changes for earlier releases.
 [@jimbolla]: https://github.com/jimbolla
 [@jquense]: https://github.com/jquense
 [@jonboiser]: https://github.com/jonboiser
+[@taion]: https://github.com/taion
+[@SimenB]: https://github.com/SimenB
