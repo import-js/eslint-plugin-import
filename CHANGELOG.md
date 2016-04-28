@@ -5,7 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 ### Fixed
-- [`no-named-as-default-member`] don't crash on rest props. ([#281], thanks [@SimenB])
+- [`no-named-as-default-member`]: don't crash on rest props. ([#281], thanks [@SimenB])
+- support for Node 6: don't pass `null` to `path` functions.
+  Thanks to [@strawbrary] for bringing this up ([#272]) and adding OSX support to the Travis
+  config ([#288]).
 
 ## resolvers/webpack: Unreleased
 ### Changed
@@ -182,6 +185,7 @@ for info on changes for earlier releases.
 [`named`]: ./docs/rules/named.md
 
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
+[#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
 [#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
 [#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
 [#261]: https://github.com/benmosher/eslint-plugin-import/pull/261
@@ -199,6 +203,7 @@ for info on changes for earlier releases.
 
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
+[#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
 [#210]: https://github.com/benmosher/eslint-plugin-import/issues/210
@@ -240,4 +245,5 @@ for info on changes for earlier releases.
 [@jquense]: https://github.com/jquense
 [@jonboiser]: https://github.com/jonboiser
 [@taion]: https://github.com/taion
+[@strawbrary]: https://github.com/strawbrary
 [@SimenB]: https://github.com/SimenB
