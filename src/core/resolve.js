@@ -6,7 +6,7 @@ import assign from 'object-assign'
 import fs from 'fs'
 import { dirname, basename, join } from 'path'
 
-export const CASE_INSENSITIVE = fs.existsSync(join(__dirname, 'reSOLVE.js'))
+export const CASE_SENSITIVE_FS = !fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
 const fileExistsCache = new Map()
 
@@ -26,6 +26,12 @@ function checkCache(cacheKey, { lifetime }) {
 
 // http://stackoverflow.com/a/27382838
 function fileExistsWithCaseSync(filepath, cacheSettings) {
+  // don't care if the FS is case-sensitive
+  if (CASE_SENSITIVE_FS) return true
+
+  // null means it resolved to a builtin
+  if (filepath === null) return true
+
   const dir = dirname(filepath)
 
   let result = checkCache(filepath, cacheSettings)
@@ -105,7 +111,7 @@ export function relative(modulePath, sourceFile, settings) {
     let { path: fullPath, found } = withResolver(resolver, config)
 
     // resolvers imply file existence, this double-check just ensures the case matches
-    if (found && CASE_INSENSITIVE && fullPath !== null && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
+    if (found && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
       // reject resolved path
       fullPath = undefined
     }
