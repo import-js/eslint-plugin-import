@@ -22,7 +22,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - `interpret` dependency was declared in the wrong `package.json`.
    Thanks [@jonboiser] for sleuthing ([#286]) and fixing ([#289]).
->>>>>>> upstream/master
 
 ## resolvers/webpack/0.2.2 - 2016-04-27
 ### Added
