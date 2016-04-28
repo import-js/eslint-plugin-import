@@ -3,7 +3,12 @@ node_js:
   - 0.10
   - 0.12
   - 4
-  - stable
+  - 5
+  - 6
+
+os:
+  - linux
+  - osx
 
 install:
   - npm -g install npm@3

@@ -49,15 +49,16 @@ module.exports = function(context) {
   }
 
   function handleDestructuringAssignment(node) {
-    if (!node.init) return
-
     const isDestructure = (
-      node.id.type === 'ObjectPattern' && node.init.type === 'Identifier'
+      node.id.type === 'ObjectPattern' &&
+      node.init != null &&
+      node.init.type === 'Identifier'
     )
     if (!isDestructure) return
 
     const objectName = node.init.name
-    for (const {key} of node.id.properties) {
+    for (const { key } of node.id.properties) {
+      if (key == null) continue  // true for rest properties
       storePropertyLookup(objectName, key.name, key)
     }
   }

@@ -3,8 +3,26 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## [Unreleased]
 ### Added
 - add [`no-mutable-exports`] rule ([#290], thanks [@josh])
+
+## resolvers/webpack: Unreleased
+### Changed
+- automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
+
+## [1.6.1] - 2016-04-28
+### Fixed
+- [`no-named-as-default-member`]: don't crash on rest props. ([#281], thanks [@SimenB])
+- support for Node 6: don't pass `null` to `path` functions.
+  Thanks to [@strawbrary] for bringing this up ([#272]) and adding OSX support to the Travis
+  config ([#288]).
+
+## resolvers/webpack/0.2.3 - 2016-04-28
+### Fixed
+- `interpret` dependency was declared in the wrong `package.json`.
+   Thanks [@jonboiser] for sleuthing ([#286]) and fixing ([#289]).
+>>>>>>> upstream/master
 
 ## resolvers/webpack/0.2.2 - 2016-04-27
 ### Added
@@ -171,9 +189,14 @@ for info on changes for earlier releases.
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
 
+[#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
+[#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
+[#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
 [#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
+[#261]: https://github.com/benmosher/eslint-plugin-import/pull/261
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
+[#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
@@ -183,6 +206,9 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
+[#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
+[#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
 [#210]: https://github.com/benmosher/eslint-plugin-import/issues/210
@@ -194,7 +220,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.5.0...1.6.0
 [1.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.3.0...v1.4.0
@@ -222,3 +249,7 @@ for info on changes for earlier releases.
 [@lemonmade]: https://github.com/lemonmade
 [@jimbolla]: https://github.com/jimbolla
 [@jquense]: https://github.com/jquense
+[@jonboiser]: https://github.com/jonboiser
+[@taion]: https://github.com/taion
+[@strawbrary]: https://github.com/strawbrary
+[@SimenB]: https://github.com/SimenB

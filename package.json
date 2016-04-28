@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Import with sanity.",
   "main": "lib/index.js",
   "directories": {
@@ -71,7 +71,6 @@
     "es6-set": "^0.1.4",
     "es6-symbol": "*",
     "eslint-import-resolver-node": "^0.2.0",
-    "interpret": "^1.0.0",
     "lodash.cond": "^4.3.0",
     "lodash.endswith": "^4.0.1",
     "lodash.find": "^4.3.0",

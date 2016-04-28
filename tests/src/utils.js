@@ -28,3 +28,33 @@ export function testContext(settings) {
 export function getFilename(file) {
   return path.join(__dirname, '..', 'files', file || 'foo.js')
 }
+
+/**
+ * to be added as valid cases just to ensure no nullable fields are going
+ * to crash at runtinme
+ * @type {Array}
+ */
+export const SYNTAX_CASES = [
+
+  test({ code: 'for (let { foo, bar } of baz) {}' }),
+  test({ code: 'for (let [ foo, bar ] of baz) {}' }),
+
+  test({ code: 'const { x, y } = bar' }),
+  test({ code: 'const { x, y, ...z } = bar', parser: 'babel-eslint' }),
+
+  // all the exports
+  test({ code: 'export { x }' }),
+  test({ code: 'export { x as y }' }),
+
+  // not sure about these since they reference a file
+  // test({ code: 'export { x } from "./y.js"'}),
+  // test({ code: 'export * as y from "./y.js"', parser: 'babel-eslint'}),
+
+  test({ code: 'export const x = null' }),
+  test({ code: 'export var x = null' }),
+  test({ code: 'export let x = null' }),
+
+  test({ code: 'export default x' }),
+  test({ code: 'export default class x {}' }),
+
+ ]
