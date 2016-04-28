@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## resolvers/webpack/0.2.3 - 2016-04-28
+### Fixed
+- `interpret` dependency was declared in the wrong `package.json`.
+   Thanks [@jonboiser] for sleuthing ([#286]) and fixing ([#289]).
+
 ## resolvers/webpack/0.2.2 - 2016-04-27
 ### Added
 - `interpret` configs (such as `.babel.js`).
@@ -168,6 +173,7 @@ for info on changes for earlier releases.
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
 
+[#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
 [#256]: https://github.com/benmosher/eslint-plugin-import/pull/256
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
@@ -180,6 +186,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
 [#210]: https://github.com/benmosher/eslint-plugin-import/issues/210
@@ -219,3 +226,4 @@ for info on changes for earlier releases.
 [@lemonmade]: https://github.com/lemonmade
 [@jimbolla]: https://github.com/jimbolla
 [@jquense]: https://github.com/jquense
+[@jonboiser]: https://github.com/jonboiser
