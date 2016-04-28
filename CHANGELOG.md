@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+### Added
+- add [`no-mutable-exports`] rule ([#290], thanks [@josh])
+
 ## resolvers/webpack/0.2.2 - 2016-04-27
 ### Added
 - `interpret` configs (such as `.babel.js`).
