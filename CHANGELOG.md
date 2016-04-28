@@ -3,16 +3,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
-## Unreleased
+## [Unreleased]
+...add changes/fixes here...
+
+## resolvers/webpack: Unreleased
+### Changed
+- automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
+
+## [1.6.1] - 2016-04-28
 ### Fixed
 - [`no-named-as-default-member`]: don't crash on rest props. ([#281], thanks [@SimenB])
 - support for Node 6: don't pass `null` to `path` functions.
   Thanks to [@strawbrary] for bringing this up ([#272]) and adding OSX support to the Travis
   config ([#288]).
-
-## resolvers/webpack: Unreleased
-### Changed
-- automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
 
 ## resolvers/webpack/0.2.3 - 2016-04-28
 ### Fixed
@@ -215,7 +218,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.5.0...1.6.0
 [1.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.3.0...v1.4.0
