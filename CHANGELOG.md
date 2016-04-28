@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## resolvers/webpack: Unreleased
+### Changed
+- automatically find webpack config with `interpret`-able extensions ([#287], thanks @taion)
+
 ## resolvers/webpack/0.2.3 - 2016-04-28
 ### Fixed
 - `interpret` dependency was declared in the wrong `package.json`.
