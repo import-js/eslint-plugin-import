@@ -36,6 +36,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
 **Module systems:**
 

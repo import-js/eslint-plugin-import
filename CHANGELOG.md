@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
+- [`no-mutable-exports`], new rule. ([#290], thanks [@josh])
 
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
