@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
 
-## resolvers/webpack: Unreleased
+## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
 - automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
 
