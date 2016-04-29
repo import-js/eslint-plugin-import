@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
+- Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
@@ -210,6 +211,7 @@ for info on changes for earlier releases.
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
+[#266]: https://github.com/benmosher/eslint-plugin-import/issues/266
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214
 [#210]: https://github.com/benmosher/eslint-plugin-import/issues/210

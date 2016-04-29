@@ -20,6 +20,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'var foo = require("pkg-up")'}),
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
+    test({ code: 'import "lodash.isarray"'}),
 
     // 'project' type
     test({
@@ -32,7 +33,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "not-a-dependency"',
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'not-a-dependency\' is not listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
@@ -40,22 +41,38 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: false}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'eslint\' is not listed in the project\'s dependencies, not devDependencies.',
+        message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
     test({
-      code: 'var foo = require("not-a-dependency");',
+      code: 'import "lodash.isarray"',
+      options: [{optionalDependencies: false}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'not-a-dependency\' is not listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+        message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
     }),
     test({
-      code: 'var eslint = require("eslint");',
+      code: 'var foo = require("not-a-dependency")',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'var eslint = require("eslint")',
       options: [{devDependencies: false}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'eslint\' is not listed in the project\'s dependencies, not devDependencies.',
+        message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'var eslint = require("lodash.isarray")',
+      options: [{optionalDependencies: false}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
     }),
   ],

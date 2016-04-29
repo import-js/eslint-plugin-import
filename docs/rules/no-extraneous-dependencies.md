@@ -8,11 +8,12 @@ The closest parent `package.json` will be used. If no `package.json` is found, t
 This rule supports the following options:
 
 `devDependencies`: If set to `false`, then the rule will show an error when `devDependencies` are imported. Defaults to `true`.
+`optionalDependencies`: If set to `false`, then the rule will show an error when `optionalDependencies` are imported. Defaults to `true`.
 
 You can set the options like this:
 
 ```js
-"import/no-extraneous-dependencies": ["error", {"devDependencies": false}]
+"import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false}]
 ```
 
 
@@ -34,6 +35,9 @@ Given the following `package.json`:
     "eslint": "^2.4.0",
     "eslint-plugin-ava": "^1.3.0",
     "xo": "^0.13.0"
+  },
+  "optionalDependencies": {
+    "lodash.isarray": "^4.0.0"
   }
 }
 ```
@@ -48,6 +52,10 @@ import _ from 'lodash';
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": false}] */
 import test from 'ava';
 var test = require('ava');
+
+/* eslint import/no-extraneous-dependencies: ["error", {"optionalDependencies": false}] */
+import isArray from 'lodash.isarray';
+var isArray = require('lodash.isarray');
 ```
 
 
@@ -60,6 +68,7 @@ var foo = require('./foo');
 
 import test from 'ava';
 import find from 'lodash.find';
+import find from 'lodash.isarray';
 ```
 
 
