@@ -10,6 +10,13 @@ describe('resolve', function () {
     expect(resolve.bind(null, null, null)).to.throw(Error)
   })
 
+  it('should resolve core modules as null', function () {
+    var file = resolve( 'path'
+                      , utils.testContext({ 'import/resolve': {}})
+                      )
+    expect(file).to.equal(null)
+  })
+
   it('respects import/resolve extensions', function () {
     var file = resolve( './jsx/MyCoolComponent'
                       , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
