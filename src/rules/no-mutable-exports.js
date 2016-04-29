@@ -6,23 +6,40 @@ module.exports = function (context) {
     }
   }
 
+  function checkDeclarationsInScope({variables}, name) {
+    for (let variable of variables) {
+      if (variable.name === name) {
+        for (let def of variable.defs) {
+          if (def.type === 'Variable') {
+            checkDeclaration(def.parent)
+          }
+        }
+      }
+    }
+  }
+
+  function handleExportDefault(node) {
+    const scope = context.getScope()
+
+    if (node.declaration.name) {
+      checkDeclarationsInScope(scope, node.declaration.name)
+    }
+  }
+
   function handleExportNamed(node) {
-    const variables = context.getScope().variables
+    const scope = context.getScope()
 
     if (node.declaration)  {
       checkDeclaration(node.declaration)
     } else {
-      node.specifiers.forEach(specifier => {
-        variables.forEach(variable => {
-          if (variable.name === specifier.local.name) {
-            variable.defs.forEach(def => checkDeclaration(def.parent))
-          }
-        })
-      })
+      for (let specifier of node.specifiers) {
+        checkDeclarationsInScope(scope, specifier.local.name)
+      }
     }
   }
 
   return {
+    'ExportDefaultDeclaration': handleExportDefault,
     'ExportNamedDeclaration': handleExportNamed,
   }
 }
