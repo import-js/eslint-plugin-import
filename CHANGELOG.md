@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-...add changes/fixes here...
+### Added
+- [`newline-after-import`], new rule. ([#245], thanks [@singles])
 
 ## resolvers/webpack: Unreleased
 ### Changed
@@ -186,6 +187,7 @@ for info on changes for earlier releases.
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
+[`newline-after-import`]: ./docs/rules/newline-after-import.md
 
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
@@ -197,6 +199,7 @@ for info on changes for earlier releases.
 [#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
 [#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
+[#245]: https://github.com/benmosher/eslint-plugin-import/pull/245
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
 [#228]: https://github.com/benmosher/eslint-plugin-import/pull/228

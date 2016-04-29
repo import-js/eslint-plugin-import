@@ -61,6 +61,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`extensions`]: ./docs/rules/extensions.md
 [`order`]: ./docs/rules/order.md
+[`newline-after-import`]: ./docs/rules/newline-after-import.md
 
 
 ## Installation
