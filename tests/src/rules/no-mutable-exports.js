@@ -9,8 +9,21 @@ ruleTester.run('no-mutable-exports', rule, {
     test({ code: 'export const count = 1'}),
     test({ code: 'export function getCount() {}'}),
     test({ code: 'export class Counter {}'}),
+    test({ code: 'export default count = 1'}),
+    test({ code: 'export default function getCount() {}'}),
+    test({ code: 'export default class Counter {}'}),
     test({ code: 'const count = 1\nexport { count }'}),
     test({ code: 'const count = 1\nexport { count as counter }'}),
+    test({ code: 'const count = 1\nexport default count'}),
+    test({ code: 'const count = 1\nexport { count as default }'}),
+    test({ code: 'function getCount() {}\nexport { getCount }'}),
+    test({ code: 'function getCount() {}\nexport { getCount as getCounter }'}),
+    test({ code: 'function getCount() {}\nexport default getCount'}),
+    test({ code: 'function getCount() {}\nexport { getCount as default }'}),
+    test({ code: 'class Counter {}\nexport { Counter }'}),
+    test({ code: 'class Counter {}\nexport { Counter as Count }'}),
+    test({ code: 'class Counter {}\nexport default Counter'}),
+    test({ code: 'class Counter {}\nexport { Counter as default }'}),
   ],
   invalid: [
     test({
@@ -35,6 +48,14 @@ ruleTester.run('no-mutable-exports', rule, {
     }),
     test({
       code: 'var count = 1\nexport { count as counter }',
+      errors: ['Exporting mutable \'var\' binding, use \'const\' instead.'],
+    }),
+    test({
+      code: 'let count = 1\nexport default count',
+      errors: ['Exporting mutable \'let\' binding, use \'const\' instead.'],
+    }),
+    test({
+      code: 'var count = 1\nexport default count',
       errors: ['Exporting mutable \'var\' binding, use \'const\' instead.'],
     }),
   ],
