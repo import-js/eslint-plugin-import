@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
+- Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
 
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed

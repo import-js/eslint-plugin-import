@@ -160,6 +160,52 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
+    // Option: newlines-between: 'always'
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+
+        var sibling = require('./foo');
+
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling'],
+            ['parent', 'external'],
+          ],
+          'newlines-between': 'always',
+        },
+      ],
+    }),
+    // Option: newlines-between: 'never'
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+        var sibling = require('./foo');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling'],
+            ['parent', 'external'],
+          ],
+          'newlines-between': 'never',
+        },
+      ],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -412,6 +458,131 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
+    }),
+    // Option newlines-between: 'never' - should report unnecessary line between groups
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+
+        var sibling = require('./foo');
+
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling'],
+            ['parent', 'external'],
+          ],
+          'newlines-between': 'never',
+        },
+      ],
+      errors: [
+        {
+          line: 4,
+          message: 'There should be no empty line between import groups',
+        },
+        {
+          line: 6,
+          message: 'There should be no empty line between import groups',
+        },
+      ],
+    }),
+    // // Option newlines-between: 'always' - should report lack of newline between groups
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+        var sibling = require('./foo');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling'],
+            ['parent', 'external'],
+          ],
+          'newlines-between': 'always',
+        },
+      ],
+      errors: [
+        {
+          line: 4,
+          message: 'There should be one empty line between import groups',
+        },
+        {
+          line: 5,
+          message: 'There should be one empty line between import groups',
+        },
+      ],
+    }),
+    //Option newlines-between: 'always' should report too many empty lines between import groups
+    test({
+      code: `
+        var fs = require('fs');
+        var index = require('./');
+
+
+
+        var sibling = require('./foo');
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling', 'parent', 'external']
+          ],
+          'newlines-between': 'always',
+        },
+      ],
+      errors: [
+        {
+          line: 3,
+          message: 'There should be one empty line between import groups',
+        },
+      ],
+    }),
+    //Option newlines-between: 'always' should report unnecessary empty lines space between import groups
+    test({
+      code: `
+        var fs = require('fs');
+
+        var path = require('path');
+        var index = require('./');
+
+        var sibling = require('./foo');
+
+        var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling', 'parent', 'external']
+          ],
+          'newlines-between': 'always',
+        },
+      ],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be no empty line within import group',
+        },
+        {
+          line: 7,
+          message: 'There should be no empty line within import group',
+        },
+      ],
     }),
   ],
 })
