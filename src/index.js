@@ -28,6 +28,9 @@ export const configs = {
   'errors': require('../config/errors'),
   'warnings': require('../config/warnings'),
 
+  // useful stuff for folks using React
+  'react': require('../config/react'),
+
   // shhhh... work in progress "secret" rules
   'stage-0': require('../config/stage-0'),
 }

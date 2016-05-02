@@ -14,6 +14,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: fallback to source path for extension enforcement if imported
   module is not resolved. Also, never report for builtins (i.e. `path`). ([#296])
 
+### Breaking
+- [`import/extensions` setting]: a whitelist of file extensions to parse as modules
+  and search for `export`s. Defaults to `['.js']`.
+
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
 - automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
@@ -180,6 +184,7 @@ for info on changes for earlier releases.
 
 [`import/cache` setting]: ./README.md#importcache
 [`import/ignore` setting]: ./README.md#importignore
+[`import/extensions` setting]: ./README.md#importextensions
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md

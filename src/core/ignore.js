@@ -1,8 +1,27 @@
+import { extname } from 'path'
+import Set from 'es6-set'
+
+// one-shot memoized
+let cachedSet, lastSettings
+function validExtensions({ settings }) {
+  if (cachedSet && settings === lastSettings) {
+    return cachedSet
+  }
+
+  // todo: add 'mjs'?
+  lastSettings = settings
+  cachedSet = new Set(settings['import/extensions'] || [ '.js' ])
+  return cachedSet
+}
+
 export default function ignore(path, context) {
   // ignore node_modules by default
-  var ignoreStrings = context.settings['import/ignore']
+  const ignoreStrings = context.settings['import/ignore']
     ? [].concat(context.settings['import/ignore'])
     : ['node_modules']
+
+  // check extension whitelist first (cheap)
+  if (!validExtensions(context).has(extname(path))) return true
 
   if (ignoreStrings.length === 0) return false
 
