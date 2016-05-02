@@ -8,7 +8,7 @@ function constant(value) {
   return () => value
 }
 
-function isBuiltIn(name) {
+export function isBuiltIn(name) {
   return builtinModules.indexOf(name) !== -1
 }
 

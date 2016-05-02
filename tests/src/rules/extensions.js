@@ -32,6 +32,14 @@ ruleTester.run('extensions', rule, {
       options: [ 'never' ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
     }),
+
+    // unresolved (#271/#295)
+    test({ code: 'import path from "path"' }),
+    test({ code: 'import path from "path"', options: [ 'never' ] }),
+    test({ code: 'import path from "path"', options: [ 'always' ] }),
+    test({ code: 'import thing from "./fake-file.js"', options: [ 'always' ] }),
+    test({ code: 'import thing from "non-package"', options: [ 'never' ] }),
+
   ],
 
   invalid: [
@@ -116,6 +124,29 @@ ruleTester.run('extensions', rule, {
       ],
     }),
 
+    // unresolved (#271/#295)
+    test({
+      code: 'import thing from "./fake-file.js"',
+      options: [ 'never' ],
+      errors: [
+        {
+            message: 'Unexpected use of file extension "js" for "./fake-file.js"',
+            line: 1,
+            column: 19,
+        },
+      ],
+    }),
+    test({
+      code: 'import thing from "non-package"',
+      options: [ 'always' ],
+      errors: [
+        {
+            message: 'Missing file extension for "non-package"',
+            line: 1,
+            column: 19,
+        },
+      ],
+    }),
+
   ],
 })
-

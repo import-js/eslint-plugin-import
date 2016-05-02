@@ -54,6 +54,8 @@ import bar from './bar';
 import Component from './Component'
 
 import express from 'express/index';
+
+import * as path from 'path';
 ```
 
 The following patterns are considered problems when configuration set to "always":
@@ -78,6 +80,8 @@ import bar from './bar.json';
 import Component from './Component.jsx'
 
 import express from 'express/index.js';
+
+import * as path from 'path';
 ```
 
 ## When Not To Use It
