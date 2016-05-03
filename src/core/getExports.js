@@ -22,6 +22,12 @@ const exportCache = new Map()
  */
 const hasExports = new RegExp('(^|[\\n;])\\s*export\\s[\\w{*]')
 
+/**
+ * detect CJS without a full parse.
+ * todo: supplant import/ignore.
+ */
+const hasCJSModule = new RegExp('(^|[^\\w.])(module\\.)?exports(\\.\w+)?\\s*=')
+
 export default class ExportMap {
   constructor(path) {
     this.path = path
