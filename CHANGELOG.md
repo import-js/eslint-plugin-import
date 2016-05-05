@@ -108,7 +108,7 @@ using it, though). See [#89] for details.
 
 ### Fixed
 - don't crash on self references ([#210])
-- correct cache behavior in `eslint_d` for deep namespaces (#200)
+- correct cache behavior in `eslint_d` for deep namespaces ([#200])
 
 ## [1.0.3] - 2016-02-26
 ### Changed
@@ -195,6 +195,7 @@ for info on changes for earlier releases.
 [`named`]: ./docs/rules/named.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 
+[#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
@@ -205,14 +206,14 @@ for info on changes for earlier releases.
 [#254]: https://github.com/benmosher/eslint-plugin-import/pull/254
 [#250]: https://github.com/benmosher/eslint-plugin-import/pull/250
 [#247]: https://github.com/benmosher/eslint-plugin-import/pull/247
-[#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#245]: https://github.com/benmosher/eslint-plugin-import/pull/245
+[#243]: https://github.com/benmosher/eslint-plugin-import/pull/243
 [#241]: https://github.com/benmosher/eslint-plugin-import/pull/241
 [#239]: https://github.com/benmosher/eslint-plugin-import/pull/239
 [#228]: https://github.com/benmosher/eslint-plugin-import/pull/228
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
-[#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
+[#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
