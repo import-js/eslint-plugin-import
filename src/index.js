@@ -5,6 +5,7 @@ export const rules = {
   'namespace': require('./rules/namespace'),
   'no-namespace': require('./rules/no-namespace'),
   'export': require('./rules/export'),
+  'no-mutable-exports': require('./rules/no-mutable-exports'),
   'extensions': require('./rules/extensions'),
 
   'no-named-as-default': require('./rules/no-named-as-default'),

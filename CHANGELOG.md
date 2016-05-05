@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 - Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
+- add [`no-mutable-exports`] rule ([#290], thanks [@josh])
 
 ### Fixed
 - [`extensions`]: fallback to source path for extension enforcement if imported
@@ -194,9 +195,11 @@ for info on changes for earlier releases.
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
+[`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
+[#290]: https://github.com/benmosher/eslint-plugin-import/pull/290
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
 [#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
@@ -263,3 +266,4 @@ for info on changes for earlier releases.
 [@taion]: https://github.com/taion
 [@strawbrary]: https://github.com/strawbrary
 [@SimenB]: https://github.com/SimenB
+[@josh]: https://github.com/josh
