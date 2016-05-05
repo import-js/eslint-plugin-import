@@ -202,10 +202,7 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
-<<<<<<< 7775f344b90aa44c446d596e4e137d6a725bf5e8
-=======
 [#297]: https://github.com/benmosher/eslint-plugin-import/pull/297
->>>>>>> default to all extensions valid to avoid breaking change until semver-next
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
 [#290]: https://github.com/benmosher/eslint-plugin-import/pull/290
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
