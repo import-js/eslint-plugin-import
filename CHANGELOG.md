@@ -9,14 +9,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 - Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
 - add [`no-mutable-exports`] rule ([#290], thanks [@josh])
+- [`import/extensions` setting]: a whitelist of file extensions to parse as modules
+  and search for `export`s. If unspecified, all extensions are considered valid (for now).
+  In v2, this will likely default to `['.js', MODULE_EXT]`,. ([#297], to fix [#267])
 
 ### Fixed
 - [`extensions`]: fallback to source path for extension enforcement if imported
   module is not resolved. Also, never report for builtins (i.e. `path`). ([#296])
-
-### Breaking
-- [`import/extensions` setting]: a whitelist of file extensions to parse as modules
-  and search for `export`s. Defaults to `['.js']`.
 
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
@@ -203,6 +202,10 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
+<<<<<<< 7775f344b90aa44c446d596e4e137d6a725bf5e8
+=======
+[#297]: https://github.com/benmosher/eslint-plugin-import/pull/297
+>>>>>>> default to all extensions valid to avoid breaking change until semver-next
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
 [#290]: https://github.com/benmosher/eslint-plugin-import/pull/290
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
@@ -226,6 +229,7 @@ for info on changes for earlier releases.
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
+[#267]: https://github.com/benmosher/eslint-plugin-import/issues/267
 [#266]: https://github.com/benmosher/eslint-plugin-import/issues/266
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216
 [#214]: https://github.com/benmosher/eslint-plugin-import/issues/214

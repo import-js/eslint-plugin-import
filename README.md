@@ -150,8 +150,10 @@ You may set the following settings in your `.eslintrc`:
 #### `import/extensions`
 
 A whitelist of file extensions that will be parsed as modules and inspected for
-`export`s. This defaults to `['.js']`, unless you are using the `react` shared config,
-in which case it is specified as `['.js', '.jsx']`.
+`export`s.
+
+This will default to `['.js']` in the next major revision of this plugin, unless
+you are using the `react` shared config, in which case it is specified as `['.js', '.jsx']`.
 
 Note that this is different from (and likely a subset of) any `import/resolver`
 extensions settings, which may include `.json`, `.coffee`, etc. which will still

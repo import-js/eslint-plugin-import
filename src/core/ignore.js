@@ -10,7 +10,12 @@ function validExtensions({ settings }) {
 
   // todo: add 'mjs'?
   lastSettings = settings
-  cachedSet = new Set(settings['import/extensions'] || [ '.js' ])
+  // breaking: default to '.js'
+  // cachedSet = new Set(settings['import/extensions'] || [ '.js' ])
+  cachedSet = 'import/extensions' in settings
+    ? new Set(settings['import/extensions'])
+    : { has: () => true } // the set of all elements
+
   return cachedSet
 }
 
