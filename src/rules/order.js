@@ -32,7 +32,7 @@ function findOutOfOrder(imported) {
   })
 }
 
-function report(context, imported, outOfOrder, order) {
+function reportOutOfOrder(context, imported, outOfOrder, order) {
   outOfOrder.forEach(function (imp) {
     const found = find(imported, function hasHigherRank(importedItem) {
       return importedItem.rank > imp.rank
@@ -42,7 +42,7 @@ function report(context, imported, outOfOrder, order) {
   })
 }
 
-function makeReport(context, imported) {
+function makeOutOfOrderReport(context, imported) {
   const outOfOrder = findOutOfOrder(imported)
   if (!outOfOrder.length) {
     return
@@ -51,10 +51,10 @@ function makeReport(context, imported) {
   const reversedImported = reverse(imported)
   const reversedOrder = findOutOfOrder(reversedImported)
   if (reversedOrder.length < outOfOrder.length) {
-    report(context, reversedImported, reversedOrder, 'after')
+    reportOutOfOrder(context, reversedImported, reversedOrder, 'after')
     return
   }
-  report(context, imported, outOfOrder, 'before')
+  reportOutOfOrder(context, imported, outOfOrder, 'before')
 }
 
 // DETECTING
@@ -109,6 +109,37 @@ function convertGroupsToRanks(groups) {
   }, rankObject)
 }
 
+function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
+  const getLineDifference = (currentImport, previousImport) => {
+    return currentImport.node.loc.start.line - previousImport.node.loc.start.line
+  }
+  let previousImport = imported[0]
+
+  imported.slice(1).forEach(function(currentImport) {
+    if (newlinesBetweenImports === 'always') {
+      if (currentImport.rank !== previousImport.rank
+        && getLineDifference(currentImport, previousImport) !== 2)
+      {
+        context.report(
+          previousImport.node, 'There should be one empty line between import groups'
+        )
+      } else if (currentImport.rank === previousImport.rank
+        && getLineDifference(currentImport, previousImport) >= 2)
+      {
+        context.report(
+          previousImport.node, 'There should be no empty line within import group'
+        )
+      }
+    } else {
+      if (getLineDifference(currentImport, previousImport) > 1) {
+        context.report(previousImport.node, 'There should be no empty line between import groups')
+      }
+    }
+
+    previousImport = currentImport
+  })
+}
+
 module.exports = function importOrderRule (context) {
   const options = context.options[0] || {}
   let ranks
@@ -148,7 +179,12 @@ module.exports = function importOrderRule (context) {
       registerNode(context, node, name, 'require', ranks, imported)
     },
     'Program:exit': function reportAndReset() {
-      makeReport(context, imported)
+      makeOutOfOrderReport(context, imported)
+
+      if ('newlines-between' in options) {
+        makeNewlinesBetweenReport(context, imported, options['newlines-between'])
+      }
+
       imported = []
     },
     FunctionDeclaration: incrementLevel,
@@ -168,6 +204,9 @@ module.exports.schema = [
     properties: {
       groups: {
         type: 'array',
+      },
+      'newlines-between': {
+        enum: [ 'always', 'never' ],
       },
     },
     additionalProperties: false,

@@ -73,7 +73,9 @@ var path = require('path');
 
 This rule supports the following options:
 
-`groups`: How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+### `groups: [array]`:
+
+How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
 ```js
 [
   'builtin', // Built-in types are first
@@ -89,3 +91,53 @@ You can set the options like this:
 ```js
 "import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```
+
+### `newlines-between: [always|never]`:
+
+
+Enforces or forbids new lines between import groups:
+
+- If omitted, assertion messages will be neither enforced nor forbidden.
+- If set to `always`, a new line between each group will be enforced, and new lines inside a group will be forbidden.
+- If set to `never`, no new lines are allowed in the entire import section.
+
+With the default group setting, the following will be invalid:
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "always"}] */
+import fs from 'fs';
+import path from 'path';
+import index from './';
+import sibling from './foo';
+```
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "never"}] */
+import fs from 'fs';
+import path from 'path';
+
+import index from './';
+
+import sibling from './foo';
+```
+
+while those will be valid:
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "always"}] */
+import fs from 'fs';
+import path from 'path';
+
+import index from './';
+
+import sibling from './foo';
+```
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "never"}] */
+import fs from 'fs';
+import path from 'path';
+import index from './';
+import sibling from './foo';
+```
+
