@@ -91,7 +91,7 @@ var reporter = 'spec'
 
 gulp.task('test', ['pretest'], function () {
   return gulp.src('tests/lib/**/*.js', { read: false })
-    .pipe(mocha({ reporter: reporter, grep: process.env.TEST_GREP }))
+    .pipe(mocha({ reporter: reporter, grep: process.env.TEST_GREP, timeout: 5000 }))
   // NODE_PATH=./lib mocha --recursive --reporter dot tests/lib/
 })
 

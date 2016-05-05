@@ -9,6 +9,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 - Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
 
+### Fixed
+- [`extensions`]: fallback to source path for extension enforcement if imported
+  module is not resolved. Also, never report for builtins (i.e. `path`). ([#296])
+
 ## resolvers/webpack/0.2.4 - 2016-04-29
 ### Changed
 - automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
@@ -191,6 +195,7 @@ for info on changes for earlier releases.
 [`named`]: ./docs/rules/named.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 
+[#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#288]: https://github.com/benmosher/eslint-plugin-import/pull/288
 [#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
