@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
@@ -16,6 +16,8 @@ ruleTester.run('no-named-as-default', rule, {
          , parser: 'babel-eslint' }),
     test({ code: 'export bar from "./bar";'
          , parser: 'babel-eslint' }),
+
+    ...SYNTAX_CASES,
   ],
 
   invalid: [

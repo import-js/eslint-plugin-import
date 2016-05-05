@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
@@ -96,6 +96,7 @@ ruleTester.run('named', rule, {
       settings: { 'import/ignore': ['common'] },
     }),
 
+    ...SYNTAX_CASES,
   ],
 
   invalid: [
@@ -166,6 +167,7 @@ ruleTester.run('named', rule, {
     // parse errors
     test({
       code: "import { a } from './test.coffee';",
+      settings: { 'import/extensions': ['.js', '.coffee'] },
       errors: [{
         message: "Parse errors in imported module './test.coffee': Unexpected token > (1:20)",
         type: 'Literal',

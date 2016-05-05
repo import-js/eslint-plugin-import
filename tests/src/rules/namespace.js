@@ -1,4 +1,4 @@
-var test = require('../utils').test
+import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester({ env: { es6: true }})
@@ -86,6 +86,7 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  ...SYNTAX_CASES,
 ]
 
 const invalid = [

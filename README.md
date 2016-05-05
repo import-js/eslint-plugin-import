@@ -148,6 +148,21 @@ If you are interesting in writing a resolver, see the [spec](./resolvers/README.
 
 You may set the following settings in your `.eslintrc`:
 
+#### `import/extensions`
+
+A whitelist of file extensions that will be parsed as modules and inspected for
+`export`s.
+
+This will default to `['.js']` in the next major revision of this plugin, unless
+you are using the `react` shared config, in which case it is specified as `['.js', '.jsx']`.
+
+Note that this is different from (and likely a subset of) any `import/resolver`
+extensions settings, which may include `.json`, `.coffee`, etc. which will still
+factor into the `no-unresolved` rule.
+
+Also, `import/ignore` patterns will overrule this whitelist, so `node_modules` that
+end in `.js` will still be ignored by default.
+
 #### `import/ignore`
 
 A list of regex strings that, if matched by a path, will

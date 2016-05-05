@@ -57,4 +57,10 @@ export const SYNTAX_CASES = [
   test({ code: 'export default x' }),
   test({ code: 'export default class x {}' }),
 
+  // issue #267: parser whitelist
+  test({
+    code: 'import json from "./data.json"',
+    settings: { 'import/extensions': ['.js'] }, // breaking: remove for v2
+  }),
+
  ]
