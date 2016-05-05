@@ -19,6 +19,7 @@ export const rules = {
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),
+  'prefer-default-export': require('./rules/prefer-default-export'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),

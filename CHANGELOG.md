@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`prefer-default-export`], new rule. ([#308], thanks [@gavriguy])
+
 ### Fixed
 - ignore namespace / ES7 re-exports in [`no-mutable-exports`]. ([#317], fixed by [#322]. thanks [@borisyankov] + [@jfmengels])
 
@@ -204,8 +207,10 @@ for info on changes for earlier releases.
 [`named`]: ./docs/rules/named.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
+[`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
+[#308]: https://github.com/benmosher/eslint-plugin-import/pull/308
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#297]: https://github.com/benmosher/eslint-plugin-import/pull/297
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
@@ -281,3 +286,4 @@ for info on changes for earlier releases.
 [@SimenB]: https://github.com/SimenB
 [@josh]: https://github.com/josh
 [@borisyankov]: https://github.com/borisyankov
+[@gavriguy]: https://github.com/gavriguy
