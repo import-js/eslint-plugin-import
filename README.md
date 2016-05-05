@@ -30,6 +30,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Report use of exported name as property of default export ([`no-named-as-default-member`])
 * Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
 * Forbid the use of extraneous packages ([`no-extraneous-dependencies`])
+* Forbid the use of mutable exports with `var` or `let`. ([`no-mutable-exports`])
 
 [`export`]: ./docs/rules/export.md
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
