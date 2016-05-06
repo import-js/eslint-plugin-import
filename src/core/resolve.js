@@ -145,7 +145,11 @@ function resolverReducer(resolvers, map) {
 
 function requireResolver(name) {
   try {
-    return require(`eslint-import-resolver-${name}`)
+    if (path.isAbsolute(name)) {
+      return require(`eslint-import-resolver-${name}`);
+    } else {
+      return require(path.resolve(name));
+   }
   } catch (err) {
     throw new Error(`unable to load resolver "${name}".`)
   }
