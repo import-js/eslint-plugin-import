@@ -72,6 +72,7 @@
     "es6-symbol": "*",
     "eslint-import-resolver-node": "^0.2.0",
     "find-root": "^1.0.0",
+    "is-absolute": "^0.2.5",
     "lodash.cond": "^4.3.0",
     "lodash.endswith": "^4.0.1",
     "lodash.find": "^4.3.0",
