@@ -145,7 +145,18 @@ function resolverReducer(resolvers, map) {
 
 function requireResolver(name) {
   try {
-    return require(`eslint-import-resolver-${name}`)
+    // Try to resolve package with absolute path (/Volumes/....)
+    if (path.isAbsolute(name)) {
+      return require(path.resolve(name));
+    }
+
+    try {
+      // Try to resolve package with custom name (@myorg/resolver-name)
+      return require(name)
+    } catch (err) {
+      // Try to resolve package with conventional name
+      return require(`eslint-import-resolver-${name}`)
+    }
   } catch (err) {
     throw new Error(`unable to load resolver "${name}".`)
   }
