@@ -2,10 +2,13 @@ import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 import assign from 'object-assign'
-import findRoot from 'find-root';
+import findRoot from 'find-root'
+import isAbsoluteFallback from 'is-absolute'
 
 import fs from 'fs'
-import { dirname, basename, join } from 'path'
+import { dirname, basename, join, isAbsolute as isAbsoluteNode } from 'path'
+
+const isAbsolute = isAbsoluteNode || isAbsoluteFallback
 
 export const CASE_SENSITIVE_FS = !fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
@@ -153,14 +156,17 @@ function requireResolver(name, modulePath) {
 
     try {
       // Try to resolve package with path, relative to closest package.json
-      const packageDir = findRoot(path.resolve(modulePath));
+      const packageDir = findRoot(resolve(modulePath))
 
-      return require(path.join(packageDir, name));
+      return require(join(packageDir, name))
     } catch (err) {
       try {
         // Try to resolve package with custom name (@myorg/resolver-name)
-        return require(name);
+        return require(name)
+        /* eslint-disable no-shadow */
       } catch (err) {
+        /* eslint-enable no-shadow */
+
         // Try to resolve package with conventional name
         return require(`eslint-import-resolver-${name}`)
       }
