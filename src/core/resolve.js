@@ -147,8 +147,8 @@ function resolverReducer(resolvers, map) {
 function requireResolver(name, modulePath) {
   try {
     // Try to resolve package with absolute path (/Volumes/....)
-    if (path.isAbsolute(name)) {
-      return require(path.resolve(name));
+    if (isAbsolute(name)) {
+      return require(name)
     }
 
     try {
