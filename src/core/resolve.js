@@ -2,6 +2,7 @@ import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 import assign from 'object-assign'
+import findRoot from 'find-root';
 
 import fs from 'fs'
 import { dirname, basename, join } from 'path'
@@ -106,7 +107,7 @@ export function relative(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map())
 
   for (let [name, config] of resolvers) {
-    const resolver = requireResolver(name)
+    const resolver = requireResolver(name, modulePath)
 
     let { path: fullPath, found } = withResolver(resolver, config)
 
@@ -143,7 +144,7 @@ function resolverReducer(resolvers, map) {
   throw new Error('invalid resolver config')
 }
 
-function requireResolver(name) {
+function requireResolver(name, modulePath) {
   try {
     // Try to resolve package with absolute path (/Volumes/....)
     if (path.isAbsolute(name)) {
@@ -151,11 +152,18 @@ function requireResolver(name) {
     }
 
     try {
-      // Try to resolve package with custom name (@myorg/resolver-name)
-      return require(name)
+      // Try to resolve package with path, relative to closest package.json
+      const packageDir = findRoot(path.resolve(modulePath));
+
+      return require(path.join(packageDir, name));
     } catch (err) {
-      // Try to resolve package with conventional name
-      return require(`eslint-import-resolver-${name}`)
+      try {
+        // Try to resolve package with custom name (@myorg/resolver-name)
+        return require(name);
+      } catch (err) {
+        // Try to resolve package with conventional name
+        return require(`eslint-import-resolver-${name}`)
+      }
     }
   } catch (err) {
     throw new Error(`unable to load resolver "${name}".`)
