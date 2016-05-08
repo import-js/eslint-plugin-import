@@ -118,18 +118,23 @@ exports.resolve = function (source, file, settings) {
     else paths.push.apply(paths, fallbackPath)
   }
 
-  let resolveOptions = {
-    source, // source, after resolving alias
+  var resolveOptions = {
+    source: source, // source, after resolving alias
     info: {
-      originalSource, // original source
-      rawSource, // source with stripped loader(same as source, if there wasn't one)
+      originalSource: originalSource, // original source
+      rawSource: rawSource, // source with stripped loader(same as source, if there wasn't one)
     },
   }
 
-  if (Array.isArray(settings.plugins)) {
-    resolveOptions = settings.plugins.reduce((currentResolveOptions, plugin) => (
-      plugin(currentResolveOptions) || currentResolveOptions
-    ), resolveOptions)
+  if (Array.isArray(get(settings, 'plugins'))) {
+    resolveOptions = settings.plugins.reduce(function pluginsReducer(currentResolveOptions, plugin) {
+      if (typeof plugin !== 'function') {
+        return currentResolveOptions
+      }
+
+      return plugin(currentResolveOptions)
+        || currentResolveOptions // allow user to mutate resolveOptions without returning it
+    }, resolveOptions)
   }
 
   // otherwise, resolve "normally"
@@ -140,11 +145,11 @@ exports.resolve = function (source, file, settings) {
 
       // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
       extensions: get(webpackConfig, ['resolve', 'extensions'])
-      || ['', '.webpack.js', '.web.js', '.js'],
+        || ['', '.webpack.js', '.web.js', '.js'],
 
       // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
       moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
-      || ['web_modules', 'node_modules'],
+        || ['web_modules', 'node_modules'],
 
       paths: paths,
       packageFilter: packageFilter.bind(null, webpackConfig),
