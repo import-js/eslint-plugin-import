@@ -143,7 +143,7 @@ exports.resolve = function (source, file, settings) {
 
   if (Array.isArray(settings.plugins)) {
     resolveOptions = settings.plugins.reduce((currentResolveOptions, plugin) => (
-      plugin(currentResolveOptions)
+      plugin(currentResolveOptions) || currentResolveOptions
     ), resolveOptions)
   }
 
