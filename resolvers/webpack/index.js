@@ -118,29 +118,35 @@ exports.resolve = function (source, file, settings) {
     else paths.push.apply(paths, fallbackPath)
   }
 
-  var resolveOptions = {
-    source: source, // source, after resolving alias
-    info: {
-      originalSource: originalSource, // original source
-      rawSource: rawSource, // source with stripped loader(same as source, if there wasn't one)
-    },
+  const sourceInfo = {
+    originalSource: originalSource, // original source
+    rawSource: rawSource, // source with stripped loader(same as source, if there wasn't one)
   }
 
   if (Array.isArray(get(settings, 'plugins'))) {
-    resolveOptions = settings.plugins.reduce(function pluginsReducer(currentResolveOptions, plugin) {
+    source = settings.plugins.reduce(function pluginsReducer(currentSource, plugin, index) {
       if (typeof plugin !== 'function') {
-        return currentResolveOptions
+        throw new TypeError(
+          'Expected webpack resolver plugin to be a function. Got' + plugin + '. Plugin index:' + index + '.'
+        )
       }
 
-      return plugin(currentResolveOptions)
-        || currentResolveOptions // allow user to mutate resolveOptions without returning it
-    }, resolveOptions)
+      currentSource = plugin(currentSource, sourceInfo)
+
+      if (typeof currentSource !== 'string') {
+        throw new TypeError(
+          'Expected webpack resolver plugin to return a string. Got ' + currentSource + '. Plugin index: ', index + '.'
+        )
+      }
+
+      return currentSource;
+    }, source)
   }
 
   // otherwise, resolve "normally"
   try {
 
-    return { found: true, path: resolve.sync(resolveOptions.source, {
+    return { found: true, path: resolve.sync(source, {
       basedir: path.dirname(file),
 
       // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
