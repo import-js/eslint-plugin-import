@@ -123,21 +123,6 @@ exports.resolve = function (source, file, settings) {
     info: {
       originalSource, // original source
       rawSource, // source with stripped loader(same as source, if there wasn't one)
-      webpackConfig,
-    },
-    path: {
-      basedir: path.dirname(file),
-
-      // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
-      extensions: get(webpackConfig, ['resolve', 'extensions'])
-        || ['', '.webpack.js', '.web.js', '.js'],
-
-      // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-      moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
-        || ['web_modules', 'node_modules'],
-
-      paths: paths,
-      packageFilter: packageFilter.bind(null, webpackConfig),
     },
   }
 
@@ -150,7 +135,20 @@ exports.resolve = function (source, file, settings) {
   // otherwise, resolve "normally"
   try {
 
-    return { found: true, path: resolve.sync(resolveOptions.source, resolveOptions.path) }
+    return { found: true, path: resolve.sync(resolveOptions.source, {
+      basedir: path.dirname(file),
+
+      // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
+      extensions: get(webpackConfig, ['resolve', 'extensions'])
+      || ['', '.webpack.js', '.web.js', '.js'],
+
+      // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
+      moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
+      || ['web_modules', 'node_modules'],
+
+      paths: paths,
+      packageFilter: packageFilter.bind(null, webpackConfig),
+    }) }
   } catch (err) {
     return { found: false }
   }
