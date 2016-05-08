@@ -23,11 +23,13 @@ exports.interfaceVersion = 2
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
 exports.resolve = function (source, file, settings) {
+  var originalSource = source
+  var rawSource = source
 
   // strip loaders
   var finalBang = source.lastIndexOf('!')
   if (finalBang >= 0) {
-    source = source.slice(finalBang + 1)
+    source = rawSource = source.slice(finalBang + 1)
   }
 
   if (resolve.isCore(source)) return { found: true, path: null }
@@ -116,11 +118,14 @@ exports.resolve = function (source, file, settings) {
     else paths.push.apply(paths, fallbackPath)
   }
 
-
-  // otherwise, resolve "normally"
-  try {
-
-    return { found: true, path: resolve.sync(source, {
+  let resolveOptions = {
+    source, // source, after resolving alias
+    info: {
+      originalSource, // original source
+      rawSource, // source with stripped loader(same as source, if there wasn't one)
+      webpackConfig,
+    },
+    path: {
       basedir: path.dirname(file),
 
       // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
@@ -133,7 +138,19 @@ exports.resolve = function (source, file, settings) {
 
       paths: paths,
       packageFilter: packageFilter.bind(null, webpackConfig),
-    }) }
+    },
+  }
+
+  if (Array.isArray(settings.plugins)) {
+    resolveOptions = settings.plugins.reduce((currentResolveOptions, plugin) => (
+      plugin(currentResolveOptions)
+    ), resolveOptions)
+  }
+
+  // otherwise, resolve "normally"
+  try {
+
+    return { found: true, path: resolve.sync(resolveOptions.source, resolveOptions.path) }
   } catch (err) {
     return { found: false }
   }
