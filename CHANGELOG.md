@@ -8,7 +8,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`prefer-default-export`], new rule. ([#308], thanks [@gavriguy])
 
 ### Fixed
-- ignore namespace / ES7 re-exports in [`no-mutable-exports`]. ([#317], fixed by [#322]. thanks [@borisyankov] + [@jfmengels])
+- Ignore namespace / ES7 re-exports in [`no-mutable-exports`]. ([#317], fixed by [#322]. thanks [@borisyankov] + [@jfmengels])
+- Make [`no-extraneous-dependencies`] handle scoped packages ([#316], thanks [@jfmengels])
 
 ## [1.7.0] - 2016-05-06
 ### Added
@@ -18,7 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add [`no-mutable-exports`] rule ([#290], thanks [@josh])
 - [`import/extensions` setting]: a whitelist of file extensions to parse as modules
   and search for `export`s. If unspecified, all extensions are considered valid (for now).
-  In v2, this will likely default to `['.js', MODULE_EXT]`,. ([#297], to fix [#267])
+  In v2, this will likely default to `['.js', MODULE_EXT]`. ([#297], to fix [#267])
 
 ### Fixed
 - [`extensions`]: fallback to source path for extension enforcement if imported
@@ -210,6 +211,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
+[#316]: https://github.com/benmosher/eslint-plugin-import/pull/316
 [#308]: https://github.com/benmosher/eslint-plugin-import/pull/308
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#297]: https://github.com/benmosher/eslint-plugin-import/pull/297

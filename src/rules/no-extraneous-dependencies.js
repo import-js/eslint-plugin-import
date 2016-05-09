@@ -39,7 +39,10 @@ function reportIfMissing(context, deps, allowDevDeps, allowOptDeps, node, name) 
   if (importType(name, context) !== 'external') {
     return
   }
-  const packageName = name.split('/')[0]
+  const splitName = name.split('/')
+  const packageName = splitName[0][0] === '@'
+    ? splitName.slice(0, 2).join('/')
+    : splitName[0]
 
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined

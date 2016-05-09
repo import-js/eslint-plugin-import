@@ -21,11 +21,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
     test({ code: 'import "lodash.isarray"'}),
+    test({ code: 'import "@scope/core"'}),
 
     // 'project' type
     test({
       code: 'import "importType"',
-      settings: { "import/resolver": { node: { paths: [ path.join(__dirname, '../../files') ] } } },
+      settings: { 'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } } },
     }),
   ],
   invalid: [
@@ -34,6 +35,20 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'var donthaveit = require("@scope/donthaveit")',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'@scope/donthaveit\' should be listed in the project\'s dependencies. Run \'npm i -S @scope/donthaveit\' to add it',
+      }],
+    }),
+    test({
+      code: 'var donthaveit = require("@scope/donthaveit/lib/foo")',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'@scope/donthaveit\' should be listed in the project\'s dependencies. Run \'npm i -S @scope/donthaveit\' to add it',
       }],
     }),
     test({
