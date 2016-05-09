@@ -111,7 +111,7 @@ function convertGroupsToRanks(groups) {
 
 function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   const getLineDifference = (currentImport, previousImport) => {
-    return currentImport.node.loc.start.line - previousImport.node.loc.start.line
+    return currentImport.node.loc.start.line - previousImport.node.loc.end.line
   }
   let previousImport = imported[0]
 

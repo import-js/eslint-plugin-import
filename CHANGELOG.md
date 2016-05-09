@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
   This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
+- Make [`order`]'s `newline-between` option handle multiline import statements ([#313], thanks [@singles])
 
 ## [1.8.0] - 2016-05-11
 ### Added
