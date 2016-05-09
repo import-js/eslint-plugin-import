@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## [Unreleased]
+### Fixed
+- ignore namespace / ES7 re-exports in [`no-mutable-exports`]. ([#317], fixed by [#322]. thanks [@borisyankov] + [@jfmengels])
+
 ## [1.7.0] - 2016-05-06
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
@@ -201,6 +205,7 @@ for info on changes for earlier releases.
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
+[#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#297]: https://github.com/benmosher/eslint-plugin-import/pull/297
 [#296]: https://github.com/benmosher/eslint-plugin-import/pull/296
@@ -223,6 +228,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
+[#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
@@ -274,3 +280,4 @@ for info on changes for earlier releases.
 [@strawbrary]: https://github.com/strawbrary
 [@SimenB]: https://github.com/SimenB
 [@josh]: https://github.com/josh
+[@borisyankov]: https://github.com/borisyankov
