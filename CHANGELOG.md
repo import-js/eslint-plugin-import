@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/extensions` setting]: a whitelist of file extensions to parse as modules
   and search for `export`s. If unspecified, all extensions are considered valid (for now).
   In v2, this will likely default to `['.js', MODULE_EXT]`,. ([#297], to fix [#267])
+- [`prefer-default-export`], new rule. ([#308], thanks [@gavriguy])
 
 ### Fixed
 - [`extensions`]: fallback to source path for extension enforcement if imported
