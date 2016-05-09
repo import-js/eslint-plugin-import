@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - Ignore namespace / ES7 re-exports in [`no-mutable-exports`]. ([#317], fixed by [#322]. thanks [@borisyankov] + [@jfmengels])
 - Make [`no-extraneous-dependencies`] handle scoped packages ([#316], thanks [@jfmengels])
+- Make [`order`]'s `newline-between` option handle multiline import statements ([#313], thanks [@singles])
 
 ## [1.7.0] - 2016-05-06
 ### Added
