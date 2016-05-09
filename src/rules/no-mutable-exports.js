@@ -31,7 +31,7 @@ module.exports = function (context) {
 
     if (node.declaration)  {
       checkDeclaration(node.declaration)
-    } else {
+    } else if (!node.source) {
       for (let specifier of node.specifiers) {
         checkDeclarationsInScope(scope, specifier.local.name)
       }
