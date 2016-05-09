@@ -57,6 +57,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure consistent use of file extension within the import path ([`extensions`])
 * Enforce a convention in module import order ([`order`])
 * Enforce a newline after import statements ([`newline-after-import`])
+* Prefer a default export if module exports a single name ([`prefer-default-export`])
 
 [`imports-first`]: ./docs/rules/imports-first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
