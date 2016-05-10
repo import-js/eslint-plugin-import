@@ -8,28 +8,16 @@ module.exports = function (context) {
   return {
     'Program': function (n) {
       const body = n.body
-          , absoluteFirst = context.options[0] === 'absolute-first'
       let nonImportCount = 0
         , anyExpressions = false
-        , anyRelative = false
       body.forEach(function (node){
         if (!anyExpressions && isPossibleDirective(node)) {
           return
         }
 
         anyExpressions = true
-         
+
         if (node.type === 'ImportDeclaration') {
-          if (absoluteFirst) {
-            if (/^\./.test(node.source.value)) {
-              anyRelative = true
-            } else if (anyRelative) {
-              context.report({
-                node: node.source,
-                message: 'Absolute imports should come before relative imports.',
-              })
-            }
-          }
           if (nonImportCount > 0) {
             context.report({
               node,

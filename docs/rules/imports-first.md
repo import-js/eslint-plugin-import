@@ -14,16 +14,6 @@ initWith(foo)
 import bar from './bar' // <- reported
 ```
 
-Providing `absolute-first` as an option will report any absolute imports (i.e.
-packages) that come after any relative imports:
-
-```js
-import foo from 'foo'
-import bar from './bar'
-
-import * as _ from 'lodash' // <- reported
-```
-
 Notably, `import`s are hoisted, which means the imported modules will be evaluated
 before any of the statements interspersed between them. Keeping all `import`s together
 at the top of the file may prevent surprises resulting from this part of the spec.
