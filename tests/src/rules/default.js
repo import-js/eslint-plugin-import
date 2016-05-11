@@ -115,5 +115,11 @@ ruleTester.run('default', rule, {
       parser: 'babel-eslint',
       errors: ['No default export found in module.'],
     }),
+
+    // #328: * exports do not include default
+    test({
+      code: 'import barDefault from "./re-export"',
+      errors: [`No default export found in module.`],
+    }),
   ],
 })

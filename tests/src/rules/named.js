@@ -217,5 +217,11 @@ ruleTester.run('named', rule, {
       // todo: better error message
       errors: ["common not found via re-export-default.js -> common.js"],
     }),
+
+    // #328: * exports do not include default
+    test({
+      code: 'import { default as barDefault } from "./re-export"',
+      errors: [`default not found in './re-export'`],
+    }),
   ],
 })

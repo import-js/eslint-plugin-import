@@ -21,16 +21,15 @@ ruleTester.run('export', rule, {
     test({ code: 'export { bar }; export * from "./export-all"' }),
     test({ code: 'export * from "./export-all"' }),
     test({ code: 'export * from "./does-not-exist"' }),
+
+    // #328: "export * from" does not export a default
+    test({ code: 'export default foo; export * from "./bar"' }),
   ],
 
   invalid: [
     // multiple defaults
     test({
       code: 'export default foo; export default bar',
-      errors: ['Multiple default exports.', 'Multiple default exports.'],
-    }),
-    test({
-      code: 'export default foo; export * from "./default-export"',
       errors: ['Multiple default exports.', 'Multiple default exports.'],
     }),
     test({
@@ -99,5 +98,11 @@ ruleTester.run('export', rule, {
                'Multiple exports of name \'bar\'.'],
     }),
 
+
+    // #328: "export * from" does not export a default
+    test({
+      code: 'export * from "./default-export"',
+      errors: [`No named exports found in module './default-export'.`],
+    }),
   ],
 })

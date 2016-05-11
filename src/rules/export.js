@@ -50,7 +50,7 @@ module.exports = function (context) {
         return
       }
       let any = false
-      remoteExports.forEach((v, name) => (any = true) && addNamed(name, node))
+      remoteExports.forEach((v, name) => name !== 'default' && (any = true) && addNamed(name, node))
 
       if (!any) {
         context.report(node.source,
