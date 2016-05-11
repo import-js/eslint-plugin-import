@@ -21,16 +21,13 @@ ruleTester.run('export', rule, {
     test({ code: 'export { bar }; export * from "./export-all"' }),
     test({ code: 'export * from "./export-all"' }),
     test({ code: 'export * from "./does-not-exist"' }),
+    test({ code: 'export default foo; export * from "./default-export"' }),
   ],
 
   invalid: [
     // multiple defaults
     test({
       code: 'export default foo; export default bar',
-      errors: ['Multiple default exports.', 'Multiple default exports.'],
-    }),
-    test({
-      code: 'export default foo; export * from "./default-export"',
       errors: ['Multiple default exports.', 'Multiple default exports.'],
     }),
     test({
