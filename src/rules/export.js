@@ -50,7 +50,13 @@ module.exports = function (context) {
         return
       }
       let any = false
-      remoteExports.forEach((v, name) => (any = true) && addNamed(name, node))
+      remoteExports.forEach((v, name) => (
+        (any = true) &&
+        // Ignore default export from an export all declaration
+        // Ref: https://github.com/benmosher/eslint-plugin-import/issues/328
+        name !== 'default' &&
+        addNamed(name, node)
+      ))
 
       if (!any) {
         context.report(node.source,
