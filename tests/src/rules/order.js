@@ -206,6 +206,44 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // Option newlines-between: 'never' with multiline imports #1
+    test({
+      code: `
+        import path from 'path';
+
+        import {
+            I,
+            Want,
+            Couple,
+            Imports,
+            Here
+        } from 'bar';
+        import external from 'external'
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'always' with multiline imports #2
+    test({
+      code: `
+        import path from 'path';
+        import net
+          from 'net';
+
+        import external from 'external'
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'always' with multiline imports #3
+    test({
+      code: `
+        import foo
+          from '../../../../this/will/be/very/long/path/and/therefore/this/import/has/to/be/in/two/lines';
+
+        import bar
+          from './sibling';
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
   ],
   invalid: [
     // builtin before external module (require)
