@@ -229,13 +229,15 @@ export default class ExportMap {
     if (this.reexports.has(name)) return true
 
     // default exports must be explicitly re-exported (#328)
-    if (name !== 'default') for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
 
-      // todo: report as unresolved?
-      if (!innerMap) continue
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      if (innerMap.has(name)) return true
+        if (innerMap.has(name)) return true
+      }
     }
 
     return false
@@ -267,18 +269,20 @@ export default class ExportMap {
 
 
     // default exports must be explicitly re-exported (#328)
-    if (name !== 'default') for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
-      // todo: report as unresolved?
-      if (!innerMap) continue
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      // safeguard against cycles
-      if (innerMap.path === this.path) continue
+        // safeguard against cycles
+        if (innerMap.path === this.path) continue
 
-      let innerValue = innerMap.hasDeep(name)
-      if (innerValue.found) {
-        innerValue.path.unshift(this)
-        return innerValue
+        let innerValue = innerMap.hasDeep(name)
+        if (innerValue.found) {
+          innerValue.path.unshift(this)
+          return innerValue
+        }
       }
     }
 
@@ -302,16 +306,18 @@ export default class ExportMap {
     }
 
     // default exports must be explicitly re-exported (#328)
-    if (name !== 'default') for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
-      // todo: report as unresolved?
-      if (!innerMap) continue
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      // safeguard against cycles
-      if (innerMap.path === this.path) continue
+        // safeguard against cycles
+        if (innerMap.path === this.path) continue
 
-      let innerValue = innerMap.get(name)
-      if (innerValue !== undefined) return innerValue
+        let innerValue = innerMap.get(name)
+        if (innerValue !== undefined) return innerValue
+      }
     }
 
     return undefined
