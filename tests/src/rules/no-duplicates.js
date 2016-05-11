@@ -15,6 +15,12 @@ ruleTester.run('no-duplicates', rule, {
     // #86: every unresolved module should not show up as 'null' and duplicate
     test({ code: 'import foo from "234artaf";' +
                  'import { shoop } from "234q25ad"' }),
+
+    // #225: ignore duplicate if is a flow type import
+    test({
+      code: "import { x } from './foo'; import type { y } from './foo'",
+      parser: 'babel-eslint',
+    }),
   ],
   invalid: [
     test({
@@ -44,6 +50,12 @@ ruleTester.run('no-duplicates', rule, {
         "'non-existent' imported multiple times.",
         "'non-existent' imported multiple times.",
       ],
+    }),
+
+    test({
+      code: "import type { x } from './foo'; import type { y } from './foo'",
+      parser: 'babel-eslint',
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
   ],
 })
