@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## [Unreleased]
+### Fixed
+- `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
+  This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
+
 ## [1.8.0] - 2016-05-11
 ### Added
 - [`prefer-default-export`], new rule. ([#308], thanks [@gavriguy])
@@ -206,10 +211,13 @@ for info on changes for earlier releases.
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
+[`default`]: ./docs/rules/default.md
+[`export`]: ./docs/rules/export.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 
+[#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
 [#316]: https://github.com/benmosher/eslint-plugin-import/pull/316
 [#308]: https://github.com/benmosher/eslint-plugin-import/pull/308
@@ -235,6 +243,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
+[#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
@@ -290,3 +299,4 @@ for info on changes for earlier releases.
 [@josh]: https://github.com/josh
 [@borisyankov]: https://github.com/borisyankov
 [@gavriguy]: https://github.com/gavriguy
+[@jkimbo]: https://github.com/jkimbo

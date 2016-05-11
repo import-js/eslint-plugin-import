@@ -228,13 +228,16 @@ export default class ExportMap {
     if (this.namespace.has(name)) return true
     if (this.reexports.has(name)) return true
 
-    for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
+    // default exports must be explicitly re-exported (#328)
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
 
-      // todo: report as unresolved?
-      if (!innerMap) continue
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      if (innerMap.has(name)) return true
+        if (innerMap.has(name)) return true
+      }
     }
 
     return false
@@ -264,18 +267,22 @@ export default class ExportMap {
       return deep
     }
 
-    for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
-      // todo: report as unresolved?
-      if (!innerMap) continue
 
-      // safeguard against cycles
-      if (innerMap.path === this.path) continue
+    // default exports must be explicitly re-exported (#328)
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      let innerValue = innerMap.hasDeep(name)
-      if (innerValue.found) {
-        innerValue.path.unshift(this)
-        return innerValue
+        // safeguard against cycles
+        if (innerMap.path === this.path) continue
+
+        let innerValue = innerMap.hasDeep(name)
+        if (innerValue.found) {
+          innerValue.path.unshift(this)
+          return innerValue
+        }
       }
     }
 
@@ -298,16 +305,19 @@ export default class ExportMap {
       return imported.get(local)
     }
 
-    for (let dep of this.dependencies.values()) {
-      let innerMap = dep()
-      // todo: report as unresolved?
-      if (!innerMap) continue
+    // default exports must be explicitly re-exported (#328)
+    if (name !== 'default') {
+      for (let dep of this.dependencies.values()) {
+        let innerMap = dep()
+        // todo: report as unresolved?
+        if (!innerMap) continue
 
-      // safeguard against cycles
-      if (innerMap.path === this.path) continue
+        // safeguard against cycles
+        if (innerMap.path === this.path) continue
 
-      let innerValue = innerMap.get(name)
-      if (innerValue !== undefined) return innerValue
+        let innerValue = innerMap.get(name)
+        if (innerValue !== undefined) return innerValue
+      }
     }
 
     return undefined
@@ -321,7 +331,7 @@ export default class ExportMap {
       callback.call(thisArg, getImport().get(local), name, this))
 
     this.dependencies.forEach(dep => dep().forEach((v, n) =>
-      callback.call(thisArg, v, n, this)))
+      n !== 'default' && callback.call(thisArg, v, n, this)))
   }
 
   // todo: keys, values, entries?

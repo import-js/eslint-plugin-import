@@ -77,6 +77,7 @@ const valid = [
 
   // names.default is valid export
   test({ code: "import * as names from './default-export';" }),
+  test({ code: "import * as names from './default-export'; console.log(names.default)" }),
   test({
    code: 'export * as names from "./default-export"',
    parser: 'babel-eslint',
@@ -164,6 +165,12 @@ const invalid = [
     errors: [error('c', 'names')],
   }),
 
+  // #328: * exports do not include default
+  test({
+    code: 'import * as ree from "./re-export"; console.log(ree.default)',
+    errors: [`'default' not found in imported namespace 'ree'.`],
+  }),
+
 ]
 
 ///////////////////////
@@ -176,6 +183,9 @@ const invalid = [
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e.f)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }),
     test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }))
+
+    // deep namespaces should include explicitly exported defaults
+    test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
 
   invalid.push(
     test({
