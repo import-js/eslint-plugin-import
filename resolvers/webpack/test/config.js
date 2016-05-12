@@ -37,7 +37,7 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'config-extensions', 'src', 'main-module.js'))
   })
 
-  it.only("finds the first config with a resolve section", function () {
+  it("finds the first config with a resolve section", function () {
     var settings = {
       config: path.join(__dirname, './files/webpack.config.multiple.js'),
     }
