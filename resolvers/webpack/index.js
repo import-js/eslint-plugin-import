@@ -93,6 +93,12 @@ exports.resolve = function (source, file, settings) {
     webpackConfig = {}
   }
 
+  if (Array.isArray(webpackConfig)) {
+    webpackConfig = find(webpackConfig, function findFirstWithResolve(config) {
+      return !!config.resolve;
+    });
+  }
+
   // externals
   if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
 
