@@ -36,4 +36,14 @@ describe("config", function () {
       .to.have.property('path')
       .and.equal(path.join(__dirname, 'config-extensions', 'src', 'main-module.js'))
   })
+
+  it("finds the first config with a resolve section", function () {
+    var settings = {
+      config: path.join(__dirname, './files/webpack.config.multiple.js'),
+    }
+
+    expect(resolve('main-module', file, settings))
+      .to.have.property('resolve')
+      .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
+  })
 })
