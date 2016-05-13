@@ -196,10 +196,12 @@ module.exports = function importOrderRule (context) {
     FunctionExpression: incrementLevel,
     ArrowFunctionExpression: incrementLevel,
     BlockStatement: incrementLevel,
+    ObjectExpression: incrementLevel,
     'FunctionDeclaration:exit': decrementLevel,
     'FunctionExpression:exit': decrementLevel,
     'ArrowFunctionExpression:exit': decrementLevel,
     'BlockStatement:exit': decrementLevel,
+    'ObjectExpression:exit': decrementLevel,
   }
 }
 

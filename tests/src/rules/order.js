@@ -291,6 +291,39 @@ ruleTester.run('order', rule, {
       `,
       options: [{ 'newlines-between': 'never' }]
     }),
+    // Option newlines-between: 'never' should ignore nested require statement's #1
+    test({
+      code: `
+        var some = require('asdas');
+        var config = {
+          port: 4444,
+          runner: {
+            server_path: require('runner-binary').path,
+            
+            cli_args: {
+                'webdriver.chrome.driver': require('browser-binary').path
+            }
+          }
+        }
+      `,
+      options: [{ 'newlines-between': 'never' }]
+    }),
+    // Option newlines-between: 'always' should ignore nested require statement's #2
+    test({
+      code: `
+        var some = require('asdas');
+        var config = {
+          port: 4444,
+          runner: {
+            server_path: require('runner-binary').path,
+            cli_args: {
+                'webdriver.chrome.driver': require('browser-binary').path
+            }
+          }
+        }
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
   ],
   invalid: [
     // builtin before external module (require)

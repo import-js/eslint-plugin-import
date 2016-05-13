@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
   This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
 - Make [`order`]'s `newline-between` option handle multiline import statements ([#313], thanks [@singles])
 - Make [`order`]'s `newline-between` option handle not assigned import statements ([#313], thanks [@singles])
+- Make [`order`]'s `newline-between` option ignore `require` statements inside object literals ([#313], thanks [@singles])
 
 ## [1.8.0] - 2016-05-11
 ### Added
