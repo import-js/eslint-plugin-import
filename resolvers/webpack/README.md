@@ -11,6 +11,8 @@ Will look for `webpack.config.js` as a sibling of the first ancestral `package.j
 or a `config` parameter may be provided with another filename/path either relative to the
 `package.json`, or a complete, absolute path.
 
+If multiple webpack configurations are found the first configuration containing a resolve section will be used. Optionally, the `config-index` (zero-based) setting can be used to select a specific configuration.
+
 ```yaml
 ---
 settings:
@@ -24,4 +26,14 @@ or with explicit config file name:
 settings:
   import/resolver:
     webpack: { config: 'webpack.dev.config.js' }
+```
+
+or with explicit config file name:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack: { config: 'webpack.multiple.config.js' }
+    config-index: 1
 ```
