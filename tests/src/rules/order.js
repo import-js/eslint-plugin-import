@@ -167,7 +167,10 @@ ruleTester.run('order', rule, {
         var index = require('./');
         var path = require('path');
 
+
+
         var sibling = require('./foo');
+
 
         var relParent1 = require('../foo');
         var relParent3 = require('../');
@@ -517,38 +520,11 @@ ruleTester.run('order', rule, {
       errors: [
         {
           line: 4,
-          message: 'There should be one empty line between import groups',
+          message: 'There should be at least one empty line between import groups',
         },
         {
           line: 5,
-          message: 'There should be one empty line between import groups',
-        },
-      ],
-    }),
-    //Option newlines-between: 'always' should report too many empty lines between import groups
-    test({
-      code: `
-        var fs = require('fs');
-        var index = require('./');
-
-
-
-        var sibling = require('./foo');
-        var async = require('async');
-      `,
-      options: [
-        {
-          groups: [
-            ['builtin', 'index'],
-            ['sibling', 'parent', 'external']
-          ],
-          'newlines-between': 'always',
-        },
-      ],
-      errors: [
-        {
-          line: 3,
-          message: 'There should be one empty line between import groups',
+          message: 'There should be at least one empty line between import groups',
         },
       ],
     }),

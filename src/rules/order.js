@@ -118,10 +118,10 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   imported.slice(1).forEach(function(currentImport) {
     if (newlinesBetweenImports === 'always') {
       if (currentImport.rank !== previousImport.rank
-        && getLineDifference(currentImport, previousImport) !== 2)
+        && getLineDifference(currentImport, previousImport) <= 1)
       {
         context.report(
-          previousImport.node, 'There should be one empty line between import groups'
+          previousImport.node, 'There should be at least one empty line between import groups'
         )
       } else if (currentImport.rank === previousImport.rank
         && getLineDifference(currentImport, previousImport) >= 2)

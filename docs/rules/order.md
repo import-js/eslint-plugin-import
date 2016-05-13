@@ -98,7 +98,7 @@ You can set the options like this:
 Enforces or forbids new lines between import groups:
 
 - If omitted, assertion messages will be neither enforced nor forbidden.
-- If set to `always`, a new line between each group will be enforced, and new lines inside a group will be forbidden.
+- If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
 - If set to `never`, no new lines are allowed in the entire import section.
 
 With the default group setting, the following will be invalid:
