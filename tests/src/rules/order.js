@@ -167,7 +167,10 @@ ruleTester.run('order', rule, {
         var index = require('./');
         var path = require('path');
 
+
+
         var sibling = require('./foo');
+
 
         var relParent1 = require('../foo');
         var relParent3 = require('../');
@@ -205,6 +208,121 @@ ruleTester.run('order', rule, {
           'newlines-between': 'never',
         },
       ],
+    }),
+    // Option newlines-between: 'always' with multiline imports #1
+    test({
+      code: `
+        import path from 'path';
+
+        import {
+            I,
+            Want,
+            Couple,
+            Imports,
+            Here
+        } from 'bar';
+        import external from 'external'
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'always' with multiline imports #2
+    test({
+      code: `
+        import path from 'path';
+        import net
+          from 'net';
+
+        import external from 'external'
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'always' with multiline imports #3
+    test({
+      code: `
+        import foo
+          from '../../../../this/will/be/very/long/path/and/therefore/this/import/has/to/be/in/two/lines';
+
+        import bar
+          from './sibling';
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'always' with not assigned import #1
+    test({
+      code: `
+        import path from 'path';
+
+        import 'loud-rejection';
+        import 'something-else';
+
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'never' with not assigned import #2
+    test({
+      code: `
+        import path from 'path';
+        import 'loud-rejection';
+        import 'something-else';
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'never' }]
+    }),
+    // Option newlines-between: 'always' with not assigned require #1
+    test({
+      code: `
+        var path = require('path');
+
+        require('loud-rejection');
+        require('something-else');
+
+        var _ = require('lodash');
+      `,
+      options: [{ 'newlines-between': 'always' }]
+    }),
+    // Option newlines-between: 'never' with not assigned require #2
+    test({
+      code: `
+        var path = require('path');
+        require('loud-rejection');
+        require('something-else');
+        var _ = require('lodash');
+      `,
+      options: [{ 'newlines-between': 'never' }]
+    }),
+    // Option newlines-between: 'never' should ignore nested require statement's #1
+    test({
+      code: `
+        var some = require('asdas');
+        var config = {
+          port: 4444,
+          runner: {
+            server_path: require('runner-binary').path,
+            
+            cli_args: {
+                'webdriver.chrome.driver': require('browser-binary').path
+            }
+          }
+        }
+      `,
+      options: [{ 'newlines-between': 'never' }]
+    }),
+    // Option newlines-between: 'always' should ignore nested require statement's #2
+    test({
+      code: `
+        var some = require('asdas');
+        var config = {
+          port: 4444,
+          runner: {
+            server_path: require('runner-binary').path,
+            cli_args: {
+                'webdriver.chrome.driver': require('browser-binary').path
+            }
+          }
+        }
+      `,
+      options: [{ 'newlines-between': 'always' }]
     }),
   ],
   invalid: [
@@ -517,38 +635,11 @@ ruleTester.run('order', rule, {
       errors: [
         {
           line: 4,
-          message: 'There should be one empty line between import groups',
+          message: 'There should be at least one empty line between import groups',
         },
         {
           line: 5,
-          message: 'There should be one empty line between import groups',
-        },
-      ],
-    }),
-    //Option newlines-between: 'always' should report too many empty lines between import groups
-    test({
-      code: `
-        var fs = require('fs');
-        var index = require('./');
-
-
-
-        var sibling = require('./foo');
-        var async = require('async');
-      `,
-      options: [
-        {
-          groups: [
-            ['builtin', 'index'],
-            ['sibling', 'parent', 'external']
-          ],
-          'newlines-between': 'always',
-        },
-      ],
-      errors: [
-        {
-          line: 3,
-          message: 'There should be one empty line between import groups',
+          message: 'There should be at least one empty line between import groups',
         },
       ],
     }),
@@ -581,6 +672,39 @@ ruleTester.run('order', rule, {
         {
           line: 7,
           message: 'There should be no empty line within import group',
+        },
+      ],
+    }),
+    // Option newlines-between: 'never' should report unnecessary empty lines when using not assigned imports
+    test({
+      code: `
+        import path from 'path';
+        import 'loud-rejection';
+
+        import 'something-else';
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'never' }],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be no empty line between import groups',
+        },
+      ],
+    }),
+    // Option newlines-between: 'always' should report missing empty lines when using not assigned imports
+    test({
+      code: `
+        import path from 'path';
+        import 'loud-rejection';
+        import 'something-else';
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'always' }],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be at least one empty line between import groups',
         },
       ],
     }),

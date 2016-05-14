@@ -110,28 +110,33 @@ function convertGroupsToRanks(groups) {
 }
 
 function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
-  const getLineDifference = (currentImport, previousImport) => {
-    return currentImport.node.loc.start.line - previousImport.node.loc.start.line
+  const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
+    const linesBetweenImports = context.getSourceCode().lines.slice(
+      previousImport.node.loc.end.line,
+      currentImport.node.loc.start.line - 1
+    )
+
+    return linesBetweenImports.filter((line) => !line.trim().length).length
   }
   let previousImport = imported[0]
 
   imported.slice(1).forEach(function(currentImport) {
     if (newlinesBetweenImports === 'always') {
       if (currentImport.rank !== previousImport.rank
-        && getLineDifference(currentImport, previousImport) !== 2)
+        && getNumberOfEmptyLinesBetween(currentImport, previousImport) === 0)
       {
         context.report(
-          previousImport.node, 'There should be one empty line between import groups'
+          previousImport.node, 'There should be at least one empty line between import groups'
         )
       } else if (currentImport.rank === previousImport.rank
-        && getLineDifference(currentImport, previousImport) >= 2)
+        && getNumberOfEmptyLinesBetween(currentImport, previousImport) > 0)
       {
         context.report(
           previousImport.node, 'There should be no empty line within import group'
         )
       }
     } else {
-      if (getLineDifference(currentImport, previousImport) > 1) {
+      if (getNumberOfEmptyLinesBetween(currentImport, previousImport) > 0) {
         context.report(previousImport.node, 'There should be no empty line between import groups')
       }
     }
@@ -191,10 +196,12 @@ module.exports = function importOrderRule (context) {
     FunctionExpression: incrementLevel,
     ArrowFunctionExpression: incrementLevel,
     BlockStatement: incrementLevel,
+    ObjectExpression: incrementLevel,
     'FunctionDeclaration:exit': decrementLevel,
     'FunctionExpression:exit': decrementLevel,
     'ArrowFunctionExpression:exit': decrementLevel,
     'BlockStatement:exit': decrementLevel,
+    'ObjectExpression:exit': decrementLevel,
   }
 }
 
