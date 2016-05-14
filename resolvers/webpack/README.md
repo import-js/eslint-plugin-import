@@ -25,7 +25,8 @@ or with explicit config file name:
 ---
 settings:
   import/resolver:
-    webpack: { config: 'webpack.dev.config.js' }
+    webpack:
+      config: 'webpack.dev.config.js'
 ```
 
 or with explicit config file name:
@@ -34,6 +35,7 @@ or with explicit config file name:
 ---
 settings:
   import/resolver:
-    webpack: { config: 'webpack.multiple.config.js' }
-    config-index: 1
+    webpack:
+      config: 'webpack.multiple.config.js'
+      config-index: 1   # take the config at index 1
 ```
