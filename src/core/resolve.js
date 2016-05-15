@@ -163,9 +163,7 @@ function requireResolver(name, modulePath) {
       try {
         // Try to resolve package with custom name (@myorg/resolver-name)
         return require(name)
-        /* eslint-disable no-shadow */
-      } catch (err) {
-        /* eslint-enable no-shadow */
+      } catch (err) { // eslint-disable-line no-shadow
 
         // Try to resolve package with conventional name
         return require(`eslint-import-resolver-${name}`)
