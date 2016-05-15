@@ -23,6 +23,10 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        export const { foo, bar } = item;`,
+      }),
+    test({
+      code: `
         export { foo as default }`,
       }),
   ],

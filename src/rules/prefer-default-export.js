@@ -15,7 +15,15 @@ module.exports = function(context) {
       }
     },
     'ExportNamedDeclaration': function(node) {
-      namedExportCount++
+      if (node.declaration &&
+          node.declaration.declarations.length &&
+          node.declaration.declarations[0].id.type === 'ObjectPattern') {
+
+        namedExportCount += node.declaration.declarations[0].id.properties.length
+      } else {
+        namedExportCount++
+      }
+
       namedExportNode = node
     },
     'ExportDefaultDeclaration': function() {
@@ -23,7 +31,7 @@ module.exports = function(context) {
     },
 
     'Program:exit': function() {
-      if (namedExportCount === 1 &&  specifierExportCount < 2 && !hasDefaultExport) {
+      if (namedExportCount === 1 && specifierExportCount < 2 && !hasDefaultExport) {
         context.report(namedExportNode, 'Prefer default export.')
       }
     },
