@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
+- Added support for custom resolvers ([#314] thanks [@le0nik])
 
 ## [Unreleased]
 ### Fixed
@@ -249,6 +250,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
@@ -307,3 +309,4 @@ for info on changes for earlier releases.
 [@borisyankov]: https://github.com/borisyankov
 [@gavriguy]: https://github.com/gavriguy
 [@jkimbo]: https://github.com/jkimbo
+[@le0nik]: https://github.com/le0nik
