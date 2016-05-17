@@ -2,7 +2,7 @@ import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 import assign from 'object-assign'
-import findRoot from 'find-root'
+import pkgDir from 'pkg-dir'
 import isAbsoluteFallback from 'is-absolute'
 
 import fs from 'fs'
@@ -57,7 +57,6 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 }
 
 export function relative(modulePath, sourceFile, settings) {
-
   const sourceDir = dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
 
@@ -83,10 +82,10 @@ export function relative(modulePath, sourceFile, settings) {
     function v1() {
       try {
         const path = resolver.resolveImport(modulePath, sourceFile, config)
-        if (path === undefined) return { found: false }
-        return { found: true, path }
+        if (path === undefined) return { found: false, path: null }
+        return { found: true, path: null }
       } catch (err) {
-        return { found: false }
+        return { found: false, path: null }
       }
     }
 
@@ -156,7 +155,7 @@ function requireResolver(name, modulePath) {
 
     try {
       // Try to resolve package with path, relative to closest package.json
-      const packageDir = findRoot(resolve(modulePath))
+      const packageDir = pkgDir.sync(resolve(modulePath))
 
       return require(join(packageDir, name))
     } catch (err) {
