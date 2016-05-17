@@ -40,6 +40,7 @@ exports.resolve = function (source, file, settings) {
 
   try {
     var configPath = get(settings, 'config')
+      , configIndex = get(settings, 'config-index')
       , packageDir
       , extension
 
@@ -91,6 +92,17 @@ exports.resolve = function (source, file, settings) {
     }
   } catch (err) {
     webpackConfig = {}
+  }
+
+  if (Array.isArray(webpackConfig)) {
+    if (typeof configIndex !== 'undefined' && webpackConfig.length > configIndex) {
+      webpackConfig = webpackConfig[configIndex]
+    }
+    else {
+      webpackConfig = find(webpackConfig, function findFirstWithResolve(config) {
+        return !!config.resolve
+      })
+    }
   }
 
   // externals

@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
+
+## [Unreleased]
 ### Fixed
 - `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
   This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
