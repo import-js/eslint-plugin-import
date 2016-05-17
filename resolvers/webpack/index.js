@@ -1,14 +1,12 @@
 var findRoot = require('find-root')
   , path = require('path')
-  , resolve = require('resolve')
   , get = require('lodash.get')
   , find = require('array-find')
   , interpret = require('interpret')
   // not available on 0.10.x
   , isAbsolute = path.isAbsolute || require('is-absolute')
   , fs = require('fs')
-
-var resolveAlias = require('./resolve-alias')
+  , coreLibs = require('node-libs-browser')
 
 exports.interfaceVersion = 2
 
@@ -30,7 +28,9 @@ exports.resolve = function (source, file, settings) {
     source = source.slice(finalBang + 1)
   }
 
-  if (resolve.isCore(source)) return { found: true, path: null }
+  if (source in coreLibs) {
+    return { found: true, path: coreLibs[source] }
+  }
 
   var webpackConfig
 
@@ -108,48 +108,71 @@ exports.resolve = function (source, file, settings) {
   // externals
   if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
 
-  // replace alias if needed
-  source = resolveAlias(source, get(webpackConfig, ['resolve', 'alias'], {}))
-
-  var paths = []
-
-  // root as first alternate path
-  var rootPath = get(webpackConfig, ['resolve', 'root'])
-
-  if (rootPath) {
-    if (typeof rootPath === 'string') paths.push(rootPath)
-    else paths.push.apply(paths, rootPath)
-  }
-
-  // set fallback paths
-  var fallbackPath = get(webpackConfig, ['resolve', 'fallback'])
-  if (fallbackPath) {
-    if (typeof fallbackPath === 'string') paths.push(fallbackPath)
-    else paths.push.apply(paths, fallbackPath)
-  }
-
-
   // otherwise, resolve "normally"
+  var resolver = createResolver(webpackConfig.resolve || {})
   try {
-
-    return { found: true, path: resolve.sync(source, {
-      basedir: path.dirname(file),
-
-      // defined via http://webpack.github.io/docs/configuration.html#resolve-extensions
-      extensions: get(webpackConfig, ['resolve', 'extensions'])
-        || ['', '.webpack.js', '.web.js', '.js'],
-
-      // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
-      moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
-        || ['web_modules', 'node_modules'],
-
-      paths: paths,
-      packageFilter: packageFilter.bind(null, webpackConfig),
-    }) }
+    return { found: true, path: resolver.resolveSync(path.dirname(file), source) }
   } catch (err) {
     return { found: false }
   }
 }
+
+var Resolver = require('enhanced-resolve/lib/Resolver')
+
+var SyncNodeJsInputFileSystem = require('enhanced-resolve/lib/SyncNodeJsInputFileSystem')
+var syncFS = new SyncNodeJsInputFileSystem()
+
+var ModuleAliasPlugin = require('enhanced-resolve/lib/ModuleAliasPlugin')
+var ModulesInDirectoriesPlugin = require('enhanced-resolve/lib/ModulesInDirectoriesPlugin')
+var ModulesInRootPlugin = require('enhanced-resolve/lib/ModulesInRootPlugin')
+var ModuleAsFilePlugin = require('enhanced-resolve/lib/ModuleAsFilePlugin')
+var ModuleAsDirectoryPlugin = require('enhanced-resolve/lib/ModuleAsDirectoryPlugin')
+var DirectoryDescriptionFilePlugin = require('enhanced-resolve/lib/DirectoryDescriptionFilePlugin')
+var DirectoryDefaultFilePlugin = require('enhanced-resolve/lib/DirectoryDefaultFilePlugin')
+var FileAppendPlugin = require('enhanced-resolve/lib/FileAppendPlugin')
+var ResultSymlinkPlugin = require('enhanced-resolve/lib/ResultSymlinkPlugin')
+var DirectoryDescriptionFileFieldAliasPlugin =
+  require('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin')
+
+// adapted from tests &
+// https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L322
+function createResolver(resolve) {
+  var resolver = new Resolver(syncFS)
+
+  resolver.apply(
+    resolve.packageAlias
+      ? new DirectoryDescriptionFileFieldAliasPlugin('package.json', resolve.packageAlias)
+      : function() {},
+    new ModuleAliasPlugin(resolve.alias || {}),
+    makeRootPlugin('module', resolve.root),
+    new ModulesInDirectoriesPlugin('module', resolve.modulesDirectories || ['web_modules', 'node_modules']),
+    makeRootPlugin('module', resolve.fallback),
+    new ModuleAsFilePlugin('module'),
+    new ModuleAsDirectoryPlugin('module'),
+    new DirectoryDescriptionFilePlugin('package.json', ['jsnext:main'].concat(resolve.packageMains || defaultMains)),
+    new DirectoryDefaultFilePlugin(['index']),
+    new FileAppendPlugin(resolve.extensions || ['', '.webpack.js', '.web.js', '.js']),
+    new ResultSymlinkPlugin()
+  )
+
+  return resolver
+}
+
+/* eslint-disable */
+// from https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L365
+function makeRootPlugin(name, root) {
+  if(typeof root === "string")
+    return new ModulesInRootPlugin(name, root);
+  else if(Array.isArray(root)) {
+    return function() {
+      root.forEach(function(root) {
+        this.apply(new ModulesInRootPlugin(name, root));
+      }, this);
+    };
+  }
+  return function() {};
+}
+/* eslint-enable */
 
 function findExternal(source, externals) {
   if (!externals) return false
@@ -185,28 +208,6 @@ function findExternal(source, externals) {
 var defaultMains = [
   'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
 ]
-
-function packageFilter(config, pkg) {
-  var altMain
-
-  // check for rollup-style first
-  if (pkg['jsnext:main']) {
-    pkg['main'] = pkg['jsnext:main']
-  } else {
-    // check for configured/default alternative main fields
-    altMain = find(
-      get(config, ['resolve', 'packageMains']) || defaultMains,
-      function (m) { return typeof get(pkg, m) === 'string' })
-
-    if (altMain) {
-      pkg['main'] = get(pkg, altMain)
-    }
-  }
-
-
-  return pkg
-}
-
 
 function registerCompiler(moduleDescriptor) {
   if(moduleDescriptor) {
