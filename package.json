@@ -75,6 +75,7 @@
     "lodash.endswith": "^4.0.1",
     "lodash.find": "^4.3.0",
     "lodash.findindex": "^4.3.0",
+    "lodash.get": "4.3.0",
     "object-assign": "^4.0.1",
     "pkg-up": "^1.0.0"
   }
