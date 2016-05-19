@@ -49,3 +49,10 @@ export { foo, bar }
 const foo = 'foo';
 export { foo as default }
 ```
+
+```javascript
+// good5.js
+
+// export multiple vars through deconstructing.
+export const { foo, bar } = baz;
+```

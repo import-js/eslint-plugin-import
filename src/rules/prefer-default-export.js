@@ -1,5 +1,8 @@
 'use strict'
 
+import get from 'lodash.get'
+// import forEach from 'lodash.forEach'
+
 module.exports = function(context) {
   let namedExportCount = 0
   let specifierExportCount = 0
@@ -15,7 +18,12 @@ module.exports = function(context) {
       }
     },
     'ExportNamedDeclaration': function(node) {
-      namedExportCount++
+      const properties = get(node, 'declaration.declarations[0].id.properties')
+      if (properties) {
+        namedExportCount = namedExportCount + properties.length
+      } else {
+        namedExportCount++
+      }
       namedExportNode = node
     },
     'ExportDefaultDeclaration': function() {
