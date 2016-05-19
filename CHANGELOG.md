@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Make [`order`]'s `newline-between` option handle multiline import statements ([#313], thanks [@singles])
 - Make [`order`]'s `newline-between` option handle not assigned import statements ([#313], thanks [@singles])
 - Make [`order`]'s `newline-between` option ignore `require` statements inside object literals ([#313], thanks [@singles])
+- [`prefer-default-export`] properly handles deep destructuring, `export * from ...`, and files with no exports. ([#342]+[#343], thanks [@scottnonnenberg])
 
 ## [1.8.0] - 2016-05-11
 ### Added
@@ -224,6 +225,7 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 
+[#343]: https://github.com/benmosher/eslint-plugin-import/pull/343
 [#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
 [#316]: https://github.com/benmosher/eslint-plugin-import/pull/316
@@ -250,6 +252,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
+[#342]: https://github.com/benmosher/eslint-plugin-import/issues/342
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
@@ -307,3 +310,4 @@ for info on changes for earlier releases.
 [@borisyankov]: https://github.com/borisyankov
 [@gavriguy]: https://github.com/gavriguy
 [@jkimbo]: https://github.com/jkimbo
+[@scottnonnenberg]: https://github.com/scottnonnenberg

@@ -96,7 +96,9 @@ module.exports = function (context) {
             return
           }
 
-          if (nextStatement && (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
+          if (nextStatement &&
+             (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
+
             checkForNewLine(statementWithRequireCall, nextStatement, 'require')
           }
         })
