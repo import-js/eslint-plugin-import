@@ -27,8 +27,33 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        export const { foo, bar: baz } = item;`,
+      }),
+    test({
+      code: `
+        export const { foo: { bar, baz } } = item;`,
+      }),
+    test({
+      code: `
+        export const foo = item;
+        export { item };`,
+      }),
+    test({
+      code: `
         export { foo as default }`,
       }),
+    test({
+      code: `
+        export * from './foo';`,
+      }),
+
+    // no exports at all
+    test({
+      code: `
+        import * as foo from './foo';`,
+      }),
+
+    // ...SYNTAX_CASES,
   ],
   invalid: [
     test({
@@ -43,6 +68,22 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         const foo = 'foo';
         export { foo };`,
+      errors: [{
+        ruleId: 'ExportNamedDeclaration',
+        message: 'Prefer default export.',
+      }],
+    }),
+    test({
+      code: `
+        export const { foo } = { foo: "bar" };`,
+      errors: [{
+        ruleId: 'ExportNamedDeclaration',
+        message: 'Prefer default export.',
+      }],
+    }),
+    test({
+      code: `
+        export const { foo: { bar } } = { foo: { bar: "baz" } };`,
       errors: [{
         ruleId: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
