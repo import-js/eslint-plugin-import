@@ -49,3 +49,10 @@ export { foo, bar }
 const foo = 'foo';
 export { foo as default }
 ```
+
+```javascript
+// export-star.js
+
+// Any batch export will disable this rule. The remote module is not inspected.
+export * from './other-module'
+```
