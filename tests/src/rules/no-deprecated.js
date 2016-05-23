@@ -13,6 +13,20 @@ ruleTester.run('no-deprecated', rule, {
     test({ code: "import { fine } from './deprecated'" }),
     test({ code: "import { _undocumented } from './deprecated'" }),
 
+    test({
+      code: "import { fn } from './deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] }
+    }),
+
+    test({
+      code: "import { fine } from './tomdoc-deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] }
+    }),
+    test({
+      code: "import { _undocumented } from './tomdoc-deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] }
+    }),
+
     // naked namespace is fine
     test({ code: "import * as depd from './deprecated'" }),
     test({ code: "import * as depd from './deprecated'; console.log(depd.fine())" }),
@@ -42,6 +56,30 @@ ruleTester.run('no-deprecated', rule, {
     test({
       code: "import { MY_TERRIBLE_ACTION } from './deprecated'",
       errors: ['Deprecated: please stop sending/handling this action type.'],
+    }),
+
+    test({
+      code: "import { fn } from './deprecated'",
+      settings: { 'import/docstyle': ['jsdoc', 'tomdoc'] },
+      errors: ["Deprecated: please use 'x' instead."],
+    }),
+
+    test({
+      code: "import { fn } from './tomdoc-deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] },
+      errors: ["Deprecated: This function is terrible."],
+    }),
+
+    test({
+      code: "import TerribleClass from './tomdoc-deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] },
+      errors: ['Deprecated: this is awful, use NotAsBadClass.'],
+    }),
+
+    test({
+      code: "import { MY_TERRIBLE_ACTION } from './tomdoc-deprecated'",
+      settings: { 'import/docstyle': ['tomdoc'] },
+      errors: ['Deprecated: Please stop sending/handling this action type.'],
     }),
 
     // ignore redeclares

@@ -97,6 +97,12 @@ export default class ExportMap {
       return m // can't continue
     }
 
+    const docstyle = (context.settings && context.settings['import/docstyle']) || ['jsdoc']
+    const docStyleParsers = {}
+    docstyle.forEach(style => {
+      docStyleParsers[style] = availableDocStyleParsers[style]
+    })
+
     // attempt to collect module doc
     ast.comments.some(c => {
       if (c.type !== 'Block') return false
@@ -143,7 +149,7 @@ export default class ExportMap {
     ast.body.forEach(function (n) {
 
       if (n.type === 'ExportDefaultDeclaration') {
-        const exportMeta = captureDoc(n)
+        const exportMeta = captureDoc(docStyleParsers, n)
         if (n.declaration.type === 'Identifier') {
           addNamespace(exportMeta, n.declaration)
         }
@@ -174,11 +180,12 @@ export default class ExportMap {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
             case 'TypeAlias': // flowtype with babel-eslint parser
-              m.namespace.set(n.declaration.id.name, captureDoc(n))
+              m.namespace.set(n.declaration.id.name, captureDoc(docStyleParsers, n))
               break
             case 'VariableDeclaration':
               n.declaration.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, id => m.namespace.set(id.name, captureDoc(d, n))))
+                recursivePatternCapture(d.id, id =>
+                  m.namespace.set(id.name, captureDoc(docStyleParsers, d, n))))
               break
           }
         }
@@ -348,31 +355,80 @@ export default class ExportMap {
 }
 
 /**
- * parse JSDoc from the first node that has leading comments
+ * parse docs from the first node that has leading comments
  * @param  {...[type]} nodes [description]
  * @return {{doc: object}}
  */
-function captureDoc(...nodes) {
+function captureDoc(docStyleParsers, ...nodes) {
   const metadata = {}
 
   // 'some' short-circuits on first 'true'
   nodes.some(n => {
     if (!n.leadingComments) return false
 
-    // capture XSDoc
-    n.leadingComments.forEach(comment => {
-      // skip non-block comments
-      if (comment.value.slice(0, 4) !== '*\n *') return
-      try {
-        metadata.doc = doctrine.parse(comment.value, { unwrap: true })
-      } catch (err) {
-        /* don't care, for now? maybe add to `errors?` */
+    for (let name in docStyleParsers) {
+      const doc = docStyleParsers[name](n.leadingComments)
+      if (doc) {
+        metadata.doc = doc
       }
-    })
+    }
+
     return true
   })
 
   return metadata
+}
+
+const availableDocStyleParsers = {
+  jsdoc: captureJsDoc,
+  tomdoc: captureTomDoc,
+}
+
+/**
+ * parse JSDoc from leading comments
+ * @param  {...[type]} comments [description]
+ * @return {{doc: object}}
+ */
+function captureJsDoc(comments) {
+  let doc
+
+  // capture XSDoc
+  comments.forEach(comment => {
+    // skip non-block comments
+    if (comment.value.slice(0, 4) !== '*\n *') return
+    try {
+      doc = doctrine.parse(comment.value, { unwrap: true })
+    } catch (err) {
+      /* don't care, for now? maybe add to `errors?` */
+    }
+  })
+
+  return doc
+}
+
+/**
+  * parse TomDoc section from comments
+  */
+function captureTomDoc(comments) {
+  // collect lines up to first paragraph break
+  const lines = []
+  for (let i = 0; i < comments.length; i++) {
+    const comment = comments[i]
+    if (comment.value.match(/^\s*$/)) break
+    lines.push(comment.value.trim())
+  }
+
+  // return doctrine-like object
+  const statusMatch = lines.join(' ').match(/^(Public|Internal|Deprecated):\s*(.+)/)
+  if (statusMatch) {
+    return {
+      description: statusMatch[2],
+      tags: [{
+        title: statusMatch[1].toLowerCase(),
+        description: statusMatch[2],
+      }],
+    }
+  }
 }
 
 /**

@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
+- Added support TomDoc comments to `no-deprecated` ([#321], thanks [@josh])
 
 ## [Unreleased]
 ### Fixed
