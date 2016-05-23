@@ -3,11 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
-## [Unreleased]
+## resolvers/webpack/0.2.5 - 2016-05-23
 ### Added
 - Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
 
-## [Unreleased]
+## [1.8.1] - 2016-05-23
 ### Fixed
 - `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
   This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
@@ -255,6 +255,7 @@ for info on changes for earlier releases.
 [#342]: https://github.com/benmosher/eslint-plugin-import/issues/342
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
+[#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
@@ -271,7 +272,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.1...HEAD
+[1.8.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.0...v1.6.1
