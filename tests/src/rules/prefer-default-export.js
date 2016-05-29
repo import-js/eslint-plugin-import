@@ -14,6 +14,15 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        export default function bar() {};`,
+      }),
+    test({
+      code: `
+        export const foo = 'foo';
+        export function bar() {};`,
+      }),
+    test({
+      code: `
         export const foo = 'foo';
         export default bar;`,
       }),
@@ -56,6 +65,14 @@ ruleTester.run('prefer-default-export', rule, {
     // ...SYNTAX_CASES,
   ],
   invalid: [
+    test({
+      code: `
+        export function bar() {};`,
+      errors: [{
+        ruleId: 'ExportNamedDeclaration',
+        message: 'Prefer default export.',
+      }],
+    }),
     test({
       code: `
         export const foo = 'foo';`,
