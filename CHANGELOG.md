@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## TBD
+### Fixed
+- [`prefer-default-export`] handles `export function` and `export const` in same file ([#359], thanks [@scottnonnenberg])
+
 ## resolvers/webpack/0.2.5 - 2016-05-23
 ### Added
 - Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
@@ -225,6 +229,7 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 
+[#359]: https://github.com/benmosher/eslint-plugin-import/pull/359
 [#343]: https://github.com/benmosher/eslint-plugin-import/pull/343
 [#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322

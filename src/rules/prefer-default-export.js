@@ -38,6 +38,10 @@ module.exports = function(context) {
           captureDeclaration(declaration.id)
         })
       }
+      else {
+        // captures 'export function foo() {}' syntax
+        specifierExportCount++
+      }
 
       namedExportNode = node
     },
