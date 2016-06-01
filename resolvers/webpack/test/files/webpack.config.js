@@ -13,5 +13,11 @@ module.exports = {
   externals: [
     { 'jquery': 'jQuery' },
     'bootstrap',
+    function (context, request, callback) {
+      if (request === 'underscore') {
+        return callback(null, 'underscore');
+      };
+      callback();
+    }
   ],
 }

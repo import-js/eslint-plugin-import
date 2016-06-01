@@ -5,7 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 ### Fixed
-- strip resource query (#357, thanks @daltones)
+- strip resource query ([#357], thanks [@daltones])
+- allow `externals` to be defined as a function ([#363], thanks [@kesne])
 
 ## 0.3.1 - 2016-06-02
 ### Added
@@ -34,6 +35,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#363]: https://github.com/benmosher/eslint-plugin-import/pull/363
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
 [#278]: https://github.com/benmosher/eslint-plugin-import/pull/278
@@ -48,3 +50,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@taion]: https://github.com/taion
 [@GreenGremlin]: https://github.com/GreenGremlin
 [@daltones]: https://github.com/daltones
+[@kesne]: https://github.com/kesne
