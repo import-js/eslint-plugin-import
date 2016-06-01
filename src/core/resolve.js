@@ -147,30 +147,32 @@ function resolverReducer(resolvers, map) {
 }
 
 function requireResolver(name, modulePath) {
-  try {
-    // Try to resolve package with absolute path (/Volumes/....)
-    if (isAbsolute(name)) {
-      return require(name)
-    }
-
+  // Try to resolve package with absolute path (/Volumes/....)
+  if (isAbsolute(name)) {
     try {
-      // Try to resolve package with path, relative to closest package.json
-      const packageDir = pkgDir.sync(resolve(modulePath))
-
-      return require(join(packageDir, name))
-    } catch (err) {
-      try {
-        // Try to resolve package with custom name (@myorg/resolver-name)
-        return require(name)
-      } catch (err) { // eslint-disable-line no-shadow
-
-        // Try to resolve package with conventional name
-        return require(`eslint-import-resolver-${name}`)
-      }
-    }
-  } catch (err) {
-    throw new Error(`unable to load resolver "${name}".`)
+      return require(name)
+    } catch (err) { /* continue */ }
   }
+
+  // Try to resolve package with path, relative to closest package.json
+  try {
+    const packageDir = pkgDir.sync((modulePath))
+
+    return require(join(packageDir, name))
+  } catch (err) { /* continue */ }
+
+  // Try to resolve package with custom name (@myorg/resolver-name)
+  try {
+    return require(name)
+  } catch (err) { /* continue */ }
+
+  // Try to resolve package with conventional name
+  try {
+    return require(`eslint-import-resolver-${name}`)
+  } catch (err) { /* continue */ }
+
+  // all else failed
+  throw new Error(`unable to load resolver "${name}".`)
 }
 
 const erroredContexts = new Set()
