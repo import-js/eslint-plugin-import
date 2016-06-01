@@ -11,10 +11,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`prefer-default-export`] handles `export function` and `export const` in same file ([#359], thanks [@scottnonnenberg])
 
-## resolvers/webpack/0.2.5 - 2016-05-23
-### Added
-- Added support for multiple webpack configs ([#181], thanks [@GreenGremlin])
-
 ## [1.8.1] - 2016-05-23
 ### Fixed
 - `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
@@ -46,26 +42,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: fallback to source path for extension enforcement if imported
   module is not resolved. Also, never report for builtins (i.e. `path`). ([#296])
 
-## resolvers/webpack/0.2.4 - 2016-04-29
-### Changed
-- automatically find webpack config with `interpret`-able extensions ([#287], thanks [@taion])
-
 ## [1.6.1] - 2016-04-28
 ### Fixed
 - [`no-named-as-default-member`]: don't crash on rest props. ([#281], thanks [@SimenB])
 - support for Node 6: don't pass `null` to `path` functions.
   Thanks to [@strawbrary] for bringing this up ([#272]) and adding OSX support to the Travis
   config ([#288]).
-
-## resolvers/webpack/0.2.3 - 2016-04-28
-### Fixed
-- `interpret` dependency was declared in the wrong `package.json`.
-   Thanks [@jonboiser] for sleuthing ([#286]) and fixing ([#289]).
-
-## resolvers/webpack/0.2.2 - 2016-04-27
-### Added
-- `interpret` configs (such as `.babel.js`).
-  Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
 ## [1.6.0] - 2016-04-25
 ### Added

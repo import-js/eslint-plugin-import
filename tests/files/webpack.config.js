@@ -1,6 +1,6 @@
 module.exports = {
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['', '.js', '.jsx'],
     root: __dirname,
   },
 }
