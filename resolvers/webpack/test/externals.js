@@ -19,6 +19,12 @@ describe("externals", function () {
     expect(resolved).to.have.property('path', null)
   })
 
+  it("works on a function", function () {
+    var resolved = webpack.resolve('underscore', file)
+    expect(resolved).to.have.property('found', true)
+    expect(resolved).to.have.property('path', null)
+  })
+
   it("returns null for core modules", function () {
     var resolved = webpack.resolve('fs', file)
     expect(resolved).to.have.property('found', true)

@@ -190,7 +190,15 @@ function findExternal(source, externals) {
   }
 
   if (typeof externals === 'function') {
-    throw new Error('unable to handle function externals')
+    var functionExternalFound = false
+    externals.call(null, null, source, function(err, value) {
+      if (err) {
+        functionExternalFound = false
+      } else {
+        functionExternalFound = findExternal(source, value)
+      }
+    })
+    return functionExternalFound
   }
 
   // else, vanilla object
