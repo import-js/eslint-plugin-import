@@ -141,6 +141,7 @@ exports.resolve = function (source, file, settings) {
 
       // http://webpack.github.io/docs/configuration.html#resolve-modulesdirectories
       moduleDirectory: get(webpackConfig, ['resolve', 'modulesDirectories'])
+        || get(webpackConfig, ['resolve', 'modules']) // Webpack >= 2
         || ['web_modules', 'node_modules'],
 
       paths: paths,
