@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
+
 ### Fixed
 - [`prefer-default-export`] handles `export function` and `export const` in same file ([#359], thanks [@scottnonnenberg])
 
@@ -233,6 +236,7 @@ for info on changes for earlier releases.
 [#343]: https://github.com/benmosher/eslint-plugin-import/pull/343
 [#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
+[#321]: https://github.com/benmosher/eslint-plugin-import/pull/321
 [#316]: https://github.com/benmosher/eslint-plugin-import/pull/316
 [#308]: https://github.com/benmosher/eslint-plugin-import/pull/308
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
