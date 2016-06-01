@@ -123,19 +123,77 @@ In the interest of supporting both of these, v0.11 introduces resolvers.
 Currently [Node] and [Webpack] resolution have been implemented, but the
 resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
-Just install a resolver as `eslint-import-resolver-foo` and reference it as such:
+You can reference resolvers in several ways(in order of precedence):
 
+1. With an absolute path to resolver, used as a `computed property` name, which is supported since Node v4:
+
+`.eslintrc.js`:
+```js
+{
+  settings: {
+    'import/resolver': {
+      [path.resolve('../../../my-resolver')]: { someConfig: value }
+    }
+  }
+}
+```
+
+2. With a path relative to the closest `package.json` file:
+
+
+`.eslintrc.js`:
+```js
+{
+  settings: {
+    'import/resolver': {
+      './my-resolver': { someConfig: value }
+    }
+  }
+}
+```
+
+`.eslintrc.yml`:
+```yaml
+settings:
+  import/resolver: './my-resolver'
+```
+
+3. With an npm module name, like `my-awesome-npm-module`:
+
+`.eslintrc.js`:
+```js
+{
+  settings: {
+    'import/resolver': {
+      'my-awesome-npm-module': { someConfig: value }
+    }
+  }
+}
+```
+
+`.eslintrc.yml`:
+```yaml
+settings:
+  import/resolver: 'my-awesome-npm-module'
+```
+
+4. As a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
+
+`.eslintrc.js`:
+```js
+{
+  settings: {
+    'import/resolver': {
+      foo: { someConfig: value }
+    }
+  }
+}
+```
+
+`.eslintrc.yml`:
 ```yaml
 settings:
   import/resolver: foo
-```
-
-or with a config object:
-
-```yaml
-settings:
-  import/resolver:
-    foo: { someConfigKey: value }
 ```
 
 If you are interesting in writing a resolver, see the [spec](./resolvers/README.md) for more details.

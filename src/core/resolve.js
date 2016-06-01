@@ -2,9 +2,13 @@ import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 import assign from 'object-assign'
+import pkgDir from 'pkg-dir'
+import isAbsoluteFallback from 'is-absolute'
 
 import fs from 'fs'
-import { dirname, basename, join } from 'path'
+import { dirname, basename, join, isAbsolute as isAbsoluteNode } from 'path'
+
+const isAbsolute = isAbsoluteNode || isAbsoluteFallback
 
 export const CASE_SENSITIVE_FS = !fs.existsSync(join(__dirname, 'reSOLVE.js'))
 
@@ -53,7 +57,6 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 }
 
 export function relative(modulePath, sourceFile, settings) {
-
   const sourceDir = dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
 
@@ -79,10 +82,10 @@ export function relative(modulePath, sourceFile, settings) {
     function v1() {
       try {
         const path = resolver.resolveImport(modulePath, sourceFile, config)
-        if (path === undefined) return { found: false }
-        return { found: true, path }
+        if (path === undefined) return { found: false, path: null }
+        return { found: true, path: null }
       } catch (err) {
-        return { found: false }
+        return { found: false, path: null }
       }
     }
 
@@ -106,7 +109,7 @@ export function relative(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map())
 
   for (let [name, config] of resolvers) {
-    const resolver = requireResolver(name)
+    const resolver = requireResolver(name, modulePath)
 
     let { path: fullPath, found } = withResolver(resolver, config)
 
@@ -143,9 +146,28 @@ function resolverReducer(resolvers, map) {
   throw new Error('invalid resolver config')
 }
 
-function requireResolver(name) {
+function requireResolver(name, modulePath) {
   try {
-    return require(`eslint-import-resolver-${name}`)
+    // Try to resolve package with absolute path (/Volumes/....)
+    if (isAbsolute(name)) {
+      return require(name)
+    }
+
+    try {
+      // Try to resolve package with path, relative to closest package.json
+      const packageDir = pkgDir.sync(resolve(modulePath))
+
+      return require(join(packageDir, name))
+    } catch (err) {
+      try {
+        // Try to resolve package with custom name (@myorg/resolver-name)
+        return require(name)
+      } catch (err) { // eslint-disable-line no-shadow
+
+        // Try to resolve package with conventional name
+        return require(`eslint-import-resolver-${name}`)
+      }
+    }
   } catch (err) {
     throw new Error(`unable to load resolver "${name}".`)
   }

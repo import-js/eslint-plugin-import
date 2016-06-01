@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
+- Added support for loading custom resolvers ([#314], thanks [@le0nik])
 
 ### Fixed
 - [`prefer-default-export`] handles `export function` and `export const` in same file ([#359], thanks [@scottnonnenberg])
@@ -260,6 +261,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#342]: https://github.com/benmosher/eslint-plugin-import/issues/342
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
@@ -321,4 +323,5 @@ for info on changes for earlier releases.
 [@borisyankov]: https://github.com/borisyankov
 [@gavriguy]: https://github.com/gavriguy
 [@jkimbo]: https://github.com/jkimbo
+[@le0nik]: https://github.com/le0nik
 [@scottnonnenberg]: https://github.com/scottnonnenberg
