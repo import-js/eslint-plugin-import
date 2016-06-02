@@ -25,6 +25,7 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
   "dependencies": {
     "array-find": "^1.0.0",
+    "debug": "^2.2.0",
     "enhanced-resolve": "~0.9.0",
     "find-root": "^0.1.1",
     "interpret": "^1.0.0",

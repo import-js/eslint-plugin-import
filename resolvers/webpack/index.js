@@ -8,6 +8,8 @@ var findRoot = require('find-root')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
 
+const log = require('debug')('eslint-plugin-import:resolver:webpack')
+
 exports.interfaceVersion = 2
 
 /**
@@ -34,15 +36,12 @@ exports.resolve = function (source, file, settings) {
 
   var webpackConfig
 
-  var extensions = Object.keys(interpret.extensions).sort(function(a, b) {
-    return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length
-  })
-
   try {
     var configPath = get(settings, 'config')
       , configIndex = get(settings, 'config-index')
       , packageDir
-      , extension
+
+    if (configPath) log('Config path from settings:', configPath)
 
     // see if we've got an absolute path
     if (!configPath || !isAbsolute(configPath)) {
@@ -51,46 +50,17 @@ exports.resolve = function (source, file, settings) {
       if (!packageDir) throw new Error('package not found above ' + file)
     }
 
-    if (configPath) {
-      // extensions is not reused below, so safe to mutate it here.
-      extensions.reverse()
-      extensions.forEach(function (maybeExtension) {
-        if (extension) {
-          return
-        }
+    configPath = findConfigPath(configPath, packageDir)
 
-        if (configPath.substr(-maybeExtension.length) === maybeExtension) {
-          extension = maybeExtension
-        }
-      })
-
-      // see if we've got an absolute path
-      if (!isAbsolute(configPath)) {
-        configPath = path.join(packageDir, configPath)
-      }
-    } else {
-      extensions.forEach(function (maybeExtension) {
-        if (extension) {
-          return
-        }
-
-        var maybePath = path.resolve(
-          path.join(packageDir, 'webpack.config' + maybeExtension)
-        )
-        if (fs.existsSync(maybePath)) {
-          configPath = maybePath
-          extension = maybeExtension
-        }
-      })
-    }
-
-    registerCompiler(interpret.extensions[extension])
+    log('Config path resolved to:', configPath)
     webpackConfig = require(configPath)
 
     if (webpackConfig && webpackConfig.default) {
+      log('Using ES6 module "default" key instead of module.exports.')
       webpackConfig = webpackConfig.default
     }
   } catch (err) {
+    log('Error during config lookup:', err)
     webpackConfig = {}
   }
 
@@ -105,14 +75,18 @@ exports.resolve = function (source, file, settings) {
     }
   }
 
+  log('Using config: ', webpackConfig)
+
   // externals
   if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
+
 
   // otherwise, resolve "normally"
   var resolver = createResolver(webpackConfig.resolve || {})
   try {
     return { found: true, path: resolver.resolveSync(path.dirname(file), source) }
   } catch (err) {
+    log('Error during module resolution:', err)
     return { found: false }
   }
 }
@@ -209,6 +183,50 @@ var defaultMains = [
   'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
 ]
 
+function findConfigPath(configPath, packageDir) {
+  var extensions = Object.keys(interpret.extensions).sort(function(a, b) {
+    return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length
+  })
+    , extension
+
+
+  if (configPath) {
+    // extensions is not reused below, so safe to mutate it here.
+    extensions.reverse()
+    extensions.forEach(function (maybeExtension) {
+      if (extension) {
+        return
+      }
+
+      if (configPath.substr(-maybeExtension.length) === maybeExtension) {
+        extension = maybeExtension
+      }
+    })
+
+    // see if we've got an absolute path
+    if (!isAbsolute(configPath)) {
+      configPath = path.join(packageDir, configPath)
+    }
+  } else {
+    extensions.forEach(function (maybeExtension) {
+      if (extension) {
+        return
+      }
+
+      var maybePath = path.resolve(
+        path.join(packageDir, 'webpack.config' + maybeExtension)
+      )
+      if (fs.existsSync(maybePath)) {
+        configPath = maybePath
+        extension = maybeExtension
+      }
+    })
+  }
+
+  registerCompiler(interpret.extensions[extension])
+  return configPath
+}
+
 function registerCompiler(moduleDescriptor) {
   if(moduleDescriptor) {
     if(typeof moduleDescriptor === 'string') {
@@ -221,7 +239,7 @@ function registerCompiler(moduleDescriptor) {
           registerCompiler(moduleDescriptor[i])
           break
         } catch(e) {
-          // do nothing
+          log('Failed to register compiler for moduleDescriptor[]:', i, moduleDescriptor)
         }
       }
     }
