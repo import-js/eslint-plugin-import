@@ -157,7 +157,7 @@ function requireResolver(name, sourceFile) {
 
   // Try to resolve package with path, relative to closest package.json
   try {
-    const packageDir = pkgDir.sync(sourceFile)
+    const packageDir = pkgDir.sync(resolve(sourceFile))
     return require(join(packageDir, name))
   } catch (err) { /* continue */ }
 
