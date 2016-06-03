@@ -80,7 +80,6 @@ function runResolverTests(resolver) {
            , options: [{ commonjs: true }]}),
       rest({ code: 'require(foo)'
            , options: [{ commonjs: true }]}),
-
     ],
 
     invalid: [
@@ -182,6 +181,22 @@ function runResolverTests(resolver) {
           type: 'Literal',
         }],
       }),
+    ],
+  })
+
+  ruleTester.run(`issue #333 (${resolver})`, rule, {
+    valid: [
+      rest({ code: 'import foo from "./bar.json"' }),
+      rest({
+        code: 'import foo from "./bar.json"',
+        settings: { 'import/extensions': ['.js'] },
+      }),
+    ],
+    invalid: [
+        rest({
+          code: 'import bar from "./foo.json"',
+          errors: ["Unable to resolve path to module './foo.json'."],
+        }),
     ],
   })
 }
