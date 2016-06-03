@@ -110,7 +110,7 @@ export function relative(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map())
 
   for (let [name, config] of resolvers) {
-    const resolver = requireResolver(name, modulePath)
+    const resolver = requireResolver(name, sourceFile)
 
     let { path: fullPath, found } = withResolver(resolver, config)
 
@@ -147,7 +147,7 @@ function resolverReducer(resolvers, map) {
   throw new Error('invalid resolver config')
 }
 
-function requireResolver(name, modulePath) {
+function requireResolver(name, sourceFile) {
   // Try to resolve package with absolute path (/Volumes/....)
   if (isAbsolute(name)) {
     try {
@@ -157,7 +157,7 @@ function requireResolver(name, modulePath) {
 
   // Try to resolve package with path, relative to closest package.json
   try {
-    const packageDir = pkgDir.sync((modulePath))
+    const packageDir = pkgDir.sync(sourceFile)
     return require(join(packageDir, name))
   } catch (err) { /* continue */ }
 
