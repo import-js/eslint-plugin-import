@@ -3,6 +3,10 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+### Fixed
+- strip resource query (#357, thanks @daltones)
+
 ## 0.3.1 - 2016-06-02
 ### Added
 - debug logging. run with `DEBUG=eslint-plugin-import:*` to see log output.
@@ -36,9 +40,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/benmosher/eslint-plugin-import/pull/181
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 
 [@gausie]: https://github.com/gausie
 [@jquense]: https://github.com/jquense
 [@taion]: https://github.com/taion
 [@GreenGremlin]: https://github.com/GreenGremlin
+[@daltones]: https://github.com/daltones

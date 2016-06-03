@@ -30,6 +30,12 @@ exports.resolve = function (source, file, settings) {
     source = source.slice(finalBang + 1)
   }
 
+  // strip resource query
+  var finalQuestionMark = source.lastIndexOf('?')
+  if (finalQuestionMark >= 0) {
+    source = source.slice(0, finalQuestionMark)
+  }
+
   if (source in coreLibs) {
     return { found: true, path: coreLibs[source] }
   }
