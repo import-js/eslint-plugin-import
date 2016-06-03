@@ -3,6 +3,10 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## 0.3.1 - 2016-06-02
+### Added
+- debug logging. run with `DEBUG=eslint-plugin-import:*` to see log output.
+
 ## 0.3.0 - 2016-06-01
 ### Changed
 - use `enhanced-resolve` to support additional plugins instead of re-implementing
