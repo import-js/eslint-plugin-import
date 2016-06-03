@@ -57,6 +57,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 }
 
 export function relative(modulePath, sourceFile, settings) {
+
   const sourceDir = dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
 
@@ -82,10 +83,10 @@ export function relative(modulePath, sourceFile, settings) {
     function v1() {
       try {
         const path = resolver.resolveImport(modulePath, sourceFile, config)
-        if (path === undefined) return { found: false, path: null }
-        return { found: true, path: null }
+        if (path === undefined) return { found: false }
+        return { found: true, path }
       } catch (err) {
-        return { found: false, path: null }
+        return { found: false }
       }
     }
 
@@ -157,7 +158,6 @@ function requireResolver(name, modulePath) {
   // Try to resolve package with path, relative to closest package.json
   try {
     const packageDir = pkgDir.sync((modulePath))
-
     return require(join(packageDir, name))
   } catch (err) { /* continue */ }
 
