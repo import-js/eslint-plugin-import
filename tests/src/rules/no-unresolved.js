@@ -312,3 +312,18 @@ ruleTester.run('no-unresolved unknown resolver', rule, {
     }),
   ],
 })
+
+ruleTester.run('no-unresolved electron', rule, {
+  valid: [
+    test({
+      code: 'import "electron"',
+      settings: { 'import/env': 'electron' },
+    }),
+  ],
+  invalid:[
+    test({
+      code: 'import "electron"',
+      errors: [`Unable to resolve path to module 'electron'.`],
+    }),
+  ],
+})
