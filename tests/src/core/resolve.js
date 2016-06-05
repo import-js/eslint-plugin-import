@@ -10,6 +10,14 @@ describe('resolve', function () {
     expect(resolve.bind(null, null, null)).to.throw(Error)
   })
 
+  it('loads a custom resolver path', function () {
+    var file = resolve( '../files/foo'
+                      , utils.testContext({ 'import/resolver': './foo-bar-resolver'})
+                      )
+
+    expect(file).to.equal(utils.testFilePath('./bar.jsx'))
+  })
+
   it('respects import/resolve extensions', function () {
     var file = resolve( './jsx/MyCoolComponent'
                       , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
