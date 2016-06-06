@@ -187,8 +187,13 @@ function runResolverTests(resolver) {
   ruleTester.run(`issue #333 (${resolver})`, rule, {
     valid: [
       rest({ code: 'import foo from "./bar.json"' }),
+      rest({ code: 'import foo from "./bar"' }),
       rest({
         code: 'import foo from "./bar.json"',
+        settings: { 'import/extensions': ['.js'] },
+      }),
+      rest({
+        code: 'import foo from "./bar"',
         settings: { 'import/extensions': ['.js'] },
       }),
     ],
