@@ -65,6 +65,12 @@ ruleTester.run('default', rule, {
       code: "import Foo from './jsx/FooES7.js';",
       parser: 'babel-eslint',
     }),
+
+    // JSON
+    test({
+      code: 'import foo from "./foobar.json";',
+      parser: 'babel-eslint',
+    }),
   ],
 
   invalid: [

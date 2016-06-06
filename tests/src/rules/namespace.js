@@ -87,6 +87,12 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // JSON
+  test({
+    code: 'import foo from "./foobar.json";',
+    parser: 'babel-eslint',
+  }),
+
   ...SYNTAX_CASES,
 ]
 
