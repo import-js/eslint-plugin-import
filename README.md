@@ -17,11 +17,13 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure named imports correspond to a named export in the remote file. ([`named`])
 * Ensure a default export is present, given a default import. ([`default`])
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])
+* Restrict which files can be imported in a given folder ([`no-restricted-paths`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
 [`default`]: ./docs/rules/default.md
 [`namespace`]: ./docs/rules/namespace.md
+[`no-restricted-paths`]: ./docs/rule/no-restricted-paths.md
 
 **Helpful warnings:**
 
