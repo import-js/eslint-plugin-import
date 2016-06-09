@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [1.9.0] - 2016-06-10
 ### Added
 - Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
 - Added support for loading custom resolvers ([#314], thanks [@le0nik])
@@ -265,7 +268,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.6.1...v1.7.0
