@@ -125,7 +125,44 @@ resolvers are just npm packages, so [third party packages are supported](https:/
 
 You can reference resolvers in several ways(in order of precedence):
 
-- with an absolute path to resolver, used as a `computed property` name, which is supported since Node v4:
+- as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
+
+```yaml
+# .eslintrc.yml
+settings:
+  # uses 'eslint-import-resolver-foo':
+  import/resolver: foo
+```
+```js
+// .eslintrc.js
+module.exports = {
+  settings: {
+    'import/resolver': {
+      foo: { someConfig: value }
+    }
+  }
+}
+```
+
+- with a full npm module name, like `my-awesome-npm-module`:
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/resolver: 'my-awesome-npm-module'
+```
+```js
+// .eslintrc.js
+module.exports = {
+  settings: {
+    'import/resolver': {
+      'my-awesome-npm-module': { someConfig: value }
+    }
+  }
+}
+```
+
+- with a filesystem path to resolver, defined in this example as a `computed property` name:
 
 ```js
 // .eslintrc.js
@@ -138,65 +175,10 @@ module.exports = {
 }
 ```
 
-- with a path relative to the closest `package.json` file:
-
-```js
-// .eslintrc.js
-module.exports = {
-  settings: {
-    'import/resolver': {
-      './my-resolver': { someConfig: value }
-    }
-  }
-}
-```
+Relative paths will be resolved relative to the source's nearest `package.json` or
+the process's current working directory if no `package.json` is found.
 
 
-```yaml
-# .eslintrc.yml
-settings:
-  import/resolver: './my-resolver'
-```
-
-- with an npm module name, like `my-awesome-npm-module`:
-
-```js
-// .eslintrc.js
-module.exports = {
-  settings: {
-    'import/resolver': {
-      'my-awesome-npm-module': { someConfig: value }
-    }
-  }
-}
-```
-
-
-```yaml
-# .eslintrc.yml
-settings:
-  import/resolver: 'my-awesome-npm-module'
-```
-
-- as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
-
-
-```js
-// .eslintrc.js
-module.exports = {
-  settings: {
-    'import/resolver': {
-      foo: { someConfig: value }
-    }
-  }
-}
-```
-
-`.eslintrc.yml`:
-```yaml
-settings:
-  import/resolver: foo
-```
 
 If you are interesting in writing a resolver, see the [spec](./resolvers/README.md) for more details.
 
