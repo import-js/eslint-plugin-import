@@ -125,11 +125,11 @@ resolvers are just npm packages, so [third party packages are supported](https:/
 
 You can reference resolvers in several ways(in order of precedence):
 
-1. With an absolute path to resolver, used as a `computed property` name, which is supported since Node v4:
+- with an absolute path to resolver, used as a `computed property` name, which is supported since Node v4:
 
-`.eslintrc.js`:
 ```js
-{
+// .eslintrc.js
+module.exports = {
   settings: {
     'import/resolver': {
       [path.resolve('../../../my-resolver')]: { someConfig: value }
@@ -138,12 +138,11 @@ You can reference resolvers in several ways(in order of precedence):
 }
 ```
 
-2. With a path relative to the closest `package.json` file:
+- with a path relative to the closest `package.json` file:
 
-
-`.eslintrc.js`:
 ```js
-{
+// .eslintrc.js
+module.exports = {
   settings: {
     'import/resolver': {
       './my-resolver': { someConfig: value }
@@ -152,17 +151,18 @@ You can reference resolvers in several ways(in order of precedence):
 }
 ```
 
-`.eslintrc.yml`:
+
 ```yaml
+# .eslintrc.yml
 settings:
   import/resolver: './my-resolver'
 ```
 
-3. With an npm module name, like `my-awesome-npm-module`:
+- with an npm module name, like `my-awesome-npm-module`:
 
-`.eslintrc.js`:
 ```js
-{
+// .eslintrc.js
+module.exports = {
   settings: {
     'import/resolver': {
       'my-awesome-npm-module': { someConfig: value }
@@ -171,17 +171,19 @@ settings:
 }
 ```
 
-`.eslintrc.yml`:
+
 ```yaml
+# .eslintrc.yml
 settings:
   import/resolver: 'my-awesome-npm-module'
 ```
 
-4. As a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
+- as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
 
-`.eslintrc.js`:
+
 ```js
-{
+// .eslintrc.js
+module.exports = {
   settings: {
     'import/resolver': {
       foo: { someConfig: value }
