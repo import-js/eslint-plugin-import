@@ -3,14 +3,11 @@ import Map from 'es6-map'
 import Set from 'es6-set'
 import assign from 'object-assign'
 import pkgDir from 'pkg-dir'
-import isAbsoluteFallback from 'is-absolute'
 
 import fs from 'fs'
-import { dirname, basename, join, isAbsolute as isAbsoluteNode } from 'path'
+import * as path from 'path'
 
-const isAbsolute = isAbsoluteNode || isAbsoluteFallback
-
-export const CASE_SENSITIVE_FS = !fs.existsSync(join(__dirname, 'reSOLVE.js'))
+export const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
 
 const fileExistsCache = new Map()
 
@@ -36,7 +33,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
   // null means it resolved to a builtin
   if (filepath === null) return true
 
-  const dir = dirname(filepath)
+  const dir = path.dirname(filepath)
 
   let result = checkCache(filepath, cacheSettings)
   if (result != null) return result
@@ -46,7 +43,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
     result = true
   } else {
     const filenames = fs.readdirSync(dir)
-    if (filenames.indexOf(basename(filepath)) === -1) {
+    if (filenames.indexOf(path.basename(filepath)) === -1) {
       result = false
     } else {
       result = fileExistsWithCaseSync(dir, cacheSettings)
@@ -58,7 +55,7 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 
 export function relative(modulePath, sourceFile, settings) {
 
-  const sourceDir = dirname(sourceFile)
+  const sourceDir = path.dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
 
   const cacheSettings = assign({
@@ -73,18 +70,18 @@ export function relative(modulePath, sourceFile, settings) {
   const cachedPath = checkCache(cacheKey, cacheSettings)
   if (cachedPath !== undefined) return cachedPath
 
-  function cache(path) {
-    cachePath(cacheKey, path)
-    return path
+  function cache(resolvedPath) {
+    cachePath(cacheKey, resolvedPath)
+    return resolvedPath
   }
 
   function withResolver(resolver, config) {
 
     function v1() {
       try {
-        const path = resolver.resolveImport(modulePath, sourceFile, config)
-        if (path === undefined) return { found: false }
-        return { found: true, path }
+        const resolved = resolver.resolveImport(modulePath, sourceFile, config)
+        if (resolved === undefined) return { found: false }
+        return { found: true, path: resolved }
       } catch (err) {
         return { found: false }
       }
@@ -148,17 +145,9 @@ function resolverReducer(resolvers, map) {
 }
 
 function requireResolver(name, sourceFile) {
-  // Try to resolve package with absolute path (/Volumes/....)
-  if (isAbsolute(name)) {
-    try {
-      return require(name)
-    } catch (err) { /* continue */ }
-  }
-
-  // Try to resolve package with path, relative to closest package.json
+  // Try to resolve package with conventional name
   try {
-    const packageDir = pkgDir.sync(sourceFile)
-    return require(join(packageDir, name))
+    return require(`eslint-import-resolver-${name}`)
   } catch (err) { /* continue */ }
 
   // Try to resolve package with custom name (@myorg/resolver-name)
@@ -166,9 +155,12 @@ function requireResolver(name, sourceFile) {
     return require(name)
   } catch (err) { /* continue */ }
 
-  // Try to resolve package with conventional name
+  // Try to resolve package with path, relative to closest package.json
+  // or current working directory
   try {
-    return require(`eslint-import-resolver-${name}`)
+    const baseDir = pkgDir.sync(sourceFile) || process.cwd()
+    // absolute paths ignore base, so this covers both
+    return require(path.resolve(baseDir, name))
   } catch (err) { /* continue */ }
 
   // all else failed
