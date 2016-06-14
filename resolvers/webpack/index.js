@@ -86,9 +86,19 @@ exports.resolve = function (source, file, settings) {
   // externals
   if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
 
+  var otherPlugins = []
+
+  // support webpack.ResolverPlugin
+  if (webpackConfig.plugins) {
+    webpackConfig.plugins.forEach(function (plugin) {
+      if (plugin.constructor && plugin.constructor.name === 'ResolverPlugin' && Array.isArray(plugin.plugins)) {
+        otherPlugins.push.apply(otherPlugins, plugin.plugins);
+      }
+    });
+  }
 
   // otherwise, resolve "normally"
-  var resolver = createResolver(webpackConfig.resolve || {})
+  var resolver = createResolver(webpackConfig.resolve || {}, otherPlugins)
   try {
     return { found: true, path: resolver.resolveSync(path.dirname(file), source) }
   } catch (err) {
@@ -116,7 +126,7 @@ var DirectoryDescriptionFileFieldAliasPlugin =
 
 // adapted from tests &
 // https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L322
-function createResolver(resolve) {
+function createResolver(resolve, otherPlugins) {
   var resolver = new Resolver(syncFS)
 
   resolver.apply(
@@ -134,6 +144,8 @@ function createResolver(resolve) {
     new FileAppendPlugin(resolve.extensions || ['', '.webpack.js', '.web.js', '.js']),
     new ResultSymlinkPlugin()
   )
+
+  resolver.apply.apply(resolver, otherPlugins);
 
   return resolver
 }
