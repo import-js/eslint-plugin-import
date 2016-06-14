@@ -27,8 +27,7 @@ module.exports = {
     new pluginsTest.ResolverPlugin([
       new pluginsTest.SimpleResolver(
         path.join(__dirname, 'some', 'bar', 'bar.js'),
-        path.join(__dirname, 'some', 'bar'),
-        './some/bar'
+        path.join(__dirname, 'some', 'bar')
       )
     ])
   ]
