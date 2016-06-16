@@ -28,7 +28,7 @@ module.exports = function (context) {
     const importPath = source.value
 
     // don't enforce anything on builtins
-    if (isBuiltIn(importPath)) return
+    if (isBuiltIn(importPath, context.settings)) return
 
     const resolvedPath = resolve(importPath, context)
 

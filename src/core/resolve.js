@@ -54,9 +54,13 @@ function fileExistsWithCaseSync(filepath, cacheSettings) {
 }
 
 export function relative(modulePath, sourceFile, settings) {
+  return fullResolve(modulePath, sourceFile, settings).path
+}
+
+function fullResolve(modulePath, sourceFile, settings) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules'])
-  if (coreSet != null && coreSet.has(modulePath)) return { path: null, found: true }
+  if (coreSet != null && coreSet.has(modulePath)) return { found: true, path: null }
 
   const sourceDir = path.dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings) + modulePath
@@ -71,11 +75,10 @@ export function relative(modulePath, sourceFile, settings) {
   }
 
   const cachedPath = checkCache(cacheKey, cacheSettings)
-  if (cachedPath !== undefined) return cachedPath
+  if (cachedPath !== undefined) return { found: true, path: cachedPath }
 
   function cache(resolvedPath) {
     cachePath(cacheKey, resolvedPath)
-    return resolvedPath
   }
 
   function withResolver(resolver, config) {
@@ -111,19 +114,21 @@ export function relative(modulePath, sourceFile, settings) {
 
   for (let [name, config] of resolvers) {
     const resolver = requireResolver(name, sourceFile)
+        , resolved = withResolver(resolver, config)
 
-    let { path: fullPath, found } = withResolver(resolver, config)
+    if (!resolved.found) continue
 
     // resolvers imply file existence, this double-check just ensures the case matches
-    if (found && !fileExistsWithCaseSync(fullPath, cacheSettings)) {
-      // reject resolved path
-      fullPath = undefined
-    }
+    if (!fileExistsWithCaseSync(resolved.path, cacheSettings)) continue
 
-    if (found) return cache(fullPath)
+    // else, counts
+    cache(resolved.path)
+    return resolved
   }
 
-  return cache(undefined)
+  // failed
+  // cache(undefined)
+  return { found: false }
 }
 
 function resolverReducer(resolvers, map) {
