@@ -317,7 +317,7 @@ ruleTester.run('no-unresolved electron', rule, {
   valid: [
     test({
       code: 'import "electron"',
-      settings: { 'import/env': 'electron' },
+      settings: { 'import/core-modules': ['electron'] },
     }),
   ],
   invalid:[
