@@ -8,12 +8,13 @@ function constant(value) {
   return () => value
 }
 
-export function isBuiltIn(name) {
-  return builtinModules.indexOf(name) !== -1
+export function isBuiltIn(name, settings) {
+  const extras = (settings && settings['import/core-modules']) || []
+  return builtinModules.indexOf(name) !== -1 || extras.indexOf(name) > -1
 }
 
 const externalModuleRegExp = /^\w/
-function isExternalModule(name, path) {
+function isExternalModule(name, settings, path) {
   if (!externalModuleRegExp.test(name)) return false
   return (!path || -1 < path.indexOf(join('node_modules', name)))
 }
@@ -23,7 +24,7 @@ function isScoped(name) {
   return scopedRegExp.test(name)
 }
 
-function isInternalModule(name, path) {
+function isInternalModule(name, settings, path) {
   if (!externalModuleRegExp.test(name)) return false
   return (path && -1 === path.indexOf(join('node_modules', name)))
 }
@@ -53,5 +54,5 @@ const typeTest = cond([
 ])
 
 export default function resolveImportType(name, context) {
-  return typeTest(name, resolve(name, context))
+  return typeTest(name, context.settings, resolve(name, context))
 }
