@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
+- [`import/core-modules` setting]: allow configuration of additional module names,
+  to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
 
 ## [1.9.1] - 2016-06-16
 ### Fixed
@@ -11,7 +15,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [1.9.0] - 2016-06-10
 ### Added
-- Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
 - Added support for loading custom resolvers ([#314], thanks [@le0nik])
 
@@ -202,6 +205,7 @@ for info on changes for earlier releases.
 [`import/cache` setting]: ./README.md#importcache
 [`import/ignore` setting]: ./README.md#importignore
 [`import/extensions` setting]: ./README.md#importextensions
+[`import/core-modules` setting]: ./README.md#importcore-modules
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
@@ -224,6 +228,7 @@ for info on changes for earlier releases.
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
+[#365]: https://github.com/benmosher/eslint-plugin-import/pull/365
 [#359]: https://github.com/benmosher/eslint-plugin-import/pull/359
 [#343]: https://github.com/benmosher/eslint-plugin-import/pull/343
 [#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
@@ -261,6 +266,7 @@ for info on changes for earlier releases.
 [#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
+[#275]: https://github.com/benmosher/eslint-plugin-import/issues/275
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
 [#267]: https://github.com/benmosher/eslint-plugin-import/issues/267
 [#266]: https://github.com/benmosher/eslint-plugin-import/issues/266
@@ -320,3 +326,4 @@ for info on changes for earlier releases.
 [@jkimbo]: https://github.com/jkimbo
 [@le0nik]: https://github.com/le0nik
 [@scottnonnenberg]: https://github.com/scottnonnenberg
+[@sindresorhus]: https://github.com/sindresorhus
