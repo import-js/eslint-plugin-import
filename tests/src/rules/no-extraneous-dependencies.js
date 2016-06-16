@@ -23,6 +23,8 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'import "lodash.isarray"'}),
     test({ code: 'import "@scope/core"'}),
 
+    test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
+
     // 'project' type
     test({
       code: 'import "importType"',
