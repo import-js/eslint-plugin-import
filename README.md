@@ -231,6 +231,33 @@ settings:
 
 [`jsnext:main`]: https://github.com/rollup/rollup/wiki/jsnext:main
 
+#### `import/core-modules`
+
+An array of additional modules to consider as "core" modules--modules that should
+be considered resolved but have no path on the filesystem. Your resolver may
+already define some of these (for example, the Node resolver knows about `fs` and
+`path`), so you need not redefine those.
+
+For example, Electron exposes an `electron` module:
+
+```js
+import 'electron'  // without extra config, will be flagged as unresolved!
+```
+
+that would otherwise be unresolved. To avoid this, you may provide `electron` as a
+core module:
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/core-modules: [ electron ]
+```
+
+In Electron's specific case, there is a shared config named `electron`
+that specifies this for you.
+
+Contribution of more such shared configs for other platforms are welcome!
+
 #### `import/resolver`
 
 See [resolvers](#resolvers).
