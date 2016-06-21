@@ -17,4 +17,8 @@ describe("default options", function () {
       .to.have.property('path')
       .equal(path.resolve(__dirname, './data.json'))
   })
+  it("ignores .json files if 'extensions' is redefined", function () {
+        expect(node.resolve('./data', './test/file.js', { extensions: ['.js'] }))
+      .to.have.property('found', false)
+  })
 })
