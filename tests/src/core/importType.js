@@ -58,4 +58,12 @@ describe('importType(name)', function () {
     expect(importType('/malformed', context)).to.equal('unknown')
     expect(importType('   foo', context)).to.equal('unknown')
   })
+
+  it("should return 'builtin' for additional core modules", function() {
+    // without extra config, should be marked external
+    expect(importType('electron', context)).to.equal('external')
+
+    const electronContext = testContext({ 'import/core-modules': ['electron'] })
+    expect(importType('electron', electronContext)).to.equal('builtin')
+  })
 })
