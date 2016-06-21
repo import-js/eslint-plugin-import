@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester()
@@ -66,11 +66,7 @@ ruleTester.run('default', rule, {
       parser: 'babel-eslint',
     }),
 
-    // JSON
-    test({
-      code: 'import foo from "./foobar.json";',
-      parser: 'babel-eslint',
-    }),
+    ...SYNTAX_CASES,
   ],
 
   invalid: [

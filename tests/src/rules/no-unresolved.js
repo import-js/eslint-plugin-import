@@ -1,7 +1,7 @@
 import * as path from 'path'
 
 import assign from 'object-assign'
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -346,4 +346,9 @@ ruleTester.run('no-unresolved electron', rule, {
       errors: [`Unable to resolve path to module 'electron'.`],
     }),
   ],
+})
+
+ruleTester.run('no-unresolved syntax verification', rule, {
+  valid: SYNTAX_CASES,
+  invalid:[],
 })
