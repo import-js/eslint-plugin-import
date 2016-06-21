@@ -9,6 +9,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/core-modules` setting]: allow configuration of additional module names,
   to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
 
+## [1.9.2] - 2016-06-21
+### Fixed
+- Issues with ignored/CJS files in [`export`] and [`no-deprecated`] rules. ([#348], [#370])
+
 ## [1.9.1] - 2016-06-16
 ### Fixed
 - Reordered precedence for loading resolvers. ([#373])
@@ -260,6 +264,8 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
+[#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
+[#348]: https://github.com/benmosher/eslint-plugin-import/issues/348
 [#342]: https://github.com/benmosher/eslint-plugin-import/issues/342
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
@@ -282,7 +288,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.2...HEAD
+[1.9.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.1...v1.9.0
 [1.8.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.8.0...v1.8.1
