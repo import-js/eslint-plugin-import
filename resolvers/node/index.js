@@ -14,7 +14,10 @@ exports.resolve = function (source, file, config) {
 }
 
 function opts(file, config) {
-  return assign({},
+  return assign({
+      // more closely matches Node (#333)
+      extensions: ['.js', '.json'],
+    },
     config,
     {
       // path.resolve will handle paths relative to CWD

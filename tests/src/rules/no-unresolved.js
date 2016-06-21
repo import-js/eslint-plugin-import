@@ -1,7 +1,7 @@
 import * as path from 'path'
 
 import assign from 'object-assign'
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -80,7 +80,6 @@ function runResolverTests(resolver) {
            , options: [{ commonjs: true }]}),
       rest({ code: 'require(foo)'
            , options: [{ commonjs: true }]}),
-
     ],
 
     invalid: [
@@ -182,6 +181,27 @@ function runResolverTests(resolver) {
           type: 'Literal',
         }],
       }),
+    ],
+  })
+
+  ruleTester.run(`issue #333 (${resolver})`, rule, {
+    valid: [
+      rest({ code: 'import foo from "./bar.json"' }),
+      rest({ code: 'import foo from "./bar"' }),
+      rest({
+        code: 'import foo from "./bar.json"',
+        settings: { 'import/extensions': ['.js'] },
+      }),
+      rest({
+        code: 'import foo from "./bar"',
+        settings: { 'import/extensions': ['.js'] },
+      }),
+    ],
+    invalid: [
+        rest({
+          code: 'import bar from "./foo.json"',
+          errors: ["Unable to resolve path to module './foo.json'."],
+        }),
     ],
   })
 }
@@ -326,4 +346,9 @@ ruleTester.run('no-unresolved electron', rule, {
       errors: [`Unable to resolve path to module 'electron'.`],
     }),
   ],
+})
+
+ruleTester.run('no-unresolved syntax verification', rule, {
+  valid: SYNTAX_CASES,
+  invalid:[],
 })

@@ -63,6 +63,16 @@ export const SYNTAX_CASES = [
     settings: { 'import/extensions': ['.js'] }, // breaking: remove for v2
   }),
 
+  // JSON
+  test({
+    code: 'import foo from "./foobar.json";',
+    settings: { 'import/extensions': ['.js'] }, // breaking: remove for v2
+  }),
+  test({
+    code: 'import foo from "./foobar";',
+    settings: { 'import/extensions': ['.js'] }, // breaking: remove for v2
+  }),
+
   // issue #370: deep commonjs import
   test({
     code: 'import { foo } from "./issue-370-commonjs-namespace/bar"',
