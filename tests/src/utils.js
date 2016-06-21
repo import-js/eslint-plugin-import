@@ -68,4 +68,10 @@ export const SYNTAX_CASES = [
     code: 'import { foo } from "./issue-370-commonjs-namespace/bar"',
     settings: { 'import/ignore': ['foo'] },
   }),
+
+  // issue #348: deep commonjs re-export
+  test({
+    code: 'export * from "./issue-370-commonjs-namespace/bar"',
+    settings: { 'import/ignore': ['foo'] },
+  }),
  ]

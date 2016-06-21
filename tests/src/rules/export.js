@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -24,6 +24,8 @@ ruleTester.run('export', rule, {
 
     // #328: "export * from" does not export a default
     test({ code: 'export default foo; export * from "./bar"' }),
+
+    ...SYNTAX_CASES,
   ],
 
   invalid: [

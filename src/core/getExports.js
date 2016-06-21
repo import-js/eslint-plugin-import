@@ -334,8 +334,11 @@ export default class ExportMap {
     this.namespace.forEach((v, n) =>
       callback.call(thisArg, v, n, this))
 
-    this.reexports.forEach(({ getImport, local }, name) =>
-      callback.call(thisArg, getImport().get(local), name, this))
+    this.reexports.forEach(({ getImport, local }, name) => {
+      const reexported = getImport()
+      // can't look up meta for ignored re-exports (#348)
+      callback.call(thisArg, reexported && reexported.get(local), name, this)
+    })
 
     this.dependencies.forEach(dep => dep().forEach((v, n) =>
       n !== 'default' && callback.call(thisArg, v, n, this)))
