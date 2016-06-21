@@ -50,11 +50,11 @@ module.exports = function (context) {
       }
 
       // unknown thing can't be deprecated
-      if (!imports.has(imported)) return
+      const exported = imports.get(imported)
+      if (exported == null) return
 
       // capture import of deep namespace
-      const { namespace } = imports.get(imported)
-      if (namespace) namespaces.set(local, namespace)
+      if (exported.namespace) namespaces.set(local, exported.namespace)
 
       const deprecation = getDeprecation(imports.get(imported))
       if (!deprecation) return

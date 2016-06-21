@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -37,6 +37,9 @@ ruleTester.run('no-deprecated', rule, {
     test({
       code: "import { deepDep } from './deep-deprecated'; function x(deepDep) { console.log(deepDep.MY_TERRIBLE_ACTION) }",
     }),
+
+
+    ...SYNTAX_CASES,
   ],
   invalid: [
 
