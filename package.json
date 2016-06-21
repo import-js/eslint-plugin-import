@@ -66,6 +66,7 @@
   },
   "dependencies": {
     "builtin-modules": "^1.1.1",
+    "contains-path": "^0.1.0",
     "doctrine": "1.2.x",
     "es6-map": "^0.1.3",
     "es6-set": "^0.1.4",

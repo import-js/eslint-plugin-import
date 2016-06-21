@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [1.9.0] - 2016-06-10
 ### Added
+- Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
 - Added support for loading custom resolvers ([#314], thanks [@le0nik])
 
@@ -220,7 +221,9 @@ for info on changes for earlier releases.
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
+[`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
 [#359]: https://github.com/benmosher/eslint-plugin-import/pull/359
 [#343]: https://github.com/benmosher/eslint-plugin-import/pull/343
 [#332]: https://github.com/benmosher/eslint-plugin-import/pull/332
@@ -269,6 +272,7 @@ for info on changes for earlier releases.
 [#191]: https://github.com/benmosher/eslint-plugin-import/issues/191
 [#189]: https://github.com/benmosher/eslint-plugin-import/issues/189
 [#170]: https://github.com/benmosher/eslint-plugin-import/issues/170
+[#155]: https://github.com/benmosher/eslint-plugin-import/issues/155
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
