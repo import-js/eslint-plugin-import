@@ -9,6 +9,15 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   valid: [
     "var path = require('path');\nvar foo = require('foo');\n",
     "a(require('b'), require('c'), require('d'));",
+    `function foo() {
+      switch (renderData.modalViewKey) {
+        case 'value':
+          var bar = require('bar');
+          return bar(renderData, options)
+        default:
+          return renderData.mainModalContent.clone()
+      }
+    }`,
     {
       code: "import path from 'path';\nimport foo from 'foo';\n",
       parserOptions: { sourceType: 'module' },

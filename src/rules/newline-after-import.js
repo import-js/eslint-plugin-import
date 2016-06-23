@@ -15,18 +15,19 @@ function containsNodeOrEqual(outerNode, innerNode) {
 }
 
 function getScopeBody(scope) {
-    const { body } = scope.block
+    if (scope.block.type === 'SwitchStatement') {
+      return []
+    }
 
-    if (body.type === 'BlockStatement') {
+    const { body } = scope.block
+    if (body && body.type === 'BlockStatement') {
         return body.body
     }
 
     return body
 }
 
-function findNodeIndexInScopeBody(scope, nodeToFind) {
-    const body = getScopeBody(scope)
-
+function findNodeIndexInScopeBody(body, nodeToFind) {
     return findIndex(body, (node) => containsNodeOrEqual(node, nodeToFind))
 }
 
@@ -87,7 +88,7 @@ module.exports = function (context) {
       scopes.forEach(function ({ scope, requireCalls }) {
         requireCalls.forEach(function (node, index) {
           const scopeBody = getScopeBody(scope)
-          const nodePosition = findNodeIndexInScopeBody(scope, node)
+          const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
           const statementWithRequireCall = scopeBody[nodePosition]
           const nextStatement = scopeBody[nodePosition + 1]
           const nextRequireCall = requireCalls[index + 1]

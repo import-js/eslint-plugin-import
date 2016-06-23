@@ -8,6 +8,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - [`import/core-modules` setting]: allow configuration of additional module names,
   to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
+### Fixed
+- Fixed crash with `newline-after-import` related to the use of switch cases. (fixes [#386], thanks [@ljharb] for reporting) ([#395])
 
 ## [1.9.2] - 2016-06-21
 ### Fixed
@@ -231,6 +233,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
 [#365]: https://github.com/benmosher/eslint-plugin-import/pull/365
 [#359]: https://github.com/benmosher/eslint-plugin-import/pull/359
@@ -263,6 +266,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
 [#348]: https://github.com/benmosher/eslint-plugin-import/issues/348
@@ -334,3 +338,4 @@ for info on changes for earlier releases.
 [@le0nik]: https://github.com/le0nik
 [@scottnonnenberg]: https://github.com/scottnonnenberg
 [@sindresorhus]: https://github.com/sindresorhus
+[@ljharb]: https://github.com/ljharb
