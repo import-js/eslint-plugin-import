@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - [`import/core-modules` setting]: allow configuration of additional module names,
   to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
+
 ### Fixed
 - Fixed crash with `newline-after-import` related to the use of switch cases. (fixes [#386], thanks [@ljharb] for reporting) ([#395])
 
