@@ -23,7 +23,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`named`]: ./docs/rules/named.md
 [`default`]: ./docs/rules/default.md
 [`namespace`]: ./docs/rules/namespace.md
-[`no-restricted-paths`]: ./docs/rule/no-restricted-paths.md
+[`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
 **Helpful warnings:**
 
