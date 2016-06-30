@@ -3,7 +3,7 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
-## Unreleased
+## 0.3.2 - 2016-06-30
 ### Added
 - shared config ([config.js](./config.js)) with barebones settings needed to use this resolver. ([#283])
 
