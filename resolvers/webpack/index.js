@@ -23,11 +23,13 @@ exports.interfaceVersion = 2
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
 exports.resolve = function (source, file, settings) {
+  var originalSource = source
+  var rawSource = source
 
   // strip loaders
   var finalBang = source.lastIndexOf('!')
   if (finalBang >= 0) {
-    source = source.slice(finalBang + 1)
+    source = rawSource = source.slice(finalBang + 1)
   }
 
   // strip resource query
@@ -86,6 +88,30 @@ exports.resolve = function (source, file, settings) {
   // externals
   if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
 
+  const sourceInfo = {
+    originalSource: originalSource, // original source
+    rawSource: rawSource, // source with stripped loader(same as source, if there wasn't one)
+  }
+
+  if (Array.isArray(get(settings, 'plugins'))) {
+    source = settings.plugins.reduce(function pluginsReducer(currentSource, plugin, index) {
+      if (typeof plugin !== 'function') {
+        throw new TypeError(
+          'Expected webpack resolver plugin to be a function. Got' + plugin + '. Plugin index:' + index + '.'
+        )
+      }
+
+      currentSource = plugin(currentSource, sourceInfo)
+
+      if (typeof currentSource !== 'string') {
+        throw new TypeError(
+          'Expected webpack resolver plugin to return a string. Got ' + currentSource + '. Plugin index: ', index + '.'
+        )
+      }
+
+      return currentSource;
+    }, source)
+  }
 
   // otherwise, resolve "normally"
   var resolver = createResolver(webpackConfig.resolve || {})
