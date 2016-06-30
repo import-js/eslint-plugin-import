@@ -35,5 +35,6 @@ export const configs = {
 
   // useful stuff for folks using various environments
   'react': require('../config/react'),
+  'react-native': require('../config/react-native'),
   'electron': require('../config/electron'),
 }
