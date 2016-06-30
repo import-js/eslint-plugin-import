@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - [`import/core-modules` setting]: allow configuration of additional module names,
   to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
+- React Native shared config (based on comment from [#283])
 
 ### Fixed
 - Fixed crash with `newline-after-import` related to the use of switch cases. (fixes [#386], thanks [@ljharb] for reporting) ([#395])
@@ -276,6 +277,7 @@ for info on changes for earlier releases.
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
+[#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#275]: https://github.com/benmosher/eslint-plugin-import/issues/275
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272

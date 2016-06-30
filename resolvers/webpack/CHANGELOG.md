@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+### Added
+- shared config ([config.js](./config.js)) with barebones settings needed to use this resolver. ([#283])
+
 ### Fixed
 - strip resource query ([#357], thanks [@daltones])
 - allow `externals` to be defined as a function ([#363], thanks [@kesne])
@@ -44,6 +47,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 [#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
+[#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
 
 [@gausie]: https://github.com/gausie
 [@jquense]: https://github.com/jquense
