@@ -48,7 +48,7 @@
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "cross-env": "^1.0.7",
-    "eslint": "2.x",
+    "eslint": "2.13.0",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
