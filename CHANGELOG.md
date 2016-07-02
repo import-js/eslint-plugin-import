@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Breaking
+- [`import/extensions`] defaults to `['.js']`.
 
 ## [1.10.1] - 2016-07-02
 ### Added

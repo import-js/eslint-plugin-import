@@ -10,14 +10,8 @@ function validExtensions(context) {
     return cachedSet
   }
 
-  // todo: add 'mjs'?
   lastSettings = context.settings
-  // breaking: default to '.js'
-  // cachedSet = new Set(context.settings['import/extensions'] || [ '.js' ])
-  cachedSet = 'import/extensions' in context.settings
-    ? new Set(context.settings['import/extensions'])
-    : { has: () => true } // the set of all elements
-
+  cachedSet = new Set(context.settings['import/extensions'] || [ '.js' ])
   return cachedSet
 }
 
