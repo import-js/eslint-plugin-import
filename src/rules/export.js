@@ -1,8 +1,4 @@
-import 'es6-symbol/implement'
-import Map from 'es6-map'
-import Set from 'es6-set'
-
-import ExportMap, { recursivePatternCapture } from '../core/getExports'
+import ExportMap, { recursivePatternCapture } from '../ExportMap'
 
 module.exports = function (context) {
   const named = new Map()

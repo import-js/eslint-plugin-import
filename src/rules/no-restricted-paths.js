@@ -1,7 +1,7 @@
 import containsPath from 'contains-path'
 import path from 'path'
 
-import resolve from '../core/resolve'
+import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
 
 module.exports = function noRestrictedPaths(context) {

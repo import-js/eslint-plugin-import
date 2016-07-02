@@ -1,7 +1,5 @@
-import Map from 'es6-map'
-
-import Exports from '../core/getExports'
-import declaredScope from '../core/declaredScope'
+import Exports from '../ExportMap'
+import declaredScope from 'eslint-module-utils/declaredScope'
 
 module.exports = function (context) {
   const deprecated = new Map()

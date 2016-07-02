@@ -1,4 +1,4 @@
-import Exports from '../core/getExports'
+import Exports from '../ExportMap'
 
 module.exports = function (context) {
 

@@ -1,4 +1,4 @@
-import Exports from '../core/getExports'
+import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 
 module.exports = function (context) {
