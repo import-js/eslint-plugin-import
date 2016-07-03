@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Import with sanity.",
   "main": "lib/index.js",
   "directories": {
@@ -48,7 +48,7 @@
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "cross-env": "^1.0.7",
-    "eslint": "2.x",
+    "eslint": "3.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "glob": "^6.0.2",
@@ -62,7 +62,7 @@
     "rimraf": "2.5.2"
   },
   "peerDependencies": {
-    "eslint": "2.x"
+    "eslint": "2.x - 3.x"
   },
   "dependencies": {
     "builtin-modules": "^1.1.1",
