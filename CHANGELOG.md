@@ -8,7 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [1.10.1] - 2016-07-02
 ### Added
-- Officially support ESLint 3.x. (peerDependencies updeted to `2.x - 3.x`)
+- Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
 ## [1.10.0] - 2016-06-30
 ### Added
