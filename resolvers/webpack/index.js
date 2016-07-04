@@ -162,7 +162,7 @@ function findExternal(source, externals, context) {
 
   // array: recurse
   if (externals instanceof Array) {
-    return externals.some(function (e) { return findExternal(source, e) })
+    return externals.some(function (e) { return findExternal(source, e, context) })
   }
 
   if (externals instanceof RegExp) {
