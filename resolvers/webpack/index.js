@@ -84,7 +84,7 @@ exports.resolve = function (source, file, settings) {
   log('Using config: ', webpackConfig)
 
   // externals
-  if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
+  if (findExternal(source, webpackConfig.externals, path.dirname(file))) return { found: true, path: null }
 
 
   // otherwise, resolve "normally"
@@ -154,7 +154,7 @@ function makeRootPlugin(name, root) {
 }
 /* eslint-enable */
 
-function findExternal(source, externals) {
+function findExternal(source, externals, context) {
   if (!externals) return false
 
   // string match
@@ -171,11 +171,11 @@ function findExternal(source, externals) {
 
   if (typeof externals === 'function') {
     var functionExternalFound = false
-    externals.call(null, null, source, function(err, value) {
+    externals.call(null, context, source, function(err, value) {
       if (err) {
         functionExternalFound = false
       } else {
-        functionExternalFound = findExternal(source, value)
+        functionExternalFound = findExternal(source, value, context)
       }
     })
     return functionExternalFound
