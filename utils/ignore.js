@@ -3,6 +3,8 @@ exports.__esModule = true
 
 const extname = require('path').extname
 
+const log = require('debug')('eslint-plugin-import:utils:ignore')
+
 // one-shot memoized
 let cachedSet, lastSettings
 function validExtensions(context) {
@@ -24,7 +26,10 @@ exports.default = function ignore(path, context) {
 
   for (let i = 0; i < ignoreStrings.length; i++) {
     const regex = new RegExp(ignoreStrings[i])
-    if (regex.test(path)) return true
+    if (regex.test(path)) {
+      log(`ignoring ${path}, matched pattern /${ignoreStrings[i]}/`)
+      return true
+    }
   }
 
   return false
