@@ -5,7 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Breaking
-- [`import/extensions`] defaults to `['.js']`.
+- [`import/extensions` setting] defaults to `['.js']`. ([#306])
+- [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
 
 ## [1.10.1] - 2016-07-02
 ### Added
@@ -287,11 +288,13 @@ for info on changes for earlier releases.
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
+[#306]: https://github.com/benmosher/eslint-plugin-import/issues/306
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#275]: https://github.com/benmosher/eslint-plugin-import/issues/275
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
+[#270]: https://github.com/benmosher/eslint-plugin-import/issues/270
 [#267]: https://github.com/benmosher/eslint-plugin-import/issues/267
 [#266]: https://github.com/benmosher/eslint-plugin-import/issues/266
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216

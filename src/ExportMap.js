@@ -14,12 +14,16 @@ const hashObject = require('eslint-module-utils/hash').hashObject
 const exportCache = new Map()
 
 /**
- * detect exports without a full parse.
+ * detect possible imports/exports without a full parse.
  * used primarily to ignore the import/ignore setting, iif it looks like
  * there might be something there (i.e., jsnext:main is set).
+ *
+ * Not perfect, just a fast way to disqualify large non-ES6 modules and
+ * avoid a parse.
  * @type {RegExp}
  */
-const hasExports = new RegExp('(^|[\\n;])\\s*export\\s[\\w{*]')
+const potentiallyUnambiguousModule =
+  new RegExp(`(?:^|;)\s*(?:export|import)(?:(?:\s+\w)|(?:\s*[{*]))`)
 
 class ExportMap {
   constructor(path) {
@@ -286,16 +290,26 @@ ExportMap.for = function (path, context) {
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
   // check for and cache ignore
-  if (isIgnored(path, context) && !hasExports.test(content)) {
+  if (isIgnored(path, context) && !potentiallyUnambiguousModule.test(content)) {
     exportCache.set(cacheKey, null)
     return null
   }
 
   exportMap = ExportMap.parse(path, content, context)
+
+  // ambiguous modules return null
+  if (exportMap == null) return null
+
   exportMap.mtime = stats.mtime
 
   exportCache.set(cacheKey, exportMap)
   return exportMap
+}
+
+
+const unambiguousNodeType = /^(Exp|Imp)ort.*Declaration$/
+function isUnambiguousModule(ast) {
+  return ast.body.some(node => unambiguousNodeType.test(node.type))
 }
 
 ExportMap.parse = function (path, content, context) {
@@ -307,6 +321,8 @@ ExportMap.parse = function (path, content, context) {
     m.errors.push(err)
     return m // can't continue
   }
+
+  if (!isUnambiguousModule(ast)) return null
 
   const docstyle = (context.settings && context.settings['import/docstyle']) || ['jsdoc']
   const docStyleParsers = {}

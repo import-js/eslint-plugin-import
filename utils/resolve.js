@@ -180,7 +180,7 @@ function resolve(p, context) {
     if (!erroredContexts.has(context)) {
       context.report({
         message: `Resolve error: ${err.message}`,
-        loc: { line: 1, col: 0 },
+        loc: { line: 1, column: 0 },
       })
       erroredContexts.add(context)
     }

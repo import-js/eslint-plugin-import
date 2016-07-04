@@ -16,15 +16,11 @@ function validExtensions(context) {
 }
 
 exports.default = function ignore(path, context) {
-  // ignore node_modules by default
-  const ignoreStrings = context.settings['import/ignore']
-    ? [].concat(context.settings['import/ignore'])
-    : ['node_modules']
-
   // check extension whitelist first (cheap)
   if (!validExtensions(context).has(extname(path))) return true
 
-  if (ignoreStrings.length === 0) return false
+  if (!('import/ignore' in context.settings)) return false
+  const ignoreStrings = context.settings['import/ignore']
 
   for (let i = 0; i < ignoreStrings.length; i++) {
     const regex = new RegExp(ignoreStrings[i])
