@@ -96,6 +96,23 @@ ruleTester.run('named', rule, {
       settings: { 'import/ignore': ['common'] },
     }),
 
+    // issue #416
+    test({
+      code: `
+        import {
+          Navigation,
+          Drawer,
+          Layout,
+          Content,
+          Header,
+        } from 'react-mdl'`,
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 6,
+        ecmaFeatures: { experimentalObjectRestSpread: true, jsx: true },
+      },
+    }),
+
     ...SYNTAX_CASES,
   ],
 

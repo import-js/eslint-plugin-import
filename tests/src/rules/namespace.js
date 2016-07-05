@@ -87,10 +87,38 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // issue #416.
+  test({
+    code: `
+      import * as ReactMDL from 'react-mdl';
+      let Navigation = ReactMDL.Navigation;
+      let Drawer = ReactMDL.Drawer;
+      let Layout = ReactMDL.Layout;
+      let Content = ReactMDL.Content;
+      let Header = ReactMDL.Content;`,
+    parserOptions: {
+      sourceType: 'module',
+      ecmaVersion: 6,
+      ecmaFeatures: { experimentalObjectRestSpread: true, jsx: true },
+    },
+  }),
+
   ...SYNTAX_CASES,
 ]
 
 const invalid = [
+
+  // issue #416: todo: proper parse error
+  // test({
+  //   code: `
+  //     import * as ReactMDL from 'react-mdl';
+  //     let Navigation = ReactMDL.Navigation;
+  //     let Drawer = ReactMDL.Drawer;
+  //     let Layout = ReactMDL.Layout;
+  //     let Content = ReactMDL.Content;
+  //     let Header = ReactMDL.Content;`,
+  // }),
+
   test({code: "import * as foo from './common';",
         errors: ["No exported names found in module './common'."]}),
 
