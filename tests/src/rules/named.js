@@ -240,5 +240,18 @@ ruleTester.run('named', rule, {
       code: 'import { default as barDefault } from "./re-export"',
       errors: [`default not found in './re-export'`],
     }),
+
+    // issue #416
+    // todo: update error message to indicate parse issue in deepest module
+    // test({
+    //   code: `
+    //     import {
+    //       Navigation,
+    //       Drawer,
+    //       Layout,
+    //       Content,
+    //       Header,
+    //     } from 'react-mdl'`,
+    // }),
   ],
 })

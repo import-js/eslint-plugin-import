@@ -107,18 +107,6 @@ const valid = [
 ]
 
 const invalid = [
-
-  // issue #416: todo: proper parse error
-  // test({
-  //   code: `
-  //     import * as ReactMDL from 'react-mdl';
-  //     let Navigation = ReactMDL.Navigation;
-  //     let Drawer = ReactMDL.Drawer;
-  //     let Layout = ReactMDL.Layout;
-  //     let Content = ReactMDL.Content;
-  //     let Header = ReactMDL.Content;`,
-  // }),
-
   test({code: "import * as foo from './common';",
         errors: ["No exported names found in module './common'."]}),
 
@@ -198,6 +186,17 @@ const invalid = [
     code: 'import * as ree from "./re-export"; console.log(ree.default)',
     errors: [`'default' not found in imported namespace 'ree'.`],
   }),
+
+  // issue #416: todo: proper parse error
+  // test({
+  //   code: `
+  //     import * as ReactMDL from 'react-mdl';
+  //     let Navigation = ReactMDL.Navigation;
+  //     let Drawer = ReactMDL.Drawer;
+  //     let Layout = ReactMDL.Layout;
+  //     let Content = ReactMDL.Content;
+  //     let Header = ReactMDL.Content;`,
+  // }),
 
 ]
 
