@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
+  issue (see [#415]). Should not make any discernible semantic difference.
 
 ## [1.10.2] - 2016-07-04
 ### Fixed
@@ -279,6 +282,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
