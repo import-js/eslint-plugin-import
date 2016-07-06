@@ -5,7 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Fixed
-- pinned `es6-symbol` dependency to `^3.1.0` instead of `*` 😳 ([#415])
+- removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
+  issue (see [#415]). Should not make any discernible semantic difference.
 
 ## [1.10.2] - 2016-07-04
 ### Fixed
