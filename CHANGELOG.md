@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- pinned `es6-symbol` dependency to `^3.1.0` instead of `*` 😳 ([#415])
 
 ## [1.10.2] - 2016-07-04
 ### Fixed
@@ -279,6 +281,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
