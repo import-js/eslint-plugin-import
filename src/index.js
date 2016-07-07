@@ -15,7 +15,7 @@ export const rules = {
   'no-commonjs': require('./rules/no-commonjs'),
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
-  'imports-first': require('./rules/imports-first'),
+  'first': require('./rules/first'),
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
   'order': require('./rules/order'),
@@ -24,6 +24,9 @@ export const rules = {
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
+
+  // deprecated aliases to rules
+  'imports-first': require('./rules/first'),
 }
 
 export const configs = {

@@ -18,7 +18,7 @@ module.exports = function (context) {
         }
 
         anyExpressions = true
-         
+
         if (node.type === 'ImportDeclaration') {
           if (absoluteFirst) {
             if (/^\./.test(node.source.value)) {

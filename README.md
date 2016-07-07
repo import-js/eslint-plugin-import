@@ -53,7 +53,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Style guide:**
 
-* Ensure all imports appear before other statements ([`imports-first`])
+* Ensure all imports appear before other statements ([`first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
 * Ensure consistent use of file extension within the import path ([`extensions`])
@@ -61,7 +61,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Enforce a newline after import statements ([`newline-after-import`])
 * Prefer a default export if module exports a single name ([`prefer-default-export`])
 
-[`imports-first`]: ./docs/rules/imports-first.md
+[`first`]: ./docs/rules/first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`extensions`]: ./docs/rules/extensions.md

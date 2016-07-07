@@ -13,6 +13,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
 - [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
 
+### Changed
+- `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
+  exist, but may be removed in a future major release.
+
 ## [1.10.1] - 2016-07-02
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
@@ -241,7 +245,8 @@ for info on changes for earlier releases.
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`extensions`]: ./docs/rules/extensions.md
-[`imports-first`]: ./docs/rules/imports-first.md
+[`first`]: ./docs/rules/first.md
+[`imports-first`]: ./docs/rules/first.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md

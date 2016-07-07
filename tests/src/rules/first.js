@@ -1,11 +1,11 @@
 import { test } from '../utils'
 
-import { linter, RuleTester } from 'eslint'
+import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/imports-first')
+    , rule = require('rules/first')
 
-ruleTester.run('imports-first', rule, {
+ruleTester.run('first', rule, {
   valid: [
     test({ code: "import { x } from './foo'; import { y } from './bar';\
                   export { x, y }" })
