@@ -236,18 +236,19 @@ export default class ExportMap {
     if (this.reexports.has(name)) return true
 
     // default exports must be explicitly re-exported (#328)
+    let foundInnerMapName = false
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
-        let innerMap = dep()
+      this.dependencies.forEach((dep) => {
+        if (!foundInnerMapName) {
+          let innerMap = dep()
 
-        // todo: report as unresolved?
-        if (!innerMap) continue
-
-        if (innerMap.has(name)) return true
-      }
+          // todo: report as unresolved?
+          if (innerMap && innerMap.has(name)) foundInnerMapName = true
+        }
+      })
     }
 
-    return false
+    return foundInnerMapName
   }
 
   /**
@@ -276,24 +277,29 @@ export default class ExportMap {
 
 
     // default exports must be explicitly re-exported (#328)
+    let returnValue = { found: false, path: [this] }
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
-        let innerMap = dep()
-        // todo: report as unresolved?
-        if (!innerMap) continue
+      this.dependencies.forEach((dep) => {
+        if (!returnValue.found) {
+          let innerMap = dep()
+          // todo: report as unresolved?
+          if (innerMap) {
 
-        // safeguard against cycles
-        if (innerMap.path === this.path) continue
+            // safeguard against cycles
+            if (innerMap.path !== this.path) {
 
-        let innerValue = innerMap.hasDeep(name)
-        if (innerValue.found) {
-          innerValue.path.unshift(this)
-          return innerValue
+              let innerValue = innerMap.hasDeep(name)
+              if (innerValue.found) {
+                innerValue.path.unshift(this)
+                returnValue = innerValue
+              }
+            }
+          }
         }
-      }
+      })
     }
 
-    return { found: false, path: [this] }
+    return returnValue
   }
 
   get(name) {
@@ -313,21 +319,26 @@ export default class ExportMap {
     }
 
     // default exports must be explicitly re-exported (#328)
+    let returnValue = undefined
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
-        let innerMap = dep()
-        // todo: report as unresolved?
-        if (!innerMap) continue
+      this.dependencies.foreach((dep) => {
+        if (returnValue === undefined) {
+          let innerMap = dep()
+          // todo: report as unresolved?
+          if (innerMap) {
 
-        // safeguard against cycles
-        if (innerMap.path === this.path) continue
+            // safeguard against cycles
+            if (innerMap.path !== this.path) {
 
-        let innerValue = innerMap.get(name)
-        if (innerValue !== undefined) return innerValue
-      }
+              let innerValue = innerMap.get(name)
+              if (innerValue !== undefined) returnValue = innerValue
+            }
+          }
+        }
+      })
     }
 
-    return undefined
+    return returnValue
   }
 
   forEach(callback, thisArg) {

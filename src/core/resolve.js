@@ -112,23 +112,24 @@ function fullResolve(modulePath, sourceFile, settings) {
 
   const resolvers = resolverReducer(configResolvers, new Map())
 
-  for (let [name, config] of resolvers) {
-    const resolver = requireResolver(name, sourceFile)
-        , resolved = withResolver(resolver, config)
+  let resolved = { found: false }
+  resolvers.forEach(function (config, name)  {
+    if (!resolved.found) {
+      const resolver = requireResolver(name, sourceFile)
+      resolved = withResolver(resolver, config)
+      if (resolved.found) {
+        // resolvers imply file existence, this double-check just ensures the case matches
+        if (fileExistsWithCaseSync(resolved.path, cacheSettings)) {
+          // else, counts
+          cache(resolved.path)
+        } else {
+          resolved = { found: false }
+        }
+      }
+    }
+  })
 
-    if (!resolved.found) continue
-
-    // resolvers imply file existence, this double-check just ensures the case matches
-    if (!fileExistsWithCaseSync(resolved.path, cacheSettings)) continue
-
-    // else, counts
-    cache(resolved.path)
-    return resolved
-  }
-
-  // failed
-  // cache(undefined)
-  return { found: false }
+  return resolved
 }
 
 function resolverReducer(resolvers, map) {
