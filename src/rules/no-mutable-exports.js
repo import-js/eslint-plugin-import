@@ -7,15 +7,15 @@ module.exports = function (context) {
   }
 
   function checkDeclarationsInScope({variables}, name) {
-    for (let variable of variables) {
+    variables.forEach((variable) => {
       if (variable.name === name) {
-        for (let def of variable.defs) {
+        variable.defs.forEach((def) => {
           if (def.type === 'Variable') {
             checkDeclaration(def.parent)
           }
-        }
+        })
       }
-    }
+    })
   }
 
   function handleExportDefault(node) {
@@ -32,9 +32,9 @@ module.exports = function (context) {
     if (node.declaration)  {
       checkDeclaration(node.declaration)
     } else if (!node.source) {
-      for (let specifier of node.specifiers) {
+      node.specifiers.forEach((specifier) => {
         checkDeclarationsInScope(scope, specifier.local.name)
-      }
+      })
     }
   }
 
