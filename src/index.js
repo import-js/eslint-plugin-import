@@ -27,6 +27,8 @@ export const rules = {
 }
 
 export const configs = {
+  'recommended': require('../config/recommended'),
+
   'errors': require('../config/errors'),
   'warnings': require('../config/warnings'),
 

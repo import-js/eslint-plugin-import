@@ -4,6 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- `recommended` shared config. Roughly `errors` and `warnings` mixed together,
+  with some `parserOptions` in the mix. ([#402])
+- `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
+
 ### Breaking
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
 - [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
@@ -280,6 +285,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#402]: https://github.com/benmosher/eslint-plugin-import/issues/402
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
