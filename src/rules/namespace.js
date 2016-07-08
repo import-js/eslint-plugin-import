@@ -1,4 +1,3 @@
-import 'es6-symbol/implement'
 import Map from 'es6-map'
 
 import Exports from '../core/getExports'
@@ -32,7 +31,7 @@ module.exports = function (context) {
           return
         }
 
-        for (let specifier of declaration.specifiers) {
+        declaration.specifiers.forEach((specifier) => {
           switch (specifier.type) {
             case 'ImportNamespaceSpecifier':
               if (!imports.size) {
@@ -51,7 +50,7 @@ module.exports = function (context) {
               break
             }
           }
-        }
+        })
       }
       body.forEach(processBodyStatement)
     },
@@ -129,28 +128,23 @@ module.exports = function (context) {
 
         if (pattern.type !== 'ObjectPattern') return
 
-        for (let property of pattern.properties) {
-
+        pattern.properties.forEach((property) => {
           if (property.key.type !== 'Identifier') {
             context.report({
               node: property,
               message: 'Only destructure top-level names.',
             })
-            continue
-          }
-
-          if (!namespace.has(property.key.name)) {
+          } else if (!namespace.has(property.key.name)) {
             context.report({
               node: property,
               message: makeMessage(property.key, path),
             })
-            continue
+          } else {
+            path.push(property.key.name)
+            testKey(property.value, namespace.get(property.key.name).namespace, path)
+            path.pop()
           }
-
-          path.push(property.key.name)
-          testKey(property.value, namespace.get(property.key.name).namespace, path)
-          path.pop()
-        }
+        })
       }
 
       testKey(id, namespaces.get(init.name))

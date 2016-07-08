@@ -3,8 +3,6 @@
  * @author Ben Mosher
  */
 
-import 'es6-symbol/implement'
-
 import resolve from '../core/resolve'
 
 module.exports = function (context) {
@@ -53,15 +51,17 @@ module.exports = function (context) {
     const modules = call.arguments[0]
     if (modules.type !== 'ArrayExpression') return
 
-    for (let element of modules.elements) {
-      if (element.type !== 'Literal') continue
-      if (typeof element.value !== 'string') continue
+    modules.elements.forEach((element) => {
+      if (element.type === 'Literal' &&
+          typeof element.value === 'string') {
 
-      if (element.value === 'require' ||
-          element.value === 'exports') continue // magic modules: http://git.io/vByan
-
-      checkSourceValue(element)
-    }
+        // magic modules: http://git.io/vByan
+        if (element.value !== 'require' &&
+            element.value !== 'exports') {
+          checkSourceValue(element)
+        }
+      }
+    })
   }
 
   const visitors = {

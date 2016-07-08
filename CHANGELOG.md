@@ -5,6 +5,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+
+## [1.10.3] - 2016-07-08
+### Fixed
+- removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
+  issue (see [#415]). Should not make any discernible semantic difference.
+
 ## [1.10.2] - 2016-07-04
 ### Fixed
 - Something horrible happened during `npm prepublish` of 1.10.1.
@@ -279,6 +285,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
@@ -306,7 +313,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...HEAD
+[1.10.3]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...v1.10.3
 [1.10.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.2...v1.10.0

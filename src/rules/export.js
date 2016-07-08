@@ -1,4 +1,3 @@
-import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 
@@ -32,11 +31,11 @@ module.exports = function (context) {
         addNamed(node.declaration.id.name, node.declaration.id)
       }
 
-      if (node.declaration.declarations != null) {
-        for (let declaration of node.declaration.declarations) {
-          recursivePatternCapture(declaration.id, v => addNamed(v.name, v))
-        }
-      }
+      if (node.declaration.declarations == null) return
+
+      node.declaration.declarations.forEach(declaration => {
+        recursivePatternCapture(declaration.id, v => addNamed(v.name, v))
+      })
     },
 
     'ExportAllDeclaration': function (node) {
@@ -62,15 +61,15 @@ module.exports = function (context) {
     },
 
     'Program:exit': function () {
-      for (let [name, nodes] of named) {
-        if (nodes.size <= 1) continue
+      named.forEach((nodes, name) => {
+        if (nodes.size <= 1) return
 
-        for (let node of nodes) {
+        nodes.forEach(node => {
           if (name === 'default') {
             context.report(node, 'Multiple default exports.')
           } else context.report(node, `Multiple exports of name '${name}'.`)
-        }
-      }
+        })
+      })
     },
   }
 }

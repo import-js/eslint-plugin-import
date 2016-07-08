@@ -1,7 +1,7 @@
 # imports-first
 
 This rule reports any imports that come after non-import
-statments.
+statements.
 
 ## Rule Details
 
@@ -23,6 +23,8 @@ import bar from './bar'
 
 import * as _ from 'lodash' // <- reported
 ```
+
+If you really want import type ordering, check out [`import/order`].
 
 Notably, `import`s are hoisted, which means the imported modules will be evaluated
 before any of the statements interspersed between them. Keeping all `import`s together
@@ -55,6 +57,8 @@ enable this rule.
 
 ## Further Reading
 
+- [`import/order`]: a major step up from `absolute-first`
 - Issue [#255]
 
+[`import/order`]: ./order.md
 [#255]: https://github.com/benmosher/eslint-plugin-import/issues/255

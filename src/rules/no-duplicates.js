@@ -1,17 +1,16 @@
-import 'es6-symbol/implement'
 import Map from 'es6-map'
 import Set from 'es6-set'
 
 import resolve from '../core/resolve'
 
 function checkImports(imported, context) {
-  for (let [module, nodes] of imported.entries()) {
+  imported.forEach((nodes, module) => {
     if (nodes.size > 1) {
-      for (let node of nodes) {
+      nodes.forEach((node) => {
         context.report(node, `'${module}' imported multiple times.`)
-      }
+      })
     }
-  }
+  })
 }
 
 module.exports = function (context) {
