@@ -5,7 +5,6 @@
  * See LICENSE in root directory for full license.
  */
 
-import 'es6-symbol/implement'
 import Map from 'es6-map'
 
 import Exports from '../core/getExports'
@@ -57,10 +56,11 @@ module.exports = function(context) {
     if (!isDestructure) return
 
     const objectName = node.init.name
-    for (const { key } of node.id.properties) {
-      if (key == null) continue  // true for rest properties
-      storePropertyLookup(objectName, key.name, key)
-    }
+    node.id.properties.forEach(({key}) => {
+      if (key != null) { // rest properties are null
+        storePropertyLookup(objectName, key.name, key)
+      }
+    })
   }
 
   function handleProgramExit() {
@@ -68,19 +68,19 @@ module.exports = function(context) {
       const fileImport = fileImports.get(objectName)
       if (fileImport == null) return
 
-      for (const {propName, node} of lookups) {
-        if (!fileImport.exportMap.namespace.has(propName)) continue
-
-        context.report({
-          node,
-          message: (
-            `Caution: \`${objectName}\` also has a named export ` +
-            `\`${propName}\`. Check if you meant to write ` +
-            `\`import {${propName}} from '${fileImport.sourcePath}'\` ` +
-            'instead.'
-          ),
-        })
-      }
+      lookups.forEach(({propName, node}) => {
+        if (fileImport.exportMap.namespace.has(propName)) {
+          context.report({
+            node,
+            message: (
+              `Caution: \`${objectName}\` also has a named export ` +
+              `\`${propName}\`. Check if you meant to write ` +
+              `\`import {${propName}} from '${fileImport.sourcePath}'\` ` +
+              'instead.'
+            ),
+          })
+        }
+      })
     })
   }
 
