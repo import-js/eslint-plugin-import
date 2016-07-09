@@ -24,6 +24,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'import "@scope/core"'}),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
+    test({
+      code: 'import "eslint"',
+      options: [{peerDependencies: true}],
+      settings: { 'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } } },
+    }),
 
     // 'project' type
     test({
@@ -79,6 +84,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'var eslint = require("eslint")',
       options: [{devDependencies: false}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'var eslint = require("eslint")',
+      options: [{devDependencies: false, peerDependencies: false}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
