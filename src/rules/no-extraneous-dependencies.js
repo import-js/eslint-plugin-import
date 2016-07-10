@@ -48,7 +48,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
-  const isInPeerDeps = deps.peerDependencies[packageName] === undefined
+  const isInPeerDeps = deps.peerDependencies[packageName] !== undefined
 
   if (isInDeps ||
     (depsOptions.allowDevDeps && isInDevDeps) ||
@@ -82,7 +82,7 @@ module.exports = function (context) {
   const depsOptions = {
     allowDevDeps: options.devDependencies !== false,
     allowOptDeps: options.optionalDependencies !== false,
-    allowPeerDeps: options.peerDependencies === true,
+    allowPeerDeps: options.peerDependencies !== false,
   }
 
   // todo: use module visitor from module-utils core
