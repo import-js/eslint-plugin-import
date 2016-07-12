@@ -1,4 +1,9 @@
 {
   "presets": [ "es2015-loose" ],
-  "sourceMaps": "inline"
+  "sourceMaps": "inline",
+  "env": {
+    "test": {
+      "plugins": [ "istanbul" ]
+    }
+  }
 }

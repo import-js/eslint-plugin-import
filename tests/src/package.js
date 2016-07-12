@@ -4,7 +4,7 @@ var path = require('path')
   , fs = require('fs')
 
 describe('package', function () {
-  let pkg = path.join(process.cwd(), 'lib')
+  let pkg = path.join(process.cwd(), 'src')
     , module
 
   before('is importable', function () {

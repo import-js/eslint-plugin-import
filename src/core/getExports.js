@@ -320,7 +320,7 @@ export default class ExportMap {
     // default exports must be explicitly re-exported (#328)
     let returnValue = undefined
     if (name !== 'default') {
-      this.dependencies.foreach((dep) => {
+      this.dependencies.forEach((dep) => {
         if (returnValue === undefined) {
           let innerMap = dep()
           // todo: report as unresolved?
