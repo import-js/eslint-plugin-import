@@ -24,10 +24,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'import "@scope/core"'}),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
-    test({
-      code: 'import "eslint"',
-    }),
-    test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
+    test({ code: 'import "eslint"' }),
     test({
       code: 'import "eslint"',
       options: [{peerDependencies: true}],
