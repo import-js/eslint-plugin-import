@@ -4,7 +4,7 @@
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -t 5s"
   },
   "repository": {
     "type": "git",
