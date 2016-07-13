@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import resolve, { CASE_INSENSITIVE } from 'core/resolve'
+import resolve, { CASE_SENSITIVE_FS } from 'core/resolve'
 
 import * as fs from 'fs'
 import * as utils from '../utils'
@@ -66,7 +66,7 @@ describe('resolve', function () {
 
         // these tests fail on a case-sensitive file system
         // because nonexistent files aren't cached
-        if (CASE_INSENSITIVE) {
+        if (CASE_SENSITIVE_FS) {
           it('gets cached values within cache lifetime', function () {
             // get cached values initially
             expect(resolve(original, context)).to.exist

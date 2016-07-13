@@ -6,7 +6,7 @@ import { createHash } from 'crypto'
 import * as doctrine from 'doctrine'
 
 import parse from './parse'
-import resolve from './resolve'
+import resolve, { relative as resolveRelative } from './resolve'
 import isIgnored from './ignore'
 
 import { hashObject } from './hash'
@@ -118,7 +118,7 @@ export default class ExportMap {
     const namespaces = new Map()
 
     function remotePath(node) {
-      return resolve.relative(node.source.value, path, context.settings)
+      return resolveRelative(node.source.value, path, context.settings)
     }
 
     function resolveImport(node) {

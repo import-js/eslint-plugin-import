@@ -52,6 +52,7 @@
     "coveralls": "^2.11.4",
     "cross-env": "^1.0.7",
     "eslint": "2.x",
+    "eslint-plugin-import": "next",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "gulp": "^3.9.0",
