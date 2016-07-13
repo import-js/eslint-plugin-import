@@ -17,7 +17,17 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
 
-## [1.10.1] - 2016-07-02
+## [1.10.3] - 2016-07-08
+### Fixed
+- removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
+  issue (see [#415]). Should not make any discernible semantic difference.
+
+## [1.10.2] - 2016-07-04
+### Fixed
+- Something horrible happened during `npm prepublish` of 1.10.1.
+  Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
+
+## [1.10.1] - 2016-07-02 [YANKED]
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
@@ -290,6 +300,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#402]: https://github.com/benmosher/eslint-plugin-import/issues/402
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
@@ -320,7 +331,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...HEAD
+[1.10.3]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...v1.10.3
+[1.10.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.2...v1.10.0
 [1.9.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.9.1...v1.9.2
@@ -369,3 +382,4 @@ for info on changes for earlier releases.
 [@scottnonnenberg]: https://github.com/scottnonnenberg
 [@sindresorhus]: https://github.com/sindresorhus
 [@ljharb]: https://github.com/ljharb
+[@rhettlivingston]: https://github.com/rhettlivingston

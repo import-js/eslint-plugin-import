@@ -4,7 +4,7 @@ var path = require('path')
   , fs = require('fs')
 
 describe('package', function () {
-  let pkg = path.join(process.cwd(), 'lib')
+  let pkg = path.join(process.cwd(), 'src')
     , module
 
   before('is importable', function () {
@@ -34,10 +34,10 @@ describe('package', function () {
   it('exports all configs', function (done) {
     fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
       if (err) { done(err); return }
-      for (let file of files) {
-        if (file[0] === '.') continue
+      files.forEach(file => {
+        if (file[0] === '.') return
         expect(module.configs).to.have.property(file.slice(0, -3)) // drop '.js'
-      }
+      })
       done()
     })
   })

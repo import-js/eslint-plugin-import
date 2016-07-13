@@ -4,10 +4,6 @@
  * @copyright 2016 Desmond Brand. All rights reserved.
  * See LICENSE in root directory for full license.
  */
-
-import 'es6-symbol/implement'
-import Map from 'es6-map'
-
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 

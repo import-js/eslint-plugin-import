@@ -5,5 +5,15 @@
 			"path": ".",
 			"folder_exclude_patterns": ["reports", "node_modules", "lib"]
 		}
-	]
+	],
+    "SublimeLinter":
+    {
+        "linters":
+        {
+            "eslint":
+            {
+                "chdir": "${project}/"
+            }
+        }
+    }
 }

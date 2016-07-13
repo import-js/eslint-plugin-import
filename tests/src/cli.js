@@ -11,7 +11,7 @@ describe('CLI regression tests', function () {
       cli = new CLIEngine({
         useEslintrc: false,
         configFile: './tests/files/issue210.config.js',
-        rulePaths: ['./lib/rules'],
+        rulePaths: ['./src/rules'],
         rules: {
           'named': 2,
         },

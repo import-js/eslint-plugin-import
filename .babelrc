@@ -1,4 +1,9 @@
 {
   "presets": [ "es2015-argon" ],
-  "sourceMaps": "inline"
+  "sourceMaps": "inline",
+  "env": {
+    "test": {
+      "plugins": [ "istanbul" ]
+    }
+  }
 }
