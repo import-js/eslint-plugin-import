@@ -21,6 +21,7 @@ export const rules = {
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
+  'unambiguous': require('./rules/unambiguous'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
