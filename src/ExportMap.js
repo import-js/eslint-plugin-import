@@ -1,21 +1,17 @@
-'use strict'
-exports.__esModule = true
+import fs from 'fs'
 
-const fs = require('fs')
+import doctrine from 'doctrine'
 
-const doctrine = require('doctrine')
+import parse from 'eslint-module-utils/parse'
+import resolve from 'eslint-module-utils/resolve'
+import isIgnored from 'eslint-module-utils/ignore'
 
-const parse = require('eslint-module-utils/parse').default
-const resolve = require('eslint-module-utils/resolve').default
-const isIgnored = require('eslint-module-utils/ignore').default
-
-const hashObject = require('eslint-module-utils/hash').hashObject
+import { hashObject } from 'eslint-module-utils/hash'
+import * as unambiguous from 'eslint-module-utils/unambiguous'
 
 const exportCache = new Map()
 
-const unambiguous = require('eslint-module-utils/unambiguous')
-
-class ExportMap {
+export default class ExportMap {
   constructor(path) {
     this.path = path
     this.namespace = new Map()
@@ -435,7 +431,6 @@ ExportMap.parse = function (path, content, context) {
 
   return m
 }
-exports.default = ExportMap
 
 
 /**
@@ -445,7 +440,7 @@ exports.default = ExportMap
  * @param  {Function} callback
  * @return {void}
  */
-function recursivePatternCapture(pattern, callback) {
+export function recursivePatternCapture(pattern, callback) {
   switch (pattern.type) {
     case 'Identifier': // base case
       callback(pattern)
@@ -465,4 +460,3 @@ function recursivePatternCapture(pattern, callback) {
       break
   }
 }
-exports.recursivePatternCapture = recursivePatternCapture
