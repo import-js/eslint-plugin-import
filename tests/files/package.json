@@ -1,6 +1,7 @@
 {
   "dummy": true,
   "devDependencies": {
+    "glob": "1.0.0",
     "eslint": "2.x"
   },
   "peerDependencies": {

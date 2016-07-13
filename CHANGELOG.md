@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Added an `peerDependencies` option to [`no-extraneous-dependencies`] to allow/forbid peer dependencies ([#423], [#428]).
 
 
 ## [1.10.3] - 2016-07-08
@@ -252,6 +254,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
 [#365]: https://github.com/benmosher/eslint-plugin-import/pull/365
@@ -285,6 +288,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
