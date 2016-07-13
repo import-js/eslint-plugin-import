@@ -1,7 +1,7 @@
 # eslint-plugin-import
 
 [![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg?branch=master)](https://travis-ci.org/benmosher/eslint-plugin-import)
-[![Coverage Status](https://coveralls.io/repos/benmosher/eslint-plugin-import/badge.svg?branch=master&service=github)](https://coveralls.io/github/benmosher/eslint-plugin-import?branch=coverage)
+[![Coverage Status](https://coveralls.io/repos/benmosher/eslint-plugin-import/badge.svg?branch=master&service=github)](https://coveralls.io/github/benmosher/eslint-plugin-import?branch=master)
 [![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/benmosher/eslint-plugin-import/branch/master)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
 
