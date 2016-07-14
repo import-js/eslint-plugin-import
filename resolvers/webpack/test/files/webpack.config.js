@@ -14,7 +14,7 @@ module.exports = {
     { 'jquery': 'jQuery' },
     'bootstrap',
     function (context, request, callback) {
-      if (request === 'underscore' && context.indexOf('/') !== -1) {
+      if (request === 'underscore') {
         return callback(null, 'underscore');
       };
       callback();
