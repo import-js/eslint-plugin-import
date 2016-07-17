@@ -4,7 +4,7 @@
   "description": "Node default behavior import resolution plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "nyc mocha"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "nyc": "^7.0.0"
   }
 }

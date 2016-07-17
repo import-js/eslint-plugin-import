@@ -4,7 +4,8 @@
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha -t 5s"
+    "test": "nyc mocha -t 5s",
+    "report": "nyc report --reporter=html"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "nyc": "^7.0.0"
   }
 }
