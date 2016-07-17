@@ -7,6 +7,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - Added an `peerDependencies` option to [`no-extraneous-dependencies`] to allow/forbid peer dependencies ([#423], [#428]).
 
+### Fixed
+- [`newline-after-import`] exception for multiple `require`s in an arrow
+  function expression (e.g. `() => require('a') || require('b')`). ([#441], thanks [@ljharb])
 
 ## [1.10.3] - 2016-07-08
 ### Fixed
@@ -288,6 +291,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
