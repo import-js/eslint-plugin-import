@@ -86,8 +86,12 @@ module.exports = function (context) {
     },
     'Program:exit': function () {
       scopes.forEach(function ({ scope, requireCalls }) {
+        const scopeBody = getScopeBody(scope)
+
+        // skip non-array scopes (i.e. arrow function expressions)
+        if (!(scopeBody instanceof Array)) return
+
         requireCalls.forEach(function (node, index) {
-          const scopeBody = getScopeBody(scope)
           const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
           const statementWithRequireCall = scopeBody[nodePosition]
           const nextStatement = scopeBody[nodePosition + 1]
