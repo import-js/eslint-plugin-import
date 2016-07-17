@@ -8,7 +8,7 @@ var findRoot = require('find-root')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
 
-const log = require('debug')('eslint-plugin-import:resolver:webpack')
+var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
 exports.interfaceVersion = 2
 
