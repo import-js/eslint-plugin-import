@@ -3,6 +3,10 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+### Changed
+- don't swallow errors, assume config exists ([#435], thanks [@Kovensky])
+
 ## 0.4.0 - 2016-07-17
 ### Added
 - support for `webpack.ResolverPlugin` ([#377], thanks [@Rogeres])
@@ -54,6 +58,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/benmosher/eslint-plugin-import/pull/181
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
 [#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
 [#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
@@ -67,3 +72,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@kesne]: https://github.com/kesne
 [@Satyam]: https://github.com/Satyam
 [@Rogeres]: https://github.com/Rogeres
+[@Kovensky]: https://github.com/Kovensky

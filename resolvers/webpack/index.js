@@ -42,32 +42,27 @@ exports.resolve = function (source, file, settings) {
 
   var webpackConfig
 
-  try {
-    var configPath = get(settings, 'config')
-      , configIndex = get(settings, 'config-index')
-      , packageDir
+  var configPath = get(settings, 'config')
+    , configIndex = get(settings, 'config-index')
+    , packageDir
 
-    if (configPath) log('Config path from settings:', configPath)
+  log('Config path from settings:', configPath)
 
-    // see if we've got an absolute path
-    if (!configPath || !isAbsolute(configPath)) {
-      // if not, find ancestral package.json and use its directory as base for the path
-      packageDir = findRoot(path.resolve(file))
-      if (!packageDir) throw new Error('package not found above ' + file)
-    }
+  // see if we've got an absolute path
+  if (!configPath || !isAbsolute(configPath)) {
+    // if not, find ancestral package.json and use its directory as base for the path
+    packageDir = findRoot(path.resolve(file))
+    if (!packageDir) throw new Error('package not found above ' + file)
+  }
 
-    configPath = findConfigPath(configPath, packageDir)
+  configPath = findConfigPath(configPath, packageDir)
 
-    log('Config path resolved to:', configPath)
-    webpackConfig = require(configPath)
+  log('Config path resolved to:', configPath)
+  webpackConfig = require(configPath)
 
-    if (webpackConfig && webpackConfig.default) {
-      log('Using ES6 module "default" key instead of module.exports.')
-      webpackConfig = webpackConfig.default
-    }
-  } catch (err) {
-    log('Error during config lookup:', err)
-    webpackConfig = {}
+  if (webpackConfig && webpackConfig.default) {
+    log('Using ES6 module "default" key instead of module.exports.')
+    webpackConfig = webpackConfig.default
   }
 
   if (Array.isArray(webpackConfig)) {

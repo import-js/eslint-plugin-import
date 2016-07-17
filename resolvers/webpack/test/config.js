@@ -16,6 +16,7 @@ describe("config", function () {
     expect(resolve('main-module', file)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
   })
+
   it("finds absolute webpack.config.js files", function () {
     expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
@@ -54,5 +55,12 @@ describe("config", function () {
 
     expect(resolve('foo', file, settings)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'))
+  })
+
+  it("doesn't swallow config load errors (#435)", function () {
+    var settings = {
+      config: path.join(__dirname, './files/webpack.config.garbage.js'),
+    }
+    expect(function () { resolve('foo', file, settings) }).to.throw(Error)
   })
 })
