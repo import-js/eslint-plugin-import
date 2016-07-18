@@ -8,7 +8,7 @@ var findRoot = require('find-root')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
 
-const log = require('debug')('eslint-plugin-import:resolver:webpack')
+var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
 exports.interfaceVersion = 2
 
@@ -42,32 +42,27 @@ exports.resolve = function (source, file, settings) {
 
   var webpackConfig
 
-  try {
-    var configPath = get(settings, 'config')
-      , configIndex = get(settings, 'config-index')
-      , packageDir
+  var configPath = get(settings, 'config')
+    , configIndex = get(settings, 'config-index')
+    , packageDir
 
-    if (configPath) log('Config path from settings:', configPath)
+  log('Config path from settings:', configPath)
 
-    // see if we've got an absolute path
-    if (!configPath || !isAbsolute(configPath)) {
-      // if not, find ancestral package.json and use its directory as base for the path
-      packageDir = findRoot(path.resolve(file))
-      if (!packageDir) throw new Error('package not found above ' + file)
-    }
+  // see if we've got an absolute path
+  if (!configPath || !isAbsolute(configPath)) {
+    // if not, find ancestral package.json and use its directory as base for the path
+    packageDir = findRoot(path.resolve(file))
+    if (!packageDir) throw new Error('package not found above ' + file)
+  }
 
-    configPath = findConfigPath(configPath, packageDir)
+  configPath = findConfigPath(configPath, packageDir)
 
-    log('Config path resolved to:', configPath)
-    webpackConfig = require(configPath)
+  log('Config path resolved to:', configPath)
+  webpackConfig = require(configPath)
 
-    if (webpackConfig && webpackConfig.default) {
-      log('Using ES6 module "default" key instead of module.exports.')
-      webpackConfig = webpackConfig.default
-    }
-  } catch (err) {
-    log('Error during config lookup:', err)
-    webpackConfig = {}
+  if (webpackConfig && webpackConfig.default) {
+    log('Using ES6 module "default" key instead of module.exports.')
+    webpackConfig = webpackConfig.default
   }
 
   if (Array.isArray(webpackConfig)) {
@@ -84,11 +79,21 @@ exports.resolve = function (source, file, settings) {
   log('Using config: ', webpackConfig)
 
   // externals
-  if (findExternal(source, webpackConfig.externals)) return { found: true, path: null }
+  if (findExternal(source, webpackConfig.externals, path.dirname(file))) return { found: true, path: null }
 
+  var otherPlugins = []
+
+  // support webpack.ResolverPlugin
+  if (webpackConfig.plugins) {
+    webpackConfig.plugins.forEach(function (plugin) {
+      if (plugin.constructor && plugin.constructor.name === 'ResolverPlugin' && Array.isArray(plugin.plugins)) {
+        otherPlugins.push.apply(otherPlugins, plugin.plugins);
+      }
+    });
+  }
 
   // otherwise, resolve "normally"
-  var resolver = createResolver(webpackConfig.resolve || {})
+  var resolver = createResolver(webpackConfig.resolve || {}, otherPlugins)
   try {
     return { found: true, path: resolver.resolveSync(path.dirname(file), source) }
   } catch (err) {
@@ -116,7 +121,7 @@ var DirectoryDescriptionFileFieldAliasPlugin =
 
 // adapted from tests &
 // https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L322
-function createResolver(resolve) {
+function createResolver(resolve, otherPlugins) {
   var resolver = new Resolver(syncFS)
 
   resolver.apply(
@@ -134,6 +139,8 @@ function createResolver(resolve) {
     new FileAppendPlugin(resolve.extensions || ['', '.webpack.js', '.web.js', '.js']),
     new ResultSymlinkPlugin()
   )
+
+  resolver.apply.apply(resolver, otherPlugins);
 
   return resolver
 }
@@ -154,7 +161,7 @@ function makeRootPlugin(name, root) {
 }
 /* eslint-enable */
 
-function findExternal(source, externals) {
+function findExternal(source, externals, context) {
   if (!externals) return false
 
   // string match
@@ -162,7 +169,7 @@ function findExternal(source, externals) {
 
   // array: recurse
   if (externals instanceof Array) {
-    return externals.some(function (e) { return findExternal(source, e) })
+    return externals.some(function (e) { return findExternal(source, e, context) })
   }
 
   if (externals instanceof RegExp) {
@@ -171,11 +178,11 @@ function findExternal(source, externals) {
 
   if (typeof externals === 'function') {
     var functionExternalFound = false
-    externals.call(null, null, source, function(err, value) {
+    externals.call(null, context, source, function(err, value) {
       if (err) {
         functionExternalFound = false
       } else {
-        functionExternalFound = findExternal(source, value)
+        functionExternalFound = findExternal(source, value, context)
       }
     })
     return functionExternalFound

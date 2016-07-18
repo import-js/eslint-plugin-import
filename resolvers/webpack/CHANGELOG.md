@@ -3,6 +3,17 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+### Changed
+- don't swallow errors, assume config exists ([#435], thanks [@Kovensky])
+
+## 0.4.0 - 2016-07-17
+### Added
+- support for `webpack.ResolverPlugin` ([#377], thanks [@Rogeres])
+
+### Fixed
+- provide string `context` to `externals` functions ([#411] + [#413], thanks [@Satyam])
+
 ## 0.3.2 - 2016-06-30
 ### Added
 - shared config ([config.js](./config.js)) with barebones settings needed to use this resolver. ([#283])
@@ -38,6 +49,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#413]: https://github.com/benmosher/eslint-plugin-import/pull/413
+[#377]: https://github.com/benmosher/eslint-plugin-import/pull/377
 [#363]: https://github.com/benmosher/eslint-plugin-import/pull/363
 [#289]: https://github.com/benmosher/eslint-plugin-import/pull/289
 [#287]: https://github.com/benmosher/eslint-plugin-import/pull/287
@@ -45,6 +58,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/benmosher/eslint-plugin-import/pull/181
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
+[#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
 [#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
@@ -55,3 +70,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@GreenGremlin]: https://github.com/GreenGremlin
 [@daltones]: https://github.com/daltones
 [@kesne]: https://github.com/kesne
+[@Satyam]: https://github.com/Satyam
+[@Rogeres]: https://github.com/Rogeres
+[@Kovensky]: https://github.com/Kovensky

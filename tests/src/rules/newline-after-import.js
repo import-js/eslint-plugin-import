@@ -8,6 +8,20 @@ const ruleTester = new RuleTester()
 ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   valid: [
     "var path = require('path');\nvar foo = require('foo');\n",
+    "require('foo');",
+    "switch ('foo') { case 'bar': require('baz'); }",
+    {
+      code: `
+        const x = () => require('baz')
+            , y = () => require('bar')`,
+      parserOptions: { ecmaVersion: 6 } ,
+    },
+    {
+      code: `const x = () => require('baz') && require('bar')`,
+      parserOptions: { ecmaVersion: 6 } ,
+    },
+    "function x(){ require('baz'); }",
+
     "a(require('b'), require('c'), require('d'));",
     `function foo() {
       switch (renderData.modalViewKey) {

@@ -17,6 +17,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
 
+## [1.11.0] - 2016-07-17
+### Added
+- Added an `peerDependencies` option to [`no-extraneous-dependencies`] to allow/forbid peer dependencies ([#423], [#428], thanks [@jfmengels]!).
+
+### Fixed
+- [`newline-after-import`] exception for multiple `require`s in an arrow
+  function expression (e.g. `() => require('a') || require('b')`). ([#441], thanks [@ljharb])
+
 ## [1.10.3] - 2016-07-08
 ### Fixed
 - removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
@@ -267,6 +275,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
 [#365]: https://github.com/benmosher/eslint-plugin-import/pull/365
@@ -300,6 +309,8 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
+[#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#402]: https://github.com/benmosher/eslint-plugin-import/issues/402
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
@@ -331,7 +342,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...v1.11.0
 [1.10.3]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...v1.10.3
 [1.10.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.1...v1.10.2
 [1.10.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.0...v1.10.1
