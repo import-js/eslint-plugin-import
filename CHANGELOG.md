@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444])
 
 ## [1.11.1] - 2016-07-20
 ### Fixed
@@ -243,6 +245,7 @@ for info on changes for earlier releases.
 [`import/ignore` setting]: ./README.md#importignore
 [`import/extensions` setting]: ./README.md#importextensions
 [`import/core-modules` setting]: ./README.md#importcore-modules
+[`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
@@ -264,6 +267,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371

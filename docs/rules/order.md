@@ -141,3 +141,8 @@ import index from './';
 import sibling from './foo';
 ```
 
+## Related
+
+- [`import/external-module-folders`] setting
+
+[`import/external-module-folders`]: ../../README.md#importexternal-module-folders
