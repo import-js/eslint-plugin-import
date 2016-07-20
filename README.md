@@ -27,6 +27,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Helpful warnings:**
 
+
 * Report any invalid exports, i.e. re-export of the same name ([`export`])
 * Report use of exported name as identifier of default export ([`no-named-as-default`])
 * Report use of exported name as property of default export ([`no-named-as-default-member`])
@@ -43,10 +44,12 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Module systems:**
 
+* Report potentially ambiguous parse goal (`script` vs. `module`) ([`unambiguous`])
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
 * Report AMD `require` and `define` calls. ([`no-amd`])
 * No Node.js builtin modules. ([`no-nodejs-modules`])
 
+[`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-amd`]: ./docs/rules/no-amd.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
