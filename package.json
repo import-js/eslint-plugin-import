@@ -49,7 +49,7 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "babel-eslint": "next",
-    "babel-preset-es2015-argon": "*",
+    "babel-preset-es2015-argon": "latest",
     "babel-plugin-istanbul": "^1.0.3",
     "babel-register": "6.9.0",
     "chai": "^3.4.0",
