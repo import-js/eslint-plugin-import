@@ -66,4 +66,18 @@ describe('importType(name)', function () {
     const electronContext = testContext({ 'import/core-modules': ['electron'] })
     expect(importType('electron', electronContext)).to.equal('builtin')
   })
+
+  it("should return 'external' for module from 'node_modules' with default config", function() {
+    expect(importType('builtin-modules', context)).to.equal('external')
+  })
+
+  it("should return 'internal' for module from 'node_modules' if 'node_modules' missed in 'external-module-folders'", function() {
+    const foldersContext = testContext({ 'import/external-module-folders': [] })
+    expect(importType('builtin-modules', foldersContext)).to.equal('internal')
+  })
+
+  it("should return 'external' for module from 'node_modules' if 'node_modules' contained in 'external-module-folders'", function() {
+    const foldersContext = testContext({ 'import/external-module-folders': ['node_modules'] })
+    expect(importType('builtin-modules', foldersContext)).to.equal('external')
+  })
 })
