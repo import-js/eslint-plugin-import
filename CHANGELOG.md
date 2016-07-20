@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [`newline-after-import`] exception for `switch` branches with `require`s iff parsed as `sourceType:'module'`.
+  (still [#441], thanks again [@ljharb])
 
 ## [1.11.0] - 2016-07-17
 ### Added
