@@ -260,6 +260,10 @@ that specifies this for you.
 
 Contribution of more such shared configs for other platforms are welcome!
 
+#### `import/external-module-folders`
+
+An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to considered modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
+
 #### `import/resolver`
 
 See [resolvers](#resolvers).
