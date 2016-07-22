@@ -62,7 +62,7 @@
     "mocha": "^2.2.1",
     "nyc": "^7.0.0",
     "redux": "^3.0.4",
-    "rimraf": "2.5.2"
+    "rimraf": "2.5.4"
   },
   "peerDependencies": {
     "eslint": "2.x - 3.x"
