@@ -77,7 +77,7 @@
     "eslint-import-resolver-node": "^0.2.0",
     "lodash.cond": "^4.3.0",
     "lodash.endswith": "^4.0.1",
-    "lodash.find": "^4.3.0",
+    "lodash.find": "^4.5.0",
     "lodash.findindex": "^4.3.0",
     "object-assign": "^4.0.1",
     "pkg-dir": "^1.0.0",
