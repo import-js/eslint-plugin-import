@@ -17,6 +17,15 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
 
+## [1.12.0] - 2016-07-26
+### Added
+- [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444], thanks [@zloirock])
+
+## [1.11.1] - 2016-07-20
+### Fixed
+- [`newline-after-import`] exception for `switch` branches with `require`s iff parsed as `sourceType:'module'`.
+  (still [#441], thanks again [@ljharb])
+
 ## [1.11.0] - 2016-07-17
 ### Added
 - Added an `peerDependencies` option to [`no-extraneous-dependencies`] to allow/forbid peer dependencies ([#423], [#428], thanks [@jfmengels]!).
@@ -253,6 +262,7 @@ for info on changes for earlier releases.
 [`import/ignore` setting]: ./README.md#importignore
 [`import/extensions` setting]: ./README.md#importextensions
 [`import/core-modules` setting]: ./README.md#importcore-modules
+[`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
@@ -275,6 +285,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
 [#371]: https://github.com/benmosher/eslint-plugin-import/pull/371
@@ -342,7 +353,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
+[1.11.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...v1.11.0
 [1.10.3]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...v1.10.3
 [1.10.2]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.1...v1.10.2
@@ -395,3 +408,4 @@ for info on changes for earlier releases.
 [@sindresorhus]: https://github.com/sindresorhus
 [@ljharb]: https://github.com/ljharb
 [@rhettlivingston]: https://github.com/rhettlivingston
+[@zloirock]: https://github.com/zloirock

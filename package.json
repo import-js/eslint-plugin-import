@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Import with sanity.",
   "engines": {
     "node": ">=4"
@@ -75,6 +75,7 @@
   "dependencies": {
     "builtin-modules": "^1.1.1",
     "contains-path": "^0.1.0",
+    "debug": "^2.2.0",
     "doctrine": "1.2.x",
     "eslint-import-resolver-node": "^0.2.0",
     "lodash.cond": "^4.3.0",

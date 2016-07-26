@@ -6,6 +6,10 @@
 import isStaticRequire from '../core/staticRequire'
 import findIndex from 'lodash.findindex'
 
+import debug from 'debug'
+
+const log = debug('eslint-plugin-import:rules:newline-after-import')
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -16,7 +20,8 @@ function containsNodeOrEqual(outerNode, innerNode) {
 
 function getScopeBody(scope) {
     if (scope.block.type === 'SwitchStatement') {
-      return []
+      log('SwitchStatement scopes not supported')
+      return null
     }
 
     const { body } = scope.block
@@ -85,14 +90,22 @@ module.exports = function (context) {
       }
     },
     'Program:exit': function () {
+      log('exit processing for', context.getFilename())
       scopes.forEach(function ({ scope, requireCalls }) {
         const scopeBody = getScopeBody(scope)
 
         // skip non-array scopes (i.e. arrow function expressions)
-        if (!(scopeBody instanceof Array)) return
+        if (!scopeBody || !(scopeBody instanceof Array)) {
+          log('invalid scope:', scopeBody)
+          return
+        }
+
+        log('got scope:', scopeBody)
 
         requireCalls.forEach(function (node, index) {
           const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
+          log('node position in scope:', nodePosition)
+
           const statementWithRequireCall = scopeBody[nodePosition]
           const nextStatement = scopeBody[nodePosition + 1]
           const nextRequireCall = requireCalls[index + 1]

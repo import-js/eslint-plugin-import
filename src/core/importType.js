@@ -13,10 +13,14 @@ export function isBuiltIn(name, settings) {
   return builtinModules.indexOf(name) !== -1 || extras.indexOf(name) > -1
 }
 
+function isExternalPath(path, name, settings) {
+  const folders = (settings && settings['import/external-module-folders']) || ['node_modules']
+  return !path || folders.some(folder => -1 < path.indexOf(join(folder, name)))
+}
+
 const externalModuleRegExp = /^\w/
 function isExternalModule(name, settings, path) {
-  if (!externalModuleRegExp.test(name)) return false
-  return (!path || -1 < path.indexOf(join('node_modules', name)))
+  return externalModuleRegExp.test(name) && isExternalPath(path, name, settings)
 }
 
 const scopedRegExp = /^@\w+\/\w+/
@@ -25,8 +29,7 @@ function isScoped(name) {
 }
 
 function isInternalModule(name, settings, path) {
-  if (!externalModuleRegExp.test(name)) return false
-  return (path && -1 === path.indexOf(join('node_modules', name)))
+  return externalModuleRegExp.test(name) && !isExternalPath(path, name, settings)
 }
 
 function isRelativeToParent(name) {

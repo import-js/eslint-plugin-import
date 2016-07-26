@@ -4,6 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/benmosher/eslint-plugin-import/badge.svg?branch=master)](https://coveralls.io/github/benmosher/eslint-plugin-import?branch=master)
 [![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/benmosher/eslint-plugin-import/branch/master)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
+[![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](http://www.npmtrends.com/eslint-plugin-import)
 
 This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES2015+ static module syntax intends to provide, marked up in your editor.
 
@@ -253,6 +254,10 @@ In Electron's specific case, there is a shared config named `electron`
 that specifies this for you.
 
 Contribution of more such shared configs for other platforms are welcome!
+
+#### `import/external-module-folders`
+
+An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to considered modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
 
 #### `import/resolver`
 
