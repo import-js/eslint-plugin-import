@@ -12,7 +12,11 @@
         {
             "eslint":
             {
-                "chdir": "${project}/"
+                "chdir": "${project}"
+            },
+            "eslint_d":
+            {
+                "chdir": "${project}"
             }
         }
     }
