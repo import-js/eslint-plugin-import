@@ -4,8 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [1.12.0] - 2016-07-26
 ### Added
-- [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444])
+- [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444], thanks [@zloirock])
 
 ## [1.11.1] - 2016-07-20
 ### Fixed
@@ -332,7 +334,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...v1.11.0
 [1.10.3]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.2...v1.10.3
@@ -386,3 +389,4 @@ for info on changes for earlier releases.
 [@sindresorhus]: https://github.com/sindresorhus
 [@ljharb]: https://github.com/ljharb
 [@rhettlivingston]: https://github.com/rhettlivingston
+[@zloirock]: https://github.com/zloirock
