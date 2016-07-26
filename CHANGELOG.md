@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Modified
+- Modified [`no-nodejs-modules`] error message to include the module's name ([#453], [#461])
 
 ## [1.12.0] - 2016-07-26
 ### Added
@@ -269,6 +271,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
@@ -304,6 +307,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415

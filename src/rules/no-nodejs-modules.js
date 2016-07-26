@@ -3,7 +3,7 @@ import isStaticRequire from '../core/staticRequire'
 
 function reportIfMissing(context, node, name) {
   if (importType(name, context) === 'builtin') {
-    context.report(node, 'Do not import Node.js builtin modules')
+    context.report(node, 'Do not import Node.js builtin module "' + name + '"')
   }
 }
 
