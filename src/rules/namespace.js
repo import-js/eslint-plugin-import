@@ -4,7 +4,30 @@ import Exports from '../core/getExports'
 import importDeclaration from '../importDeclaration'
 import declaredScope from '../core/declaredScope'
 
-module.exports = function (context) {
+exports.meta = {
+  schema: [
+    {
+      'type': 'object',
+      'properties': {
+        'allowComputed': {
+          'description':
+            'If `false`, will report computed (and thus, un-lintable) references ' +
+            'to namespace members.',
+          'type': 'boolean',
+          'default': false,
+        },
+      },
+      'additionalProperties': false,
+    },
+  ],
+}
+
+exports.create = function namespaceRule(context) {
+
+  // read options
+  const {
+    allowComputed = false,
+  } = context.options[0] || {}
 
   const namespaces = new Map()
 
@@ -93,9 +116,11 @@ module.exports = function (context) {
              dereference.type === 'MemberExpression') {
 
         if (dereference.computed) {
-          context.report(dereference.property,
-            'Unable to validate computed reference to imported namespace \'' +
-            dereference.object.name + '\'.')
+          if (!allowComputed) {
+            context.report(dereference.property,
+              'Unable to validate computed reference to imported namespace \'' +
+              dereference.object.name + '\'.')
+          }
           return
         }
 

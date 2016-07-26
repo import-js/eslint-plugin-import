@@ -87,6 +87,12 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // #456: optionally ignore computed references
+  test({
+    code: `import * as names from './named-exports'; console.log(names['a']);`,
+    options: [{ allowComputed: true }],
+  }),
+
   ...SYNTAX_CASES,
 ]
 
