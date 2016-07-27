@@ -5,10 +5,10 @@ import { RuleTester } from 'eslint'
 const ruleTester = new RuleTester()
     , rule = require('rules/no-nodejs-modules')
 
-const errors = [{
+const error = message => ({
   ruleId: 'no-nodejs-modules',
-  message: 'Do not import Node.js builtin modules',
-}]
+  message,
+})
 
 ruleTester.run('no-nodejs-modules', rule, {
   valid: [
@@ -30,19 +30,19 @@ ruleTester.run('no-nodejs-modules', rule, {
   invalid: [
     test({
       code: 'import path from "path"',
-      errors,
+      errors: [error('Do not import Node.js builtin module "path"')],
     }),
     test({
       code: 'import fs from "fs"',
-      errors,
+      errors: [error('Do not import Node.js builtin module "fs"')],
     }),
     test({
       code: 'var path = require("path")',
-      errors,
+      errors: [error('Do not import Node.js builtin module "path"')],
     }),
     test({
       code: 'var fs = require("fs")',
-      errors,
+      errors: [error('Do not import Node.js builtin module "fs"')],
     }),
   ],
 })
