@@ -91,7 +91,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 - Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
 - add [`no-mutable-exports`] rule ([#290], thanks [@josh])
-- [`import/extensions` setting]: a whitelist of file extensions to parse as modules
+- [`import/extensions` setting]: a list of file extensions to parse as modules
   and search for `export`s. If unspecified, all extensions are considered valid (for now).
   In v2, this will likely default to `['.js', MODULE_EXT]`. ([#297], to fix [#267])
 
@@ -237,7 +237,7 @@ Unpublished from npm and re-released as 0.13.0. See [#170].
 ### Changed
 - Ignore [`import/ignore` setting] if exports are actually found in the parsed module. Does
 this to support use of `jsnext:main` in `node_modules` without the pain of
-managing a whitelist or a nuanced blacklist.
+managing an allow list or a nuanced deny list.
 
 ## [0.11.0] - 2015-11-27
 ### Added

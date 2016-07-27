@@ -25,7 +25,7 @@ export default function ignore(path, context) {
     ? [].concat(context.settings['import/ignore'])
     : ['node_modules']
 
-  // check extension whitelist first (cheap)
+  // check extension list first (cheap)
   if (!validExtensions(context).has(extname(path))) return true
 
   if (ignoreStrings.length === 0) return false
