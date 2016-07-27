@@ -311,11 +311,8 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
-<<<<<<< 30e55b65d6a8a08585aa72c51f8e5871d9a832a6
-[#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
-=======
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
->>>>>>> add `allowComputed` option to `namespace` (fixes #456)
+[#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
