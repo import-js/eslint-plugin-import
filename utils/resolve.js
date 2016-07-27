@@ -15,24 +15,24 @@ exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 const fileExistsCache = new ModuleCache()
 
 // http://stackoverflow.com/a/27382838
-function fileExistsWithCaseSync(filepath, cacheSettings) {
+exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cacheSettings) {
   // don't care if the FS is case-sensitive
   if (CASE_SENSITIVE_FS) return true
 
   // null means it resolved to a builtin
   if (filepath === null) return true
-
-  const dir = path.dirname(filepath)
+  const parsedPath = path.parse(filepath)
+      , dir = parsedPath.dir
 
   let result = fileExistsCache.get(filepath, cacheSettings)
   if (result != null) return result
 
   // base case
-  if (dir === '/' || dir === '.' || /^[A-Z]:\\$/i.test(dir)) {
+  if (dir === '' || parsedPath.root === filepath) {
     result = true
   } else {
     const filenames = fs.readdirSync(dir)
-    if (filenames.indexOf(path.basename(filepath)) === -1) {
+    if (filenames.indexOf(parsedPath.base) === -1) {
       result = false
     } else {
       result = fileExistsWithCaseSync(dir, cacheSettings)
@@ -101,9 +101,6 @@ function fullResolve(modulePath, sourceFile, settings) {
         , resolved = withResolver(resolver, config)
 
     if (!resolved.found) continue
-
-    // resolvers imply file existence, this double-check just ensures the case matches
-    if (!fileExistsWithCaseSync(resolved.path, cacheSettings)) continue
 
     // else, counts
     cache(resolved.path)

@@ -88,22 +88,42 @@ exports.default = function visitModules(visitor, options) {
 }
 
 /**
+ * make an options schema for the module visitor, optionally
+ * adding extra fields.
+
+ * @param  {[type]} additionalProperties [description]
+ * @return {[type]}                      [description]
+ */
+function makeOptionsSchema(additionalProperties) {
+  const base =  {
+    'type': 'object',
+    'properties': {
+      'commonjs': { 'type': 'boolean' },
+      'amd': { 'type': 'boolean' },
+      'esmodule': { 'type': 'boolean' },
+      'ignore': {
+        'type': 'array',
+        'minItems': 1,
+        'items': { 'type': 'string' },
+        'uniqueItems': true,
+      },
+    },
+    'additionalProperties': false,
+  }
+
+  if (additionalProperties){
+    for (let key in additionalProperties) {
+      base.properties[key] = additionalProperties[key]
+    }
+  }
+
+  return base
+}
+exports.makeOptionsSchema = makeOptionsSchema
+
+/**
  * json schema object for options parameter. can be used to build
  * rule options schema object.
  * @type {Object}
  */
-exports.optionsSchema = {
-  'type': 'object',
-  'properties': {
-    'commonjs': { 'type': 'boolean' },
-    'amd': { 'type': 'boolean' },
-    'esmodule': { 'type': 'boolean' },
-    'ignore': {
-      'type': 'array',
-      'minItems': 1,
-      'items': { 'type': 'string' },
-      'uniqueItems': true,
-    },
-  },
-  'additionalProperties': false,
-}
+exports.optionsSchema = makeOptionsSchema()
