@@ -8,7 +8,9 @@ The closest parent `package.json` will be used. If no `package.json` is found, t
 This rule supports the following options:
 
 `devDependencies`: If set to `false`, then the rule will show an error when `devDependencies` are imported. Defaults to `true`.
+
 `optionalDependencies`: If set to `false`, then the rule will show an error when `optionalDependencies` are imported. Defaults to `true`.
+
 `peerDependencies`: If set to `false`, then the rule will show an error when `peerDependencies` are imported. Defaults to `false`.
 
 You can set the options like this:
