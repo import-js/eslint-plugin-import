@@ -128,7 +128,7 @@ function createResolveSync(configPath, webpackConfig) {
 function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
   var EnhancedResolve = webpackRequire('enhanced-resolve')
 
-  return EnhancedResolve.create.sync(assign({}, resolveConfig, webpack2DefaultResolveConfig))
+  return EnhancedResolve.create.sync(assign({}, webpack2DefaultResolveConfig, resolveConfig))
 }
 
 /**
