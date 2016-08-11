@@ -7,6 +7,9 @@ var findRoot = require('find-root')
   , isAbsolute = path.isAbsolute || require('is-absolute')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
+  , assign = require('object-assign')
+  , resolve = require('resolve')
+  , semver = require('semver')
 
 var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
@@ -79,75 +82,138 @@ exports.resolve = function (source, file, settings) {
   log('Using config: ', webpackConfig)
 
   // externals
-  if (findExternal(source, webpackConfig.externals, path.dirname(file))) return { found: true, path: null }
-
-  var otherPlugins = []
-
-  // support webpack.ResolverPlugin
-  if (webpackConfig.plugins) {
-    webpackConfig.plugins.forEach(function (plugin) {
-      if (plugin.constructor && plugin.constructor.name === 'ResolverPlugin' && Array.isArray(plugin.plugins)) {
-        otherPlugins.push.apply(otherPlugins, plugin.plugins);
-      }
-    });
+  if (findExternal(source, webpackConfig.externals, path.dirname(file))) {
+    return { found: true, path: null }
   }
 
   // otherwise, resolve "normally"
-  var resolver = createResolver(webpackConfig.resolve || {}, otherPlugins)
+  var resolveSync = createResolveSync(configPath, webpackConfig)
   try {
-    return { found: true, path: resolver.resolveSync(path.dirname(file), source) }
+    return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
     log('Error during module resolution:', err)
     return { found: false }
   }
 }
 
-var Resolver = require('enhanced-resolve/lib/Resolver')
+function createResolveSync(configPath, webpackConfig) {
+  var webpackRequire
 
-var SyncNodeJsInputFileSystem = require('enhanced-resolve/lib/SyncNodeJsInputFileSystem')
-var syncFS = new SyncNodeJsInputFileSystem()
+  try {
+    var webpackFilename = resolve.sync('webpack', { basedir: path.dirname(configPath) })
+    var webpackResolveOpts = { basedir: path.dirname(webpackFilename) }
 
-var ModuleAliasPlugin = require('enhanced-resolve/lib/ModuleAliasPlugin')
-var ModulesInDirectoriesPlugin = require('enhanced-resolve/lib/ModulesInDirectoriesPlugin')
-var ModulesInRootPlugin = require('enhanced-resolve/lib/ModulesInRootPlugin')
-var ModuleAsFilePlugin = require('enhanced-resolve/lib/ModuleAsFilePlugin')
-var ModuleAsDirectoryPlugin = require('enhanced-resolve/lib/ModuleAsDirectoryPlugin')
-var DirectoryDescriptionFilePlugin = require('enhanced-resolve/lib/DirectoryDescriptionFilePlugin')
-var DirectoryDefaultFilePlugin = require('enhanced-resolve/lib/DirectoryDefaultFilePlugin')
-var FileAppendPlugin = require('enhanced-resolve/lib/FileAppendPlugin')
-var ResultSymlinkPlugin = require('enhanced-resolve/lib/ResultSymlinkPlugin')
-var DirectoryDescriptionFileFieldAliasPlugin =
-  require('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin')
+    webpackRequire = function (id) {
+      return require(resolve.sync(id, webpackResolveOpts))
+    }
+  } catch (e) {
+    // Something has gone wrong (or we're in a test). Use our own bundled
+    // enhanced-resolve.
+    log('Using bundled enhanced-resolve.')
+    webpackRequire = require
+  }
+
+  var enhancedResolvePackage = webpackRequire('enhanced-resolve/package.json')
+  var enhancedResolveVersion = enhancedResolvePackage.version
+  log('enhanced-resolve version:', enhancedResolveVersion)
+
+  var resolveConfig = webpackConfig.resolve || {}
+
+  if (semver.major(enhancedResolveVersion) === 2) {
+    return createWebpack2ResolveSync(webpackRequire, resolveConfig)
+  }
+
+  return createWebpack1ResolveSync(webpackRequire, resolveConfig, webpackConfig.plugins)
+}
+
+function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
+  var EnhancedResolve = webpackRequire('enhanced-resolve')
+
+  return EnhancedResolve.create.sync(assign({}, webpack2DefaultResolveConfig, resolveConfig))
+}
+
+/**
+ * webpack 2 defaults:
+ * https://github.com/webpack/webpack/blob/v2.1.0-beta.20/lib/WebpackOptionsDefaulter.js#L72-L87
+ * @type {Object}
+ */
+var webpack2DefaultResolveConfig = {
+  unsafeCache: true, // Probably a no-op, since how can we cache anything at all here?
+  modules: ['node_modules'],
+  extensions: ['.js', '.json'],
+  aliasFields: ['browser'],
+  mainFields: ['browser', 'module', 'main'],
+}
 
 // adapted from tests &
 // https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L322
-function createResolver(resolve, otherPlugins) {
-  var resolver = new Resolver(syncFS)
+function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
+  var Resolver = webpackRequire('enhanced-resolve/lib/Resolver')
+  var SyncNodeJsInputFileSystem = webpackRequire('enhanced-resolve/lib/SyncNodeJsInputFileSystem')
+
+  var ModuleAliasPlugin = webpackRequire('enhanced-resolve/lib/ModuleAliasPlugin')
+  var ModulesInDirectoriesPlugin =
+    webpackRequire('enhanced-resolve/lib/ModulesInDirectoriesPlugin')
+  var ModulesInRootPlugin = webpackRequire('enhanced-resolve/lib/ModulesInRootPlugin')
+  var ModuleAsFilePlugin = webpackRequire('enhanced-resolve/lib/ModuleAsFilePlugin')
+  var ModuleAsDirectoryPlugin = webpackRequire('enhanced-resolve/lib/ModuleAsDirectoryPlugin')
+  var DirectoryDescriptionFilePlugin =
+    webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFilePlugin')
+  var DirectoryDefaultFilePlugin =
+    webpackRequire('enhanced-resolve/lib/DirectoryDefaultFilePlugin')
+  var FileAppendPlugin = webpackRequire('enhanced-resolve/lib/FileAppendPlugin')
+  var ResultSymlinkPlugin = webpackRequire('enhanced-resolve/lib/ResultSymlinkPlugin')
+  var DirectoryDescriptionFileFieldAliasPlugin =
+    webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin')
+
+  var resolver = new Resolver(new SyncNodeJsInputFileSystem())
 
   resolver.apply(
-    resolve.packageAlias
-      ? new DirectoryDescriptionFileFieldAliasPlugin('package.json', resolve.packageAlias)
+    resolveConfig.packageAlias
+      ? new DirectoryDescriptionFileFieldAliasPlugin('package.json', resolveConfig.packageAlias)
       : function() {},
-    new ModuleAliasPlugin(resolve.alias || {}),
-    makeRootPlugin('module', resolve.root),
-    new ModulesInDirectoriesPlugin('module', resolve.modulesDirectories || ['web_modules', 'node_modules']),
-    makeRootPlugin('module', resolve.fallback),
+    new ModuleAliasPlugin(resolveConfig.alias || {}),
+    makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
+    new ModulesInDirectoriesPlugin(
+      'module', resolveConfig.modulesDirectories || ['web_modules', 'node_modules']
+    ),
+    makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.fallback),
     new ModuleAsFilePlugin('module'),
     new ModuleAsDirectoryPlugin('module'),
-    new DirectoryDescriptionFilePlugin('package.json', ['jsnext:main'].concat(resolve.packageMains || defaultMains)),
+    new DirectoryDescriptionFilePlugin(
+      'package.json', ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
+    ),
     new DirectoryDefaultFilePlugin(['index']),
-    new FileAppendPlugin(resolve.extensions || ['', '.webpack.js', '.web.js', '.js']),
+    new FileAppendPlugin(resolveConfig.extensions || ['', '.webpack.js', '.web.js', '.js']),
     new ResultSymlinkPlugin()
   )
 
-  resolver.apply.apply(resolver, otherPlugins);
 
-  return resolver
+  var resolvePlugins = []
+
+  // support webpack.ResolverPlugin
+  if (plugins) {
+    plugins.forEach(function (plugin) {
+      if (
+        plugin.constructor &&
+        plugin.constructor.name === 'ResolverPlugin' &&
+        Array.isArray(plugin.plugins)
+      ) {
+        resolvePlugins.push.apply(resolvePlugins, plugin.plugins)
+      }
+    })
+  }
+
+  resolver.apply.apply(resolver, resolvePlugins)
+
+  return function() {
+    return resolver.resolveSync.apply(resolver, arguments)
+  }
 }
 
 /* eslint-disable */
 // from https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L365
-function makeRootPlugin(name, root) {
+function makeRootPlugin(ModulesInRootPlugin, name, root) {
   if(typeof root === "string")
     return new ModulesInRootPlugin(name, root);
   else if(Array.isArray(root)) {
@@ -197,10 +263,10 @@ function findExternal(source, externals, context) {
 }
 
 /**
- * webpack defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
+ * webpack 1 defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
  * @type {Array}
  */
-var defaultMains = [
+var webpack1DefaultMains = [
   'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
 ]
 
