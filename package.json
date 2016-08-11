@@ -12,7 +12,7 @@
     "memo-parser"
   ],
   "scripts": {
-    "watch": "cross-env NODE_PATH=./lib gulp watch-test",
+    "watch": "cross-env NODE_PATH=./src mocha --watch --compilers js:babel-register --recursive tests/src",
     "cover": "gulp pretest && cross-env NODE_PATH=./lib istanbul cover --dir reports/coverage _mocha tests/lib/ -- --recursive -R progress",
     "posttest": "eslint ./src",
     "test": "cross-env BABEL_ENV=test NODE_PATH=./src nyc mocha --recursive tests/src -t 5s",
