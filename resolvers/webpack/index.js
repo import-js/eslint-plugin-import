@@ -61,7 +61,12 @@ exports.resolve = function (source, file, settings) {
   configPath = findConfigPath(configPath, packageDir)
 
   log('Config path resolved to:', configPath)
-  webpackConfig = require(configPath)
+  if (configPath) {
+    webpackConfig = require(configPath)
+  } else {
+    log("No config path found relative to", file, "; using {}")
+    webpackConfig = {}
+  }
 
   if (webpackConfig && webpackConfig.default) {
     log('Using ES6 module "default" key instead of module.exports.')

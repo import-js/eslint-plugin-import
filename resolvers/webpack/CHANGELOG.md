@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.5.1 - 2016-08-11
+### Fixed
+- don't throw and die if no webpack config is found
+
 ## 0.5.0 - 2016-08-11
 ### Added
 - support for Webpack 2 + `module` package.json key! ([#475], thanks [@taion])
