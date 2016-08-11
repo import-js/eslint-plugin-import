@@ -292,4 +292,19 @@ describe('getExports', function () {
     })
   })
 
+  context('issue #478: never parse non-whitelist extensions', function () {
+    const context = Object.assign({}, fakeContext,
+      { settings: { 'import/extensions': ['.js'] } })
+
+    let imports
+    before('load imports', function () {
+      imports = ExportMap.get('./typescript.ts', context)
+    })
+
+    it('returns nothing for a TypeScript file', function () {
+      expect(imports).not.to.exist
+    })
+
+  })
+
 })

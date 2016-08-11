@@ -11,6 +11,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - Modified [`no-nodejs-modules`] error message to include the module's name ([#453], [#461])
 
+### Fixed
+- [`import/extensions` setting] is respected in spite of the appearance of imports
+  in an imported file. (fixes [#478], thaks [@rhys-vdw])
+
 ## [1.12.0] - 2016-07-26
 ### Added
 - [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444], thanks [@zloirock])
@@ -311,6 +315,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
 [#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
@@ -399,3 +404,4 @@ for info on changes for earlier releases.
 [@ljharb]: https://github.com/ljharb
 [@rhettlivingston]: https://github.com/rhettlivingston
 [@zloirock]: https://github.com/zloirock
+[@rhys-vdw]: https://github.com/rhys-vdw

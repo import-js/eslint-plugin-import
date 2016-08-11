@@ -26,7 +26,7 @@ export default function ignore(path, context) {
     : ['node_modules']
 
   // check extension list first (cheap)
-  if (!validExtensions(context).has(extname(path))) return true
+  if (!hasValidExtension(path, context)) return true
 
   if (ignoreStrings.length === 0) return false
 
@@ -36,4 +36,8 @@ export default function ignore(path, context) {
   }
 
   return false
+}
+
+export function hasValidExtension(path, context) {
+  return validExtensions(context).has(extname(path))
 }
