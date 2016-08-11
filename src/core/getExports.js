@@ -7,7 +7,7 @@ import * as doctrine from 'doctrine'
 
 import parse from './parse'
 import resolve, { relative as resolveRelative } from './resolve'
-import isIgnored from './ignore'
+import isIgnored, { hasValidExtension } from './ignore'
 
 import { hashObject } from './hash'
 
@@ -69,6 +69,12 @@ export default class ExportMap {
         return exportMap
       }
       // future: check content equality?
+    }
+
+    // check valid extensions first
+    if (!hasValidExtension(path, context)) {
+      exportCache.set(cacheKey, null)
+      return null
     }
 
     const content = fs.readFileSync(path, { encoding: 'utf8' })
