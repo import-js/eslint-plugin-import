@@ -109,6 +109,7 @@ function createResolveSync(configPath, webpackConfig) {
   } catch (e) {
     // Something has gone wrong (or we're in a test). Use our own bundled
     // enhanced-resolve.
+    log('Using bundled enhanced-resolve.')
     webpackRequire = require
   }
 
