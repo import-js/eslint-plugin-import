@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [1.13.0] - 2016-08-11
 ### Added
 - `allowComputed` option for [`namespace`] rule. If set to `true`, won't report
   computed member references to namespaces. (see [#456])
@@ -13,7 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`import/extensions` setting] is respected in spite of the appearance of imports
-  in an imported file. (fixes [#478], thaks [@rhys-vdw])
+  in an imported file. (fixes [#478], thanks [@rhys-vdw])
 
 ## [1.12.0] - 2016-07-26
 ### Added
@@ -348,7 +350,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...v1.11.0
