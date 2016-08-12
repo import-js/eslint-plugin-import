@@ -52,7 +52,7 @@
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
     "cross-env": "^2.0.0",
-    "eslint": "2.x",
+    "eslint": "3.3.0",
     "eslint-plugin-import": "next",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
