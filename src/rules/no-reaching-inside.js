@@ -11,48 +11,56 @@ module.exports = function noReachingInside(context) {
   const allowRegexps = (options.allow || []).map(p => minimatch.makeRe(p))
 
   // test if reaching into this directory is allowed by the
-  // config, path.sep is automatically added so that globs like
+  // config, '/' is automatically added so that globs like
   // "lodash/**" will match both "lodash" (which requires the trailing /) and "lodash/get"
   function reachingAllowed(someDir) {
-    return !!find(allowRegexps, re => re.test(someDir) || re.test(someDir + path.sep))
+    return !!find(allowRegexps, re => re.test(someDir) || re.test(someDir + '/'))
   }
 
   function isRelativeStep (step) {
     return step === '' || step === '.' || step === '..'
   }
 
+  function normalizeSep(somePath) {
+    return somePath.split('\\').join('/')
+  }
+
   function report(reachedTo, node) {
     context.report({
       node,
-      message: `Reaching into "${reachedTo}" is not allowed.`,
+      message: `Reaching into "${normalizeSep(reachedTo)}" is not allowed.`,
     })
   }
 
   function findNotAllowedReach(importPath, startingBase, join, ignoreStep) {
-    const steps = importPath.split('/').filter(Boolean)
+    const steps = normalizeSep(importPath).split('/').filter(Boolean)
+
     let parentDir = startingBase
     while (steps.length) {
       const step = steps.shift()
-      parentDir = join(parentDir, step)
+      parentDir = normalizeSep(join(parentDir, step))
 
-      if (ignoreStep && ignoreStep(step)) continue
-
-      if (steps.length) {
-        if (!reachingAllowed(parentDir)) {
-          return parentDir
-        }
+      if (ignoreStep && ignoreStep(step)) {
+        continue
+      }
+      if (steps.length && !reachingAllowed(parentDir)) {
+        return parentDir
       }
     }
   }
 
   function checkRelativeImportForReaching(importPath, node) {
     const reachedInto = findNotAllowedReach(importPath, dirname, path.resolve, isRelativeStep)
-    if (reachedInto) report(path.relative(dirname, reachedInto), node)
+    if (reachedInto) {
+      report(path.relative(dirname, reachedInto), node)
+    }
   }
 
   function checkAbsoluteImportForReaching(importPath, node) {
     const reachedInto = findNotAllowedReach(importPath, '', path.join)
-    if (reachedInto) report(reachedInto, node)
+    if (reachedInto) {
+      report(reachedInto, node)
+    }
   }
 
   function checkImportForReaching(importPath, node) {
