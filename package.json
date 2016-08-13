@@ -76,7 +76,7 @@
     "es6-set": "^0.1.4",
     "eslint-import-resolver-node": "^0.2.0",
     "lodash.cond": "^4.3.0",
-    "lodash.endswith": "^4.0.1",
+    "lodash.endswith": "^4.2.1",
     "lodash.find": "^4.3.0",
     "lodash.findindex": "^4.3.0",
     "object-assign": "^4.0.1",
