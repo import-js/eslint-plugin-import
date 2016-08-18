@@ -23,7 +23,11 @@ module.exports = function noRestrictedPaths(context) {
     }
 
     matchingZones.forEach((zone) => {
-      const absoluteFrom = path.resolve(basePath, zone.from)
+      // If the path starts with a '.' we need to resolve it as a local path,
+      // otherwise, we assume it is a package.
+      const absoluteFrom = zone.from.startsWith('.')
+        ? path.resolve(basePath, zone.from)
+        : zone.from
 
       if (containsPath(absoluteImportPath, absoluteFrom)) {
         context.report({
