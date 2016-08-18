@@ -16,22 +16,22 @@ module.exports = function noRestrictedPaths(context) {
   })
 
   function checkForRestrictedImportPath(importPath, node) {
-      const absoluteImportPath = resolve(importPath, context)
+    const absoluteImportPath = resolve(importPath, context)
 
-      if (!absoluteImportPath) {
-        return
+    if (!absoluteImportPath) {
+      return
+    }
+
+    matchingZones.forEach((zone) => {
+      const absoluteFrom = path.resolve(basePath, zone.from)
+
+      if (containsPath(absoluteImportPath, absoluteFrom)) {
+        context.report({
+          node,
+          message: `Unexpected path "${importPath}" imported in restricted zone.`,
+        })
       }
-
-      matchingZones.forEach((zone) => {
-        const absoluteFrom = path.resolve(basePath, zone.from)
-
-        if (containsPath(absoluteImportPath, absoluteFrom)) {
-          context.report({
-            node,
-            message: `Unexpected path "${importPath}" imported in restricted zone.`,
-          })
-        }
-      })
+    })
   }
 
   return {
