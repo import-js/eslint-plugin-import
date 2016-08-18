@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#416])
 
 ## [1.13.0] - 2016-08-11
 ### Added
