@@ -3,6 +3,10 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## v0.2.3 - 2016-08-20
+### Added
+- debug logging (use `DEBUG=eslint-plugin-import:resolver:node eslint [...]`)
+
 ## v0.2.2 - 2016-07-14
 ### Fixed
 - Node resolver no longer declares the import plugin as a `peerDependency`. See [#437]
