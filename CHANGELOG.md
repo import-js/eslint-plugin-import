@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser.
+
 ### Fixed
 - [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#416])
 
@@ -260,6 +263,7 @@ for info on changes for earlier releases.
 [`import/cache` setting]: ./README.md#importcache
 [`import/ignore` setting]: ./README.md#importignore
 [`import/extensions` setting]: ./README.md#importextensions
+[`import/parsers` setting]: ./README.md#importparsers
 [`import/core-modules` setting]: ./README.md#importcore-modules
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 

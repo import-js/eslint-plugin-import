@@ -265,6 +265,32 @@ Contribution of more such shared configs for other platforms are welcome!
 
 An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to considered modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
 
+#### `import/parsers`
+
+A map from parsers to file extension arrays. If a file extension is matched, the
+dependency parser will require and use the map key as the parser instead of the
+configured ESLint parser. This is useful if you're inter-op-ing with TypeScript
+directly using Webpack, for example:
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/parsers:
+    typescript-eslint-parser: [ .ts, .tsx ]
+```
+
+In this case, [`typescript-eslint-parser`](https://github.com/eslint/typescript-eslint-parser) must be installed and require-able from
+the running `eslint` module's location (i.e., install it as a peer of ESLint).
+
+This is currently only tested with `typescript-eslint-parser` but should theoretically
+work with any moderately ESTree-compliant parser.
+
+It's difficult to say how well various plugin features will be supported, too,
+depending on how far down the rabbit hole goes. Submit an issue if you find strange
+behavior beyond here, but steel your heart against the likely outcome of closing
+with `wontfix`.
+
+
 #### `import/resolver`
 
 See [resolvers](#resolvers).

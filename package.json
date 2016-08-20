@@ -53,16 +53,18 @@
     "coveralls": "^2.11.4",
     "cross-env": "^2.0.0",
     "eslint": "2.x",
-    "eslint-plugin-import": "next",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
+    "eslint-plugin-import": "next",
     "gulp": "^3.9.0",
     "gulp-babel": "6.1.2",
     "istanbul": "^0.4.0",
     "mocha": "^2.2.1",
     "nyc": "^7.0.0",
     "redux": "^3.0.4",
-    "rimraf": "2.5.2"
+    "rimraf": "2.5.2",
+    "typescript": "^1.8.10",
+    "typescript-eslint-parser": "^0.1.1"
   },
   "peerDependencies": {
     "eslint": "2.x - 3.x"
