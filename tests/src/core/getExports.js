@@ -296,7 +296,7 @@ describe('getExports', function () {
   })
 
   context('issue #478: never parse non-whitelist extensions', function () {
-    const context = Object.assign({}, fakeContext,
+    const context = assign({}, fakeContext,
       { settings: { 'import/extensions': ['.js'] } })
 
     let imports
@@ -318,7 +318,7 @@ describe('getExports', function () {
 
     configs.forEach(([description, parserConfig]) => {
       describe(description, function () {
-        const context = Object.assign({}, fakeContext,
+        const context = assign({}, fakeContext,
           { settings: {
             'import/extensions': ['.js'],
             'import/parsers': parserConfig,
