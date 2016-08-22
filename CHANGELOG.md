@@ -4,11 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [1.14.0] - 2016-08-22
 ### Added
-- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser.
+- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser. ([#503])
 
 ### Fixed
-- [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#416])
+- [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#499] fixes [#416], thanks [@wKich])
 
 ## [1.13.0] - 2016-08-11
 ### Added
@@ -287,6 +290,8 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
+[#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -328,6 +333,7 @@ for info on changes for earlier releases.
 [#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
+[#416]: https://github.com/benmosher/eslint-plugin-import/issues/416
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
@@ -356,7 +362,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...HEAD
+[1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...v1.11.1
@@ -414,3 +421,4 @@ for info on changes for earlier releases.
 [@rhettlivingston]: https://github.com/rhettlivingston
 [@zloirock]: https://github.com/zloirock
 [@rhys-vdw]: https://github.com/rhys-vdw
+[@wKich]: https://github.com/wKich
