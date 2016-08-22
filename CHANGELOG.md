@@ -17,6 +17,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#499] fixes [#416], thanks [@wKich])
 
+## [1.14.0] - 2016-08-21
+### Added
+- [`max-dependencies`] for specifying the maximum number of dependencies (both `import` and `require`) a module can have. (see [#489], thanks [@tizmagik])
+
 ## [1.13.0] - 2016-08-11
 ### Added
 - `allowComputed` option for [`namespace`] rule. If set to `true`, won't report
@@ -293,11 +297,13 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`max-dependencies`]: ./docs/rules/max-dependencies.md
 
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
+[#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -430,3 +436,4 @@ for info on changes for earlier releases.
 [@zloirock]: https://github.com/zloirock
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@wKich]: https://github.com/wKich
+[@tizmagik]: https://github.com/tizmagik
