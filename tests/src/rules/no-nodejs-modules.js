@@ -74,5 +74,12 @@ ruleTester.run('no-nodejs-modules', rule, {
       code: 'var fs = require("fs")',
       errors: [error('Do not import Node.js builtin module "fs"')],
     }),
+    test({
+      code: 'import fs from "fs"',
+      options: [{
+        allow: ['path'],
+      }],
+      errors: [error('Do not import Node.js builtin module "fs"')],
+    }),
   ],
 })
