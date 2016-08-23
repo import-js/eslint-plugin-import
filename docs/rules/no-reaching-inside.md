@@ -4,7 +4,7 @@ Use this rule to prevent importing the submodules of other modules.
 
 ## Rule Details
 
-This rule has one option, `allow` which is an array of minimatch patterns to identify directories whose children can be imported explicitly.
+This rule has one option, `allow` which is an array of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) to identify directories whose children can be imported explicitly.
 
 ### Examples
 
