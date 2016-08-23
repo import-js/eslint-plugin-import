@@ -1,6 +1,9 @@
 import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+
+
 var ruleTester = new RuleTester()
   , rule = require('rules/named')
 
@@ -211,3 +214,20 @@ ruleTester.run('named', rule, {
     }),
   ],
 })
+
+// #311: import of mismatched case
+if (!CASE_SENSITIVE_FS) {
+  ruleTester.run('named (path case-insensitivity)', rule, {
+    valid: [
+      test({
+        code: 'import { b } from "./Named-Exports"',
+      }),
+    ],
+    invalid: [
+      test({
+        code: 'import { foo } from "./Named-Exports"',
+        errors: [`foo not found in './Named-Exports'`],
+      }),
+    ],
+  })
+}
