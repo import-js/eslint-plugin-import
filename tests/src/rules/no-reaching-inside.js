@@ -57,6 +57,18 @@ ruleTester.run('no-reaching-inside', rule, {
 
   invalid: [
     test({
+      code: 'import "./plugin2/index.js";\nimport "./plugin2/app/index"',
+      filename: testFilePath('./reaching-inside/plugins/plugin.js'),
+      options: [ {
+        allow: [ '*/index.js' ],
+      } ],
+      errors: [ {
+        message: 'Reaching to "./plugin2/app/index" is not allowed.',
+        line: 2,
+        column: 8,
+      } ],
+    }),
+    test({
       code: 'import "./app/index.js"',
       filename: testFilePath('./reaching-inside/plugins/plugin2/internal.js'),
       errors: [ {

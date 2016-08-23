@@ -46,9 +46,9 @@ The following patterns are considered problems:
  *  in my-project/entry.js
  */
 
-import { settings } from './app/index'; // Reaching into "./app" is not allowed
-import userReducer from './reducer/user'; // Reaching into "./reducer" is not allowed
-import configureStore from './redux/configureStore'; // Reaching into "./redux" is not allowed
+import { settings } from './app/index'; // Reaching to "./app/index" is not allowed
+import userReducer from './reducer/user'; // Reaching to "./reducer/user" is not allowed
+import configureStore from './redux/configureStore'; // Reaching to "./redux/configureStore" is not allowed
 ```
 
 The following patterns are NOT considered problems:
