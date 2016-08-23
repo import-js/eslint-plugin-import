@@ -8,7 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
 
 ### Fixed
-- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], thanks [@jquense])
+- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
 
 ## [1.14.0] - 2016-08-22
 ### Added
@@ -295,6 +295,7 @@ for info on changes for earlier releases.
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
+[#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
