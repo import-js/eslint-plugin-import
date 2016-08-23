@@ -1,3 +1,4 @@
+import path from 'path'
 import { RuleTester } from 'eslint'
 import rule from 'rules/no-restricted-paths'
 
@@ -26,6 +27,13 @@ ruleTester.run('no-restricted-paths', rule, {
       filename: testFilePath('./restricted-paths/client/a.js'),
       options: [ {
         zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/other' } ],
+      } ],
+    }),
+    test({
+      code: 'import b from "my-package/public/a.js"',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client', from: 'my-package/private' } ],
       } ],
     }),
   ],
@@ -88,6 +96,21 @@ ruleTester.run('no-restricted-paths', rule, {
         message: 'Unexpected path "../server/b.js" imported in restricted zone.',
         line: 1,
         column: 19,
+      } ],
+    }),
+    test({
+      code: 'import b from "my-package/private/a.js"',
+      settings: {'import/resolve': {'paths': [
+        path.join('tests', 'files', 'my-package'),
+      ]}},
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client', from: 'my-package/private' } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "my-package/private/a.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
       } ],
     }),
   ],
