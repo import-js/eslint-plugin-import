@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+- Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
 
 ## [1.14.0] - 2016-08-22
 ### Added
@@ -290,6 +290,7 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
@@ -331,6 +332,7 @@ for info on changes for earlier releases.
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
 [#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
+[#452]: https://github.com/benmosher/eslint-plugin-import/issues/452
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#416]: https://github.com/benmosher/eslint-plugin-import/issues/416
