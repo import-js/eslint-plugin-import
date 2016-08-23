@@ -1,6 +1,8 @@
 "use strict"
 exports.__esModule = true
 
+const log = require('debug')('eslint-module-utils:ModuleCache')
+
 class ModuleCache {
   constructor(map) {
     this.map = map || new Map()
@@ -13,6 +15,7 @@ class ModuleCache {
    */
   set(cacheKey, result) {
     this.map.set(cacheKey, { result, lastSeen: Date.now() })
+    log('setting entry for', cacheKey)
     return result
   }
 
@@ -21,7 +24,7 @@ class ModuleCache {
       const f = this.map.get(cacheKey)
       // check fresness
       if (Date.now() - f.lastSeen < (settings.lifetime * 1000)) return f.result
-    }
+    } else log('cache miss for', cacheKey)
     // cache miss
     return undefined
   }

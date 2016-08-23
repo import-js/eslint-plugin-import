@@ -50,6 +50,12 @@ describe('resolve', function () {
       'import/cache': { 'lifetime': 1 },
     })
 
+    const infiniteContexts = [ '∞', 'Infinity' ].map(inf => [inf,
+      utils.testContext({
+        'import/cache': { 'lifetime': inf },
+      })])
+
+
     const pairs = [
       ['./CaseyKasem.js', './CASEYKASEM2.js'],
     ]
@@ -60,6 +66,13 @@ describe('resolve', function () {
         before('sanity check', function () {
           expect(resolve(original, context)).to.exist
           expect(resolve(changed, context)).not.to.exist
+        })
+
+        // settings are part of cache key
+        before('warm up infinite entries', function () {
+          infiniteContexts.forEach(([,c]) => {
+            expect(resolve(original, c)).to.exist
+          })
         })
 
         before('rename', function (done) {
@@ -86,19 +99,16 @@ describe('resolve', function () {
 
         // special behavior for infinity
         describe('infinite cache', function () {
-          this.timeout(1200)
+          this.timeout(1500)
+
           before((done) => setTimeout(done, 1100))
 
-          const lifetimes = [ '∞', 'Infinity' ]
-          lifetimes.forEach(inf => {
-            const infiniteContext =  utils.testContext({
-              'import/cache': { 'lifetime': inf },
-            })
-
+          infiniteContexts.forEach(([inf, infiniteContext]) => {
             it(`lifetime: ${inf} still gets cached values after ~1s`, function () {
               expect(resolve(original, infiniteContext), original).to.exist
             })
           })
+
         })
 
         describe('finite cache', function () {
