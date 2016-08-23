@@ -65,6 +65,8 @@ module.exports = function(context) {
       if (fileImport == null) return
 
       for (const {propName, node} of lookups) {
+        // the default import can have a "default" property
+        if (propName === 'default') continue
         if (!fileImport.exportMap.namespace.has(propName)) continue
 
         context.report({

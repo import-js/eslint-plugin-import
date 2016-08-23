@@ -2,12 +2,16 @@ import fs from 'fs'
 
 import doctrine from 'doctrine'
 
+import debug from 'debug'
+
 import parse from 'eslint-module-utils/parse'
 import resolve from 'eslint-module-utils/resolve'
-import isIgnored from 'eslint-module-utils/ignore'
+import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore'
 
 import { hashObject } from 'eslint-module-utils/hash'
 import * as unambiguous from 'eslint-module-utils/unambiguous'
+
+const log = debug('eslint-plugin-import:ExportMap')
 
 const exportCache = new Map()
 
@@ -273,6 +277,12 @@ ExportMap.for = function (path, context) {
     // future: check content equality?
   }
 
+  // check valid extensions first
+  if (!hasValidExtension(path, context)) {
+    exportCache.set(cacheKey, null)
+    return null
+  }
+
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
   // check for and cache ignore
@@ -297,8 +307,9 @@ ExportMap.parse = function (path, content, context) {
   var m = new ExportMap(path)
 
   try {
-    var ast = parse(content, context)
+    var ast = parse(path, content, context)
   } catch (err) {
+    log('parse error:', path, err)
     m.errors.push(err)
     return m // can't continue
   }

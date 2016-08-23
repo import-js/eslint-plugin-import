@@ -82,11 +82,12 @@ describe('ExportMap', function () {
     var imports = ExportMap.parse(
       path,
       contents,
-      { parserPath: 'babel-eslint' }
+      { parserPath: 'babel-eslint', settings: {} }
     )
 
-    expect(imports).to.exist
-    expect(imports.get('default')).to.exist
+    expect(imports, 'imports').to.exist
+    expect(imports.errors).to.be.empty
+    expect(imports.get('default'), 'default export').to.exist
     expect(imports.has('Bar')).to.be.true
   })
 
@@ -186,6 +187,7 @@ describe('ExportMap', function () {
           sourceType: 'module',
           attachComment: true,
         },
+        settings: {},
       })
     })
 
@@ -196,6 +198,7 @@ describe('ExportMap', function () {
           sourceType: 'module',
           attachComment: true,
         },
+        settings: {},
       })
     })
   })
@@ -278,17 +281,67 @@ describe('ExportMap', function () {
   })
 
   context('issue #210: self-reference', function () {
-    it("doesn't crash", function () {
+    it(`doesn't crash`, function () {
       expect(() => ExportMap.get('./narcissist', fakeContext)).not.to.throw(Error)
     })
-    it("'has' circular reference", function () {
+    it(`'has' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
         .to.exist.and.satisfy(m => m.has('soGreat'))
     })
-    it("can 'get' circular reference", function () {
+    it(`can 'get' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
         .to.exist.and.satisfy(m => m.get('soGreat') != null)
     })
+  })
+
+  context('issue #478: never parse non-whitelist extensions', function () {
+    const context = Object.assign({}, fakeContext,
+      { settings: { 'import/extensions': ['.js'] } })
+
+    let imports
+    before('load imports', function () {
+      imports = ExportMap.get('./typescript.ts', context)
+    })
+
+    it('returns nothing for a TypeScript file', function () {
+      expect(imports).not.to.exist
+    })
+
+  })
+
+  context('alternate parsers', function () {
+    const configs = [
+      // ['string form', { 'typescript-eslint-parser': '.ts' }],
+      ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
+    ]
+
+    configs.forEach(([description, parserConfig]) => {
+      describe(description, function () {
+        const context = Object.assign({}, fakeContext,
+          { settings: {
+            'import/extensions': ['.js'],
+            'import/parsers': parserConfig,
+          } })
+
+        let imports
+        before('load imports', function () {
+          imports = ExportMap.get('./typescript.ts', context)
+        })
+
+        it('returns something for a TypeScript file', function () {
+          expect(imports).to.exist
+        })
+
+        it('has no parse errors', function () {
+          expect(imports).property('errors').to.be.empty
+        })
+
+        it('has export (getFoo)', function () {
+          expect(imports.has('getFoo')).to.be.true
+        })
+      })
+    })
+
   })
 
 })

@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
-## [Unreleased]
+## 2.0.0 - WIP
 ### Added
 - `recommended` shared config. Roughly `errors` and `warnings` mixed together,
   with some `parserOptions` in the mix. ([#402])
@@ -16,6 +16,32 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
+
+## [Unreleased] v1
+### Added
+- Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
+
+### Fixed
+- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], thanks [@jquense])
+
+## [1.14.0] - 2016-08-22
+### Added
+- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser. ([#503])
+
+### Fixed
+- [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#499] fixes [#416], thanks [@wKich])
+
+## [1.13.0] - 2016-08-11
+### Added
+- `allowComputed` option for [`namespace`] rule. If set to `true`, won't report
+  computed member references to namespaces. (see [#456])
+
+### Changed
+- Modified [`no-nodejs-modules`] error message to include the module's name ([#453], [#461])
+
+### Fixed
+- [`import/extensions` setting] is respected in spite of the appearance of imports
+  in an imported file. (fixes [#478], thanks [@rhys-vdw])
 
 ## [1.12.0] - 2016-07-26
 ### Added
@@ -97,7 +123,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
 - Added `newlines-between` option to [`order`] rule ([#298], thanks [@singles])
 - add [`no-mutable-exports`] rule ([#290], thanks [@josh])
-- [`import/extensions` setting]: a whitelist of file extensions to parse as modules
+- [`import/extensions` setting]: a list of file extensions to parse as modules
   and search for `export`s. If unspecified, all extensions are considered valid (for now).
   In v2, this will likely default to `['.js', MODULE_EXT]`. ([#297], to fix [#267])
 
@@ -246,7 +272,7 @@ Unpublished from npm and re-released as 0.13.0. See [#170].
 ### Changed
 - Ignore [`import/ignore` setting] if exports are actually found in the parsed module. Does
 this to support use of `jsnext:main` in `node_modules` without the pain of
-managing a whitelist or a nuanced blacklist.
+managing an allow list or a nuanced deny list.
 
 ## [0.11.0] - 2015-11-27
 ### Added
@@ -261,6 +287,7 @@ for info on changes for earlier releases.
 [`import/cache` setting]: ./README.md#importcache
 [`import/ignore` setting]: ./README.md#importignore
 [`import/extensions` setting]: ./README.md#importextensions
+[`import/parsers` setting]: ./README.md#importparsers
 [`import/core-modules` setting]: ./README.md#importcore-modules
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 
@@ -285,6 +312,10 @@ for info on changes for earlier releases.
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 
+[#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
+[#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
+[#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
+[#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
@@ -320,8 +351,14 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
+[#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
+[#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
+[#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
+[#452]: https://github.com/benmosher/eslint-plugin-import/issues/452
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
+[#416]: https://github.com/benmosher/eslint-plugin-import/issues/416
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
 [#402]: https://github.com/benmosher/eslint-plugin-import/issues/402
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
@@ -353,7 +390,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...HEAD
+[1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
+[1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.10.3...v1.11.0
@@ -409,3 +448,5 @@ for info on changes for earlier releases.
 [@ljharb]: https://github.com/ljharb
 [@rhettlivingston]: https://github.com/rhettlivingston
 [@zloirock]: https://github.com/zloirock
+[@rhys-vdw]: https://github.com/rhys-vdw
+[@wKich]: https://github.com/wKich

@@ -2,13 +2,16 @@
 exports.__esModule = true
 
 const moduleRequire = require('./module-require').default
+const extname = require('path').extname
 
-exports.default = function parse(content, context) {
+const log = require('debug')('eslint-plugin-import:parse')
+
+exports.default = function parse(path, content, context) {
 
   if (context == null) throw new Error('need context to parse properly')
 
   let parserOptions = context.parserOptions
-    , parserPath = context.parserPath
+  const parserPath = getParserPath(path, context)
 
   if (!parserPath) throw new Error('parserPath is required!')
 
@@ -23,4 +26,20 @@ exports.default = function parse(content, context) {
   const parser = moduleRequire(parserPath)
 
   return parser.parse(content, parserOptions)
+}
+
+function getParserPath(path, context) {
+  const parsers = context.settings['import/parsers']
+  if (parsers != null) {
+    const extension = extname(path)
+    for (let parserPath in parsers) {
+      if (parsers[parserPath].indexOf(extension) > -1) {
+        // use this alternate parser
+        log('using alt parser:', parserPath)
+        return parserPath
+      }
+    }
+  }
+  // default to use ESLint parser
+  return context.parserPath
 }

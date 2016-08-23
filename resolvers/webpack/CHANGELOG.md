@@ -4,6 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+## 0.5.1 - 2016-08-11
+### Fixed
+- don't throw and die if no webpack config is found
+
+## 0.5.0 - 2016-08-11
+### Added
+- support for Webpack 2 + `module` package.json key! ([#475], thanks [@taion])
+
 ### Changed
 - don't swallow errors, assume config exists ([#435], thanks [@Kovensky])
 

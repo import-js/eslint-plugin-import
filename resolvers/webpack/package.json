@@ -1,6 +1,6 @@
 {
   "name": "eslint-import-resolver-webpack",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
@@ -32,10 +32,14 @@
     "interpret": "^1.0.0",
     "is-absolute": "^0.2.3",
     "lodash.get": "^3.7.0",
-    "node-libs-browser": "^1.0.0"
+    "node-libs-browser": "^1.0.0",
+    "object-assign": "^4.1.0",
+    "resolve": "^1.1.7",
+    "semver": "^5.3.0"
   },
   "peerDependencies": {
-    "eslint-plugin-import": ">=1.4.0"
+    "eslint-plugin-import": ">=1.4.0",
+    "webpack": "^1.11.0 || ^2.1.0-beta || ^2.1.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",
