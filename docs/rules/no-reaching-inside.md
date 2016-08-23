@@ -4,7 +4,7 @@ Use this rule to prevent importing the submodules of other modules.
 
 ## Rule Details
 
-This rule has one option, `allow` which is an array of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) to identify directories whose children can be imported explicitly.
+This rule has one option, `allow` which is an array of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) patterns that whitelist paths and import statements that can be imported with reaching.
 
 ### Examples
 
@@ -33,7 +33,7 @@ And the .eslintrc file:
   ...
   "rules": {
     "import/no-reaching-inside": [ "error", {
-      "allow": [ "**/actions", "source-map-support/*" ]
+      "allow": [ "**/actions/*", "source-map-support/*" ]
     } ]
   }
 }
@@ -43,7 +43,7 @@ The following patterns are considered problems:
 
 ```js
 /**
- *  in my-project/entry.jz
+ *  in my-project/entry.js
  */
 
 import { settings } from './app/index'; // Reaching into "./app" is not allowed
@@ -55,7 +55,7 @@ The following patterns are NOT considered problems:
 
 ```js
 /**
- *  in my-project/entry.jz
+ *  in my-project/entry.js
  */
 
 import 'source-map-support/register';

@@ -1,66 +1,56 @@
-import path from 'path'
 import find from 'lodash.find'
 import minimatch from 'minimatch'
 
+import resolve from '../core/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
 module.exports = function noReachingInside(context) {
   const options = context.options[0] || {}
-  const dirname = path.dirname(context.getFilename())
   const allowRegexps = (options.allow || []).map(p => minimatch.makeRe(p))
 
-  // test if reaching into this directory is allowed by the
-  // config, '/' is automatically added so that globs like
-  // "lodash/**" will match both "lodash" (which requires the trailing /) and "lodash/get"
-  function reachingAllowed(someDir) {
-    return !!find(allowRegexps, re => re.test(someDir) || re.test(someDir + '/'))
+  // test if reaching to this destination is allowed
+  function reachingAllowed(importPath) {
+    return !!find(allowRegexps, re => re.test(importPath))
   }
 
-  function isRelativeStep (step) {
-    return step === '' || step === '.' || step === '..'
-  }
-
+  // minimatch patterns are expected to use / path seperators, like import
+  // statements, so normalize paths to use the same
   function normalizeSep(somePath) {
     return somePath.split('\\').join('/')
   }
 
-  function report(reachedTo, node) {
-    context.report({
-      node,
-      message: `Reaching into "${normalizeSep(reachedTo)}" is not allowed.`,
-    })
-  }
+  // find a directory that is being reached into, but which shouldn't be
+  function isReachViolation(importPath) {
+    const steps = normalizeSep(importPath)
+      .split('/')
+      .reduce((acc, step) => {
+        if (!step || step === '.') {
+          return acc
+        } else if (step === '..') {
+          return acc.slice(0, -1)
+        } else {
+          return acc.concat(step)
+        }
+      }, [])
 
-  function findNotAllowedReach(importPath, startingBase, join, ignoreStep) {
-    const steps = normalizeSep(importPath).split('/').filter(Boolean)
+    if (steps.length <= 1) return false
 
-    let parentDir = startingBase
-    while (steps.length) {
-      const step = steps.shift()
-      parentDir = normalizeSep(join(parentDir, step))
+    // before trying to resolve, see if the raw import (with relative
+    // segments resolved) matches an allowed pattern
+    const justSteps = steps.join('/')
+    if (reachingAllowed(justSteps)) return false
+    if (reachingAllowed(`/${justSteps}`)) return false
 
-      if (ignoreStep && ignoreStep(step)) {
-        continue
-      }
-      if (steps.length && !reachingAllowed(parentDir)) {
-        return parentDir
-      }
-    }
-  }
+    // if the import statement doesn't match directly, try to match the
+    // resolved path if the import is resolvable
+    const resolved = resolve(importPath, context)
+    if (!resolved) return false
+    if (reachingAllowed(normalizeSep(resolved))) return false
 
-  function checkRelativeImportForReaching(importPath, node) {
-    const reachedInto = findNotAllowedReach(importPath, dirname, path.resolve, isRelativeStep)
-    if (reachedInto) {
-      report(path.relative(dirname, reachedInto), node)
-    }
-  }
-
-  function checkAbsoluteImportForReaching(importPath, node) {
-    const reachedInto = findNotAllowedReach(importPath, '', path.join)
-    if (reachedInto) {
-      report(reachedInto, node)
-    }
+    // this import was not allowed by the allowed paths, and reaches
+    // so it is a violation
+    return true
   }
 
   function checkImportForReaching(importPath, node) {
@@ -68,13 +58,16 @@ module.exports = function noReachingInside(context) {
       case 'parent':
       case 'index':
       case 'sibling':
-        return checkRelativeImportForReaching(importPath, node)
-
       case 'external':
-      case 'internal':
-        return checkAbsoluteImportForReaching(importPath, node)
-      default:
-        return
+      case 'internal': {
+        if (isReachViolation(importPath)) {
+          context.report({
+            node,
+            message: `Reaching to "${importPath}" is not allowed.`,
+          })
+        }
+        break
+      }
     }
   }
 

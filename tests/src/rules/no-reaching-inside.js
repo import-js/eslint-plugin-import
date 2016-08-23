@@ -36,31 +36,40 @@ ruleTester.run('no-reaching-inside', rule, {
       code: 'import b from "../../api/service"',
       filename: testFilePath('./reaching-inside/plugins/plugin2/internal.js'),
       options: [ {
-        allow: [ '**/api' ],
+        allow: [ '**/api/*' ],
       } ],
     }),
     test({
       code: 'import "jquery/dist/jquery"',
       filename: testFilePath('./reaching-inside/plugins/plugin2/internal.js'),
       options: [ {
-        allow: [ 'jquery/**' ],
+        allow: [ 'jquery/dist/*' ],
       } ],
     }),
     test({
-      code: 'import "/app/index.js"',
+      code: 'import "./app/index.js";\nimport "./app/index"',
       filename: testFilePath('./reaching-inside/plugins/plugin2/internal.js'),
       options: [ {
-        allow: [ '/app' ],
+        allow: [ '**/index{.js,}' ],
       } ],
     }),
   ],
 
   invalid: [
     test({
+      code: 'import "./app/index.js"',
+      filename: testFilePath('./reaching-inside/plugins/plugin2/internal.js'),
+      errors: [ {
+        message: 'Reaching to "./app/index.js" is not allowed.',
+        line: 1,
+        column: 8,
+      } ],
+    }),
+    test({
       code: 'import b from "./plugin2/internal"',
       filename: testFilePath('./reaching-inside/plugins/plugin.js'),
       errors: [ {
-        message: 'Reaching into "plugin2" is not allowed.',
+        message: 'Reaching to "./plugin2/internal" is not allowed.',
         line: 1,
         column: 15,
       } ],
@@ -73,18 +82,18 @@ ruleTester.run('no-reaching-inside', rule, {
       } ],
       errors: [
         {
-          message: 'Reaching into "../api/service" is not allowed.',
+          message: 'Reaching to "../api/service/index" is not allowed.',
           line: 1,
           column: 15,
         },
       ],
     }),
     test({
-      code: 'import get from "lodash/get"',
+      code: 'import get from "debug/node"',
       filename: testFilePath('./reaching-inside/plugins/plugin.js'),
       errors: [
         {
-          message: 'Reaching into "lodash" is not allowed.',
+          message: 'Reaching to "debug/node" is not allowed.',
           line: 1,
           column: 17,
         },
