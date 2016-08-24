@@ -14,7 +14,7 @@ module.exports = function noReachingInside(context) {
     return !!find(allowRegexps, re => re.test(importPath))
   }
 
-  // minimatch patterns are expected to use / path seperators, like import
+  // minimatch patterns are expected to use / path separators, like import
   // statements, so normalize paths to use the same
   function normalizeSep(somePath) {
     return somePath.split('\\').join('/')
@@ -39,14 +39,12 @@ module.exports = function noReachingInside(context) {
     // before trying to resolve, see if the raw import (with relative
     // segments resolved) matches an allowed pattern
     const justSteps = steps.join('/')
-    if (reachingAllowed(justSteps)) return false
-    if (reachingAllowed(`/${justSteps}`)) return false
+    if (reachingAllowed(justSteps) || reachingAllowed(`/${justSteps}`)) return false
 
     // if the import statement doesn't match directly, try to match the
     // resolved path if the import is resolvable
     const resolved = resolve(importPath, context)
-    if (!resolved) return false
-    if (reachingAllowed(normalizeSep(resolved))) return false
+    if (!resolved || reachingAllowed(normalizeSep(resolved))) return false
 
     // this import was not allowed by the allowed paths, and reaches
     // so it is a violation
@@ -54,20 +52,14 @@ module.exports = function noReachingInside(context) {
   }
 
   function checkImportForReaching(importPath, node) {
-    switch (importType(importPath, context)) {
-      case 'parent':
-      case 'index':
-      case 'sibling':
-      case 'external':
-      case 'internal': {
-        if (isReachViolation(importPath)) {
-          context.report({
-            node,
-            message: `Reaching to "${importPath}" is not allowed.`,
-          })
-        }
-        break
-      }
+    const potentialViolationTypes = ['parent', 'index', 'sibling', 'external', 'internal']
+    if (potentialViolationTypes.indexOf(importType(importPath, context)) !== -1 &&
+      isReachViolation(importPath)
+    ) {
+      context.report({
+        node,
+        message: `Reaching to "${importPath}" is not allowed.`,
+      })
     }
   }
 
