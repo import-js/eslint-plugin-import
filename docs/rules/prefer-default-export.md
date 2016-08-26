@@ -1,6 +1,6 @@
 # prefer-default-export
 
-When there is only a single export from a module prefer using default export over named export.
+When there is only a single export from a module, prefer using default export over named export.
 
 ## Rule Details
 
@@ -9,7 +9,7 @@ The following patterns are considered warnings:
 ```javascript
 // bad.js
 
-// There is only a single module export and its a named export.
+// There is only a single module export and it's a named export.
 export const foo = 'foo';
 
 ```
@@ -28,7 +28,7 @@ export default 'bar';
 ```javascript
 // good2.js
 
-// There is more thank one named exports in the module.
+// There is more than one named export in the module.
 export const foo = 'foo';
 export const bar = 'bar';
 ```
@@ -36,7 +36,7 @@ export const bar = 'bar';
 ```javascript
 // good3.js
 
-// There is more thank one named exports in the module
+// There is more than one named export in the module
 const foo = 'foo';
 const bar = 'bar';
 export { foo, bar }
