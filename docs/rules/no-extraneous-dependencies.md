@@ -19,6 +19,19 @@ You can set the options like this:
 "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}]
 ```
 
+You can also use regular expressions instead of literal booleans:
+
+```js
+"import/no-extraneous-dependencies": ["error", {"devDependencies": "test|spec"}]
+```
+
+If you are using JavaScript configuration (e.g., `.eslintrc.js`), then you can use a RegExp literal instead of a string:
+
+```js
+"import/no-extraneous-dependencies": ["error", {"devDependencies": /test|spec/}]
+```
+
+When using a regular expression the result of running [`test`] against the name of the file being linted is used as the boolean value. For example, the above configurations will allow the import of `devDependencies` in files whose names include `test` or `spec`.
 
 ## Rule Details
 
@@ -86,3 +99,5 @@ import react from 'react';
 ## When Not To Use It
 
 If you do not have a `package.json` file in your project.
+
+[`test`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test "RegExp.prototype.test"
