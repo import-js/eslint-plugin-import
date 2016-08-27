@@ -35,6 +35,16 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "importType"',
       settings: { 'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } } },
     }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: /test|spec/}],
+      filename: 'glob.test.js',
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: 'test|spec'}],
+      filename: 'glob.spec.js',
+    }),
   ],
   invalid: [
     test({
@@ -87,6 +97,24 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'glob\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: /test|spec/}],
+      filename: 'foo.tes.js',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: 'test|spec'}],
+      filename: 'foo.tes.js',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
     test({

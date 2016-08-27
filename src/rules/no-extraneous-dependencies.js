@@ -71,8 +71,17 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   context.report(node, missingErrorMessage(packageName))
 }
 
+function testConfig(config, filename) {
+  if (typeof config === 'boolean' || typeof config === 'undefined') {
+    return config
+  }
+  const pattern = new RegExp(config) // `config` is either a string or RegExp
+  return pattern.test(filename)
+}
+
 module.exports = function (context) {
   const options = context.options[0] || {}
+  const filename = context.getFilename()
   const deps = getDependencies(context)
 
   if (!deps) {
@@ -80,9 +89,9 @@ module.exports = function (context) {
   }
 
   const depsOptions = {
-    allowDevDeps: options.devDependencies !== false,
-    allowOptDeps: options.optionalDependencies !== false,
-    allowPeerDeps: options.peerDependencies !== false,
+    allowDevDeps: testConfig(options.devDependencies, filename) !== false,
+    allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
+    allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
   }
 
   // todo: use module visitor from module-utils core
@@ -102,9 +111,9 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': 'boolean' },
-      'optionalDependencies': { 'type': 'boolean' },
-      'peerDependencies': { 'type': 'boolean' },
+      'devDependencies': { 'type': ['boolean', 'string', 'object'] },
+      'optionalDependencies': { 'type': ['boolean', 'string', 'object'] },
+      'peerDependencies': { 'type': ['boolean', 'string', 'object'] },
     },
     'additionalProperties': false,
   },
