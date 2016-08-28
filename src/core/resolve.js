@@ -98,6 +98,7 @@ function fullResolve(modulePath, sourceFile, settings) {
 
     switch (resolver.interfaceVersion) {
       case 2:
+      case 3:
         return v2()
 
       default:
@@ -106,10 +107,7 @@ function fullResolve(modulePath, sourceFile, settings) {
     }
   }
 
-  const configResolvers = (settings['import/resolver']
-    || { 'node': settings['import/resolve'] }) // backward compatibility
-
-  const resolvers = resolverReducer(configResolvers, new Map())
+  const resolvers = getResolvers(settings)
 
   let resolved = { found: false }
   resolvers.forEach(function (config, name)  {
@@ -129,6 +127,12 @@ function fullResolve(modulePath, sourceFile, settings) {
   })
 
   return resolved
+}
+
+function getResolvers(settings) {
+  const configResolvers = (settings['import/resolver']
+    || { 'node': settings['import/resolve'] }) // backward compatibility
+  return resolverReducer(configResolvers, new Map())
 }
 
 function resolverReducer(resolvers, map) {
@@ -209,4 +213,23 @@ function hashObject(object) {
   const settingsShasum = createHash('sha1')
   settingsShasum.update(JSON.stringify(object))
   return settingsShasum.digest('hex')
+}
+
+export function getDependencies(context) {
+  const resolvers = getResolvers(context.settings).entries()
+  let nextResolver
+
+  const sourceFile = context.getFilename()
+
+  // poor man's for-of
+  while (!({ value: nextResolver } = resolvers.next()).done) {
+    const [name, config] = nextResolver
+    const resolver = requireResolver(name, sourceFile)
+
+    if (!resolver.getDependencies) continue
+
+    return resolver.getDependencies(sourceFile, config)
+  }
+
+  return null
 }

@@ -1,26 +1,6 @@
-import fs from 'fs'
-import pkgUp from 'pkg-up'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
-
-function getDependencies(context) {
-  const filepath = pkgUp.sync(context.getFilename())
-  if (!filepath) {
-    return null
-  }
-
-  try {
-    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
-  } catch (e) {
-    return null
-  }
-}
+import { getDependencies } from '../core/resolve'
 
 function missingErrorMessage(packageName) {
   return `'${packageName}' should be listed in the project's dependencies. ` +

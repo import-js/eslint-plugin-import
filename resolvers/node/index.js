@@ -1,10 +1,12 @@
 var resolve = require('resolve')
   , path = require('path')
   , assign = require('object-assign')
+  , pkgUp = require('pkg-up')
+  , fs = require('fs')
 
 var log = require('debug')('eslint-plugin-import:resolver:node')
 
-exports.interfaceVersion = 2
+exports.interfaceVersion = 3
 
 exports.resolve = function (source, file, config) {
   log('Resolving:', source, 'from:', file)
@@ -12,7 +14,7 @@ exports.resolve = function (source, file, config) {
 
   if (resolve.isCore(source)) {
     log('resolved to core')
-    return { found: true, path: null }
+    return { found: true, path: null, importType: 'core' }
   }
 
   try {
@@ -37,6 +39,25 @@ function opts(file, config) {
       packageFilter: packageFilter,
 
     })
+}
+
+exports.getDependencies = function (file) {
+  const filepath = pkgUp.sync(file)
+  if (!filepath) {
+    return null
+  }
+
+  try {
+    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    return {
+      dependencies: packageContent.dependencies || {},
+      devDependencies: packageContent.devDependencies || {},
+      optionalDependencies: packageContent.optionalDependencies || {},
+      peerDependencies: packageContent.peerDependencies || {},
+    }
+  } catch (e) {
+    return null
+  }
 }
 
 function packageFilter(pkg) {
