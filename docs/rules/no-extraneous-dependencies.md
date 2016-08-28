@@ -31,7 +31,7 @@ If you are using JavaScript configuration (e.g., `.eslintrc.js`), then you can u
 "import/no-extraneous-dependencies": ["error", {"devDependencies": /test|spec/}]
 ```
 
-When using a regular expression the result of running [`test`] against the name of the file being linted is used as the boolean value. For example, the above configurations will allow the import of `devDependencies` in files whose names include `test` or `spec`.
+When using a regular expression, the setting will be activated if the name of the file being linted matches the given regular expression. For example, the above configurations will allow the import of `devDependencies` in files whose names include `test` or `spec`.
 
 ## Rule Details
 
@@ -99,5 +99,3 @@ import react from 'react';
 ## When Not To Use It
 
 If you do not have a `package.json` file in your project.
-
-[`test`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test "RegExp.prototype.test"
