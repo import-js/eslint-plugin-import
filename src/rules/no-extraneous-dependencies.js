@@ -1,5 +1,6 @@
 import fs from 'fs'
 import pkgUp from 'pkg-up'
+import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
@@ -72,11 +73,25 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
 }
 
 function testConfig(config, filename) {
+  // Simplest configuration first
   if (typeof config === 'boolean' || typeof config === 'undefined') {
     return config
   }
-  const pattern = new RegExp(config) // `config` is either a string or RegExp
-  return pattern.test(filename)
+  // Account for the possibility of an array for multiple configuration
+  return [].concat(config).some(c => {
+    if (typeof c === 'object') {
+      // `c` is a literal RegExp
+      return c.test(filename)
+    }
+    // By this point `c` must be a string.
+    if (/^\/.+\/$/.test(c)) {
+      // `c` is a string representation of a RegExp.
+      const pattern = new RegExp(c.substring(1, c.length - 1))
+      return pattern.test(filename)
+    }
+    // `c` must be a string representing a glob
+    return minimatch(filename, c)
+  })
 }
 
 module.exports = function (context) {
@@ -111,9 +126,9 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': ['boolean', 'string', 'object'] },
-      'optionalDependencies': { 'type': ['boolean', 'string', 'object'] },
-      'peerDependencies': { 'type': ['boolean', 'string', 'object'] },
+      'devDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
+      'optionalDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
+      'peerDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
     },
     'additionalProperties': false,
   },

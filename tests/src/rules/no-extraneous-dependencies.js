@@ -38,12 +38,27 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import chai from "chai"',
       options: [{devDependencies: /test|spec/}],
-      filename: 'glob.test.js',
+      filename: 'foo.test.js',
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: 'test|spec'}],
-      filename: 'glob.spec.js',
+      options: [{devDependencies: '/test|spec/'}],
+      filename: 'foo.spec.js',
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: '*.spec.js'}],
+      filename: 'foo.spec.js',
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: ['*.test.js', '*.spec.js']}],
+      filename: 'foo.spec.js',
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: [/\.test\.js$/, /\.spec\.js$/]}],
+      filename: 'foo.spec.js',
     }),
   ],
   invalid: [
@@ -110,7 +125,25 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: 'test|spec'}],
+      options: [{devDependencies: '/test|spec/'}],
+      filename: 'foo.tes.js',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: '*.test.js'}],
+      filename: 'foo.tes.js',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
+      }],
+    }),
+    test({
+      code: 'import chai from "chai"',
+      options: [{devDependencies: ['*.test.js', /test\.js$/, '/test/']}],
       filename: 'foo.tes.js',
       errors: [{
         ruleId: 'no-extraneous-dependencies',

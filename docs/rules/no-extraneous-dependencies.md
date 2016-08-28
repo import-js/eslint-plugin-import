@@ -19,10 +19,16 @@ You can set the options like this:
 "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}]
 ```
 
-You can also use regular expressions instead of literal booleans:
+You can also use globs instead of literal booleans:
 
 ```js
-"import/no-extraneous-dependencies": ["error", {"devDependencies": "test|spec"}]
+"import/no-extraneous-dependencies": ["error", {"devDependencies": "*.test.js"}]
+```
+
+You can also use regular expressions instead of literal booleans or globs (note: the string must begin and end with `/`):
+
+```js
+"import/no-extraneous-dependencies": ["error", {"devDependencies": "/test|spec/"}]
 ```
 
 If you are using JavaScript configuration (e.g., `.eslintrc.js`), then you can use a RegExp literal instead of a string:
@@ -31,7 +37,13 @@ If you are using JavaScript configuration (e.g., `.eslintrc.js`), then you can u
 "import/no-extraneous-dependencies": ["error", {"devDependencies": /test|spec/}]
 ```
 
-When using a regular expression, the setting will be activated if the name of the file being linted matches the given regular expression. For example, the above configurations will allow the import of `devDependencies` in files whose names include `test` or `spec`.
+When using a glob or regular expression, the setting will be activated if the name of the file being linted matches the given glob or regular expression. In addition, you can use an array to specify multiple globs or regular expressions:
+
+```js
+"import/no-extraneous-dependencies": ["error", {"devDependencies": [/test/, '/spec/', '*.test.js', '*.spec.js']}]
+```
+
+When using an array of globs or regular expressions, the setting will be activated if the name of the file being linted matches a single glob or regular expression in the array.
 
 ## Rule Details
 
