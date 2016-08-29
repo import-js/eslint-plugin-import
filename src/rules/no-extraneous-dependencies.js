@@ -78,20 +78,7 @@ function testConfig(config, filename) {
     return config
   }
   // Account for the possibility of an array for multiple configuration
-  return [].concat(config).some(c => {
-    if (typeof c === 'object') {
-      // `c` is a literal RegExp
-      return c.test(filename)
-    }
-    // By this point `c` must be a string.
-    if (/^\/.+\/$/.test(c)) {
-      // `c` is a string representation of a RegExp.
-      const pattern = new RegExp(c.substring(1, c.length - 1))
-      return pattern.test(filename)
-    }
-    // `c` must be a string representing a glob
-    return minimatch(filename, c)
-  })
+  return [].concat(config).some(c =>  minimatch(filename, c))
 }
 
 module.exports = function (context) {
@@ -126,9 +113,9 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
-      'optionalDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
-      'peerDependencies': { 'type': ['boolean', 'string', 'object', 'array'] },
+      'devDependencies': { 'type': ['boolean', 'string', 'array'] },
+      'optionalDependencies': { 'type': ['boolean', 'string', 'array'] },
+      'peerDependencies': { 'type': ['boolean', 'string', 'array'] },
     },
     'additionalProperties': false,
   },
