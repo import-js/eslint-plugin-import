@@ -7,6 +7,19 @@ Webpack-literate module resolution plugin for [`eslint-plugin-import`](https://w
 Published separately to allow pegging to a specific version in case of breaking
 changes.
 
+To use with `eslint-plugin-import`, run:
+
+```
+npm i eslint-import-resolver-webpack -g
+```
+
+or if you manage ESLint as a dev dependency:
+
+```
+# inside your project's working tree
+npm install eslint-import-resolver-webpack --save-dev
+```
+
 Will look for `webpack.config.js` as a sibling of the first ancestral `package.json`,
 or a `config` parameter may be provided with another filename/path either relative to the
 `package.json`, or a complete, absolute path.
