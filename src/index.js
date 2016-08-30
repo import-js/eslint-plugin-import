@@ -17,6 +17,7 @@ export const rules = {
   'no-duplicates': require('./rules/no-duplicates'),
   'imports-first': require('./rules/imports-first'),
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
+  'no-absolute-path': require('./rules/no-absolute-path'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),

@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
+- Added [`no-absolute-path`] rule ([#530], [#538])
 
 ### Fixed
 - [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
@@ -293,7 +294,9 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 
+[#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
@@ -334,6 +337,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
