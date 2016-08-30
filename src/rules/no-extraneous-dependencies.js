@@ -73,11 +73,11 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
 }
 
 function testConfig(config, filename) {
-  // Simplest configuration first
+  // Simplest configuration first, either a boolean or nothing.
   if (typeof config === 'boolean' || typeof config === 'undefined') {
     return config
   }
-  // Account for the possibility of an array for multiple configuration
+  // Array of globs.
   return config.some(c => minimatch(filename, c))
 }
 
