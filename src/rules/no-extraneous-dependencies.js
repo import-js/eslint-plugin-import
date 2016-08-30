@@ -78,7 +78,7 @@ function testConfig(config, filename) {
     return config
   }
   // Account for the possibility of an array for multiple configuration
-  return [].concat(config).some(c =>  minimatch(filename, c))
+  return config.some(c => minimatch(filename, c))
 }
 
 module.exports = function (context) {
@@ -113,9 +113,9 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': ['boolean', 'string', 'array'] },
-      'optionalDependencies': { 'type': ['boolean', 'string', 'array'] },
-      'peerDependencies': { 'type': ['boolean', 'string', 'array'] },
+      'devDependencies': { 'type': ['boolean', 'array'] },
+      'optionalDependencies': { 'type': ['boolean', 'array'] },
+      'peerDependencies': { 'type': ['boolean', 'array'] },
     },
     'additionalProperties': false,
   },

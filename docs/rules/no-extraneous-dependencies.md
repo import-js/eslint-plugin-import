@@ -19,13 +19,7 @@ You can set the options like this:
 "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}]
 ```
 
-You can also use globs instead of literal booleans:
-
-```js
-"import/no-extraneous-dependencies": ["error", {"devDependencies": "*.test.js"}]
-```
-
-When using a glob, the setting will be activated if the name of the file being linted matches the given glob. In addition, you can use an array to specify multiple globs:
+You can also use an array of globs instead of literal booleans:
 
 ```js
 "import/no-extraneous-dependencies": ["error", {"devDependencies": ['*.test.js', '*.spec.js']}]

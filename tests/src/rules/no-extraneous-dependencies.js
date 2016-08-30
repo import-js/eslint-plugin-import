@@ -37,7 +37,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: '*.spec.js'}],
+      options: [{devDependencies: ['*.spec.js']}],
       filename: 'foo.spec.js',
     }),
     test({
@@ -101,7 +101,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: '*.test.js'}],
+      options: [{devDependencies: ['*.test.js']}],
       filename: 'foo.tes.js',
       errors: [{
         ruleId: 'no-extraneous-dependencies',
