@@ -2,7 +2,7 @@
 
 Forbid modules to have too many dependencies (`import` or `require` statements).
 
-This is a useful rule because a module with too many dependencies is code smell, and usually indicates the module is doing too much and/or should be broken up into smaller modules.
+This is a useful rule because a module with too many dependencies is a code smell, and usually indicates the module is doing too much and/or should be broken up into smaller modules.
 
 Importing multiple named exports from a single module will only count once (e.g. `import {x, y, z} from './foo'` will only count as a single dependency).
 
