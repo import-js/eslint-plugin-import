@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
 - Added [`no-absolute-path`] rule ([#530], [#538])
+- [`max-dependencies`] for specifying the maximum number of dependencies (both `import` and `require`) a module can have. (see [#489], thanks [@tizmagik])
 
 ### Fixed
 - [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
@@ -294,13 +295,18 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+<<<<<<< HEAD
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
+=======
+[`max-dependencies`]: ./docs/rules/max-dependencies.md
+>>>>>>> tizmagik/feature/max-dependencies
 
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
+[#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -434,3 +440,4 @@ for info on changes for earlier releases.
 [@zloirock]: https://github.com/zloirock
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@wKich]: https://github.com/wKich
+[@tizmagik]: https://github.com/tizmagik
