@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
 - Added [`no-absolute-path`] rule ([#530], [#538])
 - [`max-dependencies`] for specifying the maximum number of dependencies (both `import` and `require`) a module can have. (see [#489], thanks [@tizmagik])
+- Added glob option to config for [`no-extraneous-dependencies`], after much bikeshedding. Thanks, [@knpwrs]! ([#527])
 
 ### Fixed
 - [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
@@ -302,6 +303,7 @@ for info on changes for earlier releases.
 >>>>>>> tizmagik/feature/max-dependencies
 
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
+[#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
@@ -441,3 +443,4 @@ for info on changes for earlier releases.
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@wKich]: https://github.com/wKich
 [@tizmagik]: https://github.com/tizmagik
+[@knpwrs]: https://github.com/knpwrs
