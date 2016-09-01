@@ -8,7 +8,7 @@ import { testContext } from '../utils'
 describe('importType(name)', function () {
   const context = testContext()
 
-  it("should return 'absolute' for node.js modules", function() {
+  it("should return 'absolute' for paths starting with a /", function() {
     expect(importType('/', context)).to.equal('absolute')
     expect(importType('/path', context)).to.equal('absolute')
     expect(importType('/some/path', context)).to.equal('absolute')
