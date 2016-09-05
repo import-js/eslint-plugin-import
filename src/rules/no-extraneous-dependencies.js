@@ -113,9 +113,15 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': ['boolean', 'array'] },
-      'optionalDependencies': { 'type': ['boolean', 'array'] },
-      'peerDependencies': { 'type': ['boolean', 'array'] },
+      'devDependencies': {
+        'anyOf': [{ 'type': 'boolean' }, { 'type': 'array' }],
+      },
+      'optionalDependencies': {
+        'anyOf': [{ 'type': 'boolean' }, { 'type': 'array' }],
+      },
+      'peerDependencies': {
+        'anyOf': [{ 'type': 'boolean' }, { 'type': 'array' }],
+      },
     },
     'additionalProperties': false,
   },
