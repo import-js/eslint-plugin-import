@@ -131,9 +131,12 @@ exports.create = function namespaceRule(context) {
           break
         }
 
+        const exported = namespace.get(dereference.property.name)
+        if (exported == null) return
+
         // stash and pop
         namepath.push(dereference.property.name)
-        namespace = namespace.get(dereference.property.name).namespace
+        namespace = exported.namespace
         dereference = dereference.parent
       }
 

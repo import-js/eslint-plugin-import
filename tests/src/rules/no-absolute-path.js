@@ -3,14 +3,14 @@ import { test } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-nodejs-modules')
+    , rule = require('rules/no-absolute-path')
 
-const error = message => ({
-  ruleId: 'no-nodejs-modules',
-  message,
-})
+const error = {
+  ruleId: 'no-absolute-path',
+  message: 'Do not import modules using an absolute path',
+}
 
-ruleTester.run('no-nodejs-modules', rule, {
+ruleTester.run('no-absolute-path', rule, {
   valid: [
     test({ code: 'import _ from "lodash"'}),
     test({ code: 'import find from "lodash.find"'}),
@@ -59,27 +59,28 @@ ruleTester.run('no-nodejs-modules', rule, {
   ],
   invalid: [
     test({
-      code: 'import path from "path"',
-      errors: [error('Do not import Node.js builtin module "path"')],
+      code: 'import f from "/foo"',
+      errors: [error],
     }),
     test({
-      code: 'import fs from "fs"',
-      errors: [error('Do not import Node.js builtin module "fs"')],
+      code: 'import f from "/foo/path"',
+      errors: [error],
     }),
     test({
-      code: 'var path = require("path")',
-      errors: [error('Do not import Node.js builtin module "path"')],
+      code: 'import f from "/some/path"',
+      errors: [error],
     }),
     test({
-      code: 'var fs = require("fs")',
-      errors: [error('Do not import Node.js builtin module "fs"')],
+      code: 'var f = require("/foo")',
+      errors: [error],
     }),
     test({
-      code: 'import fs from "fs"',
-      options: [{
-        allow: ['path'],
-      }],
-      errors: [error('Do not import Node.js builtin module "fs"')],
+      code: 'var f = require("/foo/path")',
+      errors: [error],
+    }),
+    test({
+      code: 'var f = require("/some/path")',
+      errors: [error],
     }),
   ],
 })

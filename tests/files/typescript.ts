@@ -1,5 +1,5 @@
-type X = { y: string | null }
+type X = string
 
-export function getX() : X {
-  return null
+export function getFoo() : X {
+  return "foo"
 }

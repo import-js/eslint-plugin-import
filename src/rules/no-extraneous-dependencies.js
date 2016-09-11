@@ -1,5 +1,6 @@
 import fs from 'fs'
 import pkgUp from 'pkg-up'
+import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
@@ -71,8 +72,18 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   context.report(node, missingErrorMessage(packageName))
 }
 
+function testConfig(config, filename) {
+  // Simplest configuration first, either a boolean or nothing.
+  if (typeof config === 'boolean' || typeof config === 'undefined') {
+    return config
+  }
+  // Array of globs.
+  return config.some(c => minimatch(filename, c))
+}
+
 module.exports = function (context) {
   const options = context.options[0] || {}
+  const filename = context.getFilename()
   const deps = getDependencies(context)
 
   if (!deps) {
@@ -80,9 +91,9 @@ module.exports = function (context) {
   }
 
   const depsOptions = {
-    allowDevDeps: options.devDependencies !== false,
-    allowOptDeps: options.optionalDependencies !== false,
-    allowPeerDeps: options.peerDependencies !== false,
+    allowDevDeps: testConfig(options.devDependencies, filename) !== false,
+    allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
+    allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
   }
 
   // todo: use module visitor from module-utils core
@@ -102,9 +113,9 @@ module.exports.schema = [
   {
     'type': 'object',
     'properties': {
-      'devDependencies': { 'type': 'boolean' },
-      'optionalDependencies': { 'type': 'boolean' },
-      'peerDependencies': { 'type': 'boolean' },
+      'devDependencies': { 'type': ['boolean', 'array'] },
+      'optionalDependencies': { 'type': ['boolean', 'array'] },
+      'peerDependencies': { 'type': ['boolean', 'array'] },
     },
     'additionalProperties': false,
   },

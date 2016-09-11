@@ -13,10 +13,25 @@ function validExtensions({ settings }) {
   // breaking: default to '.js'
   // cachedSet = new Set(settings['import/extensions'] || [ '.js' ])
   cachedSet = 'import/extensions' in settings
-    ? new Set(settings['import/extensions'])
+    ? makeValidExtensionSet(settings)
     : { has: () => true } // the set of all elements
 
   return cachedSet
+}
+
+function makeValidExtensionSet(settings) {
+  // start with explicit JS-parsed extensions
+  const exts = new Set(settings['import/extensions'])
+
+  // all alternate parser extensions are also valid
+  if ('import/parsers' in settings) {
+    for (let parser in settings['import/parsers']) {
+      settings['import/parsers'][parser]
+        .forEach(ext => exts.add(ext))
+    }
+  }
+
+  return exts
 }
 
 export default function ignore(path, context) {

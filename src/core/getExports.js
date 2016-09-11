@@ -5,11 +5,15 @@ import * as fs from 'fs'
 import { createHash } from 'crypto'
 import * as doctrine from 'doctrine'
 
+import debug from 'debug'
+
 import parse from './parse'
 import resolve, { relative as resolveRelative } from './resolve'
 import isIgnored, { hasValidExtension } from './ignore'
 
 import { hashObject } from './hash'
+
+const log = debug('eslint-plugin-import:ExportMap')
 
 const exportCache = new Map()
 
@@ -96,8 +100,9 @@ export default class ExportMap {
     var m = new ExportMap(path)
 
     try {
-      var ast = parse(content, context)
+      var ast = parse(path, content, context)
     } catch (err) {
+      log('parse error:', path, err)
       m.errors.push(err)
       return m // can't continue
     }

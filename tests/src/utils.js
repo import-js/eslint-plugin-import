@@ -84,4 +84,8 @@ export const SYNTAX_CASES = [
     code: 'export * from "./issue-370-commonjs-namespace/bar"',
     settings: { 'import/ignore': ['foo'] },
   }),
+
+  test({
+    code: 'import * as a from "./commonjs-namespace/a"; a.b',
+  }),
  ]

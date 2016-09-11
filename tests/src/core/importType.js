@@ -8,6 +8,12 @@ import { testContext } from '../utils'
 describe('importType(name)', function () {
   const context = testContext()
 
+  it("should return 'absolute' for paths starting with a /", function() {
+    expect(importType('/', context)).to.equal('absolute')
+    expect(importType('/path', context)).to.equal('absolute')
+    expect(importType('/some/path', context)).to.equal('absolute')
+  })
+
   it("should return 'builtin' for node.js modules", function() {
     expect(importType('fs', context)).to.equal('builtin')
     expect(importType('path', context)).to.equal('builtin')
@@ -47,7 +53,7 @@ describe('importType(name)', function () {
     expect(importType('./importType/index.js', context)).to.equal('sibling')
   })
 
-  describe("should return 'index' for sibling index file", function() {
+  it("should return 'index' for sibling index file", function() {
     expect(importType('.', context)).to.equal('index')
     expect(importType('./', context)).to.equal('index')
     expect(importType('./index', context)).to.equal('index')
@@ -55,7 +61,8 @@ describe('importType(name)', function () {
   })
 
   it("should return 'unknown' for any unhandled cases", function() {
-    expect(importType('/malformed', context)).to.equal('unknown')
+    expect(importType('@malformed', context)).to.equal('unknown')
+    expect(importType('  /malformed', context)).to.equal('unknown')
     expect(importType('   foo', context)).to.equal('unknown')
   })
 

@@ -10,6 +10,7 @@ ruleTester.run('no-named-as-default-member', rule, {
     test({code: 'import bar from "./bar"; const baz = bar.baz'}),
     test({code: 'import {foo} from "./bar"; const baz = foo.baz;'}),
     test({code: 'import * as named from "./named-exports"; const a = named.a'}),
+    test({code: 'import foo from "./default-export-default-property"; const a = foo.default'}),
 
     ...SYNTAX_CASES,
   ],

@@ -69,6 +69,10 @@ module.exports = function(context) {
       if (fileImport == null) return
 
       lookups.forEach(({propName, node}) => {
+        // the default import can have a "default" property
+        if (propName === 'default') {
+          return
+        }
         if (fileImport.exportMap.namespace.has(propName)) {
           context.report({
             node,
