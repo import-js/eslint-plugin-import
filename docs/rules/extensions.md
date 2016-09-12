@@ -6,9 +6,11 @@ In order to provide a consistent use of file extensions across your code base, t
 
 ## Rule Details
 
-This rule has one option which could be either a string or an object. If it is `"never"` (the default value) the rule forbids the use for any extension. If `"always"` then the rule enforces the use of extensions for all import statements.
+This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements.
 
 By providing an object you can configure each extension separately, so for example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+
+By providing both a string and an object, the string will set the default setting for all extensions, and the object can be used to set granular overrides for specific extensions. For example, `[<enabled>, "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
 ### Exception
 
