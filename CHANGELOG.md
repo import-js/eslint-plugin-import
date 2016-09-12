@@ -299,11 +299,8 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
-<<<<<<< HEAD
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
-=======
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
->>>>>>> tizmagik/feature/max-dependencies
 
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
