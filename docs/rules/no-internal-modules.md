@@ -1,4 +1,4 @@
-# no-reaching-inside
+# no-internal-modules
 
 Use this rule to prevent importing the submodules of other modules.
 
@@ -32,7 +32,7 @@ And the .eslintrc file:
 {
   ...
   "rules": {
-    "import/no-reaching-inside": [ "error", {
+    "import/no-internal-modules": [ "error", {
       "allow": [ "**/actions/*", "source-map-support/*" ]
     } ]
   }
