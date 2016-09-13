@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+
+## 0.6.0 - 2016-09-13
 ### Added
 - support for config-as-function ([#533], thanks [@grahamb])
 
