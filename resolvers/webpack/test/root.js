@@ -24,4 +24,13 @@ describe("root", function () {
       .property('path')
       .to.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'))
   })
+  it("supports definition as a function", function () {
+    expect(resolve('main-module', file, { config: "webpack.function.config.js" }))
+      .property('path')
+      .to.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
+    expect(resolve('typeahead', file, { config: "webpack.function.config.js" }))
+      .property('path')
+      .to.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'))
+  })
+
 })
