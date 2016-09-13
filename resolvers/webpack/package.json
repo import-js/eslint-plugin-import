@@ -7,6 +7,10 @@
     "test": "nyc mocha -t 5s",
     "report": "nyc report --reporter=html"
   },
+  "files": [
+    "index.js",
+    "config.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benmosher/eslint-plugin-import.git"
