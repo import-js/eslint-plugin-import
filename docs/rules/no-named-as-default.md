@@ -39,6 +39,8 @@ export bar from './foo.js';
 
 ## Further Reading
 
-- Lee Byron's [ES7] export proposal
+- ECMAScript Proposal: export ns from
+- ECMAScript Proposal: export default from
 
-[ES7]: https://github.com/leebyron/ecmascript-more-export-from
+[export-ns-from]: https://github.com/leebyron/ecmascript-export-ns-from
+[export-default-from]: https://github.com/leebyron/ecmascript-export-default-from
