@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Added
+- New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
 
 ## [1.15.0] - 2016-09-12
 ### Added
@@ -301,6 +302,7 @@ for info on changes for earlier releases.
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
@@ -309,6 +311,7 @@ for info on changes for earlier releases.
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
 [#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
+[#485]: https://github.com/benmosher/eslint-plugin-import/pull/485
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -445,3 +448,4 @@ for info on changes for earlier releases.
 [@wKich]: https://github.com/wKich
 [@tizmagik]: https://github.com/tizmagik
 [@knpwrs]: https://github.com/knpwrs
+[@spalger]: https://github.com/spalger
