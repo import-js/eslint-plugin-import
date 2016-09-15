@@ -19,12 +19,14 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure a default export is present, given a default import. ([`default`])
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])
 * Restrict which files can be imported in a given folder ([`no-restricted-paths`])
+* Forbid import of modules using absolute paths ([`no-absolute-path`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
 [`default`]: ./docs/rules/default.md
 [`namespace`]: ./docs/rules/namespace.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 
 **Helpful warnings:**
 
@@ -55,6 +57,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-amd`]: ./docs/rules/no-amd.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
+
 **Style guide:**
 
 * Ensure all imports appear before other statements ([`first`])
@@ -64,6 +67,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Enforce a convention in module import order ([`order`])
 * Enforce a newline after import statements ([`newline-after-import`])
 * Prefer a default export if module exports a single name ([`prefer-default-export`])
+* Limit the maximum number of dependencies a module can have. ([`max-dependencies`])
 
 [`first`]: ./docs/rules/first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
@@ -72,7 +76,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`order`]: ./docs/rules/order.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
-
+[`max-dependencies`]: ./docs/rules/max-dependencies.md
 
 ## Installation
 

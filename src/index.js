@@ -8,6 +8,7 @@ export const rules = {
   'no-mutable-exports': require('./rules/no-mutable-exports'),
   'extensions': require('./rules/extensions'),
   'no-restricted-paths': require('./rules/no-restricted-paths'),
+  'no-internal-modules': require('./rules/no-internal-modules'),
 
   'no-named-as-default': require('./rules/no-named-as-default'),
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
@@ -16,7 +17,9 @@ export const rules = {
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
   'first': require('./rules/first'),
+  'max-dependencies': require('./rules/max-dependencies'),
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
+  'no-absolute-path': require('./rules/no-absolute-path'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),

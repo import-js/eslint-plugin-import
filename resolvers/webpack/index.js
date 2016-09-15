@@ -68,6 +68,10 @@ exports.resolve = function (source, file, settings) {
     webpackConfig = {}
   }
 
+  if (typeof webpackConfig === 'function') {
+    webpackConfig = webpackConfig()
+  }
+
   if (webpackConfig && webpackConfig.default) {
     log('Using ES6 module "default" key instead of module.exports.')
     webpackConfig = webpackConfig.default

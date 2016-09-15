@@ -1,6 +1,5 @@
 import * as path from 'path'
 
-import assign from 'object-assign'
 import { test, SYNTAX_CASES } from '../utils'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
@@ -14,7 +13,7 @@ function runResolverTests(resolver) {
   // redefine 'test' to set a resolver
   // thus 'rest'. needed something 4-chars-long for formatting simplicity
   function rest(specs) {
-    specs.settings = assign({},
+    specs.settings = Object.assign({},
       specs.settings,
       { 'import/resolver': resolver }
     )

@@ -19,10 +19,17 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased] v1
 ### Added
+- New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
+
+## [1.15.0] - 2016-09-12
+### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
+- Added [`no-absolute-path`] rule ([#530], [#538])
+- [`max-dependencies`] for specifying the maximum number of dependencies (both `import` and `require`) a module can have. (see [#489], thanks [@tizmagik])
+- Added glob option to config for [`no-extraneous-dependencies`], after much bikeshedding. Thanks, [@knpwrs]! ([#527])
 
 ### Fixed
-- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], thanks [@jquense])
+- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
 
 ## [1.14.0] - 2016-08-22
 ### Added
@@ -311,10 +318,18 @@ for info on changes for earlier releases.
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`no-absolute-path`]: ./docs/rules/no-absolute-path.md
+[`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 
+[#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
+[#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
+[#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
+[#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
+[#485]: https://github.com/benmosher/eslint-plugin-import/pull/485
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -351,6 +366,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
@@ -390,7 +406,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.11.1...v1.12.0
@@ -450,3 +467,6 @@ for info on changes for earlier releases.
 [@zloirock]: https://github.com/zloirock
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@wKich]: https://github.com/wKich
+[@tizmagik]: https://github.com/tizmagik
+[@knpwrs]: https://github.com/knpwrs
+[@spalger]: https://github.com/spalger
