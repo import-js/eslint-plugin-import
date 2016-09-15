@@ -9,36 +9,38 @@ import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisi
 
 
 
-exports.meta = {
-  schema: [ makeOptionsSchema({
-    caseSensitive: { type: 'boolean', default: true },
-  })],
-}
+module.exports = {
+  meta: {
+    schema: [ makeOptionsSchema({
+      caseSensitive: { type: 'boolean', default: true },
+    })],
+  },
 
-exports.create = function (context) {
+  create: function (context) {
 
-  function checkSourceValue(source) {
-    const shouldCheckCase = !CASE_SENSITIVE_FS &&
-      (!context.options[0] || context.options[0].caseSensitive !== false)
+    function checkSourceValue(source) {
+      const shouldCheckCase = !CASE_SENSITIVE_FS &&
+        (!context.options[0] || context.options[0].caseSensitive !== false)
 
-    const resolvedPath = resolve(source.value, context)
+      const resolvedPath = resolve(source.value, context)
 
-    if (resolvedPath === undefined) {
-      context.report(source,
-        `Unable to resolve path to module '${source.value}'.`)
-    }
-
-    else if (shouldCheckCase) {
-      const cacheSettings = ModuleCache.getSettings(context.settings)
-      if (!fileExistsWithCaseSync(resolvedPath, cacheSettings)) {
+      if (resolvedPath === undefined) {
         context.report(source,
-          `Casing of ${source.value} does not match the underlying filesystem.`)
+          `Unable to resolve path to module '${source.value}'.`)
       }
 
+      else if (shouldCheckCase) {
+        const cacheSettings = ModuleCache.getSettings(context.settings)
+        if (!fileExistsWithCaseSync(resolvedPath, cacheSettings)) {
+          context.report(source,
+            `Casing of ${source.value} does not match the underlying filesystem.`)
+        }
+
+      }
     }
-  }
 
-  return moduleVisitor(checkSourceValue, context.options[0])
+    return moduleVisitor(checkSourceValue, context.options[0])
 
+  },
 }
 

@@ -10,25 +10,31 @@ function checkImports(imported, context) {
   }
 }
 
-module.exports = function (context) {
-  const imported = new Map()
-  const typesImported = new Map()
-  return {
-    'ImportDeclaration': function (n) {
-      // resolved path will cover aliased duplicates
-      const resolvedPath = resolve(n.source.value, context) || n.source.value
-      const importMap = n.importKind === 'type' ? typesImported : imported
+module.exports = {
+  meta: {
+    docs: {},
+  },
 
-      if (importMap.has(resolvedPath)) {
-        importMap.get(resolvedPath).add(n.source)
-      } else {
-        importMap.set(resolvedPath, new Set([n.source]))
-      }
-    },
+  create: function (context) {
+    const imported = new Map()
+    const typesImported = new Map()
+    return {
+      'ImportDeclaration': function (n) {
+        // resolved path will cover aliased duplicates
+        const resolvedPath = resolve(n.source.value, context) || n.source.value
+        const importMap = n.importKind === 'type' ? typesImported : imported
 
-    'Program:exit': function () {
-      checkImports(imported, context)
-      checkImports(typesImported, context)
-    },
-  }
+        if (importMap.has(resolvedPath)) {
+          importMap.get(resolvedPath).add(n.source)
+        } else {
+          importMap.set(resolvedPath, new Set([n.source]))
+        }
+      },
+
+      'Program:exit': function () {
+        checkImports(imported, context)
+        checkImports(typesImported, context)
+      },
+    }
+  },
 }
