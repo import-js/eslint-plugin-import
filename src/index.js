@@ -8,6 +8,7 @@ export const rules = {
   'no-mutable-exports': require('./rules/no-mutable-exports'),
   'extensions': require('./rules/extensions'),
   'no-restricted-paths': require('./rules/no-restricted-paths'),
+  'no-internal-modules': require('./rules/no-internal-modules'),
 
   'no-named-as-default': require('./rules/no-named-as-default'),
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
