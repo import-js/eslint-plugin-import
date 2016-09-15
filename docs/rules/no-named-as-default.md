@@ -27,7 +27,7 @@ import foo from './foo.js';
 import bar from './foo.js';
 ```
 
-For [ES7], this also prevents exporting the default from a referenced module as a name within than module, for the same reasons:
+For post-ES2015 `export` extensions, this also prevents exporting the default from a referenced module as a name within than module, for the same reasons:
 
 ```js
 // valid:
@@ -39,8 +39,8 @@ export bar from './foo.js';
 
 ## Further Reading
 
-- ECMAScript Proposal: export ns from
-- ECMAScript Proposal: export default from
+- ECMAScript Proposal: [export ns from]
+- ECMAScript Proposal: [export default from]
 
-[export-ns-from]: https://github.com/leebyron/ecmascript-export-ns-from
-[export-default-from]: https://github.com/leebyron/ecmascript-export-default-from
+[export ns from]: https://github.com/leebyron/ecmascript-export-ns-from
+[export default from]: https://github.com/leebyron/ecmascript-export-default-from
