@@ -50,7 +50,7 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-register": "6.9.0",
     "chai": "^3.4.0",
-    "coveralls": "^2.11.4",
+    "coveralls": "^2.11.12",
     "cross-env": "^2.0.0",
     "eslint": "2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
