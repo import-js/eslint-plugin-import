@@ -1,22 +1,27 @@
 import path from 'path'
 import endsWith from 'lodash.endswith'
+import has from 'has'
+import assign from 'object-assign'
 
 import resolve from '../core/resolve'
 import { isBuiltIn } from '../core/importType'
 
-const has = Object.prototype.hasOwnProperty;
-
 module.exports = function (context) {
   const configuration = context.options[0] || 'never'
   const defaultConfig = typeof configuration === 'string' ? configuration : null
-  const modifiers = typeof configuration === 'object' ? configuration : context.options[1] || {}
+  const modifiers = assign(
+    {},
+    typeof configuration === 'object' ? configuration : context.options[1]
+  )
 
   function isUseOfExtensionRequired(extension) {
-    return (has.call(modifiers, extension) || defaultConfig) === 'always'
+    if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
+    return modifiers[extension] === 'always'
   }
 
   function isUseOfExtensionForbidden(extension) {
-    return (has.call(modifiers, extension) || defaultConfig) === 'never'
+    if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
+    return modifiers[extension] === 'never'
   }
 
   function isResolvableWithoutExtension(file) {
