@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Added
+- New rule [`no-dynamic-require`]: restrict deep package imports to specific folders. ([#567])
 - New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
 - [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
 
@@ -311,7 +312,9 @@ for info on changes for earlier releases.
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
+[`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 
+[#567]: https://github.com/benmosher/eslint-plugin-import/pull/567
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
