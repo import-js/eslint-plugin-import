@@ -66,6 +66,27 @@ ruleTester.run('default', rule, {
       parser: 'babel-eslint',
     }),
 
+    // #545: more ES7 cases
+    test({
+      code: "import bar from './default-export-from.js';",
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: "import bar from './default-export-from-named.js';",
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: "import bar from './default-export-from-ignored.js';",
+      settings: { 'import/ignore': ['common'] },
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: "export bar from './default-export-from-ignored.js';",
+      settings: { 'import/ignore': ['common'] },
+      parser: 'babel-eslint',
+    }),
+
+
     ...SYNTAX_CASES,
   ],
 
