@@ -17,6 +17,10 @@ ruleTester.run('no-named-as-default', rule, {
     test({ code: 'export bar from "./bar";'
          , parser: 'babel-eslint' }),
 
+    // #566: don't false-positive on `default` itself
+    test({ code: 'export default from "./bar";'
+         , parser: 'babel-eslint' }),
+
     ...SYNTAX_CASES,
   ],
 

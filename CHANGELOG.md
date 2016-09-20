@@ -8,6 +8,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
 - [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
 
+### Fixed
+- [`no-named-as-default`] no longer false-positive's on `export default from '...'`
+  ([#566], thanks [@preco21])
+
 ## [1.15.0] - 2016-09-12
 ### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
@@ -288,6 +292,7 @@ for info on changes for earlier releases.
 [`no-amd`]: ./docs/rules/no-amd.md
 [`namespace`]: ./docs/rules/namespace.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
+[`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`extensions`]: ./docs/rules/extensions.md
@@ -350,6 +355,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
@@ -451,3 +457,4 @@ for info on changes for earlier releases.
 [@tizmagik]: https://github.com/tizmagik
 [@knpwrs]: https://github.com/knpwrs
 [@spalger]: https://github.com/spalger
+[@preco21]: https://github.com/preco21
