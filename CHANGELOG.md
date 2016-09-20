@@ -11,6 +11,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`no-named-as-default`] no longer false-positive's on `export default from '...'`
   ([#566], thanks [@preco21])
+- [`default`]: allow re-export of values from ignored files as default
+  ([#545], thanks [@skyrpex])
 
 ## [1.15.0] - 2016-09-12
 ### Added
@@ -356,6 +358,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
+[#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
@@ -458,3 +461,4 @@ for info on changes for earlier releases.
 [@knpwrs]: https://github.com/knpwrs
 [@spalger]: https://github.com/spalger
 [@preco21]: https://github.com/preco21
+[@skyrpex]: https://github.com/skyrpex
