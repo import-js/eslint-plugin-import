@@ -1,18 +1,27 @@
 import path from 'path'
 import endsWith from 'lodash.endswith'
+import has from 'has'
+import assign from 'object-assign'
 
 import resolve from '../core/resolve'
 import { isBuiltIn } from '../core/importType'
 
 module.exports = function (context) {
   const configuration = context.options[0] || 'never'
+  const defaultConfig = typeof configuration === 'string' ? configuration : null
+  const modifiers = assign(
+    {},
+    typeof configuration === 'object' ? configuration : context.options[1]
+  )
 
-  function isUseOfExtensionEnforced(extension) {
-    if (typeof configuration === 'object') {
-      return configuration[extension] === 'always'
-    }
+  function isUseOfExtensionRequired(extension) {
+    if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
+    return modifiers[extension] === 'always'
+  }
 
-    return configuration === 'always'
+  function isUseOfExtensionForbidden(extension) {
+    if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
+    return modifiers[extension] === 'never'
   }
 
   function isResolvableWithoutExtension(file) {
@@ -37,7 +46,7 @@ module.exports = function (context) {
     const extension = path.extname(resolvedPath || importPath).substring(1)
 
     if (!extension || !endsWith(importPath, extension)) {
-      if (isUseOfExtensionEnforced(extension)) {
+      if (isUseOfExtensionRequired(extension) && !isUseOfExtensionForbidden(extension)) {
         context.report({
           node: source,
           message:
@@ -45,7 +54,7 @@ module.exports = function (context) {
         })
       }
     } else if (extension) {
-      if (!isUseOfExtensionEnforced(extension) && isResolvableWithoutExtension(importPath)) {
+      if (isUseOfExtensionForbidden(extension) && isResolvableWithoutExtension(importPath)) {
         context.report({
           node: source,
           message: `Unexpected use of file extension "${extension}" for "${importPath}"`,
@@ -59,18 +68,31 @@ module.exports = function (context) {
   }
 }
 
-module.exports.schema = [
-  {
-    oneOf: [
-      {
-        enum: [ 'always', 'never' ],
-      },
-      {
-        type: 'object',
-        patternProperties: {
-          '.*': { enum: [ 'always', 'never' ] },
-        },
-      },
-    ],
-  },
-]
+const enumValues = { enum: [ 'always', 'never' ] }
+const patternProperties = {
+  type: 'object',
+  patternProperties: { '.*': enumValues },
+}
+
+module.exports.schema = {
+  anyOf: [
+    {
+      type: 'array',
+      items: [enumValues],
+      additionalItems: false,
+    },
+    {
+      type: 'array',
+      items: [patternProperties],
+      additionalItems: false,
+    },
+    {
+      type: 'array',
+      items: [
+        enumValues,
+        patternProperties,
+      ],
+      additionalItems: false,
+    },
+  ],
+}

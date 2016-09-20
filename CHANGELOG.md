@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
+- [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
 
 ## [1.15.0] - 2016-09-12
 ### Added
@@ -304,6 +305,7 @@ for info on changes for earlier releases.
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 
+[#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
