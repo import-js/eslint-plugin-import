@@ -185,7 +185,8 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     new ModuleAliasPlugin(resolveConfig.alias || {}),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
     new ModulesInDirectoriesPlugin(
-      'module', resolveConfig.modulesDirectories || ['web_modules', 'node_modules']
+      'module',
+      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules']
     ),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.fallback),
     new ModuleAsFilePlugin('module'),

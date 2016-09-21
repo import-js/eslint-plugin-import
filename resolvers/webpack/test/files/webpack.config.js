@@ -7,6 +7,12 @@ module.exports = {
       'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
       'some-alias': path.join(__dirname, 'some'),
     },
+    modules: [
+      path.join(__dirname, 'src'),
+      path.join(__dirname, 'fallback'),
+      'node_modules',
+      'bower_components',
+    ],
     modulesDirectories: ['node_modules', 'bower_components'],
     root: path.join(__dirname, 'src'),
     fallback: path.join(__dirname, 'fallback'),
