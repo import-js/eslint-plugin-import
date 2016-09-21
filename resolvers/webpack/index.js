@@ -191,7 +191,8 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     new ModuleAsFilePlugin('module'),
     new ModuleAsDirectoryPlugin('module'),
     new DirectoryDescriptionFilePlugin(
-      'package.json', ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
+      'package.json',
+      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
     ),
     new DirectoryDefaultFilePlugin(['index']),
     new FileAppendPlugin(resolveConfig.extensions || ['', '.webpack.js', '.web.js', '.js']),

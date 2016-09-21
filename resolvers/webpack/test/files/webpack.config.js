@@ -5,7 +5,7 @@ module.exports = {
   resolve: {
     alias: {
       'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
-      'some-alias': path.join(__dirname, 'some')
+      'some-alias': path.join(__dirname, 'some'),
     },
     modulesDirectories: ['node_modules', 'bower_components'],
     root: path.join(__dirname, 'src'),
