@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
   ([#566], thanks [@preco21])
 - [`default`]: allow re-export of values from ignored files as default
   ([#545], thanks [@skyrpex])
+- Added `resolve.modules` to configs for webpack2 support ([#569])
 
 ## [1.15.0] - 2016-09-12
 ### Added
