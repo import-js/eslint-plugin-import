@@ -8,15 +8,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [1.16.0] - 2016-09-22
 ### Added
-- New rule [`no-dynamic-require`]: restrict deep package imports to specific folders. ([#567])
-- New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
+- Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568])
+- Added [`no-internal-modules`] rule: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
 - [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
 
 ### Fixed
-- [`no-named-as-default`] no longer false-positive's on `export default from '...'`
-  ([#566], thanks [@preco21])
-- [`default`]: allow re-export of values from ignored files as default
-  ([#545], thanks [@skyrpex])
+- [`no-named-as-default`] no longer false-positives on `export default from '...'` ([#566], thanks [@preco21])
+- [`default`]: allow re-export of values from ignored files as default ([#545], thanks [@skyrpex])
 
 ## [1.15.0] - 2016-09-12
 ### Added
@@ -26,7 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added glob option to config for [`no-extraneous-dependencies`], after much bikeshedding. Thanks, [@knpwrs]! ([#527])
 
 ### Fixed
-- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
+- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], [#508], thanks [@jquense] for both!)
 
 ## [1.14.0] - 2016-08-22
 ### Added
@@ -317,7 +315,7 @@ for info on changes for earlier releases.
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 
-[#567]: https://github.com/benmosher/eslint-plugin-import/pull/567
+[#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
@@ -363,6 +361,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
