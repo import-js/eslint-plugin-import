@@ -20,6 +20,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])
 * Restrict which files can be imported in a given folder ([`no-restricted-paths`])
 * Forbid import of modules using absolute paths ([`no-absolute-path`])
+* Forbid `require()` calls with expressions ([`no-dynamic-require`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -27,6 +28,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`namespace`]: ./docs/rules/namespace.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
+[`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 
 **Helpful warnings:**
 
