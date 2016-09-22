@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [1.16.0] - 2016-09-22
 ### Added
 - New rule [`no-dynamic-require`]: restrict deep package imports to specific folders. ([#567])
 - New rule [`no-internal-modules`]: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
@@ -399,7 +402,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
