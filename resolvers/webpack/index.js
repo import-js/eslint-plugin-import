@@ -52,30 +52,37 @@ exports.resolve = function (source, file, settings) {
 
   log('Config path from settings:', configPath)
 
-  // see if we've got an absolute path
-  if (!configPath || !isAbsolute(configPath)) {
-    // if not, find ancestral package.json and use its directory as base for the path
-    packageDir = findRoot(path.resolve(file))
-    if (!packageDir) throw new Error('package not found above ' + file)
-  }
+  // see if we've got a config path, a config object, an array of config objects or a config function
+  if (!configPath || typeof configPath === 'string') {
 
-  configPath = findConfigPath(configPath, packageDir)
+      // see if we've got an absolute path
+      if (!configPath || !isAbsolute(configPath)) {
+        // if not, find ancestral package.json and use its directory as base for the path
+        packageDir = findRoot(path.resolve(file))
+        if (!packageDir) throw new Error('package not found above ' + file)
+      }
 
-  log('Config path resolved to:', configPath)
-  if (configPath) {
-    webpackConfig = require(configPath)
+      configPath = findConfigPath(configPath, packageDir)
+
+      log('Config path resolved to:', configPath)
+      if (configPath) {
+        webpackConfig = require(configPath)
+      } else {
+        log("No config path found relative to", file, "; using {}")
+        webpackConfig = {}
+      }
+
+      if (webpackConfig && webpackConfig.default) {
+        log('Using ES6 module "default" key instead of module.exports.')
+        webpackConfig = webpackConfig.default
+      }
+
   } else {
-    log("No config path found relative to", file, "; using {}")
-    webpackConfig = {}
+    webpackConfig = configPath
   }
 
   if (typeof webpackConfig === 'function') {
     webpackConfig = webpackConfig()
-  }
-
-  if (webpackConfig && webpackConfig.default) {
-    log('Using ES6 module "default" key instead of module.exports.')
-    webpackConfig = webpackConfig.default
   }
 
   if (Array.isArray(webpackConfig)) {
