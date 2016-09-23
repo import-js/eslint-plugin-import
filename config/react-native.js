@@ -6,7 +6,7 @@ module.exports = {
     'import/resolver': {
       node: {
         // Note: will not complain if only _one_ of these files exists.
-        extensions: ['.js', '.ios.js', '.android.js'],
+        extensions: ['.js', '.web.js', '.ios.js', '.android.js'],
       },
     },
   },
