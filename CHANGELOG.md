@@ -6,6 +6,16 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
+## [1.16.0] - 2016-09-22
+### Added
+- Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568])
+- Added [`no-internal-modules`] rule: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
+- [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
+
+### Fixed
+- [`no-named-as-default`] no longer false-positives on `export default from '...'` ([#566], thanks [@preco21])
+- [`default`]: allow re-export of values from ignored files as default ([#545], thanks [@skyrpex])
+
 ## [1.15.0] - 2016-09-12
 ### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
@@ -14,7 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Added glob option to config for [`no-extraneous-dependencies`], after much bikeshedding. Thanks, [@knpwrs]! ([#527])
 
 ### Fixed
-- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507]+[#508], thanks [@jquense] for both!)
+- [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], [#508], thanks [@jquense] for both!)
 
 ## [1.14.0] - 2016-08-22
 ### Added
@@ -286,6 +296,7 @@ for info on changes for earlier releases.
 [`no-amd`]: ./docs/rules/no-amd.md
 [`namespace`]: ./docs/rules/namespace.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
+[`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`extensions`]: ./docs/rules/extensions.md
@@ -301,7 +312,11 @@ for info on changes for earlier releases.
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`no-internal-modules`]: ./docs/rules/no-internal-modules.md
+[`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 
+[#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
+[#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
@@ -309,6 +324,7 @@ for info on changes for earlier releases.
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
 [#499]: https://github.com/benmosher/eslint-plugin-import/pull/499
 [#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
+[#485]: https://github.com/benmosher/eslint-plugin-import/pull/485
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
@@ -345,6 +361,9 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
+[#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
+[#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
@@ -382,7 +401,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...HEAD
+[1.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.12.0...v1.13.0
@@ -445,3 +465,6 @@ for info on changes for earlier releases.
 [@wKich]: https://github.com/wKich
 [@tizmagik]: https://github.com/tizmagik
 [@knpwrs]: https://github.com/knpwrs
+[@spalger]: https://github.com/spalger
+[@preco21]: https://github.com/preco21
+[@skyrpex]: https://github.com/skyrpex

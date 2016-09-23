@@ -3,6 +3,9 @@ import importDeclaration from '../importDeclaration'
 
 module.exports = function (context) {
   function checkDefault(nameKey, defaultSpecifier) {
+    // #566: default is a valid specifier
+    if (defaultSpecifier[nameKey].name === 'default') return
+
     var declaration = importDeclaration(context)
 
     var imports = Exports.get(declaration.source.value, context)

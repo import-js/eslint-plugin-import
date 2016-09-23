@@ -1,12 +1,16 @@
 {
   "name": "eslint-import-resolver-webpack",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha -t 5s",
     "report": "nyc report --reporter=html"
   },
+  "files": [
+    "index.js",
+    "config.js"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benmosher/eslint-plugin-import.git"

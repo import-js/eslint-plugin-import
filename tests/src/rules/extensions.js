@@ -33,6 +33,25 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
     }),
 
+    test({
+      code: [
+        'import lib from "./bar"',
+        'import lib from "./bar.json"',
+        'import lib from "./bar.hbs"',
+      ].join('\n'),
+      options: [ 'always', { js: 'never', jsx: 'never' } ],
+      settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json', '.hbs' ] } },
+    }),
+
+    test({
+      code: [
+        'import lib from "./bar.js"',
+        'import lib from "./package"',
+      ].join('\n'),
+      options: [ 'never', { js: 'always', json: 'never' } ],
+      settings: { 'import/resolve': { 'extensions': [ '.js', '.json' ] } },
+    }),
+
     // unresolved (#271/#295)
     test({ code: 'import path from "path"' }),
     test({ code: 'import path from "path"', options: [ 'never' ] }),
@@ -114,6 +133,40 @@ ruleTester.run('extensions', rule, {
         'import data from "./bar.json"',
       ].join('\n'),
       options: [ { json: 'always', js: 'never', jsx: 'never' } ],
+      settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
+      errors: [
+        {
+            message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 17,
+        },
+      ],
+    }),
+
+    test({
+      code: [
+        'import lib from "./bar.js"',
+        'import lib from "./bar.json"',
+        'import lib from "./bar"',
+      ].join('\n'),
+      options: [ 'always', { json: 'always', js: 'never', jsx: 'never' } ],
+      settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
+      errors: [
+        {
+            message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 17,
+        },
+      ],
+    }),
+
+    test({
+      code: [
+        'import lib from "./bar.js"',
+        'import lib from "./bar.json"',
+        'import lib from "./bar"',
+      ].join('\n'),
+      options: [ 'never', { json: 'always', js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
         {

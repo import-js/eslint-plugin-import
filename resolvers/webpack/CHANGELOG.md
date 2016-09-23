@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+
+## 0.6.0 - 2016-09-13
+### Added
+- support for config-as-function ([#533], thanks [@grahamb])
+
 ## 0.5.1 - 2016-08-11
 ### Fixed
 - don't throw and die if no webpack config is found
@@ -58,6 +63,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#533]: https://github.com/benmosher/eslint-plugin-import/pull/533
 [#413]: https://github.com/benmosher/eslint-plugin-import/pull/413
 [#377]: https://github.com/benmosher/eslint-plugin-import/pull/377
 [#363]: https://github.com/benmosher/eslint-plugin-import/pull/363
@@ -82,3 +88,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@Satyam]: https://github.com/Satyam
 [@Rogeres]: https://github.com/Rogeres
 [@Kovensky]: https://github.com/Kovensky
+[@grahamb]: https://github.com/grahamb

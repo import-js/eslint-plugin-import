@@ -19,7 +19,7 @@ module.exports = function (context) {
 
     if (imports.errors.length) {
       imports.reportErrors(context, node)
-    } else if (!imports.get('default')) {
+    } else if (imports.get('default') === undefined) {
       context.report(defaultSpecifier, 'No default export found in module.')
     }
   }

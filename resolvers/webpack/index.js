@@ -10,6 +10,7 @@ var findRoot = require('find-root')
   , assign = require('object-assign')
   , resolve = require('resolve')
   , semver = require('semver')
+  , has = require('has')
 
 var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
@@ -66,6 +67,10 @@ exports.resolve = function (source, file, settings) {
   } else {
     log("No config path found relative to", file, "; using {}")
     webpackConfig = {}
+  }
+
+  if (typeof webpackConfig === 'function') {
+    webpackConfig = webpackConfig()
   }
 
   if (webpackConfig && webpackConfig.default) {
@@ -261,7 +266,7 @@ function findExternal(source, externals, context) {
 
   // else, vanilla object
   for (var key in externals) {
-    if (!externals.hasOwnProperty(key)) continue
+    if (!has(externals, key)) continue
     if (source === key) return true
   }
   return false

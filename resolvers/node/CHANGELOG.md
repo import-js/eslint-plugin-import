@@ -3,6 +3,10 @@ All notable changes to this resolver will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
+## Unreleased
+### Fixed
+- use `files` in `package.json` to ship only `index.js` ([#531], thanks for noticing [@lukeapage])
+
 ## v0.2.3 - 2016-08-20
 ### Added
 - debug logging (use `DEBUG=eslint-plugin-import:resolver:node eslint [...]`)
@@ -22,6 +26,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 [#438]: https://github.com/benmosher/eslint-plugin-import/pull/438
 
+[#531]: https://github.com/benmosher/eslint-plugin-import/issues/531
 [#437]: https://github.com/benmosher/eslint-plugin-import/issues/437
 
 [@jasonkarns]: https://github.com/jasonkarns
+[@lukeapage]: https://github.com/lukeapage

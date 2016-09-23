@@ -3,6 +3,7 @@
   "version": "0.2.3",
   "description": "Node default behavior import resolution plugin for eslint-plugin-import.",
   "main": "index.js",
+  "files": ["index.js"],
   "scripts": {
     "test": "nyc mocha"
   },
