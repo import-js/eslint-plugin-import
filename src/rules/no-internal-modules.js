@@ -54,7 +54,8 @@ module.exports = {
           }
         }, [])
 
-      if (steps.length <= 1) return false
+      const nonScopeSteps = steps.filter(step => step.indexOf('@') !== 0)
+      if (nonScopeSteps.length <= 1) return false
 
       // before trying to resolve, see if the raw import (with relative
       // segments resolved) matches an allowed pattern
