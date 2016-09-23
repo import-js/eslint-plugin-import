@@ -68,6 +68,14 @@ module.exports = {
       }
     }
 
+    let level = 0
+    function incrementLevel() {
+      level++
+    }
+    function decrementLevel() {
+      level--
+    }
+
     return {
       ImportDeclaration: function (node) {
         const { parent } = node
@@ -83,7 +91,7 @@ module.exports = {
       },
       CallExpression: function(node) {
         const scope = context.getScope()
-        if (isStaticRequire(node)) {
+        if (isStaticRequire(node) && level === 0) {
           const currentScope = scopes[scopeIndex]
 
           if (scope === currentScope.scope) {
@@ -127,6 +135,16 @@ module.exports = {
           })
         })
       },
+      FunctionDeclaration: incrementLevel,
+      FunctionExpression: incrementLevel,
+      ArrowFunctionExpression: incrementLevel,
+      BlockStatement: incrementLevel,
+      ObjectExpression: incrementLevel,
+      'FunctionDeclaration:exit': decrementLevel,
+      'FunctionExpression:exit': decrementLevel,
+      'ArrowFunctionExpression:exit': decrementLevel,
+      'BlockStatement:exit': decrementLevel,
+      'ObjectExpression:exit': decrementLevel,
     }
   },
 }
