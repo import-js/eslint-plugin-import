@@ -92,13 +92,13 @@ You can set the options like this:
 "import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```
 
-### `newlines-between: [always|never]`:
+### `newlines-between: [always|ignore|never]`:
 
 
 Enforces or forbids new lines between import groups:
 
-- If omitted, assertion messages will be neither enforced nor forbidden.
-- If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
+- If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used (default).
+- If set to `ignore`, no errors related to new lines between import groups will be reported.
 - If set to `never`, no new lines are allowed in the entire import section.
 
 With the default group setting, the following will be invalid:
