@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
   with some `parserOptions` in the mix. ([#402])
 - `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
 - Added [`no-webpack-loader-syntax`] rule: forbid custom Webpack loader syntax in imports. ([#586], thanks [@fson]!)
+- Add option `newlines-between: "ignore"` to [`order`] ([#519])
 
 ### Breaking
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
@@ -392,6 +393,7 @@ for info on changes for earlier releases.
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
+[#519]: https://github.com/benmosher/eslint-plugin-import/issues/519
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456

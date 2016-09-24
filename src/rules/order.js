@@ -157,7 +157,7 @@ module.exports = {
             type: 'array',
           },
           'newlines-between': {
-            enum: [ 'always', 'never' ],
+            enum: [ 'always', 'ignore', 'never' ],
           },
         },
         additionalProperties: false,
@@ -206,7 +206,7 @@ module.exports = {
       'Program:exit': function reportAndReset() {
         makeOutOfOrderReport(context, imported)
 
-        if ('newlines-between' in options) {
+        if ('newlines-between' in options && options['newlines-between'] !== 'ignore') {
           makeNewlinesBetweenReport(context, imported, options['newlines-between'])
         }
 
