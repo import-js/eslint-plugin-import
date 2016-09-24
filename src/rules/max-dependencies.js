@@ -14,36 +14,42 @@ const countDependencies = (dependencies, lastNode, context) => {
   }
 }
 
-module.exports = context => {
-  const dependencies = new Set() // keep track of dependencies
-  let lastNode // keep track of the last node to report on
+module.exports = {
+  meta: {
+    docs: {},
 
-  return {
-    ImportDeclaration(node) {
-      dependencies.add(node.source.value)
-      lastNode = node.source
-    },
-
-    CallExpression(node) {
-      if (isStaticRequire(node)) {
-        const [ requirePath ] = node.arguments
-        dependencies.add(requirePath.value)
-        lastNode = node
-      }
-    },
-
-    'Program:exit': function () {
-      countDependencies(dependencies, lastNode, context)
-    },
-  }
-}
-
-module.exports.schema = [
-  {
-    'type': 'object',
-    'properties': {
-      'max': { 'type': 'number' },
-    },
-    'additionalProperties': false,
+    schema: [
+      {
+        'type': 'object',
+        'properties': {
+          'max': { 'type': 'number' },
+        },
+        'additionalProperties': false,
+      },
+    ],
   },
-]
+
+  create: context => {
+    const dependencies = new Set() // keep track of dependencies
+    let lastNode // keep track of the last node to report on
+
+    return {
+      ImportDeclaration(node) {
+        dependencies.add(node.source.value)
+        lastNode = node.source
+      },
+
+      CallExpression(node) {
+        if (isStaticRequire(node)) {
+          const [ requirePath ] = node.arguments
+          dependencies.add(requirePath.value)
+          lastNode = node
+        }
+      },
+
+      'Program:exit': function () {
+        countDependencies(dependencies, lastNode, context)
+      },
+    }
+  },
+}

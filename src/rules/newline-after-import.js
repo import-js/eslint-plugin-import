@@ -41,86 +41,92 @@ function getLineDifference(node, nextNode) {
 }
 
 
-module.exports = function (context) {
-  const scopes = []
-  let scopeIndex = 0
+module.exports = {
+  meta: {
+    docs: {},
+  },
 
-  function checkForNewLine(node, nextNode, type) {
-    if (getLineDifference(node, nextNode) < 2) {
-      let column = node.loc.start.column
+  create: function (context) {
+    const scopes = []
+    let scopeIndex = 0
 
-      if (node.loc.start.line !== node.loc.end.line) {
-        column = 0
+    function checkForNewLine(node, nextNode, type) {
+      if (getLineDifference(node, nextNode) < 2) {
+        let column = node.loc.start.column
+
+        if (node.loc.start.line !== node.loc.end.line) {
+          column = 0
+        }
+
+        context.report({
+          loc: {
+            line: node.loc.end.line,
+            column,
+          },
+          message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+        })
       }
-
-      context.report({
-        loc: {
-          line: node.loc.end.line,
-          column,
-        },
-        message: `Expected empty line after ${type} statement not followed by another ${type}.`,
-      })
     }
-  }
 
-  return {
-    ImportDeclaration: function (node) {
-      const { parent } = node
-      const nodePosition = parent.body.indexOf(node)
-      const nextNode = parent.body[nodePosition + 1]
+    return {
+      ImportDeclaration: function (node) {
+        const { parent } = node
+        const nodePosition = parent.body.indexOf(node)
+        const nextNode = parent.body[nodePosition + 1]
 
-      if (nextNode && nextNode.type !== 'ImportDeclaration') {
-        checkForNewLine(node, nextNode, 'import')
-      }
-    },
-    Program: function () {
-      scopes.push({ scope: context.getScope(), requireCalls: [] })
-    },
-    CallExpression: function(node) {
-      const scope = context.getScope()
-      if (isStaticRequire(node)) {
-        const currentScope = scopes[scopeIndex]
-
-        if (scope === currentScope.scope) {
-          currentScope.requireCalls.push(node)
-        } else {
-          scopes.push({ scope, requireCalls: [ node ] })
-          scopeIndex += 1
+        if (nextNode && nextNode.type !== 'ImportDeclaration') {
+          checkForNewLine(node, nextNode, 'import')
         }
-      }
-    },
-    'Program:exit': function () {
-      log('exit processing for', context.getFilename())
-      scopes.forEach(function ({ scope, requireCalls }) {
-        const scopeBody = getScopeBody(scope)
+      },
+      Program: function () {
+        scopes.push({ scope: context.getScope(), requireCalls: [] })
+      },
+      CallExpression: function(node) {
+        const scope = context.getScope()
+        if (isStaticRequire(node)) {
+          const currentScope = scopes[scopeIndex]
 
-        // skip non-array scopes (i.e. arrow function expressions)
-        if (!scopeBody || !(scopeBody instanceof Array)) {
-          log('invalid scope:', scopeBody)
-          return
+          if (scope === currentScope.scope) {
+            currentScope.requireCalls.push(node)
+          } else {
+            scopes.push({ scope, requireCalls: [ node ] })
+            scopeIndex += 1
+          }
         }
+      },
+      'Program:exit': function () {
+        log('exit processing for', context.getFilename())
+        scopes.forEach(function ({ scope, requireCalls }) {
+          const scopeBody = getScopeBody(scope)
 
-        log('got scope:', scopeBody)
-
-        requireCalls.forEach(function (node, index) {
-          const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
-          log('node position in scope:', nodePosition)
-
-          const statementWithRequireCall = scopeBody[nodePosition]
-          const nextStatement = scopeBody[nodePosition + 1]
-          const nextRequireCall = requireCalls[index + 1]
-
-          if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
+          // skip non-array scopes (i.e. arrow function expressions)
+          if (!scopeBody || !(scopeBody instanceof Array)) {
+            log('invalid scope:', scopeBody)
             return
           }
 
-          if (nextStatement &&
-             (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
+          log('got scope:', scopeBody)
 
-            checkForNewLine(statementWithRequireCall, nextStatement, 'require')
-          }
+          requireCalls.forEach(function (node, index) {
+            const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
+            log('node position in scope:', nodePosition)
+
+            const statementWithRequireCall = scopeBody[nodePosition]
+            const nextStatement = scopeBody[nodePosition + 1]
+            const nextRequireCall = requireCalls[index + 1]
+
+            if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
+              return
+            }
+
+            if (nextStatement &&
+               (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
+
+              checkForNewLine(statementWithRequireCall, nextStatement, 'require')
+            }
+          })
         })
-      })
-    },
-  }
+      },
+    }
+  },
 }

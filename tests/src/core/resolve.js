@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 
-import resolve, { CASE_SENSITIVE_FS } from 'core/resolve'
+import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve'
+import ModuleCache from 'eslint-module-utils/ModuleCache'
 
 import * as fs from 'fs'
 import * as utils from '../utils'
@@ -26,22 +27,37 @@ describe('resolve', function () {
     expect(file).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'))
   })
 
-  it('should test case sensitivity', function () {
-    // Note the spelling error 'MyUncoolComponent' vs 'MyUnCoolComponent'
-    var file = resolve( './jsx/MyUncoolComponent'
-                      , utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
-                      )
-
-    expect(file, 'path to ./jsx/MyUncoolComponent').to.be.undefined
+  const caseDescribe = (!CASE_SENSITIVE_FS ? describe : describe.skip)
+  caseDescribe('case sensitivity', function () {
+    let file
+    const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
+    before('resolve', function () {
+      file = resolve(
+      // Note the case difference 'MyUncoolComponent' vs 'MyUnCoolComponent'
+        './jsx/MyUncoolComponent', testContext)
+    })
+    it('resolves regardless of case', function () {
+      expect(file, 'path to ./jsx/MyUncoolComponent').to.exist
+    })
+    it('detects case does not match FS', function () {
+      expect(fileExistsWithCaseSync(file, ModuleCache.getSettings(testContext)))
+        .to.be.false
+    })
   })
 
-  describe('case cache correctness', function () {
+  describe('rename cache correctness', function () {
     const context = utils.testContext({
       'import/cache': { 'lifetime': 1 },
     })
 
+    const infiniteContexts = [ '∞', 'Infinity' ].map(inf => [inf,
+      utils.testContext({
+        'import/cache': { 'lifetime': inf },
+      })])
+
+
     const pairs = [
-      ['./CaseyKasem.js', './CASEYKASEM.js'],
+      ['./CaseyKasem.js', './CASEYKASEM2.js'],
     ]
 
     pairs.forEach(([original, changed]) => {
@@ -50,6 +66,13 @@ describe('resolve', function () {
         before('sanity check', function () {
           expect(resolve(original, context)).to.exist
           expect(resolve(changed, context)).not.to.exist
+        })
+
+        // settings are part of cache key
+        before('warm up infinite entries', function () {
+          infiniteContexts.forEach(([,c]) => {
+            expect(resolve(original, c)).to.exist
+          })
         })
 
         before('rename', function (done) {
@@ -64,33 +87,29 @@ describe('resolve', function () {
             utils.testFilePath(changed),
             exists => done(exists ? null : new Error('new file does not exist'))))
 
-        // these tests fail on a case-sensitive file system
-        // because nonexistent files aren't cached
-        if (!CASE_SENSITIVE_FS) {
-          it('gets cached values within cache lifetime', function () {
-            // get cached values initially
-            expect(resolve(original, context)).to.exist
-            expect(resolve(changed, context)).not.to.exist
-          })
+        it('gets cached values within cache lifetime', function () {
+          // get cached values initially
+          expect(resolve(original, context)).to.exist
+        })
 
-          // special behavior for infinity
-          describe('infinite cache', function () {
-            this.timeout(1200)
-            before((done) => setTimeout(done, 1100))
+        it('gets updated values immediately', function () {
+          // get cached values initially
+          expect(resolve(changed, context)).to.exist
+        })
 
-            const lifetimes = [ '∞', 'Infinity' ]
-            lifetimes.forEach(inf => {
-              const infiniteContext =  utils.testContext({
-                'import/cache': { 'lifetime': inf },
-              })
+        // special behavior for infinity
+        describe('infinite cache', function () {
+          this.timeout(1500)
 
-              it(`lifetime: ${inf} still gets cached values after ~1s`, function () {
-                expect(resolve(original, infiniteContext)).to.exist
-                expect(resolve(changed, infiniteContext)).not.to.exist
-              })
+          before((done) => setTimeout(done, 1100))
+
+          infiniteContexts.forEach(([inf, infiniteContext]) => {
+            it(`lifetime: ${inf} still gets cached values after ~1s`, function () {
+              expect(resolve(original, infiniteContext), original).to.exist
             })
           })
-        }
+
+        })
 
         describe('finite cache', function () {
           this.timeout(1200)

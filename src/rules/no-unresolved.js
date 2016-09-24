@@ -3,100 +3,44 @@
  * @author Ben Mosher
  */
 
-import resolve from '../core/resolve'
+import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve'
+import ModuleCache from 'eslint-module-utils/ModuleCache'
+import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 
-module.exports = function (context) {
 
-  let ignoreRegExps = []
-  if (context.options[0] != null && context.options[0].ignore != null) {
-    ignoreRegExps = context.options[0].ignore.map(p => new RegExp(p))
-  }
 
-  function checkSourceValue(source) {
-    if (source == null) return
+module.exports = {
+  meta: {
+    schema: [ makeOptionsSchema({
+      caseSensitive: { type: 'boolean', default: true },
+    })],
+  },
 
-    if (ignoreRegExps.some(re => re.test(source.value))) return
+  create: function (context) {
 
-    if (resolve(source.value, context) === undefined) {
-      context.report(source,
-        'Unable to resolve path to module \'' + source.value + '\'.')
-    }
-  }
+    function checkSourceValue(source) {
+      const shouldCheckCase = !CASE_SENSITIVE_FS &&
+        (!context.options[0] || context.options[0].caseSensitive !== false)
 
-  // for import-y declarations
-  function checkSource(node) {
-    checkSourceValue(node.source)
-  }
+      const resolvedPath = resolve(source.value, context)
 
-  // for CommonJS `require` calls
-  // adapted from @mctep: http://git.io/v4rAu
-  function checkCommon(call) {
-    if (call.callee.type !== 'Identifier') return
-    if (call.callee.name !== 'require') return
-    if (call.arguments.length !== 1) return
+      if (resolvedPath === undefined) {
+        context.report(source,
+          `Unable to resolve path to module '${source.value}'.`)
+      }
 
-    const modulePath = call.arguments[0]
-    if (modulePath.type !== 'Literal') return
-    if (typeof modulePath.value !== 'string') return
-
-    checkSourceValue(modulePath)
-  }
-
-  function checkAMD(call) {
-    if (call.callee.type !== 'Identifier') return
-    if (call.callee.name !== 'require' &&
-        call.callee.name !== 'define') return
-    if (call.arguments.length !== 2) return
-
-    const modules = call.arguments[0]
-    if (modules.type !== 'ArrayExpression') return
-
-    modules.elements.forEach((element) => {
-      if (element.type === 'Literal' &&
-          typeof element.value === 'string') {
-
-        // magic modules: http://git.io/vByan
-        if (element.value !== 'require' &&
-            element.value !== 'exports') {
-          checkSourceValue(element)
+      else if (shouldCheckCase) {
+        const cacheSettings = ModuleCache.getSettings(context.settings)
+        if (!fileExistsWithCaseSync(resolvedPath, cacheSettings)) {
+          context.report(source,
+            `Casing of ${source.value} does not match the underlying filesystem.`)
         }
-      }
-    })
-  }
 
-  const visitors = {
-    'ImportDeclaration': checkSource,
-    'ExportNamedDeclaration': checkSource,
-    'ExportAllDeclaration': checkSource,
-  }
-
-  if (context.options[0] != null) {
-    const { commonjs, amd } = context.options[0]
-
-    if (commonjs || amd) {
-      visitors['CallExpression'] = function (call) {
-        if (commonjs) checkCommon(call)
-        if (amd) checkAMD(call)
       }
     }
-  }
 
-  return visitors
+    return moduleVisitor(checkSourceValue, context.options[0])
+
+  },
 }
 
-module.exports.schema = [
-  {
-    'type': 'object',
-    'properties': {
-      'commonjs': { 'type': 'boolean' },
-      'amd': { 'type': 'boolean' },
-      'ignore': {
-        'type': 'array',
-        'minItems': 1,
-        'items': { 'type': 'string' },
-        'uniqueItems': true,
-      },
-    },
-    'additionalProperties': false,
-  },
-]

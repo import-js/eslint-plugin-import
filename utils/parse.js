@@ -1,22 +1,23 @@
-import moduleRequire from './module-require'
-import assign from 'object-assign'
-import { extname } from 'path'
-import debug from 'debug'
+"use strict"
+exports.__esModule = true
 
-const log = debug('eslint-plugin-import:parse')
+const moduleRequire = require('./module-require').default
+const extname = require('path').extname
 
-export default function (path, content, context) {
+const log = require('debug')('eslint-plugin-import:parse')
+
+exports.default = function parse(path, content, context) {
 
   if (context == null) throw new Error('need context to parse properly')
 
-  let { parserOptions } = context
+  let parserOptions = context.parserOptions
   const parserPath = getParserPath(path, context)
 
   if (!parserPath) throw new Error('parserPath is required!')
 
   // hack: espree blows up with frozen options
-  parserOptions = assign({}, parserOptions)
-  parserOptions.ecmaFeatures = assign({}, parserOptions.ecmaFeatures)
+  parserOptions = Object.assign({}, parserOptions)
+  parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
 
   // always attach comments
   parserOptions.attachComment = true

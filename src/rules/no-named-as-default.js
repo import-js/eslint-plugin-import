@@ -1,32 +1,38 @@
-import Exports from '../core/getExports'
+import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 
-module.exports = function (context) {
-  function checkDefault(nameKey, defaultSpecifier) {
-    // #566: default is a valid specifier
-    if (defaultSpecifier[nameKey].name === 'default') return
+module.exports = {
+  meta: {
+    docs: {},
+  },
 
-    var declaration = importDeclaration(context)
+  create: function (context) {
+    function checkDefault(nameKey, defaultSpecifier) {
+      // #566: default is a valid specifier
+      if (defaultSpecifier[nameKey].name === 'default') return
 
-    var imports = Exports.get(declaration.source.value, context)
-    if (imports == null) return
+      var declaration = importDeclaration(context)
 
-    if (imports.errors.length) {
-      imports.reportErrors(context, declaration)
-      return
+      var imports = Exports.get(declaration.source.value, context)
+      if (imports == null) return
+
+      if (imports.errors.length) {
+        imports.reportErrors(context, declaration)
+        return
+      }
+
+      if (imports.has('default') &&
+          imports.has(defaultSpecifier[nameKey].name)) {
+
+        context.report(defaultSpecifier,
+          'Using exported name \'' + defaultSpecifier[nameKey].name +
+          '\' as identifier for default export.')
+
+      }
     }
-
-    if (imports.has('default') &&
-        imports.has(defaultSpecifier[nameKey].name)) {
-
-      context.report(defaultSpecifier,
-        'Using exported name \'' + defaultSpecifier[nameKey].name +
-        '\' as identifier for default export.')
-
+    return {
+      'ImportDefaultSpecifier': checkDefault.bind(null, 'local'),
+      'ExportDefaultSpecifier': checkDefault.bind(null, 'exported'),
     }
-  }
-  return {
-    'ImportDefaultSpecifier': checkDefault.bind(null, 'local'),
-    'ExportDefaultSpecifier': checkDefault.bind(null, 'exported'),
-  }
+  },
 }

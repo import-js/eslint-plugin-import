@@ -6,12 +6,14 @@ export in the imported module.
 For [ES7], reports if a default is named and exported but is not found in the
 referenced module.
 
-Note: for modules, the plugin will find exported names (including defaults)
+Note: for packages, the plugin will find exported names
 from [`jsnext:main`], if present in `package.json`.
-Redux's npm module includes this key, and thereby is lintable, for example. Otherwise,
-the whole `node_modules` folder is ignored by default ([`import/ignore`]) as most published modules are
-formatted in CommonJS, which [at time of this writing](https://github.com/benmosher/eslint-plugin-import/issues/13)
-is not able to be analyzed for exports.
+Redux's npm module includes this key, and thereby is lintable, for example.
+
+A module path that is [ignored] or not [unambiguously an ES module] will not be reported when imported.
+
+[ignored]: ../README.md#importignore
+[unambiguously an ES module]: https://github.com/bmeck/UnambiguousJavaScriptGrammar
 
 
 ## Rule Details

@@ -27,8 +27,7 @@ const valid = [
       ecmaFeatures: { jsx: true },
     },
   }),
-  test({ code: "import * as foo from './common';"
-       , settings: { 'import/ignore': ['common'] } }),
+  test({ code: "import * as foo from './common';" }),
 
   // destructuring namespaces
   test({ code: 'import * as names from "./named-exports";' +
@@ -97,9 +96,6 @@ const valid = [
 ]
 
 const invalid = [
-  test({code: "import * as foo from './common';",
-        errors: ["No exported names found in module './common'."]}),
-
   test({ code: "import * as names from './named-exports'; " +
                ' console.log(names.c);'
        , errors: [error('c', 'names')] }),

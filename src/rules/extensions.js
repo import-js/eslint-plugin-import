@@ -3,7 +3,7 @@ import endsWith from 'lodash.endswith'
 import has from 'has'
 import assign from 'object-assign'
 
-import resolve from '../core/resolve'
+import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn } from '../core/importType'
 
 module.exports = function (context) {

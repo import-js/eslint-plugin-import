@@ -7,18 +7,24 @@ function reportIfMissing(context, node, allowed, name) {
   }
 }
 
-module.exports = function (context) {
-  const options = context.options[0] || {}
-  const allowed = options.allow || []
+module.exports = {
+  meta: {
+    docs: {},
+  },
 
-  return {
-    ImportDeclaration: function handleImports(node) {
-      reportIfMissing(context, node, allowed, node.source.value)
-    },
-    CallExpression: function handleRequires(node) {
-      if (isStaticRequire(node)) {
-        reportIfMissing(context, node, allowed, node.arguments[0].value)
-      }
-    },
-  }
+  create: function (context) {
+    const options = context.options[0] || {}
+    const allowed = options.allow || []
+
+    return {
+      ImportDeclaration: function handleImports(node) {
+        reportIfMissing(context, node, allowed, node.source.value)
+      },
+      CallExpression: function handleRequires(node) {
+        if (isStaticRequire(node)) {
+          reportIfMissing(context, node, allowed, node.arguments[0].value)
+        }
+      },
+    }
+  },
 }

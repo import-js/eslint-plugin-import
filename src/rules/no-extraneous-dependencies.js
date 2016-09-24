@@ -81,42 +81,48 @@ function testConfig(config, filename) {
   return config.some(c => minimatch(filename, c))
 }
 
-module.exports = function (context) {
-  const options = context.options[0] || {}
-  const filename = context.getFilename()
-  const deps = getDependencies(context)
+module.exports = {
+  meta: {
+    docs: {},
 
-  if (!deps) {
-    return {}
-  }
-
-  const depsOptions = {
-    allowDevDeps: testConfig(options.devDependencies, filename) !== false,
-    allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
-    allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
-  }
-
-  // todo: use module visitor from module-utils core
-  return {
-    ImportDeclaration: function (node) {
-      reportIfMissing(context, deps, depsOptions, node, node.source.value)
-    },
-    CallExpression: function handleRequires(node) {
-      if (isStaticRequire(node)) {
-        reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
-      }
-    },
-  }
-}
-
-module.exports.schema = [
-  {
-    'type': 'object',
-    'properties': {
-      'devDependencies': { 'type': ['boolean', 'array'] },
-      'optionalDependencies': { 'type': ['boolean', 'array'] },
-      'peerDependencies': { 'type': ['boolean', 'array'] },
-    },
-    'additionalProperties': false,
+    schema: [
+      {
+        'type': 'object',
+        'properties': {
+          'devDependencies': { 'type': ['boolean', 'array'] },
+          'optionalDependencies': { 'type': ['boolean', 'array'] },
+          'peerDependencies': { 'type': ['boolean', 'array'] },
+        },
+        'additionalProperties': false,
+      },
+    ],
   },
-]
+
+  create: function (context) {
+    const options = context.options[0] || {}
+    const filename = context.getFilename()
+    const deps = getDependencies(context)
+
+    if (!deps) {
+      return {}
+    }
+
+    const depsOptions = {
+      allowDevDeps: testConfig(options.devDependencies, filename) !== false,
+      allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
+      allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
+    }
+
+    // todo: use module visitor from module-utils core
+    return {
+      ImportDeclaration: function (node) {
+        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+      },
+      CallExpression: function handleRequires(node) {
+        if (isStaticRequire(node)) {
+          reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
+        }
+      },
+    }
+  },
+}

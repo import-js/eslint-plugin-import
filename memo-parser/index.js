@@ -1,8 +1,8 @@
 "use strict"
 
 const crypto = require('crypto')
-    , moduleRequire = require('../lib/core/module-require').default
-    , hashObject = require('../lib/core/hash').hashObject
+    , moduleRequire = require('eslint-module-utils/module-require').default
+    , hashObject = require('eslint-module-utils/hash').hashObject
 
 const cache = new Map()
 
@@ -22,7 +22,7 @@ exports.parse = function parse(content, options) {
 
   const keyHash = crypto.createHash('sha256')
   keyHash.update(content)
-  hashObject(keyHash, options)
+  hashObject(options, keyHash)
 
   const key = keyHash.digest('hex')
 

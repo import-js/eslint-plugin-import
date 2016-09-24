@@ -1,6 +1,8 @@
 import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+
 var ruleTester = new RuleTester()
   , rule = require('rules/default')
 
@@ -22,8 +24,7 @@ ruleTester.run('default', rule, {
     // core modules always have a default
     test({ code: 'import crypto from "crypto";' }),
 
-    test({ code: 'import common from "./common";'
-         , settings: { 'import/ignore': ['common'] } }),
+    test({ code: 'import common from "./common";' }),
 
     // es7 export syntax
     test({ code: 'export bar from "./bar"'
@@ -86,7 +87,6 @@ ruleTester.run('default', rule, {
       parser: 'babel-eslint',
     }),
 
-
     ...SYNTAX_CASES,
   ],
 
@@ -97,17 +97,7 @@ ruleTester.run('default', rule, {
     }),
 
     test({
-      code: 'import crypto from "./common";',
-      settings: { 'import/ignore': ['foo'] },
-      errors: [{ message: 'No default export found in module.'
-               , type: 'ImportDefaultSpecifier'}]}),
-    test({
       code: 'import baz from "./named-exports";',
-      errors: [{ message: 'No default export found in module.'
-               , type: 'ImportDefaultSpecifier'}]}),
-
-    test({
-      code: 'import bar from "./common";',
       errors: [{ message: 'No default export found in module.'
                , type: 'ImportDefaultSpecifier'}]}),
 
@@ -146,3 +136,20 @@ ruleTester.run('default', rule, {
     }),
   ],
 })
+
+// #311: import of mismatched case
+if (!CASE_SENSITIVE_FS) {
+  ruleTester.run('default (path case-insensitivity)', rule, {
+    valid: [
+      test({
+        code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
+      }),
+    ],
+    invalid: [
+      test({
+        code: 'import bar from "./Named-Exports"',
+        errors: ['No default export found in module.'],
+      }),
+    ],
+  })
+}

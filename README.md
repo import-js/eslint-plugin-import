@@ -34,6 +34,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Helpful warnings:**
 
+
 * Report any invalid exports, i.e. re-export of the same name ([`export`])
 * Report use of exported name as identifier of default export ([`no-named-as-default`])
 * Report use of exported name as property of default export ([`no-named-as-default-member`])
@@ -50,10 +51,12 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Module systems:**
 
+* Report potentially ambiguous parse goal (`script` vs. `module`) ([`unambiguous`])
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
 * Report AMD `require` and `define` calls. ([`no-amd`])
 * No Node.js builtin modules. ([`no-nodejs-modules`])
 
+[`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-amd`]: ./docs/rules/no-amd.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
@@ -61,7 +64,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 **Style guide:**
 
-* Ensure all imports appear before other statements ([`imports-first`])
+* Ensure all imports appear before other statements ([`first`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
 * Ensure consistent use of file extension within the import path ([`extensions`])
@@ -70,7 +73,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Prefer a default export if module exports a single name ([`prefer-default-export`])
 * Limit the maximum number of dependencies a module can have. ([`max-dependencies`])
 
-[`imports-first`]: ./docs/rules/imports-first.md
+[`first`]: ./docs/rules/first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`extensions`]: ./docs/rules/extensions.md
@@ -208,39 +211,30 @@ You may set the following settings in your `.eslintrc`:
 A list of file extensions that will be parsed as modules and inspected for
 `export`s.
 
-This will default to `['.js']` in the next major revision of this plugin, unless
-you are using the `react` shared config, in which case it is specified as `['.js', '.jsx']`.
+This defaults to `['.js']`, unless you are using the `react` shared config,
+in which case it is specified as `['.js', '.jsx']`.
 
 Note that this is different from (and likely a subset of) any `import/resolver`
 extensions settings, which may include `.json`, `.coffee`, etc. which will still
 factor into the `no-unresolved` rule.
 
-Also, `import/ignore` patterns will overrule this list, so `node_modules` that
-end in `.js` will still be ignored by default.
+Also, the following `import/ignore` patterns will overrule this list.
 
 #### `import/ignore`
 
 A list of regex strings that, if matched by a path, will
 not report the matching module if no `export`s are found.
 In practice, this means rules other than [`no-unresolved`](./docs/rules/no-unresolved.md#ignore) will not report on any
-`import`s with (absolute) paths matching this pattern, _unless_ `export`s were
-found when parsing. This allows you to ignore `node_modules` but still properly
-lint packages that define a [`jsnext:main`] in `package.json` (Redux, D3's v4 packages, etc.).
+`import`s with (absolute filesystem) paths matching this pattern.
 
 `no-unresolved` has its own [`ignore`](./docs/rules/no-unresolved.md#ignore) setting.
-
-**Note**: setting this explicitly will replace the default of `node_modules`, so you
-may need to include it in your own list if you still want to ignore it. Example:
 
 ```yaml
 settings:
   import/ignore:
-    - node_modules       # mostly CommonJS (ignored by default)
     - \.coffee$          # fraught with parse errors
     - \.(scss|less|css)$ # can't parse unprocessed CSS modules, either
 ```
-
-[`jsnext:main`]: https://github.com/rollup/rollup/wiki/jsnext:main
 
 #### `import/core-modules`
 

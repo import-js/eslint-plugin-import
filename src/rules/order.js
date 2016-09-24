@@ -145,77 +145,83 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   })
 }
 
-module.exports = function importOrderRule (context) {
-  const options = context.options[0] || {}
-  let ranks
+module.exports = {
+  meta: {
+    docs: {},
 
-  try {
-    ranks = convertGroupsToRanks(options.groups || defaultGroups)
-  } catch (error) {
-    // Malformed configuration
-    return {
-      Program: function(node) {
-        context.report(node, error.message)
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          groups: {
+            type: 'array',
+          },
+          'newlines-between': {
+            enum: [ 'always', 'never' ],
+          },
+        },
+        additionalProperties: false,
       },
-    }
-  }
-  let imported = []
-  let level = 0
-
-  function incrementLevel() {
-    level++
-  }
-  function decrementLevel() {
-    level--
-  }
-
-  return {
-    ImportDeclaration: function handleImports(node) {
-      if (node.specifiers.length) { // Ignoring unassigned imports
-        const name = node.source.value
-        registerNode(context, node, name, 'import', ranks, imported)
-      }
-    },
-    CallExpression: function handleRequires(node) {
-      if (level !== 0 || !isStaticRequire(node) || !isInVariableDeclarator(node.parent)) {
-        return
-      }
-      const name = node.arguments[0].value
-      registerNode(context, node, name, 'require', ranks, imported)
-    },
-    'Program:exit': function reportAndReset() {
-      makeOutOfOrderReport(context, imported)
-
-      if ('newlines-between' in options) {
-        makeNewlinesBetweenReport(context, imported, options['newlines-between'])
-      }
-
-      imported = []
-    },
-    FunctionDeclaration: incrementLevel,
-    FunctionExpression: incrementLevel,
-    ArrowFunctionExpression: incrementLevel,
-    BlockStatement: incrementLevel,
-    ObjectExpression: incrementLevel,
-    'FunctionDeclaration:exit': decrementLevel,
-    'FunctionExpression:exit': decrementLevel,
-    'ArrowFunctionExpression:exit': decrementLevel,
-    'BlockStatement:exit': decrementLevel,
-    'ObjectExpression:exit': decrementLevel,
-  }
-}
-
-module.exports.schema = [
-  {
-    type: 'object',
-    properties: {
-      groups: {
-        type: 'array',
-      },
-      'newlines-between': {
-        enum: [ 'always', 'never' ],
-      },
-    },
-    additionalProperties: false,
+    ],
   },
-]
+
+  create: function importOrderRule (context) {
+    const options = context.options[0] || {}
+    let ranks
+
+    try {
+      ranks = convertGroupsToRanks(options.groups || defaultGroups)
+    } catch (error) {
+      // Malformed configuration
+      return {
+        Program: function(node) {
+          context.report(node, error.message)
+        },
+      }
+    }
+    let imported = []
+    let level = 0
+
+    function incrementLevel() {
+      level++
+    }
+    function decrementLevel() {
+      level--
+    }
+
+    return {
+      ImportDeclaration: function handleImports(node) {
+        if (node.specifiers.length) { // Ignoring unassigned imports
+          const name = node.source.value
+          registerNode(context, node, name, 'import', ranks, imported)
+        }
+      },
+      CallExpression: function handleRequires(node) {
+        if (level !== 0 || !isStaticRequire(node) || !isInVariableDeclarator(node.parent)) {
+          return
+        }
+        const name = node.arguments[0].value
+        registerNode(context, node, name, 'require', ranks, imported)
+      },
+      'Program:exit': function reportAndReset() {
+        makeOutOfOrderReport(context, imported)
+
+        if ('newlines-between' in options) {
+          makeNewlinesBetweenReport(context, imported, options['newlines-between'])
+        }
+
+        imported = []
+      },
+      FunctionDeclaration: incrementLevel,
+      FunctionExpression: incrementLevel,
+      ArrowFunctionExpression: incrementLevel,
+      BlockStatement: incrementLevel,
+      ObjectExpression: incrementLevel,
+      'FunctionDeclaration:exit': decrementLevel,
+      'FunctionExpression:exit': decrementLevel,
+      'ArrowFunctionExpression:exit': decrementLevel,
+      'BlockStatement:exit': decrementLevel,
+      'ObjectExpression:exit': decrementLevel,
+    }
+  },
+}

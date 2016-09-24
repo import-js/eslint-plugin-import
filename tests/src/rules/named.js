@@ -1,6 +1,9 @@
 import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+
+
 var ruleTester = new RuleTester()
   , rule = require('rules/named')
 
@@ -39,9 +42,6 @@ ruleTester.run('named', rule, {
     test({ code: 'import { zoob } from "a"' }),
 
     test({ code: 'import { someThing } from "./test-module"' }),
-
-    // node_modules/a only exports 'foo', should be ignored though
-    test({ code: 'import { zoob } from "a"' }),
 
     // export tests
     test({ code: 'export { foo } from "./bar"' }),
@@ -96,22 +96,23 @@ ruleTester.run('named', rule, {
       settings: { 'import/ignore': ['common'] },
     }),
 
+    // ignore CJS by default. always ignore ignore list
+    test({ code: 'import {a, b, d} from "./common"' }),
+    test({
+      code: 'import { baz } from "./bar"',
+      settings: { 'import/ignore': ['bar'] },
+    }),
+    test({
+      code: 'import { common } from "./re-export-default"',
+    }),
+
     ...SYNTAX_CASES,
   ],
 
   invalid: [
 
-    test({ code: 'import { zoob } from "a"'
-         , settings: { 'import/ignore': [] }
-         , errors: [ error('zoob', 'a') ] }),
-
     test({ code: 'import { somethingElse } from "./test-module"'
          , errors: [ error('somethingElse', './test-module') ] }),
-
-    test({code: 'import {a, b, d} from "./common"',
-      errors: [ error('a', './common')
-              , error('b', './common')
-              , error('d', './common') ]}),
 
     test({code: 'import { baz } from "./bar"',
       errors: [error('baz', './bar')]}),
@@ -125,9 +126,6 @@ ruleTester.run('named', rule, {
 
     test({code: 'import { a } from "./default-export"',
       errors: [error('a', './default-export')]}),
-
-    test({code: 'import { a } from "./common"', args: [2, 'es6-only'],
-      errors: [error('a', './common')]}),
 
     test({code: 'import { ActionTypess } from "./qc"',
       errors: [error('ActionTypess', './qc')]}),
@@ -201,22 +199,13 @@ ruleTester.run('named', rule, {
       code: 'import { baz } from "es6-module"',
       errors: ["baz not found in 'es6-module'"],
     }),
-    test({
-      code: 'import { baz } from "./bar"',
-      settings: { 'import/ignore': ['bar'] },
-      errors: ["baz not found in './bar'"],
-    }),
 
     // issue #251
     test({
       code: 'import { foo, bar, bap } from "./re-export-default"',
       errors: ["bap not found in './re-export-default'"],
     }),
-    test({
-      code: 'import { common } from "./re-export-default"',
-      // todo: better error message
-      errors: ["common not found via re-export-default.js -> common.js"],
-    }),
+
 
     // #328: * exports do not include default
     test({
@@ -225,3 +214,20 @@ ruleTester.run('named', rule, {
     }),
   ],
 })
+
+// #311: import of mismatched case
+if (!CASE_SENSITIVE_FS) {
+  ruleTester.run('named (path case-insensitivity)', rule, {
+    valid: [
+      test({
+        code: 'import { b } from "./Named-Exports"',
+      }),
+    ],
+    invalid: [
+      test({
+        code: 'import { foo } from "./Named-Exports"',
+        errors: [`foo not found in './Named-Exports'`],
+      }),
+    ],
+  })
+}

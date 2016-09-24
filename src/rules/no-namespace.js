@@ -8,10 +8,16 @@
 //------------------------------------------------------------------------------
 
 
-module.exports = function (context) {
-  return {
-    'ImportNamespaceSpecifier': function (node) {
-      context.report(node, `Unexpected namespace import.`)
-    },
-  }
+module.exports = {
+  meta: {
+    docs: {},
+  },
+
+  create: function (context) {
+    return {
+      'ImportNamespaceSpecifier': function (node) {
+        context.report(node, `Unexpected namespace import.`)
+      },
+    }
+  },
 }

@@ -5,6 +5,19 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## 2.0.0 - WIP
+### Added
+- `recommended` shared config. Roughly `errors` and `warnings` mixed together,
+  with some `parserOptions` in the mix. ([#402])
+- `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
+
+### Breaking
+- [`import/extensions` setting] defaults to `['.js']`. ([#306])
+- [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
+
+### Changed
+- `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
+  exist, but may be removed in a future major release.
 
 ## [1.16.0] - 2016-09-22
 ### Added
@@ -167,6 +180,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - Rearranged rule groups in README in preparation for more style guide rules
 
+### Removed
+- support for Node 0.10, via `es6-*` ponyfills. Using native Map/Set/Symbol.
+
 ## [1.4.0] - 2016-03-25
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
@@ -300,7 +316,8 @@ for info on changes for earlier releases.
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`extensions`]: ./docs/rules/extensions.md
-[`imports-first`]: ./docs/rules/imports-first.md
+[`first`]: ./docs/rules/first.md
+[`imports-first`]: ./docs/rules/first.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 [`order`]: ./docs/rules/order.md
 [`named`]: ./docs/rules/named.md
@@ -374,6 +391,7 @@ for info on changes for earlier releases.
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#416]: https://github.com/benmosher/eslint-plugin-import/issues/416
 [#415]: https://github.com/benmosher/eslint-plugin-import/issues/415
+[#402]: https://github.com/benmosher/eslint-plugin-import/issues/402
 [#386]: https://github.com/benmosher/eslint-plugin-import/issues/386
 [#373]: https://github.com/benmosher/eslint-plugin-import/issues/373
 [#370]: https://github.com/benmosher/eslint-plugin-import/issues/370
@@ -382,11 +400,13 @@ for info on changes for earlier releases.
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
+[#306]: https://github.com/benmosher/eslint-plugin-import/issues/306
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
 [#281]: https://github.com/benmosher/eslint-plugin-import/issues/281
 [#275]: https://github.com/benmosher/eslint-plugin-import/issues/275
 [#272]: https://github.com/benmosher/eslint-plugin-import/issues/272
+[#270]: https://github.com/benmosher/eslint-plugin-import/issues/270
 [#267]: https://github.com/benmosher/eslint-plugin-import/issues/267
 [#266]: https://github.com/benmosher/eslint-plugin-import/issues/266
 [#216]: https://github.com/benmosher/eslint-plugin-import/issues/216

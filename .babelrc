@@ -1,5 +1,5 @@
 {
-  "presets": [ "es2015-loose" ],
+  "presets": [ "es2015-argon" ],
   "sourceMaps": "inline",
   "env": {
     "test": {

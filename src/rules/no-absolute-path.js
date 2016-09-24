@@ -7,15 +7,21 @@ function reportIfMissing(context, node, name) {
   }
 }
 
-module.exports = function (context) {
-  return {
-    ImportDeclaration: function handleImports(node) {
-      reportIfMissing(context, node, node.source.value)
-    },
-    CallExpression: function handleRequires(node) {
-      if (isStaticRequire(node)) {
-        reportIfMissing(context, node, node.arguments[0].value)
-      }
-    },
-  }
+module.exports = {
+  meta: {
+    docs: {},
+  },
+
+  create: function (context) {
+    return {
+      ImportDeclaration: function handleImports(node) {
+        reportIfMissing(context, node, node.source.value)
+      },
+      CallExpression: function handleRequires(node) {
+        if (isStaticRequire(node)) {
+          reportIfMissing(context, node, node.arguments[0].value)
+        }
+      },
+    }
+  },
 }

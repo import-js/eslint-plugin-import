@@ -16,7 +16,7 @@ export const rules = {
   'no-commonjs': require('./rules/no-commonjs'),
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
-  'imports-first': require('./rules/imports-first'),
+  'first': require('./rules/first'),
   'max-dependencies': require('./rules/max-dependencies'),
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
   'no-absolute-path': require('./rules/no-absolute-path'),
@@ -25,12 +25,18 @@ export const rules = {
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
   'no-dynamic-require': require('./rules/no-dynamic-require'),
+  'unambiguous': require('./rules/unambiguous'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
+
+  // deprecated aliases to rules
+  'imports-first': require('./rules/first'),
 }
 
 export const configs = {
+  'recommended': require('../config/recommended'),
+
   'errors': require('../config/errors'),
   'warnings': require('../config/warnings'),
 

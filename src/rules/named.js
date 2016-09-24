@@ -1,54 +1,60 @@
 import * as path from 'path'
-import Exports from '../core/getExports'
+import Exports from '../ExportMap'
 
-module.exports = function (context) {
-  function checkSpecifiers(key, type, node) {
-    if (node.source == null) return // local export, ignore
+module.exports = {
+  meta: {
+    docs: {},
+  },
 
-    if (!node.specifiers
-          .some(function (im) { return im.type === type })) {
-      return // no named imports/exports
-    }
+  create: function (context) {
+    function checkSpecifiers(key, type, node) {
+      if (node.source == null) return // local export, ignore
 
-    const imports = Exports.get(node.source.value, context)
-    if (imports == null) return
-
-    if (imports.errors.length) {
-      imports.reportErrors(context, node)
-      return
-    }
-
-    node.specifiers.forEach(function (im) {
-      if (im.type !== type) return
-
-      const deepLookup = imports.hasDeep(im[key].name)
-
-      if (!deepLookup.found) {
-        if (deepLookup.path.length > 1) {
-          const deepPath = deepLookup.path
-            .map(i => path.relative(path.dirname(context.getFilename()), i.path))
-            .join(' -> ')
-
-          context.report(im[key],
-            `${im[key].name} not found via ${deepPath}`)
-        } else {
-          context.report(im[key],
-            im[key].name + ' not found in \'' + node.source.value + '\'')
-        }
+      if (!node.specifiers
+            .some(function (im) { return im.type === type })) {
+        return // no named imports/exports
       }
-    })
-  }
 
-  return {
-    'ImportDeclaration': checkSpecifiers.bind( null
-                                             , 'imported'
-                                             , 'ImportSpecifier'
-                                             ),
+      const imports = Exports.get(node.source.value, context)
+      if (imports == null) return
 
-    'ExportNamedDeclaration': checkSpecifiers.bind( null
-                                                  , 'local'
-                                                  , 'ExportSpecifier'
-                                                  ),
-  }
+      if (imports.errors.length) {
+        imports.reportErrors(context, node)
+        return
+      }
 
+      node.specifiers.forEach(function (im) {
+        if (im.type !== type) return
+
+        const deepLookup = imports.hasDeep(im[key].name)
+
+        if (!deepLookup.found) {
+          if (deepLookup.path.length > 1) {
+            const deepPath = deepLookup.path
+              .map(i => path.relative(path.dirname(context.getFilename()), i.path))
+              .join(' -> ')
+
+            context.report(im[key],
+              `${im[key].name} not found via ${deepPath}`)
+          } else {
+            context.report(im[key],
+              im[key].name + ' not found in \'' + node.source.value + '\'')
+          }
+        }
+      })
+    }
+
+    return {
+      'ImportDeclaration': checkSpecifiers.bind( null
+                                               , 'imported'
+                                               , 'ImportSpecifier'
+                                               ),
+
+      'ExportNamedDeclaration': checkSpecifiers.bind( null
+                                                    , 'local'
+                                                    , 'ExportSpecifier'
+                                                    ),
+    }
+
+  },
 }

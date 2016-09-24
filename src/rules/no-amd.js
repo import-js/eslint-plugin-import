@@ -7,27 +7,33 @@
 // Rule Definition
 //------------------------------------------------------------------------------
 
-module.exports = function (context) {
+module.exports = {
+    meta: {
+        docs: {},
+    },
 
-	return {
+    create: function (context) {
 
-		'CallExpression': function (node) {
-      if (context.getScope().type !== 'module') return
+        return {
 
-      if (node.callee.type !== 'Identifier') return
-      if (node.callee.name !== 'require' &&
-          node.callee.name !== 'define') return
+            'CallExpression': function (node) {
+          if (context.getScope().type !== 'module') return
 
-      // todo: capture define((require, module, exports) => {}) form?
-      if (node.arguments.length !== 2) return
+          if (node.callee.type !== 'Identifier') return
+          if (node.callee.name !== 'require' &&
+              node.callee.name !== 'define') return
 
-      const modules = node.arguments[0]
-      if (modules.type !== 'ArrayExpression') return
+          // todo: capture define((require, module, exports) => {}) form?
+          if (node.arguments.length !== 2) return
 
-      // todo: check second arg type? (identifier or callback)
+          const modules = node.arguments[0]
+          if (modules.type !== 'ArrayExpression') return
 
-			context.report(node, `Expected imports instead of AMD ${node.callee.name}().`)
-		},
-	}
+          // todo: check second arg type? (identifier or callback)
 
+                context.report(node, `Expected imports instead of AMD ${node.callee.name}().`)
+            },
+        }
+
+    },
 }

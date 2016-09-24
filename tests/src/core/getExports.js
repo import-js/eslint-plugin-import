@@ -1,12 +1,11 @@
-import assign from 'object-assign'
 import { expect } from  'chai'
-import ExportMap from 'core/getExports'
+import ExportMap from '../../../src/ExportMap'
 
 import * as fs from 'fs'
 
 import { getFilename } from '../utils'
 
-describe('getExports', function () {
+describe('ExportMap', function () {
   const fakeContext = {
     getFilename: getFilename,
     settings: {},
@@ -46,7 +45,7 @@ describe('getExports', function () {
     const firstAccess = ExportMap.get('./named-exports', fakeContext)
     expect(firstAccess).to.exist
 
-    const differentSettings = assign(
+    const differentSettings = Object.assign(
       {},
       fakeContext,
       { parserPath: 'espree' })
@@ -282,21 +281,21 @@ describe('getExports', function () {
   })
 
   context('issue #210: self-reference', function () {
-    it("doesn't crash", function () {
+    it(`doesn't crash`, function () {
       expect(() => ExportMap.get('./narcissist', fakeContext)).not.to.throw(Error)
     })
-    it("'has' circular reference", function () {
+    it(`'has' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
         .to.exist.and.satisfy(m => m.has('soGreat'))
     })
-    it("can 'get' circular reference", function () {
+    it(`can 'get' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
         .to.exist.and.satisfy(m => m.get('soGreat') != null)
     })
   })
 
   context('issue #478: never parse non-whitelist extensions', function () {
-    const context = assign({}, fakeContext,
+    const context = Object.assign({}, fakeContext,
       { settings: { 'import/extensions': ['.js'] } })
 
     let imports
@@ -318,7 +317,7 @@ describe('getExports', function () {
 
     configs.forEach(([description, parserConfig]) => {
       describe(description, function () {
-        const context = assign({}, fakeContext,
+        const context = Object.assign({}, fakeContext,
           { settings: {
             'import/extensions': ['.js'],
             'import/parsers': parserConfig,
@@ -331,6 +330,10 @@ describe('getExports', function () {
 
         it('returns something for a TypeScript file', function () {
           expect(imports).to.exist
+        })
+
+        it('has no parse errors', function () {
+          expect(imports).property('errors').to.be.empty
         })
 
         it('has export (getFoo)', function () {

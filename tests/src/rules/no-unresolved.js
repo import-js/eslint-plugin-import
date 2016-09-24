@@ -1,7 +1,8 @@
 import * as path from 'path'
 
-import assign from 'object-assign'
 import { test, SYNTAX_CASES } from '../utils'
+
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
 
 import { RuleTester } from 'eslint'
 
@@ -12,7 +13,7 @@ function runResolverTests(resolver) {
   // redefine 'test' to set a resolver
   // thus 'rest'. needed something 4-chars-long for formatting simplicity
   function rest(specs) {
-    specs.settings = assign({},
+    specs.settings = Object.assign({},
       specs.settings,
       { 'import/resolver': resolver }
     )
@@ -131,10 +132,6 @@ function runResolverTests(resolver) {
            , errors: ["Unable to resolve path to module './does-not-exist'."],
            }),
 
-      rest({ code: 'import foo from "./jsx/MyUncoolComponent.jsx"'
-           , errors: ["Unable to resolve path to module './jsx/MyUncoolComponent.jsx'."] }),
-
-
       // commonjs setting
       rest({
         code: 'var bar = require("./baz")',
@@ -204,6 +201,30 @@ function runResolverTests(resolver) {
         }),
     ],
   })
+
+  if (!CASE_SENSITIVE_FS) {
+    ruleTester.run('case sensitivity', rule, {
+      valid: [
+        rest({ // test with explicit flag
+          code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
+          options: [{ caseSensitive: false }],
+        }),
+      ],
+
+      invalid: [
+        rest({ // test default
+          code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
+          errors: [`Casing of ./jsx/MyUncoolComponent.jsx does not match the underlying filesystem.`],
+        }),
+        rest({ // test with explicit flag
+          code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
+          options: [{ caseSensitive: true }],
+          errors: [`Casing of ./jsx/MyUncoolComponent.jsx does not match the underlying filesystem.`],
+        }),
+      ],
+    })
+  }
+
 }
 
 ['node', 'webpack'].forEach(runResolverTests)
