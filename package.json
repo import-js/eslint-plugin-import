@@ -51,7 +51,7 @@
     "babel-register": "6.9.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "cross-env": "^2.0.0",
+    "cross-env": "^3.0.0",
     "eslint": "2.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
