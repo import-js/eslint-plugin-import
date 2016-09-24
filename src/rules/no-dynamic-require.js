@@ -11,15 +11,21 @@ function isStaticValue(arg) {
     (arg.type === 'TemplateLiteral' && arg.expressions.length === 0)
 }
 
-module.exports = function (context) {
-  return {
-    CallExpression(node) {
-      if (isRequire(node) && !isStaticValue(node.arguments[0])) {
-        context.report({
-          node,
-          message: 'Calls to require() should use string literals',
-        })
-      }
-    },
-  }
+module.exports = {
+  meta: {
+    docs: {},
+  },
+
+  create: function (context) {
+    return {
+      CallExpression(node) {
+        if (isRequire(node) && !isStaticValue(node.arguments[0])) {
+          context.report({
+            node,
+            message: 'Calls to require() should use string literals',
+          })
+        }
+      },
+    }
+  },
 }
