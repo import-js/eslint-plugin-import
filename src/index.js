@@ -21,6 +21,7 @@ export const rules = {
   'no-extraneous-dependencies': require('./rules/no-extraneous-dependencies'),
   'no-absolute-path': require('./rules/no-absolute-path'),
   'no-nodejs-modules': require('./rules/no-nodejs-modules'),
+  'no-webpack-loader-syntax': require('./rules/no-webpack-loader-syntax'),
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
