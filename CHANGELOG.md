@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
 - [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
 - [`newline-after-import`]: Removed need for an empty line after an inline `require` call ([#570])
+- [`order`]: Default value for `newlines-between` option is now `ignore` ([#519])
 
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
