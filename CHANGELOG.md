@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `recommended` shared config. Roughly `errors` and `warnings` mixed together,
   with some `parserOptions` in the mix. ([#402])
 - `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
+- Added [`no-webpack-loader-syntax`] rule: forbid custom Webpack loader syntax in imports. ([#586], thanks [@fson]!)
 
 ### Breaking
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
@@ -331,7 +332,9 @@ for info on changes for earlier releases.
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
+[`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 
+[#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
@@ -488,3 +491,4 @@ for info on changes for earlier releases.
 [@spalger]: https://github.com/spalger
 [@preco21]: https://github.com/preco21
 [@skyrpex]: https://github.com/skyrpex
+[@fson]: https://github.com/fson

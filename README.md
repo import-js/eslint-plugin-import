@@ -22,6 +22,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid import of modules using absolute paths ([`no-absolute-path`])
 * Forbid `require()` calls with expressions ([`no-dynamic-require`])
 * Prevent importing the submodules of other modules ([`no-internal-modules`])
+* Forbid Webpack loader syntax in imports ([`no-webpack-loader-syntax`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -31,6 +32,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-absolute-path`]: ./docs/rules/no-absolute-path.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
+[`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 
 **Helpful warnings:**
 
