@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Breaking
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
 - [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
+- [`newline-after-import`]: Removed need for an empty line after an inline `require` call ([#570])
 
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
@@ -381,6 +382,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545

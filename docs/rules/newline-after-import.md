@@ -1,10 +1,8 @@
 # newline-after-import
 
-Reports if there's no new line after last import/require in group.
+Enforces having an empty line after the last top-level import statement or require call.
 
 ## Rule Details
-
-**NOTE**: In each of those examples you can replace `import` call with `require`.
 
 Valid:
 
@@ -21,6 +19,13 @@ import { bar }  from 'bar-lib'
 const FOO = 'BAR'
 ```
 
+```js
+const FOO = require('./foo')
+const BAR = require('./bar')
+
+const BAZ = 1
+```
+
 ...whereas here imports will be reported:
 
 ```js
@@ -33,6 +38,12 @@ import * as foo from 'foo'
 const FOO = 'BAR'
 
 import { bar }  from 'bar-lib'
+```
+
+```js
+const FOO = require('./foo')
+const BAZ = 1
+const BAR = require('./bar')
 ```
 
 ## When Not To Use It

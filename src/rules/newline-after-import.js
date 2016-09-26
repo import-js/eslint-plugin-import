@@ -45,10 +45,9 @@ module.exports = {
   meta: {
     docs: {},
   },
-
   create: function (context) {
-    const scopes = []
-    let scopeIndex = 0
+    let level = 0
+    const requireCalls = []
 
     function checkForNewLine(node, nextNode, type) {
       if (getLineDifference(node, nextNode) < 2) {
@@ -68,6 +67,13 @@ module.exports = {
       }
     }
 
+    function incrementLevel() {
+      level++
+    }
+    function decrementLevel() {
+      level--
+    }
+
     return {
       ImportDeclaration: function (node) {
         const { parent } = node
@@ -78,55 +84,45 @@ module.exports = {
           checkForNewLine(node, nextNode, 'import')
         }
       },
-      Program: function () {
-        scopes.push({ scope: context.getScope(), requireCalls: [] })
-      },
       CallExpression: function(node) {
-        const scope = context.getScope()
-        if (isStaticRequire(node)) {
-          const currentScope = scopes[scopeIndex]
-
-          if (scope === currentScope.scope) {
-            currentScope.requireCalls.push(node)
-          } else {
-            scopes.push({ scope, requireCalls: [ node ] })
-            scopeIndex += 1
-          }
+        if (isStaticRequire(node) && level === 0) {
+          requireCalls.push(node)
         }
       },
       'Program:exit': function () {
         log('exit processing for', context.getFilename())
-        scopes.forEach(function ({ scope, requireCalls }) {
-          const scopeBody = getScopeBody(scope)
+        const scopeBody = getScopeBody(context.getScope())
+        log('got scope:', scopeBody)
 
-          // skip non-array scopes (i.e. arrow function expressions)
-          if (!scopeBody || !(scopeBody instanceof Array)) {
-            log('invalid scope:', scopeBody)
+        requireCalls.forEach(function (node, index) {
+          const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
+          log('node position in scope:', nodePosition)
+
+          const statementWithRequireCall = scopeBody[nodePosition]
+          const nextStatement = scopeBody[nodePosition + 1]
+          const nextRequireCall = requireCalls[index + 1]
+
+          if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
             return
           }
 
-          log('got scope:', scopeBody)
+          if (nextStatement &&
+             (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
 
-          requireCalls.forEach(function (node, index) {
-            const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
-            log('node position in scope:', nodePosition)
-
-            const statementWithRequireCall = scopeBody[nodePosition]
-            const nextStatement = scopeBody[nodePosition + 1]
-            const nextRequireCall = requireCalls[index + 1]
-
-            if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
-              return
-            }
-
-            if (nextStatement &&
-               (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
-
-              checkForNewLine(statementWithRequireCall, nextStatement, 'require')
-            }
-          })
+            checkForNewLine(statementWithRequireCall, nextStatement, 'require')
+          }
         })
       },
+      FunctionDeclaration: incrementLevel,
+      FunctionExpression: incrementLevel,
+      ArrowFunctionExpression: incrementLevel,
+      BlockStatement: incrementLevel,
+      ObjectExpression: incrementLevel,
+      'FunctionDeclaration:exit': decrementLevel,
+      'FunctionExpression:exit': decrementLevel,
+      'ArrowFunctionExpression:exit': decrementLevel,
+      'BlockStatement:exit': decrementLevel,
+      'ObjectExpression:exit': decrementLevel,
     }
   },
 }

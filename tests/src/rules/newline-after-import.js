@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint'
 
-const IMPORT_ERROR_MESSAGE = 'Expected empty line after import statement not followed by another import.';
-const REQUIRE_ERROR_MESSAGE = 'Expected empty line after require statement not followed by another require.';
+const IMPORT_ERROR_MESSAGE = 'Expected empty line after import statement not followed by another import.'
+const REQUIRE_ERROR_MESSAGE = 'Expected empty line after require statement not followed by another require.'
 
 const ruleTester = new RuleTester()
 
@@ -21,7 +21,6 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { ecmaVersion: 6 } ,
     },
     "function x(){ require('baz'); }",
-
     "a(require('b'), require('c'), require('d'));",
     `function foo() {
       switch (renderData.modalViewKey) {
@@ -100,7 +99,35 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: "var foo = require('foo-module');\n\nvar a = 123;\n\nvar bar = require('bar-lib');",
       parserOptions: { sourceType: 'module' }
-    }
+    },
+    {
+      code: `
+        function foo() {
+          var foo = require('foo');
+          foo();
+        }
+      `,
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `
+        if (true) {
+          var foo = require('foo');
+          foo();
+        }
+      `,
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `
+        function a() {
+          var assign = Object.assign || require('object-assign');
+          var foo = require('foo');
+          var bar = 42;
+        }
+      `,
+      parserOptions: { sourceType: 'module' },
+    },
   ],
 
   invalid: [
@@ -179,14 +206,6 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: "var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;",
       errors: [ {
         line: 2,
-        column: 1,
-        message: REQUIRE_ERROR_MESSAGE,
-      } ]
-    },
-    {
-      code: "function a() {\nvar assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42; }",
-      errors: [ {
-        line: 3,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
       } ]
