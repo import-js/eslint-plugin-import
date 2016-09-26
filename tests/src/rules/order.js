@@ -235,6 +235,32 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // 'ignore' should be the default value for `newlines-between`
+    test({
+      code: `
+      var fs = require('fs');
+
+      var index = require('./');
+      var path = require('path');
+      var sibling = require('./foo');
+
+
+      var relParent1 = require('../foo');
+
+      var relParent3 = require('../');
+
+      var async = require('async');
+      `,
+      options: [
+        {
+          groups: [
+            ['builtin', 'index'],
+            ['sibling'],
+            ['parent', 'external'],
+          ],
+        },
+      ],
+    }),
     // Option newlines-between: 'always' with multiline imports #1
     test({
       code: `

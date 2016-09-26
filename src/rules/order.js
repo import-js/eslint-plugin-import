@@ -157,7 +157,7 @@ module.exports = {
             type: 'array',
           },
           'newlines-between': {
-            enum: [ 'always', 'ignore', 'never' ],
+            enum: [ 'ignore', 'always', 'never' ],
           },
         },
         additionalProperties: false,
@@ -167,6 +167,7 @@ module.exports = {
 
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
+    const newlinesBetweenImports = options['newlines-between'] || 'ignore'
     let ranks
 
     try {
@@ -206,8 +207,8 @@ module.exports = {
       'Program:exit': function reportAndReset() {
         makeOutOfOrderReport(context, imported)
 
-        if ('newlines-between' in options && options['newlines-between'] !== 'ignore') {
-          makeNewlinesBetweenReport(context, imported, options['newlines-between'])
+        if (newlinesBetweenImports !== 'ignore') {
+          makeNewlinesBetweenReport(context, imported, newlinesBetweenImports)
         }
 
         imported = []
