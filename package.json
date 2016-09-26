@@ -82,6 +82,7 @@
     "es6-map": "^0.1.3",
     "es6-set": "^0.1.4",
     "eslint-import-resolver-node": "^0.2.0",
+    "eslint-module-utils": "^1.0.0-beta.0",
     "has": "^1.0.1",
     "lodash.cond": "^4.3.0",
     "lodash.endswith": "^4.0.1",
