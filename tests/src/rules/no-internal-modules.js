@@ -33,6 +33,10 @@ ruleTester.run('no-internal-modules', rule, {
       filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
     }),
     test({
+      code: 'import b from "@org/package"',
+      filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
+    }),
+    test({
       code: 'import b from "../../api/service"',
       filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
       options: [ {
@@ -95,6 +99,17 @@ ruleTester.run('no-internal-modules', rule, {
       errors: [
         {
           message: 'Reaching to "../api/service/index" is not allowed.',
+          line: 1,
+          column: 15,
+        },
+      ],
+    }),
+    test({
+      code: 'import b from "@org/package/internal"',
+      filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
+      errors: [
+        {
+          message: 'Reaching to "@org/package/internal" is not allowed.',
           line: 1,
           column: 15,
         },

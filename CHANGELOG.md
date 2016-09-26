@@ -21,6 +21,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
 
+### Fixed
+- [`no-internal-modules`]: support `@`-scoped packages ([#577]+[#578], thanks [@spalger])
+
 ## [1.16.0] - 2016-09-22
 ### Added
 - Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568])
@@ -336,6 +339,7 @@ for info on changes for earlier releases.
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
+[#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
 [#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
@@ -382,6 +386,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
