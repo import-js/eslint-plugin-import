@@ -27,6 +27,7 @@ export const rules = {
   'prefer-default-export': require('./rules/prefer-default-export'),
   'no-dynamic-require': require('./rules/no-dynamic-require'),
   'unambiguous': require('./rules/unambiguous'),
+  'no-unassigned-import': require('./rules/no-unassigned-import'),
 
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
