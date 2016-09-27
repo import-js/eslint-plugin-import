@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Added [`no-unassigned-import`] rule ([#529])
 
 ## 2.0.0 - WIP
 ### Added
@@ -339,6 +341,7 @@ for info on changes for earlier releases.
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
+[`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
@@ -394,6 +397,7 @@ for info on changes for earlier releases.
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
+[#529]: https://github.com/benmosher/eslint-plugin-import/issues/529
 [#519]: https://github.com/benmosher/eslint-plugin-import/issues/519
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
