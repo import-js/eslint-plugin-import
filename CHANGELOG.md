@@ -25,6 +25,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
+- Case-sensitivity: now specifically (and optionally) reported by [`no-unresolved`]. 
+  Other rules will ignore case-mismatches on paths on case-insensitive filesystems. ([#311])
 
 ### Fixed
 - [`no-internal-modules`]: support `@`-scoped packages ([#577]+[#578], thanks [@spalger])
@@ -419,6 +421,7 @@ for info on changes for earlier releases.
 [#328]: https://github.com/benmosher/eslint-plugin-import/issues/328
 [#317]: https://github.com/benmosher/eslint-plugin-import/issues/317
 [#313]: https://github.com/benmosher/eslint-plugin-import/issues/313
+[#311]: https://github.com/benmosher/eslint-plugin-import/issues/311
 [#306]: https://github.com/benmosher/eslint-plugin-import/issues/306
 [#286]: https://github.com/benmosher/eslint-plugin-import/issues/286
 [#283]: https://github.com/benmosher/eslint-plugin-import/issues/283
