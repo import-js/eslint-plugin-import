@@ -4,16 +4,16 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-### Added
-- Added [`no-unassigned-import`] rule ([#529])
 
-## 2.0.0 - WIP
+
+## [2.0.0]! - 2016-09-30
 ### Added
 - `recommended` shared config. Roughly `errors` and `warnings` mixed together,
   with some `parserOptions` in the mix. ([#402])
 - `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
 - Added [`no-webpack-loader-syntax`] rule: forbid custom Webpack loader syntax in imports. ([#586], thanks [@fson]!)
 - Add option `newlines-between: "ignore"` to [`order`] ([#519])
+- Added [`no-unassigned-import`] rule ([#529])
 
 ### Breaking
 - [`import/extensions` setting] defaults to `['.js']`. ([#306])
@@ -438,7 +438,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...v2.0.0
 [1.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.13.0...v1.14.0
