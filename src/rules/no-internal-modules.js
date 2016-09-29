@@ -1,4 +1,3 @@
-import find from 'lodash.find'
 import minimatch from 'minimatch'
 
 import resolve from 'eslint-module-utils/resolve'
@@ -31,7 +30,7 @@ module.exports = {
 
     // test if reaching to this destination is allowed
     function reachingAllowed(importPath) {
-      return !!find(allowRegexps, re => re.test(importPath))
+      return allowRegexps.some(re => re.test(importPath))
     }
 
     // minimatch patterns are expected to use / path separators, like import

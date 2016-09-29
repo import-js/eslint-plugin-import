@@ -4,10 +4,8 @@
  */
 
 import isStaticRequire from '../core/staticRequire'
-import findIndex from 'lodash.findindex'
 
 import debug from 'debug'
-
 const log = debug('eslint-plugin-import:rules:newline-after-import')
 
 //------------------------------------------------------------------------------
@@ -33,7 +31,7 @@ function getScopeBody(scope) {
 }
 
 function findNodeIndexInScopeBody(body, nodeToFind) {
-    return findIndex(body, (node) => containsNodeOrEqual(node, nodeToFind))
+    return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind))
 }
 
 function getLineDifference(node, nextNode) {

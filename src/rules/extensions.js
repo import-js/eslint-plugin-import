@@ -1,5 +1,4 @@
 import path from 'path'
-import endsWith from 'lodash.endswith'
 import has from 'has'
 import assign from 'object-assign'
 
@@ -79,7 +78,7 @@ module.exports = {
       // for unresolved, use source value.
       const extension = path.extname(resolvedPath || importPath).substring(1)
 
-      if (!extension || !endsWith(importPath, extension)) {
+      if (!extension || !importPath.endsWith(extension)) {
         if (isUseOfExtensionRequired(extension) && !isUseOfExtensionForbidden(extension)) {
           context.report({
             node: source,

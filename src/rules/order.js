@@ -1,6 +1,5 @@
 'use strict'
 
-import find from 'lodash.find'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
@@ -34,7 +33,7 @@ function findOutOfOrder(imported) {
 
 function reportOutOfOrder(context, imported, outOfOrder, order) {
   outOfOrder.forEach(function (imp) {
-    const found = find(imported, function hasHigherRank(importedItem) {
+    const found = imported.find(function hasHigherRank(importedItem) {
       return importedItem.rank > imp.rank
     })
     context.report(imp.node, '`' + imp.name + '` import should occur ' + order +
