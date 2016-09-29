@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.0.0]! - 2016-09-30
 ### Added
+- [`unambiguous`] rule: report modules that are not unambiguously ES modules.
 - `recommended` shared config. Roughly `errors` and `warnings` mixed together,
   with some `parserOptions` in the mix. ([#402])
 - `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
@@ -342,6 +343,7 @@ for info on changes for earlier releases.
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
+[`unambiguous`]: ./docs/rules/unambiguous.md
 
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
