@@ -67,6 +67,14 @@ import { x } from './mod' // may be reported, if not resolved to a module
 import coolImg from '../../img/coolImg.img' // will not be reported, even if not found
 ```
 
+#### `caseSensitive`
+
+By default, this rule will report paths whose case do not match the underlying filesystem path, if the FS is not case-sensitive. To disable this behavior, set the `caseSensitive` option to `false`.
+
+```js
+/*eslint import/no-unresolved: [2, { caseSensitive: true (default) | false }]*/
+const { default: x } = require('./foo') // reported if './foo' is actually './Foo' and caseSensitive: true
+```
 
 ## When Not To Use It
 
