@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Fixed
 - [`prefer-default-export`] handles re-exported default exports ([#609])
+- Fix crash when using `newline-after-import` with decorators ([#592])
+- Properly report `newline-after-import` when next line is a decorator
 
 ## [2.0.1] - 2016-10-06
 ### Fixed
@@ -402,6 +404,7 @@ for info on changes for earlier releases.
 
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
+[#592]: https://github.com/benmosher/eslint-plugin-import/issues/592
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
