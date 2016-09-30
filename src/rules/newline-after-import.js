@@ -38,6 +38,9 @@ function getLineDifference(node, nextNode) {
   return nextNode.loc.start.line - node.loc.end.line
 }
 
+function isClassWithDecorator(node) {
+  return node.type === 'ClassDeclaration' && node.decorators && node.decorators.length
+}
 
 module.exports = {
   meta: {
@@ -48,6 +51,10 @@ module.exports = {
     const requireCalls = []
 
     function checkForNewLine(node, nextNode, type) {
+      if (isClassWithDecorator(nextNode)) {
+        nextNode = nextNode.decorators[0]
+      }
+
       if (getLineDifference(node, nextNode) < 2) {
         let column = node.loc.start.column
 
