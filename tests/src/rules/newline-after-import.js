@@ -128,6 +128,14 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       `,
       parserOptions: { sourceType: 'module' },
     },
+    {
+      code: `//issue 592
+        @SomeDecorator(require('./some-file'))
+        export default class App {}
+      `,
+      parserOptions: { sourceType: 'module' },
+      parser: 'babel-eslint',
+    },
   ],
 
   invalid: [
