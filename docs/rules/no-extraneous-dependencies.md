@@ -22,7 +22,7 @@ You can set the options like this:
 You can also use an array of globs instead of literal booleans:
 
 ```js
-"import/no-extraneous-dependencies": ["error", {"devDependencies": ['**/*.test.js', '**/*.spec.js']}]
+"import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.js", "**/*.spec.js"]}]
 ```
 
 When using an array of globs, the setting will be activated if the name of the file being linted matches a single glob in the array.
