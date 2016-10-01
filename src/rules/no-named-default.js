@@ -1,5 +1,3 @@
-import has from 'has'
-
 module.exports = {
   meta: {
     docs: {},
@@ -20,10 +18,7 @@ module.exports = {
       node.specifiers.forEach(function (im) {
         if (im.type !== type) return
 
-        const isDefault = im.imported.name === 'default'
-        const isNamed = has(im.local, 'name')
-
-        if (isDefault && isNamed) {
+        if (im.imported.name === 'default') {
           context.report(im.local,
             'Using name \'' + im.local.name +
             '\' as identifier for default export.')
