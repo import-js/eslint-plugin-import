@@ -6,14 +6,11 @@ module.exports = {
   create: function (context) {
     return {
       'ImportDeclaration': function (node) {
-        if (node.source == null) return
-
         node.specifiers.forEach(function (im) {
           if (im.type === 'ImportSpecifier' && im.imported.name === 'default') {
             context.report({
               node: im.local,
-              message: 'Use default import syntax to ' +
-                       'import \'' + im.local.name + '\'.' })
+              message: `Use default import syntax to import \'${im.local.name}\'.` })
           }
         })
       },
