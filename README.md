@@ -73,8 +73,9 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Enforce a convention in module import order ([`order`])
 * Enforce a newline after import statements ([`newline-after-import`])
 * Prefer a default export if module exports a single name ([`prefer-default-export`])
-* Limit the maximum number of dependencies a module can have. ([`max-dependencies`])
-* Forbid unassigned imports. ([`no-unassigned-import`])
+* Limit the maximum number of dependencies a module can have ([`max-dependencies`])
+* Forbid unassigned imports ([`no-unassigned-import`])
+* Forbid named default exports ([`no-named-default`])
 
 [`first`]: ./docs/rules/first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
@@ -85,6 +86,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
+[`no-named-default`]: ./docs/rules/no-named-default.md
 
 ## Installation
 
