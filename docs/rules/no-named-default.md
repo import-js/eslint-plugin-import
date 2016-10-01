@@ -19,7 +19,7 @@ export const bar = 'baz';
 ...these would be valid:
 ```js
 import foo from './foo.js';
-import foo { bar } from './foo.js';
+import foo, { bar } from './foo.js';
 ```
 
 ...and these would be reported:

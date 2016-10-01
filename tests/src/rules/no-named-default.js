@@ -9,23 +9,31 @@ ruleTester.run('no-named-default', rule, {
     test({code: 'import bar from "./bar";'}),
     test({code: 'import bar, { foo } from "./bar";'}),
 
-    // es7
-    test({ code: 'import bar from "./bar";', parser: 'babel-eslint' }),
-    test({ code: 'import bar, { foo } from "./bar";', parser: 'babel-eslint' }),
-
     ...SYNTAX_CASES,
   ],
 
   invalid: [
     test({
+      code: 'import { default } from "./bar";',
+      errors: [{
+        message: 'Use default import syntax to import \'default\'.',
+        type: 'Identifier',
+      }],
+      parser: 'babel-eslint',
+    }),
+    test({
       code: 'import { default as bar } from "./bar";',
-      errors: [ {
-        message: 'Using name \'bar\' as identifier for default export.'
-      , type: 'Identifier' } ] }),
+      errors: [{
+        message: 'Use default import syntax to import \'bar\'.',
+        type: 'Identifier',
+      }],
+    }),
     test({
       code: 'import { foo, default as bar } from "./bar";',
-      errors: [ {
-        message: 'Using name \'bar\' as identifier for default export.'
-      , type: 'Identifier' } ] }),
+      errors: [{
+        message: 'Use default import syntax to import \'bar\'.',
+        type: 'Identifier',
+      }],
+    }),
   ],
 })

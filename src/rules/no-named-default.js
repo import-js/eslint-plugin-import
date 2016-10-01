@@ -4,29 +4,19 @@ module.exports = {
   },
 
   create: function (context) {
-    function checkSpecifiers(type, node) {
-      if (node.source == null) return
-
-      const hasImportSpecifier = node.specifiers.some(function (im) {
-        return im.type === type
-      })
-
-      if (!hasImportSpecifier) {
-        return
-      }
-
-      node.specifiers.forEach(function (im) {
-        if (im.type !== type) return
-
-        if (im.imported.name === 'default') {
-          context.report(im.local,
-            'Using name \'' + im.local.name +
-            '\' as identifier for default export.')
-        }
-      })
-    }
     return {
-      'ImportDeclaration': checkSpecifiers.bind(null, 'ImportSpecifier'),
+      'ImportDeclaration': function (node) {
+        if (node.source == null) return
+
+        node.specifiers.forEach(function (im) {
+          if (im.type === 'ImportSpecifier' && im.imported.name === 'default') {
+            context.report({
+              node: im.local,
+              message: 'Use default import syntax to ' +
+                       'import \'' + im.local.name + '\'.' })
+          }
+        })
+      },
     }
   },
 }
