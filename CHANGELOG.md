@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports
 
 
 ## [2.0.0]! - 2016-09-30
