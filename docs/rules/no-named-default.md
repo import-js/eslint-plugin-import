@@ -20,7 +20,6 @@ export const bar = 'baz';
 ```js
 import foo from './foo.js';
 import foo { bar } from './foo.js';
-import foo { bar as baz } from './foo.js';
 ```
 
 ...and these would be reported:
@@ -28,5 +27,4 @@ import foo { bar as baz } from './foo.js';
 // message: Using exported name 'bar' as identifier for default export.
 import { default as foo } from './foo.js';
 import { default as foo, bar } from './foo.js';
-import { default as foo, bar as baz } from './foo.js';
 ```
