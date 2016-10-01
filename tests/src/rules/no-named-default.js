@@ -18,14 +18,14 @@ ruleTester.run('no-named-default', rule, {
 
   invalid: [
     test({
-      code: 'import { default as foo } from "./foo";',
+      code: 'import { default as bar } from "./bar";',
       errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] }),
+        message: 'Using name \'bar\' as identifier for default export.'
+      , type: 'Identifier' } ] }),
     test({
-      code: 'import { foo, default as bar } from "./baz";',
+      code: 'import { foo, default as bar } from "./bar";',
       errors: [ {
-        message: 'Using exported name \'bar\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] }),
+        message: 'Using name \'bar\' as identifier for default export.'
+      , type: 'Identifier' } ] }),
   ],
 })

@@ -1,5 +1,4 @@
-import Exports from '../ExportMap'
-import importDeclaration from '../importDeclaration'
+import has from 'has'
 
 module.exports = {
   meta: {
@@ -7,11 +6,32 @@ module.exports = {
   },
 
   create: function (context) {
-    function checkDefault(nameKey, defaultSpecifier) {
-      return;
+    function checkSpecifiers(type, node) {
+      if (node.source == null) return
+
+      const hasImportSpecifier = node.specifiers.some(function (im) {
+        return im.type === type
+      })
+
+      if (!hasImportSpecifier) {
+        return
+      }
+
+      node.specifiers.forEach(function (im) {
+        if (im.type !== type) return
+
+        const isDefault = im.imported.name === 'default'
+        const isNamed = has(im.local, 'name')
+
+        if (isDefault && isNamed) {
+          context.report(im.local,
+            'Using name \'' + im.local.name +
+            '\' as identifier for default export.')
+        }
+      })
     }
     return {
-      'ImportDefaultSpecifier': checkDefault.bind(null, 'local'),
+      'ImportDeclaration': checkSpecifiers.bind(null, 'ImportSpecifier'),
     }
   },
 }
