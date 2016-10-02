@@ -1,6 +1,6 @@
 # unambiguous
 
-Warn if a `module` could be mistakely parsed as a `script` by a consumer leveraging
+Warn if a `module` could be mistakenly parsed as a `script` by a consumer leveraging
 [Unambiguous JavaScript Grammar] to determine correct parsing goal.
 
 Will respect the [`parserOptions.sourceType`] from ESLint config, i.e. files parsed
