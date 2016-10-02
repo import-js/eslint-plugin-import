@@ -13,6 +13,8 @@ const hashObject = require('./hash').hashObject
 const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
 exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 
+const ERROR_NAME = 'EslintPluginImportResolveError'
+
 const fileExistsCache = new ModuleCache()
 
 // Polyfill Node's `Module.createRequireFromPath` if not present (added in Node v10.12.0)
@@ -162,7 +164,9 @@ function resolverReducer(resolvers, map) {
     return map
   }
 
-  throw new Error('invalid resolver config')
+  const err = new Error('invalid resolver config')
+  err.name = ERROR_NAME
+  throw err
 }
 
 function getBaseDir(sourceFile) {
@@ -175,10 +179,14 @@ function requireResolver(name, sourceFile) {
     tryRequire(path.resolve(getBaseDir(sourceFile), name))
 
   if (!resolver) {
-    throw new Error(`unable to load resolver "${name}".`)
+    const err = new Error(`unable to load resolver "${name}".`)
+    err.name = ERROR_NAME
+    throw err
   }
   if (!isResolverValid(resolver)) {
-    throw new Error(`${name} with invalid interface loaded as resolver`)
+    const err = new Error(`${name} with invalid interface loaded as resolver`)
+    err.name = ERROR_NAME
+    throw err
   }
 
   return resolver
@@ -210,8 +218,14 @@ function resolve(p, context) {
                    )
   } catch (err) {
     if (!erroredContexts.has(context)) {
+      // The `err.stack` string starts with `err.name` followed by colon and `err.message`.
+      // We're filtering out the default `err.name` because it adds little value to the message.
+      let errMessage = err.message
+      if (err.name !== ERROR_NAME && err.stack) {
+        errMessage = err.stack.replace(/^Error: /, '')
+      }
       context.report({
-        message: `Resolve error: ${err.message}`,
+        message: `Resolve error: ${errMessage}`,
         loc: { line: 1, column: 0 },
       })
       erroredContexts.add(context)

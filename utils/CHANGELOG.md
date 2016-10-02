@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - Uses createRequireFromPath to resolve loaders ([#1591], thanks [@arcanis])
+- report the error stack on a resolution error ([#599], thanks [@sompylasar])
 
 ## v2.5.0 - 2019-12-07
 
@@ -72,6 +73,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [#1166]: https://github.com/benmosher/eslint-plugin-import/issues/1166
 [#1160]: https://github.com/benmosher/eslint-plugin-import/pull/1160
 [#1035]: https://github.com/benmosher/eslint-plugin-import/issues/1035
+[#599]: https://github.com/benmosher/eslint-plugin-import/pull/599
 
 [@hulkish]: https://github.com/hulkish
 [@timkraut]: https://github.com/timkraut
@@ -81,3 +83,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@brettz9]: https://github.com/brettz9
 [@JounQin]: https://github.com/JounQin
 [@arcanis]: https://github.com/arcanis
+[@sompylasar]: https://github.com/sompylasar

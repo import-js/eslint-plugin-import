@@ -1,1 +1,1 @@
-throw new Error('TEST ERROR')
+throw new SyntaxError('TEST SYNTAX ERROR')

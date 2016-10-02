@@ -8,6 +8,11 @@ import * as fs from 'fs'
 import * as utils from '../utils'
 
 describe('resolve', function () {
+  // We don't want to test for a specific stack, just that it was there in the error message.
+  function replaceErrorStackForTest(str) {
+    return typeof str === 'string' ? str.replace(/(\n\s+at .+:\d+\)?)+$/, '\n<stack-was-here>') : str
+  }
+
   it('throws on bad parameters', function () {
     expect(resolve.bind(null, null, null)).to.throw(Error)
   })
@@ -60,7 +65,7 @@ describe('resolve', function () {
                       , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('exception.js') } }),
                     )).to.equal(undefined)
     expect(testContextReports[0]).to.be.an('object')
-    expect(testContextReports[0].message).to.equal('Resolve error: foo-bar-resolver-v2 resolve test exception')
+    expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: foo-bar-resolver-v2 resolve test exception\n<stack-was-here>')
     expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
 
     testContextReports.length = 0
@@ -153,7 +158,7 @@ describe('resolve', function () {
                       , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('exception.js') } }),
                     )).to.equal(undefined)
     expect(testContextReports[0]).to.be.an('object')
-    expect(testContextReports[0].message).to.equal('Resolve error: TEST ERROR')
+    expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>')
     expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
   })
 
