@@ -7,7 +7,6 @@ var findRoot = require('find-root')
   , isAbsolute = path.isAbsolute || require('is-absolute')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
-  , assign = require('object-assign')
   , resolve = require('resolve')
   , semver = require('semver')
   , has = require('has')
@@ -139,7 +138,7 @@ function createResolveSync(configPath, webpackConfig) {
 function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
   var EnhancedResolve = webpackRequire('enhanced-resolve')
 
-  return EnhancedResolve.create.sync(assign({}, webpack2DefaultResolveConfig, resolveConfig))
+  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig))
 }
 
 /**

@@ -1,6 +1,5 @@
 import path from 'path'
 import has from 'has'
-import assign from 'object-assign'
 
 import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn } from '../core/importType'
@@ -42,7 +41,7 @@ module.exports = {
   create: function (context) {
     const configuration = context.options[0] || 'never'
     const defaultConfig = typeof configuration === 'string' ? configuration : null
-    const modifiers = assign(
+    const modifiers = Object.assign(
       {},
       typeof configuration === 'object' ? configuration : context.options[1]
     )

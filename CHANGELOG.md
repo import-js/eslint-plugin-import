@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Fixed
+- Fixed code that relied on removed dependencies. ([#604])
 
 ## [2.0.0]! - 2016-09-30
 ### Added
@@ -25,7 +26,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
-- Case-sensitivity: now specifically (and optionally) reported by [`no-unresolved`]. 
+- Case-sensitivity: now specifically (and optionally) reported by [`no-unresolved`].
   Other rules will ignore case-mismatches on paths on case-insensitive filesystems. ([#311])
 
 ### Fixed
@@ -395,6 +396,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567

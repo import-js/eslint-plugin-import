@@ -37,7 +37,6 @@
     "is-absolute": "^0.2.3",
     "lodash.get": "^3.7.0",
     "node-libs-browser": "^1.0.0",
-    "object-assign": "^4.1.0",
     "resolve": "^1.1.7",
     "semver": "^5.3.0"
   },
