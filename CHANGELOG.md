@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Fixed
 - Fixed code that relied on removed dependencies. ([#604])
+- Fixed default order for the [`order`] rule ([#601])
 
 ## [2.0.0]! - 2016-09-30
 ### Added
@@ -397,6 +398,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
+[#601]: https://github.com/benmosher/eslint-plugin-import/issues/601
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
