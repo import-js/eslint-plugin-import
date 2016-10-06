@@ -45,6 +45,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js', '*.spec.js']}],
       filename: 'foo.spec.js',
     }),
+    test({ code: 'require(6)' }),
   ],
   invalid: [
     test({
