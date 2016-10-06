@@ -1,8 +1,9 @@
 ---
+plugins:
+  - import
 extends:
   - eslint:recommended
-  - plugin:import/errors
-  - plugin:import/warnings
+  - plugin:import/recommended
 
 env:
   node: true
@@ -23,6 +24,10 @@ rules:
     - 2
     - single
     - allowTemplateLiterals: true
+
+  # dog fooding
+  import/no-extraneous-dependencies: "error"
+  import/unambiguous: "off"
 
 settings:
   import/resolver:
