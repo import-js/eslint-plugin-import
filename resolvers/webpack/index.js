@@ -79,6 +79,7 @@ exports.resolve = function (source, file, settings) {
 
   } else {
     webpackConfig = configPath
+    configPath = null
   }
 
   if (typeof webpackConfig === 'function') {
@@ -115,9 +116,14 @@ exports.resolve = function (source, file, settings) {
 
 function createResolveSync(configPath, webpackConfig) {
   var webpackRequire
+    , basedir = null
+
+  if (typeof configPath === 'string') {
+    basedir = path.dirname(configPath)
+  }
 
   try {
-    var webpackFilename = resolve.sync('webpack', { basedir: path.dirname(configPath) })
+    var webpackFilename = resolve.sync('webpack', { basedir })
     var webpackResolveOpts = { basedir: path.dirname(webpackFilename) }
 
     webpackRequire = function (id) {
