@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Fixed
+- [`prefer-default-export`] handles re-exported default exports ([#609])
 
 ## [2.0.1] - 2016-10-06
 ### Fixed
@@ -399,6 +400,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570

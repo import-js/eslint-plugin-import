@@ -11,7 +11,24 @@ module.exports = {
     let hasStarExport = false
     let namedExportNode = null
 
+    function captureDeclaration(identifierOrPattern) {
+      if (identifierOrPattern.type === 'ObjectPattern') {
+        // recursively capture
+        identifierOrPattern.properties
+          .forEach(function(property) {
+            captureDeclaration(property.value)
+          })
+      } else {
+      // assume it's a single standard identifier
+        specifierExportCount++
+      }
+    }
+
     return {
+      'ExportDefaultSpecifier': function() {
+        specifierExportCount++
+      },
+
       'ExportSpecifier': function(node) {
         if (node.exported.name === 'default') {
           hasDefaultExport = true
@@ -24,19 +41,6 @@ module.exports = {
       'ExportNamedDeclaration': function(node) {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return
-
-        function captureDeclaration(identifierOrPattern) {
-          if (identifierOrPattern.type === 'ObjectPattern') {
-            // recursively capture
-            identifierOrPattern.properties
-              .forEach(function(property) {
-                captureDeclaration(property.value)
-              })
-          } else {
-          // assume it's a single standard identifier
-            specifierExportCount++
-          }
-        }
 
         if (node.declaration.declarations) {
           node.declaration.declarations.forEach(function(declaration) {
