@@ -197,13 +197,15 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     new ModuleAliasPlugin(resolveConfig.alias || {}),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
     new ModulesInDirectoriesPlugin(
-      'module', resolveConfig.modulesDirectories || ['web_modules', 'node_modules']
+      'module',
+      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules']
     ),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.fallback),
     new ModuleAsFilePlugin('module'),
     new ModuleAsDirectoryPlugin('module'),
     new DirectoryDescriptionFilePlugin(
-      'package.json', ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
+      'package.json',
+      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
     ),
     new DirectoryDefaultFilePlugin(['index']),
     new FileAppendPlugin(resolveConfig.extensions || ['', '.webpack.js', '.web.js', '.js']),
