@@ -33,7 +33,7 @@ export const rules = {
   'no-deprecated': require('./rules/no-deprecated'),
 
   // deprecated aliases to rules
-  'imports-first': require('./rules/first'),
+  'imports-first': require('./rules/imports-first'),
 }
 
 export const configs = {
