@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 import pkgUp from 'pkg-up'
 import minimatch from 'minimatch'
 import importType from '../core/importType'
@@ -78,7 +79,10 @@ function testConfig(config, filename) {
     return config
   }
   // Array of globs.
-  return config.some(c => minimatch(filename, c))
+  return config.some(c => (
+    minimatch(filename, c) ||
+    minimatch(filename, path.join(process.cwd(), c))
+  ))
 }
 
 module.exports = {
