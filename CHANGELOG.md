@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Fixed
 - [`prefer-default-export`] handles re-exported default exports ([#609])
+- Fixed documentation for the default values for the [`order`] rule ([#601])
 
 ## [2.0.1] - 2016-10-06
 ### Fixed
@@ -402,6 +403,7 @@ for info on changes for earlier releases.
 
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
+[#601]: https://github.com/benmosher/eslint-plugin-import/issues/601
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
