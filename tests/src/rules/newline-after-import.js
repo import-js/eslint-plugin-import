@@ -128,6 +128,19 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       `,
       parserOptions: { sourceType: 'module' },
     },
+    {
+      code: `//issue 592
+        @SomeDecorator(require('./some-file'))
+        export default class App {}
+      `,
+      parserOptions: { sourceType: 'module' },
+      parser: 'babel-eslint',
+    },
+    {
+      code: "var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}",
+      parserOptions: { sourceType: 'module' },
+      parser: 'babel-eslint',
+    },
   ],
 
   invalid: [
@@ -247,6 +260,26 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: "import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}",
+      errors: [ {
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+      parser: 'babel-eslint',
+    },
+    {
+      code: "var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}",
+      errors: [ {
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+      parser: 'babel-eslint',
     },
   ],
 })
