@@ -22,3 +22,12 @@ describe("default options", function () {
       .to.have.property('found', false)
   })
 })
+
+describe("absolute imports", function () {
+  it("handles absolute path", function () {
+    expect(node.resolve('project/app/src/components/TopBar', '/home/map/repos/project/app/src/screens/Detail.js'))
+      .to.have.property('path')
+      .equal(path.resolve(__dirname, '../TopBar'))
+  })
+})
+

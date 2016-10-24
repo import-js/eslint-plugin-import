@@ -15,6 +15,11 @@ exports.resolve = function (source, file, config) {
   }
 
   try {
+    if (config && config.projectName && source.startsWith(config.projectName)) {
+      source = path.relative(file, source)
+      log('new source is:', source)
+    }
+
     resolvedPath = resolve.sync(source, opts(file, config))
     log('Resolved to:', resolvedPath)
     return { found: true, path: resolvedPath }
