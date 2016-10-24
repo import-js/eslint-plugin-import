@@ -42,6 +42,9 @@ module.exports = {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return
 
+        // don't count flow types exports
+        if (node.exportKind === 'type') return
+
         if (node.declaration.declarations) {
           node.declaration.declarations.forEach(function(declaration) {
             captureDeclaration(declaration.id)
