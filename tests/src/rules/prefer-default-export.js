@@ -66,6 +66,11 @@ ruleTester.run('prefer-default-export', rule, {
         import * as foo from './foo';`,
       }),
 
+    test({
+      code: `export type UserId = number;`,
+      parser: 'babel-eslint',
+      }),
+
     // ...SYNTAX_CASES,
   ],
   invalid: [
