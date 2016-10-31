@@ -127,6 +127,21 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'export class Component extends React.Component {}' }),
     test({ code: 'export function Component() {}' }),
     test({ code: 'export const Component = () => {}' }),
+
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      options: [{ packageDir: packageDirMonoRepoRoot }],
+      settings: { 'import/core-modules': ['not-a-dependency'] },
+    }),
+    test({
+      code: 'import "@generated/bar/module"',
+      settings: { 'import/core-modules': ['@generated/bar'] },
+    }),
+    test({
+      code: 'import "@generated/bar/and/sub/path"',
+      settings: { 'import/core-modules': ['@generated/bar'] },
+    }),
   ],
   invalid: [
     test({
@@ -320,6 +335,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         // missing dependency is chai not alias
         message: "'chai' should be listed in the project's dependencies. Run 'npm i -S chai' to add it",
+      }],
+    }),
+
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      options: [{ packageDir: packageDirMonoRepoRoot }],
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
       }],
     }),
   ],
