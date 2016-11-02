@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+
+## 0.7.0
 ### Added
 - Support for explicit Webpack config object in `.eslintrc.*`. ([#572], thanks [@jameslnewell])
 - Added `resolve.modules` to configs for webpack2 support ([#569], thanks [@toshafed])
