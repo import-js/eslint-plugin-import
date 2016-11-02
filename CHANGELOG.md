@@ -4,8 +4,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
 - Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports
 
+### Fixed
+- [`prefer-default-export`] handles re-exported default exports ([#609])
+- Fix crash when using `newline-after-import` with decorators ([#592])
+- Properly report `newline-after-import` when next line is a decorator
+
+## [2.0.1] - 2016-10-06
+### Fixed
+- Fixed code that relied on removed dependencies. ([#604])
 
 ## [2.0.0]! - 2016-09-30
 ### Added
@@ -26,7 +35,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
   exist, but may be removed in a future major release.
-- Case-sensitivity: now specifically (and optionally) reported by [`no-unresolved`]. 
+- Case-sensitivity: now specifically (and optionally) reported by [`no-unresolved`].
   Other rules will ignore case-mismatches on paths on case-insensitive filesystems. ([#311])
 
 ### Fixed
@@ -396,6 +405,9 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
+[#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
+[#592]: https://github.com/benmosher/eslint-plugin-import/issues/592
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
 [#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
@@ -444,7 +456,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...v2.0.0
 [1.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.14.0...v1.15.0

@@ -1,6 +1,5 @@
 var resolve = require('resolve')
   , path = require('path')
-  , assign = require('object-assign')
 
 var log = require('debug')('eslint-plugin-import:resolver:node')
 
@@ -26,7 +25,7 @@ exports.resolve = function (source, file, config) {
 }
 
 function opts(file, config) {
-  return assign({
+  return Object.assign({
       // more closely matches Node (#333)
       extensions: ['.js', '.json'],
     },

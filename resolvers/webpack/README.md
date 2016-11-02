@@ -52,3 +52,17 @@ settings:
       config: 'webpack.multiple.config.js'
       config-index: 1   # take the config at index 1
 ```
+
+or with explicit config object:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack:
+      config:
+        resolve:
+          extensions:
+            - .js
+            - .jsx
+```

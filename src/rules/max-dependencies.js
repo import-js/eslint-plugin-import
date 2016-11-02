@@ -1,4 +1,3 @@
-import Set from 'es6-set'
 import isStaticRequire from '../core/staticRequire'
 
 const DEFAULT_MAX = 10

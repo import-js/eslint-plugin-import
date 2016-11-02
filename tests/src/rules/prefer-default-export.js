@@ -55,6 +55,10 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export * from './foo';`,
       }),
+    test({
+      code: `export Memory, { MemoryValue } from './Memory'`,
+      parser: 'babel-eslint',
+      }),
 
     // no exports at all
     test({

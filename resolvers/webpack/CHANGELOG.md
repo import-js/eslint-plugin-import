@@ -4,7 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
-
+### Added
+- Support for explicit Webpack config object in `.eslintrc.*`. ([#572], thanks [@jameslnewell])
+- Added `resolve.modules` to configs for webpack2 support ([#569], thanks [@toshafed])
 
 ## 0.6.0 - 2016-09-13
 ### Added
@@ -63,6 +65,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
+[#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
 [#533]: https://github.com/benmosher/eslint-plugin-import/pull/533
 [#413]: https://github.com/benmosher/eslint-plugin-import/pull/413
 [#377]: https://github.com/benmosher/eslint-plugin-import/pull/377
@@ -89,3 +93,5 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@Rogeres]: https://github.com/Rogeres
 [@Kovensky]: https://github.com/Kovensky
 [@grahamb]: https://github.com/grahamb
+[@jameslnewell]: https://github.com/jameslnewell
+[@toshafed]: https://github.com/toshafed
