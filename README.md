@@ -6,18 +6,6 @@
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
 [![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](http://www.npmtrends.com/eslint-plugin-import)
 
-# a quick note
-
-I want to apologize: I have been pretty unresponsive the last few weeks. My wife just birthed our second son and is still recovering on bed rest, so I'm barely holding my home and day job together, and re-discovering what an amazing force for awesome she is for our family, as I'm fumbling through picking up the slack. 😅
-
-I am hoping to be back in action on this in the next week or two, but I need to focus on my family and work in the immediate term. Fortunately, @jfmengels is a fantastic co-maintainer and has been doing a great job responding to new issues in my absence.
-
-Thanks for your patience! 😎 
-
--- @benmosher
-
-(now, back to the normal README:)
-
 This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES2015+ static module syntax intends to provide, marked up in your editor.
 
 **IF YOU ARE USING THIS WITH SUBLIME**: see the [bottom section](#sublimelinter-eslint) for important info.
