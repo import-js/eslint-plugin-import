@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports
+
 ### Fixed
 - [`prefer-default-export`] handles re-exported default exports ([#609])
 - Fix crash when using `newline-after-import` with decorators ([#592])

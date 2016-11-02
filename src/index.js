@@ -10,6 +10,7 @@ export const rules = {
   'no-restricted-paths': require('./rules/no-restricted-paths'),
   'no-internal-modules': require('./rules/no-internal-modules'),
 
+  'no-named-default': require('./rules/no-named-default'),
   'no-named-as-default': require('./rules/no-named-as-default'),
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
 
