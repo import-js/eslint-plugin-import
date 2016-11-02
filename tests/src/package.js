@@ -53,5 +53,9 @@ describe('package', function () {
     }
   })
 
-})
+  it('marks deprecated rules in their metadata', function () {
+    expect(module.rules['imports-first'].meta.deprecated).to.be.true
+    expect(module.rules['first'].meta.deprecated).not.to.be.true
+  })
 
+})
