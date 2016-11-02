@@ -6,11 +6,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports
+- [`no-extraneous-dependencies`]: check globs against CWD + absolute path ([#602] + [#630], thanks [@ljharb])
 
 ### Fixed
 - [`prefer-default-export`] handles re-exported default exports ([#609])
-- Fix crash when using `newline-after-import` with decorators ([#592])
-- Properly report `newline-after-import` when next line is a decorator
+- Fix crash when using [`newline-after-import`] with decorators ([#592])
+- Properly report [`newline-after-import`] when next line is a decorator
 - Fixed documentation for the default values for the [`order`] rule ([#601])
 
 ## [2.0.1] - 2016-10-06
@@ -335,6 +336,7 @@ for info on changes for earlier releases.
 [`no-amd`]: ./docs/rules/no-amd.md
 [`namespace`]: ./docs/rules/namespace.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
+[`no-named-default`]: ./docs/rules/no-named-default.md
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
@@ -358,6 +360,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 
+[#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
 [#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
@@ -408,11 +411,12 @@ for info on changes for earlier releases.
 
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
+[#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
 [#601]: https://github.com/benmosher/eslint-plugin-import/issues/601
 [#592]: https://github.com/benmosher/eslint-plugin-import/issues/592
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
-[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
+[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567∏
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
