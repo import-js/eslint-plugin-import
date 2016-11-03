@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: check globs against CWD + absolute path ([#602] + [#630], thanks [@ljharb])
 
 ### Fixed
+- [`prefer-default-export`] handles flow `export type` ([#484])
 - [`prefer-default-export`] handles re-exported default exports ([#609])
 - Fix crash when using [`newline-after-import`] with decorators ([#592])
 - Properly report [`newline-after-import`] when next line is a decorator
