@@ -36,6 +36,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Properly report [`newline-after-import`] when next line is a decorator
 - Fixed documentation for the default values for the [`order`] rule ([#601])
 
+### Added
+- [`exports-last`] lints that export statements are at the end of the file ([#620] + [#632])
+
 ## [2.0.1] - 2016-10-06
 ### Fixed
 - Fixed code that relied on removed dependencies. ([#604])
