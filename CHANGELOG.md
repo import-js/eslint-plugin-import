@@ -8,11 +8,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.1.0] - 2016-11-02
 ### Added
-- Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports
+- Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports ([#596], thanks [@ntdb])
 - [`no-extraneous-dependencies`]: check globs against CWD + absolute path ([#602] + [#630], thanks [@ljharb])
 
 ### Fixed
-- [`prefer-default-export`] handles flow `export type` ([#484])
+- [`prefer-default-export`] handles flow `export type` ([#484] + [#639], thanks [@jakubsta])
 - [`prefer-default-export`] handles re-exported default exports ([#609])
 - Fix crash when using [`newline-after-import`] with decorators ([#592])
 - Properly report [`newline-after-import`] when next line is a decorator
@@ -364,7 +364,9 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 
+[#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
+[#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
 [#568]: https://github.com/benmosher/eslint-plugin-import/pull/568
@@ -420,13 +422,14 @@ for info on changes for earlier releases.
 [#592]: https://github.com/benmosher/eslint-plugin-import/issues/592
 [#577]: https://github.com/benmosher/eslint-plugin-import/issues/577
 [#570]: https://github.com/benmosher/eslint-plugin-import/issues/570
-[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567∏
+[#567]: https://github.com/benmosher/eslint-plugin-import/issues/567
 [#566]: https://github.com/benmosher/eslint-plugin-import/issues/566
 [#545]: https://github.com/benmosher/eslint-plugin-import/issues/545
 [#530]: https://github.com/benmosher/eslint-plugin-import/issues/530
 [#529]: https://github.com/benmosher/eslint-plugin-import/issues/529
 [#519]: https://github.com/benmosher/eslint-plugin-import/issues/519
 [#507]: https://github.com/benmosher/eslint-plugin-import/issues/507
+[#484]: https://github.com/benmosher/eslint-plugin-import/issues/484
 [#478]: https://github.com/benmosher/eslint-plugin-import/issues/478
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
 [#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
@@ -537,3 +540,5 @@ for info on changes for earlier releases.
 [@preco21]: https://github.com/preco21
 [@skyrpex]: https://github.com/skyrpex
 [@fson]: https://github.com/fson
+[@ntdb]: https://github.com/ntdb
+[@jakubsta]: https://github.com/jakubsta
