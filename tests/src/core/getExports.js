@@ -4,6 +4,7 @@ import ExportMap from '../../../src/ExportMap'
 import * as fs from 'fs'
 
 import { getFilename } from '../utils'
+import * as unambiguous from 'eslint-module-utils/unambiguous'
 
 describe('ExportMap', function () {
   const fakeContext = {
@@ -341,6 +342,25 @@ describe('ExportMap', function () {
         })
       })
     })
+
+  })
+
+  // todo: move to utils
+  describe('unambigous regex', function () {
+
+    const testFiles = [
+      ['deep/b.js', true],
+      ['bar.js', true],
+      ['deep-es7/b.js', true],
+      ['common.js', false],
+    ]
+
+    for (let [testFile, expectedRegexResult] of testFiles) {
+      it(`works for ${testFile} (${expectedRegexResult})`, function () {
+        const content = fs.readFileSync('./tests/files/' + testFile, 'utf8')
+        expect(unambiguous.test(content)).to.equal(expectedRegexResult)
+      })
+    }
 
   })
 

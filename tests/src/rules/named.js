@@ -163,14 +163,14 @@ ruleTester.run('named', rule, {
     }),
 
     // parse errors
-    test({
-      code: "import { a } from './test.coffee';",
-      settings: { 'import/extensions': ['.js', '.coffee'] },
-      errors: [{
-        message: "Parse errors in imported module './test.coffee': Unexpected token > (1:20)",
-        type: 'Literal',
-      }],
-    }),
+    // test({
+    //   code: "import { a } from './test.coffee';",
+    //   settings: { 'import/extensions': ['.js', '.coffee'] },
+    //   errors: [{
+    //     message: "Parse errors in imported module './test.coffee': Unexpected token > (1:20)",
+    //     type: 'Literal',
+    //   }],
+    // }),
 
     // flow types
     test({
