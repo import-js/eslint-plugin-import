@@ -346,7 +346,7 @@ describe('ExportMap', function () {
   })
 
   // todo: move to utils
-  describe('unambigous regex', function () {
+  describe('unambiguous regex', function () {
 
     const testFiles = [
       ['deep/b.js', true],
