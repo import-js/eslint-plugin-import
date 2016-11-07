@@ -286,7 +286,8 @@ ExportMap.for = function (path, context) {
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
   // check for and cache ignore
-  if (isIgnored(path, context) && !unambiguous.potentialModulePattern.test(content)) {
+  if (isIgnored(path, context) || !unambiguous.test(content)) {
+    log('ignored path due to unambiguous regex or ignore settings:', path)
     exportCache.set(cacheKey, null)
     return null
   }

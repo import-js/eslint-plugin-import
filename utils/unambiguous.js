@@ -1,10 +1,10 @@
 'use strict'
 exports.__esModule = true
 
+
+const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*]))/m
 /**
  * detect possible imports/exports without a full parse.
- * used primarily to ignore the import/ignore setting, iif it looks like
- * there might be something there (i.e., jsnext:main is set).
  *
  * A negative test means that a file is definitely _not_ a module.
  * A positive test means it _could_ be.
@@ -13,8 +13,9 @@ exports.__esModule = true
  * avoid a parse.
  * @type {RegExp}
  */
-exports.potentialModulePattern =
-  new RegExp(`(?:^|;)\s*(?:export|import)(?:(?:\s+\w)|(?:\s*[{*]))`)
+exports.test = function isMaybeUnambiguousModule(content) {
+  return pattern.test(content)
+}
 
 // future-/Babel-proof at the expense of being a little loose
 const unambiguousNodeType = /^(Exp|Imp)ort.*Declaration$/
