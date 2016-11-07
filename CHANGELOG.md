@@ -10,8 +10,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - Corrected a few gaffs in the auto-ignore logic to fix major performance issues
   with projects that did not explicitly ignore `node_modules`. ([#654])
-- `import/ignore` was only being respected if the ignored module didn't start with
+- [`import/ignore` setting] was only being respected if the ignored module didn't start with
   an `import` or `export` JS statement
+- [`prefer-default-export`]: fixed crash on export extensions ([#653])
 
 ## [2.1.0] - 2016-11-02
 ### Added
@@ -423,6 +424,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
