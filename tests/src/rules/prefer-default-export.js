@@ -71,6 +71,16 @@ ruleTester.run('prefer-default-export', rule, {
       parser: 'babel-eslint',
       }),
 
+    // issue #653
+    test({
+      code: 'export default from "foo.js"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'export { a, b } from "foo.js"',
+      parser: 'babel-eslint',
+    }),
+
     // ...SYNTAX_CASES,
   ],
   invalid: [
