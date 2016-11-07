@@ -6,6 +6,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
+## [2.2.0] - 2016-11-07
+### Fixed
+- Corrected a few gaffs in the auto-ignore logic to fix major performance issues
+  with projects that did not explicitly ignore `node_modules`. ([#654])
+- `import/ignore` was only being respected if the ignored module didn't start with
+  an `import` or `export` JS statement
+
 ## [2.1.0] - 2016-11-02
 ### Added
 - Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports ([#596], thanks [@ntdb])
@@ -364,6 +371,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 
+[#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
@@ -469,7 +477,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/benmosher/eslint-plugin-import/compare/v1.16.0...v2.0.0
