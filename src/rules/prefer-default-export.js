@@ -26,7 +26,7 @@ module.exports = {
 
     return {
       'ExportDefaultSpecifier': function() {
-        specifierExportCount++
+        hasDefaultExport = true
       },
 
       'ExportSpecifier': function(node) {
