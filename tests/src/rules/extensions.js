@@ -117,6 +117,16 @@ ruleTester.run('extensions', rule, {
       options: [ 'never' ],
     }),
 
+    // Root packages should be ignored and they are names not files
+    test({
+      code: [
+        'import lib from "pkg.js"',
+        'import lib2 from "pgk/package"',
+        'import lib3 from "@name/pkg.js"',
+      ].join('\n'),
+      options: [ 'never' ],
+    }),
+
     // Query strings.
     test({
       code: 'import bare from "./foo?a=True.ext"',
@@ -126,6 +136,15 @@ ruleTester.run('extensions', rule, {
       code: 'import bare from "./foo.js?a=True"',
       options: [ 'always' ],
     }),
+
+    test({
+      code: [
+        'import lib from "pkg"',
+        'import lib2 from "pgk/package.js"',
+        'import lib3 from "@name/pkg"',
+      ].join('\n'),
+      options: [ 'always' ],
+    }),
   ],
 
   invalid: [
@@ -133,15 +152,6 @@ ruleTester.run('extensions', rule, {
       code: 'import a from "a/index.js"',
       errors: [ {
         message: 'Unexpected use of file extension "js" for "a/index.js"',
-        line: 1,
-        column: 15,
-      } ],
-    }),
-    test({
-      code: 'import a from "a"',
-      options: [ 'always' ],
-      errors: [ {
-        message: 'Missing file extension "js" for "a"',
         line: 1,
         column: 15,
       } ],
@@ -285,11 +295,35 @@ ruleTester.run('extensions', rule, {
       ],
     }),
     test({
-      code: 'import thing from "non-package"',
+      code: 'import thing from "non-package/test"',
       options: [ 'always' ],
       errors: [
         {
-            message: 'Missing file extension for "non-package"',
+            message: 'Missing file extension for "non-package/test"',
+            line: 1,
+            column: 19,
+        },
+      ],
+    }),
+
+    test({
+      code: 'import thing from "@name/pkg/test"',
+      options: [ 'always' ],
+      errors: [
+        {
+            message: 'Missing file extension for "@name/pkg/test"',
+            line: 1,
+            column: 19,
+        },
+      ],
+    }),
+
+    test({
+      code: 'import thing from "@name/pkg/test.js"',
+      options: [ 'never' ],
+      errors: [
+        {
+            message: 'Unexpected use of file extension "js" for "@name/pkg/test.js"',
             line: 1,
             column: 19,
         },

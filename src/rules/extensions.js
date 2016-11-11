@@ -1,7 +1,7 @@
 import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
-import { isBuiltIn, isExternalModule, isScoped } from '../core/importType'
+import { isBuiltIn, isExternalModule, isScoped, isScopedModule } from '../core/importType'
 import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
@@ -126,6 +126,14 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context)
     }
 
+    function isExternalRootModule(file) {
+      const slashCount = file.split('/').length - 1
+
+      if (isScopedModule(file) && slashCount <= 1) return true
+      if (isExternalModule(file, context, resolve(file, context)) && !slashCount) return true
+      return false
+    }
+
     function checkFileExtension(node) {
       const { source } = node
 
@@ -138,6 +146,10 @@ module.exports = {
       if (isBuiltIn(importPathWithQueryString, context.settings)) return
 
       const importPath = importPathWithQueryString.replace(/\?(.*)$/, '')
+
+      // don't enforce in root external packages as they may have names with `.js`.
+      // Like `import Decimal from decimal.js`)
+      if (isExternalRootModule(importPath)) return
 
       const resolvedPath = resolve(importPath, context)
 

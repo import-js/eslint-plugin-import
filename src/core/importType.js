@@ -84,6 +84,10 @@ function typeTest(name, settings, path) {
   return 'unknown'
 }
 
+export function isScopedModule(name) {
+  return name.indexOf('@') === 0
+}
+
 export default function resolveImportType(name, context) {
   return typeTest(name, context.settings, resolve(name, context))
 }
