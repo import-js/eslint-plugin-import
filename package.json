@@ -68,7 +68,7 @@
     "nyc": "^8.3.0",
     "redux": "^3.0.4",
     "rimraf": "2.5.2",
-    "typescript": "^2.0.3",
+    "typescript": "^2.0.6",
     "typescript-eslint-parser": "^1.0.0"
   },
   "peerDependencies": {
