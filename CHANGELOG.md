@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- attempt to fix crash in [`no-mutable-exports`]. ([#660])
 
 
 ## [2.2.0] - 2016-11-07
@@ -424,6 +426,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604

@@ -15,7 +15,7 @@ module.exports = {
       for (let variable of variables) {
         if (variable.name === name) {
           for (let def of variable.defs) {
-            if (def.type === 'Variable') {
+            if (def.type === 'Variable' && def.parent) {
               checkDeclaration(def.parent)
             }
           }
