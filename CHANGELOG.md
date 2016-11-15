@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
+- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628])
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -436,6 +437,8 @@ for info on changes for earlier releases.
 
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
+[#628]: https://github.com/benmosher/eslint-plugin-import/issues/628
+[#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
