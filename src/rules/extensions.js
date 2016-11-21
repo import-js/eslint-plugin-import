@@ -96,7 +96,7 @@ module.exports = {
   create: function (context) {
 
     const props = buildProperties(context)
-    
+
     function getModifier(extension) {
       return props.pattern[extension] || props.defaultConfig
     }
@@ -131,11 +131,10 @@ module.exports = {
       const extension = path.extname(resolvedPath || importPath).substring(1)
 
       // determine if this is a module
-      const isPackageMain = 
-        isExternalModuleMain(importPath, context.settings) || 
-        isScopedMain(importPath)
+      const isPackageMain = isExternalModuleMain(importPath, context.settings)
+        || isScopedMain(importPath)
 
-      if (!extension || !importPath.endsWith(extension)) {
+      if (!extension || !importPath.endsWith(`.${extension}`)) {
         const extensionRequired = isUseOfExtensionRequired(extension, isPackageMain)
         const extensionForbidden = isUseOfExtensionForbidden(extension)
         if (extensionRequired && !extensionForbidden) {
