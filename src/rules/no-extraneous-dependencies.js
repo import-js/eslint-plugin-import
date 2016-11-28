@@ -1,18 +1,14 @@
 import fs from 'fs'
 import path from 'path'
-import pkgUp from 'pkg-up'
+import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
 function getDependencies(context) {
-  const filepath = pkgUp.sync(context.getFilename())
-  if (!filepath) {
-    return null
-  }
-
   try {
-    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    const pkg = readPkgUp.sync(context.getFilename())
+    const packageContent = JSON.parse(pkg.pkg)
     return {
       dependencies: packageContent.dependencies || {},
       devDependencies: packageContent.devDependencies || {},
@@ -46,7 +42,6 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
     : splitName[0]
-
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
@@ -93,16 +88,22 @@ module.exports = {
       {
         'type': 'object',
         'properties': {
-          'devDependencies': { 'type': ['boolean', 'array'] },
-          'optionalDependencies': { 'type': ['boolean', 'array'] },
-          'peerDependencies': { 'type': ['boolean', 'array'] },
+          'devDependencies': {
+            'type': ['boolean', 'array']
+          },
+          'optionalDependencies': {
+            'type': ['boolean', 'array']
+          },
+          'peerDependencies': {
+            'type': ['boolean', 'array']
+          },
         },
         'additionalProperties': false,
       },
     ],
   },
 
-  create: function (context) {
+  create: function(context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
     const deps = getDependencies(context)
@@ -119,7 +120,7 @@ module.exports = {
 
     // todo: use module visitor from module-utils core
     return {
-      ImportDeclaration: function (node) {
+      ImportDeclaration: function(node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
       CallExpression: function handleRequires(node) {

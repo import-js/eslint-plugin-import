@@ -84,7 +84,7 @@
     "has": "^1.0.1",
     "lodash.cond": "^4.3.0",
     "minimatch": "^3.0.3",
-    "pkg-up": "^1.0.0"
+    "read-pkg-up": "^2.0.0"
   },
   "nyc": {
     "require": [
