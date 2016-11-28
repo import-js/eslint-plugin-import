@@ -88,22 +88,16 @@ module.exports = {
       {
         'type': 'object',
         'properties': {
-          'devDependencies': {
-            'type': ['boolean', 'array']
-          },
-          'optionalDependencies': {
-            'type': ['boolean', 'array']
-          },
-          'peerDependencies': {
-            'type': ['boolean', 'array']
-          },
+          'devDependencies': { 'type': ['boolean', 'array'] },
+          'optionalDependencies': { 'type': ['boolean', 'array'] },
+          'peerDependencies': { 'type': ['boolean', 'array'] },
         },
         'additionalProperties': false,
       },
     ],
   },
 
-  create: function(context) {
+  create: function (context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
     const deps = getDependencies(context)
@@ -120,7 +114,7 @@ module.exports = {
 
     // todo: use module visitor from module-utils core
     return {
-      ImportDeclaration: function(node) {
+      ImportDeclaration: function (node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
       CallExpression: function handleRequires(node) {
