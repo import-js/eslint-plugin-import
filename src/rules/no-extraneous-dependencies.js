@@ -7,7 +7,7 @@ import isStaticRequire from '../core/staticRequire'
 
 function getDependencies(context) {
   try {
-    const pkg = readPkgUp.sync(context.getFilename())
+    const pkg = readPkgUp.sync({cwd: context.getFilename(), normalize: false})
     const packageContent = JSON.parse(pkg.pkg)
     return {
       dependencies: packageContent.dependencies || {},
