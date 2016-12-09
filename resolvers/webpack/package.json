@@ -33,6 +33,7 @@
     "debug": "^2.2.0",
     "enhanced-resolve": "~0.9.0",
     "find-root": "^0.1.1",
+    "has": "^1.0.1",
     "interpret": "^1.0.0",
     "is-absolute": "^0.2.3",
     "lodash.get": "^3.7.0",
