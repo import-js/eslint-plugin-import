@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
@@ -8,7 +7,10 @@ import isStaticRequire from '../core/staticRequire'
 function getDependencies(context) {
   try {
     const pkg = readPkgUp.sync({cwd: context.getFilename(), normalize: false})
-    const packageContent = JSON.parse(pkg.pkg)
+    if (!pkg || !pkg.pkg) {
+      return null
+    }
+    const packageContent = pkg.pkg
     return {
       dependencies: packageContent.dependencies || {},
       devDependencies: packageContent.devDependencies || {},
