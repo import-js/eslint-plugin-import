@@ -34,19 +34,6 @@ ruleTester.run('exports-last', rule, {
         export const bar = true;
       `,
     }),
-    // test({
-    //   code: `
-    //     const foo = 'bar';
-    //     module.exports = foo
-    //   `,
-    // }),
-    // test({
-    //   code: `
-    //     const foo = 'bar';
-    //     module.exports = foo;
-    //     exports.bar = true
-    //   `,
-    // }),
 
   ],
   invalid: [
@@ -64,19 +51,5 @@ ruleTester.run('exports-last', rule, {
       `,
       errors,
     }),
-    // test({
-    //   code: `
-    //     module.exports = 'bar';
-    //     console.log('hi');
-    //   `,
-    //   errors,
-    // }),
-    // test({
-    //   code: `
-    //     exports.foo = 'bar';
-    //     const bar = true;
-    //   `,
-    //   errors,
-    // }),
   ],
 })

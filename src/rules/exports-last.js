@@ -2,10 +2,6 @@ function isExportStatement({ type }) {
   // ES Module export statements
   if (type === 'ExportDefaultDeclaration' || type === 'ExportNamedDeclaration') {
     return true
-
-  // CommonJS export statements
-  } else if (type === 'ExpressionStatement') {
-    // TODO
   }
 
   return false
