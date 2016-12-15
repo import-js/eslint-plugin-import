@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
+
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
 
@@ -374,6 +377,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 
+[#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
@@ -556,3 +560,4 @@ for info on changes for earlier releases.
 [@fson]: https://github.com/fson
 [@ntdb]: https://github.com/ntdb
 [@jakubsta]: https://github.com/jakubsta
+[@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
