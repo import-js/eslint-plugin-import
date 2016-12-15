@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 ### Changed
 - bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
+
 ### Fixed
 - use `files` in `package.json` to ship only `index.js` ([#531], thanks for noticing [@lukeapage])
 
