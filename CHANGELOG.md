@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
+## [2.2.1] - 2016-12-15
+### Changed
+- bump `eslint-import-resolver-node` dependency range to allow install of bugfix in `v0.3.0`
+
 ## [2.2.0] - 2016-11-07
 ### Fixed
 - Corrected a few gaffs in the auto-ignore logic to fix major performance issues
@@ -479,7 +483,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
