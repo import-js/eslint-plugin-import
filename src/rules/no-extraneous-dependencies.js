@@ -1,18 +1,16 @@
-import fs from 'fs'
 import path from 'path'
-import pkgUp from 'pkg-up'
+import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
 function getDependencies(context) {
-  const filepath = pkgUp.sync(context.getFilename())
-  if (!filepath) {
-    return null
-  }
-
   try {
-    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    const pkg = readPkgUp.sync({cwd: context.getFilename(), normalize: false})
+    if (!pkg || !pkg.pkg) {
+      return null
+    }
+    const packageContent = pkg.pkg
     return {
       dependencies: packageContent.dependencies || {},
       devDependencies: packageContent.devDependencies || {},
@@ -46,7 +44,6 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
     : splitName[0]
-
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
