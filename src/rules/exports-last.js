@@ -1,32 +1,24 @@
-function isExportStatement({ type }) {
-  // ES Module export statements
-  if (type === 'ExportDefaultDeclaration' || type === 'ExportNamedDeclaration') {
-    return true
-  }
-
-  return false
-}
+const isExportStatement = ({ type }) =>
+  type === 'ExportDefaultDeclaration'
+  || type === 'ExportNamedDeclaration'
+  || type === 'ExportAllDeclaration'
 
 const rule = {
   create(context) {
     return {
       Program({ body }) {
-        const lastNonExportStatement = body.reduce((acc, node, index) => {
-          if (isExportStatement(node)) {
-            return acc
-          }
-          return index
-        }, 0)
+        const firstExportStatementIndex = body.findIndex(isExportStatement)
 
-        body.forEach((node, index) => {
-          if (isExportStatement(node) && index < lastNonExportStatement) {
-
-            context.report({
-              node,
-              message: 'Export statements should appear at the end of the file',
-            })
-          }
-        })
+        if (firstExportStatementIndex !== -1) {
+          body.slice(firstExportStatementIndex).forEach((node) => {
+            if (!isExportStatement(node)) {
+              context.report({
+                node,
+                message: 'Export statements should appear at the end of the file',
+              })
+            }
+          })
+        }
       },
     }
   },
