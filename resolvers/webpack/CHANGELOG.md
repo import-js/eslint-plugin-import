@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
-
+- bump `resolve` dependency
+- allow `enhanced-resolve` to be version `>= 2` (thanks [@Kovensky])
 
 ## 0.7.1
 ### Fixed
