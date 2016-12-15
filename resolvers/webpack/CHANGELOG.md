@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+
+## 0.8.0 - 2016-12-15
 ### Changed
 - bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
 - allow `enhanced-resolve` to be version `>= 2` (thanks [@Kovensky])
