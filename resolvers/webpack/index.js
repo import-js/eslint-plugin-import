@@ -141,7 +141,7 @@ function createResolveSync(configPath, webpackConfig) {
 
   var resolveConfig = webpackConfig.resolve || {}
 
-  if (semver.major(enhancedResolveVersion) === 2) {
+  if (semver.major(enhancedResolveVersion) >= 2) {
     return createWebpack2ResolveSync(webpackRequire, resolveConfig)
   }
 
