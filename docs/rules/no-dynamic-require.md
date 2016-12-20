@@ -18,7 +18,5 @@ require(name());
 ### Pass
 
 ```js
-require('../name');
-require('../name' + name);
 require(`../name`);
 ```
