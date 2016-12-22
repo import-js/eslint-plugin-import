@@ -47,7 +47,7 @@ const EXPECTED_LINE_DIFFERENCE = 2
 module.exports = {
   meta: {
     docs: {},
-    fixable: 'code',
+    fixable: 'whitespace',
   },
   create: function (context) {
     let level = 0
