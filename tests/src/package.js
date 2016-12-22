@@ -3,6 +3,10 @@ var expect = require('chai').expect
 var path = require('path')
   , fs = require('fs')
 
+function isJSFile(f) {
+  return path.extname(f) === '.js'
+}
+
 describe('package', function () {
   let pkg = path.join(process.cwd(), 'src')
     , module
@@ -22,7 +26,7 @@ describe('package', function () {
     , function (err, files) {
         expect(err).not.to.exist
 
-        files.forEach(function (f) {
+        files.filter(isJSFile).forEach(function (f) {
           expect(module.rules).to.have
             .property(path.basename(f, '.js'))
         })
@@ -34,9 +38,9 @@ describe('package', function () {
   it('exports all configs', function (done) {
     fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
       if (err) { done(err); return }
-      files.forEach(file => {
+      files.filter(isJSFile).forEach(file => {
         if (file[0] === '.') return
-        expect(module.configs).to.have.property(file.slice(0, -3)) // drop '.js'
+        expect(module.configs).to.have.property(path.basename(file, '.js'))
       })
       done()
     })
