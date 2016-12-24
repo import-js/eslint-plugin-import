@@ -1,10 +1,19 @@
 import { test } from '../utils'
 import * as path from 'path'
+import * as fs from 'fs'
 
 import { RuleTester } from 'eslint'
-
 const ruleTester = new RuleTester()
     , rule = require('rules/no-extraneous-dependencies')
+
+const packageDirWithSyntaxError = path.join(__dirname, '../../files/with-syntax-error')
+const packageFileWithSyntaxErrorMessage = (() => {
+  try {
+    JSON.parse(fs.readFileSync(path.join(packageDirWithSyntaxError, 'package.json')))
+  } catch (error) {
+    return error.message
+  }
+})()
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -56,6 +65,10 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({ code: 'require(6)' }),
+    test({
+      code: 'import "doctrine"',
+      options: [{packageDir: path.join(__dirname, '../../../')}],
+    }),
   ],
   invalid: [
     test({
@@ -152,6 +165,30 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      options: [{packageDir: path.join(__dirname, '../../../')}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "bar"',
+      options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: 'The package.json file could not be found.',
+      }],
+    }),
+    test({
+      code: 'import foo from "foo"',
+      options: [{packageDir: packageDirWithSyntaxError}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
       }],
     }),
   ],
