@@ -7,6 +7,10 @@ const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
 // REPORTING
 
+function isRegex(str) {
+  return /\/.+\//.test(str)
+}
+
 function reverse(array) {
   return array.map(function (v) {
     return {
@@ -59,8 +63,24 @@ function makeOutOfOrderReport(context, imported) {
 // DETECTING
 
 function computeRank(context, ranks, name, type) {
-  return ranks[importType(name, context)] +
-    (type === 'import' ? 0 : 100)
+  let rankValue
+
+  Object
+    .keys(ranks)
+    .reverse()
+    .forEach(rank => {
+      if (isRegex(rank)) {
+        const regex = new RegExp(rank.slice(1, rank.length - 1))
+
+        if (regex.test(name)) {
+          rankValue = ranks[rank] + (type === 'import' ? 0 : 100)
+        }
+      } else {
+        rankValue = ranks[importType(name, context)]
+      }
+    })
+
+  return rankValue + (type === 'import' ? 0 : 100)
 }
 
 function registerNode(context, node, name, type, ranks, imported) {
@@ -87,8 +107,10 @@ function convertGroupsToRanks(groups) {
     }
     group.forEach(function(groupItem) {
       if (types.indexOf(groupItem) === -1) {
-        throw new Error('Incorrect configuration of the rule: Unknown type `' +
-          JSON.stringify(groupItem) + '`')
+        if (!isRegex(groupItem)) {
+          throw new Error('Incorrect configuration of the rule: Unknown type `' +
+            JSON.stringify(groupItem) + '`')
+        }
       }
       if (res[groupItem] !== undefined) {
         throw new Error('Incorrect configuration of the rule: `' + groupItem + '` is duplicated')
