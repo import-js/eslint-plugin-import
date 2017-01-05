@@ -76,6 +76,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Limit the maximum number of dependencies a module can have ([`max-dependencies`])
 * Forbid unassigned imports ([`no-unassigned-import`])
 * Forbid named default exports ([`no-named-default`])
+* Forbid anonymous values as default exports ([`no-anonymous-default-export`])
 
 [`first`]: ./docs/rules/first.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
@@ -87,6 +88,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`no-named-default`]: ./docs/rules/no-named-default.md
+[`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
 ## Installation
 
