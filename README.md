@@ -78,6 +78,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid unassigned imports ([`no-unassigned-import`])
 * Forbid named default exports ([`no-named-default`])
 * Forbid anonymous values as default exports ([`no-anonymous-default-export`])
+* Prefer named exports to be grouped together in a single export declaration ([`group-exports`])
 
 [`first`]: ./docs/rules/first.md
 [`exports-last`]: ./docs/rules/exports-last.md
@@ -91,6 +92,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`no-named-default`]: ./docs/rules/no-named-default.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`group-exports`]: ./docs/rules/group-exports.md
 
 ## Installation
 

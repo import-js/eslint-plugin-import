@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+- Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
 
 ## [2.8.0] - 2017-10-18
 ### Added
@@ -431,6 +432,7 @@ for info on changes for earlier releases.
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 [`exports-last`]: ./docs/rules/exports-last.md
+[`group-exports`]: ./docs/rules/group-exports.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
@@ -442,6 +444,7 @@ for info on changes for earlier releases.
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
+[#721]: https://github.com/benmosher/eslint-plugin-import/pull/721
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#696]: https://github.com/benmosher/eslint-plugin-import/pull/696
 [#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
@@ -661,3 +664,4 @@ for info on changes for earlier releases.
 [@mplewis]: https://github.com/mplewis
 [@rosswarren]: https://github.com/rosswarren
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@robertrossmann]: https://github.com/robertrossmann
