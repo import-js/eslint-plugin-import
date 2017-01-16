@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+- Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#898], thanks [@robertrossmann])
 
 ## [2.7.0] - 2017-07-06
 ### Changed
@@ -417,6 +418,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`group-exports`]: ./docs/rules/group-exports.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
@@ -424,6 +426,7 @@ for info on changes for earlier releases.
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
+[#898]: https://github.com/benmosher/eslint-plugin-import/pull/721
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#696]: https://github.com/benmosher/eslint-plugin-import/pull/696
 [#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
@@ -632,3 +635,4 @@ for info on changes for earlier releases.
 [@eelyafi]: https://github.com/eelyafi
 [@mastilver]: https://github.com/mastilver
 [@jseminck]: https://github.com/jseminck
+[@robertrossmann]: https://github.com/robertrossmann
