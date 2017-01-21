@@ -5,7 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Added
-- [`no-anonymous-default-export`] rule: report anonymous default exports.
+- [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -380,6 +380,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 
+[#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
@@ -564,3 +565,4 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@jakubsta]: https://github.com/jakubsta
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
+[@duncanbeevers]: https://github.com/duncanbeevers
