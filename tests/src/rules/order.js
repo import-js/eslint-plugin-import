@@ -376,6 +376,53 @@ ruleTester.run('order', rule, {
       `,
       options: [{ 'newlines-between': 'always' }]
     }),
+    // Option groups should accept a regex and sort it correctly
+    test({
+      code: `
+        import path from 'path';
+        import { Meteor } from 'meteor/meteor';
+      `,
+      options: [{
+        'groups': [
+          'builtin',
+          '/^meteor/.+$/'
+        ]
+      }]
+    }),
+    // Option groups should accept a regex and have newlines-between: 'always' correctly handled
+    test({
+      code: `
+        import path from 'path';
+        
+        import { Meteor } from 'meteor/meteor';
+      `,
+      options: [{
+        'newlines-between': 'always',
+        'groups': [
+          'builtin',
+          '/^meteor/.+$/'
+        ]
+      }]
+    }),
+
+    // Option groups should accept a regex and handle it correctly when it's between an import type
+    test({
+      code: `
+        import path from 'path';
+        
+        import { Meteor } from 'meteor/meteor';
+        
+        import Foo from './foo';
+      `,
+      options: [{
+        'newlines-between': 'always',
+        'groups': [
+          'builtin',
+          '/^meteor/.+$/',
+          'external'
+        ]
+      }]
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -757,6 +804,21 @@ ruleTester.run('order', rule, {
         {
           line: 2,
           message: 'There should be at least one empty line between import groups',
+        },
+      ],
+    }),
+
+    test({
+      code: `
+        import fs from 'fs';
+        import { Meteor } from 'meteor/meteor';
+        import path from 'path';
+      `,
+      options: [{ 'groups': ['builtin', '/^meteor/.+$/'] }],
+      errors: [
+        {
+          line: 4,
+          message: '`path` import should occur before import of `meteor/meteor`',
         },
       ],
     }),
