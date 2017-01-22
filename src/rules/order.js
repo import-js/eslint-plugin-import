@@ -120,22 +120,25 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   let previousImport = imported[0]
 
   imported.slice(1).forEach(function(currentImport) {
-    if (newlinesBetweenImports === 'always') {
-      if (currentImport.rank !== previousImport.rank
-        && getNumberOfEmptyLinesBetween(currentImport, previousImport) === 0)
+    const emptyLinesBetween = getNumberOfEmptyLinesBetween(currentImport, previousImport)
+
+    if (newlinesBetweenImports === 'always'
+        || newlinesBetweenImports === 'always-and-inside-groups') {
+      if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0)
       {
         context.report(
           previousImport.node, 'There should be at least one empty line between import groups'
         )
       } else if (currentImport.rank === previousImport.rank
-        && getNumberOfEmptyLinesBetween(currentImport, previousImport) > 0)
+        && emptyLinesBetween > 0
+        && newlinesBetweenImports !== 'always-and-inside-groups')
       {
         context.report(
           previousImport.node, 'There should be no empty line within import group'
         )
       }
     } else {
-      if (getNumberOfEmptyLinesBetween(currentImport, previousImport) > 0) {
+      if (emptyLinesBetween > 0) {
         context.report(previousImport.node, 'There should be no empty line between import groups')
       }
     }
@@ -156,7 +159,12 @@ module.exports = {
             type: 'array',
           },
           'newlines-between': {
-            enum: [ 'ignore', 'always', 'never' ],
+            enum: [
+              'ignore',
+              'always',
+              'always-and-inside-groups',
+              'never',
+            ],
           },
         },
         additionalProperties: false,

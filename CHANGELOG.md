@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
+- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -385,6 +386,7 @@ for info on changes for earlier releases.
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
+[#628]: https://github.com/benmosher/eslint-plugin-import/pull/628
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
@@ -436,6 +438,7 @@ for info on changes for earlier releases.
 
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
+[#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
@@ -566,3 +569,4 @@ for info on changes for earlier releases.
 [@jakubsta]: https://github.com/jakubsta
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@duncanbeevers]: https://github.com/duncanbeevers
+[@giodamelio]: https://github.com/giodamelio

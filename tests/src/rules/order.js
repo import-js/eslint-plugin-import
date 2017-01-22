@@ -376,6 +376,32 @@ ruleTester.run('order', rule, {
       `,
       options: [{ 'newlines-between': 'always' }]
     }),
+    // Option: newlines-between: 'always-and-inside-groups'
+    test({
+      code: `
+        var fs = require('fs');
+        var path = require('path');
+
+        var util = require('util');
+
+        var async = require('async');
+
+        var relParent1 = require('../foo');
+        var relParent2 = require('../');
+
+        var relParent3 = require('../bar');
+
+        var sibling = require('./foo');
+        var sibling2 = require('./bar');
+
+        var sibling3 = require('./foobar');
+      `,
+      options: [
+        {
+          'newlines-between': 'always-and-inside-groups',
+        },
+      ],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
