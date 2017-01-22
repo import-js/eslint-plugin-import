@@ -54,6 +54,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 - Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
 - Add `count` option to the [`newline-after-import`] rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
+- Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -433,6 +434,7 @@ for info on changes for earlier releases.
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 [`exports-last`]: ./docs/rules/exports-last.md
 [`group-exports`]: ./docs/rules/group-exports.md
+[`no-self-import`]: ./docs/rules/no-self-import.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
@@ -444,6 +446,7 @@ for info on changes for earlier releases.
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
+[#727]: https://github.com/benmosher/eslint-plugin-import/pull/727
 [#721]: https://github.com/benmosher/eslint-plugin-import/pull/721
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#696]: https://github.com/benmosher/eslint-plugin-import/pull/696
@@ -468,6 +471,7 @@ for info on changes for earlier releases.
 [#489]: https://github.com/benmosher/eslint-plugin-import/pull/489
 [#485]: https://github.com/benmosher/eslint-plugin-import/pull/485
 [#461]: https://github.com/benmosher/eslint-plugin-import/pull/461
+[#449]: https://github.com/benmosher/eslint-plugin-import/pull/449
 [#444]: https://github.com/benmosher/eslint-plugin-import/pull/444
 [#428]: https://github.com/benmosher/eslint-plugin-import/pull/428
 [#395]: https://github.com/benmosher/eslint-plugin-import/pull/395
@@ -533,6 +537,7 @@ for info on changes for earlier releases.
 [#456]: https://github.com/benmosher/eslint-plugin-import/issues/456
 [#453]: https://github.com/benmosher/eslint-plugin-import/issues/453
 [#452]: https://github.com/benmosher/eslint-plugin-import/issues/452
+[#447]: https://github.com/benmosher/eslint-plugin-import/issues/447
 [#441]: https://github.com/benmosher/eslint-plugin-import/issues/441
 [#423]: https://github.com/benmosher/eslint-plugin-import/issues/423
 [#416]: https://github.com/benmosher/eslint-plugin-import/issues/416
