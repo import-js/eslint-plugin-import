@@ -6,7 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
-- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628])
+- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -569,3 +569,4 @@ for info on changes for earlier releases.
 [@jakubsta]: https://github.com/jakubsta
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@duncanbeevers]: https://github.com/duncanbeevers
+[@giodamelio]: https://github.com/giodamelio
