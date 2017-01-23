@@ -380,6 +380,7 @@ for info on changes for earlier releases.
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
+[`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
