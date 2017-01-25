@@ -6,8 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
-- Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
-- Add `count` option to the [`newline-after-import`] rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
+- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
+- [`exports-last`] lints that export statements are at the end of the file ([#620] + [#632])
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -35,9 +35,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Fix crash when using [`newline-after-import`] with decorators ([#592])
 - Properly report [`newline-after-import`] when next line is a decorator
 - Fixed documentation for the default values for the [`order`] rule ([#601])
-
-### Added
-- [`exports-last`] lints that export statements are at the end of the file ([#620] + [#632])
 
 ## [2.0.1] - 2016-10-06
 ### Fixed

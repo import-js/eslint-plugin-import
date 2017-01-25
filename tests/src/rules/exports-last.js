@@ -5,13 +5,17 @@ import rule from 'rules/exports-last'
 
 const ruleTester = new RuleTester()
 
-const errors = ['Export statements should appear at the end of the file']
+const error = type => ({
+  ruleId: 'exports-last',
+  message: 'Export statements should appear at the end of the file',
+  type
+});
 
 ruleTester.run('exports-last', rule, {
   valid: [
     // Empty file
     test({
-      code: '',
+      code: '// comment',
     }),
     test({
       // No exports
@@ -82,7 +86,7 @@ ruleTester.run('exports-last', rule, {
         export default 'bar'
         const bar = true
       `,
-      errors,
+      errors: [error('ExportDefaultDeclaration')],
     }),
     // Named export before variable declaration
     test({
@@ -90,7 +94,7 @@ ruleTester.run('exports-last', rule, {
         export const foo = 'bar'
         const bar = true
       `,
-      errors,
+      errors: [error('ExportNamedDeclaration')],
     }),
     // Export all before variable declaration
     test({
@@ -98,7 +102,7 @@ ruleTester.run('exports-last', rule, {
         export * from './foo'
         const bar = true
       `,
-      errors,
+      errors: [error('ExportAllDeclaration')],
     }),
     // Many exports arround variable declaration
     test({
@@ -111,7 +115,10 @@ ruleTester.run('exports-last', rule, {
         export const even = 'count'
         export const how = 'many'
       `,
-      errors,
+      errors: [
+        error('ExportDefaultDeclaration'),
+        error('ExportNamedDeclaration'),
+      ],
     }),
   ],
 })

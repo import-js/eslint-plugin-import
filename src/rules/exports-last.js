@@ -1,17 +1,23 @@
-const isExportStatement = ({ type }) =>
-  type === 'ExportDefaultDeclaration'
-  || type === 'ExportNamedDeclaration'
-  || type === 'ExportAllDeclaration'
+function isNonExportStatement({ type }) {
+  return type !== 'ExportDefaultDeclaration' &&
+    type !== 'ExportNamedDeclaration' &&
+    type !== 'ExportAllDeclaration'
+}
 
-const rule = {
-  create(context) {
+module.exports = {
+  create: function (context) {
     return {
-      Program({ body }) {
-        const firstExportStatementIndex = body.findIndex(isExportStatement)
+      Program: function ({ body }) {
+        const lastNonExportStatementIndex = body.reduce(function findLastIndex(acc, item, index) {
+          if (isNonExportStatement(item)) {
+            return index
+          }
+          return acc
+        }, -1)
 
-        if (firstExportStatementIndex !== -1) {
-          body.slice(firstExportStatementIndex).forEach((node) => {
-            if (!isExportStatement(node)) {
+        if (lastNonExportStatementIndex !== -1) {
+          body.slice(0, lastNonExportStatementIndex).forEach(function checkNonExport(node) {
+            if (!isNonExportStatement(node)) {
               context.report({
                 node,
                 message: 'Export statements should appear at the end of the file',
@@ -23,5 +29,3 @@ const rule = {
     }
   },
 }
-
-export default rule

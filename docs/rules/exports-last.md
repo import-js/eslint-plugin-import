@@ -1,6 +1,6 @@
 # exports-last
 
-This rule reports all export declaration which come before any non-export statements.
+This rule enforces that all exports are declared at the bottom of the file. This rule will report any export declarations that comes before any non-export statements.
 
 
 ## This will be reported
@@ -26,6 +26,8 @@ const str = 'foo'
 ## This will not be reported
 
 ```JS
+const arr = ['bar']
+
 export const bool = true
 
 export default bool
