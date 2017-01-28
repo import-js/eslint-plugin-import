@@ -3,7 +3,7 @@
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
-const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
+const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index', 'flow']
 
 // REPORTING
 
@@ -58,13 +58,19 @@ function makeOutOfOrderReport(context, imported) {
 
 // DETECTING
 
-function computeRank(context, ranks, name, type) {
-  return ranks[importType(name, context)] +
+function computeRank(context, ranks, node, name, type) {
+  let rankType
+  if (type === 'import' && node.importKind === 'type') {
+    rankType = 'flow'
+  } else {
+    rankType = importType(name, context)
+  }
+  return ranks[rankType] +
     (type === 'import' ? 0 : 100)
 }
 
 function registerNode(context, node, name, type, ranks, imported) {
-  const rank = computeRank(context, ranks, name, type)
+  const rank = computeRank(context, ranks, node, name, type)
   if (rank !== -1) {
     imported.push({name, rank, node})
   }
@@ -75,7 +81,7 @@ function isInVariableDeclarator(node) {
     (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
 }
 
-const types = ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']
+const types = ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'flow']
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
