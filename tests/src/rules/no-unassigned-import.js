@@ -29,6 +29,38 @@ ruleTester.run('no-unassigned-import', rule, {
     test({ code: 'require("lodash").foo'}),
     test({ code: 'require("lodash").foo()'}),
     test({ code: 'require("lodash")()'}),
+    test({
+      code: 'import "app.css"',
+      options: [{ 'allow': ['**/*.css'] }],
+    }),
+    test({
+      code: 'import "app.css";',
+      options: [{ 'allow': ['*.css'] }],
+    }),
+    test({
+      code: 'import "./app.css"',
+      options: [{ 'allow': ['**/*.css'] }],
+    }),
+    test({
+      code: 'import "foo/bar"',
+      options: [{ 'allow': ['foo/**'] }],
+    }),
+    test({
+      code: 'import "foo/bar"',
+      options: [{ 'allow': ['foo/bar'] }],
+    }),
+    test({
+      code: 'import "../dir/app.css"',
+      options: [{ 'allow': ['**/*.css'] }],
+    }),
+    test({
+      code: 'import "../dir/app.js"',
+      options: [{ 'allow': ['**/dir/**'] }],
+    }),
+    test({
+      code: 'require("./app.css")',
+      options: [{ 'allow': ['**/*.css'] }],
+    }),
   ],
   invalid: [
     test({
@@ -37,6 +69,21 @@ ruleTester.run('no-unassigned-import', rule, {
     }),
     test({
       code: 'require("lodash")',
+      errors: [error],
+    }),
+    test({
+      code: 'import "./app.css"',
+      options: [{ 'allow': ['**/*.js'] }],
+      errors: [error],
+    }),
+    test({
+      code: 'import "./app.css"',
+      options: [{ 'allow': ['**/dir/**'] }],
+      errors: [error],
+    }),
+    test({
+      code: 'require("./app.css")',
+      options: [{ 'allow': ['**/*.js'] }],
       errors: [error],
     }),
   ],
