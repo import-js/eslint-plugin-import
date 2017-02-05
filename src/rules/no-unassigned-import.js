@@ -11,7 +11,7 @@ function report(context, node) {
 
 function testIsAllow(globs, filename, source) {
   if (!Array.isArray(globs)) {
-    return false // default doens't allow any pattern
+    return false // default doesn't allow any patterns
   }
 
   let filePath
@@ -60,7 +60,12 @@ module.exports = {
           'devDependencies': { 'type': ['boolean', 'array'] },
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
-          'allow': { 'type': 'array' },
+          'allow': {
+            'type': 'array',
+            'items': {
+              'type': 'string',
+            },
+          },
         },
         'additionalProperties': false,
       },
