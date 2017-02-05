@@ -61,6 +61,20 @@ ruleTester.run('no-unassigned-import', rule, {
       code: 'require("./app.css")',
       options: [{ 'allow': ['**/*.css'] }],
     }),
+    test({
+      code: 'import "babel-register"',
+      options: [{ 'allow': ['babel-register'] }],
+    }),
+    test({
+      code: 'import "./styles/app.css"',
+      options: [{ 'allow': ['src/styles/**'] }],
+      filename: path.join(process.cwd(), 'src/app.js'),
+    }),
+    test({
+      code: 'import "../scripts/register.js"',
+      options: [{ 'allow': ['src/styles/**', '**/scripts/*.js'] }],
+      filename: path.join(process.cwd(), 'src/app.js'),
+    }),
   ],
   invalid: [
     test({
@@ -84,6 +98,12 @@ ruleTester.run('no-unassigned-import', rule, {
     test({
       code: 'require("./app.css")',
       options: [{ 'allow': ['**/*.js'] }],
+      errors: [error],
+    }),
+    test({
+      code: 'import "./styles/app.css"',
+      options: [{ 'allow': ['styles/*.css'] }],
+      filename: path.join(process.cwd(), 'src/app.js'),
       errors: [error],
     }),
   ],

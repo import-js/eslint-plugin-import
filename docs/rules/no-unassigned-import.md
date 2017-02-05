@@ -6,11 +6,24 @@ With both CommonJS' `require` and the ES6 modules' `import` syntax, it is possib
 
 This rule aims to remove modules with side-effects by reporting when a module is imported but not assigned.
 
+### Options
+
+This rule supports the following option:
+
+`allow`: An Array of globs. The files that match any of these patterns would be ignored/allowed by the linter. This can be usefull for some build environment (e.g. css-loader in webpack).
+
+Note that the globs start from the where the linter is executed (usually project root), but not from each file that includes the source. Learn more in both the pass and fail examples below.
+
+
 ## Fail
 
 ```js
 import 'should'
 require('should')
+
+// In <PROJECT_ROOT>/src/app.js
+import '../styles/app.css'
+// {"allow": ["styles/*.css"]}
 ```
 
 
@@ -34,4 +47,13 @@ bar(require('foo'))
 require('foo').bar
 require('foo').bar()
 require('foo')()
+
+// With allow option set
+import './style.css' // {"allow": ["**/*.css"]}
+import 'babel-register' // {"allow": ["babel-register"]}
+
+// In <PROJECT_ROOT>/src/app.js
+import './styles/app.css'
+import '../scripts/register.js'
+// {"allow": ["src/styles/**", "**/scripts/*.js"]}
 ```
