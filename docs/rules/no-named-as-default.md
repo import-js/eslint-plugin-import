@@ -27,7 +27,7 @@ import foo from './foo.js';
 import bar from './foo.js';
 ```
 
-For post-ES2015 `export` extensions, this also prevents exporting the default from a referenced module as a name within than module, for the same reasons:
+For post-ES2015 `export` extensions, this also prevents exporting the default from a referenced module as a name within that module, for the same reasons:
 
 ```js
 // valid:
