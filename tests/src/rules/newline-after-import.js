@@ -7,9 +7,9 @@ const ruleTester = new RuleTester()
 
 ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   valid: [
-    "var path = require('path');\nvar foo = require('foo');\n",
-    "require('foo');",
-    "switch ('foo') { case 'bar': require('baz'); }",
+    `var path = require('path');\nvar foo = require('foo');\n`,
+    `require('foo');`,
+    `switch ('foo') { case 'bar': require('baz'); }`,
     {
       code: `
         const x = () => require('baz')
@@ -20,8 +20,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `const x = () => require('baz') && require('bar')`,
       parserOptions: { ecmaVersion: 6 } ,
     },
-    "function x(){ require('baz'); }",
-    "a(require('b'), require('c'), require('d'));",
+    `function x(){ require('baz'); }`,
+    `a(require('b'), require('c'), require('d'));`,
     `function foo() {
       switch (renderData.modalViewKey) {
         case 'value':
@@ -65,40 +65,50 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import path from 'path';\nimport foo from 'foo';\n",
+      code: `import path from 'path';\nimport foo from 'foo';\n`,
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import path from 'path';import foo from 'foo';\n",
+      code: `import path from 'path';import foo from 'foo';\n`,
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import path from 'path';import foo from 'foo';\n\nvar bar = 42;",
+      code: `import path from 'path';import foo from 'foo';\n\nvar bar = 42;`,
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import foo from 'foo';\n\nvar foo = 'bar';",
-      parserOptions: { sourceType: 'module' }
+      code: `import foo from 'foo';\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var foo = require('foo-module');\n\nvar foo = 'bar';",
-      parserOptions: { sourceType: 'module' }
+      code: `import foo from 'foo';\n\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
+      options: { newlines: 2 },
     },
     {
-      code: "require('foo-module');\n\nvar foo = 'bar';",
-      parserOptions: { sourceType: 'module' }
+      code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import foo from 'foo';\nimport { bar } from './bar-lib';",
-      parserOptions: { sourceType: 'module' }
+      code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
+      options: { newlines: 2 },
     },
     {
-      code: "import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';",
-      parserOptions: { sourceType: 'module' }
+      code: `require('foo-module');\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var foo = require('foo-module');\n\nvar a = 123;\n\nvar bar = require('bar-lib');",
-      parserOptions: { sourceType: 'module' }
+      code: `import foo from 'foo';\nimport { bar } from './bar-lib';`,
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';`,
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `var foo = require('foo-module');\n\nvar a = 123;\n\nvar bar = require('bar-lib');`,
+      parserOptions: { sourceType: 'module' },
     },
     {
       code: `
@@ -137,7 +147,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: 'babel-eslint',
     },
     {
-      code: "var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}",
+      code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
       parserOptions: { sourceType: 'module' },
       parser: 'babel-eslint',
     },
@@ -145,106 +155,116 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
 
   invalid: [
     {
-      code: "import foo from 'foo';\nexport default function() {};",
+      code: `import foo from 'foo';\nexport default function() {};`,
       errors: [ {
         line: 1,
         column: 1,
-        message: IMPORT_ERROR_MESSAGE
+        message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' }
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var foo = require('foo-module');\nvar something = 123;",
+      code: `import foo from 'foo';\n\nexport default function() {};`,
+      options: { newlines: 2 },
       errors: [ {
         line: 1,
         column: 1,
-        message: REQUIRE_ERROR_MESSAGE
+        message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' }
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;",
+      code: `var foo = require('foo-module');\nvar something = 123;`,
+      errors: [ {
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;`,
       errors: [
       {
         line: 1,
         column: 1,
-        message: IMPORT_ERROR_MESSAGE
+        message: IMPORT_ERROR_MESSAGE,
       },
       {
         line: 4,
         column: 1,
-        message: IMPORT_ERROR_MESSAGE
+        message: IMPORT_ERROR_MESSAGE,
       }],
-      parserOptions: { sourceType: 'module' }
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var foo = require('foo-module');\nvar a = 123;\n\nvar bar = require('bar-lib');\nvar b=456;",
+      code: `var foo = require('foo-module');\nvar a = 123;\n\nvar bar = require('bar-lib');\nvar b=456;`,
       errors: [
         {
           line: 1,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
+          message: REQUIRE_ERROR_MESSAGE,
         },
         {
           line: 4,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
+          message: REQUIRE_ERROR_MESSAGE,
         }],
-      parserOptions: { sourceType: 'module' }
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var foo = require('foo-module');\nvar a = 123;\n\nrequire('bar-lib');\nvar b=456;",
+      code: `var foo = require('foo-module');\nvar a = 123;\n\nrequire('bar-lib');\nvar b=456;`,
       errors: [
         {
           line: 1,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
+          message: REQUIRE_ERROR_MESSAGE,
         },
         {
           line: 4,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
+          message: REQUIRE_ERROR_MESSAGE,
         }],
-      parserOptions: { sourceType: 'module' }
+      parserOptions: { sourceType: 'module' },
     },
     {
-      code: "var path = require('path');\nvar foo = require('foo');\nvar bar = 42;",
+      code: `var path = require('path');\nvar foo = require('foo');\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ]
+      } ],
     },
     {
-      code: "var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;",
+      code: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ]
+      } ],
     },
     {
-      code: "require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\nvar foo = 'bar';",
+      code: `require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\nvar foo = 'bar';`,
       errors: [
         {
           line: 3,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
+          message: REQUIRE_ERROR_MESSAGE,
         },
-      ]
+      ],
     },
     {
-      code: "require('a');\nfoo(\nrequire('b'),\nrequire('c'),\nrequire('d')\n);\nvar foo = 'bar';",
+      code: `require('a');\nfoo(\nrequire('b'),\nrequire('c'),\nrequire('d')\n);\nvar foo = 'bar';`,
       errors: [
         {
           line: 6,
           column: 1,
-          message: REQUIRE_ERROR_MESSAGE
-        }
-      ]
+          message: REQUIRE_ERROR_MESSAGE,
+        },
+      ],
     },
     {
-      code: "import path from 'path';\nimport foo from 'foo';\nvar bar = 42;",
+      code: `import path from 'path';\nimport foo from 'foo';\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
@@ -253,7 +273,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import path from 'path';import foo from 'foo';var bar = 42;",
+      code: `import path from 'path';import foo from 'foo';var bar = 42;`,
       errors: [ {
         line: 1,
         column: 25,
@@ -262,7 +282,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: "import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}",
+      code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
       errors: [ {
         line: 1,
         column: 1,
@@ -272,7 +292,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: 'babel-eslint',
     },
     {
-      code: "var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}",
+      code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
       errors: [ {
         line: 1,
         column: 1,
