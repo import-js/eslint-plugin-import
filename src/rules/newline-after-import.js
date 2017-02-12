@@ -55,7 +55,8 @@ module.exports = {
         nextNode = nextNode.decorators[0]
       }
 
-      if (getLineDifference(node, nextNode) < 2) {
+      const options = context.options[0] || { newlines: 1 }
+      if (getLineDifference(node, nextNode) < options.newlines + 1) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
