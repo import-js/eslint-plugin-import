@@ -83,7 +83,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\n\n\nvar foo = 'bar';`,
       parserOptions: { sourceType: 'module' },
-      options: { newlines: 2 },
+      options: [{ 'newlines': 2 }],
     },
     {
       code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
@@ -92,7 +92,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
       parserOptions: { sourceType: 'module' },
-      options: { newlines: 2 },
+      options: [{ 'newlines': 2 }],
     },
     {
       code: `require('foo-module');\n\nvar foo = 'bar';`,
@@ -165,7 +165,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
-      options: { newlines: 2 },
+      options: [{ 'newlines': 2 }],
       errors: [ {
         line: 1,
         column: 1,
