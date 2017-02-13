@@ -45,6 +45,18 @@ function isClassWithDecorator(node) {
 module.exports = {
   meta: {
     docs: {},
+    schema: [
+      {
+        'type': 'object',
+        'properties': {
+          'newlines': {
+            'type': 'integer',
+            'minimum': 1,
+          },
+        },
+        'additionalProperties': false,
+      },
+    ],
   },
   create: function (context) {
     let level = 0

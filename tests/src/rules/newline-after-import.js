@@ -86,6 +86,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       options: [{ 'newlines': 2 }],
     },
     {
+      code: `import foo from 'foo';\n\n\n\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
+      options: [{ 'newlines': 4 }],
+    },
+    {
       code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
       parserOptions: { sourceType: 'module' },
     },
@@ -93,6 +98,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
       parserOptions: { sourceType: 'module' },
       options: [{ 'newlines': 2 }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n\n\n\nvar foo = 'bar';`,
+      parserOptions: { sourceType: 'module' },
+      options: [{ 'newlines': 4 }],
     },
     {
       code: `require('foo-module');\n\nvar foo = 'bar';`,
@@ -166,6 +176,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
       options: [{ 'newlines': 2 }],
+      errors: [ {
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+    },
+    {
+      code: `import foo from 'foo';\nexport default function() {};`,
+      options: [{ 'newlines': 1 }],
       errors: [ {
         line: 1,
         column: 1,
