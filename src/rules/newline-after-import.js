@@ -45,6 +45,7 @@ function isClassWithDecorator(node) {
 module.exports = {
   meta: {
     docs: {},
+    fixable: 'whitespace',
   },
   create: function (context) {
     let level = 0
@@ -55,7 +56,8 @@ module.exports = {
         nextNode = nextNode.decorators[0]
       }
 
-      if (getLineDifference(node, nextNode) < 2) {
+      const lineDiff = getLineDifference(node, nextNode)
+      if (lineDiff < 2) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
@@ -68,6 +70,11 @@ module.exports = {
             column,
           },
           message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+          fix(fixer) {
+            // add 1 blank line,
+            // or 2, if the nodes are on the same line
+            return fixer.insertTextAfter(node, lineDiff === 1 ? '\n' : '\n\n')
+          },
         })
       }
     }
