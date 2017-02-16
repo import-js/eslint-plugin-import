@@ -49,7 +49,7 @@ module.exports = {
       {
         'type': 'object',
         'properties': {
-          'newlines': {
+          'count': {
             'type': 'integer',
             'minimum': 1,
           },
@@ -67,8 +67,8 @@ module.exports = {
         nextNode = nextNode.decorators[0]
       }
 
-      const options = context.options[0] || { newlines: 1 }
-      if (getLineDifference(node, nextNode) < options.newlines + 1) {
+      const options = context.options[0] || { count: 1 }
+      if (getLineDifference(node, nextNode) < options.count + 1) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {

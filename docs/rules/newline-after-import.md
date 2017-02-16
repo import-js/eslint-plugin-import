@@ -4,7 +4,7 @@ Enforces having one or more empty line after the last top-level import statement
 
 ## Rule Details
 
-This rule has one option, `newlines` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
+This rule has one option, `count` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
 
 Valid:
 
@@ -48,7 +48,7 @@ const BAZ = 1
 const BAR = require('./bar')
 ```
 
-With `newlines` set to `2` this will be considered valid:
+With `count` set to `2` this will be considered valid:
 
 ```js
 import defaultExport from './foo'
@@ -57,7 +57,7 @@ import defaultExport from './foo'
 const FOO = 'BAR'
 ```
 
-With `newlines` set to `2` these will be considered invalid:
+With `count` set to `2` these will be considered invalid:
 
 ```js
 import defaultExport from './foo'
@@ -76,7 +76,7 @@ const FOO = 'BAR'
 {
   ...
   "rules": {
-    "import/newline-after-import": [{ "newlines": 2 }]
+    "import/newline-after-import": [{ "count": 2 }]
   }
 }
 ```
