@@ -1,6 +1,6 @@
 # newline-after-import
 
-Enforces having one or more empty line after the last top-level import statement or require call.
+Enforces having one or more empty lines after the last top-level import statement or require call.
 
 ## Rule Details
 
