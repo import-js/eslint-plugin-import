@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 - Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
-- Add `count` option to the `newline-after-import` rule to allow configuration of number of newlines expected ([#742])
+- Add `count` option to the `newline-after-import` rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -383,6 +383,7 @@ for info on changes for earlier releases.
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
+[#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
@@ -572,3 +573,4 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@giodamelio]: https://github.com/giodamelio
+[@ntdb]: https://github.com/ntdb
