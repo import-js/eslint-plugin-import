@@ -45,6 +45,18 @@ function isClassWithDecorator(node) {
 module.exports = {
   meta: {
     docs: {},
+    schema: [
+      {
+        'type': 'object',
+        'properties': {
+          'count': {
+            'type': 'integer',
+            'minimum': 1,
+          },
+        },
+        'additionalProperties': false,
+      },
+    ],
   },
   create: function (context) {
     let level = 0
@@ -55,7 +67,8 @@ module.exports = {
         nextNode = nextNode.decorators[0]
       }
 
-      if (getLineDifference(node, nextNode) < 2) {
+      const options = context.options[0] || { count: 1 }
+      if (getLineDifference(node, nextNode) < options.count + 1) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
