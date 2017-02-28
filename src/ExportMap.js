@@ -160,11 +160,15 @@ export default class ExportMap {
   reportErrors(context, declaration) {
     context.report({
       node: declaration.source,
-      message: `Parse errors in imported module '${declaration.source.value}': ` +
-                  `${this.errors
-                        .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
-                        .join(', ')}`,
+      message: this.errorsToString(declaration.source.value),
     })
+  }
+
+  errorsToString(src) {
+    return `Parse errors in imported module '${src}': ` +
+      `${this.errors
+            .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
+            .join(', ')}`
   }
 }
 
