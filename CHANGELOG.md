@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
+- [`default`] now verifies that commonJS `require(...).default` matches default module export (#754, thanks @gmathieu)
 
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
