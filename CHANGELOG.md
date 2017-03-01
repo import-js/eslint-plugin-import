@@ -6,7 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
-- Add new value to `order`'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
+- Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
+- Add `count` option to the [`newline-after-import`] rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
 - [`exports-last`] lints that export statements are at the end of the file ([#620] + [#632])
 
 ### Changed
