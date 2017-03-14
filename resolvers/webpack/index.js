@@ -65,7 +65,12 @@ exports.resolve = function (source, file, settings) {
 
       log('Config path resolved to:', configPath)
       if (configPath) {
-        webpackConfig = require(configPath)
+        try {
+          webpackConfig = require(configPath)
+        } catch(e) {
+          console.log('Error resolving webpackConfig', e)
+          throw e
+        }
       } else {
         log("No config path found relative to", file, "; using {}")
         webpackConfig = {}
