@@ -15,6 +15,8 @@ var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
 exports.interfaceVersion = 2
 
+var cache
+
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
  *
@@ -43,13 +45,37 @@ exports.resolve = function (source, file, settings) {
     return { found: true, path: coreLibs[source] }
   }
 
-  var webpackConfig
-
   var configPath = get(settings, 'config')
     , configIndex = get(settings, 'config-index')
+    , webpackConfig
+    , resolveSync
     , packageDir
 
   log('Config path from settings:', configPath)
+
+  cache = cache || getWebpackConfig(configPath, configIndex, file)
+  webpackConfig = cache.webpackConfig
+  resolveSync = cache.resolveSync
+
+  log('Using config: ', webpackConfig)
+
+  // externals
+  if (findExternal(source, webpackConfig.externals, path.dirname(file))) {
+    return { found: true, path: null }
+  }
+
+  // otherwise, resolve "normally"
+  try {
+    return { found: true, path: resolveSync(path.dirname(file), source) }
+  } catch (err) {
+    log('Error during module resolution:', err)
+    return { found: false }
+  }
+}
+
+function getWebpackConfig(configPath, configIndex, file) {
+  var webpackConfig
+    , packageDir
 
   // see if we've got a config path, a config object, an array of config objects or a config function
   if (!configPath || typeof configPath === 'string') {
@@ -96,20 +122,9 @@ exports.resolve = function (source, file, settings) {
     }
   }
 
-  log('Using config: ', webpackConfig)
-
-  // externals
-  if (findExternal(source, webpackConfig.externals, path.dirname(file))) {
-    return { found: true, path: null }
-  }
-
-  // otherwise, resolve "normally"
-  var resolveSync = createResolveSync(configPath, webpackConfig)
-  try {
-    return { found: true, path: resolveSync(path.dirname(file), source) }
-  } catch (err) {
-    log('Error during module resolution:', err)
-    return { found: false }
+  return {
+    webpackConfig: webpackConfig,
+    resolveSync: createResolveSync(configPath, webpackConfig)
   }
 }
 
