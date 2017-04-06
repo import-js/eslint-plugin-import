@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
 
 
 ## [2.16.0] - 2019-01-29
@@ -538,6 +540,7 @@ for info on changes for earlier releases.
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#797]: https://github.com/benmosher/eslint-plugin-import/pull/797
+[#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
@@ -615,6 +618,7 @@ for info on changes for earlier releases.
 [#717]: https://github.com/benmosher/eslint-plugin-import/issues/717
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
+[#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
@@ -804,3 +808,4 @@ for info on changes for earlier releases.
 [@kirill-konshin]: https://github.com/kirill-konshin
 [@asapach]: https://github.com/asapach
 [@sergei-startsev]: https://github.com/sergei-startsev
+[@ephys]: https://github.com/ephys

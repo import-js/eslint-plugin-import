@@ -57,6 +57,8 @@
     "eslint-import-resolver-typescript": "^1.0.2",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "eslint-module-utils": "file:./utils",
+    "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
+    "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "eslint-plugin-import": "2.x",
     "gulp": "^3.9.1",
     "gulp-babel": "6.1.2",

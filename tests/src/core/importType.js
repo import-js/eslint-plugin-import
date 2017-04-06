@@ -36,9 +36,19 @@ describe('importType(name)', function () {
     expect(importType('@some-thing/something/some-directory/someModule.js', context)).to.equal('external')
   })
 
+  it("should return 'external' for external modules that redirect to its parent module using package.json", function() {
+    expect(importType('eslint-import-test-order-redirect/module', context)).to.equal('external')
+    expect(importType('@eslint/import-test-order-redirect-scoped/module', context)).to.equal('external')
+  })
+
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
     const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
     expect(importType('importType', pathContext)).to.equal('internal')
+  })
+
+  it.skip("should return 'internal' for scoped packages resolved outside of node_modules", function () {
+    const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
+    expect(importType('@importType/index', pathContext)).to.equal('internal')
   })
 
   it("should return 'parent' for internal modules that go through the parent", function() {
