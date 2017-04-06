@@ -13,7 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
 
 ### Fixed
-- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], thanks [@ephys])
+- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
 
@@ -385,6 +385,7 @@ for info on changes for earlier releases.
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
+[#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
