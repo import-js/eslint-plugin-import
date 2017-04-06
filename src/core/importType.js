@@ -19,7 +19,11 @@ export function isBuiltIn(name, settings) {
 
 function isExternalPath(path, name, settings) {
   const folders = (settings && settings['import/external-module-folders']) || ['node_modules']
-  return !path || folders.some(folder => -1 < path.indexOf(join(folder, name)))
+
+  // extract the part before the first / (redux-saga/effects => redux-saga)
+  const packageName = name.match(/([^\/]+)/)[0]
+
+  return !path || folders.some(folder => -1 < path.indexOf(join(folder, packageName)))
 }
 
 const externalModuleRegExp = /^\w/
