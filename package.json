@@ -60,6 +60,7 @@
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "eslint-module-utils": "file:./utils",
+    "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
     "eslint-plugin-import": "2.x",
     "gulp": "^3.9.0",
     "gulp-babel": "6.1.2",

@@ -29,6 +29,12 @@ ruleTester.run('order', rule, {
         import sibling, {foo3} from './foo';
         import index from './';`,
       }),
+    // Importing a package which contains nothing but a package.json which resolves elsewhere
+    test({
+      code: `
+        import reduxSagaEffects from 'eslint-import-test-order-redirect/module';
+        import relParent1 from '../foo';`,
+    }),
     // Multiple module of the same rank next to each other
     test({
       code: `
