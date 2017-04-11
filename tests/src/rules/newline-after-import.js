@@ -77,16 +77,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: `import foo from 'foo';\n\nvar foo = 'bar';`,
+      code: `import foo from 'foo';\n\nvar bar = 'bar';`,
       parserOptions: { sourceType: 'module' },
     },
     {
-      code: `import foo from 'foo';\n\n\nvar foo = 'bar';`,
+      code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
       parserOptions: { sourceType: 'module' },
       options: [{ 'count': 2 }],
     },
     {
-      code: `import foo from 'foo';\n\n\n\n\nvar foo = 'bar';`,
+      code: `import foo from 'foo';\n\n\n\n\nvar bar = 'bar';`,
       parserOptions: { sourceType: 'module' },
       options: [{ 'count': 4 }],
     },
