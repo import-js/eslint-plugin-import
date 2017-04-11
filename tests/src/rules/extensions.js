@@ -35,9 +35,9 @@ ruleTester.run('extensions', rule, {
 
     test({
       code: [
-        'import lib from "./bar"',
-        'import lib from "./bar.json"',
-        'import lib from "./bar.hbs"',
+        'import bar from "./bar"',
+        'import barjson from "./bar.json"',
+        'import barhbs from "./bar.hbs"',
       ].join('\n'),
       options: [ 'always', { js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json', '.hbs' ] } },
@@ -45,8 +45,8 @@ ruleTester.run('extensions', rule, {
 
     test({
       code: [
-        'import lib from "./bar.js"',
-        'import lib from "./package"',
+        'import bar from "./bar.js"',
+        'import pack from "./package"',
       ].join('\n'),
       options: [ 'never', { js: 'always', json: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.json' ] } },
@@ -145,9 +145,9 @@ ruleTester.run('extensions', rule, {
 
     test({
       code: [
-        'import lib from "./bar.js"',
-        'import lib from "./bar.json"',
-        'import lib from "./bar"',
+        'import barjs from "./bar.js"',
+        'import barjson from "./bar.json"',
+        'import barnone from "./bar"',
       ].join('\n'),
       options: [ 'always', { json: 'always', js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
@@ -162,9 +162,9 @@ ruleTester.run('extensions', rule, {
 
     test({
       code: [
-        'import lib from "./bar.js"',
-        'import lib from "./bar.json"',
-        'import lib from "./bar"',
+        'import barjs from "./bar.js"',
+        'import barjson from "./bar.json"',
+        'import barnone from "./bar"',
       ].join('\n'),
       options: [ 'never', { json: 'always', js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
