@@ -55,7 +55,7 @@
     "babylon": "6.15.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "cross-env": "^3.1.0",
+    "cross-env": "^4.0.0",
     "eslint": "3.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
