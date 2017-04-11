@@ -49,7 +49,6 @@ exports.resolve = function (source, file, settings) {
     , configIndex = get(settings, 'config-index')
     , webpackConfig
     , resolveSync
-    , packageDir
 
   log('Config path from settings:', configPath)
 
@@ -77,7 +76,8 @@ function getWebpackConfig(configPath, configIndex, file) {
   var webpackConfig
     , packageDir
 
-  // see if we've got a config path, a config object, an array of config objects or a config function
+  // see if we've got a config path, a config object,
+  // an array of config objects or a config function
   if (!configPath || typeof configPath === 'string') {
 
       // see if we've got an absolute path
@@ -93,7 +93,7 @@ function getWebpackConfig(configPath, configIndex, file) {
       if (configPath) {
         webpackConfig = require(configPath)
       } else {
-        log("No config path found relative to", file, "; using {}")
+        log('No config path found relative to', file, '; using {}')
         webpackConfig = {}
       }
 
@@ -124,7 +124,7 @@ function getWebpackConfig(configPath, configIndex, file) {
 
   return {
     webpackConfig: webpackConfig,
-    resolveSync: createResolveSync(configPath, webpackConfig)
+    resolveSync: createResolveSync(configPath, webpackConfig),
   }
 }
 
@@ -166,7 +166,9 @@ function createResolveSync(configPath, webpackConfig) {
 function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
   var EnhancedResolve = webpackRequire('enhanced-resolve')
 
-  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig))
+  return EnhancedResolve.create.sync(Object.assign(
+    {}, webpack2DefaultResolveConfig, resolveConfig
+  ))
 }
 
 /**
