@@ -155,7 +155,7 @@ ruleTester.run('extensions', rule, {
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
             line: 1,
-            column: 17,
+            column: 19,
         },
       ],
     }),
@@ -172,7 +172,7 @@ ruleTester.run('extensions', rule, {
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
             line: 1,
-            column: 17,
+            column: 19,
         },
       ],
     }),
