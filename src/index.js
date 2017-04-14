@@ -40,6 +40,7 @@ export const rules = {
   'no-unassigned-import': require('./rules/no-unassigned-import'),
   'no-useless-path-segments': require('./rules/no-useless-path-segments'),
   'dynamic-import-chunkname': require('./rules/dynamic-import-chunkname'),
+  'no-import-module-exports': require('./rules/no-import-module-exports'),
 
   // export
   'exports-last': require('./rules/exports-last'),

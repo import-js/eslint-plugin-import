@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-commonjs`]: Also detect require calls with expressionless template literals: ``` require(`x`) ``` ([#1958], thanks [@FloEdelmann])
 - [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
 - add [`no-relative-packages`] ([#1860], [#966], thanks [@tapayne88] [@panrafal])
+- add [`no-import-module-exports`] rule: report import declarations with CommonJS exports ([#804], thanks [@kentcdodds] and [@ttmarek])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -732,6 +733,7 @@ for info on changes for earlier releases.
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`no-import-module-exports`]: ./docs/rules/no-import-module-exports.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 [`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
@@ -908,6 +910,7 @@ for info on changes for earlier releases.
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
+[#804]: https://github.com/benmosher/eslint-plugin-import/pull/804
 [#797]: https://github.com/benmosher/eslint-plugin-import/pull/797
 [#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
@@ -1331,3 +1334,4 @@ for info on changes for earlier releases.
 [@guillaumewuip]: https://github.com/guillaumewuip
 [@tapayne88]: https://github.com/tapayne88
 [@panrafal]: https://github.com/panrafal
+[@ttmarek]: https://github.com/ttmarek

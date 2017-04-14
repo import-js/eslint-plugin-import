@@ -109,6 +109,7 @@
     "is-core-module": "^1.0.2",
     "minimatch": "^3.0.4",
     "object.values": "^1.1.1",
+    "pkg-up": "^1.0.0",
     "read-pkg-up": "^2.0.0",
     "resolve": "^1.17.0",
     "tsconfig-paths": "^3.9.0"
