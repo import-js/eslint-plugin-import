@@ -53,6 +53,17 @@ ruleTester.run('default', rule, {
       },
     }),
 
+    // commonJS
+    test({
+      code: 'var CoolClass = require("./default-class").default;',
+    }),
+    test({
+      code: 'const { ExportedClass } = require("./named-exports");',
+    }),
+    test({
+      code: 'function a() { var CoolClass = require("./default-class").default; }',
+    }),
+
     // #54: import of named export default
     test({ code: 'import foo from "./named-default-export"' }),
 
@@ -104,6 +115,24 @@ ruleTester.run('default', rule, {
     test({
       code: "import Foo from './jsx/FooES7.js';",
       errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
+    }),
+
+    // commonJS
+    test({
+      code: 'var Foo = require("./jsx/FooES7.js");',
+      errors: ['Parse errors in imported module \'./jsx/FooES7.js\': Unexpected token = (6:16)'],
+    }),
+    test({
+      code: 'var CoolClass = require("./default-class");',
+      errors: ['requiring ES module must reference default'],
+    }),
+    test({
+      code: 'function a() { var CoolClass = require("./default-class"); }',
+      errors: ['requiring ES module must reference default'],
+    }),
+    test({
+      code: 'var baz = require("./named-exports").default;',
+      errors: [`No default export found in module.`],
     }),
 
     // es7 export syntax
