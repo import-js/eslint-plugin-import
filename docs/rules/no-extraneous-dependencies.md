@@ -25,7 +25,7 @@ You can also use an array of globs instead of literal booleans:
 "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.test.js", "**/*.spec.js"]}]
 ```
 
-When using an array of globs, the setting will be activated if the name of the file being linted matches a single glob in the array.
+When using an array of globs, the setting will be set to `true` (no errors reported) if the name of the file being linted matches a single glob in the array, and `false` otherwise.
 
 ## Rule Details
 
