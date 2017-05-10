@@ -6,7 +6,7 @@ In order to provide a consistent use of file extensions across your code base, t
 
 ## Rule Details
 
-This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements.
+This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements. If it is the string `"ignorePackages"`, then the rule enforces the use of extensions for all import statements except package imports.
 
 By providing an object you can configure each extension separately, so for example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
 
@@ -84,6 +84,30 @@ import Component from './Component.jsx'
 import express from 'express/index.js';
 
 import * as path from 'path';
+```
+
+The following patterns are considered problems when configuration set to "ignorePackages":
+
+```js
+import foo from './foo';
+
+import bar from './bar';
+
+import Component from './Component'
+
+```
+
+The following patterns are not considered problems when configuration set to "ignorePackages":
+
+```js
+import foo from './foo.js';
+
+import bar from './bar.json';
+
+import Component from './Component.jsx'
+
+import express from 'express';
+
 ```
 
 ## When Not To Use It
