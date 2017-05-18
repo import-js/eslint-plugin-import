@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
+- Add support to specify the package.json [`no-extraneous-dependencies`] ([#685], thanks [@ramasilveyra])
 
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
@@ -386,6 +387,7 @@ for info on changes for earlier releases.
 
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
+[#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
@@ -575,3 +577,4 @@ for info on changes for earlier releases.
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@giodamelio]: https://github.com/giodamelio
 [@ntdb]: https://github.com/ntdb
+[@ramasilveyra]: https://github.com/ramasilveyra
