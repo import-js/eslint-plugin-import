@@ -29,6 +29,20 @@ export function getFilename(file) {
 }
 
 /**
+ * naive implementation of a function spy
+ * for more robust spy, consider replacing with sinon or chai-spies
+ * @return {function}
+ */
+export function makeNaiveSpy() {
+  const spy = function () {
+    spy.callCount += 1
+    spy.lastCallArguments = arguments
+  }
+  spy.callCount = 0
+  return spy
+}
+
+/**
  * to be added as valid cases just to ensure no nullable fields are going
  * to crash at runtinme
  * @type {Array}

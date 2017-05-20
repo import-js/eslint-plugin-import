@@ -21,9 +21,9 @@ exports.default = function parse(path, content, context) {
 
   // always attach comments
   parserOptions.attachComment = true
-  
+
   // provide the `filePath` like eslint itself does, in `parserOptions`
-  // https://github.com/eslint/eslint/blob/3ec436eeed0b0271e2ed0d0cb22e4246eb15f137/lib/linter.js#L637
+  // https://github.com/eslint/eslint/blob/3ec436ee/lib/linter.js#L637
   parserOptions.filePath = path
 
   // require the parser relative to the main module (i.e., ESLint)
