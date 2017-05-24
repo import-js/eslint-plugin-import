@@ -8,10 +8,6 @@ function constant(value) {
   return () => value
 }
 
-function isAbsolute(name) {
-  return name.indexOf('/') === 0
-}
-
 export function isBuiltIn(name, settings) {
   const extras = (settings && settings['import/core-modules']) || []
   return builtinModules.indexOf(name) !== -1 || extras.indexOf(name) > -1
@@ -50,7 +46,6 @@ function isRelativeToSibling(name) {
 }
 
 const typeTest = cond([
-  [isAbsolute, constant('absolute')],
   [isBuiltIn, constant('builtin')],
   [isExternalModule, constant('external')],
   [isScoped, constant('external')],
