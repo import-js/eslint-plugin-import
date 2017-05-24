@@ -10,7 +10,7 @@ Redux's npm module includes this key, and thereby is lintable, for example.
 
 A module path that is [ignored] or not [unambiguously an ES module] will not be reported when imported.
 
-[ignored]: ../README.md#importignore
+[ignored]: ../../README.md#importignore
 [unambiguously an ES module]: https://github.com/bmeck/UnambiguousJavaScriptGrammar
 
 

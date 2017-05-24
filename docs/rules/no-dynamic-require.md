@@ -19,6 +19,5 @@ require(name());
 
 ```js
 require('../name');
-require('../name' + name);
 require(`../name`);
 ```

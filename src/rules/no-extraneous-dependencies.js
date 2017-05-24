@@ -1,18 +1,20 @@
-import fs from 'fs'
 import path from 'path'
-import pkgUp from 'pkg-up'
+import fs from 'fs'
+import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
-function getDependencies(context) {
-  const filepath = pkgUp.sync(context.getFilename())
-  if (!filepath) {
-    return null
-  }
-
+function getDependencies(context, packageDir) {
   try {
-    const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'))
+    const packageContent = packageDir
+      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
+      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+
+    if (!packageContent) {
+      return null
+    }
+
     return {
       dependencies: packageContent.dependencies || {},
       devDependencies: packageContent.devDependencies || {},
@@ -20,6 +22,19 @@ function getDependencies(context) {
       peerDependencies: packageContent.peerDependencies || {},
     }
   } catch (e) {
+    if (packageDir && e.code === 'ENOENT') {
+      context.report({
+        message: 'The package.json file could not be found.',
+        loc: { line: 0, column: 0 },
+      })
+    }
+    if (e.name === 'JSONError' || e instanceof SyntaxError) {
+      context.report({
+        message: 'The package.json file could not be parsed: ' + e.message,
+        loc: { line: 0, column: 0 },
+      })
+    }
+
     return null
   }
 }
@@ -46,7 +61,6 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
     : splitName[0]
-
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
@@ -96,6 +110,7 @@ module.exports = {
           'devDependencies': { 'type': ['boolean', 'array'] },
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
+          'packageDir': { 'type': 'string' },
         },
         'additionalProperties': false,
       },
@@ -105,7 +120,7 @@ module.exports = {
   create: function (context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
-    const deps = getDependencies(context)
+    const deps = getDependencies(context, options.packageDir)
 
     if (!deps) {
       return {}

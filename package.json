@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Import with sanity.",
   "engines": {
     "node": ">=4"
@@ -51,10 +51,11 @@
     "babel-eslint": "next",
     "babel-plugin-istanbul": "^2.0.1",
     "babel-preset-es2015-argon": "latest",
-    "babel-register": "6.16.3",
+    "babel-register": "6.24.1",
+    "babylon": "6.15.0",
     "chai": "^3.4.0",
     "coveralls": "^2.11.4",
-    "cross-env": "^3.1.0",
+    "cross-env": "^4.0.0",
     "eslint": "3.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
@@ -69,7 +70,7 @@
     "redux": "^3.0.4",
     "rimraf": "2.5.2",
     "typescript": "^2.0.3",
-    "typescript-eslint-parser": "^0.4.0"
+    "typescript-eslint-parser": "^2.1.0"
   },
   "peerDependencies": {
     "eslint": "2.x - 3.x"
@@ -84,7 +85,7 @@
     "has": "^1.0.1",
     "lodash.cond": "^4.3.0",
     "minimatch": "^3.0.3",
-    "pkg-up": "^1.0.0"
+    "read-pkg-up": "^2.0.0"
   },
   "nyc": {
     "require": [

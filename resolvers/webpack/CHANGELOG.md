@@ -6,6 +6,19 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 
 
+## 0.8.1 - 2017-01-19
+### Changed
+- official support for Webpack 2.2.0 (RC), thanks [@graingert]
+
+## 0.8.0 - 2016-12-15
+### Changed
+- bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
+- allow `enhanced-resolve` to be version `>= 2` (thanks [@Kovensky])
+
+## 0.7.1
+### Fixed
+- missing `has` dependency ([#681] + [#683], thanks [@benmvp] + [@ljharb])
+
 ## 0.7.0
 ### Added
 - Support for explicit Webpack config object in `.eslintrc.*`. ([#572], thanks [@jameslnewell])
@@ -68,6 +81,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
 [#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
 [#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
 [#533]: https://github.com/benmosher/eslint-plugin-import/pull/533
@@ -80,6 +94,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/benmosher/eslint-plugin-import/pull/181
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#681]: https://github.com/benmosher/eslint-plugin-import/issues/681
 [#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
 [#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
 [#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
@@ -98,3 +113,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@grahamb]: https://github.com/grahamb
 [@jameslnewell]: https://github.com/jameslnewell
 [@toshafed]: https://github.com/toshafed
+[@benmvp]: https://github.com/benmvp
+[@ljharb]: https://github.com/ljharb
+[@SkeLLLa]: https://github.com/SkeLLLa
+[@graingert]: https://github.com/graingert

@@ -28,6 +28,10 @@ ruleTester.run('no-mutable-exports', rule, {
       parser: 'babel-eslint',
       code: 'export Something from "./something";',
     }),
+    test({
+      parser: 'babel-eslint',
+      code: 'type Foo = {}\nexport type {Foo}',
+    }),
   ],
   invalid: [
     test({
@@ -62,5 +66,15 @@ ruleTester.run('no-mutable-exports', rule, {
       code: 'var count = 1\nexport default count',
       errors: ['Exporting mutable \'var\' binding, use \'const\' instead.'],
     }),
+
+    // todo: undeclared globals
+    // test({
+    //   code: 'count = 1\nexport { count }',
+    //   errors: ['Exporting mutable global binding, use \'const\' instead.'],
+    // }),
+    // test({
+    //   code: 'count = 1\nexport default count',
+    //   errors: ['Exporting mutable global binding, use \'const\' instead.'],
+    // }),
   ],
 })

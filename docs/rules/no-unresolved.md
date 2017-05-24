@@ -11,7 +11,7 @@ This rule can also optionally report on unresolved modules in CommonJS `require(
 To enable this, send `{ commonjs: true/false, amd: true/false }` as a rule option.
 Both are disabled by default.
 
-If you are using Webpack, see the section on [resolver plugins](../../README.md#resolver-plugins).
+If you are using Webpack, see the section on [resolvers](../../README.md#resolvers).
 
 ## Rule Details
 
