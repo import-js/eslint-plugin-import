@@ -77,6 +77,11 @@ ruleTester.run('no-nodejs-modules', rule, {
       options: [{ignore: '**/ignore*'}],
       filename: path.join(process.cwd(), 'ignore.js'),
     }),
+    test({
+      code: 'const {readFile} = require("fs")',
+      options: [{ignore: ['**/ignore*']}],
+      filename: 'ignored.js',
+    })
   ],
   invalid: [
     test({
