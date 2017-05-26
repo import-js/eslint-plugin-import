@@ -34,3 +34,4 @@ node_modules
 # generated output
 lib/
 **/.nyc_output/
+yarn.lock
