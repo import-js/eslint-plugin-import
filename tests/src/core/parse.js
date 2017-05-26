@@ -27,16 +27,32 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     const parserOptions = { ecmaFeatures: { jsx: true } }
     require('./parseStubParser').parse = parseSpy
     parse(path, content, { settings: {}, parserPath: require.resolve('./parseStubParser'), parserOptions: parserOptions })
-    expect(parseSpy.callCount, 'parse to be called once').to.equal(1)
-    expect(parseSpy.args[0][0], 'parse to get content as its first argument').to.equal(content)
-    expect(parseSpy.args[0][1], 'parse to get an object as its second argument').to.be.an('object')
-    expect(parseSpy.args[0][1], 'parse to clone the parserOptions object').to.not.equal(parserOptions)
-    expect(parseSpy.args[0][1], 'parse to get ecmaFeatures in parserOptions which is a clone of ecmaFeatures passed in')
+    expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1)
+    expect(parseSpy.args[0][0], 'custom parser to get content as its first argument').to.equal(content)
+    expect(parseSpy.args[0][1], 'custom parser to get an object as its second argument').to.be.an('object')
+    expect(parseSpy.args[0][1], 'custom parser to clone the parserOptions object').to.not.equal(parserOptions)
+    expect(parseSpy.args[0][1], 'custom parser to get ecmaFeatures in parserOptions which is a clone of ecmaFeatures passed in')
       .to.have.property('ecmaFeatures')
         .that.is.eql(parserOptions.ecmaFeatures)
         .and.is.not.equal(parserOptions.ecmaFeatures)
-    expect(parseSpy.args[0][1], 'parse to get parserOptions.attachComment equal to true').to.have.property('attachComment', true)
-    expect(parseSpy.args[0][1], 'parse to get parserOptions.filePath equal to the full path of the source file').to.have.property('filePath', path)
+    expect(parseSpy.args[0][1], 'custom parser to get parserOptions.attachComment equal to true').to.have.property('attachComment', true)
+    expect(parseSpy.args[0][1], 'custom parser to get parserOptions.filePath equal to the full path of the source file').to.have.property('filePath', path)
+  })
+
+  it('should throw on context == null', function () {
+    expect(parse.bind(null, path, content, null)).to.throw(Error)
+  })
+
+  it('should throw on unable to resolve parserPath', function () {
+    expect(parse.bind(null, path, content, { settings: {}, parserPath: null })).to.throw(Error)
+  })
+
+  it('should take the alternate parser specified in settings', function () {
+    const parseSpy = sinon.spy()
+    const parserOptions = { ecmaFeatures: { jsx: true } }
+    require('./parseStubParser').parse = parseSpy
+    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [require.resolve('./parseStubParser')]: [ '.js' ] } }, parserPath: null, parserOptions: parserOptions })).not.to.throw(Error)
+    expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1)
   })
 
 })
