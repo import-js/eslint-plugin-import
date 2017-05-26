@@ -16,16 +16,6 @@ function isIgnored(ignored, filename) {
   ))
 }
 
-function guaranteeArray(item) {
-  if (item instanceof Array) {
-    return item
-  }
-  if (item) {
-    return [item]
-  }
-  return []
-}
-
 module.exports = {
   meta: {
     docs: {},
@@ -34,7 +24,7 @@ module.exports = {
   create: function (context) {
     const options = context.options[0] || {}
     const allowed = options.allow || []
-    const ignored = guaranteeArray(options.ignore)
+    const ignored = [].concat(options.ignore || [])
     const filename = context.getFilename()
 
     return {
