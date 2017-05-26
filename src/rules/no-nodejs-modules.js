@@ -39,6 +39,7 @@ module.exports = {
           }],
         },
       },
+      additionalProperties: false,
     }],
   },
 
