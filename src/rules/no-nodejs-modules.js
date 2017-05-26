@@ -19,6 +19,27 @@ function isIgnored(ignored, filename) {
 module.exports = {
   meta: {
     docs: {},
+    schema: [{
+      type: 'object',
+      properties: {
+        allow: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        ignore: {
+          oneOf: [{
+            type: 'string',
+          }, {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          }],
+        },
+      },
+    }],
   },
 
   create: function (context) {
