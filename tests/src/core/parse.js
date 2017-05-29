@@ -7,6 +7,8 @@ import { getFilename } from '../utils'
 
 describe('parse(content, { settings, ecmaFeatures })', function () {
   const path = getFilename('jsx.js')
+  const parseStubParser = require('./parseStubParser')
+  const parseStubParserPath = require.resolve('./parseStubParser')
   let content
 
   before((done) =>
@@ -25,8 +27,8 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   it('passes expected parserOptions to custom parser', function () {
     const parseSpy = sinon.spy()
     const parserOptions = { ecmaFeatures: { jsx: true } }
-    require('./parseStubParser').parse = parseSpy
-    parse(path, content, { settings: {}, parserPath: require.resolve('./parseStubParser'), parserOptions: parserOptions })
+    parseStubParser.parse = parseSpy
+    parse(path, content, { settings: {}, parserPath: parseStubParserPath, parserOptions: parserOptions })
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1)
     expect(parseSpy.args[0][0], 'custom parser to get content as its first argument').to.equal(content)
     expect(parseSpy.args[0][1], 'custom parser to get an object as its second argument').to.be.an('object')
@@ -50,8 +52,8 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   it('should take the alternate parser specified in settings', function () {
     const parseSpy = sinon.spy()
     const parserOptions = { ecmaFeatures: { jsx: true } }
-    require('./parseStubParser').parse = parseSpy
-    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [require.resolve('./parseStubParser')]: [ '.js' ] } }, parserPath: null, parserOptions: parserOptions })).not.to.throw(Error)
+    parseStubParser.parse = parseSpy
+    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, parserOptions: parserOptions })).not.to.throw(Error)
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1)
   })
 
