@@ -21,6 +21,7 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
 
   // null means it resolved to a builtin
   if (filepath === null) return true
+  if (filepath.toLowerCase() === process.cwd().toLowerCase()) return true
   const parsedPath = path.parse(filepath)
       , dir = parsedPath.dir
 
