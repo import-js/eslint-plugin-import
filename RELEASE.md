@@ -26,8 +26,7 @@
    ```
 
    Generally, don't use `npm version` for this because it creates a tag, which I normally
-   wait until signoff from all contributors (`new Set(["@jfmengels"])`) and actually
-   `npm publish`-ing to snap the tag.
+   wait until signoff from contributors and actually `npm publish`-ing to snap the tag.
 
 3. create pull request from `release-[x.y.z]` into `release` branch
 
