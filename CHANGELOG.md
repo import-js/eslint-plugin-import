@@ -6,7 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
-## [2.4.0] - 2017-06-02
+## [2.4.0] - 2017-06-02 [YANKED]
+
+Yanked due to critical issue in eslint-module-utils with cache key resulting from [#839].
+
 ### Added
 - Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
 - Add `allow` option to [`no-unassigned-import`] to allow for files that match the globs ([#671], [#737], thanks [@kevin940726]).
@@ -141,7 +144,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Something horrible happened during `npm prepublish` of 1.10.1.
   Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
 
-## [1.10.1] - 2016-07-02 [YANKED]
+## [1.10.1] - 2016-07-02 [
+ED]
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
