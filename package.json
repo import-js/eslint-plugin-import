@@ -82,7 +82,7 @@
     "debug": "^2.2.0",
     "doctrine": "1.5.0",
     "eslint-import-resolver-node": "^0.2.0",
-    "eslint-module-utils": "^2.1.0",
+    "eslint-module-utils": "^2.0.0",
     "has": "^1.0.1",
     "lodash.cond": "^4.3.0",
     "minimatch": "^3.0.3",
