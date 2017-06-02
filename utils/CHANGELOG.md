@@ -6,7 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 
 
-## v2.1.0 - 2017-06-02
+## v2.1.0 - 2017-06-02 [YANKED]
+
+Yanked due to critical issue with cache key resulting from #839.
+
 ### Added
 - `parse` now additionally passes `filePath` to `parser` in `parserOptions` like `eslint` core does
 
