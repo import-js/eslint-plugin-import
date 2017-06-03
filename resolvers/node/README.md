@@ -20,6 +20,9 @@ settings:
         - .es6
         - .coffee
 
+      # This allows to resolve absolute imports in React Native
+      projectName: 'YourAppNameInPackage.json'
+
       paths:
         # an array of absolute paths which will also be searched
         # think NODE_PATH
