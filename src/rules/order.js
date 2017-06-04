@@ -3,7 +3,7 @@
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
-const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
+const defaultGroups = ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']
 
 // REPORTING
 
