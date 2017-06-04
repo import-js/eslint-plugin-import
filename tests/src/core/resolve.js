@@ -27,6 +27,22 @@ describe('resolve', function () {
                     )).to.equal(undefined)
   })
 
+  it('resolves via a custom resolver with interface version 1 assumed if not specified', function () {
+    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version'})
+
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                      )).to.equal(utils.testFilePath('./bar.jsx'))
+
+    expect(resolve( '../files/exception'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('exception.js') } })
+                    )).to.equal(undefined)
+
+    expect(resolve( '../files/not-found'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('not-found.js') } })
+                    )).to.equal(undefined)
+  })
+
   it('resolves via a custom resolver with interface version 2', function () {
     const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v2'})
     const testContextReports = []
