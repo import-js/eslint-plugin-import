@@ -13,7 +13,7 @@ describe('ExportMap', function () {
     parserPath: 'babel-eslint',
   }
 
-  it('should handle ExportAllDeclaration', function () {
+  it('handles ExportAllDeclaration', function () {
     var imports
     expect(function () {
       imports = ExportMap.get('./export-all', fakeContext)
@@ -24,12 +24,12 @@ describe('ExportMap', function () {
 
   })
 
-  it('should return a cached copy on subsequent requests', function () {
+  it('returns a cached copy on subsequent requests', function () {
     expect(ExportMap.get('./named-exports', fakeContext))
       .to.exist.and.equal(ExportMap.get('./named-exports', fakeContext))
   })
 
-  it('should not return a cached copy after modification', (done) => {
+  it('does not return a cached copy after modification', (done) => {
     const firstAccess = ExportMap.get('./mutator', fakeContext)
     expect(firstAccess).to.exist
 
@@ -42,7 +42,7 @@ describe('ExportMap', function () {
     })
   })
 
-  it('should not return a cached copy with different settings', () => {
+  it('does not return a cached copy with different settings', () => {
     const firstAccess = ExportMap.get('./named-exports', fakeContext)
     expect(firstAccess).to.exist
 
@@ -56,7 +56,7 @@ describe('ExportMap', function () {
       .not.to.equal(firstAccess)
   })
 
-  it('should not throw for a missing file', function () {
+  it('does not throw for a missing file', function () {
     var imports
     expect(function () {
       imports = ExportMap.get('./does-not-exist', fakeContext)
@@ -66,7 +66,7 @@ describe('ExportMap', function () {
 
   })
 
-  it('should export explicit names for a missing file in exports', function () {
+  it('exports explicit names for a missing file in exports', function () {
     var imports
     expect(function () {
       imports = ExportMap.get('./exports-missing', fakeContext)

@@ -7,7 +7,7 @@ import * as fs from 'fs'
 import * as utils from '../utils'
 
 describe('resolve', function () {
-  it('should throw on bad parameters.', function () {
+  it('throws on bad parameters', function () {
     expect(resolve.bind(null, null, null)).to.throw(Error)
   })
 
