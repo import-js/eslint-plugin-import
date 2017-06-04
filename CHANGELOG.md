@@ -7,6 +7,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
 
+## [2.4.0] - 2017-06-02 [YANKED]
+
+Yanked due to critical issue in eslint-module-utils with cache key resulting from [#839].
+
+### Added
+- Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
+- Add `allow` option to [`no-unassigned-import`] to allow for files that match the globs ([#671], [#737], thanks [@kevin940726]).
+
 ## [2.3.0] - 2017-05-18
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
@@ -390,6 +398,7 @@ for info on changes for earlier releases.
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
+[#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
 [#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
@@ -446,6 +455,8 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
@@ -503,7 +514,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
@@ -583,3 +595,5 @@ for info on changes for earlier releases.
 [@giodamelio]: https://github.com/giodamelio
 [@ntdb]: https://github.com/ntdb
 [@ramasilveyra]: https://github.com/ramasilveyra
+[@sompylasar]: https://github.com/sompylasar
+[@kevin940726]: https://github.com/kevin940726
