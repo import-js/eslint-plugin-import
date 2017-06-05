@@ -69,6 +69,46 @@ describe('resolve', function () {
     expect(testContextReports.length).to.equal(0)
   })
 
+  it('respects import/resolver as array of strings', function () {
+    const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] })
+
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                      )).to.equal(utils.testFilePath('./bar.jsx'))
+  })
+
+  it('respects import/resolver as object', function () {
+    const testContext = utils.testContext({ 'import/resolver': { './foo-bar-resolver-v2': {} } })
+
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                      )).to.equal(utils.testFilePath('./bar.jsx'))
+  })
+
+  it('respects import/resolver as array of objects', function () {
+    const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] })
+
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                      )).to.equal(utils.testFilePath('./bar.jsx'))
+  })
+
+  it('reports invalid import/resolver config', function () {
+    const testContext = utils.testContext({ 'import/resolver': 123.456 })
+    const testContextReports = []
+    testContext.report = function (reportInfo) {
+      testContextReports.push(reportInfo)
+    }
+
+    testContextReports.length = 0
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                    )).to.equal(undefined)
+    expect(testContextReports[0]).to.be.an('object')
+    expect(testContextReports[0].message).to.equal('Resolve error: invalid resolver config')
+    expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
+  })
+
   it('respects import/resolve extensions', function () {
     const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
 
