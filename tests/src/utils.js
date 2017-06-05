@@ -87,4 +87,10 @@ export const SYNTAX_CASES = [
   test({
     code: 'import * as a from "./commonjs-namespace/a"; a.b',
   }),
- ]
+
+  // ignore invalid extensions
+  test({
+    code: 'import { foo } from "./ignore.invalid.extension"',
+  }),
+
+]
