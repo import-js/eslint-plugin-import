@@ -12,7 +12,7 @@ describe('resolve', function () {
   })
 
   it('resolves via a custom resolver with interface version 1', function () {
-    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v1'})
+    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v1' })
 
     expect(resolve( '../files/foo'
                       , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
@@ -28,7 +28,7 @@ describe('resolve', function () {
   })
 
   it('resolves via a custom resolver with interface version 1 assumed if not specified', function () {
-    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version'})
+    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version' })
 
     expect(resolve( '../files/foo'
                       , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
@@ -44,7 +44,7 @@ describe('resolve', function () {
   })
 
   it('resolves via a custom resolver with interface version 2', function () {
-    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v2'})
+    const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v2' })
     const testContextReports = []
     testContext.report = function (reportInfo) {
       testContextReports.push(reportInfo)
