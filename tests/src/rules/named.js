@@ -135,7 +135,7 @@ ruleTester.run('named', rule, {
 
     test({
       code: 'import { a } from "./re-export-names"',
-      args: [2, 'es6-only'],
+      options: [2, 'es6-only'],
       errors: [error('a', './re-export-names')],
     }),
 

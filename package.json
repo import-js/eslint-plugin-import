@@ -74,7 +74,7 @@
     "typescript-eslint-parser": "^2.1.0"
   },
   "peerDependencies": {
-    "eslint": "2.x - 3.x"
+    "eslint": "2.x - 4.x"
   },
   "dependencies": {
     "builtin-modules": "^1.1.1",

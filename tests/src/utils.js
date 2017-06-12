@@ -12,11 +12,12 @@ export const FILENAME = testFilePath('foo.js')
 export function test(t) {
   return Object.assign({
     filename: FILENAME,
-    parserOptions: {
+  }, t, {
+    parserOptions: Object.assign({
       sourceType: 'module',
       ecmaVersion: 6,
-    },
-  }, t)
+    }, t.parserOptions),
+  })
 }
 
 export function testContext(settings) {
