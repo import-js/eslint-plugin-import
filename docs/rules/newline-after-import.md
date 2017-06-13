@@ -76,7 +76,7 @@ const FOO = 'BAR'
 {
   ...
   "rules": {
-    "import/newline-after-import": [{ "count": 2 }]
+    "import/newline-after-import": ["error", { "count": 2 }]
   }
 }
 ```
