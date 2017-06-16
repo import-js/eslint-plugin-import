@@ -337,4 +337,4 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: 'babel-eslint',
     },
   ],
-});
+})
