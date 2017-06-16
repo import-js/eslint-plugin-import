@@ -4,11 +4,29 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [2.4.0] - 2017-06-02 [YANKED]
+
+Yanked due to critical issue in eslint-module-utils with cache key resulting from [#839].
+
+### Added
+- Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
+- Add `allow` option to [`no-unassigned-import`] to allow for files that match the globs ([#671], [#737], thanks [@kevin940726]).
+
+## [2.3.0] - 2017-05-18
+### Added
+- [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
+- Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
+- Add `count` option to the [`newline-after-import`] rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
+
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
+- Add support to specify the package.json [`no-extraneous-dependencies`] ([#685], thanks [@ramasilveyra])
 
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
+- "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
 
 
 ## [2.2.0] - 2016-11-07
@@ -126,7 +144,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Something horrible happened during `npm prepublish` of 1.10.1.
   Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
 
-## [1.10.1] - 2016-07-02 [YANKED]
+## [1.10.1] - 2016-07-02 [
+ED]
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
@@ -376,11 +395,17 @@ for info on changes for earlier releases.
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
+[`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 
+[#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
+[#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
+[#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
+[#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
+[#628]: https://github.com/benmosher/eslint-plugin-import/pull/628
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
 [#578]: https://github.com/benmosher/eslint-plugin-import/pull/578
@@ -430,8 +455,11 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
+[#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
@@ -486,7 +514,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...HEAD
+[2.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...v2.4.0
+[2.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
@@ -561,3 +591,9 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@jakubsta]: https://github.com/jakubsta
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
+[@duncanbeevers]: https://github.com/duncanbeevers
+[@giodamelio]: https://github.com/giodamelio
+[@ntdb]: https://github.com/ntdb
+[@ramasilveyra]: https://github.com/ramasilveyra
+[@sompylasar]: https://github.com/sompylasar
+[@kevin940726]: https://github.com/kevin940726

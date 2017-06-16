@@ -1,9 +1,11 @@
 # newline-after-import
 
-Enforces having an empty line after the last top-level import statement or require call.
+Enforces having one or more empty lines after the last top-level import statement or require call.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 ## Rule Details
+
+This rule has one option, `count` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
 
 Valid:
 
@@ -27,7 +29,7 @@ const BAR = require('./bar')
 const BAZ = 1
 ```
 
-...whereas here imports will be reported:
+Invalid:
 
 ```js
 import * as foo from 'foo'
@@ -46,6 +48,40 @@ const FOO = require('./foo')
 const BAZ = 1
 const BAR = require('./bar')
 ```
+
+With `count` set to `2` this will be considered valid:
+
+```js
+import defaultExport from './foo'
+
+
+const FOO = 'BAR'
+```
+
+With `count` set to `2` these will be considered invalid:
+
+```js
+import defaultExport from './foo'
+const FOO = 'BAR'
+```
+
+```js
+import defaultExport from './foo'
+
+const FOO = 'BAR'
+```
+
+
+## Example options usage
+```
+{
+  ...
+  "rules": {
+    "import/newline-after-import": ["error", { "count": 2 }]
+  }
+}
+```
+
 
 ## When Not To Use It
 

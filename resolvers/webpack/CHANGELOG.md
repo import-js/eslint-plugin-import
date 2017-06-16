@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 
 
+## 0.8.1 - 2017-01-19
+### Changed
+- official support for Webpack 2.2.0 (RC), thanks [@graingert]
+
 ## 0.8.0 - 2016-12-15
 ### Changed
 - bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
@@ -112,3 +116,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@benmvp]: https://github.com/benmvp
 [@ljharb]: https://github.com/ljharb
 [@SkeLLLa]: https://github.com/SkeLLLa
+[@graingert]: https://github.com/graingert

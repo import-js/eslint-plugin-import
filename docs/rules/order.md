@@ -92,13 +92,14 @@ You can set the options like this:
 "import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```
 
-### `newlines-between: [ignore|always|never]`:
+### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 
 
 Enforces or forbids new lines between import groups:
 
 - If set to `ignore`, no errors related to new lines between import groups will be reported (default).
 - If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
+- If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
 - If set to `never`, no new lines are allowed in the entire import section.
 
 With the default group setting, the following will be invalid:
@@ -106,6 +107,15 @@ With the default group setting, the following will be invalid:
 ```js
 /* eslint import/order: ["error", {"newlines-between": "always"}] */
 import fs from 'fs';
+import path from 'path';
+import index from './';
+import sibling from './foo';
+```
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "always-and-inside-groups"}] */
+import fs from 'fs';
+
 import path from 'path';
 import index from './';
 import sibling from './foo';
@@ -126,6 +136,17 @@ while those will be valid:
 ```js
 /* eslint import/order: ["error", {"newlines-between": "always"}] */
 import fs from 'fs';
+import path from 'path';
+
+import index from './';
+
+import sibling from './foo';
+```
+
+```js
+/* eslint import/order: ["error", {"newlines-between": "always-and-inside-groups"}] */
+import fs from 'fs';
+
 import path from 'path';
 
 import index from './';

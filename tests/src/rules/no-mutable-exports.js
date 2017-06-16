@@ -28,6 +28,10 @@ ruleTester.run('no-mutable-exports', rule, {
       parser: 'babel-eslint',
       code: 'export Something from "./something";',
     }),
+    test({
+      parser: 'babel-eslint',
+      code: 'type Foo = {}\nexport type {Foo}',
+    }),
   ],
   invalid: [
     test({
