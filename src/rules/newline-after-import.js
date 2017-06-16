@@ -45,6 +45,7 @@ function isClassWithDecorator(node) {
 module.exports = {
   meta: {
     docs: {},
+    fixable: 'whitespace',
     schema: [
       {
         'type': 'object',
@@ -68,7 +69,8 @@ module.exports = {
       }
 
       const options = context.options[0] || { count: 1 }
-      if (getLineDifference(node, nextNode) < options.count + 1) {
+      const lineDifference = getLineDifference(node, nextNode)
+      if (lineDifference < options.count + 1) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
@@ -81,6 +83,10 @@ module.exports = {
             column,
           },
           message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+          fix: fixer => fixer.insertTextAfter(
+            node,
+            '\n'.repeat((options.count + 1) - lineDifference)
+          ),
         })
       }
     }
