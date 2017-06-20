@@ -166,6 +166,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   invalid: [
     {
       code: `import foo from 'foo';\nexport default function() {};`,
+      output: `import foo from 'foo';\n\nexport default function() {};`,
       errors: [ {
         line: 1,
         column: 1,
@@ -175,6 +176,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n\nexport default function() {};`,
       options: [{ 'count': 2 }],
       errors: [ {
         line: 1,
@@ -184,7 +186,18 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
     },
     {
+      code: `var foo = require('foo-module');\nvar something = 123;`,
+      output: `var foo = require('foo-module');\n\nvar something = 123;`,
+      errors: [ {
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+    },
+    {
       code: `import foo from 'foo';\nexport default function() {};`,
+      output: `import foo from 'foo';\n\nexport default function() {};`,
       options: [{ 'count': 1 }],
       errors: [ {
         line: 1,
@@ -195,6 +208,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var foo = require('foo-module');\nvar something = 123;`,
+      output: `var foo = require('foo-module');\n\nvar something = 123;`,
       errors: [ {
         line: 1,
         column: 1,
@@ -204,6 +218,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;`,
+      output: `import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';\n\nvar b=456;`,
       errors: [
       {
         line: 1,
@@ -219,6 +234,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var foo = require('foo-module');\nvar a = 123;\n\nvar bar = require('bar-lib');\nvar b=456;`,
+      output: `var foo = require('foo-module');\n\nvar a = 123;\n\nvar bar = require('bar-lib');\n\nvar b=456;`,
       errors: [
         {
           line: 1,
@@ -234,6 +250,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var foo = require('foo-module');\nvar a = 123;\n\nrequire('bar-lib');\nvar b=456;`,
+      output: `var foo = require('foo-module');\n\nvar a = 123;\n\nrequire('bar-lib');\n\nvar b=456;`,
       errors: [
         {
           line: 1,
@@ -249,6 +266,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var path = require('path');\nvar foo = require('foo');\nvar bar = 42;`,
+      output: `var path = require('path');\nvar foo = require('foo');\n\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
@@ -257,6 +275,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;`,
+      output: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\n\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
@@ -265,6 +284,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\nvar foo = 'bar';`,
+      output: `require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\n\nvar foo = 'bar';`,
       errors: [
         {
           line: 3,
@@ -275,6 +295,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `require('a');\nfoo(\nrequire('b'),\nrequire('c'),\nrequire('d')\n);\nvar foo = 'bar';`,
+      output: `require('a');\nfoo(\nrequire('b'),\nrequire('c'),\nrequire('d')\n);\n\nvar foo = 'bar';`,
       errors: [
         {
           line: 6,
@@ -285,6 +306,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import path from 'path';\nimport foo from 'foo';\nvar bar = 42;`,
+      output: `import path from 'path';\nimport foo from 'foo';\n\nvar bar = 42;`,
       errors: [ {
         line: 2,
         column: 1,
@@ -294,6 +316,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import path from 'path';import foo from 'foo';var bar = 42;`,
+      output: `import path from 'path';import foo from 'foo';\n\nvar bar = 42;`,
       errors: [ {
         line: 1,
         column: 25,
@@ -303,6 +326,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
+      output: `import foo from 'foo';\n\n@SomeDecorator(foo)\nclass Foo {}`,
       errors: [ {
         line: 1,
         column: 1,
@@ -313,6 +337,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
+      output: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
       errors: [ {
         line: 1,
         column: 1,
@@ -322,4 +347,4 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: 'babel-eslint',
     },
   ],
-})
+});
