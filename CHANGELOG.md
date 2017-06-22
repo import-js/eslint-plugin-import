@@ -6,6 +6,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
+## [2.5.0] - 2017-06-22
+
+Re-releasing v[2.4.0] after discovering that the memory leak is isolated to the memo-parser,
+which is more or less experimental anyway.
+
+### Added
+- Autofixer for newline-after-import. [#686], [#696] (thanks [@eelyafi])
+
 ## [2.4.0] - 2017-06-02 [YANKED]
 
 Yanked due to critical issue in eslint-module-utils with cache key resulting from [#839].
@@ -400,6 +408,7 @@ for info on changes for earlier releases.
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
+[#696]: https://github.com/benmosher/eslint-plugin-import/pull/696
 [#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
@@ -456,6 +465,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
@@ -514,7 +524,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
@@ -597,3 +608,4 @@ for info on changes for earlier releases.
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@sompylasar]: https://github.com/sompylasar
 [@kevin940726]: https://github.com/kevin940726
+[@eelyafi]: https://github.com/eelyafi
