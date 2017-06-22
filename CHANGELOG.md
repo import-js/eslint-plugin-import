@@ -4,7 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Added
+- Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
 
 ## [2.5.0] - 2017-06-22
 
@@ -152,8 +153,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Something horrible happened during `npm prepublish` of 1.10.1.
   Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
 
-## [1.10.1] - 2016-07-02 [
-ED]
+## [1.10.1] - 2016-07-02 [YANKED]
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 

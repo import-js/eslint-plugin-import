@@ -41,15 +41,15 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.filePath equal to the full path of the source file').to.have.property('filePath', path)
   })
 
-  it('should throw on context == null', function () {
+  it('throws on context == null', function () {
     expect(parse.bind(null, path, content, null)).to.throw(Error)
   })
 
-  it('should throw on unable to resolve parserPath', function () {
+  it('throws on unable to resolve parserPath', function () {
     expect(parse.bind(null, path, content, { settings: {}, parserPath: null })).to.throw(Error)
   })
 
-  it('should take the alternate parser specified in settings', function () {
+  it('takes the alternate parser specified in settings', function () {
     const parseSpy = sinon.spy()
     const parserOptions = { ecmaFeatures: { jsx: true } }
     parseStubParser.parse = parseSpy
