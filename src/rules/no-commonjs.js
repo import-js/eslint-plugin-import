@@ -29,11 +29,35 @@ function allowRequire(node, options) {
 // Rule Definition
 //------------------------------------------------------------------------------
 
+const schemaString = { enum: ['allow-primitive-modules'] }
+const schemaObject = {
+  type: 'object',
+  properties: {
+    allowPrimitiveModules: { 'type': 'boolean' },
+    allowRequire: { 'type': 'boolean' },
+  },
+  additionalProperties: false,
+}
 
 module.exports = {
   meta: {
     docs: {
       url: docsUrl('no-commonjs'),
+    },
+
+    schema: {
+      anyOf: [
+        {
+          type: 'array',
+          items: [schemaString],
+          additionalItems: false,
+        },
+        {
+          type: 'array',
+          items: [schemaObject],
+          additionalItems: false,
+        },
+      ],
     },
   },
 
