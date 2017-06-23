@@ -36,6 +36,7 @@ if (typeof window !== "undefined") {
 but `module.exports` is reported as usual.
 
 This is useful for conditional requires.
+If you don't rely on synchronous module loading, check out [dynamic import](https://github.com/airbnb/babel-plugin-dynamic-import-node).
 
 ### Allow primitive modules
 
