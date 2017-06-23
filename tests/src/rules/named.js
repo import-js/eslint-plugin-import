@@ -72,6 +72,14 @@ ruleTester.run('named', rule, {
       code: 'import type { MyType } from "./flowtypes"',
       'parser': 'babel-eslint',
     }),
+    test({
+      code: 'import type { MyInterface } from "./flowtypes"',
+      'parser': 'babel-eslint',
+    }),
+    test({
+      code: 'import type { MyClass } from "./flowtypes"',
+      'parser': 'babel-eslint',
+    }),
 
     // jsnext
     test({

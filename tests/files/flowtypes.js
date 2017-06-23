@@ -6,3 +6,7 @@ export type MyType = {
   firstName: string,
   lastName: string
 };
+
+export interface MyInterface {}
+
+export class MyClass {}
