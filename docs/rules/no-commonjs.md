@@ -21,6 +21,24 @@ module.exports = { a: "b" }
 exports.c = "d"
 ```
 
+### Allow require
+
+If `allow-require` is provided as an option, `require` calls are valid:
+
+```js
+/*eslint no-commonjs: [2, "allow-require"]*/
+
+if (typeof window !== "undefined") {
+  require('that-ugly-thing');
+}
+```
+
+but `module.exports` is reported as usual.
+
+This is useful for conditional requires.
+
+### Allow primitive modules
+
 If `allow-primitive-modules` is provided as an option, the following is valid:
 
 ```js

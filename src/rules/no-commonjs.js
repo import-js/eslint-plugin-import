@@ -14,6 +14,11 @@ function allowPrimitive(node, context) {
   return (node.parent.right.type !== 'ObjectExpression')
 }
 
+function allowRequire(node, context) {
+  if (context.options.indexOf('allow-require') < 0) return false
+  return true
+}
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -64,6 +69,8 @@ module.exports = {
 
         if (module.type !== 'Literal') return
         if (typeof module.value !== 'string') return
+
+        if (allowRequire(call, context)) return
 
         // keeping it simple: all 1-string-arg `require` calls are reported
         context.report({

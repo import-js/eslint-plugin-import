@@ -37,6 +37,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: "var bar = proxyquire('./bar');" },
     { code: "var bar = require('./ba' + 'r');" },
     { code: 'var zero = require(0);' },
+    { code: 'require("x")', options: ['allow-require'] },
 
     { code: 'module.exports = function () {}', options: ['allow-primitive-modules'] },
     { code: 'module.exports = "foo"', options: ['allow-primitive-modules'] },
