@@ -8,15 +8,21 @@ import docsUrl from '../docsUrl'
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
     , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
 
-function allowPrimitive(node, context) {
-  if (context.options.indexOf('allow-primitive-modules') < 0) return false
+function normalizeLegacyOptions(options) {
+  if (options.indexOf('allow-primitive-modules') >= 0) {
+    return { allowPrimitiveModules: true }
+  }
+  return options[0] || {}
+}
+
+function allowPrimitive(node, options) {
+  if (!options.allowPrimitiveModules) return false
   if (node.parent.type !== 'AssignmentExpression') return false
   return (node.parent.right.type !== 'ObjectExpression')
 }
 
-function allowRequire(node, context) {
-  if (context.options.indexOf('allow-require') < 0) return false
-  return true
+function allowRequire(node, options) {
+  return options.allowRequire
 }
 
 //------------------------------------------------------------------------------
@@ -32,6 +38,7 @@ module.exports = {
   },
 
   create: function (context) {
+    const options = normalizeLegacyOptions(context.options)
 
     return {
 
@@ -39,7 +46,7 @@ module.exports = {
 
         // module.exports
         if (node.object.name === 'module' && node.property.name === 'exports') {
-          if (allowPrimitive(node, context)) return
+          if (allowPrimitive(node, options)) return
           context.report({ node, message: EXPORT_MESSAGE })
         }
 
@@ -70,7 +77,7 @@ module.exports = {
         if (module.type !== 'Literal') return
         if (typeof module.value !== 'string') return
 
-        if (allowRequire(call, context)) return
+        if (allowRequire(call, options)) return
 
         // keeping it simple: all 1-string-arg `require` calls are reported
         context.report({

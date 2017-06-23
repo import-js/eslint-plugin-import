@@ -23,10 +23,10 @@ exports.c = "d"
 
 ### Allow require
 
-If `allow-require` is provided as an option, `require` calls are valid:
+If `allowRequire` option is set to `true`, `require` calls are valid:
 
 ```js
-/*eslint no-commonjs: [2, "allow-require"]*/
+/*eslint no-commonjs: [2, { allowRequire: true }]*/
 
 if (typeof window !== "undefined") {
   require('that-ugly-thing');
@@ -39,10 +39,10 @@ This is useful for conditional requires.
 
 ### Allow primitive modules
 
-If `allow-primitive-modules` is provided as an option, the following is valid:
+If `allowPrimitiveModules` option is set to `true`, the following is valid:
 
 ```js
-/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+/*eslint no-commonjs: [2, { allowPrimitiveModules: true }]*/
 
 module.exports = "foo"
 module.exports = function rule(context) { return { /* ... */ } }
@@ -51,7 +51,7 @@ module.exports = function rule(context) { return { /* ... */ } }
 but this is still reported:
 
 ```js
-/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+/*eslint no-commonjs: [2, { allowPrimitiveModules: true }]*/
 
 module.exports = { x: "y" }
 exports.z = function boop() { /* ... */ }
