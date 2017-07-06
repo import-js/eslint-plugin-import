@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Changed
+- [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thansk [@jseminck])
 
 ## [2.6.1] - 2017-06-29
 ### Fixed
@@ -415,6 +417,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
@@ -624,3 +627,4 @@ for info on changes for earlier releases.
 [@kevin940726]: https://github.com/kevin940726
 [@eelyafi]: https://github.com/eelyafi
 [@mastilver]: https://github.com/mastilver
+[@jseminck]: https://github.com/jseminck
