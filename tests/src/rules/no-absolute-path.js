@@ -26,35 +26,29 @@ ruleTester.run('no-absolute-path', rule, {
     test({ code: 'var foo = require("foo")'}),
     test({ code: 'var foo = require("./")'}),
     test({ code: 'var foo = require("@scope/foo")'}),
-    test({
-      code: 'import events from "events"',
-      options: [{
-        allow: ['events'],
-      }],
-    }),
+
+    test({ code: 'import events from "events"' }),
+    test({ code: 'import path from "path"' }),
+    test({ code: 'var events = require("events")' }),
+    test({ code: 'var path = require("path")' }),
+    test({ code: 'import path from "path";import events from "events"' }),
+
+    // still works if only `amd: true` is provided
     test({
       code: 'import path from "path"',
-      options: [{
-        allow: ['path'],
-      }],
+      options: [{ amd: true }],
+    }),
+
+    // amd not enabled by default
+    test({ code: 'require(["/some/path"], function (f) { /* ... */ })' }),
+    test({ code: 'define(["/some/path"], function (f) { /* ... */ })' }),
+    test({
+      code: 'require(["./some/path"], function (f) { /* ... */ })',
+      options: [{ amd: true }],
     }),
     test({
-      code: 'var events = require("events")',
-      options: [{
-        allow: ['events'],
-      }],
-    }),
-    test({
-      code: 'var path = require("path")',
-      options: [{
-        allow: ['path'],
-      }],
-    }),
-    test({
-      code: 'import path from "path";import events from "events"',
-      options: [{
-        allow: ['path', 'events'],
-      }],
+      code: 'define(["./some/path"], function (f) { /* ... */ })',
+      options: [{ amd: true }],
     }),
   ],
   invalid: [
@@ -71,6 +65,11 @@ ruleTester.run('no-absolute-path', rule, {
       errors: [error],
     }),
     test({
+      code: 'import f from "/some/path"',
+      options: [{ amd: true }],
+      errors: [error],
+    }),
+    test({
       code: 'var f = require("/foo")',
       errors: [error],
     }),
@@ -80,6 +79,22 @@ ruleTester.run('no-absolute-path', rule, {
     }),
     test({
       code: 'var f = require("/some/path")',
+      errors: [error],
+    }),
+    test({
+      code: 'var f = require("/some/path")',
+      options: [{ amd: true }],
+      errors: [error],
+    }),
+    // validate amd
+    test({
+      code: 'require(["/some/path"], function (f) { /* ... */ })',
+      options: [{ amd: true }],
+      errors: [error],
+    }),
+    test({
+      code: 'define(["/some/path"], function (f) { /* ... */ })',
+      options: [{ amd: true }],
       errors: [error],
     }),
   ],

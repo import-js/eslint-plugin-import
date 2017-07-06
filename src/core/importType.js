@@ -8,7 +8,7 @@ function constant(value) {
   return () => value
 }
 
-function isAbsolute(name) {
+export function isAbsolute(name) {
   return name.indexOf('/') === 0
 }
 
