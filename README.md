@@ -145,7 +145,7 @@ In the interest of supporting both of these, v0.11 introduces resolvers.
 Currently [Node] and [Webpack] resolution have been implemented, but the
 resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
-You can reference resolvers in several ways(in order of precedence):
+You can reference resolvers in several ways (in order of precedence):
 
 - as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
 
