@@ -5,7 +5,7 @@ import importType from 'core/importType'
 
 import { testContext } from '../utils'
 
-describe.only('importType(name)', function () {
+describe('importType(name)', function () {
   const context = testContext()
 
   it("should return 'absolute' for paths starting with a /", function() {
