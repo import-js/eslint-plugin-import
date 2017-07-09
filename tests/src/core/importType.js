@@ -5,7 +5,7 @@ import importType from 'core/importType'
 
 import { testContext } from '../utils'
 
-describe('importType(name)', function () {
+describe.only('importType(name)', function () {
   const context = testContext()
 
   it("should return 'absolute' for paths starting with a /", function() {
@@ -69,14 +69,21 @@ describe('importType(name)', function () {
   it("should return 'builtin' for additional core modules", function() {
     // without extra config, should be marked external
     expect(importType('electron', context)).to.equal('external')
+    expect(importType('@org/foobar', context)).to.equal('external')
 
     const electronContext = testContext({ 'import/core-modules': ['electron'] })
     expect(importType('electron', electronContext)).to.equal('builtin')
+
+    const scopedContext = testContext({ 'import/core-modules': ['@org/foobar'] })
+    expect(importType('@org/foobar', scopedContext)).to.equal('builtin')
   })
 
   it("should return 'builtin' for resources inside additional core modules", function() {
     const electronContext = testContext({ 'import/core-modules': ['electron'] })
     expect(importType('electron/some/path/to/resource.json', electronContext)).to.equal('builtin')
+
+    const scopedContext = testContext({ 'import/core-modules': ['@org/foobar'] })
+    expect(importType('@org/foobar/some/path/to/resource.json', scopedContext)).to.equal('builtin')
   })
 
   it("should return 'external' for module from 'node_modules' with default config", function() {
