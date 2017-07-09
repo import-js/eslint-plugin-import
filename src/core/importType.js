@@ -13,8 +13,9 @@ export function isAbsolute(name) {
 }
 
 export function isBuiltIn(name, settings) {
+  const baseModule = name.split('/')[0]
   const extras = (settings && settings['import/core-modules']) || []
-  return builtinModules.indexOf(name) !== -1 || extras.indexOf(name) > -1
+  return builtinModules.indexOf(baseModule) !== -1 || extras.indexOf(baseModule) > -1
 }
 
 function isExternalPath(path, name, settings) {

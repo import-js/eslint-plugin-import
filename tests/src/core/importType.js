@@ -5,7 +5,7 @@ import importType from 'core/importType'
 
 import { testContext } from '../utils'
 
-describe('importType(name)', function () {
+describe.only('importType(name)', function () {
   const context = testContext()
 
   it("should return 'absolute' for paths starting with a /", function() {
@@ -72,6 +72,11 @@ describe('importType(name)', function () {
 
     const electronContext = testContext({ 'import/core-modules': ['electron'] })
     expect(importType('electron', electronContext)).to.equal('builtin')
+  })
+
+  it("should return 'builtin' for resources inside additional core modules", function() {
+    const electronContext = testContext({ 'import/core-modules': ['electron'] })
+    expect(importType('electron/some/path/to/resource.json', electronContext)).to.equal('builtin')
   })
 
   it("should return 'external' for module from 'node_modules' with default config", function() {
