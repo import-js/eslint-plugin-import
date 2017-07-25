@@ -49,6 +49,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
+- support scoped modules containing non word characters
 
 
 ## [2.2.0] - 2016-11-07
