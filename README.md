@@ -55,11 +55,13 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 * Report potentially ambiguous parse goal (`script` vs. `module`) ([`unambiguous`])
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
+* Report `import` used in the same file as CommonJS `module.exports` or `exports.*`. ([`no-commonjs-exports-with-import`])
 * Report AMD `require` and `define` calls. ([`no-amd`])
 * No Node.js builtin modules. ([`no-nodejs-modules`])
 
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-commonjs`]: ./docs/rules/no-commonjs.md
+[`no-commonjs-exports-with-import`]: ./docs/rules/no-commonjs-exports-with-import.md
 [`no-amd`]: ./docs/rules/no-amd.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 

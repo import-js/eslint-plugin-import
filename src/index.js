@@ -16,6 +16,7 @@ export const rules = {
   'no-anonymous-default-export': require('./rules/no-anonymous-default-export'),
 
   'no-commonjs': require('./rules/no-commonjs'),
+  'no-commonjs-exports-with-import': require('./rules/no-commonjs-exports-with-import'),
   'no-amd': require('./rules/no-amd'),
   'no-duplicates': require('./rules/no-duplicates'),
   'first': require('./rules/first'),
