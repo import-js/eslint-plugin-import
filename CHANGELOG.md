@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
 
 ## [2.7.0] - 2017-07-06
 ### Changed
@@ -418,9 +420,9 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
-
 [`memo-parser`]: ./memo-parser/README.md
 
+[#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
@@ -482,6 +484,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
@@ -633,3 +636,4 @@ for info on changes for earlier releases.
 [@eelyafi]: https://github.com/eelyafi
 [@mastilver]: https://github.com/mastilver
 [@jseminck]: https://github.com/jseminck
+[@ephys]: https://github.com/ephys
