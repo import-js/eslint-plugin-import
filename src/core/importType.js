@@ -21,7 +21,7 @@ function isExternalPath(path, name, settings) {
   const folders = (settings && settings['import/external-module-folders']) || ['node_modules']
 
   // extract the part before the first / (redux-saga/effects => redux-saga)
-  const packageName = name.match(/([^\/]+)/)[0]
+  const packageName = name.match(/([^/]+)/)[0]
 
   return !path || folders.some(folder => -1 < path.indexOf(join(folder, packageName)))
 }
