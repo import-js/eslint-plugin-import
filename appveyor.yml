@@ -1,8 +1,9 @@
 # Test against this version of Node.js
 environment:
   matrix:
-  - nodejs_version: "4"
+  - nodejs_version: "8"
   - nodejs_version: "6"
+  - nodejs_version: "4"
 
 # platform:
 #   - x86
@@ -13,11 +14,11 @@ install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
 
-  # update npm (only needed for Node 0.10)
-  - npm -g install npm@3
-  # - set PATH=%APPDATA%\npm;%PATH%
-
   # install modules
+  - ps: >-
+      if ($env:nodejs_version -eq "4") {
+        npm install -g npm@3;
+      }
   - npm install
 
   # todo: learn how to do this for all .\resolvers\* on Windows

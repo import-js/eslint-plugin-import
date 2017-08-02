@@ -8,7 +8,7 @@ function constant(value) {
   return () => value
 }
 
-function isAbsolute(name) {
+export function isAbsolute(name) {
   return name.indexOf('/') === 0
 }
 
@@ -31,7 +31,7 @@ function isExternalModule(name, settings, path) {
   return externalModuleRegExp.test(name) && isExternalPath(path, name, settings)
 }
 
-const scopedRegExp = /^@\w+\/\w+/
+const scopedRegExp = /^@[^/]+\/[^/]+/
 function isScoped(name) {
   return scopedRegExp.test(name)
 }

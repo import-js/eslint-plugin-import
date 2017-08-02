@@ -4,6 +4,41 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+### Fixed
+- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
+
+## [2.7.0] - 2017-07-06
+### Changed
+- [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thansk [@jseminck])
+
+## [2.6.1] - 2017-06-29
+### Fixed
+- update bundled node resolver dependency to latest version
+
+## [2.6.0] - 2017-06-23
+### Changed
+- update tests / peerDeps for ESLint 4.0 compatibility ([#871], thanks [@mastilver])
+- [`memo-parser`] updated to require `filePath` on parser options as it melts
+  down if it's not there, now that this plugin always provides it. (see [#863])
+
+## [2.5.0] - 2017-06-22
+
+Re-releasing v[2.4.0] after discovering that the memory leak is isolated to the [`memo-parser`],
+which is more or less experimental anyway.
+
+### Added
+- Autofixer for newline-after-import. ([#686] + [#696], thanks [@eelyafi])
+
+## [2.4.0] - 2017-06-02 [YANKED]
+
+Yanked due to critical issue in eslint-module-utils with cache key resulting from [#839].
+
+### Added
+- Add `filePath` into `parserOptions` passed to `parser` ([#839], thanks [@sompylasar])
+- Add `allow` option to [`no-unassigned-import`] to allow for files that match the globs ([#671], [#737], thanks [@kevin940726]).
+
+## [2.3.0] - 2017-05-18
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 - Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
@@ -11,11 +46,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
+- Add support to specify the package.json [`no-extraneous-dependencies`] ([#685], thanks [@ramasilveyra])
 
 ### Fixed
-- [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
+- support scoped modules containing non word characters
 
 
 ## [2.2.0] - 2016-11-07
@@ -384,10 +420,16 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`memo-parser`]: ./memo-parser/README.md
 
 [#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
+[#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
+[#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
+[#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
+[#696]: https://github.com/benmosher/eslint-plugin-import/pull/696
+[#685]: https://github.com/benmosher/eslint-plugin-import/pull/685
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
@@ -443,6 +485,10 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
 [#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
+[#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
+[#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
+[#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
@@ -500,7 +546,13 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.1...v2.7.0
+[2.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.0...v2.6.1
+[2.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.5.0...v2.6.0
+[2.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...v2.5.0
+[2.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...v2.4.0
+[2.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
@@ -578,4 +630,10 @@ for info on changes for earlier releases.
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@giodamelio]: https://github.com/giodamelio
 [@ntdb]: https://github.com/ntdb
+[@ramasilveyra]: https://github.com/ramasilveyra
+[@sompylasar]: https://github.com/sompylasar
+[@kevin940726]: https://github.com/kevin940726
+[@eelyafi]: https://github.com/eelyafi
+[@mastilver]: https://github.com/mastilver
+[@jseminck]: https://github.com/jseminck
 [@ephys]: https://github.com/ephys

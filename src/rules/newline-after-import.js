@@ -57,6 +57,7 @@ module.exports = {
         'additionalProperties': false,
       },
     ],
+    fixable: 'whitespace',
   },
   create: function (context) {
     let level = 0
@@ -68,7 +69,10 @@ module.exports = {
       }
 
       const options = context.options[0] || { count: 1 }
-      if (getLineDifference(node, nextNode) < options.count + 1) {
+      const lineDifference = getLineDifference(node, nextNode)
+      const EXPECTED_LINE_DIFFERENCE = options.count + 1
+
+      if (lineDifference < EXPECTED_LINE_DIFFERENCE) {
         let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
@@ -81,6 +85,10 @@ module.exports = {
             column,
           },
           message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+          fix: fixer => fixer.insertTextAfter(
+            node,
+            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference)
+          ),
         })
       }
     }

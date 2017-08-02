@@ -31,6 +31,9 @@ describe('importType(name)', function () {
   it("should return 'external' for scopes packages", function() {
     expect(importType('@cycle/core', context)).to.equal('external')
     expect(importType('@cycle/dom', context)).to.equal('external')
+    expect(importType('@some-thing/something', context)).to.equal('external')
+    expect(importType('@some-thing/something/some-module', context)).to.equal('external')
+    expect(importType('@some-thing/something/some-directory/someModule.js', context)).to.equal('external')
   })
 
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
