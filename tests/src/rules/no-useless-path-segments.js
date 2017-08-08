@@ -8,6 +8,7 @@ function runResolverTests(resolver) {
   ruleTester.run(`no-useless-path-segments (${resolver})`, rule, {
     valid: [
       test({ code: 'import "./malformed.js"' }),
+      test({ code: 'import "./test-module"' }),
       test({ code: 'import fs from "fs"' }),
     ],
 
