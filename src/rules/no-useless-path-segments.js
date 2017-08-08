@@ -17,8 +17,8 @@ function toRel(rel, sep) {
     `.${sep}${stripped}`
 }
 
-function normalize(fn, sep) {
-  return toRel(path.normalize(fn), sep)
+function normalize(fn) {
+  return toRel(path.posix.normalize(fn), '/')
 }
 
 const countRelParent = x => sumBy(x, v => v === '..')
@@ -44,7 +44,7 @@ module.exports = {
         return
       }
 
-      const normed = normalize(value, '/')
+      const normed = normalize(value)
       if (normed !== value) {
         return report(normed)
       }
