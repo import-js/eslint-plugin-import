@@ -9,6 +9,8 @@ function runResolverTests(resolver) {
     valid: [
       test({ code: 'import "./malformed.js"' }),
       test({ code: 'import "./test-module"' }),
+      test({ code: 'import "."' }),
+      test({ code: 'import ".."' }),
       test({ code: 'import fs from "fs"' }),
     ],
 
@@ -28,6 +30,18 @@ function runResolverTests(resolver) {
       test({
         code: 'import "../files/malformed"',
         errors: [ 'Useless path segments for "../files/malformed", should be "./malformed"'],
+      }),
+      test({
+        code: 'import "./test-module/"',
+        errors: [ 'Useless path segments for "./test-module/", should be "./test-module"'],
+      }),
+      test({
+        code: 'import "./"',
+        errors: [ 'Useless path segments for "./", should be "."'],
+      }),
+      test({
+        code: 'import "../"',
+        errors: [ 'Useless path segments for "../", should be ".."'],
       }),
      ],
    })
