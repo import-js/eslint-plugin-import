@@ -15,11 +15,19 @@ function runResolverTests(resolver) {
     invalid: [
       test({
         code: 'import "./../files/malformed.js"',
-        errors: [ 'Useless path segments for "./../files/malformed.js", should be "./malformed.js"'],
+        errors: [ 'Useless path segments for "./../files/malformed.js", should be "../files/malformed.js"'],
       }),
       test({
         code: 'import "./../files/malformed"',
-        errors: [ 'Useless path segments for "./../files/malformed", should be "./malformed"'],
+        errors: [ 'Useless path segments for "./../files/malformed", should be "../files/malformed"'],
+      }),
+      test({
+        code: 'import "../files/malformed.js"',
+        errors: [ 'Useless path segments for "../files/malformed.js", should be "./malformed.js"'],
+      }),
+      test({
+        code: 'import "../files/malformed"',
+        errors: [ 'Useless path segments for "../files/malformed", should be "./malformed"'],
       }),
      ],
    })
