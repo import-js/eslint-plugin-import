@@ -24,7 +24,7 @@ function normalize(fn, sep) {
 const countRelParent = x => sumBy(x, v => v === '..')
 
 module.exports = {
-  meta: {},
+  meta: { fixable: 'code' },
 
   create: function (context) {
     const currentDir = path.dirname(context.getFilename())
@@ -36,6 +36,7 @@ module.exports = {
         context.report({
           node: source,
           message: `Useless path segments for "${value}", should be "${proposed}"`,
+          fix: fixer => fixer.replaceText(source, JSON.stringify(proposed)),
         })
       }
 
