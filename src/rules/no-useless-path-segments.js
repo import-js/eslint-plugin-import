@@ -4,13 +4,19 @@
  */
 
 import path from 'path'
+import sumBy from 'lodash.sumby'
 import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 
-function relative(from, to) {
-  const rel = path.relative(from, to)
-  return rel.startsWith('.') ? rel : `.${path.sep}${rel}`
+function toRel(rel, sep) {
+  return rel.startsWith(`..${sep}`) ? rel : `.${sep}${rel}`
 }
+
+function normalize(fn, sep) {
+  return toRel(path.normalize(fn), sep)
+}
+
+const countRelParent = x => sumBy(x, v => v === '..')
 
 module.exports = {
   meta: {},
@@ -20,7 +26,24 @@ module.exports = {
 
     function checkSourceValue(source) {
       const { value } = source
+
+      function report(proposed) {
+        context.report({
+          node: source,
+          message: `Useless path segments for "${value}", should be "${proposed}"`,
+        })
+      }
+
       if (!value.startsWith('.')) {
+        return
+      }
+
+      const normed = normalize(value, '/')
+      if (normed !== value) {
+        return report(normed)
+      }
+
+      if (value.startsWith('./')) {
         return
       }
 
@@ -29,16 +52,23 @@ module.exports = {
         return
       }
 
-      const expected = path.parse(relative(currentDir, resolvedPath))
-      const valueParsed = path.parse(value)
+      const expected = path.relative(currentDir, resolvedPath)
+      const expectedSplit = expected.split(path.sep)
+      const valueSplit = value.replace(/^\.\//, '').split('/')
+      const valueNRelParents = countRelParent(valueSplit)
+      const expectedNRelParents = countRelParent(expectedSplit)
+      const diff = valueNRelParents - expectedNRelParents
 
-      if (valueParsed.dir !== expected.dir) {
-        const proposed = path.format({ dir: expected.dir, base: valueParsed.base })
-        context.report({
-          node: source,
-          message: `Useless path segments for "${value}", should be "${proposed}"`,
-        })
+      if (diff <= 0) {
+        return
       }
+
+      return report(
+        toRel(valueSplit
+          .slice(0, expectedNRelParents)
+          .concat(valueSplit.slice(valueNRelParents + diff))
+          .join('/'), '/')
+      )
     }
 
     return moduleVisitor(checkSourceValue, context.options[0])

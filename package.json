@@ -85,6 +85,7 @@
     "eslint-module-utils": "^2.1.1",
     "has": "^1.0.1",
     "lodash.cond": "^4.3.0",
+    "lodash.sumby": "^4.3.0",
     "minimatch": "^3.0.3",
     "read-pkg-up": "^2.0.0"
   },
