@@ -5,11 +5,16 @@
 
 import path from 'path'
 import sumBy from 'lodash.sumby'
+import escapeRegExp from 'lodash.escaperegexp'
 import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 
 function toRel(rel, sep) {
-  return rel.startsWith(`..${sep}`) ? rel : `.${sep}${rel}`
+  const rSep = escapeRegExp(sep)
+  const stripped = rel.replace(new RegExp(`${rSep}$`, 'g'), '')
+  return stripped.match(new RegExp(`^((\\.\\.)|(\\.))($|${rSep})`)) ?
+    stripped :
+    `.${sep}${stripped}`
 }
 
 function normalize(fn, sep) {
