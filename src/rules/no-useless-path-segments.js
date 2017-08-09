@@ -5,20 +5,31 @@
 
 import path from 'path'
 import sumBy from 'lodash.sumby'
-import escapeRegExp from 'lodash.escaperegexp'
 import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 
-function toRel(rel, sep) {
-  const rSep = escapeRegExp(sep)
-  const stripped = rel.replace(new RegExp(`${rSep}$`, 'g'), '')
-  return stripped.match(new RegExp(`^((\\.\\.)|(\\.))($|${rSep})`)) ?
+/**
+ * convert a potentialy relative path from node utils into a true
+ * relative path.
+ *
+ * ../ -> ..
+ * ./ -> .
+ * .foo/bar -> ./.foo/bar
+ * ..foo/bar -> ./..foo/bar
+ * foo/bar -> ./foo/bar
+ *
+ * @param rel {string} relative posix path potentially missing leading './'
+ * @returns {string} relative posix path that always starts with a ./
+ **/
+function toRel(rel) {
+  const stripped = rel.replace(/\/$/g, '')
+  return stripped.match(/^((\.\.)|(\.))($|\/)/) ?
     stripped :
-    `.${sep}${stripped}`
+    `./${stripped}`
 }
 
 function normalize(fn) {
-  return toRel(path.posix.normalize(fn), '/')
+  return toRel(path.posix.normalize(fn))
 }
 
 const countRelParent = x => sumBy(x, v => v === '..')
@@ -73,7 +84,7 @@ module.exports = {
         toRel(valueSplit
           .slice(0, expectedNRelParents)
           .concat(valueSplit.slice(valueNRelParents + diff))
-          .join('/'), '/')
+          .join('/'))
       )
     }
 
