@@ -102,4 +102,9 @@ describe('importType(name)', function () {
     const foldersContext = testContext({ 'import/external-module-folders': ['node_modules'] })
     expect(importType('builtin-modules', foldersContext)).to.equal('external')
   })
+
+  it(`should return 'internal' for module path starting with something specified in 'internal-module-folders'`, function() {
+    const foldersContext = testContext({ 'import/internal-module-folders': ['~/'] })
+    expect(importType('~/my-custom-module', foldersContext)).to.equal('internal')
+  })
 })
