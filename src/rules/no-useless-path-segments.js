@@ -23,9 +23,7 @@ import moduleVisitor from 'eslint-module-utils/moduleVisitor'
  **/
 function toRel(rel) {
   const stripped = rel.replace(/\/$/g, '')
-  return stripped.match(/^((\.\.)|(\.))($|\/)/) ?
-    stripped :
-    `./${stripped}`
+  return /^((\.\.)|(\.))($|\/)/.test(stripped) ? stripped : `./${stripped}`
 }
 
 function normalize(fn) {
