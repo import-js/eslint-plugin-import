@@ -43,6 +43,10 @@ function runResolverTests(resolver) {
         code: 'import "../"',
         errors: [ 'Useless path segments for "../", should be ".."'],
       }),
+      test({
+        code: 'import "./files//malformed"',
+        errors: [ 'Useless path segments for "./files//malformed", should be "./files/malformed"'],
+      }),
      ],
    })
 }
