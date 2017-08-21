@@ -155,7 +155,7 @@ export default class ExportMap {
       const d = dep()
       // CJS / ignored dependencies won't exist (#717)
       if (d == null) return
-      
+
       d.forEach((v, n) =>
         n !== 'default' && callback.call(thisArg, v, n, this))
     })
@@ -406,6 +406,7 @@ ExportMap.parse = function (path, content, context) {
           case 'FunctionDeclaration':
           case 'ClassDeclaration':
           case 'TypeAlias': // flowtype with babel-eslint parser
+          case 'InterfaceDeclaration':
             m.namespace.set(n.declaration.id.name, captureDoc(docStyleParsers, n))
             break
           case 'VariableDeclaration':

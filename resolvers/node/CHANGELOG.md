@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 
 
+## v0.3.1 - 2017-06-23
+### Changed
+- bumped `debug` dep to match other packages
+
 ## v0.3.0 - 2016-12-15
 ### Changed
 - bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])

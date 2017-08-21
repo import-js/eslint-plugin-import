@@ -5,6 +5,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.8.3 - 2017-06-23
+### Changed
+- `debug` bumped to match others
+
+## 0.8.2 - 2017-06-22
+### Changed
+- `webpack` peer dep updated to >= 1.11 (works fine with webpack 3 AFAICT)
 
 ## 0.8.1 - 2017-01-19
 ### Changed

@@ -13,14 +13,14 @@ ruleTester.run('no-named-default', rule, {
   ],
 
   invalid: [
-    test({
+    /*test({
       code: 'import { default } from "./bar";',
       errors: [{
         message: 'Use default import syntax to import \'default\'.',
         type: 'Identifier',
       }],
       parser: 'babel-eslint',
-    }),
+    }),*/
     test({
       code: 'import { default as bar } from "./bar";',
       errors: [{

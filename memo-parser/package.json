@@ -1,7 +1,9 @@
 {
   "name": "memo-parser",
-  "version": "0.1.0",
-  "engines": { "node": ">=4" },
+  "version": "0.2.0",
+  "engines": {
+    "node": ">=4"
+  },
   "description": "Memoizing wrapper for any ESLint-compatible parser module.",
   "main": "index.js",
   "scripts": {
@@ -21,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/benmosher/eslint-plugin-import/issues"
   },
-  "homepage": "https://github.com/benmosher/eslint-plugin-import#readme"
+  "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
+  "peerDependencies": {
+    "eslint": ">=3.5.0"
+  }
 }

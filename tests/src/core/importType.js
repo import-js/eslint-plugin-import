@@ -31,6 +31,9 @@ describe('importType(name)', function () {
   it("should return 'external' for scopes packages", function() {
     expect(importType('@cycle/core', context)).to.equal('external')
     expect(importType('@cycle/dom', context)).to.equal('external')
+    expect(importType('@some-thing/something', context)).to.equal('external')
+    expect(importType('@some-thing/something/some-module', context)).to.equal('external')
+    expect(importType('@some-thing/something/some-directory/someModule.js', context)).to.equal('external')
   })
 
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
@@ -69,9 +72,21 @@ describe('importType(name)', function () {
   it("should return 'builtin' for additional core modules", function() {
     // without extra config, should be marked external
     expect(importType('electron', context)).to.equal('external')
+    expect(importType('@org/foobar', context)).to.equal('external')
 
     const electronContext = testContext({ 'import/core-modules': ['electron'] })
     expect(importType('electron', electronContext)).to.equal('builtin')
+
+    const scopedContext = testContext({ 'import/core-modules': ['@org/foobar'] })
+    expect(importType('@org/foobar', scopedContext)).to.equal('builtin')
+  })
+
+  it("should return 'builtin' for resources inside additional core modules", function() {
+    const electronContext = testContext({ 'import/core-modules': ['electron'] })
+    expect(importType('electron/some/path/to/resource.json', electronContext)).to.equal('builtin')
+
+    const scopedContext = testContext({ 'import/core-modules': ['@org/foobar'] })
+    expect(importType('@org/foobar/some/path/to/resource.json', scopedContext)).to.equal('builtin')
   })
 
   it("should return 'external' for module from 'node_modules' with default config", function() {

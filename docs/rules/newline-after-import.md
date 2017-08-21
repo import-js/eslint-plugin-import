@@ -1,6 +1,7 @@
 # newline-after-import
 
 Enforces having one or more empty lines after the last top-level import statement or require call.
++(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 ## Rule Details
 
@@ -76,7 +77,7 @@ const FOO = 'BAR'
 {
   ...
   "rules": {
-    "import/newline-after-import": [{ "count": 2 }]
+    "import/newline-after-import": ["error", { "count": 2 }]
   }
 }
 ```
