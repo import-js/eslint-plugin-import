@@ -4,11 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+### Changed
+- Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
 
 ## [2.7.0] - 2017-07-06
 ### Changed
-- [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thansk [@jseminck])
+- [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thanks [@jseminck])
 
 ## [2.6.1] - 2017-06-29
 ### Fixed
@@ -421,6 +422,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
@@ -484,6 +486,7 @@ for info on changes for earlier releases.
 
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
@@ -633,3 +636,4 @@ for info on changes for earlier releases.
 [@eelyafi]: https://github.com/eelyafi
 [@mastilver]: https://github.com/mastilver
 [@jseminck]: https://github.com/jseminck
+[@laysent]: https://github.com/laysent
