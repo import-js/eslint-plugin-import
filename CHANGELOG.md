@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
+
 ### Changed
 - Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
 
@@ -419,6 +422,7 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`exports-last`]: ./docs/rules/exports-last.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
@@ -433,6 +437,7 @@ for info on changes for earlier releases.
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
+[#632]: https://github.com/benmosher/eslint-plugin-import/pull/632
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
 [#628]: https://github.com/benmosher/eslint-plugin-import/pull/628
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
@@ -492,6 +497,7 @@ for info on changes for earlier releases.
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
+[#620]: https://github.com/benmosher/eslint-plugin-import/issues/620
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
