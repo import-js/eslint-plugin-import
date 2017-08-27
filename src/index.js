@@ -31,6 +31,9 @@ export const rules = {
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
 
+  // export
+  'exports-last': require('./rules/exports-last'),
+
   // metadata-based
   'no-deprecated': require('./rules/no-deprecated'),
 
