@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve'
 import ModuleCache from 'eslint-module-utils/ModuleCache'
 
+import * as path from 'path'
 import * as fs from 'fs'
 import * as utils from '../utils'
 
@@ -132,6 +133,11 @@ describe('resolve', function () {
     it('detects case does not match FS', function () {
       expect(fileExistsWithCaseSync(file, ModuleCache.getSettings(testContext)))
         .to.be.false
+    })
+    it('detecting case does not include parent folder path (issue #720)', function () {
+      const f = path.join(process.cwd().toUpperCase(), './tests/files/jsx/MyUnCoolComponent.jsx')
+      expect(fileExistsWithCaseSync(f, ModuleCache.getSettings(testContext), true))
+        .to.be.true
     })
   })
 
