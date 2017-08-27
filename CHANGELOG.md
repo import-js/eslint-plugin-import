@@ -643,3 +643,4 @@ for info on changes for earlier releases.
 [@mastilver]: https://github.com/mastilver
 [@jseminck]: https://github.com/jseminck
 [@laysent]: https://github.com/laysent
+[@k15a]: https://github.com/k15a
