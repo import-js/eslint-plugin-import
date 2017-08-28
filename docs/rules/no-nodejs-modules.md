@@ -7,6 +7,7 @@ Forbid the use of Node.js builtin modules. Can be useful for client-side web pro
 This rule supports the following options:
 
 - `allow`: Array of names of allowed modules. Defaults to an empty array.
+- `ignore`: Array of filenames to disable this check on. Useful if some of your files, like config, run in node.js.
 
 ## Rule Details
 
@@ -32,6 +33,10 @@ var foo = require('foo');
 var foo = require('./foo');
 
 /* eslint import/no-nodejs-modules: ["error", {"allow": ["path"]}] */
+import path from 'path';
+
+// in `config.js`
+/* eslint import/no-nodejs-modules: ["error", {"ignore": ["**\/config*"]}] */
 import path from 'path';
 ```
 

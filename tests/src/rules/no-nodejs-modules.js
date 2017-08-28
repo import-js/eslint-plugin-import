@@ -1,3 +1,4 @@
+import * as path from 'path'
 import { test } from '../utils'
 
 import { RuleTester } from 'eslint'
@@ -56,6 +57,31 @@ ruleTester.run('no-nodejs-modules', rule, {
         allow: ['path', 'events'],
       }],
     }),
+    test({
+      code: 'import path from "path"',
+      options: [{ignore: 'ignored.js'}],
+      filename: 'ignored.js',
+    }),
+    test({
+      code: 'import {readFile} from "fs"',
+      options: [{ignore: 'webpack*'}],
+      filename: 'webpack.config.js',
+    }),
+    test({
+      code: 'var events = require("events")',
+      options: [{ignore: 'ignored.js'}],
+      filename: 'ignored.js',
+    }),
+    test({
+      code: 'var events = require("events")',
+      options: [{ignore: '**/ignore*'}],
+      filename: path.join(process.cwd(), 'ignore.js'),
+    }),
+    test({
+      code: 'const {readFile} = require("fs")',
+      options: [{ignore: ['**/ignore*']}],
+      filename: 'ignored.js',
+    })
   ],
   invalid: [
     test({
@@ -81,5 +107,11 @@ ruleTester.run('no-nodejs-modules', rule, {
       }],
       errors: [error('Do not import Node.js builtin module "fs"')],
     }),
+    test({
+      code: 'import {readFile} from "fs"',
+      options: [{ignore: 'ignored.js'}],
+      filename: 'webpack.config.js',
+      errors: [error('Do not import Node.js builtin module "fs"')],
+    })
   ],
 })
