@@ -533,9 +533,12 @@ ExportMap.parse = function (path, content, context) {
         case 'TSTypeAliasDeclaration':
         case 'TSInterfaceDeclaration':
         case 'TSAbstractClassDeclaration':
-        case 'TSModuleDeclaration':
-          m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
+        case 'TSModuleDeclaration': {
+          const meta = captureDoc(docStyleParsers, n);
+          meta.exportKind = n.exportKind;
+          m.namespace.set(n.declaration.id.name, meta);
           break;
+        }
         case 'VariableDeclaration':
           n.declaration.declarations.forEach((d) =>
             recursivePatternCapture(d.id,

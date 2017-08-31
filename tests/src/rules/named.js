@@ -216,6 +216,22 @@ ruleTester.run('named', rule, {
       parser: require.resolve('babel-eslint'),
       errors: ["MyMissingClass not found in './flowtypes'"],
     }),
+    test({
+      code: 'import { MyType } from "./flowtypes"',
+      parser: require.resolve('babel-eslint'),
+      errors: [{
+        message: "MyType not found in './flowtypes'",
+        type: 'Identifier',
+      }],
+    }),
+    test({
+      code: 'import type { MissingType } from "./flowtypes"',
+      parser: require.resolve('babel-eslint'),
+      errors: [{
+        message: "MissingType not found in './flowtypes'",
+        type: 'Identifier',
+      }],
+    }),
 
     // jsnext
     test({

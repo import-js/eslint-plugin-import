@@ -50,7 +50,14 @@ module.exports = {
               `${im[key].name} not found via ${deepPath}`);
           } else {
             context.report(im[key],
-              im[key].name + ' not found in \'' + node.source.value + '\'');
+              `${im[key].name} not found in '${node.source.value}'`);
+          }
+        } else if (node.importKind === 'value') {
+          const meta = deepLookup.path[deepLookup.path.length - 1].namespace.get(im[key].name);
+          const wrongType = meta && meta.exportKind !== undefined && meta.exportKind !== 'value';
+          if (wrongType) {
+            context.report(im[key],
+              `${im[key].name} not found in '${node.source.value}'`);
           }
         }
       });
