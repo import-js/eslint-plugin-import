@@ -19,7 +19,8 @@ exports.default = function parse(path, content, context) {
   parserOptions = Object.assign({}, parserOptions)
   parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
 
-  // always attach comments
+  // always include and attach comments
+  parserOptions.comment = true
   parserOptions.attachComment = true
 
   // provide the `filePath` like eslint itself does, in `parserOptions`
