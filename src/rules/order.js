@@ -5,7 +5,7 @@ import isStaticRequire from '../core/staticRequire'
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
-// REPORTING
+// REPORTING AND FIXING
 
 function reverse(array) {
   return array.map(function (v) {
@@ -15,6 +15,60 @@ function reverse(array) {
       node: v.node,
     }
   }).reverse()
+}
+
+function getTokensOrCommentsAfter(sourceCode, node, count) {
+  let currentNodeOrToken = node
+  const result = []
+  for (let i = 0; i < count; i++) {
+    currentNodeOrToken = sourceCode.getTokenOrCommentAfter(currentNodeOrToken)
+    if (currentNodeOrToken == null) {
+      break
+    }
+    result.push(currentNodeOrToken)
+  }
+  return result
+}
+
+function getTokensOrCommentsBefore(sourceCode, node, count) {
+  let currentNodeOrToken = node
+  const result = []
+  for (let i = 0; i < count; i++) {
+    currentNodeOrToken = sourceCode.getTokenOrCommentBefore(currentNodeOrToken)
+    if (currentNodeOrToken == null) {
+      break
+    }
+    result.push(currentNodeOrToken)
+  }
+  return result.reverse()
+}
+
+function takeTokensAfterWhile(sourceCode, node, condition) {
+  const tokens = getTokensOrCommentsAfter(sourceCode, node, 100)
+  const result = []
+  for (let i = 0; i < tokens.length; i++) {
+    if (condition(tokens[i])) {
+      result.push(tokens[i])
+    }
+    else {
+      break
+    }
+  }
+  return result
+}
+
+function takeTokensBeforeWhile(sourceCode, node, condition) {
+  const tokens = getTokensOrCommentsBefore(sourceCode, node, 100)
+  const result = []
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    if (condition(tokens[i])) {
+      result.push(tokens[i])
+    }
+    else {
+      break
+    }
+  }
+  return result.reverse()
 }
 
 function findOutOfOrder(imported) {
@@ -31,13 +85,141 @@ function findOutOfOrder(imported) {
   })
 }
 
+function findRootNode(node) {
+  let parent = node
+  while (parent.parent != null && parent.parent.body == null) {
+    parent = parent.parent
+  }
+  return parent
+}
+
+function findEndOfLineWithComments(sourceCode, node) {
+  const tokensToEndOfLine = takeTokensAfterWhile(sourceCode, node, commentOnSameLineAs(node))
+  let endOfTokens = tokensToEndOfLine.length > 0
+    ? tokensToEndOfLine[tokensToEndOfLine.length - 1].end
+    : node.end
+  let result = endOfTokens
+  for (let i = endOfTokens; i < sourceCode.text.length; i++) {
+    if (sourceCode.text[i] === '\n') {
+      result = i + 1
+      break
+    }
+    if (sourceCode.text[i] !== ' ' && sourceCode.text[i] !== '\t' && sourceCode.text[i] !== '\r') {
+      break
+    }
+    result = i + 1
+  }
+  return result
+}
+
+function commentOnSameLineAs(node) {
+  return token => (token.type === 'Block' ||  token.type === 'Line') &&
+      token.loc.start.line === token.loc.end.line &&
+      token.loc.end.line === node.loc.end.line
+}
+
+function findStartOfLineWithComments(sourceCode, node) {
+  const tokensToEndOfLine = takeTokensBeforeWhile(sourceCode, node, commentOnSameLineAs(node))
+  let startOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[0].start : node.start
+  let result = startOfTokens
+  for (let i = startOfTokens - 1; i > 0; i--) {
+    if (sourceCode.text[i] !== ' ' && sourceCode.text[i] !== '\t') {
+      break
+    }
+    result = i
+  }
+  return result
+}
+
+function isPlainRequireModule(node) {
+  if (node.type !== 'VariableDeclaration') {
+    return false
+  }
+  if (node.declarations.length !== 1) {
+    return false
+  }
+  const decl = node.declarations[0]
+  const result = (decl.id != null &&  decl.id.type === 'Identifier') &&
+    decl.init != null &&
+    decl.init.type === 'CallExpression' &&
+    decl.init.callee != null &&
+    decl.init.callee.name === 'require' &&
+    decl.init.arguments != null &&
+    decl.init.arguments.length === 1 &&
+    decl.init.arguments[0].type === 'Literal'
+  return result
+}
+
+function isPlainImportModule(node) {
+  return node.type === 'ImportDeclaration' && node.specifiers != null && node.specifiers.length > 0
+}
+
+function canCrossNodeWhileReorder(node) {
+  return isPlainRequireModule(node) || isPlainImportModule(node)
+}
+
+function canReorderItems(firstNode, secondNode) {
+  const parent = firstNode.parent
+  const firstIndex = parent.body.indexOf(firstNode)
+  const secondIndex = parent.body.indexOf(secondNode)
+  const nodesBetween = parent.body.slice(firstIndex, secondIndex + 1)
+  for (var nodeBetween of nodesBetween) {
+    if (!canCrossNodeWhileReorder(nodeBetween)) {
+      return false
+    }
+  }
+  return true
+}
+
+function fixOutOfOrder(context, firstNode, secondNode, order) {
+  const sourceCode = context.getSourceCode()
+
+  const firstRoot = findRootNode(firstNode.node)
+  let firstRootStart = findStartOfLineWithComments(sourceCode, firstRoot)
+  const firstRootEnd = findEndOfLineWithComments(sourceCode, firstRoot)
+
+  const secondRoot = findRootNode(secondNode.node)
+  let secondRootStart = findStartOfLineWithComments(sourceCode, secondRoot)
+  let secondRootEnd = findEndOfLineWithComments(sourceCode, secondRoot)
+  const canFix = canReorderItems(firstRoot, secondRoot)
+
+  let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd)
+  if (newCode[newCode.length - 1] !== '\n') {
+    newCode = newCode + '\n'
+  }
+
+  const message = '`' + secondNode.name + '` import should occur ' + order +
+      ' import of `' + firstNode.name + '`'
+
+  if (order === 'before') {
+    context.report({
+      node: secondNode.node,
+      message: message,
+      fix: canFix && (fixer =>
+        fixer.replaceTextRange(
+          [firstRootStart, secondRootEnd],
+          newCode + sourceCode.text.substring(firstRootStart, secondRootStart)
+        )),
+    })
+  } else if (order === 'after') {
+    context.report({
+      node: secondNode.node,
+      message: message,
+      fix: canFix && (fixer =>
+        fixer.replaceTextRange(
+          [secondRootStart, firstRootEnd],
+          sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode
+        )),
+    })
+  }
+}
+
 function reportOutOfOrder(context, imported, outOfOrder, order) {
   outOfOrder.forEach(function (imp) {
     const found = imported.find(function hasHigherRank(importedItem) {
       return importedItem.rank > imp.rank
     })
-    context.report(imp.node, '`' + imp.name + '` import should occur ' + order +
-      ' import of `' + found.name + '`')
+    fixOutOfOrder(context, found, imp, order)
   })
 }
 
@@ -108,6 +290,32 @@ function convertGroupsToRanks(groups) {
   }, rankObject)
 }
 
+function fixNewLineAfterImport(context, previousImport) {
+  const prevRoot = findRootNode(previousImport.node)
+  const tokensToEndOfLine = takeTokensAfterWhile(
+    context.getSourceCode(), prevRoot, commentOnSameLineAs(prevRoot))
+
+  let endOfLine = prevRoot.end
+  if (tokensToEndOfLine.length > 0) {
+    endOfLine = tokensToEndOfLine[tokensToEndOfLine.length - 1].end
+  }
+  return (fixer) => fixer.insertTextAfterRange([prevRoot.start, endOfLine], '\n')
+}
+
+function removeNewLineAfterImport(context, currentImport, previousImport) {
+  const sourceCode = context.getSourceCode()
+  const prevRoot = findRootNode(previousImport.node)
+  const currRoot = findRootNode(currentImport.node)
+  const rangeToRemove = [
+    findEndOfLineWithComments(sourceCode, prevRoot),
+    findStartOfLineWithComments(sourceCode, currRoot),
+  ]
+  if (/^\s*$/.test(sourceCode.text.substring(rangeToRemove[0], rangeToRemove[1]))) {
+    return (fixer) => fixer.removeRange(rangeToRemove)
+  }
+  return undefined
+}
+
 function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = context.getSourceCode().lines.slice(
@@ -124,23 +332,27 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
 
     if (newlinesBetweenImports === 'always'
         || newlinesBetweenImports === 'always-and-inside-groups') {
-      if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0)
-      {
-        context.report(
-          previousImport.node, 'There should be at least one empty line between import groups'
-        )
+      if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
+        context.report({
+          node: previousImport.node,
+          message: 'There should be at least one empty line between import groups',
+          fix: fixNewLineAfterImport(context, previousImport, currentImport),
+        })
       } else if (currentImport.rank === previousImport.rank
         && emptyLinesBetween > 0
-        && newlinesBetweenImports !== 'always-and-inside-groups')
-      {
-        context.report(
-          previousImport.node, 'There should be no empty line within import group'
-        )
+        && newlinesBetweenImports !== 'always-and-inside-groups') {
+        context.report({
+          node: previousImport.node,
+          message: 'There should be no empty line within import group',
+          fix: removeNewLineAfterImport(context, currentImport, previousImport),
+        })
       }
-    } else {
-      if (emptyLinesBetween > 0) {
-        context.report(previousImport.node, 'There should be no empty line between import groups')
-      }
+    } else if (emptyLinesBetween > 0) {
+      context.report({
+        node: previousImport.node,
+        message: 'There should be no empty line between import groups',
+        fix: removeNewLineAfterImport(context, currentImport, previousImport),
+      })
     }
 
     previousImport = currentImport
@@ -151,6 +363,7 @@ module.exports = {
   meta: {
     docs: {},
 
+    fixable: 'code',
     schema: [
       {
         type: 'object',

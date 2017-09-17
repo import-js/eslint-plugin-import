@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [2.8.0] - 2017-10-18
 ### Added
 - [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
+- Autofixer for [`order`] rule ([#711], thanks [@tihonove])
 
 ### Changed
 - Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
