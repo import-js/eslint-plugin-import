@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.8.0] - 2017-10-18
 ### Added
+- [`no-default-export`] rule ([#889], thanks [@isiahmeadows])
 - [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
 
 ### Changed
@@ -435,11 +436,13 @@ for info on changes for earlier releases.
 [`exports-last`]: ./docs/rules/exports-last.md
 [`group-exports`]: ./docs/rules/group-exports.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
+[`no-default-export`]: ./docs/rules/no-default-export.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
+[#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
@@ -670,3 +673,4 @@ for info on changes for earlier releases.
 [@rosswarren]: https://github.com/rosswarren
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@robertrossmann]: https://github.com/robertrossmann
+[@isiahmeadows]: https://github.com/isiahmeadows
