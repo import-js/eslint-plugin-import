@@ -336,6 +336,19 @@ settings:
 [`eslint_d`]: https://www.npmjs.com/package/eslint_d
 [`eslint-loader`]: https://www.npmjs.com/package/eslint-loader
 
+## Webpack configuration arguments
+
+This plugin doesn't pass arguments to [Webpack configuration functions](https://webpack.js.org/configuration/configuration-types/#exporting-a-function). If a Webpack configuration function uses the `env` or `argv` arguments, values must be supplied to avoid `argument undefined` errors. On Node 6.4 or greater we recommend [default parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Default_parameters):
+
+```js
+// webpack.config.js
+const defaultEnv = { NODE_ENV: 'development' };
+
+module.exports = (env = defaultEnv) => {
+  // ...configuration
+}
+```
+
 ## SublimeLinter-eslint
 
 SublimeLinter-eslint introduced a change to support `.eslintignore` files
