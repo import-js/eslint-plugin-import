@@ -30,7 +30,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
     test({ code: 'import "lodash.isarray"'}),
-    test({ code: 'import "@scope/core"'}),
+    test({ code: 'import "@org/package"'}),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
     test({ code: 'import "eslint"' }),
@@ -57,7 +57,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import chai from "chai"',
       options: [{devDependencies: ['*.test.js', '*.spec.js']}],
-      filename: 'foo.spec.js',
+      filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({
       code: 'import chai from "chai"',
@@ -79,17 +79,17 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       }],
     }),
     test({
-      code: 'var donthaveit = require("@scope/donthaveit")',
+      code: 'var donthaveit = require("@org/not-a-dependency")',
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'@scope/donthaveit\' should be listed in the project\'s dependencies. Run \'npm i -S @scope/donthaveit\' to add it',
+        message: '\'@org/not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S @org/not-a-dependency\' to add it',
       }],
     }),
     test({
-      code: 'var donthaveit = require("@scope/donthaveit/lib/foo")',
+      code: 'var donthaveit = require("@org/not-a-dependency/foo")',
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'@scope/donthaveit\' should be listed in the project\'s dependencies. Run \'npm i -S @scope/donthaveit\' to add it',
+        message: '\'@org/not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S @org/not-a-dependency\' to add it',
       }],
     }),
     test({
