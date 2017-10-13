@@ -37,13 +37,6 @@ module.exports = {
 
   create: function (context) {
     const currentDir = path.dirname(context.getFilename())
-    const resolvesToSameModule = (path1, path2) => {
-      try {
-        return require.resolve((path1)) === require.resolve((path2))
-      } catch(e) {
-        return true
-      }
-    }
 
     function checkSourceValue(source) {
       const { value } = source
@@ -60,8 +53,9 @@ module.exports = {
         return
       }
 
+      const resolvedPath = resolve(value, context)
       const normed = normalize(value)
-      if (normed !== value && resolvesToSameModule(value, normed)) {
+      if (normed !== value && resolvedPath === resolve(normed, context)) {
         return report(normed)
       }
 
@@ -69,7 +63,6 @@ module.exports = {
         return
       }
 
-      const resolvedPath = resolve(value, context)
       if (resolvedPath === undefined) {
         return
       }
