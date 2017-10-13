@@ -30,6 +30,7 @@ export const rules = {
   'no-dynamic-require': require('./rules/no-dynamic-require'),
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
+  'no-useless-path-segments': require('./rules/no-useless-path-segments'),
 
   // export
   'exports-last': require('./rules/exports-last'),
