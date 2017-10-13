@@ -53,7 +53,7 @@ ruleTester.run('exports-last', rule, {
     // Multiline export
     test({
       code: `
-        const foo = 'bar'
+        const baz = 'quux'
         export default function foo () {
           const very = 'multiline'
         }
