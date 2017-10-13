@@ -44,8 +44,8 @@ function runResolverTests(resolver) {
         errors: [ 'Useless path segments for "../", should be ".."'],
       }),
       test({
-        code: 'import "./files//malformed"',
-        errors: [ 'Useless path segments for "./files//malformed", should be "./files/malformed"'],
+        code: 'import "./deep//a"',
+        errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
       }),
      ],
    })
