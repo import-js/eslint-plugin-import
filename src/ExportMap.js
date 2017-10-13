@@ -330,17 +330,19 @@ ExportMap.parse = function (path, content, context) {
   })
 
   // attempt to collect module doc
-  ast.comments.some(c => {
-    if (c.type !== 'Block') return false
-    try {
-      const doc = doctrine.parse(c.value, { unwrap: true })
-      if (doc.tags.some(t => t.title === 'module')) {
-        m.doc = doc
-        return true
-      }
-    } catch (err) { /* ignore */ }
-    return false
-  })
+  if (ast.comments) {
+    ast.comments.some(c => {
+      if (c.type !== 'Block') return false
+      try {
+        const doc = doctrine.parse(c.value, { unwrap: true })
+        if (doc.tags.some(t => t.title === 'module')) {
+          m.doc = doc
+          return true
+        }
+      } catch (err) { /* ignore */ }
+      return false
+    })
+  }
 
   const namespaces = new Map()
 
