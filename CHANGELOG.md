@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - support scoped modules containing hyphens ([#744], thanks [@rosswarren])
 - core-modules now resolves files inside declared modules ([#886] / [#891], thanks [@mplewis])
+- TypeError for missing AST fields from TypeScript ([#842] / [#944], thanks [@alexgorbatchev])
 
 ## [2.7.0] - 2017-07-06
 ### Changed
@@ -433,6 +434,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
@@ -500,6 +502,7 @@ for info on changes for earlier releases.
 
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
+[#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
@@ -657,3 +660,4 @@ for info on changes for earlier releases.
 [@k15a]: https://github.com/k15a
 [@mplewis]: https://github.com/mplewis
 [@rosswarren]: https://github.com/rosswarren
+[@alexgorbatchev]: https://github.com/alexgorbatchev
