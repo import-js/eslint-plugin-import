@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [2.8.0] - 2017-10-18
 ### Added
 - [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
 
@@ -552,7 +555,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.1...v2.7.0
 [2.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.0...v2.6.1
 [2.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.5.0...v2.6.0
