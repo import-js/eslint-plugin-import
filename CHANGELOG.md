@@ -13,6 +13,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
 
+### Fixed
+- core-modules now resolves files inside declared modules ([#886] / [#891], thanks [@mplewis])
+
 ## [2.7.0] - 2017-07-06
 ### Changed
 - [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thanks [@jseminck])
@@ -429,6 +432,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
@@ -492,6 +496,7 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
@@ -648,3 +653,4 @@ for info on changes for earlier releases.
 [@jseminck]: https://github.com/jseminck
 [@laysent]: https://github.com/laysent
 [@k15a]: https://github.com/k15a
+[@mplewis]: https://github.com/mplewis
