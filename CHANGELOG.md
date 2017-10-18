@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
 
 ### Fixed
+- support scoped modules containing hyphens ([#744], thanks [@rosswarren])
 - core-modules now resolves files inside declared modules ([#886] / [#891], thanks [@mplewis])
 
 ## [2.7.0] - 2017-07-06
@@ -436,6 +437,7 @@ for info on changes for earlier releases.
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
+[#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
@@ -654,3 +656,4 @@ for info on changes for earlier releases.
 [@laysent]: https://github.com/laysent
 [@k15a]: https://github.com/k15a
 [@mplewis]: https://github.com/mplewis
+[@rosswarren]: https://github.com/rosswarren
