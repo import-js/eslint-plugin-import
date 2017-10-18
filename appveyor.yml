@@ -39,8 +39,9 @@ test_script:
   - cd .\resolvers\webpack && npm test && cd ..\..
   - cd .\resolvers\node && npm test && cd ..\..
 
-on_success:
-  - npm run coveralls
+# disabling coveralls since it seems to be broken as-is on Windows
+# on_success:
+#   - npm run coveralls
 
 # Don't actually build.
 build: off
