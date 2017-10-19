@@ -6,13 +6,39 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 
+## [2.8.0] - 2017-10-18
+### Added
+- [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
+
+### Changed
+- Case-sensitivity checking ignores working directory and ancestors. ([#720] + [#858], thanks [@laysent])
+
+### Fixed
+- support scoped modules containing hyphens ([#744], thanks [@rosswarren])
+- core-modules now resolves files inside declared modules ([#886] / [#891], thanks [@mplewis])
+- TypeError for missing AST fields from TypeScript ([#842] / [#944], thanks [@alexgorbatchev])
+
+## [2.7.0] - 2017-07-06
+### Changed
+- [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thanks [@jseminck])
+
+## [2.6.1] - 2017-06-29
+### Fixed
+- update bundled node resolver dependency to latest version
+
+## [2.6.0] - 2017-06-23
+### Changed
+- update tests / peerDeps for ESLint 4.0 compatibility ([#871], thanks [@mastilver])
+- [`memo-parser`] updated to require `filePath` on parser options as it melts
+  down if it's not there, now that this plugin always provides it. (see [#863])
+
 ## [2.5.0] - 2017-06-22
 
-Re-releasing v[2.4.0] after discovering that the memory leak is isolated to the memo-parser,
+Re-releasing v[2.4.0] after discovering that the memory leak is isolated to the [`memo-parser`],
 which is more or less experimental anyway.
 
 ### Added
-- Autofixer for newline-after-import. [#686], [#696] (thanks [@eelyafi])
+- Autofixer for newline-after-import. ([#686] + [#696], thanks [@eelyafi])
 
 ## [2.4.0] - 2017-06-02 [YANKED]
 
@@ -35,6 +61,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ### Fixed
 - attempt to fix crash in [`no-mutable-exports`]. ([#660])
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
+- support scoped modules containing non word characters
 
 
 ## [2.2.0] - 2016-11-07
@@ -152,8 +179,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Something horrible happened during `npm prepublish` of 1.10.1.
   Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
 
-## [1.10.1] - 2016-07-02 [
-ED]
+## [1.10.1] - 2016-07-02 [YANKED]
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
@@ -404,7 +430,16 @@ for info on changes for earlier releases.
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`exports-last`]: ./docs/rules/exports-last.md
 
+[`memo-parser`]: ./memo-parser/README.md
+
+[#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
+[#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
+[#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
+[#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
+[#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
+[#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
 [#712]: https://github.com/benmosher/eslint-plugin-import/pull/712
@@ -413,6 +448,7 @@ for info on changes for earlier releases.
 [#680]: https://github.com/benmosher/eslint-plugin-import/pull/680
 [#654]: https://github.com/benmosher/eslint-plugin-import/pull/654
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
+[#632]: https://github.com/benmosher/eslint-plugin-import/pull/632
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
 [#628]: https://github.com/benmosher/eslint-plugin-import/pull/628
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
@@ -464,12 +500,17 @@ for info on changes for earlier releases.
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 
+[#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
+[#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
+[#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
+[#620]: https://github.com/benmosher/eslint-plugin-import/issues/620
 [#609]: https://github.com/benmosher/eslint-plugin-import/issues/609
 [#604]: https://github.com/benmosher/eslint-plugin-import/issues/604
 [#602]: https://github.com/benmosher/eslint-plugin-import/issues/602
@@ -524,7 +565,11 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.5.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...v2.8.0
+[2.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.1...v2.7.0
+[2.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.0...v2.6.1
+[2.6.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.2.0...v2.3.0
@@ -609,3 +654,10 @@ for info on changes for earlier releases.
 [@sompylasar]: https://github.com/sompylasar
 [@kevin940726]: https://github.com/kevin940726
 [@eelyafi]: https://github.com/eelyafi
+[@mastilver]: https://github.com/mastilver
+[@jseminck]: https://github.com/jseminck
+[@laysent]: https://github.com/laysent
+[@k15a]: https://github.com/k15a
+[@mplewis]: https://github.com/mplewis
+[@rosswarren]: https://github.com/rosswarren
+[@alexgorbatchev]: https://github.com/alexgorbatchev

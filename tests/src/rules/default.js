@@ -58,8 +58,12 @@ ruleTester.run('default', rule, {
 
     // #94: redux export of execution result,
     test({ code: 'import connectedApp from "./redux"' }),
-    test({ code: 'import App from "./jsx/App"'
-         , ecmaFeatures: { jsx: true, modules: true } }),
+    test({
+      code: 'import App from "./jsx/App"',
+      parserOptions: {
+        ecmaFeatures: { jsx: true, modules: true },
+      },
+    }),
 
     // from no-errors
     test({

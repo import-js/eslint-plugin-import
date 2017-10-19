@@ -89,7 +89,7 @@ var foo = require('./foo');
 
 import test from 'ava';
 import find from 'lodash.find';
-import find from 'lodash.isarray';
+import isArray from 'lodash.isarray';
 
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 import react from 'react';

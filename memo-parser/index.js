@@ -17,8 +17,11 @@ const parserOptions = {
 }
 
 exports.parse = function parse(content, options) {
-  // them defaults yo
   options = Object.assign({}, options, parserOptions)
+
+  if (!options.filePath) {
+    throw new Error("no file path provided!")
+  }
 
   const keyHash = crypto.createHash('sha256')
   keyHash.update(content)

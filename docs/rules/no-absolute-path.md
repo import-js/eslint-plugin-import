@@ -25,3 +25,24 @@ var _ = require('lodash');
 var foo = require('foo');
 var foo = require('./foo');
 ```
+
+### Options
+
+By default, only ES6 imports and CommonJS `require` calls will have this rule enforced.
+
+You may provide an options object providing true/false for any of
+
+- `esmodule`: defaults to `true`
+- `commonjs`: defaults to `true`
+- `amd`: defaults to `false`
+
+If `{ amd: true }` is provided, dependency paths for AMD-style `define` and `require`
+calls will be resolved:
+
+```js
+/*eslint import/no-absolute-path: [2, { commonjs: false, amd: true }]*/
+define(['/foo'], function (foo) { /*...*/ }) // reported
+require(['/foo'], function (foo) { /*...*/ }) // reported
+
+const foo = require('/foo') // ignored because of explicit `commonjs: false`
+```

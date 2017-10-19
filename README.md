@@ -67,6 +67,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 **Style guide:**
 
 * Ensure all imports appear before other statements ([`first`])
+* Ensure all exports appear after other statements ([`exports-last`])
 * Report repeated import of the same module in multiple places ([`no-duplicates`])
 * Report namespace imports ([`no-namespace`])
 * Ensure consistent use of file extension within the import path ([`extensions`])
@@ -79,6 +80,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid anonymous values as default exports ([`no-anonymous-default-export`])
 
 [`first`]: ./docs/rules/first.md
+[`exports-last`]: ./docs/rules/exports-last.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`extensions`]: ./docs/rules/extensions.md
@@ -145,7 +147,7 @@ In the interest of supporting both of these, v0.11 introduces resolvers.
 Currently [Node] and [Webpack] resolution have been implemented, but the
 resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
-You can reference resolvers in several ways(in order of precedence):
+You can reference resolvers in several ways (in order of precedence):
 
 - as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
 

@@ -1,15 +1,24 @@
 language: node_js
 node_js:
+  - 4
   - 6
-  - 7
+  - 8
 
 os:
   - linux
   - osx
 
+env:
+  - ESLINT_VERSION=2
+  - ESLINT_VERSION=3
+  - ESLINT_VERSION=4
+
 install:
-  - npm -g install npm@3
+  - if [ ${TRAVIS_NODE_VERSION} == "4" ]; then
+      npm install -g npm@3;
+    fi
   - npm install
+  - npm install eslint@$ESLINT_VERSION --ignore-scripts || true
   # install all resolver deps
   - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
 
