@@ -84,7 +84,8 @@ module.exports = {
             line: node.loc.end.line,
             column,
           },
-          message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+          message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} \
+after ${type} statement not followed by another ${type}.`,
           fix: fixer => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference)
