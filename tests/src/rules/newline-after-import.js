@@ -1,7 +1,10 @@
 import { RuleTester } from 'eslint'
 
-const IMPORT_ERROR_MESSAGE = 'Expected empty line after import statement not followed by another import.'
-const REQUIRE_ERROR_MESSAGE = 'Expected empty line after require statement not followed by another require.'
+const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.'
+const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
+    return `Expected ${count} empty lines after import statement not followed by another import.`
+}
+const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.'
 
 const ruleTester = new RuleTester()
 
@@ -181,7 +184,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       errors: [ {
         line: 1,
         column: 1,
-        message: IMPORT_ERROR_MESSAGE,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       } ],
       parserOptions: { sourceType: 'module' },
     },
@@ -347,4 +350,4 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: 'babel-eslint',
     },
   ],
-});
+})
