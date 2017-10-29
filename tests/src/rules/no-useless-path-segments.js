@@ -9,6 +9,7 @@ function runResolverTests(resolver) {
     valid: [
       test({ code: 'import "./malformed.js"' }),
       test({ code: 'import "./test-module"' }),
+      test({ code: 'import "./bar/"' }),
       test({ code: 'import "."' }),
       test({ code: 'import ".."' }),
       test({ code: 'import fs from "fs"' }),
