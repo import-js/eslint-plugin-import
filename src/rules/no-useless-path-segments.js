@@ -9,7 +9,7 @@ import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 
 /**
- * convert a potentialy relative path from node utils into a true
+ * convert a potentially relative path from node utils into a true
  * relative path.
  *
  * ../ -> ..
