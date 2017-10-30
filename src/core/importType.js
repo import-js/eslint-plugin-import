@@ -47,7 +47,7 @@ function isScoped(name) {
   return scopedRegExp.test(name)
 }
 
-const scopedMainRegExp = /^@[^\/]+\/?[^\/]+$/
+const scopedMainRegExp = /^@[^/]+\/?[^/]+$/
 export function isScopedMain(name) {
   return scopedMainRegExp.test(name)
 }
