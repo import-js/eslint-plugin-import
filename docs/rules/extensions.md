@@ -41,7 +41,7 @@ import foo from './foo.js';
 
 import bar from './bar.json';
 
-import Component from './Component.jsx'
+import Component from './Component.jsx';
 
 import express from 'express/index.js';
 ```
@@ -53,7 +53,7 @@ import foo from './foo';
 
 import bar from './bar';
 
-import Component from './Component'
+import Component from './Component';
 
 import express from 'express/index';
 
@@ -67,7 +67,7 @@ import foo from './foo';
 
 import bar from './bar';
 
-import Component from './Component'
+import Component from './Component';
 
 import express from 'express';
 ```
@@ -79,7 +79,7 @@ import foo from './foo.js';
 
 import bar from './bar.json';
 
-import Component from './Component.jsx'
+import Component from './Component.jsx';
 
 import express from 'express/index.js';
 
@@ -93,7 +93,7 @@ import foo from './foo';
 
 import bar from './bar';
 
-import Component from './Component'
+import Component from './Component';
 
 ```
 
@@ -104,7 +104,7 @@ import foo from './foo.js';
 
 import bar from './bar.json';
 
-import Component from './Component.jsx'
+import Component from './Component.jsx';
 
 import express from 'express';
 
