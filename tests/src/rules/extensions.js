@@ -238,6 +238,7 @@ ruleTester.run('extensions', rule, {
         import foo from './foo.js'
         import bar from './bar.json'
         import Component from './Component'
+        import baz from 'foo/baz'
         import express from 'express'
       `,
       options: [ 'always', {ignorePackages: true} ],
@@ -246,6 +247,10 @@ ruleTester.run('extensions', rule, {
           message: 'Missing file extension for "./Component"',
           line: 4,
           column: 31,
+        }, {
+          message: 'Missing file extension for "foo/baz"',
+          line: 5,
+          column: 25,
         },
       ],
     }),
