@@ -59,6 +59,37 @@ ruleTester.run('extensions', rule, {
     test({ code: 'import thing from "./fake-file.js"', options: [ 'always' ] }),
     test({ code: 'import thing from "non-package"', options: [ 'never' ] }),
 
+
+    test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar.json'
+        import Component from './Component'
+        import express from 'express'
+      `,
+      options: [ 'ignorePackages' ],
+    }),
+
+    test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar.json'
+        import Component from './Component.jsx'
+        import express from 'express'
+      `,
+      options: [ 'always', {ignorePackages: true} ],
+    }),
+
+    test({
+      code: `
+        import foo from './foo'
+        import bar from './bar'
+        import Component from './Component'
+        import express from 'express'
+      `,
+      options: [ 'never', {ignorePackages: true} ],
+    }),
+
   ],
 
   invalid: [
@@ -199,6 +230,45 @@ ruleTester.run('extensions', rule, {
             column: 19,
         },
       ],
+    }),
+
+
+    test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar.json'
+        import Component from './Component'
+        import express from 'express'
+      `,
+      options: [ 'always', {ignorePackages: true} ],
+      errors: [
+        {
+          message: 'Missing file extension for "./Component"',
+          line: 4,
+          column: 31,
+        },
+      ],
+    }),
+
+    test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar.json'
+        import Component from './Component.jsx'
+        import express from 'express'
+      `,
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 2,
+          column: 25,
+        }, {
+          message: 'Unexpected use of file extension "jsx" for "./Component.jsx"',
+          line: 4,
+          column: 31,
+        },
+      ],
+      options: [ 'never', {ignorePackages: true} ],
     }),
 
   ],
