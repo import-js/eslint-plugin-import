@@ -110,6 +110,17 @@ import express from 'express';
 
 ```
 
+The following patterns are not considered problems when configuration set to `[ 'always', {ignorePackages: true} ]`:
+
+```js
+import Component from './Component.jsx';
+
+import baz from 'foo/baz.js';
+
+import express from 'express';
+
+```
+
 ## When Not To Use It
 
 If you are not concerned about a consistent usage of file extension.
