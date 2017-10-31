@@ -9,6 +9,7 @@ export const rules = {
   'extensions': require('./rules/extensions'),
   'no-restricted-paths': require('./rules/no-restricted-paths'),
   'no-internal-modules': require('./rules/no-internal-modules'),
+  'group-exports': require('./rules/group-exports'),
 
   'no-named-default': require('./rules/no-named-default'),
   'no-named-as-default': require('./rules/no-named-as-default'),
