@@ -10,6 +10,7 @@ export const rules = {
   'no-restricted-paths': require('./rules/no-restricted-paths'),
   'no-internal-modules': require('./rules/no-internal-modules'),
   'group-exports': require('./rules/group-exports'),
+  'no-relative-packages': require('./rules/no-relative-packages'),
   'no-relative-parent-imports': require('./rules/no-relative-parent-imports'),
 
   'no-self-import': require('./rules/no-self-import'),

@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-commonjs`]: Also detect require calls with expressionless template literals: ``` require(`x`) ``` ([#1958], thanks [@FloEdelmann])
 - [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
+- add [`no-relative-packages`] ([#1860], [#966], thanks [@tapayne88] [@panrafal])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -739,6 +740,7 @@ for info on changes for earlier releases.
 [`no-named-export`]: ./docs/rules/no-named-export.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
+[`no-relative-packages`]: ./docs/rules/no-relative-packages.md
 [`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
@@ -754,23 +756,19 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
-[#1944]: https://github.com/benmosher/eslint-plugin-import/pull/1944
-[#1924]: https://github.com/benmosher/eslint-plugin-import/issues/1924
-[#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
 [#1958]: https://github.com/benmosher/eslint-plugin-import/pull/1958
 [#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
 [#1947]: https://github.com/benmosher/eslint-plugin-import/pull/1947
+[#1944]: https://github.com/benmosher/eslint-plugin-import/pull/1944
 [#1940]: https://github.com/benmosher/eslint-plugin-import/pull/1940
 [#1897]: https://github.com/benmosher/eslint-plugin-import/pull/1897
 [#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
-[#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
+[#1860]: https://github.com/benmosher/eslint-plugin-import/pull/1860
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
 [#1846]: https://github.com/benmosher/eslint-plugin-import/pull/1846
-[#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
 [#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
-[#1834]: https://github.com/benmosher/eslint-plugin-import/issues/1834
 [#1833]: https://github.com/benmosher/eslint-plugin-import/pull/1833
 [#1831]: https://github.com/benmosher/eslint-plugin-import/pull/1831
 [#1830]: https://github.com/benmosher/eslint-plugin-import/pull/1830
@@ -780,7 +778,6 @@ for info on changes for earlier releases.
 [#1820]: https://github.com/benmosher/eslint-plugin-import/pull/1820
 [#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819
 [#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
-[#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
 [#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
@@ -794,10 +791,7 @@ for info on changes for earlier releases.
 [#1735]: https://github.com/benmosher/eslint-plugin-import/pull/1735
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
-[#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
-[#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
-[#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1696]: https://github.com/benmosher/eslint-plugin-import/pull/1696
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
@@ -808,17 +802,12 @@ for info on changes for earlier releases.
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
 [#1651]: https://github.com/benmosher/eslint-plugin-import/pull/1651
-[#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
-[#1631]: https://github.com/benmosher/eslint-plugin-import/issues/1631
 [#1626]: https://github.com/benmosher/eslint-plugin-import/pull/1626
 [#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
 [#1619]: https://github.com/benmosher/eslint-plugin-import/pull/1619
-[#1616]: https://github.com/benmosher/eslint-plugin-import/issues/1616
-[#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612
 [#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
 [#1605]: https://github.com/benmosher/eslint-plugin-import/pull/1605
-[#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572
 [#1569]: https://github.com/benmosher/eslint-plugin-import/pull/1569
@@ -909,6 +898,7 @@ for info on changes for earlier releases.
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1049]: https://github.com/benmosher/eslint-plugin-import/pull/1049
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
+[#966]: https://github.com/benmosher/eslint-plugin-import/pull/966
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 [#908]: https://github.com/benmosher/eslint-plugin-import/pull/908
@@ -985,10 +975,24 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
+[#1924]: https://github.com/benmosher/eslint-plugin-import/issues/1924
+[#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
+[#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
+[#1834]: https://github.com/benmosher/eslint-plugin-import/issues/1834
 [#1814]: https://github.com/benmosher/eslint-plugin-import/issues/1814
 [#1811]: https://github.com/benmosher/eslint-plugin-import/issues/1811
 [#1808]: https://github.com/benmosher/eslint-plugin-import/issues/1808
 [#1805]: https://github.com/benmosher/eslint-plugin-import/issues/1805
+[#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
+[#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
+[#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
+[#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
+[#1631]: https://github.com/benmosher/eslint-plugin-import/issues/1631
+[#1616]: https://github.com/benmosher/eslint-plugin-import/issues/1616
+[#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
+[#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1565]: https://github.com/benmosher/eslint-plugin-import/issues/1565
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
@@ -1325,3 +1329,5 @@ for info on changes for earlier releases.
 [@FloEdelmann]: https://github.com/FloEdelmann
 [@bicstone]: https://github.com/bicstone
 [@guillaumewuip]: https://github.com/guillaumewuip
+[@tapayne88]: https://github.com/tapayne88
+[@panrafal]: https://github.com/panrafal
