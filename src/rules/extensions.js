@@ -1,13 +1,55 @@
 import path from 'path'
-import has from 'has'
 
 import resolve from 'eslint-module-utils/resolve'
-import { isBuiltIn } from '../core/importType'
+import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
 
-const enumValues = { enum: [ 'always', 'never' ] }
+const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
 const patternProperties = {
   type: 'object',
   patternProperties: { '.*': enumValues },
+}
+const properties = {
+  type: 'object',
+  properties: { 
+    'pattern': patternProperties,
+    'ignorePackages': { type: 'boolean' },
+  },
+}
+
+function buildProperties(context) {
+
+    const result = {
+      defaultConfig: 'never',
+      pattern: {},
+      ignorePackages: false,
+    }
+
+    context.options.forEach(obj => {
+
+      // If this is a string, set defaultConfig to its value
+      if (typeof obj === 'string') {
+        result.defaultConfig = obj
+        return
+      }
+
+      // If this is not the new structure, transfer all props to result.pattern
+      if (obj.pattern === undefined && obj.ignorePackages === undefined) {
+        Object.assign(result.pattern, obj)
+        return
+      }
+
+      // If pattern is provided, transfer all props
+      if (obj.pattern !== undefined) {
+        Object.assign(result.pattern, obj.pattern)
+      }
+
+      // If ignorePackages is provided, transfer it to result
+      if (obj.ignorePackages !== undefined) {
+        result.ignorePackages = obj.ignorePackages
+      }      
+    })
+
+    return result
 }
 
 module.exports = {
@@ -21,6 +63,19 @@ module.exports = {
           items: [enumValues],
           additionalItems: false,
         },
+        {
+          type: 'array',
+          items: [
+            enumValues, 
+            properties,
+          ],
+          additionalItems: false,
+        },
+        {
+          type: 'array',
+          items: [properties],
+          additionalItems: false,
+        },                
         {
           type: 'array',
           items: [patternProperties],
@@ -39,21 +94,19 @@ module.exports = {
   },
 
   create: function (context) {
-    const configuration = context.options[0] || 'never'
-    const defaultConfig = typeof configuration === 'string' ? configuration : null
-    const modifiers = Object.assign(
-      {},
-      typeof configuration === 'object' ? configuration : context.options[1]
-    )
 
-    function isUseOfExtensionRequired(extension) {
-      if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
-      return modifiers[extension] === 'always'
+    const props = buildProperties(context)
+    
+    function getModifier(extension) {
+      return props.pattern[extension] || props.defaultConfig
+    }
+
+    function isUseOfExtensionRequired(extension, isPackageMain) {
+      return getModifier(extension) === 'always' && (!props.ignorePackages || !isPackageMain)
     }
 
     function isUseOfExtensionForbidden(extension) {
-      if (!has(modifiers, extension)) { modifiers[extension] = defaultConfig }
-      return modifiers[extension] === 'never'
+      return getModifier(extension) === 'never'
     }
 
     function isResolvableWithoutExtension(file) {
@@ -77,8 +130,15 @@ module.exports = {
       // for unresolved, use source value.
       const extension = path.extname(resolvedPath || importPath).substring(1)
 
+      // determine if this is a module
+      const isPackageMain = 
+        isExternalModuleMain(importPath, context.settings) || 
+        isScopedMain(importPath)
+
       if (!extension || !importPath.endsWith(extension)) {
-        if (isUseOfExtensionRequired(extension) && !isUseOfExtensionForbidden(extension)) {
+        const extensionRequired = isUseOfExtensionRequired(extension, isPackageMain)
+        const extensionForbidden = isUseOfExtensionForbidden(extension)
+        if (extensionRequired && !extensionForbidden) {
           context.report({
             node: source,
             message:
