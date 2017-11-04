@@ -25,11 +25,9 @@ matrix:
     node_js: 8
 
 install:
-  - if [ ${TRAVIS_NODE_VERSION} == "4" ]; then
-      npm install -g npm@3;
-    fi
+  - nvm install-latest-npm
   - npm install
-  - npm install eslint@$ESLINT_VERSION --ignore-scripts || true
+  - npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
   # install all resolver deps
   - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
 
