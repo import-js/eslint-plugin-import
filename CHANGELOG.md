@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
+- Add [`es6modules-only`] rule: module-systems rule to detect import of non-es6 modules ([#971], thanks [@dominiktilp])
 
 ## [2.8.0] - 2017-10-18
 ### Added
@@ -433,6 +434,7 @@ for info on changes for earlier releases.
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 [`exports-last`]: ./docs/rules/exports-last.md
 [`group-exports`]: ./docs/rules/group-exports.md
+[`es6modules-only`]: ./docs/rules/es6modules-only.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
