@@ -3,6 +3,8 @@
  * @type {Object}
  */
 module.exports = {
+  plugins: ['import'],
+
   rules: {
     // analysis/correctness
     'import/no-unresolved': 'error',
