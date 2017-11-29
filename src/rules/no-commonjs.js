@@ -36,7 +36,12 @@ module.exports = {
 
         // exports.
         if (node.object.name === 'exports') {
-          context.report({ node, message: EXPORT_MESSAGE })
+          const isInScope = context.getScope()
+            .variables
+            .some(variable => variable.name === 'exports')
+          if (! isInScope) {
+            context.report({ node, message: EXPORT_MESSAGE })
+          }
         }
 
       },

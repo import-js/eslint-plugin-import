@@ -17,6 +17,15 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     // exports
     { code: 'export default "x"', parserOptions: { sourceType: 'module' } },
     { code: 'export function house() {}', parserOptions: { sourceType: 'module' } },
+    {
+      code:
+      'function someFunc() {\n'+
+      '  const exports = someComputation();\n'+
+      '\n'+
+      '  expect(exports.someProp).toEqual({ a: \'value\' });\n'+
+      '}',
+      parserOptions: { sourceType: 'module' },
+    },
 
     // allowed requires
     { code: 'function a() { var x = require("y"); }' }, // nested requires allowed
