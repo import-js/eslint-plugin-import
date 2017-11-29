@@ -1,4 +1,4 @@
-import cond from 'lodash.cond'
+import cond from 'lodash/cond'
 import builtinModules from 'builtin-modules'
 import { join } from 'path'
 
