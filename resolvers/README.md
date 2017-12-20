@@ -49,7 +49,7 @@ the absolute path to the file making the import (`/some/path/to/module.js`)
 
 ##### `config`
 
-an object provided via the `import/resolver` setting.`my-cool-resolver` will get `["some", "stuff"]` as its `config`, while
+an object provided via the `import/resolver` setting. `my-cool-resolver` will get `["some", "stuff"]` as its `config`, while
   `node` will get `{ "paths": ["a", "b", "c"] }` provided as `config`.
 
 #### Return value
