@@ -29,6 +29,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'var foo = require("pkg-up")'}),
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
+    test({ code: 'import "raw-loader!./foo"'}),
     test({ code: 'import "lodash.isarray"'}),
     test({ code: 'import "@org/package"'}),
 
@@ -73,6 +74,13 @@ ruleTester.run('no-extraneous-dependencies', rule, {
   invalid: [
     test({
       code: 'import "not-a-dependency"',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "raw-loader!not-a-dependency"',
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
