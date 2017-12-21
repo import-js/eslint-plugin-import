@@ -55,11 +55,11 @@ function optDepErrorMessage(packageName) {
 }
 
 function stripWebpackLoaders(name) {
-  return name.split('!').pop();
+  return name.split('!').pop()
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
-  name = stripWebpackLoaders(name);
+  name = stripWebpackLoaders(name)
   if (importType(name, context) !== 'external') {
     return
   }
