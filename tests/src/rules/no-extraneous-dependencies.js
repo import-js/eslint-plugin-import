@@ -14,6 +14,7 @@ const packageFileWithSyntaxErrorMessage = (() => {
     return error.message
   }
 })()
+const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -68,6 +69,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "doctrine"',
       options: [{packageDir: path.join(__dirname, '../../../')}],
+    }),
+    test({
+      code: 'import type MyType from "myflowtyped";',
+      options: [{packageDir: packageDirWithFlowTyped}],
+      parser: 'babel-eslint',
     }),
   ],
   invalid: [

@@ -55,9 +55,15 @@ function optDepErrorMessage(packageName) {
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
+  // Do not report when importing types
+  if (node.importKind === 'type') {
+    return
+  }
+
   if (importType(name, context) !== 'external') {
     return
   }
+
   const resolved = resolve(name, context)
   if (!resolved) {
     return
