@@ -16,6 +16,7 @@ The complete default configuration looks like this.
   "allowArrowFunction": false,
   "allowAnonymousClass": false,
   "allowAnonymousFunction": false,
+  "allowCallExpression": true, // The true value here is for backward compatibility
   "allowLiteral": false,
   "allowObject": false
 }]
@@ -32,6 +33,9 @@ export default () => {}
 export default class {}
 
 export default function () {}
+
+/* eslint import/no-anonymous-default-export: [2, {"allowCallExpression": false}] */
+export default foo(bar)
 
 export default 123
 
@@ -58,6 +62,8 @@ export default class {}
 
 /* eslint import/no-anonymous-default-export: [2, {"allowAnonymousFunction": true}] */
 export default function () {}
+
+export default foo(bar)
 
 /* eslint import/no-anonymous-default-export: [2, {"allowLiteral": true}] */
 export default 123
