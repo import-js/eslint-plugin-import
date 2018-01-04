@@ -1,5 +1,23 @@
-type X = string
+export type MyType = string
+export enum MyEnum {
+  Foo,
+  Bar,
+  Baz
+}
+export interface Foo {
+  native: string | number
+  typedef: MyType
+  enum: MyEnum
+}
 
-export function getFoo() : X {
+export abstract class Bar {
+  abstract foo(): Foo
+
+  method() {
+    return "foo"
+  }
+}
+
+export function getFoo() : MyType {
   return "foo"
 }

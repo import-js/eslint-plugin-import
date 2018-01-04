@@ -61,6 +61,7 @@
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "eslint-module-utils": "file:./utils",
     "eslint-plugin-import": "2.x",
+    "eslint-plugin-typescript": "^0.8.1",
     "gulp": "^3.9.0",
     "gulp-babel": "6.1.2",
     "istanbul": "^0.4.0",
@@ -71,7 +72,7 @@
     "rimraf": "2.5.2",
     "sinon": "^2.3.2",
     "typescript": "^2.0.3",
-    "typescript-eslint-parser": "^2.1.0"
+    "typescript-eslint-parser": "^8.0.0"
   },
   "peerDependencies": {
     "eslint": "2.x - 4.x"
