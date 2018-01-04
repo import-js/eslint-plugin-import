@@ -1,4 +1,4 @@
-# Forbid the use of extraneous packages
+# import/no-extraneous-dependencies: Forbid the use of extraneous packages
 
 Forbid the import of external modules that are not declared in the `package.json`'s `dependencies`, `devDependencies`, `optionalDependencies` or `peerDependencies`.
 The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behaviour can be changed with the rule option `packageDir`.

@@ -1,4 +1,4 @@
-# default
+# import/default
 
 If a default import is requested, this rule will report if there is no default
 export in the imported module.

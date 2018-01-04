@@ -1,4 +1,4 @@
-# Forbid import of modules using absolute paths
+# import/no-absolute-path: Forbid import of modules using absolute paths
 
 Node.js allows the import of modules using an absolute path such as `/home/xyz/file.js`. That is a bad practice as it ties the code using it to your computer, and therefore makes it unusable in packages distributed on `npm` for instance.
 

@@ -1,4 +1,4 @@
-# extensions - Ensure consistent use of file extension within the import path
+# import/extensions - Ensure consistent use of file extension within the import path
 
 Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default. Depending on the resolver you can configure more extensions to get resolved automatically.
 

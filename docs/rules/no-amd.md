@@ -1,4 +1,4 @@
-# no-amd
+# import/no-amd
 
 Reports `require([array], ...)` and `define([array], ...)` function calls at the
 module scope. Will not report if !=2 arguments, or first argument is not a literal array.

@@ -1,4 +1,4 @@
-# unambiguous
+# import/unambiguous
 
 Warn if a `module` could be mistakenly parsed as a `script` by a consumer leveraging
 [Unambiguous JavaScript Grammar] to determine correct parsing goal.

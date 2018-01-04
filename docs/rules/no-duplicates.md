@@ -1,4 +1,4 @@
-# no-duplicates
+# import/no-duplicates
 
 Reports if a resolved path is imported more than once.
 

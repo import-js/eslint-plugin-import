@@ -1,4 +1,4 @@
-# max-dependencies
+# import/max-dependencies
 
 Forbid modules to have too many dependencies (`import` or `require` statements).
 

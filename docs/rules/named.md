@@ -1,4 +1,4 @@
-# named
+# import/named
 
 Verifies that all named imports are part of the set of named exports in the referenced module.
 

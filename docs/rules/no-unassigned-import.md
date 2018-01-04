@@ -1,4 +1,4 @@
-# Forbid unassigned imports
+# import/no-unassigned-import: Forbid unassigned imports
 
 With both CommonJS' `require` and the ES6 modules' `import` syntax, it is possible to import a module but not to use its result. This can be done explicitly by not assigning the module to as variable. Doing so can mean either of the following things:
 - The module is imported but not used

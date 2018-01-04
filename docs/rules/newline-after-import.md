@@ -1,4 +1,4 @@
-# newline-after-import
+# import/newline-after-import
 
 Enforces having one or more empty lines after the last top-level import statement or require call.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
