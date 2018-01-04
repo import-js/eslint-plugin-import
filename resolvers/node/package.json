@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "dependencies": {
-    "debug": "^2.6.8",
-    "resolve": "^1.2.0"
+    "debug": "^2.6.9",
+    "resolve": "^1.5.0"
   },
   "devDependencies": {
     "chai": "^3.4.1",
