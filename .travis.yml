@@ -1,39 +1,40 @@
 language: node_js
 node_js:
-  - 4
-  - 6
-  - 8
+  - '8'
+  - '6'
+  - '4'
 
 os: linux
 
 env:
-  - ESLINT_VERSION=2
-  - ESLINT_VERSION=3
   - ESLINT_VERSION=4
+  - ESLINT_VERSION=3
+  - ESLINT_VERSION=2
 
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
   include:
   - os: osx
-    env: ESLINT_VERSION=2
-    node_js: 4
+    env: ESLINT_VERSION=4
+    node_js: 8
   - os: osx
     env: ESLINT_VERSION=3
     node_js: 6
   - os: osx
-    env: ESLINT_VERSION=4
-    node_js: 8
+    env: ESLINT_VERSION=2
+    node_js: 4
 
-install:
+before_install:
   - nvm install-latest-npm
+install:
   - npm install
   - npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
   # install all resolver deps
-  - "for resolver in ./resolvers/*; do cd $resolver && npm install && cd ../..; done"
+  - 'for resolver in ./resolvers/*; do cd "${resolver}" && npm install && cd ../..; done'
 
 script:
-  - "npm test"
-  - "for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done"
+  - 'npm test'
+  - 'for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done'
 
 after_success:
   - npm run coveralls
