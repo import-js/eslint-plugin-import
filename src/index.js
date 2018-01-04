@@ -1,4 +1,5 @@
 export const rules = {
+  'es6modules-only': require('./rules/es6modules-only'),
   'no-unresolved': require('./rules/no-unresolved'),
   'named': require('./rules/named'),
   'default': require('./rules/default'),
