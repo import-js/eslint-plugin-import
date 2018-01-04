@@ -47,6 +47,10 @@ module.exports = {
       },
       'CallExpression': function (call) {
         if (context.getScope().type !== 'module') return
+        if (
+          call.parent.type !== 'ExpressionStatement'
+          && call.parent.type !== 'VariableDeclarator'
+        ) return
 
         if (call.callee.type !== 'Identifier') return
         if (call.callee.name !== 'require') return

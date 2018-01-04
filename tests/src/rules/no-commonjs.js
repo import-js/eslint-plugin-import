@@ -29,6 +29,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
 
     // allowed requires
     { code: 'function a() { var x = require("y"); }' }, // nested requires allowed
+    { code: 'var a = c && require("b")' }, // conditional requires allowed
     { code: 'require.resolve("help")' }, // methods of require are allowed
     { code: 'require.ensure([])' }, // webpack specific require.ensure is allowed
     { code: 'require([], function(a, b, c) {})' }, // AMD require is allowed
