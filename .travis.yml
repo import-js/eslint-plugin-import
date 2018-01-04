@@ -14,6 +14,18 @@ env:
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
   include:
+  - env: PACKAGE=resolvers/node
+    node_js: 8
+  - env: PACKAGE=resolvers/node
+    node_js: 6
+  - env: PACKAGE=resolvers/node
+    node_js: 4
+  - env: PACKAGE=resolvers/webpack
+    node_js: 8
+  - env: PACKAGE=resolvers/webpack
+    node_js: 6
+  - env: PACKAGE=resolvers/webpack
+    node_js: 4
   - os: osx
     env: ESLINT_VERSION=4
     node_js: 8
@@ -25,16 +37,14 @@ matrix:
     node_js: 4
 
 before_install:
-  - nvm install-latest-npm
+  - 'nvm install-latest-npm'
+  - 'if [ -n "${PACKAGE-}" ]; then cd "${PACKAGE}"; fi'
 install:
   - npm install
   - npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
-  # install all resolver deps
-  - 'for resolver in ./resolvers/*; do cd "${resolver}" && npm install && cd ../..; done'
 
 script:
   - 'npm test'
-  - 'for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done'
 
 after_success:
   - npm run coveralls
