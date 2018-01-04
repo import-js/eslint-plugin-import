@@ -73,9 +73,8 @@ const FOO = 'BAR'
 
 
 ## Example options usage
-```
+```json
 {
-  ...
   "rules": {
     "import/newline-after-import": ["error", { "count": 2 }]
   }
