@@ -1,6 +1,6 @@
 import { RuleTester } from 'eslint'
 import rule from 'rules/extensions'
-import { test } from '../utils'
+import { test, testFilePath } from '../utils'
 
 const ruleTester = new RuleTester()
 
@@ -59,7 +59,6 @@ ruleTester.run('extensions', rule, {
     test({ code: 'import thing from "./fake-file.js"', options: [ 'always' ] }),
     test({ code: 'import thing from "non-package"', options: [ 'never' ] }),
 
-
     test({
       code: `
         import foo from './foo.js'
@@ -90,6 +89,17 @@ ruleTester.run('extensions', rule, {
       options: [ 'never', {ignorePackages: true} ],
     }),
 
+    test({
+      code: 'import exceljs from "exceljs"',
+      options: [ 'always', { js: 'never', jsx: 'never' } ],
+      filename: testFilePath('./internal-modules/plugins/plugin.js'),
+      settings: {
+        'import/resolver': {
+          'node': { 'extensions': [ '.js', '.jsx', '.json' ] },
+          'webpack': { 'config': 'webpack.empty.config.js' },
+        },
+      },
+    }),
   ],
 
   invalid: [
