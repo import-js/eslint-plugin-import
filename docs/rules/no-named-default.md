@@ -1,4 +1,4 @@
-# no-named-default
+# import/no-named-default
 
 Reports use of a default export as a locally named import.
 

@@ -1,4 +1,4 @@
-# No Node.js builtin modules
+# import/no-nodejs-modules: No Node.js builtin modules
 
 Forbid the use of Node.js builtin modules. Can be useful for client-side web projects that do not have access to those modules.
 

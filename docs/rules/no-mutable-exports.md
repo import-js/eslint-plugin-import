@@ -1,4 +1,4 @@
-# no-mutable-exports
+# import/no-mutable-exports
 
 Forbids the use of mutable exports with `var` or `let`.
 

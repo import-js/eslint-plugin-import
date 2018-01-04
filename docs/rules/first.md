@@ -1,4 +1,4 @@
-# first
+# import/first
 
 This rule reports any imports that come after non-import
 statements.

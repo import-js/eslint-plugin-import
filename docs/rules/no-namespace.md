@@ -1,4 +1,4 @@
-# no-namespace
+# import/no-namespace
 
 Reports if namespace import is used.
 

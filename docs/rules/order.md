@@ -1,4 +1,4 @@
-# Enforce a convention in module import order
+# import/order: Enforce a convention in module import order
 
 Enforce a convention in the order of `require()` / `import` statements. The order is as shown in the following example:
 

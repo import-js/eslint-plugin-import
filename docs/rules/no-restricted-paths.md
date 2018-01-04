@@ -1,4 +1,4 @@
-# no-restricted-paths - Restrict which files can be imported in a given folder
+# import/no-restricted-paths: Restrict which files can be imported in a given folder
 
 Some projects contain files which are not always meant to be executed in the same environment.
 For example consider a web application that contains specific code for the server and some specific code for the browser/client. In this case you don’t want to import server-only files in your client code.

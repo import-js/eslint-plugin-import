@@ -1,4 +1,4 @@
-# no-unresolved
+# import/no-unresolved
 
 Ensures an imported module can be resolved to a module on the local filesystem,
 as defined by standard Node `require.resolve` behavior.

@@ -1,4 +1,4 @@
-# no-anonymous-default-export
+# import/no-anonymous-default-export
 
 Reports if a module's default export is unnamed. This includes several types of unnamed data types; literals, object expressions, arrays, anonymous functions, arrow functions, and anonymous class declarations.
 
