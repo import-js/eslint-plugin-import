@@ -57,7 +57,7 @@ exports.resolve = function (source, file, settings) {
       // see if we've got an absolute path
       if (!configPath || !isAbsolute(configPath)) {
         // if not, find ancestral package.json and use its directory as base for the path
-        packageDir = findRoot(path.resolve(file))
+        packageDir = findRoot(path.resolve(source))
         if (!packageDir) throw new Error('package not found above ' + file)
       }
 
