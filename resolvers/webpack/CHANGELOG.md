@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.8.4 - 2018-01-05
+### Changed
+- allow newer version of node-libs-browser ([#969])
+
 ## 0.8.3 - 2017-06-23
 ### Changed
 - `debug` bumped to match others
@@ -88,6 +92,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#969]: https://github.com/benmosher/eslint-plugin-import/pull/969
 [#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
 [#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
 [#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
