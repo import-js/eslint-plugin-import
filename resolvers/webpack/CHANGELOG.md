@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
-- Fix [#666] - only respect config and configIndex settings if not in a node_module
+- Fix [#666] - only respect config and configIndex settings if not in a node_module ([#994])
 
 ## 0.8.3 - 2017-06-23
 ### Changed
@@ -88,7 +88,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
-
+[#994]: https://github.com/benmosher/eslint-plugin-import/pull/994
 [#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
 [#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
 [#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
@@ -103,6 +103,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
 [#681]: https://github.com/benmosher/eslint-plugin-import/issues/681
+[#666]: https://github.com/benmosher/eslint-plugin-import/issues/666
 [#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
 [#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
 [#357]: https://github.com/benmosher/eslint-plugin-import/issues/357
