@@ -4,8 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+## v0.3.2 - 2018-01-05
 ### Added
 - `.mjs` extension detected by default to support `experimental-modules` (#939)
+
+### Deps
+- update `debug`, `resolve`
 
 ## v0.3.1 - 2017-06-23
 ### Changed
