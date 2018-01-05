@@ -96,7 +96,7 @@ describe("config", function () {
     const npmModuleFile = path.resolve(npmModulePath, 'foo.js')
 
     // Repeat of test against foo alias, for a control
-    // (If the alias is changed, this test could silently regress without this)
+    // (Without this, if the alias was changed, this test would silently regress)
     expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
     // Actual test
