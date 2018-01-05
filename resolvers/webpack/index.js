@@ -44,12 +44,16 @@ exports.resolve = function (source, file, settings) {
   }
 
   var webpackConfig
-
-  var configPath = get(settings, 'config')
-    , configIndex = get(settings, 'config-index')
+    , configPath
+    , configIndex
     , packageDir
 
-  log('Config path from settings:', configPath)
+  // Only respect webpackConfig settings if not in a node_module
+  if (!~file.indexOf('/node_modules/')) {
+    configPath = get(settings, 'config')
+    configIndex = get(settings, 'config-index')
+    log('Config path from settings:', configPath)
+  }
 
   // see if we've got a config path, a config object, an array of config objects or a config function
   if (!configPath || typeof configPath === 'string') {
