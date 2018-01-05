@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
+- Fix [#666], webpack resolver incorrectly resolving relative paths to the webpack config ([#993])
 
 ## [2.8.0] - 2017-10-18
 ### Added
@@ -438,6 +439,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#993]: https://github.com/benmosher/eslint-plugin-import/pull/993
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
@@ -514,6 +516,7 @@ for info on changes for earlier releases.
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
+[#666]: https://github.com/benmosher/eslint-plugin-import/issues/666
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
