@@ -16,12 +16,17 @@ var log = require('debug')('eslint-plugin-import:resolver:webpack')
 exports.interfaceVersion = 2
 
 /**
+ * Settings object
+ * @typedef {Object} settings
+ * @property {string} configPath the path to the webpack config
+ */
+/**
  * Find the full path to 'source', given 'file' as a full reference path.
  *
  * resolveImport('./foo', '/Users/ben/bar.js') => '/Users/ben/foo.js'
  * @param  {string} source - the module to resolve; i.e './some-module'
  * @param  {string} file - the importing file's full path; i.e. '/usr/local/bin/file.js'
- * TODO: take options as a third param, with webpack config file name
+ * @param  {settings} settings - settings object
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
