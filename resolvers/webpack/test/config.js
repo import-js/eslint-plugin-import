@@ -91,4 +91,16 @@ describe("config", function () {
         .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'))
   })
 
+  it("ignores config setting when resolving inside a dependency", function () {
+    const npmModulePath = path.resolve(__dirname, 'files', 'node_modules', 'some-module')
+    const npmModuleFile = path.resolve(npmModulePath, 'foo.js')
+
+    // Repeat of test against foo alias, for a control
+    // (If the alias is changed, this test could silently regress without this)
+    expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
+        .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
+    // Actual test
+    expect(resolve('foo', npmModuleFile, absoluteSettings)).to.have.property('found')
+        .and.equal(false)
+  })
 })
