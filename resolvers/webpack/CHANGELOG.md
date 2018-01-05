@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+- Fix [#666] - only respect config and configIndex settings if not in a node_module
 
 ## 0.8.3 - 2017-06-23
 ### Changed
