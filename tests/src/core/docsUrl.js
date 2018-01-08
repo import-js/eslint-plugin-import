@@ -4,7 +4,7 @@ import docsUrl from '../../../src/docsUrl'
 
 describe('docsUrl', function () {
   it('returns the rule documentation URL when given a rule name', function () {
-    expect(docsUrl('foo')).to.equal('https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules/foo.md')
+    expect(docsUrl('foo')).to.equal('https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/foo.md')
   })
 
   it('supports an optional commit hash parameter', function () {
