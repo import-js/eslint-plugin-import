@@ -57,7 +57,10 @@ exports.resolve = function (source, file, settings) {
       // see if we've got an absolute path
       if (!configPath || !path.isAbsolute(configPath)) {
         // if not, find ancestral package.json and use its directory as base for the path
-        packageDir = findRoot(path.resolve(file))
+        packageDir = findRoot(path.resolve(file), function (dir) {
+          return dir.indexOf('node_modules') === -1
+            && fs.existsSync(path.join(dir, 'package.json'))
+        })
         if (!packageDir) throw new Error('package not found above ' + file)
       }
 

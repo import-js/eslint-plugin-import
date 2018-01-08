@@ -103,4 +103,13 @@ describe("config", function () {
         .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'))
   })
 
+  it("finds the real config when its not an absolute path, ignoring node_modules packages on the way", function () {
+    var reexportingFile = path.join(__dirname, 'files', 'node_modules', 'module-with-reexports', 'lib', 'index.js')
+    var settings = {
+      config: 'webpack.config.js',
+    }
+
+    expect(resolve('./reexported-module', reexportingFile, settings)).to.have.property('path')
+      .and.equal(path.join(__dirname, 'files', 'node_modules', 'module-with-reexports', 'lib', 'reexported-module.js'))
+  })
 })
