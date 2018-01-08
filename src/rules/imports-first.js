@@ -1,5 +1,6 @@
-import first from './first'
 import docsUrl from '../docsUrl'
+
+const first = require('./first')
 
 const newMeta = Object.assign({}, first.meta, {
   deprecated: true,
