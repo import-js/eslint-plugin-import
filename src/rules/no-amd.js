@@ -3,7 +3,7 @@
  * @author Jamund Ferguson
  */
 
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -12,7 +12,7 @@ const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/mast
 module.exports = {
     meta: {
         docs: {
-            url: `${ruleDocsUrl}/no-amd.md`,
+            url: docsUrl('no-amd'),
         },
     },
 

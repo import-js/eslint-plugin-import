@@ -1,13 +1,12 @@
+import declaredScope from 'eslint-module-utils/declaredScope'
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
-import declaredScope from 'eslint-module-utils/declaredScope'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/namespace.md`,
+      url: docsUrl('namespace'),
     },
 
     schema: [

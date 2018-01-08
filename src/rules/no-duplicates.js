@@ -1,6 +1,5 @@
 import resolve from 'eslint-module-utils/resolve'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 function checkImports(imported, context) {
   for (let [module, nodes] of imported.entries()) {
@@ -15,7 +14,7 @@ function checkImports(imported, context) {
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-duplicates.md`,
+      url: docsUrl('no-duplicates'),
     },
   },
 

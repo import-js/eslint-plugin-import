@@ -1,15 +1,15 @@
+import docsUrl from '../docsUrl'
+
 function isNonExportStatement({ type }) {
   return type !== 'ExportDefaultDeclaration' &&
     type !== 'ExportNamedDeclaration' &&
     type !== 'ExportAllDeclaration'
 }
 
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
-
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/exports-last.md`,
+      url: docsUrl('exports-last'),
     },
   },
 

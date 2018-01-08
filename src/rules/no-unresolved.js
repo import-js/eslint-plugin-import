@@ -6,13 +6,12 @@
 import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve'
 import ModuleCache from 'eslint-module-utils/ModuleCache'
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-unresolved.md`,
+      url: docsUrl('no-unresolved'),
     },
 
     schema: [ makeOptionsSchema({

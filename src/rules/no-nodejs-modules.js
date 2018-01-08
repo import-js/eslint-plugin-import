@@ -1,7 +1,6 @@
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 function reportIfMissing(context, node, allowed, name) {
   if (allowed.indexOf(name) === -1 && importType(name, context) === 'builtin') {
@@ -12,7 +11,7 @@ function reportIfMissing(context, node, allowed, name) {
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-nodejs-modules.md`,
+      url: docsUrl('no-nodejs-modules'),
     },
   },
 

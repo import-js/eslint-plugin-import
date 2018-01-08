@@ -1,11 +1,11 @@
 'use strict'
 
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/prefer-default-export.md`,
+      url: docsUrl('prefer-default-export'),
     },
   },
 

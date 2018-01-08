@@ -1,4 +1,5 @@
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 const DEFAULT_MAX = 10
 
@@ -12,12 +13,11 @@ const countDependencies = (dependencies, lastNode, context) => {
     )
   }
 }
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/max-dependencies.md`,
+      url: docsUrl('max-dependencies'),
     },
 
     schema: [

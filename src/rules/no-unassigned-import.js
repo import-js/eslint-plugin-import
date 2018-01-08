@@ -1,8 +1,8 @@
-import isStaticRequire from '../core/staticRequire'
 import path from 'path'
 import minimatch from 'minimatch'
 
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function report(context, node) {
   context.report({
@@ -55,7 +55,7 @@ module.exports = {
   create,
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-unassigned-import.md`,
+      url: docsUrl('no-unassigned-import'),
     },
     schema: [
       {

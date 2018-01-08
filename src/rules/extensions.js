@@ -2,6 +2,7 @@ import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
+import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
 const patternProperties = {
@@ -15,7 +16,6 @@ const properties = {
     'ignorePackages': { type: 'boolean' },
   },
 }
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
 
 function buildProperties(context) {
 
@@ -56,7 +56,7 @@ function buildProperties(context) {
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/extensions.md`,
+      url: docsUrl('extensions'),
     },
 
     schema: {

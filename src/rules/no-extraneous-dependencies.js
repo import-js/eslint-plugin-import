@@ -5,8 +5,7 @@ import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 function getDependencies(context, packageDir) {
   try {
@@ -115,7 +114,7 @@ function testConfig(config, filename) {
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-extraneous-dependencies.md`,
+      url: docsUrl('no-extraneous-dependencies'),
     },
 
     schema: [

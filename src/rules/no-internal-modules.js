@@ -3,13 +3,12 @@ import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-internal-modules.md`,
+      url: docsUrl('no-internal-modules'),
     },
 
     schema: [

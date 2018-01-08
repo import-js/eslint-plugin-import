@@ -3,13 +3,12 @@ import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-restricted-paths.md`,
+      url: docsUrl('no-restricted-paths'),
     },
 
     schema: [

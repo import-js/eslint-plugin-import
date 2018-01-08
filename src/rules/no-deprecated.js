@@ -1,7 +1,6 @@
-import Exports from '../ExportMap'
 import declaredScope from 'eslint-module-utils/declaredScope'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import Exports from '../ExportMap'
+import docsUrl from '../docsUrl'
 
 function message(deprecation) {
   return 'Deprecated' + (deprecation.description ? ': ' + deprecation.description : '.')
@@ -19,7 +18,7 @@ function getDeprecation(metadata) {
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-deprecated.md`,
+      url: docsUrl('no-deprecated'),
     },
   },
 

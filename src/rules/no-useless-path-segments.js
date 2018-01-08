@@ -7,8 +7,7 @@ import path from 'path'
 import sumBy from 'lodash/sumBy'
 import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
-
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
 
 /**
  * convert a potentially relative path from node utils into a true
@@ -37,7 +36,7 @@ const countRelParent = x => sumBy(x, v => v === '..')
 module.exports = {
   meta: {
     docs: {
-      url: `${ruleDocsUrl}/no-useless-path-segments.md`,
+      url: docsUrl('no-useless-path-segments'),
     },
 
     fixable: 'code',

@@ -1,7 +1,8 @@
-const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+import docsUrl from '../docsUrl'
+
 const meta = {
   docs: {
-    url: `${ruleDocsUrl}/group-exports.md`,
+    url: docsUrl('group-exports'),
   },
 }
 /* eslint-disable max-len */
