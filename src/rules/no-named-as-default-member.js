@@ -7,13 +7,17 @@
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-named-as-default-member.md`,
+    },
   },
 
   create: function(context) {

@@ -1,4 +1,9 @@
-const meta = {}
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+const meta = {
+  docs: {
+    url: `${ruleDocsUrl}/group-exports.md`,
+  },
+}
 /* eslint-disable max-len */
 const errors = {
   ExportNamedDeclaration: 'Multiple named export declarations; consolidate all named exports into a single export declaration',

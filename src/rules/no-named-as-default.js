@@ -1,9 +1,13 @@
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-named-as-default.md`,
+    },
   },
 
   create: function (context) {

@@ -8,6 +8,8 @@ import sumBy from 'lodash/sumBy'
 import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 /**
  * convert a potentially relative path from node utils into a true
  * relative path.
@@ -33,7 +35,13 @@ function normalize(fn) {
 const countRelParent = x => sumBy(x, v => v === '..')
 
 module.exports = {
-  meta: { fixable: 'code' },
+  meta: {
+    docs: {
+      url: `${ruleDocsUrl}/no-useless-path-segments.md`,
+    },
+
+    fixable: 'code',
+  },
 
   create: function (context) {
     const currentDir = path.dirname(context.getFilename())

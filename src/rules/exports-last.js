@@ -4,7 +4,15 @@ function isNonExportStatement({ type }) {
     type !== 'ExportAllDeclaration'
 }
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
+  meta: {
+    docs: {
+      url: `${ruleDocsUrl}/exports-last.md`,
+    },
+  },
+
   create: function (context) {
     return {
       Program: function ({ body }) {

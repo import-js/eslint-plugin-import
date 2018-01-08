@@ -1,6 +1,10 @@
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/first.md`,
+    },
   },
 
   create: function (context) {

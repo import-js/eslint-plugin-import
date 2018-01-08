@@ -6,6 +6,8 @@ import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 function getDependencies(context, packageDir) {
   try {
     const packageContent = packageDir
@@ -112,7 +114,9 @@ function testConfig(config, filename) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-extraneous-dependencies.md`,
+    },
 
     schema: [
       {

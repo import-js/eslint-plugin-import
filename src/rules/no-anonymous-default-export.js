@@ -67,8 +67,14 @@ const defaults = Object.keys(defs)
     return acc
   }, {})
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
   meta: {
+    docs: {
+      url: `${ruleDocsUrl}/no-anonymous-default-export.md`,
+    },
+
     schema: [
       {
         type: 'object',

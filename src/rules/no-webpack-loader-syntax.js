@@ -1,5 +1,7 @@
 import isStaticRequire from '../core/staticRequire'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 function reportIfNonStandard(context, node, name) {
   if (name.indexOf('!') !== -1) {
     context.report(node, `Unexpected '!' in '${name}'. ` +
@@ -10,7 +12,9 @@ function reportIfNonStandard(context, node, name) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-webpack-loader-syntax.md`,
+    },
   },
 
   create: function (context) {

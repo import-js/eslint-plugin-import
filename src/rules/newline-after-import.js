@@ -7,6 +7,7 @@ import isStaticRequire from '../core/staticRequire'
 
 import debug from 'debug'
 const log = debug('eslint-plugin-import:rules:newline-after-import')
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -44,7 +45,9 @@ function isClassWithDecorator(node) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/newline-after-import.md`,
+    },
     schema: [
       {
         'type': 'object',

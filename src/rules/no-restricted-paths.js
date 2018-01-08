@@ -4,9 +4,13 @@ import path from 'path'
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-restricted-paths.md`,
+    },
 
     schema: [
       {

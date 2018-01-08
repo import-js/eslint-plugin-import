@@ -5,6 +5,7 @@
 
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
     , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
 
 function allowPrimitive(node, context) {
   if (context.options.indexOf('allow-primitive-modules') < 0) return false
@@ -19,7 +20,9 @@ function allowPrimitive(node, context) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-commonjs.md`,
+    },
   },
 
   create: function (context) {

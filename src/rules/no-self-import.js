@@ -6,6 +6,8 @@
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 function isImportingSelf(context, node, requireName) {
   const filePath = context.getFilename()
 
@@ -20,10 +22,12 @@ function isImportingSelf(context, node, requireName) {
 
 module.exports = {
   meta: {
-    doc: {
+    docs: {
       description: 'Forbid a module from importing itself',
       recommended: true,
+      url: `${ruleDocsUrl}/no-self-import.md`,
     },
+
     schema: [],
   },
   create: function (context) {

@@ -3,13 +3,17 @@
  * @author Jamund Ferguson
  */
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
 module.exports = {
     meta: {
-        docs: {},
+        docs: {
+            url: `${ruleDocsUrl}/no-amd.md`,
+        },
     },
 
     create: function (context) {

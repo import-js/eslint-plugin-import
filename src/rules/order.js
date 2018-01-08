@@ -4,6 +4,7 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
 
 // REPORTING
 
@@ -149,7 +150,9 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/order.md`,
+    },
 
     schema: [
       {

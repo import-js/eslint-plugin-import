@@ -1,3 +1,5 @@
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 function isRequire(node) {
   return node &&
     node.callee &&
@@ -13,7 +15,9 @@ function isStaticValue(arg) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: `${ruleDocsUrl}/no-dynamic-require.md`,
+    },
   },
 
   create: function (context) {

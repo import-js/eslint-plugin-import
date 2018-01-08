@@ -5,8 +5,14 @@
 
 import { isModule } from 'eslint-module-utils/unambiguous'
 
+const ruleDocsUrl = 'https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules'
+
 module.exports = {
-  meta: {},
+  meta: {
+    docs: {
+      url: `${ruleDocsUrl}/unambiguous.md`,
+    },
+  },
 
   create: function (context) {
     // ignore non-modules
