@@ -6,11 +6,14 @@
 import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve'
 import ModuleCache from 'eslint-module-utils/ModuleCache'
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
-
-
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
+    docs: {
+      url: docsUrl('no-unresolved'),
+    },
+
     schema: [ makeOptionsSchema({
       caseSensitive: { type: 'boolean', default: true },
     })],
@@ -43,4 +46,3 @@ module.exports = {
 
   },
 }
-

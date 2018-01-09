@@ -1,3 +1,5 @@
+import docsUrl from '../docsUrl'
+
 function isRequire(node) {
   return node &&
     node.callee &&
@@ -13,7 +15,9 @@ function isStaticValue(arg) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-dynamic-require'),
+    },
   },
 
   create: function (context) {

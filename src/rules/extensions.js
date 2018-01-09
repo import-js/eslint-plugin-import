@@ -2,6 +2,7 @@ import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
+import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
 const patternProperties = {
@@ -10,7 +11,7 @@ const patternProperties = {
 }
 const properties = {
   type: 'object',
-  properties: { 
+  properties: {
     'pattern': patternProperties,
     'ignorePackages': { type: 'boolean' },
   },
@@ -46,7 +47,7 @@ function buildProperties(context) {
       // If ignorePackages is provided, transfer it to result
       if (obj.ignorePackages !== undefined) {
         result.ignorePackages = obj.ignorePackages
-      }      
+      }
     })
 
     return result
@@ -54,7 +55,9 @@ function buildProperties(context) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('extensions'),
+    },
 
     schema: {
       anyOf: [
@@ -66,7 +69,7 @@ module.exports = {
         {
           type: 'array',
           items: [
-            enumValues, 
+            enumValues,
             properties,
           ],
           additionalItems: false,
@@ -75,7 +78,7 @@ module.exports = {
           type: 'array',
           items: [properties],
           additionalItems: false,
-        },                
+        },
         {
           type: 'array',
           items: [patternProperties],

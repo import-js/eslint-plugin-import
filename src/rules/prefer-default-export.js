@@ -1,8 +1,12 @@
 'use strict'
 
+import docsUrl from '../docsUrl'
+
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('prefer-default-export'),
+    },
   },
 
   create: function(context) {

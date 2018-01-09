@@ -1,9 +1,14 @@
+import declaredScope from 'eslint-module-utils/declaredScope'
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
-import declaredScope from 'eslint-module-utils/declaredScope'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
+    docs: {
+      url: docsUrl('namespace'),
+    },
+
     schema: [
       {
         'type': 'object',

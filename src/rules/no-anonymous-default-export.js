@@ -3,6 +3,8 @@
  * @author Duncan Beevers
  */
 
+import docsUrl from '../docsUrl'
+
 const defs = {
   ArrayExpression: {
     option: 'allowArray',
@@ -69,6 +71,10 @@ const defaults = Object.keys(defs)
 
 module.exports = {
   meta: {
+    docs: {
+      url: docsUrl('no-anonymous-default-export'),
+    },
+
     schema: [
       {
         type: 'object',

@@ -3,10 +3,13 @@ import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-restricted-paths'),
+    },
 
     schema: [
       {

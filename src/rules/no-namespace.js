@@ -3,6 +3,8 @@
  * @author Radek Benkel
  */
 
+import docsUrl from '../docsUrl'
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -10,7 +12,9 @@
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-namespace'),
+    },
   },
 
   create: function (context) {

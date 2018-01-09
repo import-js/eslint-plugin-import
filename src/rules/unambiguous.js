@@ -4,9 +4,14 @@
  */
 
 import { isModule } from 'eslint-module-utils/unambiguous'
+import docsUrl from '../docsUrl'
 
 module.exports = {
-  meta: {},
+  meta: {
+    docs: {
+      url: docsUrl('unambiguous'),
+    },
+  },
 
   create: function (context) {
     // ignore non-modules

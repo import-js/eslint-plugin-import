@@ -1,4 +1,10 @@
-const meta = {}
+import docsUrl from '../docsUrl'
+
+const meta = {
+  docs: {
+    url: docsUrl('group-exports'),
+  },
+}
 /* eslint-disable max-len */
 const errors = {
   ExportNamedDeclaration: 'Multiple named export declarations; consolidate all named exports into a single export declaration',

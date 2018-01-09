@@ -1,9 +1,12 @@
 import * as path from 'path'
 import Exports from '../ExportMap'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('named'),
+    },
   },
 
   create: function (context) {

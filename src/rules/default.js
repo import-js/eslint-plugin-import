@@ -1,8 +1,11 @@
 import Exports from '../ExportMap'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('default'),
+    },
   },
 
   create: function (context) {

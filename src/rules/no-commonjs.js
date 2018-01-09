@@ -3,6 +3,8 @@
  * @author Jamund Ferguson
  */
 
+import docsUrl from '../docsUrl'
+
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
     , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
 
@@ -19,7 +21,9 @@ function allowPrimitive(node, context) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-commonjs'),
+    },
   },
 
   create: function (context) {

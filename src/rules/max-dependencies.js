@@ -1,4 +1,5 @@
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 const DEFAULT_MAX = 10
 
@@ -15,7 +16,9 @@ const countDependencies = (dependencies, lastNode, context) => {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('max-dependencies'),
+    },
 
     schema: [
       {

@@ -1,4 +1,5 @@
 import resolve from 'eslint-module-utils/resolve'
+import docsUrl from '../docsUrl'
 
 function checkImports(imported, context) {
   for (let [module, nodes] of imported.entries()) {
@@ -12,7 +13,9 @@ function checkImports(imported, context) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-duplicates'),
+    },
   },
 
   create: function (context) {
