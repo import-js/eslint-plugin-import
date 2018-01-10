@@ -3,7 +3,7 @@
 Enforce a convention in the order of `require()` / `import` statements. The order is as shown in the following example:
 
 ```js
-// 1. node "builtins"
+// 1. node "builtin" modules
 import fs from 'fs';
 import path from 'path';
 // 2. "external" modules
