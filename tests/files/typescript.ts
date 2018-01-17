@@ -21,3 +21,17 @@ export abstract class Bar {
 export function getFoo() : MyType {
   return "foo"
 }
+
+export module MyModule {
+  export function ModuleFunction(){}
+}
+
+export namespace MyNamespace {
+  export function NamespaceFunction(){}
+
+  export module NSModule {
+    export function NSModuleFunction(){}
+  }
+}
+
+interface NotExported {}
