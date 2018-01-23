@@ -21,10 +21,11 @@ export function isAbsolute(name) {
   return name.indexOf('/') === 0
 }
 
-export function isBuiltIn(name, settings) {
+export function isBuiltIn(name, settings, path) {
   const base = baseModule(name)
   const extras = (settings && settings['import/core-modules']) || []
-  return builtinModules.indexOf(base) !== -1 || extras.indexOf(base) > -1
+  const isInternal = isInternalModule(name, settings, path)
+  return !isInternal && (builtinModules.indexOf(base) !== -1 || extras.indexOf(base) > -1)
 }
 
 function isExternalPath(path, name, settings) {

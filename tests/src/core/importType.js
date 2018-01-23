@@ -41,6 +41,11 @@ describe('importType(name)', function () {
     expect(importType('importType', pathContext)).to.equal('internal')
   })
 
+  it("should return 'internal' for files resolved outside of node_modules that share a name with a builtin", function () {
+    const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
+    expect(importType('constants/foo', pathContext)).to.equal('internal')
+  })
+
   it("should return 'parent' for internal modules that go through the parent", function() {
     expect(importType('../foo', context)).to.equal('parent')
     expect(importType('../../foo', context)).to.equal('parent')
