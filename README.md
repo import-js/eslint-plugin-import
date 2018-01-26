@@ -228,6 +228,19 @@ A list of file extensions that will be parsed as modules and inspected for
 This defaults to `['.js']`, unless you are using the `react` shared config,
 in which case it is specified as `['.js', '.jsx']`.
 
+```js
+"settings": {
+  "import/resolver": {
+    "node": {
+      "extensions": [
+        ".js",
+        ".jsx"
+      ]
+    }
+  }
+}
+```
+
 Note that this is different from (and likely a subset of) any `import/resolver`
 extensions settings, which may include `.json`, `.coffee`, etc. which will still
 factor into the `no-unresolved` rule.
