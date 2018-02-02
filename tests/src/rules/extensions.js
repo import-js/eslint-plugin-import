@@ -183,7 +183,7 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
-    // extension resolve order (#965)
+    // extension resolve order (#583/#965)
     test({
       code: [
         'import component from "./bar.jsx"',
@@ -198,6 +198,18 @@ ruleTester.run('extensions', rule, {
             column: 23,
         },
       ],
+    }),
+    test({
+      code: 'import "./bar.coffee"',
+      errors: [
+        {
+          message: 'Unexpected use of file extension "coffee" for "./bar.coffee"',
+          line: 1,
+          column: 8,
+        },
+      ],
+      options: ['never', { js: 'always', jsx: 'always' }],
+      settings: { 'import/resolve': { 'extensions': ['.coffee', '.js'] } },
     }),
 
     test({
