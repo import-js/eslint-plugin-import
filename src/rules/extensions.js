@@ -122,6 +122,10 @@ module.exports = {
 
     function checkFileExtension(node) {
       const { source } = node
+
+      // bail if the declaration doesn't have a source, e.g. "export { foo };"
+      if (!source) return
+
       const importPath = source.value
 
       // don't enforce anything on builtins
@@ -159,6 +163,7 @@ module.exports = {
 
     return {
       ImportDeclaration: checkFileExtension,
+      ExportNamedDeclaration: checkFileExtension,
     }
   },
 }
