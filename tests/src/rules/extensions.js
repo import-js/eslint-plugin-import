@@ -183,6 +183,22 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
+    // extension resolve order (#965)
+    test({
+      code: [
+        'import component from "./bar.jsx"',
+        'import data from "./bar.json"',
+      ].join('\n'),
+      options: [ { json: 'always', js: 'never', jsx: 'never' } ],
+      settings: { 'import/resolve': { 'extensions': [ '.jsx', '.json', '.js' ] } },
+      errors: [
+        {
+            message: 'Unexpected use of file extension "jsx" for "./bar.jsx"',
+            line: 1,
+            column: 23,
+        },
+      ],
+    }),
 
     test({
       code: [
