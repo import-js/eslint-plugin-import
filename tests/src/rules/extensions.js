@@ -100,6 +100,22 @@ ruleTester.run('extensions', rule, {
         },
       },
     }),
+
+    // export (#964)
+    test({
+      code: [
+        'export { foo } from "./foo.js"',
+        'export { bar }',
+      ].join('\n'),
+      options: [ 'always' ],
+    }),
+    test({
+      code: [
+        'export { foo } from "./foo"',
+        'export { bar }',
+      ].join('\n'),
+      options: [ 'never' ],
+    }),
   ],
 
   invalid: [
@@ -314,5 +330,34 @@ ruleTester.run('extensions', rule, {
       options: [ 'never', {ignorePackages: true} ],
     }),
 
+    // export (#964)
+    test({
+      code: [
+        'export { foo } from "./foo"',
+        'export { bar }',
+      ].join('\n'),
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+          column: 21,
+        },
+      ],
+    }),
+    test({
+      code: [
+        'export { foo } from "./foo.js"',
+        'export { bar }',
+      ].join('\n'),
+      options: [ 'never' ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 1,
+          column: 21,
+        },
+      ],
+    }),
   ],
 })
