@@ -353,6 +353,18 @@ settings:
 [`eslint_d`]: https://www.npmjs.com/package/eslint_d
 [`eslint-loader`]: https://www.npmjs.com/package/eslint-loader
 
+#### `import/paths`
+
+Settings for `package.json` lookup paths in order to include their defined dependencies in addition to the next-immediate `package.json` relative to the linted file. For example, the [`no-extraneous-dependencies`] rule.
+
+This is useful in scenarios where your workspace includes several hierarchical `package.json` files. For example, a [lerna](https://github.com/lerna/lerna) monorepo where you've hoisted all your `devDependencies` to the `package.json` at the root of the monorepo.
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/paths: ['.', 'packages/my-dev-utils']
+```
+
 ## SublimeLinter-eslint
 
 SublimeLinter-eslint introduced a change to support `.eslintignore` files
