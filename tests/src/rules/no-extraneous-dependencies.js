@@ -15,6 +15,8 @@ const packageFileWithSyntaxErrorMessage = (() => {
   }
 })()
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
+const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
+const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -75,8 +77,42 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirWithFlowTyped}],
       parser: 'babel-eslint',
     }),
+    test({
+      code: 'import react from "react";',
+      options: [{packageDir: packageDirMonoRepoWithNested}],
+      // filename: path.join(process.cwd(), 'foo.spec.js'),
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: packageDirMonoRepoWithNested}],
+      settings: { 'import/paths': [packageDirMonoRepoRoot] },
+      // filename: path.join(process.cwd(), 'foo.spec.js'),
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      settings: { 'import/paths': [packageDirMonoRepoRoot] },
+    }),
   ],
   invalid: [
+    test({
+      code: 'import "not-a-dependency"',
+      options: [{packageDir: packageDirMonoRepoWithNested}],
+      settings: { 'import/paths': [packageDirMonoRepoRoot] },
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      settings: { 'import/paths': [packageDirMonoRepoRoot] },
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
     test({
       code: 'import "not-a-dependency"',
       errors: [{
