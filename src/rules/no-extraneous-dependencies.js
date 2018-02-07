@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import has from 'has'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -30,7 +31,7 @@ function getDependencies(context, packageDir) {
       peerDependencies: {},
     }
 
-    if (Object.prototype.hasOwnProperty.call(context.settings, 'import/paths')) {
+    if (has(context.settings, 'import/paths')) {
       paths.push(
         ...context.settings['import/paths']
           .map((dir) => path.resolve(dir))
