@@ -7,22 +7,66 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
+function hasKeys(obj = {}) {
+  return Object.keys(obj).length > 0
+}
+
+function extractDepFields(pkg) {
+  return {
+    dependencies: pkg.dependencies || {},
+    devDependencies: pkg.devDependencies || {},
+    optionalDependencies: pkg.optionalDependencies || {},
+    peerDependencies: pkg.peerDependencies || {},
+  }
+}
+
 function getDependencies(context, packageDir) {
   try {
-    const packageContent = packageDir
-      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
-      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+    const paths = []
+    const packageContent = {
+      dependencies: {},
+      devDependencies: {},
+      optionalDependencies: {},
+      peerDependencies: {},
+    }
 
-    if (!packageContent) {
+    if (Object.prototype.hasOwnProperty(context.settings, 'import/paths')) {
+      paths.push(
+        ...context.settings['import/paths']
+          .map(path.resolve)
+      )
+    }
+
+    if (packageDir) {
+      paths.unshift(packageDir)
+    } else {
+      Object.assign(
+        packageContent,
+        extractDepFields(
+          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+        )
+      )
+    }
+
+    if (paths.length) {
+      paths.forEach((dir) => {
+        Object.assign(packageContent, extractDepFields(
+          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
+        ))
+      })
+    }
+
+
+    if (![
+      packageContent.dependencies,
+      packageContent.devDependencies,
+      packageContent.optionalDependencies,
+      packageContent.peerDependencies,
+    ].some(hasKeys)) {
       return null
     }
 
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
+    return packageContent
   } catch (e) {
     if (packageDir && e.code === 'ENOENT') {
       context.report({
