@@ -38,14 +38,7 @@ function getDependencies(context, packageDir) {
     }
 
     if (packageDir) {
-      paths.unshift(packageDir)
-    } else {
-      Object.assign(
-        packageContent,
-        extractDepFields(
-          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
-        )
-      )
+      paths.push(packageDir)
     }
 
     if (paths.length) {
@@ -56,6 +49,14 @@ function getDependencies(context, packageDir) {
       })
     }
 
+    if (!packageDir) {
+      Object.assign(
+        packageContent,
+        extractDepFields(
+          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+        )
+      )
+    }
 
     if (![
       packageContent.dependencies,
