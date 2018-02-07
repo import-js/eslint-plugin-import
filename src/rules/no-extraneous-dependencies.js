@@ -30,10 +30,10 @@ function getDependencies(context, packageDir) {
       peerDependencies: {},
     }
 
-    if (Object.prototype.hasOwnProperty(context.settings, 'import/paths')) {
+    if (Object.prototype.hasOwnProperty.call(context.settings, 'import/paths')) {
       paths.push(
         ...context.settings['import/paths']
-          .map(path.resolve)
+          .map((dir) => path.resolve(dir))
       )
     }
 

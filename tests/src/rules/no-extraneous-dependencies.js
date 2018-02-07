@@ -80,13 +80,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import react from "react";',
       options: [{packageDir: packageDirMonoRepoWithNested}],
-      // filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: packageDirMonoRepoWithNested}],
       settings: { 'import/paths': [packageDirMonoRepoRoot] },
-      // filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({
       code: 'import leftpad from "left-pad";',
@@ -97,7 +95,17 @@ ruleTester.run('no-extraneous-dependencies', rule, {
   invalid: [
     test({
       code: 'import "not-a-dependency"',
-      options: [{packageDir: packageDirMonoRepoWithNested}],
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      settings: { 'import/paths': [packageDirMonoRepoRoot] },
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
       settings: { 'import/paths': [packageDirMonoRepoRoot] },
       errors: [{
         ruleId: 'no-extraneous-dependencies',
