@@ -7,22 +7,25 @@ export default class CachedPackageLocator {
     this.store = {}
   }
 
-  readUpSync(context, dirname, immediate) {
+  readUpSync(context, dirname, immediate, reduce) {
     const locations = []
 
     do {
       const location = path.join(dirname, 'package.json')
 
       try {
-        locations.push(location)
         if (this.store[location]) {
           return this.store[location]
         }
+
+        locations.push(location)
         if (this.store[location] === null) {
           continue
         }
 
-        return this.store[location] = JSON.parse(fs.readFileSync(location, 'utf8'))
+        return this.store[location] = reduce(
+          JSON.parse(fs.readFileSync(location, 'utf8'))
+        )
       } catch (err) {
         if (err.code === 'ENOENT') {
           this.store[location] = null

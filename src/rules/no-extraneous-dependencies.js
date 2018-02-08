@@ -8,23 +8,28 @@ import docsUrl from '../docsUrl'
 
 const packageLocator = new CachedPackageLocator()
 
-function hasKeys(obj = {}) {
+function keyLength(obj) {
   return Object.keys(obj).length
 }
 
+function reducePackage({
+  dependencies = {},
+  devDependencies = {},
+  peerDependencies = {},
+  optionalDependencies = {},
+}) => {
+  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(keyLength)) {
+    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
+  }
+}
+
 function getDependencies(context, packageDir) {
-  const {
-    dependencies = {},
-    devDependencies = {},
-    peerDependencies = {},
-    optionalDependencies = {},
-  } = packageLocator.readUpSync(
+  return packageLocator.readUpSync(
     context,
     packageDir || path.dirname(context.getFilename()),
-    packageDir
-  ) || {}
-
-  return { dependencies, devDependencies, optionalDependencies, peerDependencies }
+    packageDir,
+    reducePackage,
+  )
 }
 
 function missingErrorMessage(packageName) {
@@ -122,12 +127,7 @@ module.exports = {
     const filename = context.getFilename()
     const deps = getDependencies(context, options.packageDir)
 
-    if (![
-      deps.dependencies,
-      deps.devDependencies,
-      deps.peerDependencies,
-      deps.optionalDependencies,
-    ].some(hasKeys)) {
+    if (!deps) {
       return {}
     }
 
