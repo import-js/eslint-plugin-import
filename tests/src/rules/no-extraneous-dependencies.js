@@ -1,17 +1,21 @@
 import { test } from '../utils'
-import * as path from 'path'
-import * as fs from 'fs'
+import path from 'path'
+import fs from 'fs'
+import os from 'os'
 
 import { RuleTester } from 'eslint'
+
 const ruleTester = new RuleTester()
     , rule = require('rules/no-extraneous-dependencies')
 
 const packageDirWithSyntaxError = path.join(__dirname, '../../files/with-syntax-error')
 const packageFileWithSyntaxErrorMessage = (() => {
+  const location = path.join(packageDirWithSyntaxError, 'package.json')
+
   try {
-    JSON.parse(fs.readFileSync(path.join(packageDirWithSyntaxError, 'package.json')))
+    JSON.parse(fs.readFileSync(location))
   } catch (error) {
-    return error.message
+    return error.message + ': ' + location
   }
 })()
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
@@ -183,18 +187,39 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import "bar"',
-      options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
+      options: [{packageDir: path.join(__dirname, 'doesn-exist')}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: 'The package.json file could not be found.',
-      }],
+        message: 'Could not find package.json file: ' + path.join(path.join(__dirname, 'doesn-exist', 'package.json')),
+      }]
     }),
     test({
-      code: 'import foo from "foo"',
+      code: 'import "bar"',
+      options: [{packageDir: '/does/not/exist'}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: 'Could not find package.json file: /does/not/exist/package.json',
+      }]
+    }),
+    test({
+      code: 'import "bar"',
+      filename: path.join('/does/not/exist', 'file.js'),
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: 'Could not find package.json files: ' + os.EOL + [
+          '/does/not/exist/package.json',
+          '/does/not/package.json',
+          '/does/package.json',
+          '/package.json',
+        ].join(os.EOL),
+      }]
+    }),
+    test({
+      code: 'import "foo"',
       options: [{packageDir: packageDirWithSyntaxError}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
+        message: 'Could not parse package.json file: ' + packageFileWithSyntaxErrorMessage,
       }],
     }),
   ],

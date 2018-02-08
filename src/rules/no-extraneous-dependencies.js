@@ -3,46 +3,28 @@ import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
-import createPackageLocator from '../core/createPackageLocator'
+import CachedPackageLocator from '../core/CachedPackageLocator'
 import docsUrl from '../docsUrl'
 
-const cachedPackageLocator = createPackageLocator(true)
+const packageLocator = new CachedPackageLocator()
+
+function hasKeys(obj = {}) {
+  return Object.keys(obj).length
+}
 
 function getDependencies(context, packageDir) {
-  try {
-    cachedPackageLocator.clear()
-    const packageContent = (
-      packageDir
-        ? cachedPackageLocator.readPackageSync(path.join(packageDir, 'package.json'))
-        : cachedPackageLocator.readPackageUpSync(path.dirname(context.getFilename()))
-    ).result
+  const {
+    dependencies = {},
+    devDependencies = {},
+    peerDependencies = {},
+    optionalDependencies = {},
+  } = packageLocator.readUpSync(
+    context,
+    packageDir || path.dirname(context.getFilename()),
+    packageDir
+  ) || {}
 
-    if (!packageContent) {
-      return null
-    }
-
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
-  } catch (e) {
-    if (packageDir && e.code === 'ENOENT') {
-      context.report({
-        message: 'The package.json file could not be found.',
-        loc: { line: 0, column: 0 },
-      })
-    }
-    if (e.name === 'JSONError' || e instanceof SyntaxError) {
-      context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
-        loc: { line: 0, column: 0 },
-      })
-    }
-
-    return null
-  }
+  return { dependencies, devDependencies, optionalDependencies, peerDependencies }
 }
 
 function missingErrorMessage(packageName) {
@@ -140,7 +122,12 @@ module.exports = {
     const filename = context.getFilename()
     const deps = getDependencies(context, options.packageDir)
 
-    if (!deps) {
+    if (![
+      deps.dependencies,
+      deps.devDependencies,
+      deps.peerDependencies,
+      deps.optionalDependencies,
+    ].some(hasKeys)) {
       return {}
     }
 
