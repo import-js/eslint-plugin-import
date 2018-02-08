@@ -1,17 +1,21 @@
 import path from 'path'
-import fs from 'fs'
-import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import createPackageLocator from '../core/createPackageLocator'
 import docsUrl from '../docsUrl'
+
+const cachedPackageLocator = createPackageLocator(true)
 
 function getDependencies(context, packageDir) {
   try {
-    const packageContent = packageDir
-      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
-      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+    cachedPackageLocator.clear()
+    const packageContent = (
+      packageDir
+        ? cachedPackageLocator.readPackageSync(path.join(packageDir, 'package.json'))
+        : cachedPackageLocator.readPackageUpSync(path.dirname(context.getFilename()))
+    ).result
 
     if (!packageContent) {
       return null
