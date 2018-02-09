@@ -31,7 +31,7 @@
   "dependencies": {
     "array-find": "^1.0.0",
     "debug": "^2.6.8",
-    "enhanced-resolve": "~0.9.0",
+    "enhanced-resolve": "^3.4.1",
     "find-root": "^1.1.0",
     "has": "^1.0.1",
     "interpret": "^1.0.0",
