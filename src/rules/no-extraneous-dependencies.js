@@ -8,30 +8,6 @@ import docsUrl from '../docsUrl'
 
 const packageLocator = new CachedPackageLocator()
 
-function keyLength(obj) {
-  return Object.keys(obj).length
-}
-
-function reducePackage({
-  dependencies = {},
-  devDependencies = {},
-  peerDependencies = {},
-  optionalDependencies = {},
-}) => {
-  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(keyLength)) {
-    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
-  }
-}
-
-function getDependencies(context, packageDir) {
-  return packageLocator.readUpSync(
-    context,
-    packageDir || path.dirname(context.getFilename()),
-    packageDir,
-    reducePackage,
-  )
-}
-
 function missingErrorMessage(packageName) {
   return `'${packageName}' should be listed in the project's dependencies. ` +
     `Run 'npm i -S ${packageName}' to add it`
@@ -122,10 +98,14 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
-    const deps = getDependencies(context, options.packageDir)
+    const deps = packageLocator.readUpSync(
+      context,
+      options.packageDir || path.dirname(context.getFilename()),
+      typeof options.packageDir !== 'undefined'
+    )
 
     if (!deps) {
       return {}
@@ -139,10 +119,10 @@ module.exports = {
 
     // todo: use module visitor from module-utils core
     return {
-      ImportDeclaration: function (node) {
+      ImportDeclaration(node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
-      CallExpression: function handleRequires(node) {
+      CallExpression(node) {
         if (isStaticRequire(node)) {
           reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
         }

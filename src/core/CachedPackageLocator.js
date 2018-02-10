@@ -1,31 +1,50 @@
 import path from 'path'
-import fs from 'fs'
 import os from 'os'
+import fs from 'fs'
 
+function notEmpty(obj) {
+  return Object.keys(obj).length
+}
+
+function reducePackage({
+  dependencies = {},
+  devDependencies = {},
+  peerDependencies = {},
+  optionalDependencies = {},
+} = {}) {
+  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(notEmpty)) {
+    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
+  }
+
+  return null
+}
 export default class CachedPackageLocator {
   constructor() {
     this.store = {}
   }
 
-  readUpSync(context, dirname, immediate, reduce) {
+  readUpSync(context, dirname, immediate) {
     const locations = []
-
     do {
       const location = path.join(dirname, 'package.json')
 
+      if (this.store[location]) {
+        return this.store[location]
+      }
+
+      locations.push(location)
+      if (this.store[location] === null) {
+        continue
+      }
+
       try {
+        this.store[location] = reducePackage(
+          JSON.parse(fs.readFileSync(location, 'utf8'))
+        )
+
         if (this.store[location]) {
           return this.store[location]
         }
-
-        locations.push(location)
-        if (this.store[location] === null) {
-          continue
-        }
-
-        return this.store[location] = reduce(
-          JSON.parse(fs.readFileSync(location, 'utf8'))
-        )
       } catch (err) {
         if (err.code === 'ENOENT') {
           this.store[location] = null
@@ -43,6 +62,9 @@ export default class CachedPackageLocator {
             loc: { line: 0, column: 0 },
           })
           return
+        } else {
+          // dont swallow unknown error
+          throw err
         }
       }
     } while (dirname !== (dirname = path.dirname(dirname)))
