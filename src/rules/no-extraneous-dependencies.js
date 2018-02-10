@@ -8,6 +8,23 @@ import docsUrl from '../docsUrl'
 
 const packageLocator = new CachedPackageLocator()
 
+function notEmpty(obj) {
+  return Object.keys(obj).length
+}
+
+function reducePackage({
+  dependencies = {},
+  devDependencies = {},
+  peerDependencies = {},
+  optionalDependencies = {},
+} = {}) {
+  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(notEmpty)) {
+    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
+  }
+
+  return null
+}
+
 function missingErrorMessage(packageName) {
   return `'${packageName}' should be listed in the project's dependencies. ` +
     `Run 'npm i -S ${packageName}' to add it`
@@ -104,7 +121,8 @@ module.exports = {
     const deps = packageLocator.readUpSync(
       context,
       options.packageDir || path.dirname(context.getFilename()),
-      typeof options.packageDir !== 'undefined'
+      typeof options.packageDir !== 'undefined',
+      reducePackage
     )
 
     if (!deps) {

@@ -4,6 +4,23 @@ import { expect } from 'chai'
 
 import CachedPackageLocator from '../../../src/core/CachedPackageLocator'
 
+function notEmpty(obj) {
+  return Object.keys(obj).length
+}
+
+function reduce({
+  dependencies = {},
+  devDependencies = {},
+  peerDependencies = {},
+  optionalDependencies = {},
+} = {}) {
+  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(notEmpty)) {
+    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
+  }
+
+  return null
+}
+
 describe('CachedPackageLocator.readUpSync()', function () {
   let sandbox
   let packageLocator
@@ -49,18 +66,20 @@ describe('CachedPackageLocator.readUpSync()', function () {
   it('should not repeat fs.readFileSync on stored locations', function () {
     fs.readFileSync.withArgs('/a/package.json').returns(withDepsStr)
 
-    expect(packageLocator.readUpSync(context, '/a/b')).to.deep.equal(withDeps)
+    expect(packageLocator.readUpSync(context, '/a/b', false, reduce))
+      .to.deep.equal(withDeps)
     sinon.assert.callCount(fs.readFileSync, 2)
-    expect(packageLocator.readUpSync(context, '/a')).to.deep.equal(withDeps)
+    expect(packageLocator.readUpSync(context, '/a', false, reduce))
+      .to.deep.equal(withDeps)
     sinon.assert.callCount(fs.readFileSync, 2)
     expect(packageLocator.store).to.deep.equal({
       '/a/b/package.json': null,
       '/a/package.json': withDeps,
     })
 
-    expect(packageLocator.readUpSync(context, '/x')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 4)
-    expect(packageLocator.readUpSync(context, '/x')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 4)
     expect(packageLocator.store).to.deep.equal({
       '/x/package.json': null,
@@ -69,9 +88,9 @@ describe('CachedPackageLocator.readUpSync()', function () {
       '/package.json': null,
     })
 
-    expect(packageLocator.readUpSync(context, '/x/y/z')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x/y/z', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 6)
-    expect(packageLocator.readUpSync(context, '/x/y/z')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x/y/z', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 6)
     expect(packageLocator.store).to.deep.equal({
       '/x/y/z/package.json': null,
@@ -82,9 +101,9 @@ describe('CachedPackageLocator.readUpSync()', function () {
       '/package.json': null,
     })
 
-    expect(packageLocator.readUpSync(context, '/x/w')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x/w', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 7)
-    expect(packageLocator.readUpSync(context, '/x/w')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/x/w', false, reduce)).to.be.undefined
     sinon.assert.callCount(fs.readFileSync, 7)
 
     expect(packageLocator.store).to.deep.equal({
@@ -100,7 +119,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
 
   it('should only store and return dependency fields', function () {
     fs.readFileSync.withArgs('/package.json').returns(withDepsExtraFieldsStr)
-    expect(packageLocator.readUpSync(context, '/')).to.deep.equal(withDeps)
+    expect(packageLocator.readUpSync(context, '/', false, reduce))
+      .to.deep.equal(withDeps)
     expect(packageLocator.store).to.deep.equal({
       '/package.json': withDeps,
     })
@@ -109,7 +129,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
 
   it('should locate first available', function () {
     fs.readFileSync.withArgs('/a/b/package.json').returns(withDepsStr)
-    expect(packageLocator.readUpSync(context, '/a/b')).to.deep.equal(withDeps)
+    expect(packageLocator.readUpSync(context, '/a/b', false, reduce))
+      .to.deep.equal(withDeps)
     expect(packageLocator.store).to.deep.equal({
       '/a/b/package.json': withDeps,
     })
@@ -118,7 +139,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
 
   it('should locate last available', function () {
     fs.readFileSync.withArgs('/package.json').returns(withDepsStr)
-    expect(packageLocator.readUpSync(context, '/a/b/c/d/e/f')).to.deep.equal(withDeps)
+    expect(packageLocator.readUpSync(context, '/a/b/c/d/e/f', false, reduce))
+      .to.deep.equal(withDeps)
     expect(packageLocator.store).to.deep.equal({
       '/a/b/c/d/e/f/package.json': null,
       '/a/b/c/d/e/package.json': null,
@@ -133,7 +155,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
 
   it('should store package.json with empty deps as null', function () {
     fs.readFileSync.withArgs('/package.json').returns('{}')
-    expect(packageLocator.readUpSync(context, '/')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/', false, reduce))
+      .to.be.undefined
     expect(packageLocator.store).to.deep.equal({
       '/package.json': null,
     })
@@ -145,9 +168,11 @@ describe('CachedPackageLocator.readUpSync()', function () {
       .withArgs('/package.json').returns(withDepsStr)
       .withArgs('/a/package.json').returns(withUnexpectedTokenStr)
       .withArgs('/a/b/package.json').returns(withUnexpectedEndStr)
-    expect(packageLocator.readUpSync(context, '/a')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/a', false))
+      .to.be.undefined
     expect(packageLocator.store).to.be.empty
-    expect(packageLocator.readUpSync(context, '/a/b/c/d')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/a/b/c/d', false))
+      .to.be.undefined
     expect(packageLocator.store).to.deep.equal({
       '/a/b/c/d/package.json': null,
       '/a/b/c/package.json': null,
@@ -156,7 +181,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
   })
 
   it('should store failed locations as null', function () {
-    expect(packageLocator.readUpSync(context, '/does/not/exist')).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/does/not/exist', false))
+      .to.be.undefined
     expect(packageLocator.store).to.deep.equal({
       '/does/not/exist/package.json': null,
       '/does/not/package.json': null,
@@ -167,7 +193,8 @@ describe('CachedPackageLocator.readUpSync()', function () {
   })
 
   it('immediate=true should halt on first failed location', function () {
-    expect(packageLocator.readUpSync(context, '/does/not/exist', true)).to.be.undefined
+    expect(packageLocator.readUpSync(context, '/does/not/exist', true))
+      .to.be.undefined
     expect(packageLocator.store).to.deep.equal({
       '/does/not/exist/package.json': null
     })
