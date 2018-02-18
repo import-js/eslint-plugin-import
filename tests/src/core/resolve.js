@@ -118,6 +118,22 @@ describe('resolve', function () {
                       )).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'))
   })
 
+  it('reports load exception in a user resolver', function () {
+    
+    const testContext = utils.testContext({ 'import/resolver': './load-error-resolver' })
+    const testContextReports = []
+    testContext.report = function (reportInfo) {
+      testContextReports.push(reportInfo)
+    }
+
+    expect(resolve( '../files/exception'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('exception.js') } })
+                    )).to.equal(undefined)
+    expect(testContextReports[0]).to.be.an('object')
+    expect(testContextReports[0].message).to.equal('Resolve error: TEST ERROR')
+    expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
+  })
+
   const caseDescribe = (!CASE_SENSITIVE_FS ? describe : describe.skip)
   caseDescribe('case sensitivity', function () {
     let file
