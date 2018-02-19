@@ -29,6 +29,7 @@ export const rules = {
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
+  'no-default-export': require('./rules/no-default-export'),
   'no-dynamic-require': require('./rules/no-dynamic-require'),
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
