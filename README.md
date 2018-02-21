@@ -22,7 +22,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid import of modules using absolute paths ([`no-absolute-path`])
 * Forbid `require()` calls with expressions ([`no-dynamic-require`])
 * Prevent importing the submodules of other modules ([`no-internal-modules`])
-* Forbid Webpack loader syntax in imports ([`no-webpack-loader-syntax`])
+* Forbid webpack loader syntax in imports ([`no-webpack-loader-syntax`])
 * Forbid a module from importing itself ([`no-self-import`])
 * Forbid a module from importing a module with a dependency path back to itself ([`no-cycle`])
 
@@ -145,14 +145,14 @@ to find the file behind `module`.
 Up through v0.10ish, this plugin has directly used substack's [`resolve`] plugin,
 which implements Node's import behavior. This works pretty well in most cases.
 
-However, Webpack allows a number of things in import module source strings that
+However, webpack allows a number of things in import module source strings that
 Node does not, such as loaders (`import 'file!./whatever'`) and a number of
 aliasing schemes, such as [`externals`]: mapping a module id to a global name at
 runtime (allowing some modules to be included more traditionally via script tags).
 
 In the interest of supporting both of these, v0.11 introduces resolvers.
 
-Currently [Node] and [Webpack] resolution have been implemented, but the
+Currently [Node] and [webpack] resolution have been implemented, but the
 resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
 You can reference resolvers in several ways (in order of precedence):
@@ -218,7 +218,7 @@ If you are interesting in writing a resolver, see the [spec](./resolvers/README.
 [`externals`]: http://webpack.github.io/docs/library-and-externals.html
 
 [Node]: https://www.npmjs.com/package/eslint-import-resolver-node
-[Webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
+[webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
 
 # Settings
 
@@ -303,7 +303,7 @@ An array of folders. Resolved modules only from those folders will be considered
 A map from parsers to file extension arrays. If a file extension is matched, the
 dependency parser will require and use the map key as the parser instead of the
 configured ESLint parser. This is useful if you're inter-op-ing with TypeScript
-directly using Webpack, for example:
+directly using webpack, for example:
 
 ```yaml
 # .eslintrc.yml
