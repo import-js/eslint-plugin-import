@@ -5,12 +5,15 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.9.0] - 2018-02-21
+### Added
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
 - Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
+- Add [`no-default-export`] rule ([#889], thanks [@isiahmeadows])
+- ... and more! check the commits for v[2.9.0]
 
 ## [2.8.0] - 2017-10-18
 ### Added
-- [`no-default-export`] rule ([#889], thanks [@isiahmeadows])
 - [`exports-last`] rule ([#620] + [#632], thanks [@k15a])
 
 ### Changed
@@ -576,7 +579,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.9.0...HEAD
+[2.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.1...v2.7.0
 [2.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.0...v2.6.1
