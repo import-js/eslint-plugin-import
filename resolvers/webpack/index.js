@@ -122,8 +122,8 @@ function createResolveSync(configPath, webpackConfig) {
   }
 
   try {
-    var webpackFilename = resolve.sync('webpack', { basedir })
-    var webpackResolveOpts = { basedir: path.dirname(webpackFilename) }
+    var webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false })
+    var webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false }
 
     webpackRequire = function (id) {
       return require(resolve.sync(id, webpackResolveOpts))
