@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
 - Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
 - Add [`no-default-export`] rule ([#889], thanks [@isiahmeadows])
+- Add [`no-useless-path-segments`] rule ([#912], thanks [@graingert] and [@danny-andrews])
 - ... and more! check the commits for v[2.9.0]
 
 ## [2.8.0] - 2017-10-18
@@ -440,6 +441,7 @@ for info on changes for earlier releases.
 [`group-exports`]: ./docs/rules/group-exports.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
 [`no-default-export`]: ./docs/rules/no-default-export.md
+[`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
@@ -512,6 +514,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
+[#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
@@ -678,3 +681,5 @@ for info on changes for earlier releases.
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@robertrossmann]: https://github.com/robertrossmann
 [@isiahmeadows]: https://github.com/isiahmeadows
+[@graingert]: https://github.com/graingert
+[@danny-andrews]: https://github.com/dany-andrews
