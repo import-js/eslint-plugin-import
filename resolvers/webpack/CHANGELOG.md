@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+### Breaking (?)
+- Fix with `pnpm` ([#968])
 
 ## 0.8.4 - 2018-01-05
 ### Changed
@@ -93,6 +95,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
 [#969]: https://github.com/benmosher/eslint-plugin-import/pull/969
+[#968]: https://github.com/benmosher/eslint-plugin-import/pull/968
 [#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
 [#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
 [#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
