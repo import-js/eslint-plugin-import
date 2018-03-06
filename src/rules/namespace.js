@@ -161,6 +161,9 @@ module.exports = {
           if (pattern.type !== 'ObjectPattern') return
 
           for (let property of pattern.properties) {
+            if (property.type === 'ExperimentalRestProperty') {
+              continue
+            }
 
             if (property.key.type !== 'Identifier') {
               context.report({
