@@ -92,6 +92,20 @@ const valid = [
     options: [{ allowComputed: true }],
   }),
 
+  // #656: should handle object-rest properties
+  test({
+    code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
+    parserOptions: {
+      ecmaFeatures: {
+        experimentalObjectRestSpread: true,
+      },
+    },
+  }),
+  test({
+    code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
+    parser: 'babel-eslint',
+  }),
+
   ...SYNTAX_CASES,
 ]
 
