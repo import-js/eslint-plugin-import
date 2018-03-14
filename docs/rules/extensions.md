@@ -8,9 +8,33 @@ In order to provide a consistent use of file extensions across your code base, t
 
 This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements. If it is the string `"ignorePackages"`, then the rule enforces the use of extensions for all import statements except package imports.
 
-By providing an object you can configure each extension separately, so for example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+```json
+"import/extensions": [<severity>, "never" | "always" | "ignorePackages"]
+```
 
-By providing both a string and an object, the string will set the default setting for all extensions, and the object can be used to set granular overrides for specific extensions. For example, `[<enabled>, "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
+By providing an object you can configure each extension separately.
+
+```json
+"import/extensions": [<severity>, {
+  <extension>: "never" | "always" | "ignorePackages"
+}]
+```
+
+ For example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+
+By providing both a string and an object, the string will set the default setting for all extensions, and the object can be used to set granular overrides for specific extensions.
+
+```json
+"import/extensions": [
+  <severity>,
+  "never" | "always" | "ignorePackages",
+  {
+    <extension>: "never" | "always" | "ignorePackages" 
+  }
+]
+```
+
+For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
 ### Exception
 
@@ -110,7 +134,7 @@ import express from 'express';
 
 ```
 
-The following patterns are not considered problems when configuration set to `[ 'always', {ignorePackages: true} ]`:
+The following patterns are not considered problems when configuration set to `['error', 'always', {ignorePackages: true} ]`:
 
 ```js
 import Component from './Component.jsx';
