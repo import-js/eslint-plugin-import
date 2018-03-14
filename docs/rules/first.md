@@ -50,6 +50,12 @@ mode](http://www.ecma-international.org/ecma-262/6.0/#sec-strict-mode-code) so i
 
 Given that, see [#255] for the reasoning.
 
+### With Fixer
+
+This rule contains a fixer to reorder in-body import to top, the following criteria applied:
+1. Never re-order relative to each other, even if `absolute-first` is set.
+2. If an import creates an identifier, and that identifier is referenced at module level *before* the import itself, that won't be re-ordered.
+
 ## When Not To Use It
 
 If you don't mind imports being sprinkled throughout, you may not want to
