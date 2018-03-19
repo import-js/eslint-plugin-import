@@ -16,8 +16,12 @@
             },
             "eslint_d":
             {
+                "disable": true,
                 "chdir": "${project}"
             }
+        },
+        "paths": {
+            "osx": ["${project}/node_modules/.bin"]
         }
     }
 }
