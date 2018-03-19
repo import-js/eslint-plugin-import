@@ -21,7 +21,16 @@ export default class ExportMap {
     this.namespace = new Map()
     // todo: restructure to key on path, value is resolver + map of names
     this.reexports = new Map()
-    this.dependencies = new Map()
+    /**
+     * star-exports
+     * @type {Set} of () => ExportMap
+     */
+    this.dependencies = new Set()
+    /**
+     * dependencies of this module that are not explicitly re-exported
+     * @type {Map} from path = () => ExportMap
+     */
+    this.imports = new Map()
     this.errors = []
   }
 
@@ -46,7 +55,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
 
         // todo: report as unresolved?
@@ -88,7 +97,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
         // todo: report as unresolved?
         if (!innerMap) continue
@@ -125,7 +134,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
         // todo: report as unresolved?
         if (!innerMap) continue
@@ -373,6 +382,18 @@ ExportMap.parse = function (path, content, context) {
     return object
   }
 
+  function captureDependency(declaration) {
+    if (declaration.source == null) return
+
+    const p = remotePath(declaration)
+    if (p == null) return
+    if (m.imports.has(p)) return
+
+    const getter = () => ExportMap.for(p, context)
+    m.imports.set(p, getter)
+    return getter
+  }
+
 
   ast.body.forEach(function (n) {
 
@@ -386,14 +407,14 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportAllDeclaration') {
-      let remoteMap = remotePath(n)
-      if (remoteMap == null) return
-      m.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
+      const getter = captureDependency(n)
+      if (getter) m.dependencies.add(getter)
       return
     }
 
     // capture namespaces in case of later export
     if (n.type === 'ImportDeclaration') {
+      captureDependency(n)
       let ns
       if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
         namespaces.set(ns.local.name, n)
@@ -401,7 +422,8 @@ ExportMap.parse = function (path, content, context) {
       return
     }
 
-    if (n.type === 'ExportNamedDeclaration'){
+    if (n.type === 'ExportNamedDeclaration') {
+      captureDependency(n)
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {
