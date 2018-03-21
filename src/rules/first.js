@@ -23,15 +23,13 @@ module.exports = {
             , sourceCode = context.getSourceCode()
             , originSourceCode = sourceCode.getText()
             , scopeManager = sourceCode.scopeManager
-            , moduleScope = scopeManager.scopes.find(function (scope) {
-              return scope.type === 'module'
-            })
         let nonImportCount = 0
           , anyExpressions = false
           , anyRelative = false
           , lastLegalImp = null
           , errorInfos = []
-        
+          , shouldSort = true
+          , lastSortNodesIndex = 0
         body.forEach(function (node, index){
           if (!anyExpressions && isPossibleDirective(node)) {
             return
@@ -51,21 +49,20 @@ module.exports = {
               }
             }
             if (nonImportCount > 0) {
-              let shouldSort = true
               for (let variable of scopeManager.getDeclaredVariables(node)) {
+                if (!shouldSort) break
                 const references = variable.references
                 if (references.length) {
                   for (let reference of references) {
-                    if (reference.identifier.range[0] >= node.range[1]) {
-                      break
-                    } else if (reference.from === moduleScope) {
+                    if (reference.identifier.range[0] < node.range[1]) {
                       shouldSort = false
                       break
                     }
                   }
                 }
               }
-              shouldSort && errorInfos.push({
+              shouldSort && (lastSortNodesIndex = errorInfos.length)
+              errorInfos.push({
                 node,
                 range: [body[index - 1].range[1], node.range[1]],
               })
@@ -77,40 +74,46 @@ module.exports = {
           }
         })
         if (!errorInfos.length) return
-        errorInfos.slice(0, -1).forEach(function (errorInfo) {
+        errorInfos.forEach(function (errorInfo, index) {
           const node = errorInfo.node
-          context.report({
-            node,
-            message,
-            // fake fixer
-            fix: function (fixer) {
+              , infos = {
+                node,
+                message,
+              }
+          if (index < lastSortNodesIndex) {
+            infos.fix = function (fixer) {
               return fixer.insertTextAfter(node, '')
-            },
-          })
-        })
-        context.report({
-          node: errorInfos[errorInfos.length - 1].node,
-          message,
-          // fixers batch
-          fix: function (fixer) {
-            const removeFixers = errorInfos.map(function (errorInfo) {
-                  return fixer.removeRange(errorInfo.range)
-                })
-                , insertSourceCode = errorInfos.map(function (errorInfo) {
-                  const nodeSourceCode = String.prototype.slice.apply(
-                    originSourceCode, errorInfo.range
-                  )
-                  if (/\S/.test(nodeSourceCode[0])) {
-                    return '\n' + nodeSourceCode
-                  } else {
+            }
+          } else if (index === lastSortNodesIndex) {
+            const sortNodes = errorInfos.slice(0, lastSortNodesIndex + 1)
+            infos.fix = function (fixer) {
+              const removeFixers = sortNodes.map(function (_errorInfo) {
+                    return fixer.removeRange(_errorInfo.range)
+                  })
+              let insertSourceCode = sortNodes.map(function (_errorInfo) {
+                    const nodeSourceCode = String.prototype.slice.apply(
+                      originSourceCode, _errorInfo.range
+                    )
+                    if (/\S/.test(nodeSourceCode[0])) {
+                      return '\n' + nodeSourceCode
+                    }
                     return nodeSourceCode
-                  }
-                }).join('')
-                , insertFixer = lastLegalImp ? 
-                                fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
-                                fixer.insertTextBefore(body[0], insertSourceCode.trim() + '\n')
-            return removeFixers.concat([insertFixer])
-          },
+                  }).join('')
+                , insertFixer = null
+              if (!lastLegalImp && !(/\s$/.test(insertSourceCode))) {
+                if (/^(\s+)/.test(insertSourceCode)) {
+                  insertSourceCode = insertSourceCode.trim() + RegExp.$1
+                } else {
+                  insertSourceCode = insertSourceCode + '\n'
+                }
+              }
+              insertFixer = lastLegalImp ? 
+                            fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
+                            fixer.insertTextBefore(body[0], insertSourceCode)
+              return removeFixers.concat([insertFixer])
+            }
+          }
+          context.report(infos)
         })
       },
     }

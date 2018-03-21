@@ -18,10 +18,10 @@ ruleTester.run('first', rule, {
   invalid: [
     test({ code: "import { x } from './foo';\
                   export { x };\
-                  import { y } from './foo';"
+                  import { y } from './bar';"
          , errors: 1
          , output: "import { x } from './foo';\
-                  import { y } from './foo';\
+                  import { y } from './bar';\
                   export { x };"
          })
   , test({ code: "import { x } from './foo';\
@@ -53,25 +53,20 @@ ruleTester.run('first', rule, {
          , errors: 3
          , output: "import { x } from './foo';\
                   import { y } from './bar';\
-                  import { z } from './baz';\nvar foo = bar;"
+                  import { z } from './baz';\
+                  var foo = bar;"
   })
-  , test({ code: "var a = x;\
-                  import { x } from './foo';\
+  , test({ code: "var a = 1;\
                   import { y } from './bar';\
-                  import { z } from './baz';"
-         , errors: 2
-         , output: "import { y } from './bar';\
-                  import { z } from './baz';\nvar a = x;\
-                  import { x } from './foo';"
-  })
-  , test({ code: "if (true) { x() };\
+                  if (true) { x() };\
                   import { x } from './foo';\
-                  import { y } from './bar';\
                   import { z } from './baz';"
          , errors: 3
-         , output: "import { x } from './foo';\
-                  import { y } from './bar';\
-                  import { z } from './baz';\nif (true) { x() };"
+         , output: "import { y } from './bar';\
+                  var a = 1;\
+                  if (true) { x() };\
+                  import { x } from './foo';\
+                  import { z } from './baz';"
   })
   ,
   ]
