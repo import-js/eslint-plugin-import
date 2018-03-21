@@ -22,7 +22,6 @@ module.exports = {
             , message = 'Import in body of module; reorder to top.'
             , sourceCode = context.getSourceCode()
             , originSourceCode = sourceCode.getText()
-            , scopeManager = sourceCode.scopeManager
         let nonImportCount = 0
           , anyExpressions = false
           , anyRelative = false
@@ -49,7 +48,7 @@ module.exports = {
               }
             }
             if (nonImportCount > 0) {
-              for (let variable of scopeManager.getDeclaredVariables(node)) {
+              for (let variable of context.getDeclaredVariables(node)) {
                 if (!shouldSort) break
                 const references = variable.references
                 if (references.length) {
