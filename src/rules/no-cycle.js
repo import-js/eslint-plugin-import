@@ -10,48 +10,51 @@ import docsUrl from '../docsUrl'
 // todo: cache cycles / deep relationships for faster repeat evaluation
 module.exports = {
   meta: {
-    docs: {
-      url: docsUrl('no-cycle'),
-    },
-
+    docs: { url: docsUrl('no-cycle') },
     schema: [optionsSchema],
   },
 
   create: function (context) {
-
     const myPath = context.getFilename()
+    if (myPath === '<text>') return  // can't cycle-check a non-file
 
-    function checkSourceValue(source) {
-      const imported = Exports.get(source.value, context)
+    function checkSourceValue(sourceNode, importer) {
+      const imported = Exports.get(sourceNode.value, context)
 
-      if (imported === undefined) {
-        return // no-unresolved territory
+      if (imported == null) {
+        return  // no-unresolved territory
       }
 
       if (imported.path === myPath) {
-        // todo: report direct self import?
-        return
+        return  // no-self-import territory
       }
 
-      const untraversed = [imported]
+      const untraversed = [{imported, route:[]}]
       const traversed = new Set()
-      function detectCycle(m) {
+      function detectCycle({imported: m, route}) {
         if (traversed.has(m.path)) return
         traversed.add(m.path)
 
-        for (let [path, getter] of m.imports) {
-          if (path === context) return true
+        for (let [path, { getter, source }] of m.imports) {
+          if (path === myPath) return true
           if (traversed.has(path)) continue
-          untraversed.push(getter())
+          const deeper = getter()
+          if (deeper != null) {
+            untraversed.push({
+              imported: deeper,
+              route: route.concat(source),
+            })
+          }
         }
       }
 
       while (untraversed.length > 0) {
-        if (detectCycle(untraversed.pop())) {
-          // todo: report
-
-          // todo: cache
-
+        const next = untraversed.shift() // bfs!
+        if (detectCycle(next)) {
+          const message = (next.route.length > 0
+            ? `Dependency cycle via ${routeString(next.route)}`
+            : 'Dependency cycle detected.')
+          context.report(importer, message)
           return
         }
       }
@@ -59,4 +62,8 @@ module.exports = {
 
     return moduleVisitor(checkSourceValue, context.options[0])
   },
+}
+
+function routeString(route) {
+  return route.map(s => `${s.value}:${s.loc.start.line}`).join('=>')
 }

@@ -19,19 +19,19 @@ exports.default = function visitModules(visitor, options) {
     ignoreRegExps = options.ignore.map(p => new RegExp(p))
   }
 
-  function checkSourceValue(source) {
+  function checkSourceValue(source, importer) {
     if (source == null) return //?
 
     // handle ignore
     if (ignoreRegExps.some(re => re.test(source.value))) return
 
     // fire visitor
-    visitor(source)
+    visitor(source, importer)
   }
 
   // for import-y declarations
   function checkSource(node) {
-    checkSourceValue(node.source)
+    checkSourceValue(node.source, node)
   }
 
   // for CommonJS `require` calls
@@ -45,7 +45,7 @@ exports.default = function visitModules(visitor, options) {
     if (modulePath.type !== 'Literal') return
     if (typeof modulePath.value !== 'string') return
 
-    checkSourceValue(modulePath)
+    checkSourceValue(modulePath, call)
   }
 
   function checkAMD(call) {
@@ -64,7 +64,7 @@ exports.default = function visitModules(visitor, options) {
       if (element.value === 'require' ||
           element.value === 'exports') continue // magic modules: http://git.io/vByan
 
-      checkSourceValue(element)
+      checkSourceValue(element, call)
     }
   }
 

@@ -390,7 +390,7 @@ ExportMap.parse = function (path, content, context) {
     if (m.imports.has(p)) return
 
     const getter = () => ExportMap.for(p, context)
-    m.imports.set(p, getter)
+    m.imports.set(p, { getter, source: declaration.source })
     return getter
   }
 
@@ -423,7 +423,6 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportNamedDeclaration') {
-      captureDependency(n)
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {
