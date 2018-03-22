@@ -329,3 +329,18 @@ if (!CASE_SENSITIVE_FS) {
     ],
   })
 }
+
+// export-all
+ruleTester.run('named (export *)', rule, {
+  valid: [
+    test({
+      code: 'import { foo } from "./export-all"',
+    }),
+  ],
+  invalid: [
+    test({
+      code: 'import { bar } from "./export-all"',
+      errors: [`bar not found in './export-all'`],
+    }),
+  ],
+})

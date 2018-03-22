@@ -383,15 +383,14 @@ ExportMap.parse = function (path, content, context) {
   }
 
   function captureDependency(declaration) {
-    if (declaration.source == null) return
+    if (declaration.source == null) return null
 
     const p = remotePath(declaration)
-    if (p == null) return
-    if (m.imports.has(p)) return
+    if (p == null || m.imports.has(p)) return p
 
     const getter = () => ExportMap.for(p, context)
     m.imports.set(p, { getter, source: declaration.source })
-    return getter
+    return p
   }
 
 
@@ -407,8 +406,8 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportAllDeclaration') {
-      const getter = captureDependency(n)
-      if (getter) m.dependencies.add(getter)
+      const p = captureDependency(n)
+      if (p) m.dependencies.add(m.imports.get(p).getter)
       return
     }
 
