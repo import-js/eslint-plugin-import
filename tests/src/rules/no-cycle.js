@@ -8,7 +8,7 @@ const ruleTester = new RuleTester()
 const error = message => ({ ruleId: 'no-cycle', message })
 
 const test = def => _test(Object.assign(def, {
-  filename: testFilePath("./cycles/depth-zero.js")
+  filename: testFilePath('./cycles/depth-zero.js'),
 }))
 
 // describe.only("no-cycle", () => {
@@ -36,19 +36,39 @@ ruleTester.run('no-cycle', rule, {
   invalid: [
     test({
       code: 'import { foo } from "./depth-one"',
-      errors: [error("Dependency cycle detected.")]
+      errors: [error(`Dependency cycle detected.`)],
+    }),
+    test({
+      code: 'const { foo } = require("./depth-one")',
+      errors: [error(`Dependency cycle detected.`)],
+      options: [{ commonjs: true }],
+    }),
+    test({
+      code: 'require(["./depth-one"], d1 => {})',
+      errors: [error(`Dependency cycle detected.`)],
+      options: [{ amd: true }],
+    }),
+    test({
+      code: 'define(["./depth-one"], d1 => {})',
+      errors: [error(`Dependency cycle detected.`)],
+      options: [{ amd: true }],
     }),
     test({
       code: 'import { foo } from "./depth-two"',
-      errors: [error("Dependency cycle via ./depth-one:1")]
+      errors: [error(`Dependency cycle via ./depth-one:1`)],
+    }),
+    test({
+      code: 'const { foo } = require("./depth-two")',
+      errors: [error(`Dependency cycle via ./depth-one:1`)],
+      options: [{ commonjs: true }],
     }),
     test({
       code: 'import { two } from "./depth-three-star"',
-      errors: [error("Dependency cycle via ./depth-two:1=>./depth-one:1")]
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
     }),
     test({
       code: 'import { bar } from "./depth-three-indirect"',
-      errors: [error("Dependency cycle via ./depth-two:1=>./depth-one:1")]
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
     }),
   ],
 })

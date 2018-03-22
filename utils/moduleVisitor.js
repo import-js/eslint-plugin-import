@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 exports.__esModule = true
 
 /**
@@ -64,7 +64,7 @@ exports.default = function visitModules(visitor, options) {
       if (element.value === 'require' ||
           element.value === 'exports') continue // magic modules: http://git.io/vByan
 
-      checkSourceValue(element, call)
+      checkSourceValue(element, element)
     }
   }
 
