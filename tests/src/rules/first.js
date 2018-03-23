@@ -46,16 +46,6 @@ ruleTester.run('first', rule, {
                   import { y } from 'bar';\
                   'use directive';"
          })
-  , test({ code: "var foo = bar;\
-                  import { x } from './foo';\
-                  import { y } from './bar';\
-                  import { z } from './baz';"
-         , errors: 3
-         , output: "import { x } from './foo';\
-                  import { y } from './bar';\
-                  import { z } from './baz';\
-                  var foo = bar;"
-  })
   , test({ code: "var a = 1;\
                   import { y } from './bar';\
                   if (true) { x() };\

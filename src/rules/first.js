@@ -89,6 +89,7 @@ module.exports = {
               const removeFixers = sortNodes.map(function (_errorInfo) {
                     return fixer.removeRange(_errorInfo.range)
                   })
+                  , range = [0, removeFixers[removeFixers.length - 1].range[1]]
               let insertSourceCode = sortNodes.map(function (_errorInfo) {
                     const nodeSourceCode = String.prototype.slice.apply(
                       originSourceCode, _errorInfo.range
@@ -99,6 +100,7 @@ module.exports = {
                     return nodeSourceCode
                   }).join('')
                 , insertFixer = null
+                , replaceSourceCode = ''
               if (!lastLegalImp && !(/\s$/.test(insertSourceCode))) {
                 if (/^(\s+)/.test(insertSourceCode)) {
                   insertSourceCode = insertSourceCode.trim() + RegExp.$1
@@ -109,7 +111,13 @@ module.exports = {
               insertFixer = lastLegalImp ? 
                             fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
                             fixer.insertTextBefore(body[0], insertSourceCode)
-              return removeFixers.concat([insertFixer])
+              const fixers = [insertFixer].concat(removeFixers)
+              fixers.forEach(function (computedFixer, i) {
+                replaceSourceCode += (originSourceCode.slice(
+                  fixers[i - 1] ? fixers[i - 1].range[1] : 0, computedFixer.range[0]
+                ) + computedFixer.text)
+              })
+              return fixer.replaceTextRange(range, replaceSourceCode)
             }
           }
           context.report(infos)
