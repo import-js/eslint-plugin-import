@@ -4,19 +4,28 @@
  */
 
 import Exports from '../ExportMap'
-import moduleVisitor, { optionsSchema } from 'eslint-module-utils/moduleVisitor'
+import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 import docsUrl from '../docsUrl'
 
 // todo: cache cycles / deep relationships for faster repeat evaluation
 module.exports = {
   meta: {
     docs: { url: docsUrl('no-cycle') },
-    schema: [optionsSchema],
+    schema: [makeOptionsSchema({
+      maxDepth:{
+        description: 'maximum dependency depth to traverse',
+        type: 'integer',
+        minimum: 1,
+      },
+    })],
   },
 
   create: function (context) {
     const myPath = context.getFilename()
     if (myPath === '<text>') return  // can't cycle-check a non-file
+
+    const options = context.options[0] || {}
+    const maxDepth = options.maxDepth || Infinity
 
     function checkSourceValue(sourceNode, importer) {
       const imported = Exports.get(sourceNode.value, context)
@@ -29,19 +38,20 @@ module.exports = {
         return  // no-self-import territory
       }
 
-      const untraversed = [{imported, route:[]}]
+      const untraversed = [{mget: () => imported, route:[]}]
       const traversed = new Set()
-      function detectCycle({imported: m, route}) {
+      function detectCycle({mget, route}) {
+        const m = mget()
+        if (m == null) return
         if (traversed.has(m.path)) return
         traversed.add(m.path)
 
         for (let [path, { getter, source }] of m.imports) {
           if (path === myPath) return true
           if (traversed.has(path)) continue
-          const deeper = getter()
-          if (deeper != null) {
+          if (route.length + 1 < maxDepth) {
             untraversed.push({
-              imported: deeper,
+              mget: getter,
               route: route.concat(source),
             })
           }

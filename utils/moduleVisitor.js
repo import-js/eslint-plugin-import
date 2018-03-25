@@ -90,9 +90,6 @@ exports.default = function visitModules(visitor, options) {
 /**
  * make an options schema for the module visitor, optionally
  * adding extra fields.
-
- * @param  {[type]} additionalProperties [description]
- * @return {[type]}                      [description]
  */
 function makeOptionsSchema(additionalProperties) {
   const base =  {
