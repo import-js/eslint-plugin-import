@@ -11,7 +11,7 @@ const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
 }))
 
-// describe.only("no-cycle", () => {
+describe.only("no-cycle", () => {
 ruleTester.run('no-cycle', rule, {
   valid: [
     // this rule doesn't care if the cycle length is 0
@@ -32,10 +32,19 @@ ruleTester.run('no-cycle', rule, {
       code: 'var bar = require("./bar")',
       filename: '<text>',
     }),
+    test({
+      code: 'import { foo } from "./depth-two"',
+      options: [{ maxDepth: 1 }],
+    }),
   ],
   invalid: [
     test({
       code: 'import { foo } from "./depth-one"',
+      errors: [error(`Dependency cycle detected.`)],
+    }),
+    test({
+      code: 'import { foo } from "./depth-one"',
+      options: [{ maxDepth: 1 }],
       errors: [error(`Dependency cycle detected.`)],
     }),
     test({
@@ -58,6 +67,11 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle via ./depth-one:1`)],
     }),
     test({
+      code: 'import { foo } from "./depth-two"',
+      options: [{ maxDepth: 2 }],
+      errors: [error(`Dependency cycle via ./depth-one:1`)],
+    }),
+    test({
       code: 'const { foo } = require("./depth-two")',
       errors: [error(`Dependency cycle via ./depth-one:1`)],
       options: [{ commonjs: true }],
@@ -72,4 +86,4 @@ ruleTester.run('no-cycle', rule, {
     }),
   ],
 })
-// })
+})
