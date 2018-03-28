@@ -3,10 +3,13 @@ import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-internal-modules'),
+    },
 
     schema: [
       {

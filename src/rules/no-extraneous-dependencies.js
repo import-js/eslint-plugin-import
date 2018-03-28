@@ -2,8 +2,10 @@ import path from 'path'
 import fs from 'fs'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
+import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function getDependencies(context, packageDir) {
   try {
@@ -54,7 +56,17 @@ function optDepErrorMessage(packageName) {
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
+  // Do not report when importing types
+  if (node.importKind === 'type') {
+    return
+  }
+
   if (importType(name, context) !== 'external') {
+    return
+  }
+
+  const resolved = resolve(name, context)
+  if (!resolved) {
     return
   }
   const splitName = name.split('/')
@@ -101,7 +113,9 @@ function testConfig(config, filename) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-extraneous-dependencies'),
+    },
 
     schema: [
       {

@@ -12,7 +12,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
-**Static analysis:**
+### Static analysis
 
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])
 * Ensure named imports correspond to a named export in the remote file. ([`named`])
@@ -23,6 +23,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid `require()` calls with expressions ([`no-dynamic-require`])
 * Prevent importing the submodules of other modules ([`no-internal-modules`])
 * Forbid Webpack loader syntax in imports ([`no-webpack-loader-syntax`])
+* Forbid a module from importing itself ([`no-self-import`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -33,8 +34,9 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
+[`no-self-import`]: ./docs/rules/no-self-import.md
 
-**Helpful warnings:**
+### Helpful warnings
 
 
 * Report any invalid exports, i.e. re-export of the same name ([`export`])
@@ -51,7 +53,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
-**Module systems:**
+### Module systems
 
 * Report potentially ambiguous parse goal (`script` vs. `module`) ([`unambiguous`])
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
@@ -64,7 +66,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
 
-**Style guide:**
+### Style guide
 
 * Ensure all imports appear before other statements ([`first`])
 * Ensure all exports appear after other statements ([`exports-last`])
@@ -77,7 +79,9 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Limit the maximum number of dependencies a module can have ([`max-dependencies`])
 * Forbid unassigned imports ([`no-unassigned-import`])
 * Forbid named default exports ([`no-named-default`])
+* Forbid default exports ([`no-default-export`])
 * Forbid anonymous values as default exports ([`no-anonymous-default-export`])
+* Prefer named exports to be grouped together in a single export declaration ([`group-exports`])
 
 [`first`]: ./docs/rules/first.md
 [`exports-last`]: ./docs/rules/exports-last.md
@@ -91,6 +95,8 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`no-named-default`]: ./docs/rules/no-named-default.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`group-exports`]: ./docs/rules/group-exports.md
+[`no-default-export`]: ./docs/rules/no-default-export.md
 
 ## Installation
 
@@ -223,6 +229,19 @@ A list of file extensions that will be parsed as modules and inspected for
 
 This defaults to `['.js']`, unless you are using the `react` shared config,
 in which case it is specified as `['.js', '.jsx']`.
+
+```js
+"settings": {
+  "import/resolver": {
+    "node": {
+      "extensions": [
+        ".js",
+        ".jsx"
+      ]
+    }
+  }
+}
+```
 
 Note that this is different from (and likely a subset of) any `import/resolver`
 extensions settings, which may include `.json`, `.coffee`, etc. which will still

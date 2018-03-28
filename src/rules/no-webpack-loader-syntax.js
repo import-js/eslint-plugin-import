@@ -1,4 +1,5 @@
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function reportIfNonStandard(context, node, name) {
   if (name.indexOf('!') !== -1) {
@@ -10,7 +11,9 @@ function reportIfNonStandard(context, node, name) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-webpack-loader-syntax'),
+    },
   },
 
   create: function (context) {

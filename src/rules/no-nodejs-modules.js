@@ -1,5 +1,6 @@
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function reportIfMissing(context, node, allowed, name) {
   if (allowed.indexOf(name) === -1 && importType(name, context) === 'builtin') {
@@ -9,7 +10,9 @@ function reportIfMissing(context, node, allowed, name) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-nodejs-modules'),
+    },
   },
 
   create: function (context) {

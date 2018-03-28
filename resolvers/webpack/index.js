@@ -47,6 +47,7 @@ exports.resolve = function (source, file, settings) {
 
   var configPath = get(settings, 'config')
     , configIndex = get(settings, 'config-index')
+    , env = get(settings, 'env')
     , packageDir
 
   log('Config path from settings:', configPath)
@@ -82,7 +83,7 @@ exports.resolve = function (source, file, settings) {
   }
 
   if (typeof webpackConfig === 'function') {
-    webpackConfig = webpackConfig()
+    webpackConfig = webpackConfig(env)
   }
 
   if (Array.isArray(webpackConfig)) {
@@ -122,8 +123,8 @@ function createResolveSync(configPath, webpackConfig) {
   }
 
   try {
-    var webpackFilename = resolve.sync('webpack', { basedir })
-    var webpackResolveOpts = { basedir: path.dirname(webpackFilename) }
+    var webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false })
+    var webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false }
 
     webpackRequire = function (id) {
       return require(resolve.sync(id, webpackResolveOpts))

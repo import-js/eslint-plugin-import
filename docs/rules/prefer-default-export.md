@@ -1,4 +1,4 @@
-# prefer-default-export
+# import/prefer-default-export
 
 When there is only a single export from a module, prefer using default export over named export.
 

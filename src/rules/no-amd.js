@@ -3,13 +3,17 @@
  * @author Jamund Ferguson
  */
 
+import docsUrl from '../docsUrl'
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
 module.exports = {
     meta: {
-        docs: {},
+        docs: {
+            url: docsUrl('no-amd'),
+        },
     },
 
     create: function (context) {

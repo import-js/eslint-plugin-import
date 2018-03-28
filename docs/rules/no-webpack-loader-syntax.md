@@ -1,4 +1,4 @@
-# no-webpack-loader-syntax
+# import/no-webpack-loader-syntax
 
 Forbid Webpack loader syntax in imports.
 

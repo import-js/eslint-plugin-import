@@ -2,6 +2,7 @@
 
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
@@ -361,7 +362,9 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('order'),
+    },
 
     fixable: 'code',
     schema: [

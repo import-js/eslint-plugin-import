@@ -1,11 +1,11 @@
-# Enforce a convention in module import order
+# import/order: Enforce a convention in module import order
 
 Enforce a convention in the order of `require()` / `import` statements.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 The order is as shown in the following example:
 
 ```js
-// 1. node "builtins"
+// 1. node "builtin" modules
 import fs from 'fs';
 import path from 'path';
 // 2. "external" modules

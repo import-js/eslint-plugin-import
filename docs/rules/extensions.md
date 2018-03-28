@@ -1,4 +1,4 @@
-# extensions - Ensure consistent use of file extension within the import path
+# import/extensions - Ensure consistent use of file extension within the import path
 
 Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default. Depending on the resolver you can configure more extensions to get resolved automatically.
 
@@ -6,11 +6,35 @@ In order to provide a consistent use of file extensions across your code base, t
 
 ## Rule Details
 
-This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements.
+This rule either takes one string option, one object option, or a string and an object option. If it is the string `"never"` (the default value), then the rule forbids the use for any extension. If it is the string `"always"`, then the rule enforces the use of extensions for all import statements. If it is the string `"ignorePackages"`, then the rule enforces the use of extensions for all import statements except package imports.
 
-By providing an object you can configure each extension separately, so for example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+```
+"import/extensions": [<severity>, "never" | "always" | "ignorePackages"]
+```
 
-By providing both a string and an object, the string will set the default setting for all extensions, and the object can be used to set granular overrides for specific extensions. For example, `[<enabled>, "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
+By providing an object you can configure each extension separately.
+
+```
+"import/extensions": [<severity>, {
+  <extension>: "never" | "always" | "ignorePackages"
+}]
+```
+
+ For example `{ "js": "always", "json": "never" }` would always enforce the use of the `.js` extension but never allow the use of the `.json` extension.
+
+By providing both a string and an object, the string will set the default setting for all extensions, and the object can be used to set granular overrides for specific extensions.
+
+```
+"import/extensions": [
+  <severity>,
+  "never" | "always" | "ignorePackages",
+  {
+    <extension>: "never" | "always" | "ignorePackages" 
+  }
+]
+```
+
+For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
 ### Exception
 
@@ -41,7 +65,7 @@ import foo from './foo.js';
 
 import bar from './bar.json';
 
-import Component from './Component.jsx'
+import Component from './Component.jsx';
 
 import express from 'express/index.js';
 ```
@@ -53,7 +77,7 @@ import foo from './foo';
 
 import bar from './bar';
 
-import Component from './Component'
+import Component from './Component';
 
 import express from 'express/index';
 
@@ -67,7 +91,7 @@ import foo from './foo';
 
 import bar from './bar';
 
-import Component from './Component'
+import Component from './Component';
 
 import express from 'express';
 ```
@@ -79,11 +103,46 @@ import foo from './foo.js';
 
 import bar from './bar.json';
 
-import Component from './Component.jsx'
+import Component from './Component.jsx';
 
 import express from 'express/index.js';
 
 import * as path from 'path';
+```
+
+The following patterns are considered problems when configuration set to "ignorePackages":
+
+```js
+import foo from './foo';
+
+import bar from './bar';
+
+import Component from './Component';
+
+```
+
+The following patterns are not considered problems when configuration set to "ignorePackages":
+
+```js
+import foo from './foo.js';
+
+import bar from './bar.json';
+
+import Component from './Component.jsx';
+
+import express from 'express';
+
+```
+
+The following patterns are not considered problems when configuration set to `['error', 'always', {ignorePackages: true} ]`:
+
+```js
+import Component from './Component.jsx';
+
+import baz from 'foo/baz.js';
+
+import express from 'express';
+
 ```
 
 ## When Not To Use It

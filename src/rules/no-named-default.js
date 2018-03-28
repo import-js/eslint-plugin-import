@@ -1,6 +1,10 @@
+import docsUrl from '../docsUrl'
+
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-named-default'),
+    },
   },
 
   create: function (context) {

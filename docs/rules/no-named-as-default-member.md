@@ -1,4 +1,4 @@
-# no-named-as-default-member
+# import/no-named-as-default-member
 
 Reports use of an exported name as a property on the default export.
 

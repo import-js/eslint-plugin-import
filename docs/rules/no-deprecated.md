@@ -1,4 +1,4 @@
-# no-deprecated
+# import/no-deprecated
 
 **Stage: 0**
 

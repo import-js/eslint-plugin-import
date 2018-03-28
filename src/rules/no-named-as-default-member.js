@@ -6,6 +6,7 @@
  */
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
+import docsUrl from '../docsUrl'
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -13,7 +14,9 @@ import importDeclaration from '../importDeclaration'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-named-as-default-member'),
+    },
   },
 
   create: function(context) {

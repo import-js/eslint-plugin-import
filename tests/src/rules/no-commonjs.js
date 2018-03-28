@@ -17,9 +17,19 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     // exports
     { code: 'export default "x"', parserOptions: { sourceType: 'module' } },
     { code: 'export function house() {}', parserOptions: { sourceType: 'module' } },
+    {
+      code:
+      'function someFunc() {\n'+
+      '  const exports = someComputation();\n'+
+      '\n'+
+      '  expect(exports.someProp).toEqual({ a: \'value\' });\n'+
+      '}',
+      parserOptions: { sourceType: 'module' },
+    },
 
     // allowed requires
     { code: 'function a() { var x = require("y"); }' }, // nested requires allowed
+    { code: 'var a = c && require("b")' }, // conditional requires allowed
     { code: 'require.resolve("help")' }, // methods of require are allowed
     { code: 'require.ensure([])' }, // webpack specific require.ensure is allowed
     { code: 'require([], function(a, b, c) {})' }, // AMD require is allowed

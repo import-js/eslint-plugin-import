@@ -1,3 +1,5 @@
+import docsUrl from '../docsUrl'
+
 function isNonExportStatement({ type }) {
   return type !== 'ExportDefaultDeclaration' &&
     type !== 'ExportNamedDeclaration' &&
@@ -5,6 +7,12 @@ function isNonExportStatement({ type }) {
 }
 
 module.exports = {
+  meta: {
+    docs: {
+      url: docsUrl('exports-last'),
+    },
+  },
+
   create: function (context) {
     return {
       Program: function ({ body }) {

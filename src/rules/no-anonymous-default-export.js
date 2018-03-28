@@ -3,6 +3,8 @@
  * @author Duncan Beevers
  */
 
+import docsUrl from '../docsUrl'
+
 const defs = {
   ArrayExpression: {
     option: 'allowArray',
@@ -13,6 +15,12 @@ const defs = {
     option: 'allowArrowFunction',
     description: 'If `false`, will report default export of an arrow function',
     message: 'Assign arrow function to a variable before exporting as module default',
+  },
+  CallExpression: {
+    option: 'allowCallExpression',
+    description: 'If `false`, will report default export of a function call',
+    message: 'Assign call result to a variable before exporting as module default',
+    default: true,
   },
   ClassDeclaration: {
     option: 'allowAnonymousClass',
@@ -43,20 +51,30 @@ const defs = {
   },
 }
 
-const schemaProperties = Object.keys(defs).
-  map((key) => defs[key]).
-  reduce((acc, def) => {
+const schemaProperties = Object.keys(defs)
+  .map((key) => defs[key])
+  .reduce((acc, def) => {
     acc[def.option] = {
       description: def.description,
       type: 'boolean',
-      default: false,
     }
 
     return acc
   }, {})
 
+const defaults = Object.keys(defs)
+  .map((key) => defs[key])
+  .reduce((acc, def) => {
+    acc[def.option] = def.hasOwnProperty('default') ? def.default : false
+    return acc
+  }, {})
+
 module.exports = {
   meta: {
+    docs: {
+      url: docsUrl('no-anonymous-default-export'),
+    },
+
     schema: [
       {
         type: 'object',
@@ -67,7 +85,7 @@ module.exports = {
   },
 
   create: function (context) {
-    const options = Object.assign({}, context.options[0])
+    const options = Object.assign({}, defaults, context.options[0])
 
     return {
       'ExportDefaultDeclaration': (node) => {

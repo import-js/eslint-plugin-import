@@ -1,8 +1,11 @@
 import ExportMap, { recursivePatternCapture } from '../ExportMap'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('export'),
+    },
   },
 
   create: function (context) {

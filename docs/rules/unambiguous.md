@@ -1,4 +1,4 @@
-# unambiguous
+# import/unambiguous
 
 Warn if a `module` could be mistakenly parsed as a `script` by a consumer leveraging
 [Unambiguous JavaScript Grammar] to determine correct parsing goal.
@@ -51,4 +51,4 @@ a `module`.
 - [node-eps#13](https://github.com/nodejs/node-eps/issues/13)
 
 [`parserOptions.sourceType`]: http://eslint.org/docs/user-guide/configuring#specifying-parser-options
-[Unambiguous JavaScript Grammar]: https://github.com/nodejs/node-eps/blob/master/002-es6-modules.md#51-determining-if-source-is-an-es-module
+[Unambiguous JavaScript Grammar]: https://github.com/nodejs/node-eps/blob/master/002-es-modules.md#32-determining-if-source-is-an-es-module

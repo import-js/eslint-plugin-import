@@ -1,6 +1,8 @@
-import isStaticRequire from '../core/staticRequire'
 import path from 'path'
 import minimatch from 'minimatch'
+
+import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function report(context, node) {
   context.report({
@@ -52,7 +54,9 @@ function create(context) {
 module.exports = {
   create,
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-unassigned-import'),
+    },
     schema: [
       {
         'type': 'object',

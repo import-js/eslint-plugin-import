@@ -1,4 +1,4 @@
-# no-internal-modules
+# import/no-internal-modules
 
 Use this rule to prevent importing the submodules of other modules.
 

@@ -9,7 +9,9 @@ export const rules = {
   'extensions': require('./rules/extensions'),
   'no-restricted-paths': require('./rules/no-restricted-paths'),
   'no-internal-modules': require('./rules/no-internal-modules'),
+  'group-exports': require('./rules/group-exports'),
 
+  'no-self-import': require('./rules/no-self-import'),
   'no-named-default': require('./rules/no-named-default'),
   'no-named-as-default': require('./rules/no-named-as-default'),
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
@@ -27,9 +29,11 @@ export const rules = {
   'order': require('./rules/order'),
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
+  'no-default-export': require('./rules/no-default-export'),
   'no-dynamic-require': require('./rules/no-dynamic-require'),
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
+  'no-useless-path-segments': require('./rules/no-useless-path-segments'),
 
   // export
   'exports-last': require('./rules/exports-last'),

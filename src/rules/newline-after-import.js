@@ -4,6 +4,7 @@
  */
 
 import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 import debug from 'debug'
 const log = debug('eslint-plugin-import:rules:newline-after-import')
@@ -44,7 +45,9 @@ function isClassWithDecorator(node) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('newline-after-import'),
+    },
     schema: [
       {
         'type': 'object',
@@ -84,7 +87,8 @@ module.exports = {
             line: node.loc.end.line,
             column,
           },
-          message: `Expected empty line after ${type} statement not followed by another ${type}.`,
+          message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} \
+after ${type} statement not followed by another ${type}.`,
           fix: fixer => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference)

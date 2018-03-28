@@ -3,6 +3,8 @@
  * @author Jamund Ferguson
  */
 
+import docsUrl from '../docsUrl'
+
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
     , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
 
@@ -19,7 +21,9 @@ function allowPrimitive(node, context) {
 
 module.exports = {
   meta: {
-    docs: {},
+    docs: {
+      url: docsUrl('no-commonjs'),
+    },
   },
 
   create: function (context) {
@@ -36,12 +40,21 @@ module.exports = {
 
         // exports.
         if (node.object.name === 'exports') {
-          context.report({ node, message: EXPORT_MESSAGE })
+          const isInScope = context.getScope()
+            .variables
+            .some(variable => variable.name === 'exports')
+          if (! isInScope) {
+            context.report({ node, message: EXPORT_MESSAGE })
+          }
         }
 
       },
       'CallExpression': function (call) {
         if (context.getScope().type !== 'module') return
+        if (
+          call.parent.type !== 'ExpressionStatement'
+          && call.parent.type !== 'VariableDeclarator'
+        ) return
 
         if (call.callee.type !== 'Identifier') return
         if (call.callee.name !== 'require') return
