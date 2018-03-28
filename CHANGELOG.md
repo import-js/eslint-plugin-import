@@ -506,6 +506,7 @@ for info on changes for earlier releases.
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
+[#711]: https://github.com/benmosher/eslint-plugin-import/issues/711
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
