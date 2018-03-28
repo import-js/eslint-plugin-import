@@ -11,7 +11,7 @@ const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
 }))
 
-describe.only("no-cycle", () => {
+// describe.only("no-cycle", () => {
 ruleTester.run('no-cycle', rule, {
   valid: [
     // this rule doesn't care if the cycle length is 0
@@ -86,4 +86,4 @@ ruleTester.run('no-cycle', rule, {
     }),
   ],
 })
-})
+// })
