@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/benmosher/eslint-plugin-import/issues"
   },
-  "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
+  "homepage": "https://github.com/benmosher/eslint-plugin-import/tree/master/resolvers/webpack",
   "dependencies": {
     "array-find": "^1.0.0",
     "debug": "^2.6.8",
