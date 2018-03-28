@@ -1,44 +1,28 @@
 import path from 'path'
-import fs from 'fs'
-import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
+import CachedPackageLocator from '../core/CachedPackageLocator'
 import docsUrl from '../docsUrl'
 
-function getDependencies(context, packageDir) {
-  try {
-    const packageContent = packageDir
-      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
-      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+const packageLocator = new CachedPackageLocator()
 
-    if (!packageContent) {
-      return null
-    }
+function notEmpty(obj) {
+  return Object.keys(obj).length
+}
 
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
-  } catch (e) {
-    if (packageDir && e.code === 'ENOENT') {
-      context.report({
-        message: 'The package.json file could not be found.',
-        loc: { line: 0, column: 0 },
-      })
-    }
-    if (e.name === 'JSONError' || e instanceof SyntaxError) {
-      context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
-        loc: { line: 0, column: 0 },
-      })
-    }
-
-    return null
+function reducePackage({
+  dependencies = {},
+  devDependencies = {},
+  peerDependencies = {},
+  optionalDependencies = {},
+} = {}) {
+  if ([dependencies, devDependencies, peerDependencies, optionalDependencies].some(notEmpty)) {
+    return { dependencies, devDependencies, peerDependencies, optionalDependencies }
   }
+
+  return null
 }
 
 function missingErrorMessage(packageName) {
@@ -131,10 +115,15 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
-    const deps = getDependencies(context, options.packageDir)
+    const deps = packageLocator.readUpSync(
+      context,
+      options.packageDir || path.dirname(context.getFilename()),
+      typeof options.packageDir !== 'undefined',
+      reducePackage
+    )
 
     if (!deps) {
       return {}
@@ -148,10 +137,10 @@ module.exports = {
 
     // todo: use module visitor from module-utils core
     return {
-      ImportDeclaration: function (node) {
+      ImportDeclaration(node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
-      CallExpression: function handleRequires(node) {
+      CallExpression(node) {
         if (isStaticRequire(node)) {
           reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
         }
