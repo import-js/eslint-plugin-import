@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- Autofixer for [`order`] rule ([#711], thanks [@tihonove])
 
 ## [2.9.0] - 2018-02-21
 ### Added
@@ -679,6 +680,7 @@ for info on changes for earlier releases.
 [@mplewis]: https://github.com/mplewis
 [@rosswarren]: https://github.com/rosswarren
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@tihonove]: https://github.com/tihonove
 [@robertrossmann]: https://github.com/robertrossmann
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@graingert]: https://github.com/graingert
