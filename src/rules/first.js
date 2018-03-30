@@ -99,12 +99,9 @@ module.exports = {
                     return nodeSourceCode
                   }).join('')
                 , insertFixer = null
-              if (!lastLegalImp && !(/\s$/.test(insertSourceCode))) {
-                if (/^(\s+)/.test(insertSourceCode)) {
-                  insertSourceCode = insertSourceCode.trim() + RegExp.$1
-                } else {
-                  insertSourceCode = insertSourceCode + '\n'
-                }
+              if (!lastLegalImp) {
+                  insertSourceCode =
+                    insertSourceCode.trim() + insertSourceCode.match(/^(\s+)/)[0]
               }
               insertFixer = lastLegalImp ? 
                             fixer.insertTextAfter(lastLegalImp, insertSourceCode) :

@@ -68,6 +68,10 @@ ruleTester.run('first', rule, {
                   import { x } from './foo';\
                   import { z } from './baz';"
   })
+  , test({ code: "if (true) { console.log(1) }import a from 'b'"
+         , errors: 1
+         , output: "import a from 'b'\nif (true) { console.log(1) }"
+  })
   ,
   ]
 })
