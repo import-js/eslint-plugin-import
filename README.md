@@ -24,6 +24,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Prevent importing the submodules of other modules ([`no-internal-modules`])
 * Forbid Webpack loader syntax in imports ([`no-webpack-loader-syntax`])
 * Forbid a module from importing itself ([`no-self-import`])
+* Forbid a module from importing a module with a dependency path back to itself ([`no-cycle`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -35,6 +36,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
+[`no-cycle`]: ./docs/rules/no-cycle.md
 
 ### Helpful warnings
 
