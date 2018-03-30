@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
+- Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 
 ## [2.10.0] - 2018-03-29
 ### Added
@@ -452,6 +452,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
@@ -692,3 +693,4 @@ for info on changes for earlier releases.
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@graingert]: https://github.com/graingert
 [@danny-andrews]: https://github.com/dany-andrews
+[@fengkfengk]: https://github.com/fengkfengk
