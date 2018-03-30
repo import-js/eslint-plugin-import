@@ -4,8 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
-### Breaking (?)
-- Fix with `pnpm` ([#968])
+
+
+## 0.9.0 - 2018-03-29
+### Breaking
+- Fix with `pnpm` by bumping `resolve` ([#968])
 
 ## 0.8.4 - 2018-01-05
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "eslint-import-resolver-webpack",
-  "version": "0.8.4",
+  "version": "0.9.0",
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
