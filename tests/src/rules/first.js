@@ -18,14 +18,21 @@ ruleTester.run('first', rule, {
   invalid: [
     test({ code: "import { x } from './foo';\
                   export { x };\
-                  import { y } from './foo';"
+                  import { y } from './bar';"
          , errors: 1
+         , output: "import { x } from './foo';\
+                  import { y } from './bar';\
+                  export { x };"
          })
   , test({ code: "import { x } from './foo';\
                   export { x };\
                   import { y } from './bar';\
                   import { z } from './baz';"
          , errors: 2
+         , output: "import { x } from './foo';\
+                  import { y } from './bar';\
+                  import { z } from './baz';\
+                  export { x };"
          })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'"
          , options: ['absolute-first']
@@ -35,7 +42,26 @@ ruleTester.run('first', rule, {
                   'use directive';\
                   import { y } from 'bar';"
          , errors: 1
+         , output: "import { x } from 'foo';\
+                  import { y } from 'bar';\
+                  'use directive';"
          })
+  , test({ code: "var a = 1;\
+                  import { y } from './bar';\
+                  if (true) { x() };\
+                  import { x } from './foo';\
+                  import { z } from './baz';"
+         , errors: 3
+         , output: "import { y } from './bar';\
+                  var a = 1;\
+                  if (true) { x() };\
+                  import { x } from './foo';\
+                  import { z } from './baz';"
+  })
+  , test({ code: "if (true) { console.log(1) }import a from 'b'"
+         , errors: 1
+         , output: "import a from 'b'\nif (true) { console.log(1) }"
+  })
   ,
   ]
 })
