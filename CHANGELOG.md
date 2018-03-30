@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Add [`no-cycle`] rule: reports import cycles.
 
 ## [2.9.0] - 2018-02-21
 ### Added
@@ -440,6 +442,7 @@ for info on changes for earlier releases.
 [`group-exports`]: ./docs/rules/group-exports.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
 [`no-default-export`]: ./docs/rules/no-default-export.md
+[`no-cycle`]: ./docs/rules/no-cycle.md
 
 [`memo-parser`]: ./memo-parser/README.md
 

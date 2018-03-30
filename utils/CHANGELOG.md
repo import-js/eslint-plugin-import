@@ -4,7 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
-
+### Changed
+- `parse`: attach node locations by default.
+- `moduleVisitor`: visitor now gets the full `import` statement node as a second
+  argument, so rules may report against the full statement / `require` call instead
+  of only the string literal node.
 
 ## v2.1.1 - 2017-06-22
 
