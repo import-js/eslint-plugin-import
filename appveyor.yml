@@ -21,6 +21,10 @@ install:
       }
   - npm install
 
+  # fix symlinks
+  - cmd: git config core.symlinks true
+  - cmd: git reset --hard
+
   # todo: learn how to do this for all .\resolvers\* on Windows
   - cd .\resolvers\webpack && npm install && cd ..\..
   - cd .\resolvers\node && npm install && cd ..\..

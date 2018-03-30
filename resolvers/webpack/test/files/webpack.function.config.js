@@ -1,11 +1,12 @@
 var path = require('path')
 var pluginsTest = require('webpack-resolver-plugin-test')
 
-module.exports = function() {
+module.exports = function(env) {
   return {
     resolve: {
       alias: {
         'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
+        'bar': env ? path.join(__dirname, 'some', 'goofy', 'path', 'bar.js') : undefined,
         'some-alias': path.join(__dirname, 'some'),
       },
       modules: [

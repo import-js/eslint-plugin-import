@@ -98,7 +98,7 @@ function create(context) {
   }
 }
 
-export default {
+module.exports = {
   meta,
   create,
 }

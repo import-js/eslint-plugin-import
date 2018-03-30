@@ -5,6 +5,10 @@ import { RuleTester } from 'eslint'
 const ruleTester = new RuleTester()
     , rule = require('rules/order')
 
+function withoutAutofixOutput(test) {
+  return Object.assign({}, test, { output: test.code })
+}
+
 ruleTester.run('order', rule, {
   valid: [
     // Default order using require
@@ -410,6 +414,135 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var fs = require('fs');
       `,
+      output: `
+        var fs = require('fs');
+        var async = require('async');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with spaces on the end of line
+    test({
+      code: `
+        var async = require('async');
+        var fs = require('fs');${' '}
+      `,
+      output: `
+        var fs = require('fs');${' '}
+        var async = require('async');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with comment on the end of line
+    test({
+      code: `
+        var async = require('async');
+        var fs = require('fs'); /* comment */
+      `,
+      output: `
+        var fs = require('fs'); /* comment */
+        var async = require('async');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with comments at the end and start of line
+    test({
+      code: `
+        /* comment1 */  var async = require('async'); /* comment2 */
+        /* comment3 */  var fs = require('fs'); /* comment4 */
+      `,
+      output: `
+        /* comment3 */  var fs = require('fs'); /* comment4 */
+        /* comment1 */  var async = require('async'); /* comment2 */
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with few comments at the end and start of line
+    test({
+      code: `
+        /* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */
+        /* comment3 */  var fs = require('fs'); /* comment4 */
+      `,
+      output: `
+        /* comment3 */  var fs = require('fs'); /* comment4 */
+        /* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with windows end of lines
+    test({
+      code:
+        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n` +
+        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`
+      ,
+      output:
+        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n` +
+        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`
+      ,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order with multilines comments at the end and start of line
+    test({
+      code: `
+        /* multiline1
+          comment1 */  var async = require('async'); /* multiline2
+          comment2 */  var fs = require('fs'); /* multiline3
+          comment3 */
+      `,
+      output: `
+        /* multiline1
+          comment1 */  var fs = require('fs');` + ' '  + `
+  var async = require('async'); /* multiline2
+          comment2 *//* multiline3
+          comment3 */
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order of multile import
+    test({
+      code: `
+        var async = require('async');
+        var fs =
+          require('fs');
+      `,
+      output: `
+        var fs =
+          require('fs');
+        var async = require('async');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // fix order at the end of file
+    test({
+      code: `
+        var async = require('async');
+        var fs = require('fs');`,
+      output: `
+        var fs = require('fs');
+        var async = require('async');` + '\n',
       errors: [{
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
@@ -420,6 +553,10 @@ ruleTester.run('order', rule, {
       code: `
         import async from 'async';
         import fs from 'fs';
+      `,
+      output: `
+        import fs from 'fs';
+        import async from 'async';
       `,
       errors: [{
         ruleId: 'order',
@@ -432,6 +569,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         import fs from 'fs';
       `,
+      output: `
+        import fs from 'fs';
+        var async = require('async');
+      `,
       errors: [{
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
@@ -442,6 +583,10 @@ ruleTester.run('order', rule, {
       code: `
         var parent = require('../parent');
         var async = require('async');
+      `,
+      output: `
+        var async = require('async');
+        var parent = require('../parent');
       `,
       errors: [{
         ruleId: 'order',
@@ -454,6 +599,10 @@ ruleTester.run('order', rule, {
         var sibling = require('./sibling');
         var parent = require('../parent');
       `,
+      output: `
+        var parent = require('../parent');
+        var sibling = require('./sibling');
+      `,
       errors: [{
         ruleId: 'order',
         message: '`../parent` import should occur before import of `./sibling`',
@@ -464,6 +613,10 @@ ruleTester.run('order', rule, {
       code: `
         var index = require('./');
         var sibling = require('./sibling');
+      `,
+      output: `
+        var sibling = require('./sibling');
+        var index = require('./');
       `,
       errors: [{
         ruleId: 'order',
@@ -495,6 +648,14 @@ ruleTester.run('order', rule, {
         var foo = require('foo');
         var bar = require('bar');
       `,
+      output: `
+        var fs = require('fs');
+        var path = require('path');
+        var _ = require('lodash');
+        var foo = require('foo');
+        var bar = require('bar');
+        var index = require('./');
+      `,
       errors: [{
         ruleId: 'order',
         message: '`./` import should occur after import of `bar`',
@@ -506,6 +667,10 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
         var index = require('./');
       `,
+      output: `
+        var index = require('./');
+        var fs = require('fs');
+      `,
       options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
       errors: [{
         ruleId: 'order',
@@ -513,7 +678,7 @@ ruleTester.run('order', rule, {
       }],
     }),
     // member expression of require
-    test({
+    test(withoutAutofixOutput({
       code: `
         var foo = require('./foo').bar;
         var fs = require('fs');
@@ -522,9 +687,9 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
-    }),
+    })),
     // nested member expression of require
-    test({
+    test(withoutAutofixOutput({
       code: `
         var foo = require('./foo').bar.bar.bar;
         var fs = require('fs');
@@ -533,7 +698,33 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
-    }),
+    })),
+    // fix near nested member expression of require with newlines
+    test(withoutAutofixOutput({
+      code: `
+        var foo = require('./foo').bar
+          .bar
+          .bar;
+        var fs = require('fs');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `./foo`',
+      }],
+    })),
+    // fix nested member expression of require with newlines
+    test(withoutAutofixOutput({
+      code: `
+        var foo = require('./foo');
+        var fs = require('fs').bar
+          .bar
+          .bar;
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `./foo`',
+      }],
+    })),
     // Grouping import types
     test({
       code: `
@@ -541,6 +732,12 @@ ruleTester.run('order', rule, {
         var index = require('./');
         var sibling = require('./foo');
         var path = require('path');
+      `,
+      output: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+        var sibling = require('./foo');
       `,
       options: [{groups: [
         ['builtin', 'index'],
@@ -556,6 +753,10 @@ ruleTester.run('order', rule, {
       code: `
         var path = require('path');
         var async = require('async');
+      `,
+      output: `
+        var async = require('async');
+        var path = require('path');
       `,
       options: [{groups: [
         'index',
@@ -639,6 +840,15 @@ ruleTester.run('order', rule, {
         import sibling, {foo3} from './foo';
         var index = require('./');
       `,
+      output: `
+        import async, {foo1} from 'async';
+        import relParent2, {foo2} from '../foo/bar';
+        import sibling, {foo3} from './foo';
+        var fs = require('fs');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var index = require('./');
+      `,
       errors: [{
         ruleId: 'order',
         message: '`./foo` import should occur before import of `fs`',
@@ -649,6 +859,11 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
         import async, {foo1} from 'async';
         import relParent2, {foo2} from '../foo/bar';
+      `,
+      output: `
+        import async, {foo1} from 'async';
+        import relParent2, {foo2} from '../foo/bar';
+        var fs = require('fs');
       `,
       errors: [{
         ruleId: 'order',
@@ -664,6 +879,15 @@ ruleTester.run('order', rule, {
 
         var sibling = require('./foo');
 
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      output: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+        var sibling = require('./foo');
         var relParent1 = require('../foo');
         var relParent3 = require('../');
         var async = require('async');
@@ -689,13 +913,75 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
-    // // Option newlines-between: 'always' - should report lack of newline between groups
+    // Fix newlines-between with comments after
+    test({
+      code: `
+        var fs = require('fs'); /* comment */
+
+        var index = require('./');
+      `,
+      output: `
+        var fs = require('fs'); /* comment */
+        var index = require('./');
+      `,
+      options: [
+        {
+          groups: [['builtin'], ['index']],
+          'newlines-between': 'never',
+        },
+      ],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be no empty line between import groups',
+        },
+      ],
+    }),
+    // Cannot fix newlines-between with multiline comment after
+    test({
+      code: `
+        var fs = require('fs'); /* multiline
+        comment */
+
+        var index = require('./');
+      `,
+      output: `
+        var fs = require('fs'); /* multiline
+        comment */
+
+        var index = require('./');
+      `,
+      options: [
+        {
+          groups: [['builtin'], ['index']],
+          'newlines-between': 'never',
+        },
+      ],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be no empty line between import groups',
+        },
+      ],
+    }),
+    // Option newlines-between: 'always' - should report lack of newline between groups
     test({
       code: `
         var fs = require('fs');
         var index = require('./');
         var path = require('path');
         var sibling = require('./foo');
+        var relParent1 = require('../foo');
+        var relParent3 = require('../');
+        var async = require('async');
+      `,
+      output: `
+        var fs = require('fs');
+        var index = require('./');
+        var path = require('path');
+
+        var sibling = require('./foo');
+
         var relParent1 = require('../foo');
         var relParent3 = require('../');
         var async = require('async');
@@ -721,7 +1007,7 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
-    //Option newlines-between: 'always' should report unnecessary empty lines space between import groups
+    // Option newlines-between: 'always' should report unnecessary empty lines space between import groups
     test({
       code: `
         var fs = require('fs');
@@ -733,11 +1019,19 @@ ruleTester.run('order', rule, {
 
         var async = require('async');
       `,
+      output: `
+        var fs = require('fs');
+        var path = require('path');
+        var index = require('./');
+
+        var sibling = require('./foo');
+        var async = require('async');
+      `,
       options: [
         {
           groups: [
             ['builtin', 'index'],
-            ['sibling', 'parent', 'external']
+            ['sibling', 'parent', 'external'],
           ],
           'newlines-between': 'always',
         },
@@ -753,9 +1047,16 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
-    // Option newlines-between: 'never' should report unnecessary empty lines when using not assigned imports
+    // Option newlines-between: 'never' cannot fix if there are other statements between imports
     test({
       code: `
+        import path from 'path';
+        import 'loud-rejection';
+
+        import 'something-else';
+        import _ from 'lodash';
+      `,
+      output: `
         import path from 'path';
         import 'loud-rejection';
 
@@ -778,6 +1079,13 @@ ruleTester.run('order', rule, {
         import 'something-else';
         import _ from 'lodash';
       `,
+      output: `
+        import path from 'path';
+
+        import 'loud-rejection';
+        import 'something-else';
+        import _ from 'lodash';
+      `,
       options: [{ 'newlines-between': 'always' }],
       errors: [
         {
@@ -786,5 +1094,171 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // fix missing empty lines with single line comment after
+    test({
+      code: `
+        import path from 'path'; // comment
+        import _ from 'lodash';
+      `,
+      output: `
+        import path from 'path'; // comment
+
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'always' }],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be at least one empty line between import groups',
+        },
+      ],
+    }),
+    // fix missing empty lines with few line block comment after
+    test({
+      code: `
+        import path from 'path'; /* comment */ /* comment */
+        import _ from 'lodash';
+      `,
+      output: `
+        import path from 'path'; /* comment */ /* comment */
+
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'always' }],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be at least one empty line between import groups',
+        },
+      ],
+    }),
+    // fix missing empty lines with single line block comment after
+    test({
+      code: `
+        import path from 'path'; /* 1
+        2 */
+        import _ from 'lodash';
+      `,
+      output: `
+        import path from 'path';
+ /* 1
+        2 */
+        import _ from 'lodash';
+      `,
+      options: [{ 'newlines-between': 'always' }],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be at least one empty line between import groups',
+        },
+      ],
+    }),
+
+    // reorder fix cannot cross non import or require
+    test(withoutAutofixOutput({
+      code: `
+        var async = require('async');
+        fn_call();
+        var fs = require('fs');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder cannot cross non plain requires
+    test(withoutAutofixOutput({
+      code: `
+        var async = require('async');
+        var a = require('./value.js')(a);
+        var fs = require('fs');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder fixes cannot be applied to non plain requires #1
+    test(withoutAutofixOutput({
+      code: `
+        var async = require('async');
+        var fs = require('fs')(a);
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder fixes cannot be applied to non plain requires #2
+    test(withoutAutofixOutput({
+      code: `
+        var async = require('async')(a);
+        var fs = require('fs');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // cannot require in case of not assignement require
+    test(withoutAutofixOutput({
+      code: `
+        var async = require('async');
+        require('./aa');
+        var fs = require('fs');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder cannot cross function call (import statement)
+    test(withoutAutofixOutput({
+      code: `
+        import async from 'async';
+        fn_call();
+        import fs from 'fs';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder cannot cross variable assignemet (import statement)
+    test(withoutAutofixOutput({
+      code: `
+        import async from 'async';
+        var a = 1;
+        import fs from 'fs';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder cannot cross non plain requires (import statement)
+    test(withoutAutofixOutput({
+      code: `
+        import async from 'async';
+        var a = require('./value.js')(a);
+        import fs from 'fs';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // cannot reorder in case of not assignement import
+    test(withoutAutofixOutput({
+      code: `
+        import async from 'async';
+        import './aa';
+        import fs from 'fs';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
   ],
 })
