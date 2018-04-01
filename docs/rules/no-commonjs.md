@@ -21,10 +21,29 @@ module.exports = { a: "b" }
 exports.c = "d"
 ```
 
-If `allow-primitive-modules` is provided as an option, the following is valid:
+### Allow require
+
+If `allowRequire` option is set to `true`, `require` calls are valid:
 
 ```js
-/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+/*eslint no-commonjs: [2, { allowRequire: true }]*/
+
+if (typeof window !== "undefined") {
+  require('that-ugly-thing');
+}
+```
+
+but `module.exports` is reported as usual.
+
+This is useful for conditional requires.
+If you don't rely on synchronous module loading, check out [dynamic import](https://github.com/airbnb/babel-plugin-dynamic-import-node).
+
+### Allow primitive modules
+
+If `allowPrimitiveModules` option is set to `true`, the following is valid:
+
+```js
+/*eslint no-commonjs: [2, { allowPrimitiveModules: true }]*/
 
 module.exports = "foo"
 module.exports = function rule(context) { return { /* ... */ } }
@@ -33,7 +52,7 @@ module.exports = function rule(context) { return { /* ... */ } }
 but this is still reported:
 
 ```js
-/*eslint no-commonjs: [2, "allow-primitive-modules"]*/
+/*eslint no-commonjs: [2, { allowPrimitiveModules: true }]*/
 
 module.exports = { x: "y" }
 exports.z = function boop() { /* ... */ }
