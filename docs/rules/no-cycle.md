@@ -32,7 +32,7 @@ cycles created by `require` within imported modules may not be detected.
 There is a `maxDepth` option available to prevent full expansion of very deep dependency trees:
 
 ```js
-/*eslint import/no-unresolved: [2, { maxDepth: 1 }]*/
+/*eslint import/no-cycle: [2, { maxDepth: 1 }]*/
 
 // dep-c.js
 import './dep-a.js'
