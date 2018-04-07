@@ -8,7 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.10.0] - 2018-03-29
 ### Added
-- Autofixer for [`order`] rule ([#711], thanks [@tihonove])
+- Autofixer for [`order`] rule ([#908], thanks [@tihonove])
 - Add [`no-cycle`] rule: reports import cycles.
 
 ## [2.9.0] - 2018-02-21
