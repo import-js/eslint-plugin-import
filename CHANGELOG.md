@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+# [2.10.1] - 2018-04-09
+### Added
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 
 ## [2.10.0] - 2018-03-29
@@ -590,7 +594,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.1...HEAD
+[2.10.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...v2.10.1
 [2.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...v2.8.0
