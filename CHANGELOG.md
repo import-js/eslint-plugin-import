@@ -8,7 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.10.0] - 2018-03-29
 ### Added
-- Autofixer for [`order`] rule ([#711], thanks [@tihonove])
+- Autofixer for [`order`] rule ([#908], thanks [@tihonove])
 - Add [`no-cycle`] rule: reports import cycles.
 
 ## [2.9.0] - 2018-02-21
@@ -454,6 +454,7 @@ for info on changes for earlier releases.
 
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
+[#908]: https://github.com/benmosher/eslint-plugin-import/pull/908
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
