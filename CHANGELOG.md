@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 # [2.10.1] - 2018-04-09
 ### Added
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
+- `allow-require` option for [`no-commonjs`] rule ([#880], thanks [@futpib])
 
 ## [2.10.0] - 2018-03-29
 ### Added
@@ -460,6 +461,7 @@ for info on changes for earlier releases.
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
+[#880]: https://github.com/benmosher/eslint-plugin-import/pull/880
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
@@ -699,3 +701,4 @@ for info on changes for earlier releases.
 [@graingert]: https://github.com/graingert
 [@danny-andrews]: https://github.com/dany-andrews
 [@fengkfengk]: https://github.com/fengkfengk
+[@futpib]: https://github.com/futpib
