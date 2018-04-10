@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 
 ## [2.10.0] - 2018-03-29
@@ -452,6 +453,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
@@ -694,3 +696,4 @@ for info on changes for earlier releases.
 [@graingert]: https://github.com/graingert
 [@danny-andrews]: https://github.com/dany-andrews
 [@fengkfengk]: https://github.com/fengkfengk
+[@manovotny]: https://github.com/manovotny
