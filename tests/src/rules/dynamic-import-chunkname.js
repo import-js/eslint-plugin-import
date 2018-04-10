@@ -6,9 +6,9 @@ const ruleTester = new RuleTester()
 
 const commentFormat = '[0-9a-zA-Z-_/.]+'
 const pickyCommentFormat = '[a-zA-Z-_/.]+'
-const options = [{ importFunction: 'dynamicImport' }]
+const options = [{ importFunctions: ['dynamicImport'] }]
 const pickyCommentOptions = [{
-  importFunction: 'dynamicImport',
+  importFunctions: ['dynamicImport'],
   webpackChunknameFormat: pickyCommentFormat,
 }]
 const parser = 'babel-eslint'

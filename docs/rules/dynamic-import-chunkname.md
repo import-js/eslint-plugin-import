@@ -2,15 +2,15 @@
 
 This rule reports any dynamic imports without a webpackChunkName specified in a leading block comment in the proper format.
 
-This is a useful rule because if the webpackChunkName is not defined in a dynamic import, Webpack will autogenerate the chunk name.
+This rule enforces naming of webpack chunks in dynamic imports. When you don't explicitly name chunks, webpack will autogenerate chunk names that are not consistent across builds, which prevents long-term browser caching.
 
 ## Rule Details
-This rule runs against `import` by default, but can be configured to also run against an alternative dynamic-import function, e.g. 'dynamicImport.'
-You can also configure the regex format you'd like to accept for the webpackChunkName - for example, we don't want the number 6 to show up in our chunk names.
+This rule runs against `import()` by default, but can be configured to also run against an alternative dynamic-import function, e.g. 'dynamicImport.'
+You can also configure the regex format you'd like to accept for the webpackChunkName - for example, if we don't want the number 6 to show up in our chunk names:
  ```javascript
 {
   "dynamic-import-chunkname": [2, {
-    importFunction: "dynamicImport",
+    importFunctions: ["dynamicImport"],
     webpackChunknameFormat: "[a-zA-Z0-57-9-/_]"
   }]
 }
@@ -63,4 +63,4 @@ The following patterns are valid:
 
 ## When Not To Use It
 
-If you don't care that Webpack will autogenerate chunk names and may blow up browser caches and bundle size reports.
+If you don't care that webpack will autogenerate chunk names and may blow up browser caches and bundle size reports.

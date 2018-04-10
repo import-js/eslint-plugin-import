@@ -8,8 +8,11 @@ module.exports = {
     schema: [{
       type: 'object',
       properties: {
-        importFunction: {
-          type: 'string',
+        importFunctions: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
         },
         webpackChunknameFormat: {
           type: 'string',
@@ -20,23 +23,19 @@ module.exports = {
 
   create: function (context) {
     const config = context.options[0]
-    let importFunction
-    if (config) {
-      ({ importFunction } = config)
-    }
+    const { importFunctions = [] } = config || {}
+    const { webpackChunknameFormat = '[0-9a-zA-Z-_/.]+' } = config || {}
 
-    let webpackChunknameFormat = '[0-9a-zA-Z-_/.]+'
-    if (config && config.webpackChunknameFormat) {
-      ({ webpackChunknameFormat } = config)
-    }
     const commentFormat = ` webpackChunkName: "${webpackChunknameFormat}" `
     const commentRegex = new RegExp(commentFormat)
 
     return {
-      CallExpression(node) {
-        if (node.callee.name !== importFunction && node.callee.type !== 'Import') {
+      [`CallExpression[callee.type="Import"],CallExpression[callee.name]`](node) {
+        const { callee: { name }} = node
+        if (name && !importFunctions.includes(name)) {
           return
         }
+
         const sourceCode = context.getSourceCode()
         const arg = node.arguments[0]
         const leadingComments = sourceCode.getComments(arg).leading
