@@ -1,3 +1,5 @@
 {
-  "dependencies": {}
+  "dependencies": {
+    "myflowtyped": "1.0.0"
+  }
 }

@@ -18,6 +18,8 @@ module.exports = {
         return // no named imports/exports
       }
 
+      if (isTypeFromPackage(node)) return
+
       const imports = Exports.get(node.source.value, context)
       if (imports == null) return
 
@@ -45,6 +47,14 @@ module.exports = {
           }
         }
       })
+    }
+
+    function isTypeFromPackage(node) {
+      return node.importKind === 'type' && !hasRelativePath(node.source)
+    }
+
+    function hasRelativePath(source) {
+      return source.value.match(/^\.\//)
     }
 
     return {

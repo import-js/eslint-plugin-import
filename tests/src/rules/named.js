@@ -1,4 +1,5 @@
 import { test, SYNTAX_CASES } from '../utils'
+import * as path from 'path'
 import { RuleTester } from 'eslint'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
@@ -11,6 +12,8 @@ function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''
          , type: 'Identifier' }
 }
+
+const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
 
 ruleTester.run('named', rule, {
   valid: [
@@ -78,6 +81,11 @@ ruleTester.run('named', rule, {
     }),
     test({
       code: 'import type { MyClass } from "./flowtypes"',
+      'parser': 'babel-eslint',
+    }),
+    test({
+      filename: packageDirWithFlowTyped + '/foo.js',
+      code: 'import type { MyType } from "myflowtyped"',
       'parser': 'babel-eslint',
     }),
 
