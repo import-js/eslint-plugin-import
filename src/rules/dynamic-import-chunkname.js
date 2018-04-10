@@ -31,9 +31,8 @@ module.exports = {
     const commentRegex = new RegExp(commentFormat)
 
     return {
-      [`CallExpression[callee.type="Import"],CallExpression[callee.name]`](node) {
-        const { callee: { name }} = node
-        if (name && importFunctions.indexOf(name) < 0) {
+      CallExpression(node) {
+        if (node.callee.type !== 'Import' && importFunctions.indexOf(node.callee.name) < 0) {
           return
         }
 
