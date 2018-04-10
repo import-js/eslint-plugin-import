@@ -11,6 +11,9 @@ const pickyCommentOptions = [{
   importFunctions: ['dynamicImport'],
   webpackChunknameFormat: pickyCommentFormat,
 }]
+const multipleImportFunctionOptions = [{
+  importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
+}]
 const parser = 'babel-eslint'
 
 const noLeadingCommentError = 'dynamic imports require a leading comment with the webpack chunkname'
@@ -170,6 +173,28 @@ ruleTester.run('dynamic-import-chunkname', rule, {
       parser,
       errors: [{
         message: pickyCommentFormatError,
+        type: 'CallExpression',
+      }],
+    },
+    {
+      code: `dynamicImport(
+        /* webpackChunkName "someModule" */
+        'someModule'
+      )`,
+      options: multipleImportFunctionOptions,
+      errors: [{
+        message: commentFormatError,
+        type: 'CallExpression',
+      }],
+    },
+    {
+      code: `definitelyNotStaticImport(
+        /* webpackChunkName "someModule" */
+        'someModule'
+      )`,
+      options: multipleImportFunctionOptions,
+      errors: [{
+        message: commentFormatError,
         type: 'CallExpression',
       }],
     },

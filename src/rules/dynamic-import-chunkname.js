@@ -10,6 +10,7 @@ module.exports = {
       properties: {
         importFunctions: {
           type: 'array',
+          uniqueItems: true,
           items: {
             type: 'string',
           },
@@ -32,7 +33,7 @@ module.exports = {
     return {
       [`CallExpression[callee.type="Import"],CallExpression[callee.name]`](node) {
         const { callee: { name }} = node
-        if (name && !importFunctions.includes(name)) {
+        if (name && importFunctions.indexOf(name) < 0) {
           return
         }
 
