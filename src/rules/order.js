@@ -4,7 +4,7 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
-const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
+const defaultGroups = ['builtin', 'external', 'private', 'absolute', 'parent', 'sibling', 'index']
 
 // REPORTING AND FIXING
 
@@ -241,13 +241,14 @@ function makeOutOfOrderReport(context, imported) {
 
 // DETECTING
 
-function computeRank(context, ranks, name, type) {
-  return ranks[importType(name, context)] +
+function computeRank(context, ranks, name, type, groups) {
+  return ranks[importType(name, context, groups)] +
     (type === 'import' ? 0 : 100)
 }
 
-function registerNode(context, node, name, type, ranks, imported) {
-  const rank = computeRank(context, ranks, name, type)
+function registerNode(context, node, name, type, ranks, imported, groups) {
+  const rank = computeRank(context, ranks, name, type, groups)
+
   if (rank !== -1) {
     imported.push({name, rank, node})
   }
@@ -258,7 +259,7 @@ function isInVariableDeclarator(node) {
     (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
 }
 
-const types = ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']
+const types = ['builtin', 'external', 'private', 'internal', 'parent', 'sibling', 'index', 'absolute']
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
@@ -268,16 +269,39 @@ function convertGroupsToRanks(groups) {
     if (typeof group === 'string') {
       group = [group]
     }
+
+    if (
+      typeof group === 'object' &&
+      group !== null &&
+      group.constructor === Object
+    ) {
+      group = [group]
+    }
+
     group.forEach(function(groupItem) {
-      if (types.indexOf(groupItem) === -1) {
+      if (
+        typeof groupItem === 'object' &&
+        groupItem !== null &&
+        groupItem.constructor === Object &&
+        groupItem.name
+      ) {
+        groupItem = groupItem.name
+      }
+
+      const isCorrectGroup = types.find((typeItem) => typeItem === groupItem)
+
+      if (!isCorrectGroup) {
         throw new Error('Incorrect configuration of the rule: Unknown type `' +
           JSON.stringify(groupItem) + '`')
       }
+
       if (res[groupItem] !== undefined) {
         throw new Error('Incorrect configuration of the rule: `' + groupItem + '` is duplicated')
       }
+
       res[groupItem] = index
     })
+
     return res
   }, {})
 
@@ -287,6 +311,7 @@ function convertGroupsToRanks(groups) {
 
   return omittedTypes.reduce(function(res, type) {
     res[type] = groups.length
+
     return res
   }, rankObject)
 }
@@ -390,11 +415,13 @@ module.exports = {
 
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
+    const groups = options.groups || defaultGroups
     const newlinesBetweenImports = options['newlines-between'] || 'ignore'
     let ranks
 
     try {
-      ranks = convertGroupsToRanks(options.groups || defaultGroups)
+      ranks = convertGroupsToRanks(groups)
+
     } catch (error) {
       // Malformed configuration
       return {
@@ -403,6 +430,7 @@ module.exports = {
         },
       }
     }
+
     let imported = []
     let level = 0
 
@@ -417,7 +445,7 @@ module.exports = {
       ImportDeclaration: function handleImports(node) {
         if (node.specifiers.length) { // Ignoring unassigned imports
           const name = node.source.value
-          registerNode(context, node, name, 'import', ranks, imported)
+          registerNode(context, node, name, 'import', ranks, imported, groups)
         }
       },
       CallExpression: function handleRequires(node) {
@@ -425,7 +453,7 @@ module.exports = {
           return
         }
         const name = node.arguments[0].value
-        registerNode(context, node, name, 'require', ranks, imported)
+        registerNode(context, node, name, 'require', ranks, imported, groups)
       },
       'Program:exit': function reportAndReset() {
         makeOutOfOrderReport(context, imported)
