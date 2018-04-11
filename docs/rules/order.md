@@ -77,16 +77,29 @@ This rule supports the following options:
 
 ### `groups: [array]`:
 
-How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+How groups are defined, and the order to respect. `groups` must be an array of types or [types].
+
+The types can be either `"String"`: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`,
+or ```Object```: ```{ name: 'absolute'<String>, pattern: //<RegExp> }```, ```{ name: 'private'<String>, pattern: '^my-awesome-project/libs'<RegExp> }```  
+
+We intentionally made `"absolute"` type matching with optional pattern, because a lot of projects use aliases and have complicated absolute path logic.
+The meaning of `"private"` type is to separate project/company level packages and libs from all `"external"`
+
+The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
 ```js
 [
   'builtin', // Built-in types are first
+  [{ name: 'private', pattern: '^my-awesome-project/libs' }, 'internal'] // The private types and internal (@myproject) are mixed together
+  { name: 'absolute', pattern: '^src' }, // Then absolute types
   ['sibling', 'parent'], // Then sibling and parent types. They can be mingled together
   'index', // Then the index file
   // Then the rest: internal and external type
 ]
 ```
-The default value is `["builtin", "external", "parent", "sibling", "index"]`.
+The default value is `["builtin", "external", "absolute", "parent", "sibling", "index"]`.
+By default `"absolute"` type will be applied to any import which path starts with `"/"` if you want to change
+that behavior you can specify absolute type with ```Object``` literal ```{ name: 'absolute'<String>, pattern: //<RegExp> }```.
+Custom pattern behavior can be applied only for `"absolute"` and `"private"` types
 
 You can set the options like this:
 
