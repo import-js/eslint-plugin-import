@@ -11,6 +11,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 - `allow-require` option for [`no-commonjs`] rule ([#880], thanks [@futpib])
 
+### Fixed
+- memory/CPU regression where ASTs were held in memory ([#1058], thanks [@klimashkin]/[@lukeapage])
+
 ## [2.10.0] - 2018-03-29
 ### Added
 - Autofixer for [`order`] rule ([#711], thanks [@tihonove])
@@ -530,6 +533,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
+[#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
@@ -702,3 +706,5 @@ for info on changes for earlier releases.
 [@danny-andrews]: https://github.com/dany-andrews
 [@fengkfengk]: https://github.com/fengkfengk
 [@futpib]: https://github.com/futpib
+[@klimashkin]: https://github.com/klimashkin
+[@lukeapage]: https://github.com/lukeapage
