@@ -11,7 +11,8 @@ module.exports = {
 
   create: function (context) {
     function checkSpecifiers(key, type, node) {
-      if (node.source == null) return // local export, ignore
+      // ignore local exports and type imports
+      if (node.source == null || node.importKind === 'type') return
 
       if (!node.specifiers
             .some(function (im) { return im.type === type })) {
