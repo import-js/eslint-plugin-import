@@ -5,7 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Added
-- Ignore type imports for named rule ([#931], thanks [@mattijsbliek])
+- Ignore type imports for [`named`] rule ([#931], thanks [@mattijsbliek])
 - Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
 
 
@@ -539,6 +539,7 @@ for info on changes for earlier releases.
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
 [#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
+[#931]: https://github.com/benmosher/eslint-plugin-import/issues/931
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
@@ -714,3 +715,4 @@ for info on changes for earlier releases.
 [@klimashkin]: https://github.com/klimashkin
 [@lukeapage]: https://github.com/lukeapage
 [@manovotny]: https://github.com/manovotny
+[@mattijsbliek]: https://github.com/mattijsbliek
