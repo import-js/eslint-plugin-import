@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Ignore type imports for named rule ([#931], thanks [@mattijsbliek])
+- Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
 
 
 # [2.11.0] - 2018-04-09
@@ -16,7 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.10.0] - 2018-03-29
 ### Added
-- Autofixer for [`order`] rule ([#711], thanks [@tihonove])
+- Autofixer for [`order`] rule ([#908], thanks [@tihonove])
 - Add [`no-cycle`] rule: reports import cycles.
 
 ## [2.9.0] - 2018-02-21
@@ -460,8 +463,10 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
+[#908]: https://github.com/benmosher/eslint-plugin-import/pull/908
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
 [#880]: https://github.com/benmosher/eslint-plugin-import/pull/880
@@ -708,3 +713,4 @@ for info on changes for earlier releases.
 [@futpib]: https://github.com/futpib
 [@klimashkin]: https://github.com/klimashkin
 [@lukeapage]: https://github.com/lukeapage
+[@manovotny]: https://github.com/manovotny
