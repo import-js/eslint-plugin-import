@@ -91,14 +91,13 @@ The enforced order is the same as the order of each element in a group. Omitted 
   'builtin', // Built-in types are first
   [{ name: 'private', pattern: '^my-awesome-project/libs' }, 'internal'] // The private types and internal (@myproject) are mixed together
   { name: 'absolute', pattern: '^src' }, // Then absolute types
-  ['sibling', 'parent'], // Then sibling and parent types. They can be mingled together
-  'index', // Then the index file
+  ['sibling', 'parent', 'index'], // Then sibling and parent types and index. They can be mingled together
   // Then the rest: internal and external type
 ]
 ```
 The default value is `["builtin", "external", "absolute", "parent", "sibling", "index"]`.
 By default `"absolute"` type will be applied to any import which path starts with `"/"` if you want to change
-that behavior you can specify absolute type with ```Object``` literal ```{ name: 'absolute'<String>, pattern: //<RegExp> }```.
+that behavior you can specify absolute type with ```Object``` literal ```{ name: 'absolute'<String>, pattern: // <RegExp> }```.
 Custom pattern behavior can be applied only for `"absolute"` and `"private"` types
 
 You can set the options like this:
