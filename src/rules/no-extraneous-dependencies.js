@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import has from 'has'
+import { isArray, isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -22,8 +22,8 @@ function extractDepFields(pkg) {
 }
 
 function getDependencies(context, packageDir) {
+  let paths = []
   try {
-    const paths = []
     const packageContent = {
       dependencies: {},
       devDependencies: {},
@@ -31,26 +31,23 @@ function getDependencies(context, packageDir) {
       peerDependencies: {},
     }
 
-    if (has(context.settings, 'import/paths')) {
-      paths.push(
-        ...context.settings['import/paths']
-          .map((dir) => path.resolve(dir))
-      )
+    if (!isEmpty(packageDir)) {
+      if (!isArray(packageDir)) {
+        paths = [path.resolve(packageDir)]
+      } else {
+        paths = packageDir.map(dir => path.resolve(dir))
+      }
     }
 
-    if (packageDir) {
-      paths.push(packageDir)
-    }
-
-    if (paths.length) {
-      paths.forEach((dir) => {
+    if (!isEmpty(paths)) {
+      // use rule config to find package.json
+      paths.forEach(dir => {
         Object.assign(packageContent, extractDepFields(
           JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
         ))
       })
-    }
-
-    if (!packageDir) {
+    } else {
+      // use closest package.json
       Object.assign(
         packageContent,
         extractDepFields(
@@ -70,7 +67,7 @@ function getDependencies(context, packageDir) {
 
     return packageContent
   } catch (e) {
-    if (packageDir && e.code === 'ENOENT') {
+    if (!isEmpty(paths) && e.code === 'ENOENT') {
       context.report({
         message: 'The package.json file could not be found.',
         loc: { line: 0, column: 0 },
@@ -112,9 +109,8 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   }
 
   const resolved = resolve(name, context)
-  if (!resolved) {
-    return
-  }
+  if (!resolved) { return }
+
   const splitName = name.split('/')
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
@@ -170,7 +166,7 @@ module.exports = {
           'devDependencies': { 'type': ['boolean', 'array'] },
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
-          'packageDir': { 'type': 'string' },
+          'packageDir': { 'type': ['string', 'array'] },
         },
         'additionalProperties': false,
       },

@@ -85,7 +85,6 @@
     "doctrine": "1.5.0",
     "eslint-import-resolver-node": "^0.3.1",
     "eslint-module-utils": "^2.1.1",
-    "has": "^1.0.1",
     "lodash": "^4.17.4",
     "minimatch": "^3.0.3",
     "read-pkg-up": "^2.0.0"

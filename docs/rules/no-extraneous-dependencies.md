@@ -35,6 +35,13 @@ Also there is one more option called `packageDir`, this option is to specify the
 "import/no-extraneous-dependencies": ["error", {"packageDir": './some-dir/'}]
 ```
 
+It may also be an array of multiple paths, to support monorepos or other novel project
+folder layouts:
+
+```js
+"import/no-extraneous-dependencies": ["error", {"packageDir": ['./some-dir/', './root-pkg']}]
+```
+
 ## Rule Details
 
 Given the following `package.json`:
