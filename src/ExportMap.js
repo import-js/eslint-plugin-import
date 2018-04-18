@@ -21,7 +21,16 @@ export default class ExportMap {
     this.namespace = new Map()
     // todo: restructure to key on path, value is resolver + map of names
     this.reexports = new Map()
-    this.dependencies = new Map()
+    /**
+     * star-exports
+     * @type {Set} of () => ExportMap
+     */
+    this.dependencies = new Set()
+    /**
+     * dependencies of this module that are not explicitly re-exported
+     * @type {Map} from path = () => ExportMap
+     */
+    this.imports = new Map()
     this.errors = []
   }
 
@@ -46,7 +55,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
 
         // todo: report as unresolved?
@@ -88,7 +97,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
         // todo: report as unresolved?
         if (!innerMap) continue
@@ -125,7 +134,7 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies.values()) {
+      for (let dep of this.dependencies) {
         let innerMap = dep()
         // todo: report as unresolved?
         if (!innerMap) continue
@@ -256,20 +265,14 @@ ExportMap.get = function (source, context) {
   const path = resolve(source, context)
   if (path == null) return null
 
-  return ExportMap.for(path, context)
+  return ExportMap.for(childContext(path, context))
 }
 
-ExportMap.for = function (path, context) {
-  let exportMap
+ExportMap.for = function (context) {
+  const { path } = context
 
-  const cacheKey = hashObject({
-    settings: context.settings,
-    parserPath: context.parserPath,
-    parserOptions: context.parserOptions,
-    path,
-  }).digest('hex')
-
-  exportMap = exportCache.get(cacheKey)
+  const cacheKey = hashObject(context).digest('hex')
+  let exportMap = exportCache.get(cacheKey)
 
   // return cached ignore
   if (exportMap === null) return null
@@ -298,6 +301,7 @@ ExportMap.for = function (path, context) {
     return null
   }
 
+  log('cache miss', cacheKey, 'for path', path)
   exportMap = ExportMap.parse(path, content, context)
 
   // ambiguous modules return null
@@ -346,14 +350,14 @@ ExportMap.parse = function (path, content, context) {
 
   const namespaces = new Map()
 
-  function remotePath(node) {
-    return resolve.relative(node.source.value, path, context.settings)
+  function remotePath(value) {
+    return resolve.relative(value, path, context.settings)
   }
 
-  function resolveImport(node) {
-    const rp = remotePath(node)
+  function resolveImport(value) {
+    const rp = remotePath(value)
     if (rp == null) return null
-    return ExportMap.for(rp, context)
+    return ExportMap.for(childContext(rp, context))
   }
 
   function getNamespace(identifier) {
@@ -373,6 +377,25 @@ ExportMap.parse = function (path, content, context) {
     return object
   }
 
+  function captureDependency(declaration) {
+    if (declaration.source == null) return null
+
+    const p = remotePath(declaration.source.value)
+    if (p == null) return null
+    const existing = m.imports.get(p)
+    if (existing != null) return existing.getter
+
+    const getter = () => ExportMap.for(childContext(p, context))
+    m.imports.set(p, {
+      getter,
+      source: {  // capturing actual node reference holds full AST in memory!
+        value: declaration.source.value,
+        loc: declaration.source.loc,
+      },
+    })
+    return getter
+  }
+
 
   ast.body.forEach(function (n) {
 
@@ -386,22 +409,22 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportAllDeclaration') {
-      let remoteMap = remotePath(n)
-      if (remoteMap == null) return
-      m.dependencies.set(remoteMap, () => ExportMap.for(remoteMap, context))
+      const getter = captureDependency(n)
+      if (getter) m.dependencies.add(getter)
       return
     }
 
     // capture namespaces in case of later export
     if (n.type === 'ImportDeclaration') {
+      captureDependency(n)
       let ns
       if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
-        namespaces.set(ns.local.name, n)
+        namespaces.set(ns.local.name, n.source.value)
       }
       return
     }
 
-    if (n.type === 'ExportNamedDeclaration'){
+    if (n.type === 'ExportNamedDeclaration') {
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {
@@ -423,6 +446,7 @@ ExportMap.parse = function (path, content, context) {
         }
       }
 
+      const nsource = n.source && n.source.value
       n.specifiers.forEach((s) => {
         const exportMeta = {}
         let local
@@ -434,7 +458,7 @@ ExportMap.parse = function (path, content, context) {
             break
           case 'ExportNamespaceSpecifier':
             m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-              get() { return resolveImport(n) },
+              get() { return resolveImport(nsource) },
             }))
             return
           case 'ExportSpecifier':
@@ -449,7 +473,7 @@ ExportMap.parse = function (path, content, context) {
         }
 
         // todo: JSDoc
-        m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(n) })
+        m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) })
       })
     }
   })
@@ -483,5 +507,18 @@ export function recursivePatternCapture(pattern, callback) {
         recursivePatternCapture(element, callback)
       })
       break
+  }
+}
+
+/**
+ * don't hold full context object in memory, just grab what we need.
+ */
+function childContext(path, context) {
+  const { settings, parserOptions, parserPath } = context
+  return {
+    settings,
+    parserOptions,
+    parserPath,
+    path,
   }
 }

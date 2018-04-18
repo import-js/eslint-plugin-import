@@ -23,6 +23,9 @@ exports.default = function parse(path, content, context) {
   parserOptions.comment = true
   parserOptions.attachComment = true
 
+  // attach node locations
+  parserOptions.loc = true
+
   // provide the `filePath` like eslint itself does, in `parserOptions`
   // https://github.com/eslint/eslint/blob/3ec436ee/lib/linter.js#L637
   parserOptions.filePath = path

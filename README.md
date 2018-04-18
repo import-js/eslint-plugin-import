@@ -12,7 +12,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
-**Static analysis:**
+### Static analysis
 
 * Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])
 * Ensure named imports correspond to a named export in the remote file. ([`named`])
@@ -22,8 +22,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid import of modules using absolute paths ([`no-absolute-path`])
 * Forbid `require()` calls with expressions ([`no-dynamic-require`])
 * Prevent importing the submodules of other modules ([`no-internal-modules`])
-* Forbid Webpack loader syntax in imports ([`no-webpack-loader-syntax`])
+* Forbid webpack loader syntax in imports ([`no-webpack-loader-syntax`])
 * Forbid a module from importing itself ([`no-self-import`])
+* Forbid a module from importing a module with a dependency path back to itself ([`no-cycle`])
+* Prevent unnecessary path segemnts in import and require statements ([`no-useless-path-segments`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -35,8 +37,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
 [`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
+[`no-cycle`]: ./docs/rules/no-cycle.md
+[`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
 
-**Helpful warnings:**
+### Helpful warnings
 
 
 * Report any invalid exports, i.e. re-export of the same name ([`export`])
@@ -53,7 +57,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
 
-**Module systems:**
+### Module systems
 
 * Report potentially ambiguous parse goal (`script` vs. `module`) ([`unambiguous`])
 * Report CommonJS `require` calls and `module.exports` or `exports.*`. ([`no-commonjs`])
@@ -66,7 +70,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
 
 
-**Style guide:**
+### Style guide
 
 * Ensure all imports appear before other statements ([`first`])
 * Ensure all exports appear after other statements ([`exports-last`])
@@ -79,8 +83,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Limit the maximum number of dependencies a module can have ([`max-dependencies`])
 * Forbid unassigned imports ([`no-unassigned-import`])
 * Forbid named default exports ([`no-named-default`])
+* Forbid default exports ([`no-default-export`])
 * Forbid anonymous values as default exports ([`no-anonymous-default-export`])
 * Prefer named exports to be grouped together in a single export declaration ([`group-exports`])
+* Enforce a leading comment with the webpackChunkName for dynamic imports ([`dynamic-import-chunkname`])
 
 [`first`]: ./docs/rules/first.md
 [`exports-last`]: ./docs/rules/exports-last.md
@@ -95,6 +101,8 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-named-default`]: ./docs/rules/no-named-default.md
 [`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
 [`group-exports`]: ./docs/rules/group-exports.md
+[`no-default-export`]: ./docs/rules/no-default-export.md
+[`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
 
 ## Installation
 
@@ -141,14 +149,14 @@ to find the file behind `module`.
 Up through v0.10ish, this plugin has directly used substack's [`resolve`] plugin,
 which implements Node's import behavior. This works pretty well in most cases.
 
-However, Webpack allows a number of things in import module source strings that
+However, webpack allows a number of things in import module source strings that
 Node does not, such as loaders (`import 'file!./whatever'`) and a number of
 aliasing schemes, such as [`externals`]: mapping a module id to a global name at
 runtime (allowing some modules to be included more traditionally via script tags).
 
 In the interest of supporting both of these, v0.11 introduces resolvers.
 
-Currently [Node] and [Webpack] resolution have been implemented, but the
+Currently [Node] and [webpack] resolution have been implemented, but the
 resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
 You can reference resolvers in several ways (in order of precedence):
@@ -214,7 +222,7 @@ If you are interesting in writing a resolver, see the [spec](./resolvers/README.
 [`externals`]: http://webpack.github.io/docs/library-and-externals.html
 
 [Node]: https://www.npmjs.com/package/eslint-import-resolver-node
-[Webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
+[webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
 
 # Settings
 
@@ -299,7 +307,7 @@ An array of folders. Resolved modules only from those folders will be considered
 A map from parsers to file extension arrays. If a file extension is matched, the
 dependency parser will require and use the map key as the parser instead of the
 configured ESLint parser. This is useful if you're inter-op-ing with TypeScript
-directly using Webpack, for example:
+directly using webpack, for example:
 
 ```yaml
 # .eslintrc.yml

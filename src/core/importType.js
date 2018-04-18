@@ -1,5 +1,5 @@
 import cond from 'lodash/cond'
-import builtinModules from 'builtin-modules'
+import coreModules from 'resolve/lib/core'
 import { join } from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
@@ -24,7 +24,7 @@ export function isAbsolute(name) {
 export function isBuiltIn(name, settings) {
   const base = baseModule(name)
   const extras = (settings && settings['import/core-modules']) || []
-  return builtinModules.indexOf(base) !== -1 || extras.indexOf(base) > -1
+  return coreModules[base] || extras.indexOf(base) > -1
 }
 
 function isExternalPath(path, name, settings) {

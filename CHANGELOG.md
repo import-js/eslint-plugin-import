@@ -4,8 +4,31 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Ignore type imports for [`named`] rule ([#931], thanks [@mattijsbliek])
+- Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
 
+
+# [2.11.0] - 2018-04-09
+### Added
+- Fixer for [`first`] ([#1046], thanks [@fengkfengk])
+- `allow-require` option for [`no-commonjs`] rule ([#880], thanks [@futpib])
+
+### Fixed
+- memory/CPU regression where ASTs were held in memory ([#1058], thanks [@klimashkin]/[@lukeapage])
+
+## [2.10.0] - 2018-03-29
+### Added
+- Autofixer for [`order`] rule ([#908], thanks [@tihonove])
+- Add [`no-cycle`] rule: reports import cycles.
+
+## [2.9.0] - 2018-02-21
+### Added
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
+- Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
+- Add [`no-default-export`] rule ([#889], thanks [@isiahmeadows])
+- Add [`no-useless-path-segments`] rule ([#912], thanks [@graingert] and [@danny-andrews])
+- ... and more! check the commits for v[2.9.0]
 
 ## [2.8.0] - 2017-10-18
 ### Added
@@ -54,7 +77,6 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 - Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
 - Add `count` option to the [`newline-after-import`] rule to allow configuration of number of newlines expected ([#742], thanks [@ntdb])
-- Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
 
 ### Changed
 - [`no-extraneous-dependencies`]: use `read-pkg-up` to simplify finding + loading `package.json` ([#680], thanks [@wtgtybhertgeghgtwtg])
@@ -435,11 +457,19 @@ for info on changes for earlier releases.
 [`exports-last`]: ./docs/rules/exports-last.md
 [`group-exports`]: ./docs/rules/group-exports.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
+[`no-default-export`]: ./docs/rules/no-default-export.md
+[`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
+[`no-cycle`]: ./docs/rules/no-cycle.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
+[#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
+[#908]: https://github.com/benmosher/eslint-plugin-import/pull/908
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
+[#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
+[#880]: https://github.com/benmosher/eslint-plugin-import/pull/880
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
@@ -506,7 +536,10 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
+[#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
+[#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
+[#931]: https://github.com/benmosher/eslint-plugin-import/issues/931
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
@@ -573,7 +606,10 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.11.0...HEAD
+[2.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...v2.11.0
+[2.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.9.0...v2.10.0
+[2.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.1...v2.7.0
 [2.6.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.6.0...v2.6.1
@@ -669,4 +705,14 @@ for info on changes for earlier releases.
 [@mplewis]: https://github.com/mplewis
 [@rosswarren]: https://github.com/rosswarren
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@tihonove]: https://github.com/tihonove
 [@robertrossmann]: https://github.com/robertrossmann
+[@isiahmeadows]: https://github.com/isiahmeadows
+[@graingert]: https://github.com/graingert
+[@danny-andrews]: https://github.com/dany-andrews
+[@fengkfengk]: https://github.com/fengkfengk
+[@futpib]: https://github.com/futpib
+[@klimashkin]: https://github.com/klimashkin
+[@lukeapage]: https://github.com/lukeapage
+[@manovotny]: https://github.com/manovotny
+[@mattijsbliek]: https://github.com/mattijsbliek

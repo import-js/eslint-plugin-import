@@ -67,18 +67,10 @@ ruleTester.run('named', rule, {
     test({ code: 'import { deepProp } from "./named-exports"' }),
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
 
-    // flow types
+    // should ignore imported flow types, even if they don’t exist
     test({
-      code: 'import type { MyType } from "./flowtypes"',
-      'parser': 'babel-eslint',
-    }),
-    test({
-      code: 'import type { MyInterface } from "./flowtypes"',
-      'parser': 'babel-eslint',
-    }),
-    test({
-      code: 'import type { MyClass } from "./flowtypes"',
-      'parser': 'babel-eslint',
+      code: 'import type { MissingType } from "./flowtypes"',
+      parser: 'babel-eslint',
     }),
 
     // TypeScript
@@ -244,16 +236,6 @@ ruleTester.run('named', rule, {
     //   }],
     // }),
 
-    // flow types
-    test({
-      code: 'import type { MissingType } from "./flowtypes"',
-      parser: 'babel-eslint',
-      errors: [{
-        message: "MissingType not found in './flowtypes'",
-        type: 'Identifier',
-      }],
-    }),
-
     // TypeScript
     test({
       code: 'import { MissingType } from "./typescript"',
@@ -329,3 +311,18 @@ if (!CASE_SENSITIVE_FS) {
     ],
   })
 }
+
+// export-all
+ruleTester.run('named (export *)', rule, {
+  valid: [
+    test({
+      code: 'import { foo } from "./export-all"',
+    }),
+  ],
+  invalid: [
+    test({
+      code: 'import { bar } from "./export-all"',
+      errors: [`bar not found in './export-all'`],
+    }),
+  ],
+})
