@@ -7,22 +7,61 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
-function getDependencies(context, packageDir) {
-  try {
-    const packageContent = packageDir
-      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
-      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+function hasKeys(obj) {
+  return Object.keys(obj).length > 0
+}
 
-    if (!packageContent) {
+function extractDependencies(manifest = {}) {
+  const {
+    dependencies = {},
+    devDependencies = {},
+    optionalDependencies = {},
+    peerDependencies = {},
+  } = manifest
+
+  return {
+    dependencies,
+    devDependencies,
+    optionalDependencies,
+    peerDependencies,
+  }
+}
+
+function getDependencies(context, packageDir) {
+  const packageDirs = Array.isArray(packageDir)
+      ? packageDir
+      : (packageDir ? [packageDir] : [])
+  const packageContent = {
+    dependencies: {},
+    devDependencies: {},
+    optionalDependencies: {},
+    peerDependencies: {},
+  }
+
+  try {
+    if (!packageDirs.length) {
+      Object.assign(
+        packageContent,
+        extractDependencies(
+          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+        )
+      )
+    } else {
+      for (const dir of packageDirs) {
+        const manifest = extractDependencies(
+          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
+        )
+        for (const [depType, deps] of Object.entries(manifest)) {
+          Object.assign(packageContent[depType], deps)
+        }
+      }
+    }
+
+    if (!Object.values(packageContent).some(hasKeys)) {
       return null
     }
 
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
+    return packageContent
   } catch (e) {
     if (packageDir && e.code === 'ENOENT') {
       context.report({
@@ -36,9 +75,9 @@ function getDependencies(context, packageDir) {
         loc: { line: 0, column: 0 },
       })
     }
-
-    return null
   }
+
+  return null
 }
 
 function missingErrorMessage(packageName) {
@@ -124,7 +163,7 @@ module.exports = {
           'devDependencies': { 'type': ['boolean', 'array'] },
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
-          'packageDir': { 'type': 'string' },
+          'packageDir': { 'type': ['string', 'array'] },
         },
         'additionalProperties': false,
       },
