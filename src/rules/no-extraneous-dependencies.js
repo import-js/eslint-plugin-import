@@ -51,13 +51,13 @@ function getDependencies(context, packageDir) {
         const manifest = extractDependencies(
           JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
         )
-        for (const [depType, deps] of Object.entries(manifest)) {
-          Object.assign(packageContent[depType], deps)
-        }
+        Object.keys(manifest).forEach(depType => {
+          Object.assign(packageContent[depType], manifest[depType])
+        })
       }
     }
 
-    if (!Object.values(packageContent).some(hasKeys)) {
+    if (!Object.keys(packageContent).some(depType => hasKeys(packageContent[depType]))) {
       return null
     }
 
