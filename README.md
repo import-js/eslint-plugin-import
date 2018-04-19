@@ -25,7 +25,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid webpack loader syntax in imports ([`no-webpack-loader-syntax`])
 * Forbid a module from importing itself ([`no-self-import`])
 * Forbid a module from importing a module with a dependency path back to itself ([`no-cycle`])
-* Prevent unnecessary path segemnts in import and require statements ([`no-useless-path-segments`])
+* Prevent unnecessary path segments in import and require statements ([`no-useless-path-segments`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
