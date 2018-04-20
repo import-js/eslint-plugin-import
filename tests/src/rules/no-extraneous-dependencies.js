@@ -71,6 +71,10 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: path.join(__dirname, '../../../')}],
     }),
     test({
+      code: 'import "chai"',
+      options: [{packageDir: [path.join(__dirname, '../../../')]}],
+    }),
+    test({
       code: 'import type MyType from "myflowtyped";',
       options: [{packageDir: packageDirWithFlowTyped}],
       parser: 'babel-eslint',

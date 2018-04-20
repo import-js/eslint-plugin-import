@@ -35,6 +35,11 @@ Also there is one more option called `packageDir`, this option is to specify the
 "import/no-extraneous-dependencies": ["error", {"packageDir": './some-dir/'}]
 ```
 
+Or, as an array - for when you need this rule to lookup multiple package.json files (for ex, if you are using a monnorepo).
+```js
+"import/no-extraneous-dependencies": ["error", {"packageDir": ['./some-dir/', './some/other/dir/']}]
+```
+
 ## Rule Details
 
 Given the following `package.json`:
