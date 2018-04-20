@@ -4,6 +4,7 @@
  */
 
 import docsUrl from '../docsUrl'
+import has from 'has'
 
 const defs = {
   ArrayExpression: {
@@ -65,7 +66,7 @@ const schemaProperties = Object.keys(defs)
 const defaults = Object.keys(defs)
   .map((key) => defs[key])
   .reduce((acc, def) => {
-    acc[def.option] = def.hasOwnProperty('default') ? def.default : false
+    acc[def.option] = has(def, 'default') ? def.default : false
     return acc
   }, {})
 
