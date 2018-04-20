@@ -4,7 +4,7 @@ import path from 'path'
 import 'babel-eslint'
 
 export function testFilePath(relativePath) {
-    return path.join(process.cwd(), './tests/files', relativePath)
+  return path.join(process.cwd(), './tests/files', relativePath)
 }
 
 export const FILENAME = testFilePath('foo.js')
@@ -31,7 +31,7 @@ export function getFilename(file) {
 
 /**
  * to be added as valid cases just to ensure no nullable fields are going
- * to crash at runtinme
+ * to crash at runtime
  * @type {Array}
  */
 export const SYNTAX_CASES = [
