@@ -361,6 +361,7 @@ settings:
 [`eslint_d`]: https://www.npmjs.com/package/eslint_d
 [`eslint-loader`]: https://www.npmjs.com/package/eslint-loader
 
+
 ## SublimeLinter-eslint
 
 SublimeLinter-eslint introduced a change to support `.eslintignore` files

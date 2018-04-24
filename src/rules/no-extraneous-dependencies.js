@@ -1,5 +1,6 @@
 import path from 'path'
 import fs from 'fs'
+import { isArray, isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -7,24 +8,66 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
-function getDependencies(context, packageDir) {
-  try {
-    const packageContent = packageDir
-      ? JSON.parse(fs.readFileSync(path.join(packageDir, 'package.json'), 'utf8'))
-      : readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+function hasKeys(obj = {}) {
+  return Object.keys(obj).length > 0
+}
 
-    if (!packageContent) {
+function extractDepFields(pkg) {
+  return {
+    dependencies: pkg.dependencies || {},
+    devDependencies: pkg.devDependencies || {},
+    optionalDependencies: pkg.optionalDependencies || {},
+    peerDependencies: pkg.peerDependencies || {},
+  }
+}
+
+function getDependencies(context, packageDir) {
+  let paths = []
+  try {
+    const packageContent = {
+      dependencies: {},
+      devDependencies: {},
+      optionalDependencies: {},
+      peerDependencies: {},
+    }
+
+    if (!isEmpty(packageDir)) {
+      if (!isArray(packageDir)) {
+        paths = [path.resolve(packageDir)]
+      } else {
+        paths = packageDir.map(dir => path.resolve(dir))
+      }
+    }
+
+    if (!isEmpty(paths)) {
+      // use rule config to find package.json
+      paths.forEach(dir => {
+        Object.assign(packageContent, extractDepFields(
+          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
+        ))
+      })
+    } else {
+      // use closest package.json
+      Object.assign(
+        packageContent,
+        extractDepFields(
+          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+        )
+      )
+    }
+
+    if (![
+      packageContent.dependencies,
+      packageContent.devDependencies,
+      packageContent.optionalDependencies,
+      packageContent.peerDependencies,
+    ].some(hasKeys)) {
       return null
     }
 
-    return {
-      dependencies: packageContent.dependencies || {},
-      devDependencies: packageContent.devDependencies || {},
-      optionalDependencies: packageContent.optionalDependencies || {},
-      peerDependencies: packageContent.peerDependencies || {},
-    }
+    return packageContent
   } catch (e) {
-    if (packageDir && e.code === 'ENOENT') {
+    if (!isEmpty(paths) && e.code === 'ENOENT') {
       context.report({
         message: 'The package.json file could not be found.',
         loc: { line: 0, column: 0 },
@@ -66,9 +109,8 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   }
 
   const resolved = resolve(name, context)
-  if (!resolved) {
-    return
-  }
+  if (!resolved) { return }
+
   const splitName = name.split('/')
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
@@ -124,7 +166,7 @@ module.exports = {
           'devDependencies': { 'type': ['boolean', 'array'] },
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
-          'packageDir': { 'type': 'string' },
+          'packageDir': { 'type': ['string', 'array'] },
         },
         'additionalProperties': false,
       },

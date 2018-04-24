@@ -15,6 +15,8 @@ const packageFileWithSyntaxErrorMessage = (() => {
   }
 })()
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
+const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
+const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -75,8 +77,46 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirWithFlowTyped}],
       parser: 'babel-eslint',
     }),
+    test({
+      code: 'import react from "react";',
+      options: [{packageDir: packageDirMonoRepoWithNested}],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: [packageDirMonoRepoWithNested, packageDirMonoRepoRoot]}],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: packageDirMonoRepoRoot}],
+    }),
   ],
   invalid: [
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot }],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
     test({
       code: 'import "not-a-dependency"',
       errors: [{
@@ -197,5 +237,31 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
       }],
     }),
-  ],
+    test({
+      code: 'import leftpad from "left-pad";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoWithNested}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
+      }],
+    }),
+    test({
+      code: 'import react from "react";',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+      }],
+    }),
+    test({
+      code: 'import react from "react";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+      }],
+    }),
+  ]
 })
