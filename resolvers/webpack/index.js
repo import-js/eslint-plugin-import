@@ -1,6 +1,6 @@
 var findRoot = require('find-root')
   , path = require('path')
-  , get = require('lodash.get')
+  , _ = require('lodash')
   , find = require('array-find')
   , interpret = require('interpret')
   // not available on 0.10.x
@@ -10,6 +10,8 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , semver = require('semver')
   , has = require('has')
+
+var get = _.get
 
 var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
@@ -105,13 +107,32 @@ exports.resolve = function (source, file, settings) {
   }
 
   // otherwise, resolve "normally"
-  var resolveSync = createResolveSync(configPath, webpackConfig)
+  var resolveSync = getResolveSync(configPath, webpackConfig)
+
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
     log('Error during module resolution:', err)
     return { found: false }
   }
+}
+
+var MAX_CACHE = 10
+var _cache = []
+function getResolveSync(configPath, webpackConfig) {
+  var cacheKey = { configPath: configPath, webpackConfig: webpackConfig }
+  var cached = find(_cache, function (entry) { return _.isEqual(entry.key, cacheKey) })
+  if (!cached) {
+    cached = {
+      key: cacheKey,
+      value: createResolveSync(configPath, webpackConfig)
+    }
+    // put in front and pop last item
+    if (_cache.unshift(cached) > MAX_CACHE) {
+      _cache.pop()
+    }
+  }
+  return cached.value
 }
 
 function createResolveSync(configPath, webpackConfig) {
