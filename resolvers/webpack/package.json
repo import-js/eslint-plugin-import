@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc mocha -t 5s",
-    "report": "nyc report --reporter=html"
+    "report": "nyc report --reporter=html",
+    "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/webpack/coverage/lcov.info"
   },
   "files": [
     "index.js",
@@ -50,6 +51,7 @@
     "babel-preset-es2015-argon": "^0.1.0",
     "babel-register": "^6.26.0",
     "chai": "^3.4.1",
+    "coveralls": "^3.0.0",
     "mocha": "^2.3.3",
     "nyc": "^7.0.0"
   }
