@@ -1,6 +1,7 @@
 var findRoot = require('find-root')
   , path = require('path')
-  , _ = require('lodash')
+  , get = require('lodash/get')
+  , isEqual = require('lodash/isEqual')
   , find = require('array-find')
   , interpret = require('interpret')
   // not available on 0.10.x
@@ -10,8 +11,6 @@ var findRoot = require('find-root')
   , resolve = require('resolve')
   , semver = require('semver')
   , has = require('has')
-
-var get = _.get
 
 var log = require('debug')('eslint-plugin-import:resolver:webpack')
 
@@ -121,7 +120,7 @@ var MAX_CACHE = 10
 var _cache = []
 function getResolveSync(configPath, webpackConfig) {
   var cacheKey = { configPath: configPath, webpackConfig: webpackConfig }
-  var cached = find(_cache, function (entry) { return _.isEqual(entry.key, cacheKey) })
+  var cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey) })
   if (!cached) {
     cached = {
       key: cacheKey,
