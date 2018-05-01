@@ -4,7 +4,6 @@ var findRoot = require('find-root')
   , isEqual = require('lodash/isEqual')
   , find = require('array-find')
   , interpret = require('interpret')
-  , isAbsolute = require('is-absolute')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
   , resolve = require('resolve')
@@ -56,7 +55,7 @@ exports.resolve = function (source, file, settings) {
   if (!configPath || typeof configPath === 'string') {
 
       // see if we've got an absolute path
-      if (!configPath || !isAbsolute(configPath)) {
+      if (!configPath || !path.isAbsolute(configPath)) {
         // if not, find ancestral package.json and use its directory as base for the path
         packageDir = findRoot(path.resolve(file))
         if (!packageDir) throw new Error('package not found above ' + file)
@@ -335,7 +334,7 @@ function findConfigPath(configPath, packageDir) {
     })
 
     // see if we've got an absolute path
-    if (!isAbsolute(configPath)) {
+    if (!path.isAbsolute(configPath)) {
       configPath = path.join(packageDir, configPath)
     }
   } else {
