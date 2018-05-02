@@ -19,6 +19,18 @@ ruleTester.run('no-relative-parent-imports', rule, {
       code: 'import foo from "package"',
       filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
     }),
+    test({
+      code: 'require("./internal.js")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
+    }),
+    test({
+      code: 'require("./app/index.js")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
+    }),
+    test({
+      code: 'require("package")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
+    }),
   ],
 
   invalid: [
@@ -29,6 +41,15 @@ ruleTester.run('no-relative-parent-imports', rule, {
         message: 'Relative imports from parent directories are not allowed.',
         line: 1,
         column: 17,
+      } ],
+    }),
+    test({
+      code: 'require("../plugin.js")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
+      errors: [ {
+        message: 'Relative imports from parent directories are not allowed.',
+        line: 1,
+        column: 9,
       } ],
     }),
   ],
