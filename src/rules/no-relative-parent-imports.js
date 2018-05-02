@@ -16,7 +16,7 @@ module.exports = {
       if (importType(importPath, context) === 'parent') {
         context.report({
           node,
-          message: 'Relative imports from parent directories are not allowed. ',
+          message: 'Relative imports from parent directories are not allowed.',
         })
       }
     }
