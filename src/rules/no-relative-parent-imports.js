@@ -1,6 +1,7 @@
 import docsUrl from '../docsUrl'
 
 import importType from '../core/importType'
+import isStaticImport from '../core/staticImport'
 import isStaticRequire from '../core/staticRequire'
 
 module.exports = {
@@ -26,7 +27,7 @@ module.exports = {
         checkImportForRelativeParentPath(node.source.value, node.source)
       },
       CallExpression(node) {
-        if (isStaticRequire(node)) {
+        if (isStaticRequire(node) || isStaticImport(node)) {
           const [ firstArgument ] = node.arguments
           checkImportForRelativeParentPath(firstArgument.value, firstArgument)
         }
