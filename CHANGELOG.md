@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - Ignore type imports for [`named`] rule ([#931], thanks [@mattijsbliek])
 - Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
+- Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories.
 
 
 # [2.11.0] - 2018-04-09
