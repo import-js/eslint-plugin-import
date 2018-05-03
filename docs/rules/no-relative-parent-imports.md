@@ -1,6 +1,6 @@
 # no-relative-parent-imports
 
-Use this rule to prevent imports to folds in relative parent paths.
+Use this rule to prevent imports to folders in relative parent paths.
 
 It's useful for large codebases codebases to enforce directed-acyclic-graph like folder structures.
 
