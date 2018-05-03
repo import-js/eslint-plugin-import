@@ -1,10 +1,9 @@
 var findRoot = require('find-root')
   , path = require('path')
-  , get = require('lodash.get')
+  , get = require('lodash/get')
+  , isEqual = require('lodash/isEqual')
   , find = require('array-find')
   , interpret = require('interpret')
-  // not available on 0.10.x
-  , isAbsolute = path.isAbsolute || require('is-absolute')
   , fs = require('fs')
   , coreLibs = require('node-libs-browser')
   , resolve = require('resolve')
@@ -56,7 +55,7 @@ exports.resolve = function (source, file, settings) {
   if (!configPath || typeof configPath === 'string') {
 
       // see if we've got an absolute path
-      if (!configPath || !isAbsolute(configPath)) {
+      if (!configPath || !path.isAbsolute(configPath)) {
         // if not, find ancestral package.json and use its directory as base for the path
         packageDir = findRoot(path.resolve(file))
         if (!packageDir) throw new Error('package not found above ' + file)
@@ -105,13 +104,32 @@ exports.resolve = function (source, file, settings) {
   }
 
   // otherwise, resolve "normally"
-  var resolveSync = createResolveSync(configPath, webpackConfig)
+  var resolveSync = getResolveSync(configPath, webpackConfig)
+
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
     log('Error during module resolution:', err)
     return { found: false }
   }
+}
+
+var MAX_CACHE = 10
+var _cache = []
+function getResolveSync(configPath, webpackConfig) {
+  var cacheKey = { configPath: configPath, webpackConfig: webpackConfig }
+  var cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey) })
+  if (!cached) {
+    cached = {
+      key: cacheKey,
+      value: createResolveSync(configPath, webpackConfig)
+    }
+    // put in front and pop last item
+    if (_cache.unshift(cached) > MAX_CACHE) {
+      _cache.pop()
+    }
+  }
+  return cached.value
 }
 
 function createResolveSync(configPath, webpackConfig) {
@@ -316,7 +334,7 @@ function findConfigPath(configPath, packageDir) {
     })
 
     // see if we've got an absolute path
-    if (!isAbsolute(configPath)) {
+    if (!path.isAbsolute(configPath)) {
       configPath = path.join(packageDir, configPath)
     }
   } else {

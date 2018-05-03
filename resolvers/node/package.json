@@ -7,7 +7,8 @@
     "index.js"
   ],
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/node/coverage/lcov.info"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^3.0.0",
     "mocha": "^3.5.3",
     "nyc": "^10.3.2"
   }
