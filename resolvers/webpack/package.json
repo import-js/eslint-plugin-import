@@ -53,5 +53,10 @@
     "coveralls": "^3.0.0",
     "mocha": "^2.3.3",
     "nyc": "^7.0.0"
+  },
+  "nyc": {
+    "exclude": [
+      "test/"
+    ]
   }
 }

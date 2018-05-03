@@ -311,6 +311,8 @@ describe('ExportMap', function () {
   })
 
   context('alternate parsers', function () {
+    this.timeout(10000)  // takes a long time :shrug:
+
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
       ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
