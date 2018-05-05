@@ -1,5 +1,6 @@
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 import docsUrl from '../docsUrl'
+import { basename } from 'path'
 
 import importType from '../core/importType'
 
@@ -16,10 +17,14 @@ module.exports = {
     if (myPath === '<text>') return {} // can't cycle-check a non-file
 
     function checkSourceValue(sourceNode) {
-      if (importType(sourceNode.value, context) === 'parent') {
+      const depPath = sourceNode.value
+      if (importType(depPath, context) === 'parent') {
         context.report({
           node: sourceNode,
-          message: 'Relative imports from parent directories are not allowed.',
+          message: 'Relative imports from parent directories are not allowed. ' +
+            `Please either pass what you're importing through at runtime ` +
+            `(dependency injection), move \`${basename(myPath)}\` to same ` +
+            `directory as \`${depPath}\` or consider making \`${depPath}\` a package.`,
         })
       }
     }
