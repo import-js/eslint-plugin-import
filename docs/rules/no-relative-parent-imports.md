@@ -19,7 +19,7 @@ export default function (numbers) {
 }
 
 // ./numbers/three.js
-import add from '../add';
+import add from '../add'; // violates import/no-relative-parent-imports
 
 export default function three() {
   return add([1, 2]);
@@ -30,14 +30,14 @@ You can,
 
 1. Move the file to be in a sibling folder (or higher) of the dependency.
 
-`three.js` could be be in the same folder as `../add.js`:
+`three.js` could be be in the same folder as `add.js`:
 
 ```
 three.js
 add.js
 ```
 
-or because `add` doesn't have any imports, it could be in it's own namespace:
+or since `add` doesn't have any imports, it could be in it's own directory (namespace):
 
 ```
 math
@@ -53,13 +53,13 @@ export default function three(add) {
   return add([1, 2]);
 }
 
-// somewhere else when you use `./three.js`:
+// somewhere else when you use `three.js`:
 import add from './add';
 import three from './numbers/three';
 console.log(three(add));
 ```
 
-3. Make the dependency a package so it's available to all files:
+3. Make the dependency a package so it's globally available to all files in your project:
 
 ```js
 import add from 'add'; // from https://www.npmjs.com/package/add
