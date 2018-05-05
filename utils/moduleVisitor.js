@@ -34,6 +34,18 @@ exports.default = function visitModules(visitor, options) {
     checkSourceValue(node.source, node)
   }
 
+  // for esmodule dynamic `import()` calls
+  function checkImportCall(node) {
+    if (node.callee.type !== 'Import') return
+    if (node.arguments.length !== 1) return
+
+    const modulePath = node.arguments[0]
+    if (modulePath.type !== 'Literal') return
+    if (typeof modulePath.value !== 'string') return
+
+    checkSourceValue(modulePath, node)
+  }
+
   // for CommonJS `require` calls
   // adapted from @mctep: http://git.io/v4rAu
   function checkCommon(call) {
@@ -74,6 +86,7 @@ exports.default = function visitModules(visitor, options) {
       'ImportDeclaration': checkSource,
       'ExportNamedDeclaration': checkSource,
       'ExportAllDeclaration': checkSource,
+      'CallExpression': checkImportCall,
     })
   }
 
