@@ -2,8 +2,73 @@
 
 Use this rule to prevent imports to folders in relative parent paths.
 
-It's useful for large codebases codebases to enforce directed-acyclic-graph like folder structures.
+It's useful for enforcing tree-like folder structures instead of complex graph-like folder structures. While this might be a departure from Node's default resolution style, it can lead large codebases to be easier to maintain codebases over time.
 
+To fix violations of this rule there are three general strategies. Given this example:
+
+```
+numbers
+└── three.js
+add.js
+```
+
+```js
+// ./add.js
+export default function (numbers) {
+  return numbers.reduce((sum, n) => sum + n, 0);
+}
+
+// ./numbers/three.js
+import add from '../add';
+
+export default function three() {
+  return add([1, 2]);
+}
+```
+
+You can,
+
+1. Move the file to be in a sibling folder (or higher) of the dependency.
+
+`three.js` could be be in the same folder as `../add.js`:
+
+```
+three.js
+add.js
+```
+
+or because `add` doesn't have any imports, it could be in it's own namespace:
+
+```
+math
+└── add.js
+three.js
+```
+
+2. Pass the dependency as an argument at runtime (dependency injection)
+
+```js
+// three.js
+export default function three(add) {
+  return add([1, 2]);
+}
+
+// somewhere else when you use `./three.js`:
+import add from './add';
+import three from './numbers/three';
+console.log(three(add));
+```
+
+3. Make the dependency a package so it's available to all files:
+
+```js
+import add from 'add'; // from https://www.npmjs.com/package/add
+export default function three() {
+  return add([1,2]);
+}
+```
+
+These are (respectively) static, dynamic & global solutions to graph-like dependency resolution.
 
 ### Examples
 
