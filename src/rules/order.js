@@ -180,12 +180,12 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
   const sourceCode = context.getSourceCode()
 
   const firstRoot = findRootNode(firstNode.node)
-  let firstRootStart = findStartOfLineWithComments(sourceCode, firstRoot)
+  const firstRootStart = findStartOfLineWithComments(sourceCode, firstRoot)
   const firstRootEnd = findEndOfLineWithComments(sourceCode, firstRoot)
 
   const secondRoot = findRootNode(secondNode.node)
-  let secondRootStart = findStartOfLineWithComments(sourceCode, secondRoot)
-  let secondRootEnd = findEndOfLineWithComments(sourceCode, secondRoot)
+  const secondRootStart = findStartOfLineWithComments(sourceCode, secondRoot)
+  const secondRootEnd = findEndOfLineWithComments(sourceCode, secondRoot)
   const canFix = canReorderItems(firstRoot, secondRoot)
 
   let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd)
@@ -241,6 +241,63 @@ function makeOutOfOrderReport(context, imported) {
     return
   }
   reportOutOfOrder(context, imported, outOfOrder, 'before')
+}
+
+function importsSorterAsc(importA, importB) {
+  if (importA < importB) {
+    return -1
+  }
+
+  if (importA > importB) {
+    return 1
+  }
+
+  return 0
+}
+
+function importsSorterDesc(importA, importB) {
+  if (importA < importB) {
+    return 1
+  }
+
+  if (importA > importB) {
+    return -1
+  }
+
+  return 0
+}
+
+function mutateRanksToAlphabetize(imported, order) {
+  const groupedByRanks = imported.reduce(function(acc, importedItem) {
+    if (!Array.isArray(acc[importedItem.rank])) { 
+      acc[importedItem.rank] = []
+    }
+    acc[importedItem.rank].push(importedItem.name)
+    return acc
+  }, {})
+
+  const groupRanks = Object.keys(groupedByRanks)
+
+  const sorterFn = order === 'asc' ? importsSorterAsc : importsSorterDesc
+  // sort imports locally within their group
+  groupRanks.forEach(function(groupRank) {
+    groupedByRanks[groupRank].sort(sorterFn)
+  })
+
+  // assign globally unique rank to each import
+  let newRank = 0
+  const alphabetizedRanks = groupRanks.sort().reduce(function(acc, groupRank) {
+    groupedByRanks[groupRank].forEach(function(importedItemName) {
+      acc[importedItemName] = newRank
+      newRank += 1
+    })
+    return acc
+  }, {})
+
+  // mutate the original group-rank with alphabetized-rank
+  imported.forEach(function(importedItem) {
+    importedItem.rank = alphabetizedRanks[importedItem.name]
+  })
 }
 
 // DETECTING
@@ -427,6 +484,13 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   })
 }
 
+function getAlphabetizeConfig(options) {
+  const alphabetize = options.alphabetize || {}
+  const order = alphabetize.order || 'ignore'
+
+  return {order}
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -473,6 +537,16 @@ module.exports = {
               'never',
             ],
           },
+          alphabetize: {
+            type: 'object',
+            properties: {
+              order: {
+                enum: ['ignore', 'asc', 'desc'],
+                default: 'ignore',
+              },
+            },
+            additionalProperties: false,
+          },
         },
         additionalProperties: false,
       },
@@ -482,6 +556,7 @@ module.exports = {
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
     const newlinesBetweenImports = options['newlines-between'] || 'ignore'
+    const alphabetize = getAlphabetizeConfig(options)
     let ranks
 
     try {
@@ -524,6 +599,10 @@ module.exports = {
         registerNode(context, node, name, 'require', ranks, imported)
       },
       'Program:exit': function reportAndReset() {
+        if (alphabetize.order !== 'ignore') {
+          mutateRanksToAlphabetize(imported, alphabetize.order)
+        }
+
         makeOutOfOrderReport(context, imported)
 
         if (newlinesBetweenImports !== 'ignore') {

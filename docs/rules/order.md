@@ -122,7 +122,6 @@ Properties of the objects
 
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 
-
 Enforces or forbids new lines between import groups:
 
 - If set to `ignore`, no errors related to new lines between import groups will be reported (default).
@@ -188,6 +187,39 @@ import fs from 'fs';
 import path from 'path';
 import index from './';
 import sibling from './foo';
+```
+
+### `alphabetize: {order: asc|desc|ignore}`:
+
+Sort the order within each group in alphabetical manner based on **import path**:
+
+- `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
+
+Example setting:
+```js
+alphabetize: {
+  order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
+}
+```
+
+This will fail the rule check:
+
+```js
+/* eslint import/order: ["error", {"alphabetize": true}] */
+import React, { PureComponent } from 'react';
+import aTypes from 'prop-types';
+import { compose, apply } from 'xcompose';
+import * as classnames from 'classnames';
+```
+
+While this will pass:
+
+```js
+/* eslint import/order: ["error", {"alphabetize": true}] */
+import * as classnames from 'classnames';
+import aTypes from 'prop-types';
+import React, { PureComponent } from 'react';
+import { compose, apply } from 'xcompose';
 ```
 
 ## Related

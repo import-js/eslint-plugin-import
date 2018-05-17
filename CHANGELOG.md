@@ -1,10 +1,10 @@
 # Change Log
+
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: add flow type support ([#1542], thanks [@rfermann])
 - [`order`]: Adds support for pathGroups to allow ordering by defined patterns ([#795], [#1386], thanks [@Mairu])
 - [`no-duplicates`]: Add `considerQueryString` option : allow duplicate imports with different query strings ([#1107], thanks [@pcorpet]).
+- [`order`]: Add support for alphabetical sorting of import paths within import groups ([#1360], [#1105], [#629], thanks [@duncanbeevers], [@stropho], [@luczsoma], [@randallreedjr])
 
 ### Fixed
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
@@ -34,10 +35,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]/`eslint-module-utils`: Avoid superfluous calls and code ([#1551], thanks [@brettz9])
 
 ## [2.18.2] - 2019-07-19
+### Fixed
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
 
 ## [2.18.1] - 2019-07-18
-
 ### Fixed
 - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
 - [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
@@ -45,10 +46,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`export`]: false positive for TypeScript overloads ([#1412], thanks [@golopot])
 
 ### Refactors
- - [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
+- [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
 
 ## [2.18.0] - 2019-06-24
-
 ### Added
 - Support eslint v6 ([#1393], thanks [@sheepsteak])
 - [`order`]: Adds support for correctly sorting unknown types into a single group ([#1375], thanks [@swernerx])
@@ -63,7 +63,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-named-as-default-member`]: update broken link ([#1389], thanks [@fooloomanzoo])
 
 ## [2.17.3] - 2019-05-23
-
 ### Fixed
 - [`no-common-js`]: Also throw an error when assigning ([#1354], thanks [@charlessuh])
 - [`no-unused-modules`]: don't crash when lint file outside src-folder ([#1347], thanks [@rfermann])
@@ -76,22 +75,18 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Docs
 - add missing `no-unused-modules` in README ([#1358], thanks [@golopot])
 - [`no-unused-modules`]: Indicates usage, plugin defaults to no-op, and add description to main README.md ([#1352], thanks [@johndevedu])
-[@christophercurrie]: https://github.com/christophercurrie
 - Document `env` option for `eslint-import-resolver-webpack` ([#1363], thanks [@kgregory])
 
 ## [2.17.2] - 2019-04-16
-
 ### Fixed
 - [`no-unused-modules`]: avoid crash when using `ignoreExports`-option ([#1331], [#1323], thanks [@rfermann])
 - [`no-unused-modules`]: make sure that rule with no options will not fail ([#1330], [#1334], thanks [@kiwka])
 
 ## [2.17.1] - 2019-04-13
-
 ### Fixed
 - require v2.4 of `eslint-module-utils` ([#1322])
 
 ## [2.17.0] - 2019-04-13
-
 ### Added
 - [`no-useless-path-segments`]: Add `noUselessIndex` option ([#1290], thanks [@timkraut])
 - [`no-duplicates`]: Add autofix ([#1312], thanks [@lydell])
@@ -116,7 +111,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - fix broken tests on master ([#1295], thanks [@jeffshaver] and [@ljharb])
 - [`no-commonjs`]: add tests that show corner cases ([#1308], thanks [@TakeScoop])
 
-
 ## [2.16.0] - 2019-01-29
 ### Added
 - `typescript` config ([#1257], thanks [@kirill-konshin])
@@ -133,13 +127,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`dynamic-import-chunkname`]: Add proper webpack comment parsing ([#1163], thanks [@st-sloth])
 - [`named`]: fix destructuring assignment ([#1232], thanks [@ljqx])
 
-
 ## [2.14.0] - 2018-08-13
-*   69e0187 (HEAD -> master, source/master, origin/master, origin/HEAD) Merge pull request #1151 from jf248/jsx
-|\
-| * e30a757 (source/pr/1151, fork/jsx) Add JSX check to namespace rule
-|/
-* 8252344 (source/pr/1148) Add error to output when module loaded as resolver has invalid API
 ### Added
 - [`no-useless-path-segments`]: add commonJS (CJS) support ([#1128], thanks [@1pete])
 - [`namespace`]: add JSX check ([#1151], thanks [@jf248])
@@ -497,11 +485,10 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 
 ## [1.1.0] - 2016-03-15
 ### Added
-- Added an [`ignore`](./docs/rules/no-unresolved.md#ignore) option to [`no-unresolved`] for those pesky files that no
-resolver can find. (still prefer enhancing the Webpack and Node resolvers to
-using it, though). See [#89] for details.
+- Added an [`ignore`](./docs/rules/no-unresolved.md#ignore) option to [`no-unresolved`] for those pesky files that no resolver can find. (still prefer enhancing the Webpack and Node resolvers to using it, though). See [#89] for details.
 
 ## [1.0.4] - 2016-03-11
+
 ### Changed
 - respect hoisting for deep namespaces ([`namespace`]/[`no-deprecated`]) ([#211])
 
@@ -510,39 +497,41 @@ using it, though). See [#89] for details.
 - correct cache behavior in `eslint_d` for deep namespaces ([#200])
 
 ## [1.0.3] - 2016-02-26
+
 ### Changed
 - no-deprecated follows deep namespaces ([#191])
 
 ### Fixed
-- [`namespace`] no longer flags modules with only a default export as having no
-names. (ns.default is valid ES6)
+- [`namespace`] no longer flags modules with only a default export as having no names. (ns.default is valid ES6)
 
 ## [1.0.2] - 2016-02-26
+
 ### Fixed
 - don't parse imports with no specifiers ([#192])
 
 ## [1.0.1] - 2016-02-25
+
 ### Fixed
 - export `stage-0` shared config
 - documented [`no-deprecated`]
 - deep namespaces are traversed regardless of how they get imported ([#189])
 
 ## [1.0.0] - 2016-02-24
+
 ### Added
-- [`no-deprecated`]: WIP rule to let you know at lint time if you're using
-deprecated functions, constants, classes, or modules.
+- [`no-deprecated`]: WIP rule to let you know at lint time if you're using deprecated functions, constants, classes, or modules.
 
 ### Changed
 - [`namespace`]: support deep namespaces ([#119] via [#157])
 
 ## [1.0.0-beta.0] - 2016-02-13
+
 ### Changed
 - support for (only) ESLint 2.x
-- no longer needs/refers to `import/parser` or `import/parse-options`. Instead,
-ESLint provides the configured parser + options to the rules, and they use that
-to parse dependencies.
+- no longer needs/refers to `import/parser` or `import/parse-options`. Instead, ESLint provides the configured parser + options to the rules, and they use that to parse dependencies.
 
 ### Removed
+
 - `babylon` as default import parser (see Breaking)
 
 ## [0.13.0] - 2016-02-08
@@ -562,14 +551,11 @@ Unpublished from npm and re-released as 0.13.0. See [#170].
 
 ## [0.12.0] - 2015-12-14
 ### Changed
-- Ignore [`import/ignore` setting] if exports are actually found in the parsed module. Does
-this to support use of `jsnext:main` in `node_modules` without the pain of
-managing an allow list or a nuanced deny list.
+- Ignore [`import/ignore` setting] if exports are actually found in the parsed module. Does this to support use of `jsnext:main` in `node_modules` without the pain of managing an allow list or a nuanced deny list.
 
 ## [0.11.0] - 2015-11-27
 ### Added
-- Resolver plugins. Now the linter can read Webpack config, properly follow
-aliases and ignore externals, dismisses inline loaders, etc. etc.!
+- Resolver plugins. Now the linter can read Webpack config, properly follow aliases and ignore externals, dismisses inline loaders, etc. etc.!
 
 ## Earlier releases (0.10.1 and younger)
 See [GitHub release notes](https://github.com/benmosher/eslint-plugin-import/releases?after=v0.11.0)
@@ -655,6 +641,7 @@ for info on changes for earlier releases.
 [#1371]: https://github.com/benmosher/eslint-plugin-import/pull/1371
 [#1370]: https://github.com/benmosher/eslint-plugin-import/pull/1370
 [#1363]: https://github.com/benmosher/eslint-plugin-import/pull/1363
+[#1360]: https://github.com/benmosher/eslint-plugin-import/pull/1360
 [#1358]: https://github.com/benmosher/eslint-plugin-import/pull/1358
 [#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
 [#1354]: https://github.com/benmosher/eslint-plugin-import/pull/1354
@@ -695,6 +682,7 @@ for info on changes for earlier releases.
 [#1112]: https://github.com/benmosher/eslint-plugin-import/pull/1112
 [#1107]: https://github.com/benmosher/eslint-plugin-import/pull/1107
 [#1106]: https://github.com/benmosher/eslint-plugin-import/pull/1106
+[#1105]: https://github.com/benmosher/eslint-plugin-import/pull/1105
 [#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
@@ -724,6 +712,7 @@ for info on changes for earlier releases.
 [#639]: https://github.com/benmosher/eslint-plugin-import/pull/639
 [#632]: https://github.com/benmosher/eslint-plugin-import/pull/632
 [#630]: https://github.com/benmosher/eslint-plugin-import/pull/630
+[#629]: https://github.com/benmosher/eslint-plugin-import/pull/629
 [#628]: https://github.com/benmosher/eslint-plugin-import/pull/628
 [#596]: https://github.com/benmosher/eslint-plugin-import/pull/596
 [#586]: https://github.com/benmosher/eslint-plugin-import/pull/586
@@ -774,7 +763,6 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
-
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
 [#1323]: https://github.com/benmosher/eslint-plugin-import/issues/1323
@@ -921,7 +909,6 @@ for info on changes for earlier releases.
 [0.12.1]: https://github.com/benmosher/eslint-plugin-import/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
-
 [@mathieudutour]: https://github.com/mathieudutour
 [@gausie]: https://github.com/gausie
 [@singles]: https://github.com/singles
@@ -1035,3 +1022,7 @@ for info on changes for earlier releases.
 [@Mairu]: https://github.com/Mairu
 [@aamulumi]: https://github.com/aamulumi
 [@pcorpet]: https://github.com/pcorpet
+[@stropho]: https://github.com/stropho
+[@luczsoma]: https://github.com/luczsoma
+[@christophercurrie]: https://github.com/christophercurrie
+[@randallreedjr]: https://github.com/randallreedjr

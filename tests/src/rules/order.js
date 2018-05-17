@@ -519,6 +519,47 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // Option alphabetize: {order: 'ignore'}
+    test({
+      code: `
+        import a from 'foo';
+        import b from 'bar';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'ignore'},
+      }],
+    }),
+    // Option alphabetize: {order: 'asc'}
+    test({
+      code: `
+        import c from 'Bar';
+        import b from 'bar';
+        import a from 'foo';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'asc'},
+      }],
+    }),
+    // Option alphabetize: {order: 'desc'}
+    test({
+      code: `
+        import a from 'foo';
+        import b from 'bar';
+        import c from 'Bar';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'desc'},
+      }],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -1764,5 +1805,55 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
+    // Option alphabetize: {order: 'asc'}
+    test({
+      code: `
+        import b from 'bar';
+        import c from 'Bar';
+        import a from 'foo';
+
+        import index from './';
+      `,
+      output: `
+        import c from 'Bar';
+        import b from 'bar';
+        import a from 'foo';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'asc'},
+      }],
+      errors: [{
+        ruleID: 'order',
+        message: '`Bar` import should occur before import of `bar`',
+      }],
+    }),
+    // Option alphabetize: {order: 'desc'}
+    test({
+      code: `
+        import a from 'foo';
+        import c from 'Bar';
+        import b from 'bar';
+
+        import index from './';
+      `,
+      output: `
+        import a from 'foo';
+        import b from 'bar';
+        import c from 'Bar';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'desc'},
+      }],
+      errors: [{
+        ruleID: 'order',
+        message: '`bar` import should occur before import of `Bar`',
+      }],
+    }),
   ].filter((t) => !!t),
 })
