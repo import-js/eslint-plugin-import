@@ -89,6 +89,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: packageDirMonoRepoRoot}],
     }),
+    test({
+      code: 'import leftPad from "left-pad";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+    }),
   ],
   invalid: [
     test({
@@ -243,7 +248,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirMonoRepoWithNested}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
+        message: '\'left-pad\' should be listed in the project\'s dependencies. Run \'npm i -S left-pad\' to add it',
       }],
     }),
     test({
@@ -251,16 +256,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+        message: '\'react\' should be listed in the project\'s dependencies. Run \'npm i -S react\' to add it',
       }],
     }),
     test({
-      code: 'import react from "react";',
+      code: 'import leftPad from "left-pad";',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoRoot}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+        message: '\'left-pad\' should be listed in the project\'s dependencies. Run \'npm i -S left-pad\' to add it',
       }],
     }),
   ]

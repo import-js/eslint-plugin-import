@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs'
-import { isArray, isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -21,66 +20,58 @@ function extractDepFields(pkg) {
   }
 }
 
+function assignDeps(fromDeps, toDeps) {
+  Object.assign(fromDeps.dependencies, toDeps.dependencies)
+  Object.assign(fromDeps.devDependencies, toDeps.devDependencies)
+  Object.assign(fromDeps.peerDependencies, toDeps.peerDependencies)
+  Object.assign(fromDeps.optionalDependencies, toDeps.optionalDependencies)
+}
+
 function getDependencies(context, packageDir) {
-  let paths = []
+  const files = []
+
   try {
-    const packageContent = {
-      dependencies: {},
-      devDependencies: {},
-      optionalDependencies: {},
-      peerDependencies: {},
-    }
+    const closest = readPkgUp.sync({cwd: context.getFilename(), normalize: false})
+    files.push(closest.path)
 
-    if (!isEmpty(packageDir)) {
-      if (!isArray(packageDir)) {
-        paths = [path.resolve(packageDir)]
-      } else {
-        paths = packageDir.map(dir => path.resolve(dir))
-      }
-    }
+    const deps = (packageDir ? [].concat(packageDir) : [])
+      .reduce((allDeps, dir) => {
+        const pkgFile = path.resolve(dir, 'package.json')
 
-    if (!isEmpty(paths)) {
-      // use rule config to find package.json
-      paths.forEach(dir => {
-        Object.assign(packageContent, extractDepFields(
-          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
-        ))
-      })
-    } else {
-      // use closest package.json
-      Object.assign(
-        packageContent,
-        extractDepFields(
-          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
-        )
-      )
-    }
+        if (files.indexOf(pkgFile) === -1) {
+          files.push(pkgFile)
 
-    if (![
-      packageContent.dependencies,
-      packageContent.devDependencies,
-      packageContent.optionalDependencies,
-      packageContent.peerDependencies,
+          assignDeps(
+            allDeps,
+            extractDepFields(JSON.parse(fs.readFileSync(pkgFile, 'utf8')))
+          )
+        }
+
+        return allDeps
+      }, extractDepFields(closest.pkg))
+
+    if ([
+      deps.dependencies,
+      deps.devDependencies,
+      deps.optionalDependencies,
+      deps.peerDependencies,
     ].some(hasKeys)) {
-      return null
+      return deps
     }
-
-    return packageContent
   } catch (e) {
-    if (!isEmpty(paths) && e.code === 'ENOENT') {
+    if (e.code === 'ENOENT') {
       context.report({
         message: 'The package.json file could not be found.',
         loc: { line: 0, column: 0 },
       })
-    }
-    if (e.name === 'JSONError' || e instanceof SyntaxError) {
+    } else if (e.name === 'JSONError' || e instanceof SyntaxError) {
       context.report({
         message: 'The package.json file could not be parsed: ' + e.message,
         loc: { line: 0, column: 0 },
       })
+    } else {
+      throw e
     }
-
-    return null
   }
 }
 
