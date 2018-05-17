@@ -28,6 +28,23 @@ ruleTester.run('no-restricted-paths', rule, {
         zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/other' } ],
       } ],
     }),
+
+
+    // irrelevant function calls
+    test({ code: 'notrequire("../server/b.js")' }),
+    test({
+      code: 'notrequire("../server/b.js")',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+        options: [ {
+          zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
+        } ], }),
+
+    // no config
+    test({ code: 'require("../server/b.js")' }),
+    test({ code: 'import b from "../server/b.js"' }),
+
+    // builtin (ignore)
+    test({ code: 'require("os")' })
   ],
 
   invalid: [
