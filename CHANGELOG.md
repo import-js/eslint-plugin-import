@@ -4,13 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories.
+
+## [2.12.0] - 2018-05-17
 ### Added
 - Ignore type imports for [`named`] rule ([#931], thanks [@mattijsbliek])
 - Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
-- Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories.
+- `packageDir` option for [`no-extraneous-dependencies`] can be array-valued ([#1085], thanks [@hulkish])
 
-
-# [2.11.0] - 2018-04-09
+## [2.11.0] - 2018-04-09
 ### Added
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 - `allow-require` option for [`no-commonjs`] rule ([#880], thanks [@futpib])
@@ -464,6 +466,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
@@ -607,7 +610,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.11.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.12.0...HEAD
+[2.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.9.0...v2.10.0
 [2.9.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.8.0...v2.9.0
@@ -717,3 +721,4 @@ for info on changes for earlier releases.
 [@lukeapage]: https://github.com/lukeapage
 [@manovotny]: https://github.com/manovotny
 [@mattijsbliek]: https://github.com/mattijsbliek
+[@hulkish]: https://github.com/hulkish

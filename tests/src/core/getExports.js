@@ -311,6 +311,7 @@ describe('ExportMap', function () {
   })
 
   context('alternate parsers', function () {
+
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
       ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
@@ -326,6 +327,7 @@ describe('ExportMap', function () {
 
         let imports
         before('load imports', function () {
+          this.timeout(20000)  // takes a long time :shrug:
           imports = ExportMap.get('./typescript.ts', context)
         })
 
