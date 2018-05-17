@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## Unreleased
 
 
+## 0.10.0 - 2018-05-17
+### Changed
+- cache webpack resolve function, for performance ([#788]/[#1091])
+
 ## 0.9.0 - 2018-03-29
 ### Breaking
 - Fix with `pnpm` by bumping `resolve` ([#968])
@@ -97,6 +101,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#1091]: https://github.com/benmosher/eslint-plugin-import/pull/1091
 [#969]: https://github.com/benmosher/eslint-plugin-import/pull/969
 [#968]: https://github.com/benmosher/eslint-plugin-import/pull/968
 [#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
@@ -112,6 +117,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/benmosher/eslint-plugin-import/pull/181
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
+[#788]: https://github.com/benmosher/eslint-plugin-import/issues/788
 [#681]: https://github.com/benmosher/eslint-plugin-import/issues/681
 [#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
 [#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
