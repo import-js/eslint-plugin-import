@@ -31,7 +31,7 @@ module.exports = {
         if (im.type !== type) return
 
         // ignore type imports
-        if(im.importKind === 'type') return
+        if (im.importKind === 'type') return
 
         const deepLookup = imports.hasDeep(im[key].name)
 
