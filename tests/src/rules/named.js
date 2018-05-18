@@ -270,6 +270,12 @@ ruleTester.run('named', rule, {
       }],
     }),
 
+    test({
+      code: 'import  { type MyOpaqueType, MyMissingClass } from "./flowtypes"',
+      parser: 'babel-eslint',
+      errors: ["MyMissingClass not found in './flowtypes'"],
+    }),
+
     // jsnext
     test({
       code: '/*jsnext*/ import { createSnorlax } from "redux"',
