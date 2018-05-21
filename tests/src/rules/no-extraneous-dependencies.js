@@ -94,6 +94,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoRoot}],
     }),
+    test({
+      code: 'import react from "react";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'react\' should be listed in the project\'s dependencies. Run \'npm i -S react\' to add it',
+      }],
+    }),
   ],
   invalid: [
     test({
