@@ -36,6 +36,31 @@ The motivation is that this is likely a result of two developers importing diffe
 names from the same module at different times (and potentially largely different
 locations in the file.) This rule brings both (or n-many) to attention.
 
+### Query Strings
+
+By default, this rule ignores query strings (i.e. paths followed by a question mark), and thus imports from `./mod?a` and `./mod?b` will be considered as duplicates. However you can use the option `considerQueryString` to handle them as different (primarily because browsers will resolve those imports differently).
+
+Config:
+
+```json
+"import/no-duplicates": ["error", {"considerQueryString": true}]
+```
+
+And then the following code becomes valid:
+```js
+import minifiedMod from './mod?minify'
+import noCommentsMod from './mod?comments=0'
+import originalMod from './mod'
+```
+
+It will still catch duplicates when using the same module and the exact same query string:
+```js
+import SomeDefaultClass from './mod?minify'
+
+// This is invalid, assuming `./mod` and `./mod.js` are the same target:
+import * from './mod.js?minify'
+```
+
 ## When Not To Use It
 
 If the core ESLint version is good enough (i.e. you're _not_ using Flow and you _are_ using [`import/extensions`](./extensions.md)), keep it and don't use this.

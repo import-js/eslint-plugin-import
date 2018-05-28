@@ -230,15 +230,38 @@ module.exports = {
       url: docsUrl('no-duplicates'),
     },
     fixable: 'code',
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          considerQueryString: {
+            type: 'boolean',
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create: function (context) {
+    // Prepare the resolver from options.
+    const considerQueryStringOption = context.options[0] &&
+      context.options[0]['considerQueryString']
+    const defaultResolver = sourcePath => resolve(sourcePath, context) || sourcePath
+    const resolver = considerQueryStringOption ? (sourcePath => {
+      const parts = sourcePath.match(/^([^?]*)\?(.*)$/)
+      if (!parts) {
+        return defaultResolver(sourcePath)
+      }
+      return defaultResolver(parts[1]) + '?' + parts[2]
+    }) : defaultResolver
+
     const imported = new Map()
     const typesImported = new Map()
     return {
       'ImportDeclaration': function (n) {
         // resolved path will cover aliased duplicates
-        const resolvedPath = resolve(n.source.value, context) || n.source.value
+        const resolvedPath = resolver(n.source.value)
         const importMap = n.importKind === 'type' ? typesImported : imported
 
         if (importMap.has(resolvedPath)) {

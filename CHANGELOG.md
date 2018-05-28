@@ -4,7 +4,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-- [`no-extraneous-dependencies`]: Check `export from` ([#1049], thanks [@marcusdarmstrong])
 
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
@@ -14,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
 - [`no-unused-modules`]: add flow type support ([#1542], thanks [@rfermann])
 - [`order`]: Adds support for pathGroups to allow ordering by defined patterns ([#795], [#1386], thanks [@Mairu])
+- [`no-duplicates`]: Add `considerQueryString` option : allow duplicate imports with different query strings ([#1107], thanks [@pcorpet]).
 
 ### Fixed
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
@@ -25,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: fix crash due to `export *` ([#1496], thanks [@Taranys])
 - [`no-cycle`]: should not warn for Flow imports ([#1494], thanks [@maxmalov])
 - [`order`]: fix `@someModule` considered as `unknown` instead of `internal` ([#1493], thanks [@aamulumi])
+- [`no-extraneous-dependencies`]: Check `export from` ([#1049], thanks [@marcusdarmstrong])
 
 ### Docs
 - [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
@@ -692,6 +693,7 @@ for info on changes for earlier releases.
 [#1126]: https://github.com/benmosher/eslint-plugin-import/pull/1126
 [#1122]: https://github.com/benmosher/eslint-plugin-import/pull/1122
 [#1112]: https://github.com/benmosher/eslint-plugin-import/pull/1112
+[#1107]: https://github.com/benmosher/eslint-plugin-import/pull/1107
 [#1106]: https://github.com/benmosher/eslint-plugin-import/pull/1106
 [#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
@@ -1032,3 +1034,4 @@ for info on changes for earlier releases.
 [@marcusdarmstrong]: https://github.com/marcusdarmstrong
 [@Mairu]: https://github.com/Mairu
 [@aamulumi]: https://github.com/aamulumi
+[@pcorpet]: https://github.com/pcorpet
