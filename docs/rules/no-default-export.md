@@ -1,4 +1,4 @@
-# no-default-export
+# `import/no-default-export`
 
 Prohibit default exports. Mostly an inverse of [`prefer-default-export`].
 

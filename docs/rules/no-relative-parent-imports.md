@@ -1,4 +1,4 @@
-# no-relative-parent-imports
+# import/no-relative-parent-imports
 
 Use this rule to prevent imports to folders in relative parent paths.
 

@@ -1,4 +1,4 @@
-# no-named-export
+# `import/no-named-export`
 
 Prohibit named exports. Mostly an inverse of [`no-default-export`].
 

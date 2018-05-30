@@ -1,4 +1,4 @@
-# Forbid a module from importing itself
+# Forbid a module from importing itself (`import/no-self-import`)
 
 Forbid a module from importing itself. This can sometimes happen during refactoring.
 

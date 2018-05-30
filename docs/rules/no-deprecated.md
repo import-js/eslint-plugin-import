@@ -1,4 +1,4 @@
-# import/no-deprecated
+# `import/no-deprecated`
 
 Reports use of a deprecated name, as indicated by a JSDoc block with a `@deprecated`
 tag or TomDoc `Deprecated: ` comment.
