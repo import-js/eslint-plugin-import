@@ -82,5 +82,5 @@ const typeTest = cond([
 ])
 
 export default function resolveImportType(name, context) {
-  return typeTest(name, context.settings, resolve(name, context))
+  return typeTest(name, context.settings, resolve(name, context, __dirname))
 }

@@ -66,7 +66,7 @@ module.exports = {
 
       // if the import statement doesn't match directly, try to match the
       // resolved path if the import is resolvable
-      const resolved = resolve(importPath, context)
+      const resolved = resolve(importPath, context, __dirname)
       if (!resolved || reachingAllowed(normalizeSep(resolved))) return false
 
       // this import was not allowed by the allowed paths, and reaches

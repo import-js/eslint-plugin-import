@@ -60,9 +60,9 @@ module.exports = {
         return
       }
 
-      const resolvedPath = resolve(value, context)
+      const resolvedPath = resolve(value, context, __dirname)
       const normed = normalize(value)
-      if (normed !== value && resolvedPath === resolve(normed, context)) {
+      if (normed !== value && resolvedPath === resolve(normed, context, __dirname)) {
         return report(normed)
       }
 

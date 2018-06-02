@@ -108,7 +108,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     return
   }
 
-  const resolved = resolve(name, context)
+  const resolved = resolve(name, context, __dirname)
   if (!resolved) { return }
 
   const splitName = name.split('/')

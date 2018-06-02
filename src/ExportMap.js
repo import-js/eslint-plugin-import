@@ -262,7 +262,7 @@ function captureTomDoc(comments) {
 }
 
 ExportMap.get = function (source, context) {
-  const path = resolve(source, context)
+  const path = resolve(source, context, __dirname)
   if (path == null) return null
 
   return ExportMap.for(childContext(path, context))

@@ -11,7 +11,7 @@ function isImportingSelf(context, node, requireName) {
   const filePath = context.getFilename()
 
   // If the input is from stdin, this test can't fail
-  if (filePath !== '<text>' && filePath === resolve(requireName, context)) {
+  if (filePath !== '<text>' && filePath === resolve(requireName, context, __dirname)) {
     context.report({
         node,
         message: 'Module imports itself.',

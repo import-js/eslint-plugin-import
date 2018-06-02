@@ -115,9 +115,9 @@ module.exports = {
     function isResolvableWithoutExtension(file) {
       const extension = path.extname(file)
       const fileWithoutExtension = file.slice(0, -extension.length)
-      const resolvedFileWithoutExtension = resolve(fileWithoutExtension, context)
+      const resolvedFileWithoutExtension = resolve(fileWithoutExtension, context, __dirname)
 
-      return resolvedFileWithoutExtension === resolve(file, context)
+      return resolvedFileWithoutExtension === resolve(file, context, __dirname)
     }
 
     function checkFileExtension(node) {
@@ -131,7 +131,7 @@ module.exports = {
       // don't enforce anything on builtins
       if (isBuiltIn(importPath, context.settings)) return
 
-      const resolvedPath = resolve(importPath, context)
+      const resolvedPath = resolve(importPath, context, __dirname)
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.

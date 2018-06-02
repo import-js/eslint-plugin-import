@@ -2,6 +2,7 @@
 exports.__esModule = true
 
 const pkgDir = require('pkg-dir')
+const nodeResolve = require('resolve')
 
 const fs = require('fs')
 const path = require('path')
@@ -14,11 +15,15 @@ exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 
 const fileExistsCache = new ModuleCache()
 
-function tryRequire(target) {
+function tryRequire(target, dirname) {
+  dirname = dirname || process.cwd();
   let resolved;
   try {
     // Check if the target exists
-    resolved = require.resolve(target);
+    resolved = nodeResolve.sync(target, {
+      preserveSymlinks: false,
+      basedir: dirname
+    });
   } catch(e) {
     // If the target does not exist then just return undefined
     return undefined;
@@ -57,11 +62,11 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   return result
 }
 
-function relative(modulePath, sourceFile, settings) {
-  return fullResolve(modulePath, sourceFile, settings).path
+function relative(modulePath, sourceFile, settings, dirname) {
+  return fullResolve(modulePath, sourceFile, settings, dirname).path
 }
 
-function fullResolve(modulePath, sourceFile, settings) {
+function fullResolve(modulePath, sourceFile, settings, dirname) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules'])
   if (coreSet != null && coreSet.has(modulePath)) return { found: true, path: null }
@@ -112,7 +117,7 @@ function fullResolve(modulePath, sourceFile, settings) {
   for (let pair of resolvers) {
     let name = pair[0]
       , config = pair[1]
-    const resolver = requireResolver(name, sourceFile)
+    const resolver = requireResolver(name, sourceFile, dirname)
         , resolved = withResolver(resolver, config)
 
     if (!resolved.found) continue
@@ -152,11 +157,11 @@ function resolverReducer(resolvers, map) {
 function getBaseDir(sourceFile) {
   return pkgDir.sync(sourceFile) || process.cwd()
 }
-function requireResolver(name, sourceFile) {
+function requireResolver(name, sourceFile, dirname) {
   // Try to resolve package with conventional name
-  let resolver = tryRequire(`eslint-import-resolver-${name}`) ||
-    tryRequire(name) ||
-    tryRequire(path.resolve(getBaseDir(sourceFile), name))
+  let resolver = tryRequire(`eslint-import-resolver-${name}`, dirname) ||
+    tryRequire(name, dirname) ||
+    tryRequire(path.resolve(getBaseDir(sourceFile), name), dirname)
 
   if (!resolver) {
     throw new Error(`unable to load resolver "${name}".`)
@@ -171,15 +176,17 @@ const erroredContexts = new Set()
  * Given
  * @param  {string} p - module path
  * @param  {object} context - ESLint context
+ * @param  {string} dirname - dirname to resolve the resolver module from
  * @return {string} - the full module filesystem path;
  *                    null if package is core;
  *                    undefined if not found
  */
-function resolve(p, context) {
+function resolve(p, context, dirname) {
   try {
     return relative( p
                    , context.getFilename()
                    , context.settings
+                   , dirname
                    )
   } catch (err) {
     if (!erroredContexts.has(context)) {

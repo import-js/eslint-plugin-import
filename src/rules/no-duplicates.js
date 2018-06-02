@@ -24,7 +24,7 @@ module.exports = {
     return {
       'ImportDeclaration': function (n) {
         // resolved path will cover aliased duplicates
-        const resolvedPath = resolve(n.source.value, context) || n.source.value
+        const resolvedPath = resolve(n.source.value, context, __dirname) || n.source.value
         const importMap = n.importKind === 'type' ? typesImported : imported
 
         if (importMap.has(resolvedPath)) {

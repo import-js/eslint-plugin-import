@@ -46,7 +46,7 @@ module.exports = {
     })
 
     function checkForRestrictedImportPath(importPath, node) {
-        const absoluteImportPath = resolve(importPath, context)
+        const absoluteImportPath = resolve(importPath, context, __dirname)
 
         if (!absoluteImportPath) {
           return
