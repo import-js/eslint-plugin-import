@@ -70,7 +70,10 @@ function getDependencies(context, packageDir) {
         loc: { line: 0, column: 0 },
       })
     } else {
-      throw e
+      context.report({
+        message: e.message,
+        loc: { line: 0, column: 0 },
+      })
     }
   }
 }
