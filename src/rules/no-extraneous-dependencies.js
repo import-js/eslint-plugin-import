@@ -7,16 +7,23 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
+const CWD = process.cwd()
+
 function hasKeys(obj = {}) {
   return Object.keys(obj).length > 0
 }
 
-function extractDepFields(pkg) {
+function extractDepFields({
+  dependencies = {},
+  devDependencies = {},
+  optionalDependencies = {},
+  peerDependencies = {},
+}) {
   return {
-    dependencies: pkg.dependencies || {},
-    devDependencies: pkg.devDependencies || {},
-    optionalDependencies: pkg.optionalDependencies || {},
-    peerDependencies: pkg.peerDependencies || {},
+    dependencies,
+    devDependencies,
+    optionalDependencies,
+    peerDependencies,
   }
 }
 
@@ -27,11 +34,11 @@ function assignDeps(fromDeps, toDeps) {
   Object.assign(fromDeps.optionalDependencies, toDeps.optionalDependencies)
 }
 
-function getDependencies(context, packageDir) {
+function getDependencies(context, packageDir, filename) {
   const files = []
 
   try {
-    const closest = readPkgUp.sync({cwd: context.getFilename(), normalize: false})
+    const closest = readPkgUp.sync({cwd: filename, normalize: false})
     files.push(closest.path)
 
     const deps = (packageDir ? [].concat(packageDir) : [])
@@ -59,19 +66,21 @@ function getDependencies(context, packageDir) {
       return deps
     }
   } catch (e) {
+    const relFiles = files.map((file) => path.relative(CWD, file))
+
     if (e.code === 'ENOENT') {
       context.report({
-        message: 'The package.json file could not be found.',
+        message: `Could not find: ${relFiles.join(', ')}`,
         loc: { line: 0, column: 0 },
       })
     } else if (e.name === 'JSONError' || e instanceof SyntaxError) {
       context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
+        message: `Could not parse ${relFiles.pop()}: ${e.message}`,
         loc: { line: 0, column: 0 },
       })
     } else {
       context.report({
-        message: e.message,
+        message: `Unknown Error while searching; ${relFiles.join(', ')}: ${e.message}`,
         loc: { line: 0, column: 0 },
       })
     }
@@ -167,19 +176,24 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
-    const options = context.options[0] || {}
+  create(context) {
+    const [{
+      devDependencies,
+      optionalDependencies,
+      peerDependencies,
+      packageDir,
+     } = {}] = context.options
     const filename = context.getFilename()
-    const deps = getDependencies(context, options.packageDir)
+    const deps = getDependencies(context, packageDir, filename)
 
     if (!deps) {
       return {}
     }
 
     const depsOptions = {
-      allowDevDeps: testConfig(options.devDependencies, filename) !== false,
-      allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
-      allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
+      allowDevDeps: testConfig(devDependencies, filename) !== false,
+      allowOptDeps: testConfig(optionalDependencies, filename) !== false,
+      allowPeerDeps: testConfig(peerDependencies, filename) !== false,
     }
 
     // todo: use module visitor from module-utils core
