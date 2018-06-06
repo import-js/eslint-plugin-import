@@ -13,17 +13,12 @@ function hasKeys(obj = {}) {
   return Object.keys(obj).length > 0
 }
 
-function extractDepFields({
-  dependencies,
-  devDependencies,
-  optionalDependencies,
-  peerDependencies,
-}) {
+function extractDepFields(pkg) {
   return {
-    dependencies: dependencies || {},
-    devDependencies: devDependencies || {},
-    optionalDependencies: optionalDependencies || {},
-    peerDependencies: peerDependencies || {},
+    dependencies: pkg.dependencies || {},
+    devDependencies: pkg.devDependencies || {},
+    optionalDependencies: pkg.optionalDependencies || {},
+    peerDependencies: pkg.peerDependencies || {},
   }
 }
 
