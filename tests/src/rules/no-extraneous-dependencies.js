@@ -236,7 +236,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: 'Could not find: tests/files/package.json, tests/src/rules/doesn-exist/package.json',
+        message: `Could not find: ${path.join('tests/files/package.json')}, ${path.join('tests/src/rules/doesn-exist/package.json')}`,
       }],
     }),
     test({
@@ -244,7 +244,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirWithSyntaxError}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: `Could not parse tests/files/with-syntax-error/package.json: ` + packageFileWithSyntaxErrorMessage,
+        message: `Could not parse ${path.join('tests/files/with-syntax-error/package.json')}: ` + packageFileWithSyntaxErrorMessage,
       }],
     }),
     test({
