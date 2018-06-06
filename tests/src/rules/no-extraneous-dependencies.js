@@ -253,7 +253,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirMonoRepoWithNested}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'left-pad\' should be listed in the project\'s dependencies. Run \'npm i -S left-pad\' to add it',
+        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
       }],
     }),
     test({
@@ -261,7 +261,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'react\' should be listed in the project\'s dependencies. Run \'npm i -S react\' to add it',
+        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
     }),
     test({
@@ -269,7 +269,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: '\'left-pad\' should be listed in the project\'s dependencies. Run \'npm i -S left-pad\' to add it',
+        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
       }],
     }),
   ]

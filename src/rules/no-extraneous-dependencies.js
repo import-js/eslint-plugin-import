@@ -14,16 +14,16 @@ function hasKeys(obj = {}) {
 }
 
 function extractDepFields({
-  dependencies = {},
-  devDependencies = {},
-  optionalDependencies = {},
-  peerDependencies = {},
+  dependencies,
+  devDependencies,
+  optionalDependencies,
+  peerDependencies,
 }) {
   return {
-    dependencies,
-    devDependencies,
-    optionalDependencies,
-    peerDependencies,
+    dependencies: dependencies || {},
+    devDependencies: devDependencies || {},
+    optionalDependencies: optionalDependencies || {},
+    peerDependencies: peerDependencies || {},
   }
 }
 
@@ -75,7 +75,7 @@ function getDependencies(context, packageDir, filename) {
       })
     } else if (e.name === 'JSONError' || e instanceof SyntaxError) {
       context.report({
-        message: `Could not parse ${relFiles.pop()}: ${e.message}`,
+        message: `Could not parse ${relFiles[relFiles.length - 1]}: ${e.message}`,
         loc: { line: 0, column: 0 },
       })
     } else {
