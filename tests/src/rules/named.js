@@ -72,6 +72,11 @@ ruleTester.run('named', rule, {
       code: 'import type { MissingType } from "./flowtypes"',
       parser: 'babel-eslint',
     }),
+    
+    test({
+      code: 'import { type MissingType } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
 
     // TypeScript
     test({
