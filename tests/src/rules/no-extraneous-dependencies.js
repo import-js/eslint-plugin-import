@@ -17,6 +17,7 @@ const packageFileWithSyntaxErrorMessage = (() => {
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
 const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
 const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
+const packageDirWebpackAliased = path.join(__dirname, '../../files/webpack-aliased')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -88,6 +89,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: packageDirMonoRepoRoot}],
+    }),
+    test({
+      code: 'import { View } from "react-native";',
+      options: [{packageDir: packageDirWebpackAliased}],
+      settings: { 'import/resolver': { webpack: { config: path.join(packageDirWebpackAliased, 'webpack.config.js') } } },
     }),
   ],
   invalid: [
