@@ -111,7 +111,9 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const resolved = resolve(name, context)
   if (!resolved) { return }
 
-  const [, resolvedName = name] = resolved.split(path.join(process.cwd(), 'node_modules/'))
+  // Take last part after node_modules
+  const [resolvedName] = resolved.split('node_modules/').slice(-1)
+
   const splitName = resolvedName.split('/')
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
