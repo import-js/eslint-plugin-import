@@ -23,7 +23,6 @@ module.exports = {
   // all of them)
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 6,
-    ecmaFeatures: { experimentalObjectRestSpread: true },
+    ecmaVersion: 2018,
   },
 }

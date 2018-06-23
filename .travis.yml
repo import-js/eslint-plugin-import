@@ -8,6 +8,7 @@ node_js:
 os: linux
 
 env:
+  - ESLINT_VERSION=5
   - ESLINT_VERSION=4
   - ESLINT_VERSION=3
   - ESLINT_VERSION=2
@@ -32,6 +33,9 @@ matrix:
   - env: PACKAGE=resolvers/webpack
     node_js: 4
   - os: osx
+    env: ESLINT_VERSION=5
+    node_js: 10
+  - os: osx
     env: ESLINT_VERSION=4
     node_js: 8
   - os: osx
@@ -40,6 +44,9 @@ matrix:
   - os: osx
     env: ESLINT_VERSION=2
     node_js: 4
+  exclude:
+  - node_js: '4'
+    env: ESLINT_VERSION=5
 
 before_install:
   - 'nvm install-latest-npm'

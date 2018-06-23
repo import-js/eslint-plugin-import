@@ -96,9 +96,7 @@ const valid = [
   test({
     code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
     parserOptions: {
-      ecmaFeatures: {
-        experimentalObjectRestSpread: true,
-      },
+      ecmaVersion: 2018,
     },
   }),
   test({
