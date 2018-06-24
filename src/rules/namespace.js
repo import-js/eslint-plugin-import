@@ -161,7 +161,7 @@ module.exports = {
           if (pattern.type !== 'ObjectPattern') return
 
           for (let property of pattern.properties) {
-            if (property.type === 'ExperimentalRestProperty') {
+            if (property.type === 'ExperimentalRestProperty' || !property.key) {
               continue
             }
 
