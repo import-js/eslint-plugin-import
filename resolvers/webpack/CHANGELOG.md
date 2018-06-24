@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.10.1 - 2018-06-24
+### Fixed
+- log a useful error in a module bug arises ([#768]/[#767], thanks [@mattkrick])
 
 ## 0.10.0 - 2018-05-17
 ### Changed
@@ -104,6 +107,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#1091]: https://github.com/benmosher/eslint-plugin-import/pull/1091
 [#969]: https://github.com/benmosher/eslint-plugin-import/pull/969
 [#968]: https://github.com/benmosher/eslint-plugin-import/pull/968
+[#768]: https://github.com/benmosher/eslint-plugin-import/pull/768
 [#683]: https://github.com/benmosher/eslint-plugin-import/pull/683
 [#572]: https://github.com/benmosher/eslint-plugin-import/pull/572
 [#569]: https://github.com/benmosher/eslint-plugin-import/pull/569
@@ -118,6 +122,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 
 [#788]: https://github.com/benmosher/eslint-plugin-import/issues/788
+[#767]: https://github.com/benmosher/eslint-plugin-import/issues/767
 [#681]: https://github.com/benmosher/eslint-plugin-import/issues/681
 [#435]: https://github.com/benmosher/eslint-plugin-import/issues/435
 [#411]: https://github.com/benmosher/eslint-plugin-import/issues/411
@@ -141,3 +146,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@ljharb]: https://github.com/ljharb
 [@SkeLLLa]: https://github.com/SkeLLLa
 [@graingert]: https://github.com/graingert
+[@mattkrick]: https://github.com/mattkrick

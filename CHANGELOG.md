@@ -4,7 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-- Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories.
+
+## [2.13.0] - 2018-06-24
+### Added
+- Add ESLint 5 support ([#1122], thanks [@ai] and [@ljharb])
+- Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories ([#1093], thanks [@chrislloyd])
+
+### Fixed
+- `namespace` rule: ensure it works in eslint 5/ecmaVersion 2018 (thanks [@ljharb])
 
 ## [2.12.0] - 2018-05-17
 ### Added
@@ -466,6 +473,8 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1122]: https://github.com/benmosher/eslint-plugin-import/pull/1122
+[#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
@@ -722,3 +731,5 @@ for info on changes for earlier releases.
 [@manovotny]: https://github.com/manovotny
 [@mattijsbliek]: https://github.com/mattijsbliek
 [@hulkish]: https://github.com/hulkish
+[@chrislloyd]: https://github.com/chrislloyd
+[@ai]: https://github.com/ai
