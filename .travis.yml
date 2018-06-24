@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - '10'
   - '8'
   - '6'
   - '4'
@@ -15,11 +16,15 @@ env:
 matrix:
   include:
   - env: PACKAGE=resolvers/node
+    node_js: 10
+  - env: PACKAGE=resolvers/node
     node_js: 8
   - env: PACKAGE=resolvers/node
     node_js: 6
   - env: PACKAGE=resolvers/node
     node_js: 4
+  - env: PACKAGE=resolvers/webpack
+    node_js: 10
   - env: PACKAGE=resolvers/webpack
     node_js: 8
   - env: PACKAGE=resolvers/webpack
