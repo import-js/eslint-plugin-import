@@ -58,7 +58,7 @@ module.exports = {
             return
           }
 
-          for (let specifier of declaration.specifiers) {
+          for (const specifier of declaration.specifiers) {
             switch (specifier.type) {
               case 'ImportNamespaceSpecifier':
                 if (!imports.size) {
@@ -160,8 +160,12 @@ module.exports = {
 
           if (pattern.type !== 'ObjectPattern') return
 
-          for (let property of pattern.properties) {
-            if (property.type === 'ExperimentalRestProperty' || !property.key) {
+          for (const property of pattern.properties) {
+            if (
+              property.type === 'ExperimentalRestProperty'
+              || property.type === 'RestElement'
+              || !property.key
+            ) {
               continue
             }
 
