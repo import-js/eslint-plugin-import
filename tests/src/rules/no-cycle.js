@@ -36,6 +36,10 @@ ruleTester.run('no-cycle', rule, {
       code: 'import { foo } from "./depth-two"',
       options: [{ maxDepth: 1 }],
     }),
+    test({
+      code: 'import type { FooType } from "./depth-one"',
+      parser: 'babel-eslint',
+    }),
   ],
   invalid: [
     test({
