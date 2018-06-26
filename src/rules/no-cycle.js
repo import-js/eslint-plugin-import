@@ -30,7 +30,7 @@ module.exports = {
     function checkSourceValue(sourceNode, importer) {
       const imported = Exports.get(sourceNode.value, context)
 
-      if (sourceNode.parent.importKind === 'type') {
+      if (sourceNode.parent && sourceNode.parent.importKind === 'type') {
         return // no Flow import resolution
       }
 
