@@ -72,6 +72,14 @@ ruleTester.run('named', rule, {
       code: 'import type { MissingType } from "./flowtypes"',
       parser: 'babel-eslint',
     }),
+    test({
+      code: 'import type { MyOpaqueType } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import  { type MyOpaqueType, MyClass } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
 
     // TypeScript
     test({
@@ -260,6 +268,12 @@ ruleTester.run('named', rule, {
         message: "NotExported not found in './typescript'",
         type: 'Identifier',
       }],
+    }),
+
+    test({
+      code: 'import  { type MyOpaqueType, MyMissingClass } from "./flowtypes"',
+      parser: 'babel-eslint',
+      errors: ["MyMissingClass not found in './flowtypes'"],
     }),
 
     // jsnext
