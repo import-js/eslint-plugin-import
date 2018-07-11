@@ -1,6 +1,7 @@
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 import docsUrl from '../docsUrl'
-import { basename } from 'path'
+import { basename, dirname, relative } from 'path'
+import resolve from 'eslint-module-utils/resolve'
 
 import importType from '../core/importType'
 
@@ -14,11 +15,24 @@ module.exports = {
 
   create: function noRelativePackages(context) {
     const myPath = context.getFilename()
-    if (myPath === '<text>') return {} // can't cycle-check a non-file
+    if (myPath === '<text>') return {} // can't check a non-file
 
     function checkSourceValue(sourceNode) {
       const depPath = sourceNode.value
-      if (importType(depPath, context) === 'parent') {
+
+      if (importType(depPath, context) === 'external') { // ignore packages
+        return
+      }
+
+      const absDepPath = resolve(depPath, context)
+
+      if (!absDepPath) { // unable to resolve path
+        return
+      }
+
+      const relDepPath = relative(dirname(myPath), absDepPath)
+
+      if (importType(relDepPath, context) === 'parent') {
         context.report({
           node: sourceNode,
           message: 'Relative imports from parent directories are not allowed. ' +

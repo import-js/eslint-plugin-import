@@ -39,7 +39,16 @@ ruleTester.run('no-relative-parent-imports', rule, {
       code: 'import("./app/index.js")',
     }),
     test({
+      code: 'import(".")',
+    }),
+    test({
+      code: 'import("path")',
+    }),
+    test({
       code: 'import("package")',
+    }),
+    test({
+      code: 'import("@scope/package")',
     }),
   ],
 
@@ -69,5 +78,21 @@ ruleTester.run('no-relative-parent-imports', rule, {
         column: 8,
       } ],
     }),
+    test({
+      code: 'import foo from "./../plugin.js"',
+      errors: [ {
+        message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `./../plugin.js` or consider making `./../plugin.js` a package.',
+        line: 1,
+        column: 17
+      }]
+    }),
+    test({
+      code: 'import foo from "../../api/service"',
+      errors: [ {
+        message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `../../api/service` or consider making `../../api/service` a package.',
+        line: 1,
+        column: 17
+      }]
+    })
   ],
 })
