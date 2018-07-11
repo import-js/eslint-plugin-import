@@ -619,7 +619,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.12.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.13.0...HEAD
+[2.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.9.0...v2.10.0
