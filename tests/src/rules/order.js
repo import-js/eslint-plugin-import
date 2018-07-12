@@ -1260,5 +1260,21 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
+    // fix incorrect order with typescript-eslint-parser
+    test({
+      code: `
+        var async = require('async');
+        var fs = require('fs');
+      `,
+      output: `
+        var fs = require('fs');
+        var async = require('async');
+      `,
+      parser: 'typescript-eslint-parser',
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
   ],
 })
