@@ -39,6 +39,16 @@ module.exports = {
       url: docsUrl('no-useless-path-segments'),
     },
 
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          commonjs: { type: 'boolean' },
+        },
+        additionalProperties: false,
+      },
+    ],
+
     fixable: 'code',
   },
 
