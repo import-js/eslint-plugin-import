@@ -97,8 +97,8 @@ function findRootNode(node) {
 function findEndOfLineWithComments(sourceCode, node) {
   const tokensToEndOfLine = takeTokensAfterWhile(sourceCode, node, commentOnSameLineAs(node))
   let endOfTokens = tokensToEndOfLine.length > 0
-    ? tokensToEndOfLine[tokensToEndOfLine.length - 1].end
-    : node.end
+    ? tokensToEndOfLine[tokensToEndOfLine.length - 1].range[1]
+    : node.range[1]
   let result = endOfTokens
   for (let i = endOfTokens; i < sourceCode.text.length; i++) {
     if (sourceCode.text[i] === '\n') {
@@ -121,7 +121,7 @@ function commentOnSameLineAs(node) {
 
 function findStartOfLineWithComments(sourceCode, node) {
   const tokensToEndOfLine = takeTokensBeforeWhile(sourceCode, node, commentOnSameLineAs(node))
-  let startOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[0].start : node.start
+  let startOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[0].range[0] : node.range[0]
   let result = startOfTokens
   for (let i = startOfTokens - 1; i > 0; i--) {
     if (sourceCode.text[i] !== ' ' && sourceCode.text[i] !== '\t') {
@@ -296,11 +296,11 @@ function fixNewLineAfterImport(context, previousImport) {
   const tokensToEndOfLine = takeTokensAfterWhile(
     context.getSourceCode(), prevRoot, commentOnSameLineAs(prevRoot))
 
-  let endOfLine = prevRoot.end
+  let endOfLine = prevRoot.range[1]
   if (tokensToEndOfLine.length > 0) {
-    endOfLine = tokensToEndOfLine[tokensToEndOfLine.length - 1].end
+    endOfLine = tokensToEndOfLine[tokensToEndOfLine.length - 1].range[1]
   }
-  return (fixer) => fixer.insertTextAfterRange([prevRoot.start, endOfLine], '\n')
+  return (fixer) => fixer.insertTextAfterRange([prevRoot.range[0], endOfLine], '\n')
 }
 
 function removeNewLineAfterImport(context, currentImport, previousImport) {
