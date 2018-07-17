@@ -43,6 +43,10 @@ function isClassWithDecorator(node) {
   return node.type === 'ClassDeclaration' && node.decorators && node.decorators.length
 }
 
+function isExportDefaultClass(node) {
+  return node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'ClassDeclaration'
+}
+
 module.exports = {
   meta: {
     type: 'layout',
@@ -68,7 +72,13 @@ module.exports = {
     const requireCalls = []
 
     function checkForNewLine(node, nextNode, type) {
-      if (isClassWithDecorator(nextNode)) {
+      if (isExportDefaultClass(nextNode)) {
+        let classNode = nextNode.declaration
+
+        if (isClassWithDecorator(classNode)) {
+          nextNode = classNode.decorators[0]
+        }
+      } else if (isClassWithDecorator(nextNode)) {
         nextNode = nextNode.decorators[0]
       }
 

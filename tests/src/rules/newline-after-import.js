@@ -165,6 +165,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       parser: require.resolve('babel-eslint'),
     },
+    {
+      code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      parserOptions: { sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
+    },
+    {
+      code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      parserOptions: { sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
+    },
   ],
 
   invalid: [
@@ -338,6 +348,28 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
+    },
+    {
+      code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
+      output: `// issue 10042\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      errors: [ {
+        line: 2,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
+    },
+    {
+      code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
+      output: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      errors: [ {
+        line: 2,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE,
+      } ],
+      parserOptions: { sourceType: 'module' },
       parser: require.resolve('babel-eslint'),
     },
   ],

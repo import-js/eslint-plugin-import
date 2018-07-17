@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
+- [``newline-after-import`: recognize decorators ([#1139], thanks [@atos1990])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -770,6 +771,7 @@ for info on changes for earlier releases.
 [#1157]: https://github.com/benmosher/eslint-plugin-import/pull/1157
 [#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
 [#1142]: https://github.com/benmosher/eslint-plugin-import/pull/1142
+[#1139]: https://github.com/benmosher/eslint-plugin-import/pull/1139
 [#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
 [#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
 [#1128]: https://github.com/benmosher/eslint-plugin-import/pull/1128
@@ -1153,3 +1155,4 @@ for info on changes for earlier releases.
 [@Ephem]: https://github.com/Ephem
 [@kmui2]: https://github.com/kmui2
 [@arvigeus]: https://github.com/arvigeus
+[@atos1990]: https://github.com/atos1990
