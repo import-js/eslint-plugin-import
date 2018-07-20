@@ -57,7 +57,7 @@ function isInternalModule(name, settings, path) {
 }
 
 function isRelativeToParent(name) {
-  return name.indexOf('../') === 0
+  return /^\.\.[\\/]/.test(name)
 }
 
 const indexFiles = ['.', './', './index', './index.js']
@@ -66,7 +66,7 @@ function isIndex(name) {
 }
 
 function isRelativeToSibling(name) {
-  return name.indexOf('./') === 0
+  return /^\.[\\/]/.test(name)
 }
 
 const typeTest = cond([
