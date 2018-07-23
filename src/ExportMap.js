@@ -379,6 +379,17 @@ ExportMap.parse = function (path, content, context) {
 
   function captureDependency(declaration) {
     if (declaration.source == null) return null
+    const importedSpecifiers = new Set()
+    if (declaration.specifiers) {
+      declaration.specifiers.forEach(specifier => {
+        if (specifier.type === 'ImportDefaultSpecifier') {
+          importedSpecifiers.add('ImportDefaultSpecifier')
+        } 
+        if (specifier.type === 'ImportSpecifier') {
+          importedSpecifiers.add(specifier.local.name)
+        }
+      })
+    }
 
     const p = remotePath(declaration.source.value)
     if (p == null) return null
@@ -392,6 +403,7 @@ ExportMap.parse = function (path, content, context) {
         value: declaration.source.value,
         loc: declaration.source.loc,
       },
+      importedSpecifiers,
     })
     return getter
   }
