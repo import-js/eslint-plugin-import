@@ -34,6 +34,10 @@ module.exports = {
         return // no Flow import resolution
       }
 
+      if (sourceNode._babelType === 'Literal') {
+        return // no Flow import resolution, workaround for ESLint < 5.x
+      }
+
       if (imported == null) {
         return  // no-unresolved territory
       }
