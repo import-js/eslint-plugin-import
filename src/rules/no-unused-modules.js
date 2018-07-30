@@ -68,6 +68,9 @@ const prepareImportsAndExports = (srcFiles, context) => {
     }
     const { imports: localImportList, namespace } = currentExports
     localImportList.forEach((value, key) => {
+      if (isNodeModule(key)) {
+        return
+      }
       imports.set(key, value.importedSpecifiers)
     })
     importList.set(file, imports)
@@ -317,12 +320,15 @@ module.exports = {
           if (isNodeModule(resolvedPath)) {
             return
           }
-          const imports = oldImportPaths.get(resolvedPath)
+          let imports = oldImportPaths.get(resolvedPath)
           const exports = exportList.get(resolvedPath)
 
           // unknown module
           if (typeof exports === UNDEFINED) {
             return
+          }
+          if (typeof imports === UNDEFINED) {
+            imports = new Set()
           }
 
           const tmpImports = new Set()
@@ -355,11 +361,7 @@ module.exports = {
 
           // update usage of named imports/export
           astNode.specifiers.forEach(specifier => {
-            if (specifier.exported) {
-              imports.add(specifier.exported.name)
-            } else {
-              imports.add(specifier.local.name)
-            }
+            imports.add(specifier.local.name)
             tmpImports.delete(specifier.local.name)
             
             const currentExport = exports.get(specifier.local.name)
@@ -398,8 +400,6 @@ module.exports = {
           node.specifiers.forEach(specifier => {
             if (specifier.exported) {
               checkUsage(node, specifier.exported.name)
-            } else {
-              checkUsage(node, specifier.local.name)
             }
           })
         }
