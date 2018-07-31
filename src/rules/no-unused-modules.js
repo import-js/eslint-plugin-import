@@ -195,14 +195,13 @@ module.exports = {
   },
 
   create: context => {
-    const { getFilename } = context
     const { src, ignore, missingExports = false, unusedExports = false } = context.options[0]
 
     if (unusedExports && !preparationDone) {
       doPreparation(src, ignore, context)
     }
     
-    const file = getFilename()
+    const file = context.getFilename()
 
     const checkExportPresence = node => {
       if (ignoredFiles.has(file)) {
