@@ -1,6 +1,9 @@
 import { test, testFilePath } from '../utils'
 
 import { RuleTester } from 'eslint'
+import { expect } from 'chai';
+
+const doPreparation = require( '../../../src/rules/no-unused-modules').doPreparation
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-unused-modules')
@@ -16,6 +19,26 @@ const unusedExportsOptions = [{
   src: [testFilePath('./no-unused-modules/**/*.js')],
   ignore: [testFilePath('./no-unused-modules/*ignored*.js')],
 }]
+
+describe('doPreparation throws correct errors', () => {
+  // const fn = doPreparation()
+  const context = {id: 'no-unused-modules' }
+  it('should throw an error, if src is not an array', () => {
+    expect(doPreparation.bind(doPreparation, null,  null, context)).to.throw(`Rule ${context.id}: src option must be an array`)
+  })
+  it('should throw an error, if ignore is not an array', () => {
+    expect(doPreparation.bind(doPreparation, [], null, context)).to.throw(`Rule ${context.id}: ignore option must be an array`)
+  })
+  it('should throw an error, if src is empty', () => {
+    expect(doPreparation.bind(doPreparation, [],  [], context)).to.throw(`Rule ${context.id}: src option must be defined`)
+  })
+  it('should throw an error, if src is empty', () => {
+    expect(doPreparation.bind(doPreparation, [""],  [], context)).to.throw(`Rule ${context.id}: src option must not contain empty strings`)
+  })
+  it('should throw an error, if src is empty', () => {
+    expect(doPreparation.bind(doPreparation, ["src"],  [""], context)).to.throw(`Rule ${context.id}: ignore option must not contain empty strings`)
+  })
+})
 
 // tests for missing exports
 ruleTester.run('no-unused-modules', rule, {
@@ -37,6 +60,11 @@ ruleTester.run('no-unused-modules', rule, {
     test({
       options: missingExportsOptions,
       code: 'const a = 1',
+      errors: [error(`No exports found`)],
+    }),
+    test({
+      options: missingExportsOptions,
+      code: '/* const a = 1 */',
       errors: [error(`No exports found`)],
     }),
   ],
@@ -152,7 +180,7 @@ ruleTester.run('no-unused-modules', rule, {
 ruleTester.run('no-unused-modules', rule, {
   valid: [
     test({ options: unusedExportsOptions,
-           code: `import g from '${testFilePath('./no-unused-modules/file-g.js')}'`,
+           code: `import g from '${testFilePath('./no-unused-modules/file-g.js')}';import {h} from '${testFilePath('./no-unused-modules/file-gg.js')}'`,
            filename: testFilePath('./no-unused-modules/file-0.js')}),
     ],
   invalid: [
@@ -166,7 +194,7 @@ ruleTester.run('no-unused-modules', rule, {
 ruleTester.run('no-unused-modules', rule, {
   valid: [
     test({ options: unusedExportsOptions,
-           code: `import { g } from '${testFilePath('./no-unused-modules/file-g.js')}'`,
+           code: `import { g } from '${testFilePath('./no-unused-modules/file-g.js')}'; import eslint from 'eslint'`,
            filename: testFilePath('./no-unused-modules/file-0.js')}),
     test({ options: unusedExportsOptions,
             code: 'export const g = 2',
