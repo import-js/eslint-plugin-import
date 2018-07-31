@@ -57,9 +57,6 @@ const resolveFiles = (src, ignore) => {
  */
 const prepareImportsAndExports = (srcFiles, context) => {
   srcFiles.forEach(file => {
-    if (isNodeModule(file)) {
-      return
-    }
     const exports = new Map()
     const imports = new Map()
     const currentExports = Exports.get(file, context)
@@ -170,6 +167,7 @@ const newDefaultImportExists = specifiers => {
 }
 
 module.exports = {
+  doPreparation,
   meta: {
     docs: { url: docsUrl('no-unused-modules') },
     schema: [
