@@ -110,6 +110,22 @@ describe('resolve', function () {
     expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
   })
 
+  it('reports loaded resolver with invalid interface', function () {
+    const resolverName = './foo-bar-resolver-invalid';
+    const testContext = utils.testContext({ 'import/resolver': resolverName });
+    const testContextReports = []
+    testContext.report = function (reportInfo) {
+      testContextReports.push(reportInfo)
+    }
+    testContextReports.length = 0
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } })
+                    )).to.equal(undefined)
+    expect(testContextReports[0]).to.be.an('object')
+    expect(testContextReports[0].message).to.equal(`Resolve error: ${resolverName} with invalid interface loaded as resolver`)
+    expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 })
+  })
+
   it('respects import/resolve extensions', function () {
     const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] }})
 
@@ -119,7 +135,6 @@ describe('resolve', function () {
   })
 
   it('reports load exception in a user resolver', function () {
-    
     const testContext = utils.testContext({ 'import/resolver': './load-error-resolver' })
     const testContextReports = []
     testContext.report = function (reportInfo) {

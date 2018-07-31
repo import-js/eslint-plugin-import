@@ -160,8 +160,19 @@ function requireResolver(name, sourceFile) {
 
   if (!resolver) {
     throw new Error(`unable to load resolver "${name}".`)
+  }
+  if (!isResolverValid(resolver)) {
+    throw new Error(`${name} with invalid interface loaded as resolver`)
+  }
+
+  return resolver
+}
+
+function isResolverValid(resolver) {
+  if (resolver.interfaceVersion === 2) {
+    return resolver.resolve && typeof resolver.resolve === 'function'
   } else {
-    return resolver;
+    return resolver.resolveImport && typeof resolver.resolveImport === 'function'
   }
 }
 
