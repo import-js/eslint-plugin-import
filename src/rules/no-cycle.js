@@ -30,6 +30,14 @@ module.exports = {
     function checkSourceValue(sourceNode, importer) {
       const imported = Exports.get(sourceNode.value, context)
 
+      if (sourceNode.parent && sourceNode.parent.importKind === 'type') {
+        return // no Flow import resolution
+      }
+
+      if (sourceNode._babelType === 'Literal') {
+        return // no Flow import resolution, workaround for ESLint < 5.x
+      }
+
       if (imported == null) {
         return  // no-unresolved territory
       }
