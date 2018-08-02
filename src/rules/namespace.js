@@ -44,7 +44,7 @@ module.exports = {
     return {
 
       // pick up all imports at body entry time, to properly respect hoisting
-      'Program': function ({ body }) {
+      Program: function ({ body }) {
         function processBodyStatement(declaration) {
           if (declaration.type !== 'ImportDeclaration') return
 
@@ -83,7 +83,7 @@ module.exports = {
       },
 
       // same as above, but does not add names to local map
-      'ExportNamespaceSpecifier': function (namespace) {
+      ExportNamespaceSpecifier: function (namespace) {
         var declaration = importDeclaration(context)
 
         var imports = Exports.get(declaration.source.value, context)
@@ -102,7 +102,7 @@ module.exports = {
 
       // todo: check for possible redefinition
 
-      'MemberExpression': function (dereference) {
+      MemberExpression: function (dereference) {
         if (dereference.object.type !== 'Identifier') return
         if (!namespaces.has(dereference.object.name)) return
 
@@ -146,7 +146,7 @@ module.exports = {
 
       },
 
-      'VariableDeclarator': function ({ id, init }) {
+      VariableDeclarator: function ({ id, init }) {
         if (init == null) return
         if (init.type !== 'Identifier') return
         if (!namespaces.has(init.name)) return
@@ -192,6 +192,17 @@ module.exports = {
         }
 
         testKey(id, namespaces.get(init.name))
+      },
+
+      JSXMemberExpression: function({object, property}) {
+         if (!namespaces.has(object.name)) return
+         var namespace = namespaces.get(object.name)
+         if (!namespace.has(property.name)) {
+           context.report({
+             node: property,
+             message: makeMessage(property, [object.name]),
+           })
+         }
       },
     }
   },
