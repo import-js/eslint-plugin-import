@@ -6,9 +6,16 @@
 
 import Exports from '../ExportMap'
 import { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
-import { listFilesToProcess } from 'eslint/lib/util/glob-util'
 import resolve from 'eslint-module-utils/resolve'
 import docsUrl from '../docsUrl'
+
+// eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
+let listFilesToProcess
+try {
+  listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
+} catch (err) {
+  listFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
+}
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration'
 const EXPORT_NAMED_DECLARATION = 'ExportNamedDeclaration'
@@ -113,6 +120,13 @@ const determineUsage = () => {
   })
 }
 
+const getSrc = src => {
+  if (src) {
+    return src
+  }
+  return [process.cwd()]
+}
+
 /**
  * prepare the lists of existing imports and exports - should only be executed once at
  * the start of a new eslint run
@@ -121,32 +135,38 @@ const doPreparation = (src, ignore, context) => {
   const { id } = context
 
   // do some sanity checks
-  if (!Array.isArray(src)) {
+  if (typeof src !== UNDEFINED && !Array.isArray(src)) {
     throw new Error(`Rule ${id}: src option must be an array`)
   }
 
-  if (!Array.isArray(ignore)) {
+  if (typeof ignore !== UNDEFINED && !Array.isArray(ignore)) {
     throw new Error(`Rule ${id}: ignore option must be an array`)
   }
 
-  if (src.length < 1) {
-    throw new Error(`Rule ${id}: src option must be defined`)
+  // no empty patterns for paths, as this will cause issues during path resolution
+  if (src) {
+    src.forEach(file => {
+      if (typeof file !== 'string') {
+        throw new Error(`Rule ${id}: src option must not contain values other than strings`)
+      }
+      if (file.length < 1) {
+        throw new Error(`Rule ${id}: src option must not contain empty strings`)
+      }
+    })
+  }
+  
+  if (ignore) {
+    ignore.forEach(file => {
+      if (typeof file !== 'string') {
+        throw new Error(`Rule ${id}: ignore option must not contain values other than strings`)
+      }
+      if (file.length < 1) {
+        throw new Error(`Rule ${id}: ignore option must not contain empty strings`)
+      }
+    })
   }
 
-  // no empty patterns for paths, as this will cause issues during path resolution
-  src.forEach(file => {
-    if (file.length < 1) {
-      throw new Error(`Rule ${id}: src option must not contain empty strings`)
-    }
-  })
-
-  ignore.forEach(file => {
-    if (file.length < 1) {
-      throw new Error(`Rule ${id}: ignore option must not contain empty strings`)
-    }
-  })
-
-  const srcFiles = resolveFiles(src, ignore)
+  const srcFiles = resolveFiles(getSrc(src), ignore)
   prepareImportsAndExports(srcFiles, context)
   determineUsage()  
   preparationDone = true
@@ -168,6 +188,7 @@ const newDefaultImportExists = specifiers => {
 
 module.exports = {
   doPreparation,
+  getSrc,
   meta: {
     docs: { url: docsUrl('no-unused-modules') },
     schema: [

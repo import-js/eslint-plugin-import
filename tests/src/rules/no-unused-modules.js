@@ -1,9 +1,10 @@
 import { test, testFilePath } from '../utils'
 
 import { RuleTester } from 'eslint'
-import { expect } from 'chai';
+import { expect } from 'chai'
 
 const doPreparation = require( '../../../src/rules/no-unused-modules').doPreparation
+const getSrc = require( '../../../src/rules/no-unused-modules').getSrc
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-unused-modules')
@@ -21,22 +22,46 @@ const unusedExportsOptions = [{
 }]
 
 describe('doPreparation throws correct errors', () => {
-  // const fn = doPreparation()
-  const context = {id: 'no-unused-modules' }
+  const context = { id: 'no-unused-modules' }
   it('should throw an error, if src is not an array', () => {
     expect(doPreparation.bind(doPreparation, null,  null, context)).to.throw(`Rule ${context.id}: src option must be an array`)
   })
   it('should throw an error, if ignore is not an array', () => {
     expect(doPreparation.bind(doPreparation, [], null, context)).to.throw(`Rule ${context.id}: ignore option must be an array`)
   })
-  it('should throw an error, if src is empty', () => {
-    expect(doPreparation.bind(doPreparation, [],  [], context)).to.throw(`Rule ${context.id}: src option must be defined`)
+  it('should throw an error, if src contains empty strings', () => {
+    expect(doPreparation.bind(doPreparation, [''],  [], context)).to.throw(`Rule ${context.id}: src option must not contain empty strings`)
   })
-  it('should throw an error, if src is empty', () => {
-    expect(doPreparation.bind(doPreparation, [""],  [], context)).to.throw(`Rule ${context.id}: src option must not contain empty strings`)
+  it('should throw an error, if src contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, [false],  [], context)).to.throw(`Rule ${context.id}: src option must not contain values other than strings`)
   })
-  it('should throw an error, if src is empty', () => {
-    expect(doPreparation.bind(doPreparation, ["src"],  [""], context)).to.throw(`Rule ${context.id}: ignore option must not contain empty strings`)
+  it('should throw an error, if src contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, [null],  [], context)).to.throw(`Rule ${context.id}: src option must not contain values other than strings`)
+  })
+  it('should throw an error, if src contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, [undefined],  [], context)).to.throw(`Rule ${context.id}: src option must not contain values other than strings`)
+  })
+  it('should throw an error, if ignore contains empty strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [''], context)).to.throw(`Rule ${context.id}: ignore option must not contain empty strings`)
+  })
+  it('should throw an error, if ignore contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [false], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  })
+  it('should throw an error, if ignore contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [null], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  })
+  it('should throw an error, if ignore contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [undefined], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  })
+})
+
+describe('getSrc returns correct source', () => {
+  it('if src is provided', () => {
+    const src = ['file-a.js']
+    expect(getSrc(src)).to.eq(src)
+  })
+  it('if src is not provided', () => {
+    expect(getSrc()).to.eql([process.cwd()])
   })
 })
 
