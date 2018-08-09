@@ -69,7 +69,7 @@ export { foo as default }
 // good3.js
 
 // There is only a single module export and it's a default export.
-export default from './other-module;
+export default from './other-module';
 ```
 
 ## When Not To Use It
