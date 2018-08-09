@@ -125,7 +125,7 @@ ruleTester.run('no-named-export', rule, {
     test({
       code: `export * from './foo';`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        ruleId: 'ExportAllDeclaration',
         message: 'Prefer default export.',
       }],
     }),
