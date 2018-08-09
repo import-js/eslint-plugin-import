@@ -32,6 +32,7 @@ export const rules = {
   'newline-after-import': require('./rules/newline-after-import'),
   'prefer-default-export': require('./rules/prefer-default-export'),
   'no-default-export': require('./rules/no-default-export'),
+  'no-named-export': require('./rules/no-named-export'),
   'no-dynamic-require': require('./rules/no-dynamic-require'),
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
