@@ -38,7 +38,12 @@ export default class ExportMap {
 
   get size() {
     let size = this.namespace.size + this.reexports.size
-    this.dependencies.forEach(dep => size += dep().size)
+    this.dependencies.forEach(dep => {
+      const d = dep()
+      // CJS / ignored dependencies won't exist (#717)
+      if (d == null) return
+      size += d.size
+    })
     return size
   }
 
