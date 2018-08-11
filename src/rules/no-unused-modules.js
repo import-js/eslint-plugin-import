@@ -20,6 +20,7 @@ try {
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration'
 const EXPORT_NAMED_DECLARATION = 'ExportNamedDeclaration'
 const IMPORT_DECLARATION = 'ImportDeclaration' 
+const IMPORT_NAMESPACE_SPECIFIER = 'ImportNamespaceSpecifier'
 const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier' 
 const IMPORT_SPECIFIER = 'ImportSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
@@ -84,8 +85,13 @@ const prepareImportsAndExports = (srcFiles, context) => {
       return
     }
     namespace.forEach((value, key) => {
-      exports.set(key, { whereUsed: new Set() })
+      if (key === DEFAULT) {
+        exports.set(IMPORT_DEFAULT_SPECIFIER, { whereUsed: new Set() })
+      } else {
+        exports.set(key, { whereUsed: new Set() })
+      }
     })
+    exports.set(IMPORT_NAMESPACE_SPECIFIER, { whereUsed: new Set() })
     exportList.set(file, exports)
   })
 }
@@ -101,8 +107,10 @@ const determineUsage = () => {
       if (typeof exports !== UNDEFINED) {
         value.forEach(currentImport => {
           let specifier
-          if (currentImport === IMPORT_DEFAULT_SPECIFIER) {
-            specifier = DEFAULT
+          if (currentImport === IMPORT_NAMESPACE_SPECIFIER) {
+            specifier = IMPORT_NAMESPACE_SPECIFIER
+          } else if (currentImport === IMPORT_DEFAULT_SPECIFIER) {
+            specifier = IMPORT_DEFAULT_SPECIFIER
           } else {
             specifier = currentImport
           }
@@ -168,13 +176,21 @@ const doPreparation = (src, ignore, context) => {
 
   const srcFiles = resolveFiles(getSrc(src), ignore)
   prepareImportsAndExports(srcFiles, context)
-  determineUsage()  
+  determineUsage()
   preparationDone = true
 }
 
-const oldDefaultImportExists = imports => {
-  return imports.has(IMPORT_DEFAULT_SPECIFIER)
+
+const newNamespaceImportExists = specifiers => {
+  let hasNewNamespaceImport = false
+  specifiers.forEach(specifier => {
+    if (specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
+      hasNewNamespaceImport = true
+    }
+  })
+  return hasNewNamespaceImport
 }
+
 
 const newDefaultImportExists = specifiers => {
   let hasNewDefaultImport = false
@@ -223,11 +239,12 @@ module.exports = {
     const file = context.getFilename()
 
     const checkExportPresence = node => {
-      if (ignoredFiles.has(file)) {
+      if (!missingExports) {
         return
       }
 
       const exportCount = exportList.get(file)
+      exportCount.delete(IMPORT_NAMESPACE_SPECIFIER)
       if (missingExports && exportCount.size < 1) {
         // node.body[0] === 'undefined' only happens, if everything is commented out in the file
         // being linted
@@ -243,14 +260,29 @@ module.exports = {
       if (ignoredFiles.has(file)) {
         return
       }
+
       const exports = exportList.get(file)
+
+      // special case: namespace import
+      const nameSpaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER)
+      if (typeof nameSpaceImports !== UNDEFINED) {
+        if (nameSpaceImports.whereUsed.size > 0) {
+          return
+        }
+      }
+
       const exportStatement = exports.get(exportedValue)
       if (typeof exportStatement !== UNDEFINED){
-        const { whereUsed } = exportStatement
-        if ( whereUsed.size < 1) {
+        if ( exportStatement.whereUsed.size < 1) {
+          let value = ''
+          if (exportedValue === IMPORT_DEFAULT_SPECIFIER) {
+            value = DEFAULT
+          } else {
+            value = exportedValue
+          }
           context.report(
             node,
-            `exported declaration '${exportedValue}' not used within other modules`
+            `exported declaration '${value}' not used within other modules`
           )
         }
       }
@@ -279,12 +311,14 @@ module.exports = {
 
       node.body.forEach(({ type, declaration, specifiers }) => {
         if (type === EXPORT_DEFAULT_DECLARATION) {
-          newExportIdentifiers.add(DEFAULT)
+          newExportIdentifiers.add(IMPORT_DEFAULT_SPECIFIER)
         } 
         if (type === EXPORT_NAMED_DECLARATION) {
           if (specifiers.length > 0) {
             specifiers.forEach(specifier => {
-              newExportIdentifiers.add(specifier.local.name)
+              if (specifier.exported) {
+                newExportIdentifiers.add(specifier.exported.name)
+              }
             })
           }
           if (declaration) {
@@ -313,6 +347,9 @@ module.exports = {
           newExports.set(key, {whereUsed: new Set()})
         }
       })
+
+      // preserve information about namespace imports
+      newExports.set(IMPORT_NAMESPACE_SPECIFIER, exports.get(IMPORT_NAMESPACE_SPECIFIER))
       exportList.set(file, newExports)
     }
 
@@ -325,8 +362,28 @@ module.exports = {
       if (!unusedExports) {
         return
       }
-      const oldImportPaths = importList.get(file)
+
+      let oldImportPaths = importList.get(file)
+      if (typeof oldImportPaths === UNDEFINED) {
+        oldImportPaths = new Map()
+      }
       
+      const oldNamespaceImports = new Set()
+      const newNamespaceImports = new Set()
+      oldImportPaths.forEach((value, key) => {
+        if (value.has(IMPORT_NAMESPACE_SPECIFIER)) {
+          oldNamespaceImports.add(key)
+        }
+      })
+      
+      const oldDefaultImports = new Set()
+      const newDefaultImports = new Set()
+      oldImportPaths.forEach((value, key) => {
+        if (value.has(IMPORT_DEFAULT_SPECIFIER)) {
+          oldDefaultImports.add(key)
+        }
+      })
+            
       node.body.forEach(astNode => {
         if (astNode.type === IMPORT_DECLARATION) {
           const resolvedPath = resolve(astNode.source.value, context)
@@ -338,47 +395,36 @@ module.exports = {
           if (isNodeModule(resolvedPath)) {
             return
           }
+
+          if (newNamespaceImportExists(astNode.specifiers)) {
+            newNamespaceImports.add(resolvedPath)
+          }
+
+          if (newDefaultImportExists(astNode.specifiers)) {
+            newDefaultImports.add(resolvedPath)
+          }
+
           let imports = oldImportPaths.get(resolvedPath)
           const exports = exportList.get(resolvedPath)
 
-          // unknown module
-          if (typeof exports === UNDEFINED) {
-            return
-          }
           if (typeof imports === UNDEFINED) {
             imports = new Set()
           }
 
           const tmpImports = new Set()
           imports.forEach((value, key) => {
-            if (key !== IMPORT_DEFAULT_SPECIFIER) {
+            if (key !== IMPORT_DEFAULT_SPECIFIER && key !== IMPORT_NAMESPACE_SPECIFIER) {
               tmpImports.add(key)
             }
           })
           
-          // update usage of default import/export
-          const defaultExport = exports.get(DEFAULT)
-          const hasOldDefaultImport = oldDefaultImportExists(imports)
-          const hasNewDefaultImport = newDefaultImportExists(astNode.specifiers)
-
-          if (hasNewDefaultImport && !hasOldDefaultImport) {
-            imports.add(IMPORT_DEFAULT_SPECIFIER)
-            if (typeof defaultExport !== UNDEFINED) {
-              const { whereUsed } = defaultExport
-              whereUsed.add(file)
-            }
-          }
-
-          if (!hasNewDefaultImport && hasOldDefaultImport) {
-            imports.delete(IMPORT_DEFAULT_SPECIFIER)
-            if (typeof defaultExport !== UNDEFINED) {
-              const { whereUsed } = defaultExport
-              whereUsed.delete(file)
-            }
-          }
-
           // update usage of named imports/export
           astNode.specifiers.forEach(specifier => {
+            if (specifier.type === IMPORT_DEFAULT_SPECIFIER ||
+                specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
+              return
+            }
+
             imports.add(specifier.local.name)
             tmpImports.delete(specifier.local.name)
             
@@ -395,10 +441,77 @@ module.exports = {
             tmpImports.forEach(key => {
               const currentExport = exports.get(key)
               if (typeof currentExport !== UNDEFINED) {
-                const { whereUsed } = currentExport
-                whereUsed.delete(file)
+                currentExport.whereUsed.delete(file)
               }
             })
+          }
+        }
+      })
+
+      newDefaultImports.forEach(value => {
+        if (!oldDefaultImports.has(value)) {
+          let imports = oldImportPaths.get(value)
+          if (typeof imports === UNDEFINED) {
+            imports = new Set()
+          }
+          imports.add(IMPORT_DEFAULT_SPECIFIER)
+          oldImportPaths.set(value, imports)
+
+          const exports = exportList.get(value)
+          if (typeof exports !== UNDEFINED) {
+            const currentExport = exports.get(IMPORT_DEFAULT_SPECIFIER)
+            if (typeof currentExport !== UNDEFINED) {
+              currentExport.whereUsed.add(file)
+            }
+          }
+        }
+      })
+
+      oldDefaultImports.forEach(value => {
+        if (!newDefaultImports.has(value)) {
+          const imports = oldImportPaths.get(value)
+          imports.delete(IMPORT_DEFAULT_SPECIFIER)
+
+          const exports = exportList.get(value)
+          if (typeof exports !== UNDEFINED) {
+            const currentExport = exports.get(IMPORT_DEFAULT_SPECIFIER)
+            if (typeof currentExport !== UNDEFINED) {
+              currentExport.whereUsed.delete(file)
+            }
+          }
+        }
+      })
+
+      newNamespaceImports.forEach(value => {
+        if (!oldNamespaceImports.has(value)) {
+          let imports = oldImportPaths.get(value)
+          if (typeof imports === UNDEFINED) {
+            imports = new Set()
+          }
+          imports.add(IMPORT_NAMESPACE_SPECIFIER)
+          oldImportPaths.set(value, imports)
+
+          const exports = exportList.get(value)
+          if (typeof exports !== UNDEFINED) {
+            const currentExport = exports.get(IMPORT_NAMESPACE_SPECIFIER)
+            if (typeof currentExport !== UNDEFINED) {
+              currentExport.whereUsed.add(file)
+            }
+          }
+        }
+      })
+
+      oldNamespaceImports.forEach(value => {
+        if (!newNamespaceImports.has(value)) {
+          const imports = oldImportPaths.get(value)
+          imports.delete(IMPORT_NAMESPACE_SPECIFIER)
+          
+          const exports = exportList.get(value)
+          if (typeof exports !== UNDEFINED) {
+            const currentExport = exports.get(IMPORT_NAMESPACE_SPECIFIER)
+            if (typeof currentExport !== UNDEFINED) {
+              currentExport.whereUsed.delete(file)
+            }
           }
         }
       })
@@ -411,7 +524,7 @@ module.exports = {
         checkExportPresence(node)
       },
       'ExportDefaultDeclaration': node => {
-        checkUsage(node, DEFAULT)
+        checkUsage(node, IMPORT_DEFAULT_SPECIFIER)
       },
       'ExportNamedDeclaration': node => {
         if (node.specifiers) {

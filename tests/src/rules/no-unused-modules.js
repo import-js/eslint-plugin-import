@@ -2,6 +2,7 @@ import { test, testFilePath } from '../utils'
 
 import { RuleTester } from 'eslint'
 import { expect } from 'chai'
+import fs from 'fs'
 
 const doPreparation = require( '../../../src/rules/no-unused-modules').doPreparation
 const getSrc = require( '../../../src/rules/no-unused-modules').getSrc
@@ -114,6 +115,9 @@ ruleTester.run('no-unused-modules', rule, {
     test({ options: unusedExportsOptions,
       code: 'const e0 = 5; export { e0 as e }',
       filename: testFilePath('./no-unused-modules/file-e.js')}),
+    test({ options: unusedExportsOptions,
+      code: 'const l0 = 5; const l = 10; export { l0 as l1, l }; export default () => {}',
+      filename: testFilePath('./no-unused-modules/file-l.js')}),
     ],
   invalid: [],
 })
@@ -169,7 +173,11 @@ ruleTester.run('no-unused-modules', rule, {
       filename: testFilePath('./no-unused-modules/file-ignored-d.js')}),
     test({ options: unusedExportsOptions,
       code: 'const f = 5; export { f as e }',
-      filename: testFilePath('./no-unused-modules/file-ignored-e.js')})],
+      filename: testFilePath('./no-unused-modules/file-ignored-e.js')}),
+    test({ options: unusedExportsOptions,
+      code: 'const l0 = 5; const l = 10; export { l0 as l1, l }; export default () => {}',
+      filename: testFilePath('./no-unused-modules/file-ignored-l.js')}),
+    ],
   invalid: [],
 })
 
@@ -256,4 +264,101 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-a.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
   ],
+})
+
+// add namespace import for file with unused exports
+ruleTester.run('no-unused-modules', rule, {
+  valid: [],
+  invalid: [
+    test({ options: unusedExportsOptions,
+           code: 'const m0 = 5; const m = 10; export { m0 as m1, m }; export default () => {}',
+           filename: testFilePath('./no-unused-modules/file-m.js'),
+           errors: [
+             error(`exported declaration 'm1' not used within other modules`),
+             error(`exported declaration 'm' not used within other modules`),
+             error(`exported declaration 'default' not used within other modules`),
+          ]}),
+  ],
+})
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+           code: `import * as m from '${testFilePath('./no-unused-modules/file-m.js')}'; import unknown from 'unknown-module'`,
+           filename: testFilePath('./no-unused-modules/file-0.js')}),
+    test({ options: unusedExportsOptions,
+           code: 'const m0 = 5; const m = 10; export { m0 as m1, m }; export default () => {}',
+           filename: testFilePath('./no-unused-modules/file-m.js')}),
+  ],
+  invalid: [],
+})
+
+// remove all exports
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+           code: `/* import * as m from '${testFilePath('./no-unused-modules/file-m.js')}' */`,
+           filename: testFilePath('./no-unused-modules/file-0.js')}),
+  ],
+  invalid: [
+    test({ options: unusedExportsOptions,
+      code: 'const m0 = 5; const m = 10; export { m0 as m1, m }; export default () => {}',
+      filename: testFilePath('./no-unused-modules/file-m.js'),
+      errors: [
+        error(`exported declaration 'm1' not used within other modules`),
+        error(`exported declaration 'm' not used within other modules`),
+        error(`exported declaration 'default' not used within other modules`),
+     ]}),
+  ],
+})
+
+describe('test behaviour for new file', () => {
+  before(() => {
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added.js'), '', {encoding: 'utf8'})
+  })
+
+  // add import in newly created file
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+            code: `import * as m from '${testFilePath('./no-unused-modules/file-m.js')}'`,
+            filename: testFilePath('./no-unused-modules/file-added.js')}),
+      test({ options: unusedExportsOptions,
+            code: 'const m0 = 5; const m = 10; export { m0 as m1, m }; export default () => {}',
+            filename: testFilePath('./no-unused-modules/file-m.js')}),
+    ],
+    invalid: [],
+  })
+
+  // add export for newly created file
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+            code: `export default () => {}`,
+            filename: testFilePath('./no-unused-modules/file-added.js')}),
+    ],
+    invalid: [
+      test({ options: unusedExportsOptions,
+            code: `export default () => {}`,
+            filename: testFilePath('./no-unused-modules/file-added.js'),
+            errors: [error(`exported declaration 'default' not used within other modules`)]}),
+      ],
+  })
+
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+            code: `import def from '${testFilePath('./no-unused-modules/file-added.js')}'`,
+            filename: testFilePath('./no-unused-modules/file-0.js')}),
+      test({ options: unusedExportsOptions,
+            code: `export default () => {}`,
+            filename: testFilePath('./no-unused-modules/file-added.js')}),
+    ],
+    invalid: [],
+  })
+
+  after(() => {
+    if (fs.existsSync(testFilePath('./no-unused-modules/file-added.js'))) {
+      fs.unlinkSync(testFilePath('./no-unused-modules/file-added.js'))
+    }
+  })
 })

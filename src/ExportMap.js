@@ -385,6 +385,9 @@ ExportMap.parse = function (path, content, context) {
         if (specifier.type === 'ImportDefaultSpecifier') {
           importedSpecifiers.add('ImportDefaultSpecifier')
         } 
+        if (specifier.type === 'ImportNamespaceSpecifier') {
+          importedSpecifiers.add('ImportNamespaceSpecifier')
+        } 
         if (specifier.type === 'ImportSpecifier') {
           importedSpecifiers.add(specifier.local.name)
         }
