@@ -104,6 +104,16 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // JSX
+  test({
+    code: 'import * as Names from "./named-exports"; const Foo = <Names.a/>',
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
+  }),
+
   ...SYNTAX_CASES,
 ]
 
@@ -183,6 +193,17 @@ const invalid = [
   test({
     code: 'import * as ree from "./re-export"; console.log(ree.default)',
     errors: [`'default' not found in imported namespace 'ree'.`],
+  }),
+
+  // JSX
+  test({
+    code: 'import * as Names from "./named-exports"; const Foo = <Names.e/>',
+    errors: [error('e', 'Names')],
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
   }),
 
 ]
