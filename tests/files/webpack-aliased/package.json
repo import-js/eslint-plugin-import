@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "react-native-web": "^1.2.0"
+  }
+}
