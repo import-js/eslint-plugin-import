@@ -1,12 +1,13 @@
 import path from 'path'
 import fs from 'fs'
-import { isArray, isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
+
+const CWD = process.cwd()
 
 function hasKeys(obj = {}) {
   return Object.keys(obj).length > 0
@@ -21,66 +22,63 @@ function extractDepFields(pkg) {
   }
 }
 
-function getDependencies(context, packageDir) {
-  let paths = []
+function assignDeps(fromDeps, toDeps) {
+  Object.assign(fromDeps.dependencies, toDeps.dependencies)
+  Object.assign(fromDeps.devDependencies, toDeps.devDependencies)
+  Object.assign(fromDeps.peerDependencies, toDeps.peerDependencies)
+  Object.assign(fromDeps.optionalDependencies, toDeps.optionalDependencies)
+}
+
+function getDependencies(context, packageDir, filename) {
+  const files = []
+
   try {
-    const packageContent = {
-      dependencies: {},
-      devDependencies: {},
-      optionalDependencies: {},
-      peerDependencies: {},
-    }
+    const closest = readPkgUp.sync({cwd: filename, normalize: false})
+    files.push(closest.path)
 
-    if (!isEmpty(packageDir)) {
-      if (!isArray(packageDir)) {
-        paths = [path.resolve(packageDir)]
-      } else {
-        paths = packageDir.map(dir => path.resolve(dir))
-      }
-    }
+    const deps = (packageDir ? [].concat(packageDir) : [])
+      .reduce((allDeps, dir) => {
+        const pkgFile = path.resolve(dir, 'package.json')
 
-    if (!isEmpty(paths)) {
-      // use rule config to find package.json
-      paths.forEach(dir => {
-        Object.assign(packageContent, extractDepFields(
-          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
-        ))
+        if (files.indexOf(pkgFile) === -1) {
+          files.push(pkgFile)
+
+          assignDeps(
+            allDeps,
+            extractDepFields(JSON.parse(fs.readFileSync(pkgFile, 'utf8')))
+          )
+        }
+
+        return allDeps
+      }, extractDepFields(closest.pkg))
+
+    if ([
+      deps.dependencies,
+      deps.devDependencies,
+      deps.optionalDependencies,
+      deps.peerDependencies,
+    ].some(hasKeys)) {
+      return deps
+    }
+  } catch (e) {
+    const relFiles = files.map((file) => path.relative(CWD, file))
+
+    if (e.code === 'ENOENT') {
+      context.report({
+        message: `Could not find: ${relFiles.join(', ')}`,
+        loc: { line: 0, column: 0 },
+      })
+    } else if (e.name === 'JSONError' || e instanceof SyntaxError) {
+      context.report({
+        message: `Could not parse ${relFiles[relFiles.length - 1]}: ${e.message}`,
+        loc: { line: 0, column: 0 },
       })
     } else {
-      // use closest package.json
-      Object.assign(
-        packageContent,
-        extractDepFields(
-          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
-        )
-      )
-    }
-
-    if (![
-      packageContent.dependencies,
-      packageContent.devDependencies,
-      packageContent.optionalDependencies,
-      packageContent.peerDependencies,
-    ].some(hasKeys)) {
-      return null
-    }
-
-    return packageContent
-  } catch (e) {
-    if (!isEmpty(paths) && e.code === 'ENOENT') {
       context.report({
-        message: 'The package.json file could not be found.',
+        message: `Unknown Error while searching; ${relFiles.join(', ')}: ${e.message}`,
         loc: { line: 0, column: 0 },
       })
     }
-    if (e.name === 'JSONError' || e instanceof SyntaxError) {
-      context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
-        loc: { line: 0, column: 0 },
-      })
-    }
-
-    return null
   }
 }
 
@@ -173,19 +171,24 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
-    const options = context.options[0] || {}
+  create(context) {
+    const [{
+      devDependencies,
+      optionalDependencies,
+      peerDependencies,
+      packageDir,
+     } = {}] = context.options
     const filename = context.getFilename()
-    const deps = getDependencies(context, options.packageDir)
+    const deps = getDependencies(context, packageDir, filename)
 
     if (!deps) {
       return {}
     }
 
     const depsOptions = {
-      allowDevDeps: testConfig(options.devDependencies, filename) !== false,
-      allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
-      allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
+      allowDevDeps: testConfig(devDependencies, filename) !== false,
+      allowOptDeps: testConfig(optionalDependencies, filename) !== false,
+      allowPeerDeps: testConfig(peerDependencies, filename) !== false,
     }
 
     // todo: use module visitor from module-utils core

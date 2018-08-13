@@ -89,6 +89,16 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: packageDirMonoRepoRoot}],
     }),
+    test({
+      code: 'import leftPad from "left-pad";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+    }),
+    test({
+      code: 'import react from "react";',
+      filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot}],
+    }),
   ],
   invalid: [
     test({
@@ -226,7 +236,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: 'The package.json file could not be found.',
+        message: `Could not find: ${path.join('tests/files/package.json')}, ${path.join('tests/src/rules/doesn-exist/package.json')}`,
       }],
     }),
     test({
@@ -234,7 +244,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{packageDir: packageDirWithSyntaxError}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
+        message: `Could not parse ${path.join('tests/files/with-syntax-error/package.json')}: ` + packageFileWithSyntaxErrorMessage,
       }],
     }),
     test({
@@ -255,12 +265,11 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       }],
     }),
     test({
-      code: 'import react from "react";',
+      code: 'import leftPad from "left-pad";',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoRoot}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
-        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
       }],
     }),
   ]
