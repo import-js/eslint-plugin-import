@@ -5,6 +5,26 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.14.0] - 2018-08-13
+*   69e0187 (HEAD -> master, source/master, origin/master, origin/HEAD) Merge pull request #1151 from jf248/jsx
+|\  
+| * e30a757 (source/pr/1151, fork/jsx) Add JSX check to namespace rule
+|/  
+* 8252344 (source/pr/1148) Add error to output when module loaded as resolver has invalid API
+### Added
+- [`no-useless-path-segments`]: add commonJS (CJS) support ([#1128], thanks [@1pete])
+- [`namespace`]: add JSX check ([#1151], thanks [@jf248])
+
+### Fixed
+- [`no-cycle`]: ignore Flow imports ([#1126], thanks [@gajus])
+- fix Flow type imports ([#1106], thanks [@syymza])
+- [`no-relative-parent-imports`]: resolve paths ([#1135], thanks [@chrislloyd])
+- [`import/order`]: fix autofixer when using typescript-eslint-parser ([#1137], thanks [@justinanastos])
+- repeat fix from [#797] for [#717], in another place (thanks [@ljharb])
+
+### Refactors
+- add explicit support for RestElement alongside ExperimentalRestProperty (thanks [@ljharb])
+
 ## [2.13.0] - 2018-06-24
 ### Added
 - Add ESLint 5 support ([#1122], thanks [@ai] and [@ljharb])
@@ -473,7 +493,13 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
+[#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
+[#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
+[#1128]: https://github.com/benmosher/eslint-plugin-import/pull/1128
+[#1126]: https://github.com/benmosher/eslint-plugin-import/pull/1126
 [#1122]: https://github.com/benmosher/eslint-plugin-import/pull/1122
+[#1106]: https://github.com/benmosher/eslint-plugin-import/pull/1106
 [#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
@@ -486,6 +512,7 @@ for info on changes for earlier releases.
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
 [#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
+[#797]: https://github.com/benmosher/eslint-plugin-import/pull/797
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
 [#742]: https://github.com/benmosher/eslint-plugin-import/pull/742
 [#737]: https://github.com/benmosher/eslint-plugin-import/pull/737
@@ -558,6 +585,7 @@ for info on changes for earlier releases.
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
+[#717]: https://github.com/benmosher/eslint-plugin-import/issues/717
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
@@ -734,3 +762,8 @@ for info on changes for earlier releases.
 [@hulkish]: https://github.com/hulkish
 [@chrislloyd]: https://github.com/chrislloyd
 [@ai]: https://github.com/ai
+[@syymza]: https://github.com/syymza
+[@justinanastos]: https://github.com/justinanastos
+[@1pete]: https://github.com/1pete
+[@gajus]: https://github.com/gajus
+[@jf248]: https://github.com/jf248
