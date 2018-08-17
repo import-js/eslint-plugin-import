@@ -17,6 +17,7 @@ const packageFileWithSyntaxErrorMessage = (() => {
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
 const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
 const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
+const packageDirWithEmpty = path.join(__dirname, '../../files/empty')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -258,6 +259,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import react from "react";',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoRoot}],
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
+      }],
+    }),
+    test({
+      code: 'import "react";',
+      filename: path.join(packageDirWithEmpty, 'index.js'),
+      options: [{packageDir: packageDirWithEmpty}],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",

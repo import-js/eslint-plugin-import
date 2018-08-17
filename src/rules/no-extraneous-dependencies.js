@@ -176,11 +176,7 @@ module.exports = {
   create: function (context) {
     const options = context.options[0] || {}
     const filename = context.getFilename()
-    const deps = getDependencies(context, options.packageDir)
-
-    if (!deps) {
-      return {}
-    }
+    const deps = getDependencies(context, options.packageDir) || extractDepFields({})
 
     const depsOptions = {
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,
