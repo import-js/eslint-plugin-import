@@ -4,6 +4,8 @@ Reports:
   - modules without any or
   - individual exports not being used within other modules
 
+Note: dynamic imports are currently not supported.
+
 ## Rule Details
 
 
@@ -11,10 +13,10 @@ Reports:
 
 This rule takes the following option:
 
-- `src`: an array with files/paths to be analyzed. It only for applies for unused exports  
+- `src`: an array with files/paths to be analyzed. It only for applies for unused exports. Defaults to `process.cwd()`, if not provided
 - `ignore`: an array with files/paths to be ignored. It only for applies for unused exports  
 - `missingExports`: if `true`, files without any exports are reported  
-- `unusedExports`: if `true`, exports without any usage are reported
+- `unusedExports`: if `true`, exports without any usage within other modules are reported.
 
 
 ### Example for missing exports
@@ -41,12 +43,31 @@ export { foo as bar }
 ```
 
 ### Example for unused exports
-given file-c:
+given file-f:
 ```js
 import { e } from 'file-a'
 import { f } from 'file-b'
+import * from  'file-c'
+export * from 'file-d'
+export { default, i0 } from 'file-e' // both will be reported
 
-export default 7 // will be reported
+export const j = 99 // will be reported 
+```
+and file-e:
+```js
+export const i0 = 9 // will not be reported
+export const i1 = 9 // will be reported
+export default () => {} // will not be reported
+```
+and file-d:
+```js
+export const h = 8 // will not be reported
+export default () => {} // will be reported, as export * only considers named exports and ignores default exports
+```
+and file-c:
+```js
+export const g = 7 // will not be reported
+export default () => {} // will not be reported
 ```
 and file-b:
 ```js
