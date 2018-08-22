@@ -28,6 +28,10 @@ import(
   /*webpackChunkName:"someModule"*/
   'someModule',
 );
+import(
+  /* webpackChunkName : "someModule" */
+  'someModule',
+);
 
 // chunkname contains a 6 (forbidden by rule config)
 import(
@@ -38,6 +42,12 @@ import(
 // using single quotes instead of double quotes
 import(
   /* webpackChunkName: 'someModule' */
+  'someModule',
+);
+
+// invalid syntax for webpack comment
+import(
+  /* totally not webpackChunkName: "someModule" */
   'someModule',
 );
 
@@ -57,6 +67,15 @@ The following patterns are valid:
   );
   import(
     /* webpackChunkName: "someOtherModule12345789" */
+    'someModule',
+  );
+  import(
+    /* webpackChunkName: "someModule" */
+    /* webpackPrefetch: true */
+    'someModule',
+  );
+  import(
+    /* webpackChunkName: "someModule", webpackPrefetch: true */
     'someModule',
   );
 ```
