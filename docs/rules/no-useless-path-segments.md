@@ -1,6 +1,6 @@
 # import/no-useless-path-segments
 
-Use this rule to prevent unnecessary path segemnts in import and require statements.
+Use this rule to prevent unnecessary path segments in import and require statements.
 
 ## Rule Details
 
