@@ -26,6 +26,6 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
   "dependencies": {
     "debug": "^2.6.8",
-    "pkg-dir": "^1.0.0"
+    "pkg-dir": "^2.0.0"
   }
 }
