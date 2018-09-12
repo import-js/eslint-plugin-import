@@ -19,7 +19,7 @@ const missingExportsOptions = [{
 const unusedExportsOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/**/*.js')],
-  ignore: [testFilePath('./no-unused-modules/*ignored*.js')],
+  ignoreExports: [testFilePath('./no-unused-modules/*ignored*.js')],
 }]
 
 describe('doPreparation throws correct errors', () => {
@@ -27,8 +27,8 @@ describe('doPreparation throws correct errors', () => {
   it('should throw an error, if src is not an array', () => {
     expect(doPreparation.bind(doPreparation, null,  null, context)).to.throw(`Rule ${context.id}: src option must be an array`)
   })
-  it('should throw an error, if ignore is not an array', () => {
-    expect(doPreparation.bind(doPreparation, [], null, context)).to.throw(`Rule ${context.id}: ignore option must be an array`)
+  it('should throw an error, if ignoreExports is not an array', () => {
+    expect(doPreparation.bind(doPreparation, [], null, context)).to.throw(`Rule ${context.id}: ignoreExports option must be an array`)
   })
   it('should throw an error, if src contains empty strings', () => {
     expect(doPreparation.bind(doPreparation, [''],  [], context)).to.throw(`Rule ${context.id}: src option must not contain empty strings`)
@@ -42,17 +42,17 @@ describe('doPreparation throws correct errors', () => {
   it('should throw an error, if src contains values other than strings', () => {
     expect(doPreparation.bind(doPreparation, [undefined],  [], context)).to.throw(`Rule ${context.id}: src option must not contain values other than strings`)
   })
-  it('should throw an error, if ignore contains empty strings', () => {
-    expect(doPreparation.bind(doPreparation, ['src'],  [''], context)).to.throw(`Rule ${context.id}: ignore option must not contain empty strings`)
+  it('should throw an error, if ignoreExports contains empty strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [''], context)).to.throw(`Rule ${context.id}: ignoreExports option must not contain empty strings`)
   })
-  it('should throw an error, if ignore contains values other than strings', () => {
-    expect(doPreparation.bind(doPreparation, ['src'],  [false], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  it('should throw an error, if ignoreExports contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [false], context)).to.throw(`Rule ${context.id}: ignoreExports option must not contain values other than strings`)
   })
-  it('should throw an error, if ignore contains values other than strings', () => {
-    expect(doPreparation.bind(doPreparation, ['src'],  [null], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  it('should throw an error, if ignoreExports contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [null], context)).to.throw(`Rule ${context.id}: ignoreExports option must not contain values other than strings`)
   })
-  it('should throw an error, if ignore contains values other than strings', () => {
-    expect(doPreparation.bind(doPreparation, ['src'],  [undefined], context)).to.throw(`Rule ${context.id}: ignore option must not contain values other than strings`)
+  it('should throw an error, if ignoreExports contains values other than strings', () => {
+    expect(doPreparation.bind(doPreparation, ['src'],  [undefined], context)).to.throw(`Rule ${context.id}: ignoreExports option must not contain values other than strings`)
   })
 })
 

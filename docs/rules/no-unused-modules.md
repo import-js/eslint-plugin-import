@@ -14,7 +14,7 @@ Note: dynamic imports are currently not supported.
 This rule takes the following option:
 
 - `src`: an array with files/paths to be analyzed. It only for applies for unused exports. Defaults to `process.cwd()`, if not provided
-- `ignore`: an array with files/paths to be ignored. It only for applies for unused exports  
+- `ignore`: an array with files/paths for which unused exports will not be reported (e.g module entry points) 
 - `missingExports`: if `true`, files without any exports are reported  
 - `unusedExports`: if `true`, exports without any usage within other modules are reported.
 

@@ -38,16 +38,16 @@ const isNodeModule = path => {
 }
 
 /**
- * read all files matching the patterns in src and ignore
+ * read all files matching the patterns in src and ignoreExports
  * 
- * return all files matching src pattern, which are not matching the ignore pattern
+ * return all files matching src pattern, which are not matching the ignoreExports pattern
  */
-const resolveFiles = (src, ignore) => {
+const resolveFiles = (src, ignoreExports) => {
   const srcFiles = new Set()
   const srcFileList = listFilesToProcess(src)
 
   // prepare list of ignored files
-  const ignoredFilesList =  listFilesToProcess(ignore)
+  const ignoredFilesList =  listFilesToProcess(ignoreExports)
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename))
 
   // prepare list of source files, don't consider files from node_modules
@@ -180,7 +180,7 @@ const getSrc = src => {
  * prepare the lists of existing imports and exports - should only be executed once at
  * the start of a new eslint run
  */
-const doPreparation = (src, ignore, context) => {
+const doPreparation = (src, ignoreExports, context) => {
   const { id } = context
 
   // do some sanity checks
@@ -188,8 +188,8 @@ const doPreparation = (src, ignore, context) => {
     throw new Error(`Rule ${id}: src option must be an array`)
   }
 
-  if (typeof ignore !== UNDEFINED && !Array.isArray(ignore)) {
-    throw new Error(`Rule ${id}: ignore option must be an array`)
+  if (typeof ignoreExports !== UNDEFINED && !Array.isArray(ignoreExports)) {
+    throw new Error(`Rule ${id}: ignoreExports option must be an array`)
   }
 
   // no empty patterns for paths, as this will cause issues during path resolution
@@ -204,18 +204,18 @@ const doPreparation = (src, ignore, context) => {
     })
   }
   
-  if (ignore) {
-    ignore.forEach(file => {
+  if (ignoreExports) {
+    ignoreExports.forEach(file => {
       if (typeof file !== 'string') {
-        throw new Error(`Rule ${id}: ignore option must not contain values other than strings`)
+        throw new Error(`Rule ${id}: ignoreExports option must not contain values other than strings`)
       }
       if (file.length < 1) {
-        throw new Error(`Rule ${id}: ignore option must not contain empty strings`)
+        throw new Error(`Rule ${id}: ignoreExports option must not contain empty strings`)
       }
     })
   }
 
-  const srcFiles = resolveFiles(getSrc(src), ignore)
+  const srcFiles = resolveFiles(getSrc(src), ignoreExports)
   prepareImportsAndExports(srcFiles, context)
   determineUsage()
   preparationDone = true
@@ -252,8 +252,9 @@ module.exports = {
           description: 'files/paths to be analyzed (only for unused exports)',
           type: 'array',
         },
-        ignore: {
-          description: 'files/paths to be ignored (only for unused exports)',
+        ignoreExports: {
+          description:
+            'files/paths for which unused exports will not be reported (e.g module entry points)',
           type: 'array',
         },
         missingExports: {
@@ -269,10 +270,10 @@ module.exports = {
   },
 
   create: context => {
-    const { src, ignore, missingExports = false, unusedExports = false } = context.options[0]
+    const { src, ignoreExports, missingExports = false, unusedExports = false } = context.options[0]
 
     if (unusedExports && !preparationDone) {
-      doPreparation(src, ignore, context)
+      doPreparation(src, ignoreExports, context)
     }
     
     const file = context.getFilename()
