@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [`no-extraneous-dependencies`]: `packageDir` option with array value was clobbering package deps instead of merging them ([#1175] thanks [@aravindet])
+
 
 ## [2.14.0] - 2018-08-13
 *   69e0187 (HEAD -> master, source/master, origin/master, origin/HEAD) Merge pull request #1151 from jf248/jsx

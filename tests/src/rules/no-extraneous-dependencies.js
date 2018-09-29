@@ -90,6 +90,22 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: packageDirMonoRepoRoot}],
     }),
+    test({
+      code: 'import react from "react";',
+      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{packageDir: [packageDirMonoRepoWithNested, packageDirMonoRepoRoot]}],
+    }),
+    test({
+      code: 'import rightpad from "right-pad";',
+      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+    }),
   ],
   invalid: [
     test({
