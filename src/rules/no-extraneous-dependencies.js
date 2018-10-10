@@ -42,9 +42,12 @@ function getDependencies(context, packageDir) {
     if (!isEmpty(paths)) {
       // use rule config to find package.json
       paths.forEach(dir => {
-        Object.assign(packageContent, extractDepFields(
+        const _packageContent = extractDepFields(
           JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
-        ))
+        )
+        Object.keys(packageContent).forEach(depsKey =>
+          Object.assign(packageContent[depsKey], _packageContent[depsKey])
+        )
       })
     } else {
       // use closest package.json
