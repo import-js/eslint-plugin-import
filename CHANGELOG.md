@@ -5,7 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Fixed
-- [`no-extraneous-dependencies`]: `packageDir` option with array value was clobbering package deps instead of merging them ([#1175] thanks [@aravindet])
+- [`no-extraneous-dependencies`]: `packageDir` option with array value was clobbering package deps instead of merging them ([#1175]/[#1176], thanks [@aravindet] & [@pzhine])
 
 
 ## [2.14.0] - 2018-08-13
@@ -496,6 +496,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
 [#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
 [#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
 [#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
@@ -581,7 +582,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
-[#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
+[#1175]: https://github.com/benmosher/eslint-plugin-import/issues/1175
 [#931]: https://github.com/benmosher/eslint-plugin-import/issues/931
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
@@ -770,3 +771,5 @@ for info on changes for earlier releases.
 [@1pete]: https://github.com/1pete
 [@gajus]: https://github.com/gajus
 [@jf248]: https://github.com/jf248
+[@aravindet]: https://github.com/aravindet
+[@pzhine]: https://github.com/pzhine
