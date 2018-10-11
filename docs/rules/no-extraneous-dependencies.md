@@ -29,10 +29,14 @@ You can also use an array of globs instead of literal booleans:
 
 When using an array of globs, the setting will be set to `true` (no errors reported) if the name of the file being linted matches a single glob in the array, and `false` otherwise.
 
-Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json and is relative to the current working directory.
+Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json.
+
+If provided as a relative path string, will be computed relative to the current working directory at linter execution time. If this is not ideal (does not work with some editor integrations), consider using `__dirname` to provide a path relative to your configuration.
 
 ```js
 "import/no-extraneous-dependencies": ["error", {"packageDir": './some-dir/'}]
+// or
+"import/no-extraneous-dependencies": ["error", {"packageDir": path.join(__dirname, 'some-dir')}]
 ```
 
 It may also be an array of multiple paths, to support monorepos or other novel project
