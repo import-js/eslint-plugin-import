@@ -54,7 +54,7 @@
     "cross-env": "^4.0.0",
     "eslint": "2.x - 5.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
-    "eslint-import-resolver-typescript": "^1.0.2",
+    "eslint-import-resolver-typescript": "1.0.2",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "eslint-module-utils": "file:./utils",
     "eslint-plugin-import": "2.x",
