@@ -5,7 +5,6 @@
  */
 
 import Exports from '../ExportMap'
-import { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 import resolve from 'eslint-module-utils/resolve'
 import docsUrl from '../docsUrl'
 
@@ -26,7 +25,6 @@ const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
 const DEFAULT = 'default'
-const UNDEFINED = 'undefined'
 
 let preparationDone = false
 const importList = new Map()
@@ -96,7 +94,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
         } else {
           currentValue = value.local
         }
-        if (typeof localImport !== UNDEFINED) {
+        if (typeof localImport !== 'undefined') {
           localImport = new Set([...localImport, currentValue])
         } else {
           localImport = new Set([currentValue])
@@ -145,7 +143,7 @@ const determineUsage = () => {
   importList.forEach((listValue, listKey) => {
     listValue.forEach((value, key) => {
       const exports = exportList.get(key)
-      if (typeof exports !== UNDEFINED) {
+      if (typeof exports !== 'undefined') {
         value.forEach(currentImport => {
           let specifier
           if (currentImport === IMPORT_NAMESPACE_SPECIFIER) {
@@ -155,9 +153,9 @@ const determineUsage = () => {
           } else {
             specifier = currentImport
           }
-          if (typeof specifier !== UNDEFINED) {
+          if (typeof specifier !== 'undefined') {
             const exportStatement = exports.get(specifier)
-            if (typeof exportStatement !== UNDEFINED) {
+            if (typeof exportStatement !== 'undefined') {
               const { whereUsed } = exportStatement
               whereUsed.add(listKey)
               exports.set(specifier, { whereUsed })
@@ -181,40 +179,6 @@ const getSrc = src => {
  * the start of a new eslint run
  */
 const doPreparation = (src, ignoreExports, context) => {
-  const { id } = context
-
-  // do some sanity checks
-  if (typeof src !== UNDEFINED && !Array.isArray(src)) {
-    throw new Error(`Rule ${id}: src option must be an array`)
-  }
-
-  if (typeof ignoreExports !== UNDEFINED && !Array.isArray(ignoreExports)) {
-    throw new Error(`Rule ${id}: ignoreExports option must be an array`)
-  }
-
-  // no empty patterns for paths, as this will cause issues during path resolution
-  if (src) {
-    src.forEach(file => {
-      if (typeof file !== 'string') {
-        throw new Error(`Rule ${id}: src option must not contain values other than strings`)
-      }
-      if (file.length < 1) {
-        throw new Error(`Rule ${id}: src option must not contain empty strings`)
-      }
-    })
-  }
-  
-  if (ignoreExports) {
-    ignoreExports.forEach(file => {
-      if (typeof file !== 'string') {
-        throw new Error(`Rule ${id}: ignoreExports option must not contain values other than strings`)
-      }
-      if (file.length < 1) {
-        throw new Error(`Rule ${id}: ignoreExports option must not contain empty strings`)
-      }
-    })
-  }
-
   const srcFiles = resolveFiles(getSrc(src), ignoreExports)
   prepareImportsAndExports(srcFiles, context)
   determineUsage()
@@ -246,16 +210,26 @@ module.exports = {
   getSrc,
   meta: {
     docs: { url: docsUrl('no-unused-modules') },
-    schema: [
-      makeOptionsSchema({
+    schema: [{
+      properties: {
         src: {
           description: 'files/paths to be analyzed (only for unused exports)',
           type: 'array',
+          minItems: 1,
+          items: {
+            type: 'string',
+            minLength: 1,
+          },
         },
         ignoreExports: {
           description:
             'files/paths for which unused exports will not be reported (e.g module entry points)',
           type: 'array',
+          minItems: 1,
+          items: {
+            type: 'string',
+            minLength: 1,
+          },
         },
         missingExports: {
           description: 'report modules without any exports',
@@ -265,12 +239,48 @@ module.exports = {
           description: 'report exports without any usage',
           type: 'boolean',
         },
-      }),
-    ],
+      },
+      not: {
+        properties: {
+          unusedExports: { enum: [false] },
+          missingExports: { enum: [false] },
+        },
+      },
+      anyOf:[{
+        not: {
+          properties: {
+            unusedExports: { enum: [true] },
+          },
+        },
+        required: ['missingExports'],
+      }, {
+        not: {
+          properties: {
+            missingExports: { enum: [true] },
+          },
+        },
+        required: ['unusedExports'],
+      }, {
+        properties: {
+          unusedExports: { enum: [true] },
+        },
+        required: ['unusedExports'],
+      }, {
+        properties: {
+          missingExports: { enum: [true] },
+        },
+        required: ['missingExports'],
+      }],
+    }],
   },
 
   create: context => {
-    const { src, ignoreExports, missingExports = false, unusedExports = false } = context.options[0]
+    const {
+      src,
+      ignoreExports = [],
+      missingExports,
+      unusedExports,
+    } = context.options[0]
 
     if (unusedExports && !preparationDone) {
       doPreparation(src, ignoreExports, context)
@@ -311,7 +321,7 @@ module.exports = {
 
       // special case: export * from 
       const exportAll = exports.get(EXPORT_ALL_DECLARATION)
-      if (typeof exportAll !== UNDEFINED && exportedValue !== IMPORT_DEFAULT_SPECIFIER) {
+      if (typeof exportAll !== 'undefined' && exportedValue !== IMPORT_DEFAULT_SPECIFIER) {
         if (exportAll.whereUsed.size > 0) {
           return
         }
@@ -319,7 +329,7 @@ module.exports = {
 
       // special case: namespace import
       const namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER)
-      if (typeof namespaceImports !== UNDEFINED) {
+      if (typeof namespaceImports !== 'undefined') {
         if (namespaceImports.whereUsed.size > 0) {
           return
         }
@@ -334,7 +344,7 @@ module.exports = {
         value = exportedValue
       }
       
-      if (typeof exportStatement !== UNDEFINED){
+      if (typeof exportStatement !== 'undefined'){
         if ( exportStatement.whereUsed.size < 1) {
           context.report(
             node,
@@ -363,7 +373,7 @@ module.exports = {
 
       // new module has been created during runtime
       // include it in further processing
-      if (typeof exports === UNDEFINED) {
+      if (typeof exports === 'undefined') {
         exports = new Map()
       }
 
@@ -413,7 +423,7 @@ module.exports = {
       let exportAll = exports.get(EXPORT_ALL_DECLARATION)
       let namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER)
       
-      if (typeof namespaceImports === UNDEFINED) {
+      if (typeof namespaceImports === 'undefined') {
         namespaceImports = { whereUsed: new Set() }
       }
 
@@ -433,7 +443,7 @@ module.exports = {
       }
 
       let oldImportPaths = importList.get(file)
-      if (typeof oldImportPaths === UNDEFINED) {
+      if (typeof oldImportPaths === 'undefined') {
         oldImportPaths = new Map()
       }
       
@@ -521,7 +531,7 @@ module.exports = {
       newExportAll.forEach(value => {
         if (!oldExportAll.has(value)) {
           let imports = oldImportPaths.get(value)
-          if (typeof imports === UNDEFINED) {
+          if (typeof imports === 'undefined') {
             imports = new Set()
           }
           imports.add(EXPORT_ALL_DECLARATION)
@@ -529,14 +539,14 @@ module.exports = {
 
           let exports = exportList.get(value)
           let currentExport
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             currentExport = exports.get(EXPORT_ALL_DECLARATION)
           } else {
             exports = new Map()
             exportList.set(value, exports)
           }
 
-          if (typeof currentExport !== UNDEFINED) {
+          if (typeof currentExport !== 'undefined') {
             currentExport.whereUsed.add(file)
           } else {
             const whereUsed = new Set()
@@ -552,9 +562,9 @@ module.exports = {
           imports.delete(EXPORT_ALL_DECLARATION)
 
           const exports = exportList.get(value)
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             const currentExport = exports.get(EXPORT_ALL_DECLARATION)
-            if (typeof currentExport !== UNDEFINED) {
+            if (typeof currentExport !== 'undefined') {
               currentExport.whereUsed.delete(file)
             }
           }
@@ -564,7 +574,7 @@ module.exports = {
       newDefaultImports.forEach(value => {
         if (!oldDefaultImports.has(value)) {
           let imports = oldImportPaths.get(value)
-          if (typeof imports === UNDEFINED) {
+          if (typeof imports === 'undefined') {
             imports = new Set()
           }
           imports.add(IMPORT_DEFAULT_SPECIFIER)
@@ -572,14 +582,14 @@ module.exports = {
 
           let exports = exportList.get(value)
           let currentExport
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             currentExport = exports.get(IMPORT_DEFAULT_SPECIFIER)
           } else {
             exports = new Map()
             exportList.set(value, exports)
           }
 
-          if (typeof currentExport !== UNDEFINED) {
+          if (typeof currentExport !== 'undefined') {
             currentExport.whereUsed.add(file)
           } else {
             const whereUsed = new Set()
@@ -595,9 +605,9 @@ module.exports = {
           imports.delete(IMPORT_DEFAULT_SPECIFIER)
 
           const exports = exportList.get(value)
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             const currentExport = exports.get(IMPORT_DEFAULT_SPECIFIER)
-            if (typeof currentExport !== UNDEFINED) {
+            if (typeof currentExport !== 'undefined') {
               currentExport.whereUsed.delete(file)
             }
           }
@@ -607,7 +617,7 @@ module.exports = {
       newNamespaceImports.forEach(value => {
         if (!oldNamespaceImports.has(value)) {
           let imports = oldImportPaths.get(value)
-          if (typeof imports === UNDEFINED) {
+          if (typeof imports === 'undefined') {
             imports = new Set()
           }
           imports.add(IMPORT_NAMESPACE_SPECIFIER)
@@ -615,14 +625,14 @@ module.exports = {
 
           let exports = exportList.get(value)
           let currentExport
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             currentExport = exports.get(IMPORT_NAMESPACE_SPECIFIER)
           } else {
             exports = new Map()
             exportList.set(value, exports)
           }
 
-          if (typeof currentExport !== UNDEFINED) {
+          if (typeof currentExport !== 'undefined') {
             currentExport.whereUsed.add(file)
           } else {
             const whereUsed = new Set()
@@ -638,9 +648,9 @@ module.exports = {
           imports.delete(IMPORT_NAMESPACE_SPECIFIER)
 
           const exports = exportList.get(value)
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             const currentExport = exports.get(IMPORT_NAMESPACE_SPECIFIER)
-            if (typeof currentExport !== UNDEFINED) {
+            if (typeof currentExport !== 'undefined') {
               currentExport.whereUsed.delete(file)
             }
           }
@@ -650,7 +660,7 @@ module.exports = {
       newImports.forEach((value, key) => {
         if (!oldImports.has(key)) {
           let imports = oldImportPaths.get(value)
-          if (typeof imports === UNDEFINED) {
+          if (typeof imports === 'undefined') {
             imports = new Set()
           }
           imports.add(key)
@@ -658,14 +668,14 @@ module.exports = {
 
           let exports = exportList.get(value)
           let currentExport
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             currentExport = exports.get(key)
           } else {
             exports = new Map()
             exportList.set(value, exports)
           }
 
-          if (typeof currentExport !== UNDEFINED) {
+          if (typeof currentExport !== 'undefined') {
             currentExport.whereUsed.add(file)
           } else {
             const whereUsed = new Set()
@@ -681,9 +691,9 @@ module.exports = {
           imports.delete(key)
 
           const exports = exportList.get(value)
-          if (typeof exports !== UNDEFINED) {
+          if (typeof exports !== 'undefined') {
             const currentExport = exports.get(key)
-            if (typeof currentExport !== UNDEFINED) {
+            if (typeof currentExport !== 'undefined') {
               currentExport.whereUsed.delete(file)
             }
           }
