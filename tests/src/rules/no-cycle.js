@@ -37,7 +37,20 @@ ruleTester.run('no-cycle', rule, {
       options: [{ maxDepth: 1 }],
     }),
     test({
+      code: 'import { foo, bar } from "./depth-two"',
+      options: [{ maxDepth: 1 }],
+    }),
+    test({
+      code: 'import("./depth-two").then(function({ foo }){})',
+      options: [{ maxDepth: 1 }],
+      parser: 'babel-eslint',
+    }),
+    test({
       code: 'import type { FooType } from "./depth-one"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import type { FooType, BarType } from "./depth-one"',
       parser: 'babel-eslint',
     }),
   ],
@@ -85,8 +98,27 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
     }),
     test({
+      code: 'import one, { two, three } from "./depth-three-star"',
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+    }),
+    test({
       code: 'import { bar } from "./depth-three-indirect"',
       errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+    }),
+    test({
+      code: 'import { bar } from "./depth-three-indirect"',
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import("./depth-three-star")',
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import("./depth-three-indirect")',
+      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      parser: 'babel-eslint',
     }),
   ],
 })

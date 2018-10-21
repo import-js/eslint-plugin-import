@@ -93,6 +93,14 @@ ruleTester.run('no-relative-parent-imports', rule, {
         line: 1,
         column: 17
       }]
+    }),
+    test({
+      code: 'import("../../api/service")',
+      errors: [ {
+        message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `../../api/service` or consider making `../../api/service` a package.',
+        line: 1,
+        column: 8
+      }],
     })
   ],
 })

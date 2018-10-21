@@ -29,6 +29,8 @@ function runResolverTests(resolver) {
       rest({ code: "import bar from './bar.js';" }),
       rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
+      rest({ code: "import('fs');"
+           , parser: 'babel-eslint' }),
 
       rest({ code: 'import * as foo from "a"' }),
 
@@ -114,6 +116,13 @@ function runResolverTests(resolver) {
                             "module 'in-alternate-root'."
                  , type: 'Literal',
                  }]}),
+      rest({
+      code: "import('in-alternate-root').then(function({DEEP}){});",
+      errors: [{ message: 'Unable to resolve path to ' +
+                          "module 'in-alternate-root'."
+                , type: 'Literal',
+                }],
+      parser: 'babel-eslint'}),
 
       rest({ code: 'export { foo } from "./does-not-exist"'
            , errors: ["Unable to resolve path to module './does-not-exist'."] }),

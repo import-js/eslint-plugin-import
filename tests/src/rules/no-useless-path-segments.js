@@ -17,7 +17,6 @@ function runResolverTests(resolver) {
       test({ code: 'import "."' }),
       test({ code: 'import ".."' }),
       test({ code: 'import fs from "fs"' }),
-      test({ code: 'import fs from "fs"' }),
 
       // ES modules + noUselessIndex
       test({ code: 'import "../index"' }), // noUselessIndex is false by default
@@ -28,6 +27,13 @@ function runResolverTests(resolver) {
       test({ code: 'import "./malformed.js"', options: [{ noUselessIndex: true }] }), // ./malformed directory does not exist
       test({ code: 'import "./malformed"', options: [{ noUselessIndex: true }] }), // ./malformed directory does not exist
       test({ code: 'import "./importType"', options: [{ noUselessIndex: true }] }), // ./importType.js does not exist
+
+      test({ code: 'import(".")'
+           , parser: 'babel-eslint' }),
+      test({ code: 'import("..")'
+           , parser: 'babel-eslint' }),
+      test({ code: 'import("fs").then(function(fs){})'
+           , parser: 'babel-eslint' }),
     ],
 
     invalid: [
@@ -189,6 +195,21 @@ function runResolverTests(resolver) {
         code: 'import "../index.js"',
         options: [{ noUselessIndex: true }],
         errors: ['Useless path segments for "../index.js", should be ".."'],
+      }),
+      test({
+        code: 'import("./")',
+        errors: [ 'Useless path segments for "./", should be "."'],
+        parser: 'babel-eslint',
+      }),
+      test({
+        code: 'import("../")',
+        errors: [ 'Useless path segments for "../", should be ".."'],
+        parser: 'babel-eslint',
+      }),
+      test({
+        code: 'import("./deep//a")',
+        errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
+        parser: 'babel-eslint',
       }),
     ],
   })

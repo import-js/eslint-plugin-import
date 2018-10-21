@@ -91,7 +91,9 @@ exports.default = function visitModules(visitor, options) {
   }
 
   if (options.commonjs || options.amd) {
+    const currentCallExpression = visitors['CallExpression']
     visitors['CallExpression'] = function (call) {
+      if (currentCallExpression) currentCallExpression(call)
       if (options.commonjs) checkCommon(call)
       if (options.amd) checkAMD(call)
     }
