@@ -103,4 +103,15 @@ describe("config", function () {
         .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'))
   })
 
+  it('finds the config at option env when config is an array of functions', function() {
+    var settings = {
+      config: require(path.join(__dirname, './files/webpack.function.config.multiple.js')),
+      env: {
+        dummy: true,
+      },
+    }
+
+    expect(resolve('bar', file, settings)).to.have.property('path')
+        .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'))
+  })
 })
