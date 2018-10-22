@@ -91,6 +91,14 @@ exports.resolve = function (source, file, settings) {
   }
 
   if (Array.isArray(webpackConfig)) {
+    webpackConfig = webpackConfig.map(cfg => {
+      if (typeof cfg === 'function') {
+        return cfg(env)
+      }
+
+      return cfg
+    })
+
     if (typeof configIndex !== 'undefined' && webpackConfig.length > configIndex) {
       webpackConfig = webpackConfig[configIndex]
     }
