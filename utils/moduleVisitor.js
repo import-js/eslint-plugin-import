@@ -80,7 +80,7 @@ exports.default = function visitModules(visitor, options) {
     }
   }
 
-  function checkRequireResolve(call) {
+  function checkCommonRequireResolve(call) {
     if (call.callee.type !== 'MemberExpression') return
     if (call.callee.object.name !== 'require') return
     if (call.callee.property.name !== 'resolve') return
@@ -110,11 +110,21 @@ exports.default = function visitModules(visitor, options) {
     }
   }
 
-  if (options.requireResolve) {
+  const requireResolve = {}
+  if(typeof options.requireResolve === 'boolean') {
+    Object.assign(requireResolve, {
+      commonjs: options.commonjs && options.requireResolve,
+    })
+  }
+  else if(options.requireResolve) {
+    Object.assign(requireResolve, options.requireResolve)
+  }
+
+  if (requireResolve.commonjs) {
     const currentCallExpression = visitors['CallExpression']
     visitors['CallExpression'] = function (call) {
       if (currentCallExpression) currentCallExpression(call)
-      checkRequireResolve(call)
+      checkCommonRequireResolve(call)
     }
   }
 
@@ -132,7 +142,17 @@ function makeOptionsSchema(additionalProperties) {
       'commonjs': { 'type': 'boolean' },
       'amd': { 'type': 'boolean' },
       'esmodule': { 'type': 'boolean' },
-      'requireResolve': { 'type': 'boolean' },
+      'requireResolve': {
+        'oneOf': [
+          { 'type': 'boolean' },
+          {
+            'type': 'object',
+            'properties': {
+              'commonjs': { 'type': 'boolean' },
+            },
+          },
+        ],
+      },
       'ignore': {
         'type': 'array',
         'minItems': 1,

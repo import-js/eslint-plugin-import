@@ -75,6 +75,12 @@ function runResolverTests(resolver) {
            , options: [{ requireResolve: true }]}),
       rest({ code: 'require.resolve("./does-not-exist")'
            , options: [{ requireResolve: false }]}),
+      rest({ code: 'require.resolve("./bar")'
+           , options: [{ commonjs: false, requireResolve: { commonjs: true } }]}),
+      rest({ code: 'require.resolve("./does-not-exist")'
+           , options: [{ requireResolve: { commonjs: false } }]}),
+      rest({ code: 'require.resolve("./does-not-exist")'
+           , options: [{ requireResolve: {} }]}),
       rest({ code: 'require.resolve("./does-not-exist")' }),
 
       // stress tests
@@ -191,7 +197,7 @@ function runResolverTests(resolver) {
       // requireResolve setting
       rest({
         code: 'var bar = require.resolve("./baz")',
-        options: [{ requireResolve: true }],
+        options: [{ commonjs: true, requireResolve: true }],
         errors: [{
           message: "Unable to resolve path to module './baz'.",
           type: 'Literal',
@@ -199,7 +205,15 @@ function runResolverTests(resolver) {
       }),
       rest({
         code: 'require.resolve("./baz")',
-        options: [{ requireResolve: true }],
+        options: [{ commonjs: true, requireResolve: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'var bar = require.resolve("./baz")',
+        options: [{ requireResolve: { commonjs: true } }],
         errors: [{
           message: "Unable to resolve path to module './baz'.",
           type: 'Literal',
