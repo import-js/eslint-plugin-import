@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`no-dynamic-require`]: add option `esmodule` ([#1223], thanks [@vikr01])
+- [`named`]: add `commonjs` option ([#1222], thanks [@vikr01])
 
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
@@ -891,7 +892,6 @@ for info on changes for earlier releases.
 [#1619]: https://github.com/benmosher/eslint-plugin-import/pull/1619
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612
 [#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
-[#1223]: https://github.com/benmosher/eslint-plugin-import/pull/1223
 [#1605]: https://github.com/benmosher/eslint-plugin-import/pull/1605
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572
@@ -963,6 +963,8 @@ for info on changes for earlier releases.
 [#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
 [#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
+[#1223]: https://github.com/benmosher/eslint-plugin-import/pull/1223
+[#1222]: https://github.com/benmosher/eslint-plugin-import/pull/1222
 [#1218]: https://github.com/benmosher/eslint-plugin-import/pull/1218
 [#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
 [#1163]: https://github.com/benmosher/eslint-plugin-import/pull/1163
