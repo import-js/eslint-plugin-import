@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Added
+- [`no-dynamic-require`]: add option `esmodule` ([#1223], thanks [@vikr01])
+
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
@@ -888,6 +891,7 @@ for info on changes for earlier releases.
 [#1619]: https://github.com/benmosher/eslint-plugin-import/pull/1619
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612
 [#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
+[#1223]: https://github.com/benmosher/eslint-plugin-import/pull/1223
 [#1605]: https://github.com/benmosher/eslint-plugin-import/pull/1605
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572

@@ -9,6 +9,10 @@ const error = {
   message: 'Calls to require() should use string literals',
 };
 
+const dynamicImportError = {
+  message: 'Calls to import() should use string literals',
+};
+
 ruleTester.run('no-dynamic-require', rule, {
   valid: [
     test({ code: 'import _ from "lodash"' }),
@@ -22,6 +26,59 @@ ruleTester.run('no-dynamic-require', rule, {
     test({ code: 'var foo = require(`foo`)' }),
     test({ code: 'var foo = require("./foo")' }),
     test({ code: 'var foo = require("@scope/foo")' }),
+
+    //dynamic import
+    test({
+      code: 'import("foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import(`foo`)',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import("./foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import("@scope/foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'var foo = import("foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'var foo = import(`foo`)',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'var foo = import("./foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'var foo = import("@scope/foo")',
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import("../" + name)',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: false }],
+    }),
+    test({
+      code: 'import(`../${name}`)',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
   invalid: [
     test({
@@ -43,6 +100,33 @@ ruleTester.run('no-dynamic-require', rule, {
     test({
       code: 'require(name + "foo", "bar")',
       errors: [error],
+      options: [{ esmodule: true }],
+    }),
+
+    // dynamic import
+    test({
+      code: 'import("../" + name)',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import(`../${name}`)',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import(name)',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
+    }),
+    test({
+      code: 'import(name())',
+      errors: [dynamicImportError],
+      parser: require.resolve('babel-eslint'),
+      options: [{ esmodule: true }],
     }),
     test({
       code: 'require(`foo${x}`)',
