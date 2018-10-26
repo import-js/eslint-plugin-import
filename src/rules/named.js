@@ -7,9 +7,31 @@ module.exports = {
     docs: {
       url: docsUrl('named'),
     },
+    schema : [{
+      type: 'object',
+      properties: {
+        commonjs: {
+          oneOf: [
+            { type: 'boolean' },
+            {
+              type: 'object',
+              properties: {
+                require: { type: 'boolean' },
+                exports: { type: 'boolean' },
+              },
+            },
+          ],
+        },
+      },
+      additionalProperties: false,
+    }],
   },
 
   create: function (context) {
+    const options = context.options[0] || {}
+    const { commonjs = {} } = options
+    const useCommonjsExports = typeof commonjs === 'boolean' ? commonjs : commonjs.exports
+
     function checkSpecifiers(key, type, node) {
       // ignore local exports and type imports
       if (node.source == null || node.importKind === 'type') return
@@ -19,7 +41,12 @@ module.exports = {
         return // no named imports/exports
       }
 
-      const imports = Exports.get(node.source.value, context)
+      const exportsOptions = {
+        useCommonjsExports,
+        noInterop: false, // this should only be true when using require() calls
+      }
+
+      const imports = Exports.get(node.source.value, context, exportsOptions)
       if (imports == null) return
 
       if (imports.errors.length) {
