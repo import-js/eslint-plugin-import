@@ -33,6 +33,18 @@ ruleTester.run('no-relative-parent-imports', rule, {
       options: [{ commonjs: true }],
     }),
     test({
+      code: 'require.resolve("./internal.js")',
+      options: [{ commonjs: true, requireResolve: true }],
+    }),
+    test({
+      code: 'require.resolve("./app/index.js")',
+      options: [{ commonjs: false, requireResolve: { commonjs: true } }],
+    }),
+    test({
+      code: 'require.resolve("package")',
+      options: [{ requireResolve: { commonjs: true } }],
+    }),
+    test({
       code: 'import("./internal.js")',
     }),
     test({
@@ -71,6 +83,15 @@ ruleTester.run('no-relative-parent-imports', rule, {
       } ],
     }),
     test({
+      code: 'require.resolve("../plugin.js")',
+      options: [{ requireResolve: { commonjs: true } }],
+      errors: [ {
+        message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `../plugin.js` or consider making `../plugin.js` a package.',
+        line: 1,
+        column: 17,
+      } ],
+    }),
+    test({
       code: 'import("../plugin.js")',
       errors: [ {
         message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `../plugin.js` or consider making `../plugin.js` a package.',
@@ -83,16 +104,16 @@ ruleTester.run('no-relative-parent-imports', rule, {
       errors: [ {
         message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `./../plugin.js` or consider making `./../plugin.js` a package.',
         line: 1,
-        column: 17
-      }]
+        column: 17,
+      }],
     }),
     test({
       code: 'import foo from "../../api/service"',
       errors: [ {
         message: 'Relative imports from parent directories are not allowed. Please either pass what you\'re importing through at runtime (dependency injection), move `index.js` to same directory as `../../api/service` or consider making `../../api/service` a package.',
         line: 1,
-        column: 17
-      }]
-    })
+        column: 17,
+      }],
+    }),
   ],
 })

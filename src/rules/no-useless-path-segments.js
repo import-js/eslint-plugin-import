@@ -44,6 +44,17 @@ module.exports = {
         type: 'object',
         properties: {
           commonjs: { type: 'boolean' },
+          requireResolve: {
+            oneOf: [
+              { type: 'boolean' },
+              {
+                type: 'object',
+                properties: {
+                  commonjs: { type: 'boolean' },
+                },
+              },
+            ],
+          },
         },
         additionalProperties: false,
       },
