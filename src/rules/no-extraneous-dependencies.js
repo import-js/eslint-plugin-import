@@ -112,7 +112,10 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   }
 
   const resolved = resolve(name, context)
-  if (!resolved) { return }
+  if (!resolved) {
+    return
+  }
+
 
   const splitName = name.split('/')
   const packageName = splitName[0][0] === '@'
@@ -122,6 +125,10 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
   const isInPeerDeps = deps.peerDependencies[packageName] !== undefined
+
+  if (depsOptions.ignore.some(reg => reg.test(packageName))) {
+    return
+  }
 
   if (isInDeps ||
     (depsOptions.allowDevDeps && isInDevDeps) ||
@@ -164,14 +171,21 @@ module.exports = {
 
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'devDependencies': { 'type': ['boolean', 'array'] },
-          'optionalDependencies': { 'type': ['boolean', 'array'] },
-          'peerDependencies': { 'type': ['boolean', 'array'] },
-          'packageDir': { 'type': ['string', 'array'] },
+        type: 'object',
+        properties: {
+          devDependencies: { type: ['boolean', 'array'] },
+          optionalDependencies: { type: ['boolean', 'array'] },
+          peerDependencies: { type: ['boolean', 'array'] },
+          packageDir: { type: ['string', 'array'] },
+          ignore: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+            uniqueItems: true,
+          },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
@@ -185,6 +199,7 @@ module.exports = {
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,
       allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
+      ignore: (options.ignore || []).map(p => new RegExp(p)),
     }
 
     // todo: use module visitor from module-utils core

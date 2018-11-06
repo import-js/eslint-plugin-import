@@ -15,10 +15,20 @@ This rule supports the following options:
 
 `peerDependencies`: If set to `false`, then the rule will show an error when `peerDependencies` are imported. Defaults to `false`.
 
+`ignore`:  Some modules can be ignored by the ignore parameter.It supports regular expressions
+
 You can set the options like this:
 
 ```js
-"import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}]
+"import/no-extraneous-dependencies": [
+  "error", 
+  {
+    "devDependencies": false, 
+    "optionalDependencies": false,
+    "peerDependencies": false,
+    "ignore": ["@org", "@org/module", "@org/custom-.*"]
+  }
+]
 ```
 
 You can also use an array of globs instead of literal booleans:

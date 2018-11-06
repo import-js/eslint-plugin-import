@@ -106,6 +106,22 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import rightpad from "right-pad";',
       options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
     }),
+    test({
+      code: 'import ignore from "@org/not-a-dependency"',
+      options: [{ignore: ['@org'] }],
+    }),
+    test({
+      code: 'import ignore from "@org/not-a-dependency"',
+      options: [{ignore: ['@org/not-a-dependency'] }],
+    }),
+    test({
+      code: 'import ignore from "not-a-dependency"',
+      options: [{ignore: ['not-a-dependency'] }],
+    }),
+    test({
+      code: 'import ignore from "not-a-dependency/index"',
+      options: [{ignore: ['not-a-dependency'] }],
+    }),
   ],
   invalid: [
     test({
