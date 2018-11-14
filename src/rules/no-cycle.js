@@ -51,7 +51,8 @@ module.exports = {
         if (traversed.has(m.path)) return
         traversed.add(m.path)
 
-        for (let [path, { getter, source }] of m.imports) {
+        for (let [path, { getter, importKind, source }] of m.imports) {
+          if (importKind === 'type') continue
           if (path === myPath) return true
           if (traversed.has(path)) continue
           if (route.length + 1 < maxDepth) {

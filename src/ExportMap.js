@@ -418,6 +418,7 @@ ExportMap.parse = function (path, content, context) {
     const getter = thunkFor(p, context)
     m.imports.set(p, {
       getter,
+      importKind: declaration.importKind,
       source: {  // capturing actual node reference holds full AST in memory!
         value: declaration.source.value,
         loc: declaration.source.loc,
