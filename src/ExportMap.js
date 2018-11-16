@@ -243,7 +243,7 @@ function captureJsDoc(comments) {
   // capture XSDoc
   comments.forEach(comment => {
     // skip non-block comments
-    if (comment.value.slice(0, 4) !== '*\n *') return
+    if (comment.type !== 'Block') return
     try {
       doc = doctrine.parse(comment.value, { unwrap: true })
     } catch (err) {

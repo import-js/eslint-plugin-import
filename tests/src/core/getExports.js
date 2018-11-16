@@ -96,12 +96,12 @@ describe('ExportMap', function () {
 
   context('deprecation metadata', function () {
 
-    function jsdocTests(parseContext) {
+    function jsdocTests(parseContext, lineEnding) {
       context('deprecated imports', function () {
         let imports
         before('parse file', function () {
           const path = getFilename('deprecated.js')
-              , contents = fs.readFileSync(path, { encoding: 'utf8' })
+              , contents = fs.readFileSync(path, { encoding: 'utf8' }).replace(/[\r]\n/g, lineEnding)
           imports = ExportMap.parse(path, contents, parseContext)
 
           // sanity checks
@@ -191,7 +191,15 @@ describe('ExportMap', function () {
           attachComment: true,
         },
         settings: {},
-      })
+      }, '\n')
+      jsdocTests({
+        parserPath: 'espree',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+        settings: {},
+      }, '\r\n')
     })
 
     context('babel-eslint', function () {
@@ -202,7 +210,15 @@ describe('ExportMap', function () {
           attachComment: true,
         },
         settings: {},
-      })
+      }, '\n')
+      jsdocTests({
+        parserPath: 'babel-eslint',
+        parserOptions: {
+          sourceType: 'module',
+          attachComment: true,
+        },
+        settings: {},
+      }, '\r\n')
     })
   })
 
