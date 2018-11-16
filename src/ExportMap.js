@@ -512,6 +512,10 @@ export function recursivePatternCapture(pattern, callback) {
         recursivePatternCapture(element, callback)
       })
       break
+
+    case 'AssignmentPattern':
+      callback(pattern.left)
+      break
   }
 }
 

@@ -273,7 +273,7 @@ describe('ExportMap', function () {
     context('#size', function () {
 
       it('counts the names', () => expect(ExportMap.get('./named-exports', fakeContext))
-        .to.have.property('size', 8))
+        .to.have.property('size', 10))
 
       it('includes exported namespace size', () => expect(ExportMap.get('./export-all', fakeContext))
         .to.have.property('size', 1))

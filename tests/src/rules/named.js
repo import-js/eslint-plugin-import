@@ -22,6 +22,8 @@ ruleTester.run('named', rule, {
     test({code: 'import bar, { foo } from "./bar.js"'}),
     test({code: 'import {a, b, d} from "./named-exports"'}),
     test({code: 'import {ExportedClass} from "./named-exports"'}),
+    test({code: 'import { destructingAssign } from "./named-exports"'}),
+    test({code: 'import { destructingRenamedAssign } from "./named-exports"'}),
     test({code: 'import { ActionTypes } from "./qc"'}),
     test({code: 'import {a, b, c, d} from "./re-export"'}),
 
