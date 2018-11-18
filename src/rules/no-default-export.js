@@ -1,5 +1,6 @@
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {},
   },
 

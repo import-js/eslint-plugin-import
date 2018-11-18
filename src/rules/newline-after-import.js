@@ -45,6 +45,7 @@ function isClassWithDecorator(node) {
 
 module.exports = {
   meta: {
+    type: 'layout',
     docs: {
       url: docsUrl('newline-after-import'),
     },

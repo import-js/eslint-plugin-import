@@ -21,6 +21,7 @@ function isImportingSelf(context, node, requireName) {
 
 module.exports = {
   meta: {
+    type: 'problem',
     docs: {
       description: 'Forbid a module from importing itself',
       recommended: true,

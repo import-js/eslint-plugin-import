@@ -16,6 +16,7 @@ const countDependencies = (dependencies, lastNode, context) => {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('max-dependencies'),
     },

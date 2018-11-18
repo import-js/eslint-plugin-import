@@ -41,6 +41,7 @@ const schemaObject = {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-commonjs'),
     },

@@ -362,6 +362,7 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('order'),
     },

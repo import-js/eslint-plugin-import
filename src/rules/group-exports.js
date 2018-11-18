@@ -1,6 +1,7 @@
 import docsUrl from '../docsUrl'
 
 const meta = {
+  type: 'suggestion',
   docs: {
     url: docsUrl('group-exports'),
   },

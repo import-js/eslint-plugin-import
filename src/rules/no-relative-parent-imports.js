@@ -7,6 +7,7 @@ import importType from '../core/importType'
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-relative-parent-imports'),
     },

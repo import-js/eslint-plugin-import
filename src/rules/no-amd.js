@@ -11,6 +11,7 @@ import docsUrl from '../docsUrl'
 
 module.exports = {
     meta: {
+        type: 'suggestion',
         docs: {
             url: docsUrl('no-amd'),
         },

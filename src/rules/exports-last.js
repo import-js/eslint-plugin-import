@@ -8,6 +8,7 @@ function isNonExportStatement({ type }) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('exports-last'),
     },

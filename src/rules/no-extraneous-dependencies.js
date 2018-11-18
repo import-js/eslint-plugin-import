@@ -158,6 +158,7 @@ function testConfig(config, filename) {
 
 module.exports = {
   meta: {
+    type: 'problem',
     docs: {
       url: docsUrl('no-extraneous-dependencies'),
     },

@@ -72,6 +72,7 @@ const defaults = Object.keys(defs)
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-anonymous-default-export'),
     },
