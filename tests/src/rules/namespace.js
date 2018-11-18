@@ -104,6 +104,11 @@ const valid = [
     parser: 'babel-eslint',
   }),
 
+  // #1144: should handle re-export CommonJS as namespace
+  test({
+    code: `import * as ns from './re-export-common'; const {foo} = ns;`,
+  }),
+
   // JSX
   test({
     code: 'import * as Names from "./named-exports"; const Foo = <Names.a/>',

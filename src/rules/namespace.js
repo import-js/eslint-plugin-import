@@ -187,7 +187,11 @@ module.exports = {
             }
 
             path.push(property.key.name)
-            testKey(property.value, namespace.get(property.key.name).namespace, path)
+            const dependencyExportMap = namespace.get(property.key.name)
+            // could be null when ignored or ambiguous
+            if (dependencyExportMap !== null) {
+              testKey(property.value, dependencyExportMap.namespace, path)
+            }
             path.pop()
           }
         }
