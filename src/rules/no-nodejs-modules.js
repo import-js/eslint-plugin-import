@@ -1,5 +1,5 @@
 import importType from '../core/importType';
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 function reportIfMissing(context, node, allowed, name) {
@@ -35,15 +35,8 @@ module.exports = {
     const options = context.options[0] || {};
     const allowed = options.allow || [];
 
-    return {
-      ImportDeclaration: function handleImports(node) {
-        reportIfMissing(context, node, allowed, node.source.value);
-      },
-      CallExpression: function handleRequires(node) {
-        if (isStaticRequire(node)) {
-          reportIfMissing(context, node, allowed, node.arguments[0].value);
-        }
-      },
-    };
+    return moduleVisitor((source, node) => {
+      reportIfMissing(context, node, allowed, source.value);
+    }, { commonjs: true });
   },
 };

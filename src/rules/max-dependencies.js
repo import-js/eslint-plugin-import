@@ -1,4 +1,4 @@
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 const DEFAULT_MAX = 10;
@@ -36,23 +36,13 @@ module.exports = {
     const dependencies = new Set(); // keep track of dependencies
     let lastNode; // keep track of the last node to report on
 
-    return {
-      ImportDeclaration(node) {
-        dependencies.add(node.source.value);
-        lastNode = node.source;
-      },
-
-      CallExpression(node) {
-        if (isStaticRequire(node)) {
-          const [ requirePath ] = node.arguments;
-          dependencies.add(requirePath.value);
-          lastNode = node;
-        }
-      },
-
+    return Object.assign({
       'Program:exit': function () {
         countDependencies(dependencies, lastNode, context);
       },
-    };
+    }, moduleVisitor((source) => {
+      dependencies.add(source.value);
+      lastNode = source;
+    }, { commonjs: true }));
   },
 };

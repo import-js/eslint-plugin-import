@@ -2,7 +2,7 @@ import containsPath from 'contains-path';
 import path from 'path';
 
 import resolve from 'eslint-module-utils/resolve';
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 import importType from '../core/importType';
 
@@ -109,17 +109,8 @@ module.exports = {
       });
     }
 
-    return {
-      ImportDeclaration(node) {
-        checkForRestrictedImportPath(node.source.value, node.source);
-      },
-      CallExpression(node) {
-        if (isStaticRequire(node)) {
-          const [ firstArgument ] = node.arguments;
-
-          checkForRestrictedImportPath(firstArgument.value, firstArgument);
-        }
-      },
-    };
+    return moduleVisitor((source) => {
+      checkForRestrictedImportPath(source.value, source);
+    }, { commonjs: true });
   },
 };

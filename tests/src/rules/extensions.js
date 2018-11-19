@@ -391,6 +391,22 @@ ruleTester.run('extensions', rule, {
       options: [ 'never', { ignorePackages: true } ],
     }),
 
+    test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar.json'
+        import Component from './Component.jsx'
+      `,
+      errors: [
+        {
+          message: 'Unexpected use of file extension "jsx" for "./Component.jsx"',
+          line: 4,
+          column: 31,
+        },
+      ],
+      options: [ 'always', { pattern: { jsx: 'never' } } ],
+    }),
+
     // export (#964)
     test({
       code: [
@@ -444,6 +460,48 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
+    // require (#1230)
+    test({
+      code: [
+        'const { foo } = require("./foo")',
+        'export { foo }',
+      ].join('\n'),
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+          column: 25,
+        },
+      ],
+    }),
+    test({
+      code: [
+        'const { foo } = require("./foo.js")',
+        'export { foo }',
+      ].join('\n'),
+      options: [ 'never' ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 1,
+          column: 25,
+        },
+      ],
+    }),
+
+    // export { } from
+    test({
+      code: 'export { foo } from "./foo"',
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+          column: 21,
+        },
+      ],
+    }),
     test({
       code: 'import foo from "@/ImNotAScopedModule"',
       options: ['always'],
@@ -451,6 +509,41 @@ ruleTester.run('extensions', rule, {
         {
           message: 'Missing file extension for "@/ImNotAScopedModule"',
           line: 1,
+        },
+      ],
+    }),
+    test({
+      code: 'export { foo } from "./foo.js"',
+      options: [ 'never' ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 1,
+          column: 21,
+        },
+      ],
+    }),
+
+    // export * from
+    test({
+      code: 'export * from "./foo"',
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+          column: 15,
+        },
+      ],
+    }),
+    test({
+      code: 'export * from "./foo.js"',
+      options: [ 'never' ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 1,
+          column: 15,
         },
       ],
     }),

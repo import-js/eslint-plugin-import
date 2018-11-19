@@ -15,6 +15,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
 - [`import/no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 
+### Changed
+- [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
+
 ## [2.22.1] - 2020-09-27
 ### Fixed
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
@@ -867,6 +870,7 @@ for info on changes for earlier releases.
 [#1253]: https://github.com/benmosher/eslint-plugin-import/pull/1253
 [#1248]: https://github.com/benmosher/eslint-plugin-import/pull/1248
 [#1238]: https://github.com/benmosher/eslint-plugin-import/pull/1238
+[#1237]: https://github.com/benmosher/eslint-plugin-import/pull/1237
 [#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
 [#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232

@@ -4,7 +4,7 @@
  */
 
 import resolve from 'eslint-module-utils/resolve';
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 function isImportingSelf(context, node, requireName) {
@@ -31,15 +31,8 @@ module.exports = {
     schema: [],
   },
   create: function (context) {
-    return {
-      ImportDeclaration(node) {
-        isImportingSelf(context, node, node.source.value);
-      },
-      CallExpression(node) {
-        if (isStaticRequire(node)) {
-          isImportingSelf(context, node, node.arguments[0].value);
-        }
-      },
-    };
+    return moduleVisitor((source, node) => {
+      isImportingSelf(context, node, source.value);
+    }, { commonjs: true });
   },
 };

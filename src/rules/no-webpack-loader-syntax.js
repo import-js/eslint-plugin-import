@@ -1,4 +1,4 @@
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 function reportIfNonStandard(context, node, name) {
@@ -19,15 +19,8 @@ module.exports = {
   },
 
   create: function (context) {
-    return {
-      ImportDeclaration: function handleImports(node) {
-        reportIfNonStandard(context, node, node.source.value);
-      },
-      CallExpression: function handleRequires(node) {
-        if (isStaticRequire(node)) {
-          reportIfNonStandard(context, node, node.arguments[0].value);
-        }
-      },
-    };
+    return moduleVisitor((source, node) => {
+      reportIfNonStandard(context, node, source.value);
+    }, { commonjs: true });
   },
 };

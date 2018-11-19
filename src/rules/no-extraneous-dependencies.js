@@ -207,8 +207,8 @@ module.exports = {
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
     };
 
-    return moduleVisitor(node => {
-      reportIfMissing(context, deps, depsOptions, node, node.value);
+    return moduleVisitor((source, node) => {
+      reportIfMissing(context, deps, depsOptions, node, source.value);
     }, { commonjs: true });
   },
 };

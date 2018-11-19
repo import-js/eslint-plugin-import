@@ -2,7 +2,7 @@ import minimatch from 'minimatch';
 
 import resolve from 'eslint-module-utils/resolve';
 import importType from '../core/importType';
-import isStaticRequire from '../core/staticRequire';
+import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -87,24 +87,8 @@ module.exports = {
       }
     }
 
-    return {
-      ImportDeclaration(node) {
-        checkImportForReaching(node.source.value, node.source);
-      },
-      ExportAllDeclaration(node) {
-        checkImportForReaching(node.source.value, node.source);
-      },
-      ExportNamedDeclaration(node) {
-        if (node.source) {
-          checkImportForReaching(node.source.value, node.source);
-        }
-      },
-      CallExpression(node) {
-        if (isStaticRequire(node)) {
-          const [ firstArgument ] = node.arguments;
-          checkImportForReaching(firstArgument.value, firstArgument);
-        }
-      },
-    };
+    return moduleVisitor((source) => {
+      checkImportForReaching(source.value, source);
+    }, { commonjs: true });
   },
 };
