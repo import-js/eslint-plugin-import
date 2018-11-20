@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`order`]: added `caseInsensitive` as an additional option to `alphabetize` ([#1586], thanks [@dbrewer5])
+- [`no-restricted-paths`]: New `except` option per `zone`, allowing exceptions to be defined for a restricted zone ([#1238], thanks [@rsolomon])
 
 ### Fixed
 - [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
@@ -685,6 +686,7 @@ for info on changes for earlier releases.
 [#1277]: https://github.com/benmosher/eslint-plugin-import/pull/1277
 [#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
 [#1253]: https://github.com/benmosher/eslint-plugin-import/pull/1253
+[#1238]: https://github.com/benmosher/eslint-plugin-import/pull/1238
 [#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
 [#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
@@ -1051,3 +1053,4 @@ for info on changes for earlier releases.
 [@Pessimistress]: https://github.com/Pessimistress
 [@stekycz]: https://github.com/stekycz
 [@dbrewer5]: https://github.com/dbrewer5
+[@rsolomon]: https://github.com/rsolomon

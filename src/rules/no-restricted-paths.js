@@ -4,6 +4,7 @@ import path from 'path'
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
+import importType from '../core/importType'
 
 module.exports = {
   meta: {
@@ -24,6 +25,13 @@ module.exports = {
               properties: {
                 target: { type: 'string' },
                 from: { type: 'string' },
+                except: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
+                  uniqueItems: true,
+                },
               },
               additionalProperties: false,
             },
@@ -46,6 +54,19 @@ module.exports = {
       return containsPath(currentFilename, targetPath)
     })
 
+    function isValidExceptionPath(absoluteFromPath, absoluteExceptionPath) {
+      const relativeExceptionPath = path.relative(absoluteFromPath, absoluteExceptionPath)
+
+      return importType(relativeExceptionPath, context) !== 'parent'
+    }
+
+    function reportInvalidExceptionPath(node) {
+      context.report({
+        node,
+        message: 'Restricted path exceptions must be descendants of the configured `from` path for that zone.',
+      })
+    }
+
     function checkForRestrictedImportPath(importPath, node) {
         const absoluteImportPath = resolve(importPath, context)
 
@@ -54,14 +75,36 @@ module.exports = {
         }
 
         matchingZones.forEach((zone) => {
+          const exceptionPaths = zone.except || []
           const absoluteFrom = path.resolve(basePath, zone.from)
 
-          if (containsPath(absoluteImportPath, absoluteFrom)) {
-            context.report({
-              node,
-              message: `Unexpected path "${importPath}" imported in restricted zone.`,
-            })
+          if (!containsPath(absoluteImportPath, absoluteFrom)) {
+            return
           }
+
+          const absoluteExceptionPaths = exceptionPaths.map((exceptionPath) =>
+            path.resolve(absoluteFrom, exceptionPath)
+          )
+          const hasValidExceptionPaths = absoluteExceptionPaths
+            .every((absoluteExceptionPath) => isValidExceptionPath(absoluteFrom, absoluteExceptionPath))
+
+          if (!hasValidExceptionPaths) {
+            reportInvalidExceptionPath(node)
+            return
+          }
+
+          const pathIsExcepted = absoluteExceptionPaths
+            .some((absoluteExceptionPath) => containsPath(absoluteImportPath, absoluteExceptionPath))
+
+          if (pathIsExcepted) {
+            return
+          }
+
+          context.report({
+            node,
+            message: `Unexpected path "{{importPath}}" imported in restricted zone.`,
+            data: { importPath },
+          })
         })
     }
 

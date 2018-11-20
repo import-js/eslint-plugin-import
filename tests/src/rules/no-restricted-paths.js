@@ -28,6 +28,28 @@ ruleTester.run('no-restricted-paths', rule, {
         zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/other' } ],
       } ],
     }),
+    test({
+      code: 'import a from "./a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/one',
+          from: './tests/files/restricted-paths/server',
+          except: ['./one'],
+        } ],
+      } ],
+    }),
+    test({
+      code: 'import a from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/one',
+          from: './tests/files/restricted-paths/server',
+          except: ['./two'],
+        } ],
+      } ],
+    }),
 
 
     // irrelevant function calls
@@ -105,6 +127,39 @@ ruleTester.run('no-restricted-paths', rule, {
         message: 'Unexpected path "../server/b.js" imported in restricted zone.',
         line: 1,
         column: 19,
+      } ],
+    }),
+    test({
+      code: 'import b from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/one',
+          from: './tests/files/restricted-paths/server',
+          except: ['./one'],
+        } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../two/a.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import b from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/one',
+          from: './tests/files/restricted-paths/server',
+          except: ['../client/a'],
+        } ],
+      } ],
+      errors: [ {
+        message: 'Restricted path exceptions must be descendants of the configured ' +
+          '`from` path for that zone.',
+        line: 1,
+        column: 15,
       } ],
     }),
   ],
