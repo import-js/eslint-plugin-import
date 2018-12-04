@@ -11,6 +11,7 @@ function reportIfNonStandard(context, node, name) {
 
 module.exports = {
   meta: {
+    type: 'problem',
     docs: {
       url: docsUrl('no-webpack-loader-syntax'),
     },

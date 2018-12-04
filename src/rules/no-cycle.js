@@ -10,6 +10,7 @@ import docsUrl from '../docsUrl'
 // todo: cache cycles / deep relationships for faster repeat evaluation
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: { url: docsUrl('no-cycle') },
     schema: [makeOptionsSchema({
       maxDepth:{

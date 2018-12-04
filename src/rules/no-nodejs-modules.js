@@ -10,6 +10,7 @@ function reportIfMissing(context, node, allowed, name) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-nodejs-modules'),
     },

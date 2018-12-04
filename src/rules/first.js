@@ -2,6 +2,7 @@ import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('first'),
     },
@@ -105,7 +106,7 @@ module.exports = {
                   insertSourceCode =
                     insertSourceCode.trim() + insertSourceCode.match(/^(\s+)/)[0]
               }
-              insertFixer = lastLegalImp ? 
+              insertFixer = lastLegalImp ?
                             fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
                             fixer.insertTextBefore(body[0], insertSourceCode)
               const fixers = [insertFixer].concat(removeFixers)

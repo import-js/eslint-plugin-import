@@ -54,6 +54,7 @@ function create(context) {
 module.exports = {
   create,
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-unassigned-import'),
     },

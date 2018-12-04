@@ -13,6 +13,7 @@ function checkImports(imported, context) {
 
 module.exports = {
   meta: {
+    type: 'problem',
     docs: {
       url: docsUrl('no-duplicates'),
     },

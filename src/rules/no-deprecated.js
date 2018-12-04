@@ -17,6 +17,7 @@ function getDeprecation(metadata) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-deprecated'),
     },

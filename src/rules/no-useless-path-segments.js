@@ -35,6 +35,7 @@ const countRelParent = x => sumBy(x, v => v === '..')
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-useless-path-segments'),
     },

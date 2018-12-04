@@ -55,6 +55,7 @@ function buildProperties(context) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('extensions'),
     },

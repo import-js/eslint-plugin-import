@@ -10,6 +10,7 @@ import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
+    type: 'problem',
     docs: {
       url: docsUrl('no-unresolved'),
     },

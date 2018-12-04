@@ -15,6 +15,7 @@ function isStaticValue(arg) {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: {
       url: docsUrl('no-dynamic-require'),
     },
