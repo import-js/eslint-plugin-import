@@ -266,14 +266,14 @@ function captureTomDoc(comments) {
   }
 }
 
-ExportMap.get = function (source, context) {
+ExportMap.get = function (source, context, options) {
   const path = resolve(source, context)
   if (path == null) return null
 
-  return ExportMap.for(childContext(path, context))
+  return ExportMap.for(childContext(path, context), options)
 }
 
-ExportMap.for = function (context) {
+ExportMap.for = function (context, options = {}) {
   const { path } = context
 
   const cacheKey = hashObject(context).digest('hex')
@@ -300,14 +300,14 @@ ExportMap.for = function (context) {
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
   // check for and cache ignore
-  if (isIgnored(path, context) || !unambiguous.test(content)) {
+  if (isIgnored(path, context) || (!options.useCommonjsExports && !unambiguous.test(content))) {
     log('ignored path due to unambiguous regex or ignore settings:', path)
     exportCache.set(cacheKey, null)
     return null
   }
 
   log('cache miss', cacheKey, 'for path', path)
-  exportMap = ExportMap.parse(path, content, context)
+  exportMap = ExportMap.parse(path, content, context, options)
 
   // ambiguous modules return null
   if (exportMap == null) return null
@@ -319,7 +319,9 @@ ExportMap.for = function (context) {
 }
 
 
-ExportMap.parse = function (path, content, context) {
+ExportMap.parse = function (path, content, context, options = {}) {
+  log('using commonjs exports:', options.useCommonjsExports)
+
   var m = new ExportMap(path)
 
   try {
@@ -330,7 +332,7 @@ ExportMap.parse = function (path, content, context) {
     return m // can't continue
   }
 
-  if (!unambiguous.isModule(ast)) return null
+  if (!options.useCommonjsExports && !unambiguous.isModule(ast)) return null
 
   const docstyle = (context.settings && context.settings['import/docstyle']) || ['jsdoc']
   const docStyleParsers = {}
@@ -362,7 +364,7 @@ ExportMap.parse = function (path, content, context) {
   function resolveImport(value) {
     const rp = remotePath(value)
     if (rp == null) return null
-    return ExportMap.for(childContext(rp, context))
+    return ExportMap.for(childContext(rp, context), options)
   }
 
   function getNamespace(identifier) {
@@ -390,7 +392,7 @@ ExportMap.parse = function (path, content, context) {
     const existing = m.imports.get(p)
     if (existing != null) return existing.getter
 
-    const getter = () => ExportMap.for(childContext(p, context))
+    const getter = () => ExportMap.for(childContext(p, context), options)
     m.imports.set(p, {
       getter,
       source: {  // capturing actual node reference holds full AST in memory!
@@ -401,8 +403,118 @@ ExportMap.parse = function (path, content, context) {
     return getter
   }
 
+  // for saving all commonjs exports
+  let moduleExports = {}
+
+  // for if module exports has been declared directly (exports/module.exports = ...)
+  let moduleExportsMain = null
+
+  function parseModuleExportsObjectExpression(node) {
+    moduleExportsMain = true
+    moduleExports = {}
+    node.properties.forEach(
+      function(property) {
+        const keyType = property.key.type
+
+        if (keyType === 'Identifier') {
+          const keyName = property.key.name
+          moduleExports[keyName] = property.value
+        }
+        else if (keyType === 'Literal') {
+          const keyName = property.key.value
+          moduleExports[keyName] = property.value
+        }
+      }
+    )
+  }
+
+  function handleModuleExports() {
+    let isEsModule = false
+    const esModule = moduleExports.__esModule
+    if (esModule && esModule.type === 'Literal' && esModule.value) {
+      // for interopRequireDefault calls
+    }
+
+    Object.getOwnPropertyNames(moduleExports).forEach(function (propertyName) {
+      m.namespace.set(propertyName)
+    })
+
+    if (!isEsModule && moduleExportsMain && !options.noInterop) {
+      // recognizes default for import statements
+      m.namespace.set('default')
+    }
+  }
 
   ast.body.forEach(function (n) {
+    if (options.useCommonjsExports) {
+      if (n.type === 'ExpressionStatement') {
+        if (n.expression.type === 'AssignmentExpression') {
+          const left = n.expression.left
+          const right = n.expression.right
+
+          // exports/module.exports = ...
+          if (isCommonjsExportsObject(left)) {
+            moduleExportsMain = true
+
+            // exports/module.exports = {...}
+            if (right.type === 'ObjectExpression') {
+              parseModuleExportsObjectExpression(right)
+            }
+          }
+          else if (left.type === 'MemberExpression'
+            && isCommonjsExportsObject(left.object)) {
+            // (exports/module.exports).<name> = ...
+            if (left.property.type === 'Identifier') {
+              const keyName = left.property.name
+              moduleExports[keyName] = right
+            }
+            // (exports/module.exports).["<name>"] = ...
+            else if (left.property.type === 'Literal') {
+              const keyName = left.property.value
+              moduleExports[keyName] = right
+            }
+          }
+          else return
+        }
+        // Object.defineProperty((exports/module.exports), <name>, {value: <value>})
+        else if (n.expression.type === 'CallExpression') {
+          const call = n.expression
+
+          const callee = call.callee
+          if (callee.type !== 'MemberExpression') return
+          if (callee.object.type !== 'Identifier' || callee.object.name !== 'Object') return
+          if (callee.property.type !== 'Identifier' || callee.property.name !== 'defineProperty') return
+
+          if (call.arguments.length !== 3) return
+          if (!isCommonjsExportsObject(call.arguments[0])) return
+          if (call.arguments[1].type !== 'Literal') return
+          if (call.arguments[2].type !== 'ObjectExpression') return
+
+          call.arguments[2].properties.forEach(function (defineProperty) {
+            if (defineProperty.type !== 'Property') return
+
+            if (defineProperty.key.type === 'Literal'
+                && defineProperty.key.value === 'value') {
+              // {'value': <value>}
+              Object.defineProperty(
+                moduleExports,
+                call.arguments[1].value,
+                defineProperty.value
+              )
+            }
+            else if (defineProperty.key.type === 'Identifier'
+                && defineProperty.key.name === 'value') {
+              // {value: <value>}
+              Object.defineProperty(
+                moduleExports,
+                call.arguments[1].value,
+                defineProperty.value
+              )
+            }
+          })
+        }
+      }
+    }
 
     if (n.type === 'ExportDefaultDeclaration') {
       const exportMeta = captureDoc(docStyleParsers, n)
@@ -483,6 +595,8 @@ ExportMap.parse = function (path, content, context) {
     }
   })
 
+  if (options.useCommonjsExports) handleModuleExports()
+
   return m
 }
 
@@ -530,4 +644,26 @@ function childContext(path, context) {
     parserPath,
     path,
   }
+}
+
+/**
+ * Check if a given node is exports, module.exports, or module['exports']
+ * @param {node} node
+ * @return {boolean}
+ */
+function isCommonjsExportsObject(node) {
+  // exports
+  if (node.type === 'Identifier' && node.name === 'exports') return true
+
+  if (node.type !== 'MemberExpression') return false
+
+  if (node.object.type === 'Identifier' && node.object.name === 'module') {
+    // module.exports
+    if (node.property.type === 'Identifier' && node.property.name === 'exports') return true
+
+    // module['exports']
+    if (node.property.type === 'Literal' && node.property.value === 'exports') return true
+  }
+
+  return false
 }
