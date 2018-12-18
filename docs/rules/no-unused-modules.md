@@ -1,8 +1,8 @@
 # import/no-unused-modules
 
 Reports:
-  - modules without any or
-  - individual exports not being used within other modules
+  - modules without any exports
+  - individual exports not being statically `import`ed or `require`ed from other modules in the same project
 
 Note: dynamic imports are currently not supported.
 
@@ -13,10 +13,10 @@ Note: dynamic imports are currently not supported.
 
 This rule takes the following option:
 
-- `src`: an array with files/paths to be analyzed. It only for applies for unused exports. Defaults to `process.cwd()`, if not provided
-- `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points) 
+- `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
+- `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package) 
 - `missingExports`: if `true`, files without any exports are reported  
-- `unusedExports`: if `true`, exports without any usage within other modules are reported.
+- `unusedExports`: if `true`, exports without any static usage within other modules are reported.
 
 
 ### Example for missing exports

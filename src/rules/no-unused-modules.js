@@ -11,9 +11,9 @@ import docsUrl from '../docsUrl'
 // eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
 let listFilesToProcess
 try {
-  listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
-} catch (err) {
   listFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
+} catch (err) {
+  listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
 }
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration'
@@ -32,7 +32,7 @@ const exportList = new Map()
 const ignoredFiles = new Set()
 
 const isNodeModule = path => {
-  return path.indexOf('node_modules') > -1
+  return path.includes('node_modules')
 }
 
 /**
@@ -49,10 +49,7 @@ const resolveFiles = (src, ignoreExports) => {
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename))
 
   // prepare list of source files, don't consider files from node_modules
-  srcFileList.forEach(({ filename }) => {
-    if (isNodeModule(filename)) {
-      return
-    }
+  srcFileList.filter(({ filename }) => !isNodeModule(filename)).forEach(({ filename }) => {
     srcFiles.add(filename)
   })
   return srcFiles
@@ -185,25 +182,29 @@ const doPreparation = (src, ignoreExports, context) => {
   preparationDone = true
 }
 
-const newNamespaceImportExists = specifiers => {
-  let hasNewNamespaceImport = false
-  specifiers.forEach(specifier => {
-    if (specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
-      hasNewNamespaceImport = true
-    }
-  })
-  return hasNewNamespaceImport
-}
+// const newNamespaceImportExists = specifiers => {
+//   let hasNewNamespaceImport = false
+//   specifiers.forEach(specifier => {
+//     if (specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
+//       hasNewNamespaceImport = true
+//     }
+//   })
+//   return hasNewNamespaceImport
+// }
 
-const newDefaultImportExists = specifiers => {
-  let hasNewDefaultImport = false
-  specifiers.forEach(specifier => {
-    if (specifier.type === IMPORT_DEFAULT_SPECIFIER) {
-      hasNewDefaultImport = true
-    }
-  })
-  return hasNewDefaultImport
-}
+const newNamespaceImportExists = specifiers => specifiers.some(({ type }) => type === IMPORT_NAMESPACE_SPECIFIER)
+
+const newDefaultImportExists = specifiers => specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER)
+
+// const newDefaultImportExists = specifiers => {
+//   let hasNewDefaultImport = false
+//   specifiers.forEach(specifier => {
+//     if (specifier.type === IMPORT_DEFAULT_SPECIFIER) {
+//       hasNewDefaultImport = true
+//     }
+//   })
+//   return hasNewDefaultImport
+// }
 
 module.exports = {
   doPreparation,

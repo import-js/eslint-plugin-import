@@ -380,14 +380,12 @@ ExportMap.parse = function (path, content, context) {
   function captureDependency(declaration) {
     if (declaration.source == null) return null
     const importedSpecifiers = new Set()
+    const supportedTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier'])
     if (declaration.specifiers) {
       declaration.specifiers.forEach(specifier => {
-        if (specifier.type === 'ImportDefaultSpecifier') {
-          importedSpecifiers.add('ImportDefaultSpecifier')
-        } 
-        if (specifier.type === 'ImportNamespaceSpecifier') {
-          importedSpecifiers.add('ImportNamespaceSpecifier')
-        } 
+        if (supportedTypes.has(specifier.type)) {
+          importedSpecifiers.add(specifier.type)
+        }
         if (specifier.type === 'ImportSpecifier') {
           importedSpecifiers.add(specifier.local.name)
         }
