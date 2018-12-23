@@ -32,7 +32,7 @@ const exportList = new Map()
 const ignoredFiles = new Set()
 
 const isNodeModule = path => {
-  return path.includes('node_modules')
+  return /\/(node_modules)\//.test(path)
 }
 
 /**
@@ -182,31 +182,14 @@ const doPreparation = (src, ignoreExports, context) => {
   preparationDone = true
 }
 
-// const newNamespaceImportExists = specifiers => {
-//   let hasNewNamespaceImport = false
-//   specifiers.forEach(specifier => {
-//     if (specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
-//       hasNewNamespaceImport = true
-//     }
-//   })
-//   return hasNewNamespaceImport
-// }
+const newNamespaceImportExists = specifiers =>
+  specifiers.some(({ type }) => type === IMPORT_NAMESPACE_SPECIFIER)
 
-const newNamespaceImportExists = specifiers => specifiers.some(({ type }) => type === IMPORT_NAMESPACE_SPECIFIER)
-
-const newDefaultImportExists = specifiers => specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER)
-
-// const newDefaultImportExists = specifiers => {
-//   let hasNewDefaultImport = false
-//   specifiers.forEach(specifier => {
-//     if (specifier.type === IMPORT_DEFAULT_SPECIFIER) {
-//       hasNewDefaultImport = true
-//     }
-//   })
-//   return hasNewDefaultImport
-// }
+const newDefaultImportExists = specifiers =>
+  specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER)
 
 module.exports = {
+  isNodeModule,
   doPreparation,
   getSrc,
   meta: {

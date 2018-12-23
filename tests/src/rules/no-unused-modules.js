@@ -4,8 +4,8 @@ import { RuleTester } from 'eslint'
 import { expect } from 'chai'
 import fs from 'fs'
 
-const doPreparation = require( '../../../src/rules/no-unused-modules').doPreparation
 const getSrc = require( '../../../src/rules/no-unused-modules').getSrc
+const isNodeModule = require( '../../../src/rules/no-unused-modules').isNodeModule
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-unused-modules')
@@ -29,6 +29,21 @@ describe('getSrc returns correct source', () => {
   })
   it('if src is not provided', () => {
     expect(getSrc()).to.eql([process.cwd()])
+  })
+})
+
+describe('isNodeModule returns correct value', () => {
+  it('true for "/node_modules/"', () => {
+    expect(isNodeModule('/node_modules/')).to.be.true
+  })
+  it('true for "/node_modules/package/file.js"', () => {
+    expect(isNodeModule('/node_modules/package/file.js')).to.be.true
+  })
+  it('false for "/node_modules.js"', () => {
+    expect(isNodeModule('/node_modules.js')).to.be.false
+  })
+  it('false for "node_modules_old"', () => {
+    expect(isNodeModule('node_modules_old')).to.be.false
   })
 })
 
