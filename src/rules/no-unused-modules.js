@@ -321,15 +321,10 @@ module.exports = {
 
       const exportStatement = exports.get(exportedValue)
       
-      let value = ''
-      if (exportedValue === IMPORT_DEFAULT_SPECIFIER) {
-        value = DEFAULT
-      } else {
-        value = exportedValue
-      }
+      const value = exportedValue === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportedValue
       
       if (typeof exportStatement !== 'undefined'){
-        if ( exportStatement.whereUsed.size < 1) {
+        if (exportStatement.whereUsed.size < 1) {
           context.report(
             node,
             `exported declaration '${value}' not used within other modules`
