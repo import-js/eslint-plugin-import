@@ -8,14 +8,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
 - [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
-
-### Added
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 - [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
 
 ### Fixed
 - `default`: make error message less confusing ([#1470], thanks [@golopot])
 - Support export of a merged typescript namespace declaration ([#1495], thanks [@benmunro])
+- [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
@@ -651,6 +650,7 @@ for info on changes for earlier releases.
 [#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
 [#1277]: https://github.com/benmosher/eslint-plugin-import/pull/1277
 [#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
+[#1253]: https://github.com/benmosher/eslint-plugin-import/pull/1253
 [#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
 [#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
@@ -995,3 +995,4 @@ for info on changes for earlier releases.
 [@schmidsi]: https://github.com/schmidsi
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@benmunro]: https://github.com/benmunro
+[@tihonove]: https://github.com/tihonove

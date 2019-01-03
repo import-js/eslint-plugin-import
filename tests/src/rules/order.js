@@ -1265,7 +1265,137 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // reorder fix cannot cross function call on moving below #1
+    test({
+      code: `
+        const local = require('./local');
 
+        fn_call();
+
+        const global1 = require('global1');
+        const global2 = require('global2');
+
+        fn_call();
+      `,
+      output: `
+        const local = require('./local');
+
+        fn_call();
+
+        const global1 = require('global1');
+        const global2 = require('global2');
+
+        fn_call();
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./local` import should occur after import of `global2`',
+      }],
+    }),
+    // reorder fix cannot cross function call on moving below #2
+    test({
+      code: `
+        const local = require('./local');
+        fn_call();
+        const global1 = require('global1');
+        const global2 = require('global2');
+
+        fn_call();
+      `,
+      output: `
+        const local = require('./local');
+        fn_call();
+        const global1 = require('global1');
+        const global2 = require('global2');
+
+        fn_call();
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./local` import should occur after import of `global2`',
+      }],
+    }),
+    // reorder fix cannot cross function call on moving below #3
+    test({
+      code: `
+        const local1 = require('./local1');
+        const local2 = require('./local2');
+        const local3 = require('./local3');
+        const local4 = require('./local4');
+        fn_call();
+        const global1 = require('global1');
+        const global2 = require('global2');
+        const global3 = require('global3');
+        const global4 = require('global4');
+        const global5 = require('global5');
+        fn_call();
+      `,
+      output: `
+        const local1 = require('./local1');
+        const local2 = require('./local2');
+        const local3 = require('./local3');
+        const local4 = require('./local4');
+        fn_call();
+        const global1 = require('global1');
+        const global2 = require('global2');
+        const global3 = require('global3');
+        const global4 = require('global4');
+        const global5 = require('global5');
+        fn_call();
+      `,
+      errors: [
+        '`./local1` import should occur after import of `global5`',
+        '`./local2` import should occur after import of `global5`',
+        '`./local3` import should occur after import of `global5`',
+        '`./local4` import should occur after import of `global5`',
+      ],
+    }),
+    // reorder fix cannot cross function call on moving below
+    test(withoutAutofixOutput({
+      code: `
+        const local = require('./local');
+        const global1 = require('global1');
+        const global2 = require('global2');
+        fn_call();
+        const global3 = require('global3');
+
+        fn_call();
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./local` import should occur after import of `global3`',
+      }],
+    })),
+    // reorder fix cannot cross function call on moving below
+    // fix imports that not crosses function call only
+    test({
+      code: `
+        const local1 = require('./local1');
+        const global1 = require('global1');
+        const global2 = require('global2');
+        fn_call();
+        const local2 = require('./local2');
+        const global3 = require('global3');
+        const global4 = require('global4');
+
+        fn_call();
+      `,
+      output: `
+        const local1 = require('./local1');
+        const global1 = require('global1');
+        const global2 = require('global2');
+        fn_call();
+        const global3 = require('global3');
+        const global4 = require('global4');
+        const local2 = require('./local2');
+
+        fn_call();
+      `,
+      errors: [
+        '`./local1` import should occur after import of `global4`',
+        '`./local2` import should occur after import of `global4`',
+      ],
+    }),
     // reorder fix cannot cross non import or require
     test(withoutAutofixOutput({
       code: `
@@ -1278,6 +1408,33 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
+    // reorder fix cannot cross function call on moving below (from #1252)
+    test({
+      code: `
+        const env = require('./config');
+
+        Object.keys(env);
+
+        const http = require('http');
+        const express = require('express');
+
+        http.createServer(express());
+      `,
+      output: `
+        const env = require('./config');
+
+        Object.keys(env);
+
+        const http = require('http');
+        const express = require('express');
+
+        http.createServer(express());
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./config` import should occur after import of `express`',
+      }],
+    }),
     // reorder cannot cross non plain requires
     test(withoutAutofixOutput({
       code: `

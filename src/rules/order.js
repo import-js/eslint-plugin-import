@@ -162,8 +162,10 @@ function canCrossNodeWhileReorder(node) {
 
 function canReorderItems(firstNode, secondNode) {
   const parent = firstNode.parent
-  const firstIndex = parent.body.indexOf(firstNode)
-  const secondIndex = parent.body.indexOf(secondNode)
+  const [firstIndex, secondIndex] = [
+    parent.body.indexOf(firstNode),
+    parent.body.indexOf(secondNode),
+  ].sort()
   const nodesBetween = parent.body.slice(firstIndex, secondIndex + 1)
   for (var nodeBetween of nodesBetween) {
     if (!canCrossNodeWhileReorder(nodeBetween)) {
