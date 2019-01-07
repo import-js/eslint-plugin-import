@@ -62,4 +62,5 @@ export const configs = {
   'react': require('../config/react'),
   'react-native': require('../config/react-native'),
   'electron': require('../config/electron'),
+  'typescript': require('../config/typescript'),
 }
