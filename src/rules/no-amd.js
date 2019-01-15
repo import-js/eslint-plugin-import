@@ -10,35 +10,35 @@ import docsUrl from '../docsUrl'
 //------------------------------------------------------------------------------
 
 module.exports = {
-    meta: {
-        type: 'suggestion',
-        docs: {
-            url: docsUrl('no-amd'),
-        },
+  meta: {
+    type: 'suggestion',
+    docs: {
+      url: docsUrl('no-amd'),
     },
+  },
 
-    create: function (context) {
+  create: function (context) {
+    return {
+      'CallExpression': function (node) {
+        if (context.getScope().type !== 'module') return
 
-        return {
+        console.log("got scope", context.getScope().type)
 
-            'CallExpression': function (node) {
-          if (context.getScope().type !== 'module') return
+        if (node.callee.type !== 'Identifier') return
+        if (node.callee.name !== 'require' &&
+            node.callee.name !== 'define') return
 
-          if (node.callee.type !== 'Identifier') return
-          if (node.callee.name !== 'require' &&
-              node.callee.name !== 'define') return
+        // todo: capture define((require, module, exports) => {}) form?
+        if (node.arguments.length !== 2) return
 
-          // todo: capture define((require, module, exports) => {}) form?
-          if (node.arguments.length !== 2) return
+        const modules = node.arguments[0]
+        if (modules.type !== 'ArrayExpression') return
 
-          const modules = node.arguments[0]
-          if (modules.type !== 'ArrayExpression') return
+        // todo: check second arg type? (identifier or callback)
 
-          // todo: check second arg type? (identifier or callback)
+        context.report(node, `Expected imports instead of AMD ${node.callee.name}().`)
+      },
+    }
 
-                context.report(node, `Expected imports instead of AMD ${node.callee.name}().`)
-            },
-        }
-
-    },
+  },
 }

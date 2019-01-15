@@ -44,7 +44,7 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
-    "babel-eslint": "8.0.x",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-preset-es2015-argon": "latest",
     "babel-register": "^6.26.0",
