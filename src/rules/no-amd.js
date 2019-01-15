@@ -22,8 +22,6 @@ module.exports = {
       'CallExpression': function (node) {
         if (context.getScope().type !== 'module') return
 
-        console.log("got scope", context.getScope().type)
-
         if (node.callee.type !== 'Identifier') return
         if (node.callee.name !== 'require' &&
             node.callee.name !== 'define') return
