@@ -33,7 +33,7 @@ export function getFilename(file) {
  * skip tests iff ESLINT_VERSION is in provided `versions` array
  */
 export function skipESLints(versions) {
-  if (!versions.includes(+process.env.ESLINT_VERSION)) {
+  if (versions.indexOf(+process.env.ESLINT_VERSION) === -1) {
     return describe
   } else {
     return describe.skip
