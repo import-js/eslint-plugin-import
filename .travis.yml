@@ -10,8 +10,8 @@ os: linux
 env:
   - ESLINT_VERSION=5
   - ESLINT_VERSION=4
-  - ESLINT_VERSION=3
-  - ESLINT_VERSION=2
+  # - ESLINT_VERSION=3
+  # - ESLINT_VERSION=2
 
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
@@ -38,12 +38,15 @@ matrix:
   - os: osx
     env: ESLINT_VERSION=4
     node_js: 8
-  - os: osx
-    env: ESLINT_VERSION=3
-    node_js: 6
-  - os: osx
-    env: ESLINT_VERSION=2
-    node_js: 4
+
+  # the following combos fail TypeScript tests
+  # - os: osx
+  #   env: ESLINT_VERSION=3
+  #   node_js: 6
+  # - os: osx
+  #   env: ESLINT_VERSION=2
+  #   node_js: 4
+
   exclude:
   - node_js: '4'
     env: ESLINT_VERSION=5

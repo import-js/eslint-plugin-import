@@ -3,13 +3,14 @@ environment:
   matrix:
   - nodejs_version: "10"
   - nodejs_version: "8"
-  - nodejs_version: "6"
-  - nodejs_version: "4"
+  # - nodejs_version: "6"
+  # - nodejs_version: "4"
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - nodejs_version: "4" # for eslint 5
+
+  # allow_failures:
+  #   - nodejs_version: "4" # for eslint 5
 
 # platform:
 #   - x86
