@@ -114,4 +114,25 @@ describe("config", function () {
     expect(resolve('bar', file, settings)).to.have.property('path')
         .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'))
   })
+
+  it('passes argv to config when it is a function', function() {
+    var settings = {
+      config: require(path.join(__dirname, './files/webpack.function.config.js')),
+      argv: {
+        mode: 'test'
+      }
+    }
+
+    expect(resolve('baz', file, settings)).to.have.property('path')
+        .and.equal(path.join(__dirname, 'files', 'some', 'bar', 'bar.js'))
+  })
+
+  it('passes a default empty argv object to config when it is a function', function() {
+    var settings = {
+      config: require(path.join(__dirname, './files/webpack.function.config.js')),
+      argv: undefined
+    }
+
+    expect(function () { resolve('baz', file, settings) }).to.not.throw(Error)
+  })
 })
