@@ -3,7 +3,7 @@ import ExportMap from '../../../src/ExportMap'
 
 import * as fs from 'fs'
 
-import { getFilename, skipESLints } from '../utils'
+import { getFilename } from '../utils'
 import * as unambiguous from 'eslint-module-utils/unambiguous'
 
 describe('ExportMap', function () {
@@ -310,7 +310,7 @@ describe('ExportMap', function () {
 
   })
 
-  skipESLints([2, 3])('alternate parsers', function () {
+  context('alternate parsers', function () {
 
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],

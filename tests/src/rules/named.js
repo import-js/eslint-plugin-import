@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, skipESLints } from '../utils'
+import { test, SYNTAX_CASES } from '../utils'
 import { RuleTester } from 'eslint'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
@@ -254,7 +254,7 @@ ruleTester.run('named (export *)', rule, {
 })
 
 
-skipESLints([2, 3])("Typescript", function () {
+context("Typescript", function () {
   // Typescript
   ruleTester.run("named", rule, {
     valid: [

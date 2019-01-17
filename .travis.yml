@@ -32,6 +32,7 @@ matrix:
     node_js: 6
   - env: PACKAGE=resolvers/webpack
     node_js: 4
+
   - os: osx
     env: ESLINT_VERSION=5
     node_js: 10
@@ -54,7 +55,7 @@ before_install:
   - 'if [ -n "${PACKAGE-}" ]; then cd "${PACKAGE}"; fi'
 install:
   - npm install
-  - npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
+  - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
 
 script:
   - 'npm test'
