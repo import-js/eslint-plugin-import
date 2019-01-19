@@ -318,6 +318,7 @@ describe('ExportMap', function () {
     ]
 
     configs.forEach(([description, parserConfig]) => {
+
       describe(description, function () {
         const context = Object.assign({}, fakeContext,
           { settings: {

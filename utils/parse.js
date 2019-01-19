@@ -19,12 +19,14 @@ exports.default = function parse(path, content, context) {
   parserOptions = Object.assign({}, parserOptions)
   parserOptions.ecmaFeatures = Object.assign({}, parserOptions.ecmaFeatures)
 
-  // always include and attach comments
+  // always include comments and tokens (for doc parsing)
   parserOptions.comment = true
-  parserOptions.attachComment = true
+  parserOptions.attachComment = true  // keeping this for backward-compat with  older parsers
+  parserOptions.tokens = true
 
   // attach node locations
   parserOptions.loc = true
+  parserOptions.range = true
 
   // provide the `filePath` like eslint itself does, in `parserOptions`
   // https://github.com/eslint/eslint/blob/3ec436ee/lib/linter.js#L637

@@ -38,6 +38,8 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
         .that.is.eql(parserOptions.ecmaFeatures)
         .and.is.not.equal(parserOptions.ecmaFeatures)
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.attachComment equal to true').to.have.property('attachComment', true)
+    expect(parseSpy.args[0][1], 'custom parser to get parserOptions.tokens equal to true').to.have.property('tokens', true)
+    expect(parseSpy.args[0][1], 'custom parser to get parserOptions.range equal to true').to.have.property('range', true)
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.filePath equal to the full path of the source file').to.have.property('filePath', path)
   })
 

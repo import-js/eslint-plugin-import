@@ -4,6 +4,8 @@ import doctrine from 'doctrine'
 
 import debug from 'debug'
 
+import SourceCode from 'eslint/lib/util/source-code'
+
 import parse from 'eslint-module-utils/parse'
 import resolve from 'eslint-module-utils/resolve'
 import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore'
@@ -193,22 +195,28 @@ export default class ExportMap {
  * @param  {...[type]} nodes [description]
  * @return {{doc: object}}
  */
-function captureDoc(docStyleParsers) {
+function captureDoc(source, docStyleParsers) {
   const metadata = {}
        , nodes = Array.prototype.slice.call(arguments, 1)
 
   // 'some' short-circuits on first 'true'
   nodes.some(n => {
-    if (!n.leadingComments) return false
+    try {
+      // n.leadingComments is legacy `attachComments` behavior
+      let leadingComments = n.leadingComments || source.getCommentsBefore(n)
+      if (leadingComments.length === 0) return false
 
-    for (let name in docStyleParsers) {
-      const doc = docStyleParsers[name](n.leadingComments)
-      if (doc) {
-        metadata.doc = doc
+      for (let name in docStyleParsers) {
+        const doc = docStyleParsers[name](leadingComments)
+        if (doc) {
+          metadata.doc = doc
+        }
       }
-    }
 
-    return true
+      return true
+    } catch (err) {
+      return false
+    }
   })
 
   return metadata
@@ -338,6 +346,8 @@ ExportMap.parse = function (path, content, context) {
     docStyleParsers[style] = availableDocStyleParsers[style]
   })
 
+  const source = makeSourceCode(content, ast)
+
   // attempt to collect module doc
   if (ast.comments) {
     ast.comments.some(c => {
@@ -405,7 +415,7 @@ ExportMap.parse = function (path, content, context) {
   ast.body.forEach(function (n) {
 
     if (n.type === 'ExportDefaultDeclaration') {
-      const exportMeta = captureDoc(docStyleParsers, n)
+      const exportMeta = captureDoc(source, docStyleParsers, n)
       if (n.declaration.type === 'Identifier') {
         addNamespace(exportMeta, n.declaration)
       }
@@ -441,12 +451,12 @@ ExportMap.parse = function (path, content, context) {
           case 'TSInterfaceDeclaration':
           case 'TSAbstractClassDeclaration':
           case 'TSModuleDeclaration':
-            m.namespace.set(n.declaration.id.name, captureDoc(docStyleParsers, n))
+            m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n))
             break
           case 'VariableDeclaration':
             n.declaration.declarations.forEach((d) =>
               recursivePatternCapture(d.id,
-                id => m.namespace.set(id.name, captureDoc(docStyleParsers, d, n))))
+                id => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n))))
             break
         }
       }
@@ -529,5 +539,19 @@ function childContext(path, context) {
     parserOptions,
     parserPath,
     path,
+  }
+}
+
+
+/**
+ * sometimes legacy support isn't _that_ hard... right?
+ */
+function makeSourceCode(text, ast) {
+  if (SourceCode.length > 1) {
+    // ESLint 3
+    return new SourceCode(text, ast)
+  } else {
+    // ESLint 4, 5
+    return new SourceCode({ text, ast })
   }
 }

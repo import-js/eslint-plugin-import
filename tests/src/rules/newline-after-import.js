@@ -153,8 +153,9 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     },
     {
       code: `//issue 592
+        export default
         @SomeDecorator(require('./some-file'))
-        export default class App {}
+        class App {}
       `,
       parserOptions: { sourceType: 'module' },
       parser: 'babel-eslint',
