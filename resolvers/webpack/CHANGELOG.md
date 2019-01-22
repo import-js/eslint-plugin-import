@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+### Added
+- support for `argv` parameter when config is a function. ([#1261], thanks [@keann])
+
 ### Fixed
 - crash when webpack config is an array of functions ([#1219]/[#1220] by [@idudinov])
 
@@ -106,6 +110,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#1261]: https://github.com/benmosher/eslint-plugin-import/pull/1261
 [#1220]: https://github.com/benmosher/eslint-plugin-import/pull/1220
 [#1091]: https://github.com/benmosher/eslint-plugin-import/pull/1091
 [#969]: https://github.com/benmosher/eslint-plugin-import/pull/969
@@ -152,3 +157,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@graingert]: https://github.com/graingert
 [@mattkrick]: https://github.com/mattkrick
 [@idudinov]: https://github.com/idudinov
+[@keann]: https://github.com/keann
