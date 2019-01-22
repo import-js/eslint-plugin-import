@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.3.0 - 2019-01-22
+### Fixed
+- use `process.hrtime()` for cache dates ([#1160], thanks [@hulkish])
+
 ## v2.2.0 - 2018-03-29
 ### Changed
 - `parse`: attach node locations by default.
@@ -30,3 +34,9 @@ Yanked due to critical issue with cache key resulting from #839.
 
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
+
+
+
+[#1160]: https://github.com/benmosher/eslint-plugin-import/pull/1160
+
+[@hulkish]: https://github.com/hulkish
