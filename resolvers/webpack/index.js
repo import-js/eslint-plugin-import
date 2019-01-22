@@ -47,6 +47,7 @@ exports.resolve = function (source, file, settings) {
   var configPath = get(settings, 'config')
     , configIndex = get(settings, 'config-index')
     , env = get(settings, 'env')
+    , argv = get(settings, 'argv', {})
     , packageDir
 
   log('Config path from settings:', configPath)
@@ -87,13 +88,13 @@ exports.resolve = function (source, file, settings) {
   }
 
   if (typeof webpackConfig === 'function') {
-    webpackConfig = webpackConfig(env, {})
+    webpackConfig = webpackConfig(env, argv)
   }
 
   if (Array.isArray(webpackConfig)) {
     webpackConfig = webpackConfig.map(cfg => {
       if (typeof cfg === 'function') {
-        return cfg(env, {})
+        return cfg(env, argv)
       }
 
       return cfg
