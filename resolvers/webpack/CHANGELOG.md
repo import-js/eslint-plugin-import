@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+
+## 0.11.0 - 2018-01-22
+
 ### Added
 - support for `argv` parameter when config is a function. ([#1261], thanks [@keann])
 
