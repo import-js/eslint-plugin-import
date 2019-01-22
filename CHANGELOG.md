@@ -4,15 +4,23 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [2.15.0] - 2019-01-22
+### Added
+- new rule: [`no-named-export`] ([#1157], thanks [@fsmaia])
+
 ### Fixed
 - [`no-extraneous-dependencies`]: `packageDir` option with array value was clobbering package deps instead of merging them ([#1175]/[#1176], thanks [@aravindet] & [@pzhine])
+- [`dynamic-import-chunkname`]: Add proper webpack comment parsing ([#1163], thanks [@st-sloth])
+- [`named`]: fix destructuring assignment ([#1232], thanks [@ljqx])
 
 
 ## [2.14.0] - 2018-08-13
 *   69e0187 (HEAD -> master, source/master, origin/master, origin/HEAD) Merge pull request #1151 from jf248/jsx
-|\  
+|\
 | * e30a757 (source/pr/1151, fork/jsx) Add JSX check to namespace rule
-|/  
+|/
 * 8252344 (source/pr/1148) Add error to output when module loaded as resolver has invalid API
 ### Added
 - [`no-useless-path-segments`]: add commonJS (CJS) support ([#1128], thanks [@1pete])
@@ -493,10 +501,15 @@ for info on changes for earlier releases.
 [`no-default-export`]: ./docs/rules/no-default-export.md
 [`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
 [`no-cycle`]: ./docs/rules/no-cycle.md
+[`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
+[`no-named-export`]: ./docs/rules/no-named-export.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
 [#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
+[#1163]: https://github.com/benmosher/eslint-plugin-import/pull/1163
+[#1157]: https://github.com/benmosher/eslint-plugin-import/pull/1157
 [#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
 [#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
 [#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
@@ -652,7 +665,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.13.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.15.0...HEAD
+[2.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.14.0...v2.15.0
+[2.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.10.0...v2.11.0
@@ -774,3 +789,5 @@ for info on changes for earlier releases.
 [@jf248]: https://github.com/jf248
 [@aravindet]: https://github.com/aravindet
 [@pzhine]: https://github.com/pzhine
+[@st-sloth]: https://github.com/st-sloth
+[@ljqx]: https://github.com/ljqx
