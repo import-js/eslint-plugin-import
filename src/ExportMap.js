@@ -192,7 +192,8 @@ export default class ExportMap {
 
 /**
  * parse docs from the first node that has leading comments
- * @param  {...[type]} nodes [description]
+ * @param  {SourceCode} source parsed source code
+ * @param  {object} docStyleParsers a set of available docs parses
  * @return {{doc: object}}
  */
 function captureDoc(source, docStyleParsers) {
@@ -202,9 +203,10 @@ function captureDoc(source, docStyleParsers) {
   // 'some' short-circuits on first 'true'
   nodes.some(n => {
     try {
+      let commentsBefore = source && source.getCommentsBefore(n)
       // n.leadingComments is legacy `attachComments` behavior
-      let leadingComments = n.leadingComments || source.getCommentsBefore(n)
-      if (leadingComments.length === 0) return false
+      let leadingComments = n.leadingComments || commentsBefore
+      if (!leadingComments || leadingComments.length === 0) return false
 
       for (let name in docStyleParsers) {
         const doc = docStyleParsers[name](leadingComments)
@@ -274,14 +276,14 @@ function captureTomDoc(comments) {
   }
 }
 
-ExportMap.get = function (source, context) {
+ExportMap.get = function (source, context, options) {
   const path = resolve(source, context)
   if (path == null) return null
 
-  return ExportMap.for(childContext(path, context))
+  return ExportMap.for(childContext(path, context), options)
 }
 
-ExportMap.for = function (context) {
+ExportMap.for = function (context, options) {
   const { path } = context
 
   const cacheKey = hashObject(context).digest('hex')
@@ -315,7 +317,7 @@ ExportMap.for = function (context) {
   }
 
   log('cache miss', cacheKey, 'for path', path)
-  exportMap = ExportMap.parse(path, content, context)
+  exportMap = ExportMap.parse(path, content, context, options)
 
   // ambiguous modules return null
   if (exportMap == null) return null
@@ -327,7 +329,7 @@ ExportMap.for = function (context) {
 }
 
 
-ExportMap.parse = function (path, content, context) {
+ExportMap.parse = function (path, content, context, options = {}) {
   var m = new ExportMap(path)
 
   try {
@@ -346,7 +348,7 @@ ExportMap.parse = function (path, content, context) {
     docStyleParsers[style] = availableDocStyleParsers[style]
   })
 
-  const source = makeSourceCode(content, ast)
+  const source = options.parseComments && makeSourceCode(content, ast)
 
   // attempt to collect module doc
   if (ast.comments) {

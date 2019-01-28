@@ -31,7 +31,8 @@ module.exports = {
       if (node.type !== 'ImportDeclaration') return
       if (node.source == null) return // local export, ignore
 
-      const imports = Exports.get(node.source.value, context)
+      const options = {parseComments: true}
+      const imports = Exports.get(node.source.value, context, options)
       if (imports == null) return
 
       let moduleDeprecation

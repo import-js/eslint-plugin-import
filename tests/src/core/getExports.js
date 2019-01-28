@@ -98,9 +98,10 @@ describe('ExportMap', function () {
       context('deprecated imports', function () {
         let imports
         before('parse file', function () {
-          const path = getFilename('deprecated.js')
-              , contents = fs.readFileSync(path, { encoding: 'utf8' })
-          imports = ExportMap.parse(path, contents, parseContext)
+          const path = getFilename('deprecated.js'),
+            contents = fs.readFileSync(path, {encoding: 'utf8'}),
+            options = {parseComments: true}
+          imports = ExportMap.parse(path, contents, parseContext, options)
 
           // sanity checks
           expect(imports.errors).to.be.empty
@@ -112,7 +113,7 @@ describe('ExportMap', function () {
           expect(imports.get('fn'))
             .to.have.deep.property('doc.tags[0].title', 'deprecated')
           expect(imports.get('fn'))
-            .to.have.deep.property('doc.tags[0].description', "please use 'x' instead.")
+            .to.have.deep.property('doc.tags[0].description', 'please use \'x\' instead.')
         })
 
         it('works with default imports.', function () {
