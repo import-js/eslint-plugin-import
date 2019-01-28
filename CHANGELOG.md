@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
-## [2.13.1] - 2019-01-28
+## [2.13.X] - 2019-01-XX
 ### Fixed
 - [Issue #1269](https://github.com/benmosher/eslint-plugin-import/issues/1269) a breaking change to `eslint-module-utils` version `2.3.0` is now reflected in `package.json` dependencies.
 
