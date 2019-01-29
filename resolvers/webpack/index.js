@@ -48,7 +48,7 @@ exports.resolve = function (source, file, settings) {
 
   var webpackConfig
 
-  var configPath = get(settings, 'config')
+  var _configPath = get(settings, 'config')
     /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
@@ -58,6 +58,10 @@ exports.resolve = function (source, file, settings) {
     , env = get(settings, 'env')
     , argv = get(settings, 'argv', {})
     , packageDir
+
+  var configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
+    ? path.resolve(_configPath)
+    : _configPath
 
   log('Config path from settings:', configPath)
 

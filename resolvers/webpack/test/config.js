@@ -72,6 +72,14 @@ describe("config", function () {
         .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
   })
 
+  it("finds config object when config uses a path relative to working dir", function () {
+    var settings = {
+      config: './test/files/some/absolute.path.webpack.config.js',
+    }
+    expect(resolve('foo', file, settings)).to.have.property('path')
+        .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'))
+  })
+
   it("finds the first config with a resolve section when config is an array of config objects", function () {
     var settings = {
       config: require(path.join(__dirname, './files/webpack.config.multiple.js')),
