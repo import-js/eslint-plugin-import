@@ -148,6 +148,8 @@ rules:
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 
+Make sure you have installed the `@eslint/typescript-parser` which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
+
 ```yaml
 extends:
   - eslint:recommended
