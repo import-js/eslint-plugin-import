@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+
+## [2.16.0] - 2019-01-29
 ### Added
 - `typescript` config ([#1257], thanks [@kirill-konshin])
 
@@ -671,7 +674,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.15.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.16.0...HEAD
+[2.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.12.0...v2.13.0
