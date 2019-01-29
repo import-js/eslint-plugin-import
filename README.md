@@ -144,6 +144,18 @@ rules:
   # etc...
 ```
 
+# Typescript
+
+You may use the following shortcut or assemble your own config using the granular settings described below.
+
+```yaml
+extends:
+  - eslint:recommended
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:import/typescript # this line does the trick
+```
+
 # Resolvers
 
 With the advent of module bundlers and the current state of modules and module
