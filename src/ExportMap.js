@@ -192,8 +192,6 @@ export default class ExportMap {
 
 /**
  * parse docs from the first node that has leading comments
- * @param  {...[type]} nodes [description]
- * @return {{doc: object}}
  */
 function captureDoc(source, docStyleParsers) {
   const metadata = {}
@@ -202,9 +200,17 @@ function captureDoc(source, docStyleParsers) {
   // 'some' short-circuits on first 'true'
   nodes.some(n => {
     try {
+
+      let leadingComments
+
       // n.leadingComments is legacy `attachComments` behavior
-      let leadingComments = n.leadingComments || source.getCommentsBefore(n)
-      if (leadingComments.length === 0) return false
+      if ('leadingComments' in n) {
+        leadingComments = n.leadingComments
+      } else if (n.range) {
+        leadingComments = source.getCommentsBefore(n)
+      }
+
+      if (!leadingComments || leadingComments.length === 0) return false
 
       for (let name in docStyleParsers) {
         const doc = docStyleParsers[name](leadingComments)
@@ -346,8 +352,6 @@ ExportMap.parse = function (path, content, context) {
     docStyleParsers[style] = availableDocStyleParsers[style]
   })
 
-  const source = makeSourceCode(content, ast)
-
   // attempt to collect module doc
   if (ast.comments) {
     ast.comments.some(c => {
@@ -400,7 +404,7 @@ ExportMap.parse = function (path, content, context) {
     const existing = m.imports.get(p)
     if (existing != null) return existing.getter
 
-    const getter = () => ExportMap.for(childContext(p, context))
+    const getter = thunkFor(p, context)
     m.imports.set(p, {
       getter,
       source: {  // capturing actual node reference holds full AST in memory!
@@ -411,6 +415,7 @@ ExportMap.parse = function (path, content, context) {
     return getter
   }
 
+  const source = makeSourceCode(content, ast)
 
   ast.body.forEach(function (n) {
 
@@ -494,6 +499,15 @@ ExportMap.parse = function (path, content, context) {
   })
 
   return m
+}
+
+/**
+ * The creation of this closure is isolated from other scopes
+ * to avoid over-retention of unrelated variables, which has
+ * caused memory leaks. See #1266.
+ */
+function thunkFor(p, context) {
+  return () => ExportMap.for(childContext(p, context))
 }
 
 
