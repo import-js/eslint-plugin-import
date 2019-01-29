@@ -10,7 +10,7 @@ module.exports = {
   settings: {
     'import/extensions': allExtensions,
     'import/parsers': {
-      'typescript-eslint-parser': tsExtensions
+      '@eslint/typescript-parser': tsExtensions
     },
     'import/resolver': {
       'node': {
