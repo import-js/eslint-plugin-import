@@ -4,7 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- `typescript` config ([#1257], thanks [@kirill-konshin])
 
+### Fixed
+- Memory leak of `SourceCode` objects for all parsed dependencies, resolved. (issue [#1266], thanks [@asapach] and [@sergei-startsev] for digging in)
 
 ## [2.15.0] - 2019-01-22
 ### Added
@@ -506,6 +510,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
 [#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
 [#1163]: https://github.com/benmosher/eslint-plugin-import/pull/1163
@@ -595,6 +600,7 @@ for info on changes for earlier releases.
 [#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
+[#1266]: https://github.com/benmosher/eslint-plugin-import/issues/1266
 [#1175]: https://github.com/benmosher/eslint-plugin-import/issues/1175
 [#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
 [#931]: https://github.com/benmosher/eslint-plugin-import/issues/931
@@ -791,3 +797,6 @@ for info on changes for earlier releases.
 [@pzhine]: https://github.com/pzhine
 [@st-sloth]: https://github.com/st-sloth
 [@ljqx]: https://github.com/ljqx
+[@kirill-konshin]: https://github.com/kirill-konshin
+[@asapach]: https://github.com/asapach
+[@sergei-startsev]: https://github.com/sergei-startsev

@@ -1,9 +1,5 @@
 # import/no-deprecated
 
-**Stage: 0**
-
-**NOTE**: this rule is currently a work in progress. There may be "breaking" changes: most likely, additional cases that are flagged.
-
 Reports use of a deprecated name, as indicated by a JSDoc block with a `@deprecated`
 tag or TomDoc `Deprecated: ` comment.
 
