@@ -193,9 +193,8 @@ export default class ExportMap {
 /**
  * parse docs from the first node that has leading comments
  */
-function captureDoc(source, docStyleParsers) {
+function captureDoc(source, docStyleParsers, ...nodes) {
   const metadata = {}
-       , nodes = Array.prototype.slice.call(arguments, 1)
 
   // 'some' short-circuits on first 'true'
   nodes.some(n => {
