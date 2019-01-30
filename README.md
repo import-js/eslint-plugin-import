@@ -148,7 +148,7 @@ rules:
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 
-Make sure you have installed the `@eslint/typescript-parser` which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
+Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
 
 ```yaml
 extends:
@@ -157,6 +157,8 @@ extends:
   - plugin:import/warnings
   - plugin:import/typescript # this line does the trick
 ```
+
+[`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser
 
 # Resolvers
 
