@@ -144,6 +144,22 @@ rules:
   # etc...
 ```
 
+# Typescript
+
+You may use the following shortcut or assemble your own config using the granular settings described below.
+
+Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
+
+```yaml
+extends:
+  - eslint:recommended
+  - plugin:import/errors
+  - plugin:import/warnings
+  - plugin:import/typescript # this line does the trick
+```
+
+[`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser
+
 # Resolvers
 
 With the advent of module bundlers and the current state of modules and module
