@@ -148,7 +148,7 @@ rules:
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 
-Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
+Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies.
 
 ```yaml
 extends:
@@ -333,13 +333,46 @@ directly using webpack, for example:
 # .eslintrc.yml
 settings:
   import/parsers:
-    typescript-eslint-parser: [ .ts, .tsx ]
+    @typescript-eslint/parser: [ .ts, .tsx ]
+    import/resolver:
+      # use <root>/tsconfig.json
+      typescript: {}
+      # use <root>/path/to/folder/tsconfig.json
+      typescript:
+        directory: "./path/to/folder"
 ```
 
-In this case, [`typescript-eslint-parser`](https://github.com/eslint/typescript-eslint-parser) must be installed and require-able from
+```json
+// .eslintrc
+{
+  "plugins": ["import"],
+  "rules": {
+    // turn on errors for missing imports
+    "import/no-unresolved": "error"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      // use <root>/tsconfig.json
+      "typescript": {},
+
+      // use <root>/path/to/folder/tsconfig.json
+      "typescript": {
+        "directory": "./path/to/folder"
+      }
+    }
+  }
+}
+```
+
+In this case, [`eslint-import-resolver-typescript`](https://github.com/alexgorbatchev/eslint-import-resolver-typescript) must be installed and require-able from
 the running `eslint` module's location (i.e., install it as a peer of ESLint).
 
-This is currently only tested with `typescript-eslint-parser` but should theoretically
+NB. [`typescript-eslint-parser`](https://github.com/eslint/typescript-eslint-parser) has been deprecated.
+
+This is currently only tested with `eslint-import-resolver-typescript` but should theoretically
 work with any moderately ESTree-compliant parser.
 
 It's difficult to say how well various plugin features will be supported, too,
