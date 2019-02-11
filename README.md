@@ -342,31 +342,6 @@ settings:
         directory: "./path/to/folder"
 ```
 
-```json
-// .eslintrc
-{
-  "plugins": ["import"],
-  "rules": {
-    // turn on errors for missing imports
-    "import/no-unresolved": "error"
-  },
-  "settings": {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
-    },
-    "import/resolver": {
-      // use <root>/tsconfig.json
-      "typescript": {},
-
-      // use <root>/path/to/folder/tsconfig.json
-      "typescript": {
-        "directory": "./path/to/folder"
-      }
-    }
-  }
-}
-```
-
 In this case, [`eslint-import-resolver-typescript`](https://github.com/alexgorbatchev/eslint-import-resolver-typescript) must be installed and require-able from
 the running `eslint` module's location (i.e., install it as a peer of ESLint).
 
