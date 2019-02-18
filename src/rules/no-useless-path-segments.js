@@ -3,10 +3,9 @@
  * @author Thomas Grainger
  */
 
-import path from 'path'
-import sumBy from 'lodash/sumBy'
-import resolve from 'eslint-module-utils/resolve'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
+import resolve from 'eslint-module-utils/resolve'
+import path from 'path'
 import docsUrl from '../docsUrl'
 
 /**
@@ -19,19 +18,22 @@ import docsUrl from '../docsUrl'
  * ..foo/bar -> ./..foo/bar
  * foo/bar -> ./foo/bar
  *
- * @param rel {string} relative posix path potentially missing leading './'
+ * @param relativePath {string} relative posix path potentially missing leading './'
  * @returns {string} relative posix path that always starts with a ./
  **/
-function toRel(rel) {
-  const stripped = rel.replace(/\/$/g, '')
+function toRelativePath(relativePath) {
+  const stripped = relativePath.replace(/\/$/g, '') // Remove trailing /
+
   return /^((\.\.)|(\.))($|\/)/.test(stripped) ? stripped : `./${stripped}`
 }
 
 function normalize(fn) {
-  return toRel(path.posix.normalize(fn))
+  return toRelativePath(path.posix.normalize(fn))
 }
 
-const countRelParent = x => sumBy(x, v => v === '..')
+const countRelativeParents = (pathSegments) => pathSegments.reduce(
+  (sum, pathSegment) => pathSegment === '..' ? sum + 1 : sum, 0
+)
 
 module.exports = {
   meta: {
@@ -51,59 +53,76 @@ module.exports = {
     ],
 
     fixable: 'code',
+    messages: {
+      uselessPath: 'Useless path segments for "{{ path }}", should be "{{ proposedPath }}"',
+    },
   },
 
-  create: function (context) {
+  create(context) {
     const currentDir = path.dirname(context.getFilename())
+    const config = context.options[0]
 
     function checkSourceValue(source) {
-      const { value } = source
+      const { value: importPath } = source
 
-      function report(proposed) {
+      function report(proposedPath) {
         context.report({
           node: source,
-          message: `Useless path segments for "${value}", should be "${proposed}"`,
-          fix: fixer => fixer.replaceText(source, JSON.stringify(proposed)),
+          messageId: 'uselessPath',
+          data: {
+            path: importPath,
+            proposedPath,
+          },
+          fix: fixer => fixer.replaceText(source, JSON.stringify(proposedPath)),
         })
       }
 
-      if (!value.startsWith('.')) {
+      // Only relative imports are relevant for this rule --> Skip checking
+      if (!importPath.startsWith('.')) {
         return
       }
 
-      const resolvedPath = resolve(value, context)
-      const normed = normalize(value)
-      if (normed !== value && resolvedPath === resolve(normed, context)) {
-        return report(normed)
+      // Report rule violation if path is not the shortest possible
+      const resolvedPath = resolve(importPath, context)
+      const normedPath = normalize(importPath)
+      const resolvedNormedPath = resolve(normedPath, context)
+      if (normedPath !== importPath && resolvedPath === resolvedNormedPath) {
+        return report(normedPath)
       }
 
-      if (value.startsWith('./')) {
+      // Path is shortest possible + starts from the current directory --> Return directly
+      if (importPath.startsWith('./')) {
         return
       }
 
+      // Path is not existing --> Return directly (following code requires path to be defined)
       if (resolvedPath === undefined) {
         return
       }
 
-      const expected = path.relative(currentDir, resolvedPath)
-      const expectedSplit = expected.split(path.sep)
-      const valueSplit = value.replace(/^\.\//, '').split('/')
-      const valueNRelParents = countRelParent(valueSplit)
-      const expectedNRelParents = countRelParent(expectedSplit)
-      const diff = valueNRelParents - expectedNRelParents
+      const expected = path.relative(currentDir, resolvedPath) // Expected import path
+      const expectedSplit = expected.split(path.sep) // Split by / or \ (depending on OS)
+      const importPathSplit = importPath.replace(/^\.\//, '').split('/')
+      const countImportPathRelativeParents = countRelativeParents(importPathSplit)
+      const countExpectedRelativeParents = countRelativeParents(expectedSplit)
+      const diff = countImportPathRelativeParents - countExpectedRelativeParents
 
+      // Same number of relative parents --> Paths are the same --> Return directly
       if (diff <= 0) {
         return
       }
 
+      // Report and propose minimal number of required relative parents
       return report(
-        toRel(valueSplit
-          .slice(0, expectedNRelParents)
-          .concat(valueSplit.slice(valueNRelParents + diff))
-          .join('/'))
+        toRelativePath(
+          importPathSplit
+            .slice(0, countExpectedRelativeParents)
+            .concat(importPathSplit.slice(countImportPathRelativeParents + diff))
+            .join('/')
+        )
       )
     }
 
-    return moduleVisitor(checkSourceValue, context.options[0])
+    return moduleVisitor(checkSourceValue, config)
   },
 }
