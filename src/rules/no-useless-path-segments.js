@@ -3,6 +3,7 @@
  * @author Thomas Grainger
  */
 
+import { getFileExtensions } from 'eslint-module-utils/ignore'
 import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 import resolve from 'eslint-module-utils/resolve'
 import path from 'path'
@@ -31,9 +32,9 @@ function normalize(fn) {
   return toRelativePath(path.posix.normalize(fn))
 }
 
-const countRelativeParents = (pathSegments) => pathSegments.reduce(
-  (sum, pathSegment) => pathSegment === '..' ? sum + 1 : sum, 0
-)
+function countRelativeParents(pathSegments) {
+  return pathSegments.reduce((sum, pathSegment) => pathSegment === '..' ? sum + 1 : sum, 0)
+}
 
 module.exports = {
   meta: {
@@ -47,33 +48,28 @@ module.exports = {
         type: 'object',
         properties: {
           commonjs: { type: 'boolean' },
+          noUselessIndex: { type: 'boolean' },
         },
         additionalProperties: false,
       },
     ],
 
     fixable: 'code',
-    messages: {
-      uselessPath: 'Useless path segments for "{{ path }}", should be "{{ proposedPath }}"',
-    },
   },
 
   create(context) {
     const currentDir = path.dirname(context.getFilename())
-    const config = context.options[0]
+    const options = context.options[0]
 
     function checkSourceValue(source) {
       const { value: importPath } = source
 
-      function report(proposedPath) {
+      function reportWithProposedPath(proposedPath) {
         context.report({
           node: source,
-          messageId: 'uselessPath',
-          data: {
-            path: importPath,
-            proposedPath,
-          },
-          fix: fixer => fixer.replaceText(source, JSON.stringify(proposedPath)),
+          // Note: Using messageIds is not possible due to the support for ESLint 2 and 3
+          message: `Useless path segments for "${importPath}", should be "${proposedPath}"`,
+          fix: fixer => proposedPath && fixer.replaceText(source, JSON.stringify(proposedPath)),
         })
       }
 
@@ -87,7 +83,28 @@ module.exports = {
       const normedPath = normalize(importPath)
       const resolvedNormedPath = resolve(normedPath, context)
       if (normedPath !== importPath && resolvedPath === resolvedNormedPath) {
-        return report(normedPath)
+        return reportWithProposedPath(normedPath)
+      }
+
+      const fileExtensions = getFileExtensions(context.settings)
+      const regexUnnecessaryIndex = new RegExp(
+        `.*\\/index(\\${Array.from(fileExtensions).join('|\\')})?$`
+      )
+
+      // Check if path contains unnecessary index (including a configured extension)
+      if (options && options.noUselessIndex && regexUnnecessaryIndex.test(importPath)) {
+        const parentDirectory = path.dirname(importPath)
+
+        // Try to find ambiguous imports
+        if (parentDirectory !== '.' && parentDirectory !== '..') {
+          for (let fileExtension of fileExtensions) {
+            if (resolve(`${parentDirectory}${fileExtension}`, context)) {
+              return reportWithProposedPath(`${parentDirectory}/`)
+            }
+          }
+        }
+
+        return reportWithProposedPath(parentDirectory)
       }
 
       // Path is shortest possible + starts from the current directory --> Return directly
@@ -113,7 +130,7 @@ module.exports = {
       }
 
       // Report and propose minimal number of required relative parents
-      return report(
+      return reportWithProposedPath(
         toRelativePath(
           importPathSplit
             .slice(0, countExpectedRelativeParents)
@@ -123,6 +140,6 @@ module.exports = {
       )
     }
 
-    return moduleVisitor(checkSourceValue, config)
+    return moduleVisitor(checkSourceValue, options)
   },
 }

@@ -34,6 +34,7 @@ function makeValidExtensionSet(settings) {
 
   return exts
 }
+exports.getFileExtensions = makeValidExtensionSet
 
 exports.default = function ignore(path, context) {
   // check extension whitelist first (cheap)
