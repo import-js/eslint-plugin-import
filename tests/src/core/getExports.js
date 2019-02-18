@@ -110,26 +110,26 @@ describe('ExportMap', function () {
           expect(imports.has('fn')).to.be.true
 
           expect(imports.get('fn'))
-            .to.have.deep.property('doc.tags[0].title', 'deprecated')
+            .to.have.nested.property('doc.tags[0].title', 'deprecated')
           expect(imports.get('fn'))
-            .to.have.deep.property('doc.tags[0].description', "please use 'x' instead.")
+            .to.have.nested.property('doc.tags[0].description', 'please use \'x\' instead.')
         })
 
         it('works with default imports.', function () {
           expect(imports.has('default')).to.be.true
           const importMeta = imports.get('default')
 
-          expect(importMeta).to.have.deep.property('doc.tags[0].title', 'deprecated')
-          expect(importMeta).to.have.deep.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
+          expect(importMeta).to.have.nested.property('doc.tags[0].title', 'deprecated')
+          expect(importMeta).to.have.nested.property('doc.tags[0].description', 'this is awful, use NotAsBadClass.')
         })
 
         it('works with variables.', function () {
           expect(imports.has('MY_TERRIBLE_ACTION')).to.be.true
           const importMeta = imports.get('MY_TERRIBLE_ACTION')
 
-          expect(importMeta).to.have.deep.property(
+          expect(importMeta).to.have.nested.property(
             'doc.tags[0].title', 'deprecated')
-          expect(importMeta).to.have.deep.property(
+          expect(importMeta).to.have.nested.property(
             'doc.tags[0].description', 'please stop sending/handling this action type.')
         })
 
@@ -138,27 +138,27 @@ describe('ExportMap', function () {
             expect(imports.has('CHAIN_A')).to.be.true
             const importMeta = imports.get('CHAIN_A')
 
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].title', 'deprecated')
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].description', 'this chain is awful')
           })
           it('works for the second one', function () {
             expect(imports.has('CHAIN_B')).to.be.true
             const importMeta = imports.get('CHAIN_B')
 
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].title', 'deprecated')
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].description', 'so awful')
           })
           it('works for the third one, etc.', function () {
             expect(imports.has('CHAIN_C')).to.be.true
             const importMeta = imports.get('CHAIN_C')
 
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].title', 'deprecated')
-            expect(importMeta).to.have.deep.property(
+            expect(importMeta).to.have.nested.property(
               'doc.tags[0].description', 'still terrible')
           })
         })

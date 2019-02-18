@@ -49,7 +49,7 @@
     "babel-preset-es2015-argon": "latest",
     "babel-register": "^6.26.0",
     "babylon": "^6.15.0",
-    "chai": "^3.5.0",
+    "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "cross-env": "^4.0.0",
     "eslint": "2.x - 5.x",
