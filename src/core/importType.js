@@ -57,7 +57,8 @@ export function isScopedMain(name) {
 }
 
 function isInternalModule(name, settings, path) {
-  return externalModuleRegExp.test(name) && !isExternalPath(path, name, settings)
+  const matchesScopedOrExternalRegExp = scopedRegExp.test(name) || externalModuleRegExp.test(name)
+  return (matchesScopedOrExternalRegExp && !isExternalPath(path, name, settings))
 }
 
 function isRelativeToParent(name) {
@@ -76,9 +77,9 @@ function isRelativeToSibling(name) {
 const typeTest = cond([
   [isAbsolute, constant('absolute')],
   [isBuiltIn, constant('builtin')],
+  [isInternalModule, constant('internal')],
   [isExternalModule, constant('external')],
   [isScoped, constant('external')],
-  [isInternalModule, constant('internal')],
   [isRelativeToParent, constant('parent')],
   [isIndex, constant('index')],
   [isRelativeToSibling, constant('sibling')],

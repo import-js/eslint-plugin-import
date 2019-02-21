@@ -50,6 +50,11 @@ describe('importType(name)', function () {
     const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
     expect(importType('@importType/index', pathContext)).to.equal('internal')
   })
+    
+  it("should return 'internal' for internal modules that are referenced by aliases", function () {
+    const pathContext = testContext({ 'import/resolver': { node: { paths: [path.join(__dirname, '..', '..', 'files')] } } })
+    expect(importType('@my-alias/fn', pathContext)).to.equal('internal')
+  })
 
   it("should return 'parent' for internal modules that go through the parent", function() {
     expect(importType('../foo', context)).to.equal('parent')
