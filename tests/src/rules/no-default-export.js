@@ -29,7 +29,7 @@ ruleTester.run('no-default-export', rule, {
       `,
     }),
     test({
-      code: `export { foo, bar }`,
+      code: `let foo, bar; export { foo, bar }`,
     }),
     test({
       code: `export const { foo, bar } = item;`,
@@ -42,6 +42,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: `
+        let item;
         export const foo = item;
         export { item };
       `,
@@ -102,7 +103,7 @@ ruleTester.run('no-default-export', rule, {
       }],
     }),
     test({
-      code: 'export { foo as default }',
+      code: 'let foo; export { foo as default }',
       errors: [{
         ruleId: 'ExportNamedDeclaration',
         message: 'Do not alias `foo` as `default`. Just export `foo` itself ' +

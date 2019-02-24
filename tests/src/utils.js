@@ -43,8 +43,8 @@ export const SYNTAX_CASES = [
   test({ code: 'const { x, y, ...z } = bar', parser: 'babel-eslint' }),
 
   // all the exports
-  test({ code: 'export { x }' }),
-  test({ code: 'export { x as y }' }),
+  test({ code: 'let x; export { x }' }),
+  test({ code: 'let x; export { x as y }' }),
 
   // not sure about these since they reference a file
   // test({ code: 'export { x } from "./y.js"'}),

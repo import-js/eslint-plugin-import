@@ -10,7 +10,7 @@ ruleTester.run('no-named-export', rule, {
       code: 'export default function bar() {};',
     }),
     test({
-      code: 'export { foo as default }',
+      code: 'let foo; export { foo as default }',
     }),
     test({
       code: 'export default from "foo.js"',
@@ -82,7 +82,7 @@ ruleTester.run('no-named-export', rule, {
       }],
     }),
     test({
-      code: `export { foo, bar }`,
+      code: `let foo, bar; export { foo, bar }`,
       errors: [{
         ruleId: 'ExportNamedDeclaration',
         message: 'Named exports are not allowed.',
@@ -111,6 +111,7 @@ ruleTester.run('no-named-export', rule, {
     }),
     test({
       code: `
+        let item;
         export const foo = item;
         export { item };
       `,

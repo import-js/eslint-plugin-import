@@ -105,14 +105,14 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'export { foo } from "./foo.js"',
-        'export { bar }',
+        'let bar; export { bar }',
       ].join('\n'),
       options: [ 'always' ],
     }),
     test({
       code: [
         'export { foo } from "./foo"',
-        'export { bar }',
+        'let bar; export { bar }',
       ].join('\n'),
       options: [ 'never' ],
     }),
@@ -334,7 +334,7 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'export { foo } from "./foo"',
-        'export { bar }',
+        'let bar; export { bar }',
       ].join('\n'),
       options: [ 'always' ],
       errors: [
@@ -348,7 +348,7 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'export { foo } from "./foo.js"',
-        'export { bar }',
+        'let bar; export { bar }',
       ].join('\n'),
       options: [ 'never' ],
       errors: [

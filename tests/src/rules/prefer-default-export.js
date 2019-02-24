@@ -28,6 +28,7 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        let foo, bar;
         export { foo, bar }`,
       }),
     test({
@@ -44,11 +45,13 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        let item;
         export const foo = item;
         export { item };`,
       }),
     test({
       code: `
+        let foo;
         export { foo as default }`,
       }),
     test({

@@ -61,7 +61,7 @@ ruleTester.run('named', rule, {
     }),
 
     // regression tests
-    test({ code: 'export { foo as bar }'}),
+    test({ code: 'let foo; export { foo as bar }'}),
 
     // destructured exports
     test({ code: 'import { destructuredProp } from "./named-exports"' }),
