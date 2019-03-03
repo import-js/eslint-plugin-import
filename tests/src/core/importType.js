@@ -90,16 +90,16 @@ describe('importType(name)', function () {
   })
 
   it("should return 'external' for module from 'node_modules' with default config", function() {
-    expect(importType('builtin-modules', context)).to.equal('external')
+    expect(importType('resolve', context)).to.equal('external')
   })
 
   it("should return 'internal' for module from 'node_modules' if 'node_modules' missed in 'external-module-folders'", function() {
     const foldersContext = testContext({ 'import/external-module-folders': [] })
-    expect(importType('builtin-modules', foldersContext)).to.equal('internal')
+    expect(importType('resolve', foldersContext)).to.equal('internal')
   })
 
   it("should return 'external' for module from 'node_modules' if 'node_modules' contained in 'external-module-folders'", function() {
     const foldersContext = testContext({ 'import/external-module-folders': ['node_modules'] })
-    expect(importType('builtin-modules', foldersContext)).to.equal('external')
+    expect(importType('resolve', foldersContext)).to.equal('external')
   })
 })
