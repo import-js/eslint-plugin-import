@@ -17,8 +17,8 @@ ruleTester.run('export', rule, {
     test({ code: 'export var [ foo, bar ] = array;' }),
     test({ code: 'export var { foo, bar } = object;' }),
     test({ code: 'export var [ foo, bar ] = array;' }),
-    test({ code: 'export { foo, foo as bar }' }),
-    test({ code: 'export { bar }; export * from "./export-all"' }),
+    test({ code: 'let foo; export { foo, foo as bar }' }),
+    test({ code: 'let bar; export { bar }; export * from "./export-all"' }),
     test({ code: 'export * from "./export-all"' }),
     test({ code: 'export * from "./does-not-exist"' }),
 
@@ -62,7 +62,7 @@ ruleTester.run('export', rule, {
     //   errors: ['Parsing error: Duplicate export \'foo\''],
     // }),
     test({
-      code: 'export { foo }; export * from "./export-all"',
+      code: 'let foo; export { foo }; export * from "./export-all"',
       errors: ['Multiple exports of name \'foo\'.',
                'Multiple exports of name \'foo\'.'],
     }),

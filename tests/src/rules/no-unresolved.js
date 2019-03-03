@@ -34,7 +34,7 @@ function runResolverTests(resolver) {
 
       rest({ code: 'export { foo } from "./bar"' }),
       rest({ code: 'export * from "./bar"' }),
-      rest({ code: 'export { foo }' }),
+      rest({ code: 'let foo; export { foo }' }),
 
       // stage 1 proposal for export symmetry,
       rest({ code: 'export * as bar from "./bar"'
