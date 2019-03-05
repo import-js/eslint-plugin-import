@@ -21,7 +21,9 @@ export function isAbsolute(name) {
   return name.indexOf('/') === 0
 }
 
-export function isBuiltIn(name, settings) {
+// path is defined only when a resolver resolves to a non-standard path
+export function isBuiltIn(name, settings, path) {
+  if (path) return false
   const base = baseModule(name)
   const extras = (settings && settings['import/core-modules']) || []
   return coreModules[base] || extras.indexOf(base) > -1
