@@ -80,6 +80,19 @@ exports.default = function visitModules(visitor, options) {
     }
   }
 
+  function checkCommonRequireResolve(call) {
+    if (call.callee.type !== 'MemberExpression') return
+    if (call.callee.object.name !== 'require') return
+    if (call.callee.property.name !== 'resolve') return
+    if (call.arguments.length !== 1) return
+
+    const modulePath = call.arguments[0]
+    if (modulePath.type !== 'Literal') return
+    if (typeof modulePath.value !== 'string') return
+
+    checkSourceValue(modulePath, call)
+  }
+
   const visitors = {}
   if (options.esmodule) {
     Object.assign(visitors, {
@@ -97,6 +110,24 @@ exports.default = function visitModules(visitor, options) {
     }
   }
 
+  const requireResolve = {}
+  if(typeof options.requireResolve === 'boolean') {
+    Object.assign(requireResolve, {
+      commonjs: options.commonjs && options.requireResolve,
+    })
+  }
+  else if(options.requireResolve) {
+    Object.assign(requireResolve, options.requireResolve)
+  }
+
+  if (requireResolve.commonjs) {
+    const currentCallExpression = visitors['CallExpression']
+    visitors['CallExpression'] = function (call) {
+      if (currentCallExpression) currentCallExpression(call)
+      checkCommonRequireResolve(call)
+    }
+  }
+
   return visitors
 }
 
@@ -111,6 +142,17 @@ function makeOptionsSchema(additionalProperties) {
       'commonjs': { 'type': 'boolean' },
       'amd': { 'type': 'boolean' },
       'esmodule': { 'type': 'boolean' },
+      'requireResolve': {
+        'oneOf': [
+          { 'type': 'boolean' },
+          {
+            'type': 'object',
+            'properties': {
+              'commonjs': { 'type': 'boolean' },
+            },
+          },
+        ],
+      },
       'ignore': {
         'type': 'array',
         'minItems': 1,

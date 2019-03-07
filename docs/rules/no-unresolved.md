@@ -53,6 +53,16 @@ define(['./foo'], function (foo) { /*...*/ }) // reported if './foo' is not foun
 require(['./foo'], function (foo) { /*...*/ }) // reported if './foo' is not found
 ```
 
+If `{requireResolve: true}` is provided, single-argument `require.resolve` calls will be resolved:
+
+```js
+/*eslint import/no-unresolved: [2, { requireResolve: true }]*/
+const { default: x } = require.resolve('./foo') // reported if './foo' is not found
+
+require.resolve(0) // ignored
+require.resolve(['x', 'y'], function (x, y) { /*...*/ }) // ignored
+```
+
 #### `ignore`
 
 This rule has its own ignore list, separate from [`import/ignore`]. This is because you may want to know whether a module can be located, regardless of whether it can be parsed for exports: `node_modules`, CoffeeScript files, etc. are all good to resolve properly, but will not be parsed if configured as such via [`import/ignore`].

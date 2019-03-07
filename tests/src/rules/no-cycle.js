@@ -40,6 +40,10 @@ ruleTester.run('no-cycle', rule, {
       code: 'import type { FooType } from "./depth-one"',
       parser: 'babel-eslint',
     }),
+    test({
+      code: 'require.resolve("./depth-one")',
+      options: [{ commonjs: true, requireResolve: true }],
+    }),
   ],
   invalid: [
     test({

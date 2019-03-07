@@ -68,6 +68,21 @@ function runResolverTests(resolver) {
            , options: [{ amd: true }]}),
       rest({ code: 'define(["./does-not-exist"], function (bar) {})' }),
 
+      // requireResolve setting
+      rest({ code: 'var foo = require.resolve("./bar")'
+           , options: [{ requireResolve: true }]}),
+      rest({ code: 'require.resolve("./bar")'
+           , options: [{ requireResolve: true }]}),
+      rest({ code: 'require.resolve("./does-not-exist")'
+           , options: [{ requireResolve: false }]}),
+      rest({ code: 'require.resolve("./bar")'
+           , options: [{ commonjs: false, requireResolve: { commonjs: true } }]}),
+      rest({ code: 'require.resolve("./does-not-exist")'
+           , options: [{ requireResolve: { commonjs: false } }]}),
+      rest({ code: 'require.resolve("./does-not-exist")'
+           , options: [{ requireResolve: {} }]}),
+      rest({ code: 'require.resolve("./does-not-exist")' }),
+
       // stress tests
       rest({ code: 'require("./does-not-exist", "another arg")'
            , options: [{ commonjs: true, amd: true }]}),
@@ -175,6 +190,32 @@ function runResolverTests(resolver) {
           type: 'Literal',
         },{
           message: "Unable to resolve path to module './does-not-exist'.",
+          type: 'Literal',
+        }],
+      }),
+
+      // requireResolve setting
+      rest({
+        code: 'var bar = require.resolve("./baz")',
+        options: [{ commonjs: true, requireResolve: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'require.resolve("./baz")',
+        options: [{ commonjs: true, requireResolve: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'var bar = require.resolve("./baz")',
+        options: [{ requireResolve: { commonjs: true } }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
           type: 'Literal',
         }],
       }),

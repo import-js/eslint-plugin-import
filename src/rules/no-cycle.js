@@ -29,6 +29,8 @@ module.exports = {
     const maxDepth = options.maxDepth || Infinity
 
     function checkSourceValue(sourceNode, importer) {
+      if (isRequireResolve(importer)) return // no require.resolve
+
       const imported = Exports.get(sourceNode.value, context)
 
       if (sourceNode.parent && sourceNode.parent.importKind === 'type') {
@@ -85,4 +87,11 @@ module.exports = {
 
 function routeString(route) {
   return route.map(s => `${s.value}:${s.loc.start.line}`).join('=>')
+}
+
+function isRequireResolve(node) {
+  return (node.type === 'CallExpression'
+          && node.callee.type === 'MemberExpression'
+          && node.callee.object.name === 'require'
+          && node.callee.property.name === 'resolve')
 }

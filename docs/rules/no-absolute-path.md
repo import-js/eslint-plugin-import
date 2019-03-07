@@ -35,6 +35,7 @@ You may provide an options object providing true/false for any of
 - `esmodule`: defaults to `true`
 - `commonjs`: defaults to `true`
 - `amd`: defaults to `false`
+- `requireResolve`: defaults to `false`
 
 If `{ amd: true }` is provided, dependency paths for AMD-style `define` and `require`
 calls will be resolved:

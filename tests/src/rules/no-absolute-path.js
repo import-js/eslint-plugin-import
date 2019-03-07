@@ -27,6 +27,20 @@ ruleTester.run('no-absolute-path', rule, {
     test({ code: 'var foo = require("./")'}),
     test({ code: 'var foo = require("@scope/foo")'}),
 
+    // requireResolve option
+    test({
+      code: 'var foo = require.resolve("foo")',
+      options: [{ requireResolve: { commonjs: true }}],
+    }),
+    test({
+      code: 'var foo = require.resolve("./")',
+      options: [{ commonjs: true, requireResolve: true }],
+    }),
+    test({
+      code: 'var foo = require.resolve("@scope/foo")',
+      options: [{ requireResolve: { commonjs: true }}],
+    }),
+
     test({ code: 'import events from "events"' }),
     test({ code: 'import path from "path"' }),
     test({ code: 'var events = require("events")' }),
@@ -84,6 +98,16 @@ ruleTester.run('no-absolute-path', rule, {
     test({
       code: 'var f = require("/some/path")',
       options: [{ amd: true }],
+      errors: [error],
+    }),
+    test({
+      code: 'var f = require.resolve("/some/path")',
+      options: [{ commonjs: true, requireResolve: true }],
+      errors: [error],
+    }),
+    test({
+      code: 'var f = require.resolve("/some/path")',
+      options: [{ requireResolve: { commonjs: true } }],
       errors: [error],
     }),
     // validate amd

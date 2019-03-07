@@ -10,6 +10,17 @@ function runResolverTests(resolver) {
       // commonjs with default options
       test({ code: 'require("./../files/malformed.js")' }),
 
+      // requireResolve option
+      test({
+        code: 'require("./../files/malformed.js")',
+        options: [{ commonjs: false, requireResolve: { commonjs: true } }],
+      }),
+      test({
+        code: 'require.resolve("./malformed.js")',
+        options: [{ commonjs: true, requireResolve: true }],
+      }),
+
+
       // esmodule
       test({ code: 'import "./malformed.js"' }),
       test({ code: 'import "./test-module"' }),
@@ -59,6 +70,28 @@ function runResolverTests(resolver) {
       test({
         code: 'require("./deep//a")',
         options: [{ commonjs: true }],
+        errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
+      }),
+
+      // requireResolve
+      test({
+        code: 'require.resolve("./test-module/")',
+        options: [{ commonjs: true, requireResolve: true }],
+        errors: [ 'Useless path segments for "./test-module/", should be "./test-module"'],
+      }),
+      test({
+        code: 'require.resolve("./")',
+        options: [{ commonjs: true, requireResolve: { commonjs: true } }],
+        errors: [ 'Useless path segments for "./", should be "."'],
+      }),
+      test({
+        code: 'require.resolve("../")',
+        options: [{ commonjs: true, requireResolve: true }],
+        errors: [ 'Useless path segments for "../", should be ".."'],
+      }),
+      test({
+        code: 'require.resolve("./deep//a")',
+        options: [{ commonjs: false, requireResolve: { commonjs: true } }],
         errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
       }),
 
