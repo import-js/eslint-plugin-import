@@ -70,8 +70,7 @@ describe('importType(name)', function () {
     const pathContext = testContext({ 'import/resolver': { webpack: { config: webpackConfig } } })
     expect(importType('constants/index', pathContext)).to.equal('internal')
     expect(importType('constants/', pathContext)).to.equal('internal')
-    // the following assertion fails because the webpack resolver runs an resolve.isCore('constants') without first checking paths config
-    // expect(importType('constants', pathContext)).to.equal('internal')
+    expect(importType('constants', pathContext)).to.equal('internal')
   })
 
   it("should return 'parent' for internal modules that go through the parent", function() {
