@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore'
+import isIgnored, { getFileExtensions, hasValidExtension } from 'eslint-module-utils/ignore'
 
 import * as utils from '../utils'
 
@@ -55,4 +55,36 @@ describe('ignore', function () {
     })
   })
 
+  describe('getFileExtensions', function () {
+    it('returns a set with the file extension ".js" if "import/extensions" is not configured', function () {
+      const fileExtensions = getFileExtensions({})
+
+      expect(fileExtensions).to.include('.js')
+    })
+
+    it('returns a set with the file extensions configured in "import/extension"', function () {
+      const settings = {
+        'import/extensions': ['.js', '.jsx'],
+      }
+
+      const fileExtensions = getFileExtensions(settings)
+
+      expect(fileExtensions).to.include('.js')
+      expect(fileExtensions).to.include('.jsx')
+    })
+
+    it('returns a set with the file extensions configured in "import/extension" and "import/parsers"', function () {
+      const settings = {
+        'import/parsers': {
+          'typescript-eslint-parser': ['.ts', '.tsx'],
+        },
+      }
+
+      const fileExtensions = getFileExtensions(settings)
+
+      expect(fileExtensions).to.include('.js') // If "import/extensions" is not configured, this is the default
+      expect(fileExtensions).to.include('.ts')
+      expect(fileExtensions).to.include('.tsx')
+    })
+  })
 })

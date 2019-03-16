@@ -258,6 +258,17 @@ in which case it is specified as `['.js', '.jsx']`.
 
 ```js
 "settings": {
+  "import/extensions": [
+    ".js",
+    ".jsx"
+  ]
+}
+```
+
+If you require more granular extension definitions, you can use:
+
+```js
+"settings": {
   "import/resolver": {
     "node": {
       "extensions": [
