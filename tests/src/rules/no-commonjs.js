@@ -39,6 +39,17 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: 'var zero = require(0);' },
     { code: 'require("x")', options: [{ allowRequire: true }] },
 
+    // commonJS doesn't care how the path is built. You can use a function to
+    // dynamically build the module path.t st
+    { code: 'require(rootRequire("x"))', options: [{ allowRequire: true }] },
+    { code: 'require(String("x"))', options: [{ allowRequire: true }] },
+    { code: 'require(["x", "y", "z"].join("/"))', options: [{ allowRequire: true }] },
+
+    // commonJS rules should be scoped to commonJS spec. `rootRequire` is not
+    // recognized by this commonJS plugin.
+    { code: 'rootRequire("x")', options: [{ allowRequire: true }] },
+    { code: 'rootRequire("x")', options: [{ allowRequire: false}] },
+
     { code: 'module.exports = function () {}', options: ['allow-primitive-modules'] },
     { code: 'module.exports = function () {}', options: [{ allowPrimitiveModules: true }] },
     { code: 'module.exports = "foo"', options: ['allow-primitive-modules'] },
