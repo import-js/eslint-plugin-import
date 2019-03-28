@@ -148,7 +148,7 @@ rules:
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 
-Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies. 
+Make sure you have installed the [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies.
 
 ```yaml
 extends:
@@ -344,13 +344,13 @@ directly using webpack, for example:
 # .eslintrc.yml
 settings:
   import/parsers:
-    typescript-eslint-parser: [ .ts, .tsx ]
+    '@typescript-eslint/parser': [ .ts, .tsx ]
 ```
 
-In this case, [`typescript-eslint-parser`](https://github.com/eslint/typescript-eslint-parser) must be installed and require-able from
+In this case, [`@typescript-eslint/parser`](https://github.com/eslint/@typescript-eslint/parser) must be installed and require-able from
 the running `eslint` module's location (i.e., install it as a peer of ESLint).
 
-This is currently only tested with `typescript-eslint-parser` but should theoretically
+This is currently only tested with `@typescript-eslint/parser` but should theoretically
 work with any moderately ESTree-compliant parser.
 
 It's difficult to say how well various plugin features will be supported, too,

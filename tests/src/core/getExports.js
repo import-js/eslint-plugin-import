@@ -313,8 +313,8 @@ describe('ExportMap', function () {
   context('alternate parsers', function () {
 
     const configs = [
-      // ['string form', { 'typescript-eslint-parser': '.ts' }],
-      ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
+      // ['string form', { '@typescript-eslint/parser': '.ts' }],
+      ['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }],
     ]
 
     configs.forEach(([description, parserConfig]) => {

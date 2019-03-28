@@ -260,41 +260,41 @@ context("Typescript", function () {
     valid: [
       test({
         code: 'import { MyType } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
       test({
         code: 'import { Foo } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
       test({
         code: 'import { Bar } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
       test({
         code: 'import { getFoo } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
       test({
         code: 'import { MyEnum } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
@@ -303,9 +303,9 @@ context("Typescript", function () {
           import { MyModule } from "./typescript"
           MyModule.ModuleFunction()
         `,
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
@@ -314,9 +314,9 @@ context("Typescript", function () {
           import { MyNamespace } from "./typescript"
           MyNamespace.NSModule.NSModuleFunction()
         `,
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       }),
@@ -325,9 +325,9 @@ context("Typescript", function () {
     invalid: [
       test({
         code: 'import { MissingType } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
         errors: [{
@@ -337,9 +337,9 @@ context("Typescript", function () {
       }),
       test({
         code: 'import { NotExported } from "./typescript"',
-        parser: 'typescript-eslint-parser',
+        parser: '@typescript-eslint/parser',
         settings: {
-          'import/parsers': { 'typescript-eslint-parser': ['.ts'] },
+          'import/parsers': { '@typescript-eslint/parser': ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
         errors: [{

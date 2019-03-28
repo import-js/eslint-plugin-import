@@ -44,6 +44,8 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
+    "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
+    "@typescript-eslint/parser": "^1.5.0",
     "babel-eslint": "^8.2.6",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-preset-es2015-argon": "latest",
@@ -56,9 +58,8 @@
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-typescript": "^1.0.2",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
-    "eslint-module-utils": "file:./utils",
     "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
-    "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
+    "eslint-module-utils": "file:./utils",
     "eslint-plugin-import": "2.x",
     "gulp": "^3.9.1",
     "gulp-babel": "6.1.2",
@@ -68,8 +69,7 @@
     "redux": "^3.7.2",
     "rimraf": "^2.6.3",
     "sinon": "^2.4.1",
-    "typescript": "^3.2.2",
-    "typescript-eslint-parser": "^21.0.2"
+    "typescript": "^3.2.2"
   },
   "peerDependencies": {
     "eslint": "2.x - 5.x"

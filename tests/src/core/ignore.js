@@ -76,7 +76,7 @@ describe('ignore', function () {
     it('returns a set with the file extensions configured in "import/extension" and "import/parsers"', function () {
       const settings = {
         'import/parsers': {
-          'typescript-eslint-parser': ['.ts', '.tsx'],
+          '@typescript-eslint/parser': ['.ts', '.tsx'],
         },
       }
 
