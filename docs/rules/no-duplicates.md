@@ -1,6 +1,7 @@
 # import/no-duplicates
 
 Reports if a resolved path is imported more than once.
++(fixable) The `--fix` option on the [command line] automatically fixes some problems reported by this rule.
 
 ESLint core has a similar rule ([`no-duplicate-imports`](http://eslint.org/docs/rules/no-duplicate-imports)), but this version
 is different in two key ways:

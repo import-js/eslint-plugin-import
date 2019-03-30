@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- Autofixer for [`no-duplicates`] rule ([#1312], thanks [@lydell])
+
 ### Fixed
 - [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
 
@@ -512,9 +515,11 @@ for info on changes for earlier releases.
 [`no-cycle`]: ./docs/rules/no-cycle.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
 [`no-named-export`]: ./docs/rules/no-named-export.md
+[`no-duplicates`]: ./docs/rules/no-duplicates.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1312]: https://github.com/benmosher/eslint-plugin-import/pull/1312
 [#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
 [#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
@@ -809,3 +814,4 @@ for info on changes for earlier releases.
 [@asapach]: https://github.com/asapach
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@ephys]: https://github.com/ephys
+[@lydell]: https://github.com/lydell
