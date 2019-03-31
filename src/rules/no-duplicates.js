@@ -36,8 +36,11 @@ function getFix(first, rest, sourceCode) {
     return undefined
   }
 
-  // If the first import is `import * as ns from './foo'` there's nothing we can do.
-  if (hasNamespace(first)) {
+  // Adjusting the first import might make it multiline, which could break
+  // `eslint-disable-next-line` comments and similar, so bail if the first
+  // import has comments. Also, if the first import is `import * as ns from
+  // './foo'` there's nothing we can do.
+  if (hasProblematicComments(first, sourceCode) || hasNamespace(first)) {
     return undefined
   }
 
@@ -51,15 +54,11 @@ function getFix(first, rest, sourceCode) {
     return undefined
   }
 
-  // It's not obvious what the user wants to do with comments associated with
-  // duplicate imports, so skip imports with comments when autofixing. Also skip
-  // `import * as ns from './foo'` imports, since they cannot be merged into
-  // another import.
+  // Leave it to the user to handle comments. Also skip `import * as ns from
+  // './foo'` imports, since they cannot be merged into another import.
   const restWithoutComments = rest.filter(node => !(
-      hasCommentBefore(node, sourceCode) ||
-      hasCommentAfter(node, sourceCode) ||
-      hasCommentInsideNonSpecifiers(node, sourceCode) ||
-      hasNamespace(node)
+    hasProblematicComments(node, sourceCode) ||
+    hasNamespace(node)
   ))
 
   const specifiers = restWithoutComments
@@ -177,6 +176,16 @@ function hasSpecifiers(node) {
   const specifiers = node.specifiers
     .filter(specifier => specifier.type === 'ImportSpecifier')
   return specifiers.length > 0
+}
+
+// It's not obvious what the user wants to do with comments associated with
+// duplicate imports, so skip imports with comments when autofixing.
+function hasProblematicComments(node, sourceCode) {
+  return (
+    hasCommentBefore(node, sourceCode) ||
+    hasCommentAfter(node, sourceCode) ||
+    hasCommentInsideNonSpecifiers(node, sourceCode)
+  )
 }
 
 // Checks whether `node` has a comment (that ends) on the previous line or on

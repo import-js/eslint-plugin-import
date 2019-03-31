@@ -162,6 +162,21 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: `
+        // some-tool-disable-next-line
+        import {x} from './foo'
+        import {//y\ny} from './foo'
+      `,
+      // Autofix bail because of comment.
+      output: `
+        // some-tool-disable-next-line
+        import {x} from './foo'
+        import {//y\ny} from './foo'
+      `,
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: `
         import {x} from './foo'
         // some-tool-disable-next-line
         import {y} from './foo'
@@ -170,6 +185,19 @@ ruleTester.run('no-duplicates', rule, {
       output: `
         import {x} from './foo'
         // some-tool-disable-next-line
+        import {y} from './foo'
+      `,
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: `
+        import {x} from './foo' // some-tool-disable-line
+        import {y} from './foo'
+      `,
+      // Autofix bail because of comment.
+      output: `
+        import {x} from './foo' // some-tool-disable-line
         import {y} from './foo'
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
@@ -296,6 +324,23 @@ ruleTester.run('no-duplicates', rule, {
       output: `
         import {x} from './foo'
         import{y}from/* comment */'./foo'
+      `,
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: `
+        import {x} from
+        // some-tool-disable-next-line
+        './foo'
+        import {y} from './foo'
+      `,
+      // Autofix bail because of comment.
+      output: `
+        import {x} from
+        // some-tool-disable-next-line
+        './foo'
+        import {y} from './foo'
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
