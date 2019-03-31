@@ -147,6 +147,20 @@ ruleTester.run('no-duplicates', rule, {
     }),
 
     test({
+      code: "import * as ns from './foo'; import {y} from './foo'",
+      // Autofix bail because first import is a namespace import.
+      output: "import * as ns from './foo'; import {y} from './foo'",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: "import {x} from './foo'; import * as ns from './foo'; import {y} from './foo'; import './foo'",
+      // Autofix could merge some imports, but not the namespace import.
+      output: "import {x,y} from './foo'; import * as ns from './foo';  ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
       code: `
         import {x} from './foo'
         // some-tool-disable-next-line

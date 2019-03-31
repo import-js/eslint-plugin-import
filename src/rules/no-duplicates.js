@@ -36,6 +36,11 @@ function getFix(first, rest, sourceCode) {
     return undefined
   }
 
+  // If the first import is `import * as ns from './foo'` there's nothing we can do.
+  if (hasNamespace(first)) {
+    return undefined
+  }
+
   const defaultImportNames = new Set(
     [first, ...rest].map(getDefaultImportName).filter(Boolean)
   )
@@ -47,11 +52,14 @@ function getFix(first, rest, sourceCode) {
   }
 
   // It's not obvious what the user wants to do with comments associated with
-  // duplicate imports, so skip imports with comments when autofixing.
+  // duplicate imports, so skip imports with comments when autofixing. Also skip
+  // `import * as ns from './foo'` imports, since they cannot be merged into
+  // another import.
   const restWithoutComments = rest.filter(node => !(
       hasCommentBefore(node, sourceCode) ||
       hasCommentAfter(node, sourceCode) ||
-      hasCommentInsideNonSpecifiers(node, sourceCode)
+      hasCommentInsideNonSpecifiers(node, sourceCode) ||
+      hasNamespace(node)
   ))
 
   const specifiers = restWithoutComments
@@ -75,6 +83,7 @@ function getFix(first, rest, sourceCode) {
 
   const unnecessaryImports = restWithoutComments.filter(node =>
     !hasSpecifiers(node) &&
+    !hasNamespace(node) &&
     !specifiers.some(specifier => specifier.importNode === node)
   )
 
@@ -154,6 +163,13 @@ function getDefaultImportName(node) {
   const defaultSpecifier = node.specifiers
     .find(specifier => specifier.type === 'ImportDefaultSpecifier')
   return defaultSpecifier != null ? defaultSpecifier.local.name : undefined
+}
+
+// Checks whether `node` has a namespace import.
+function hasNamespace(node) {
+  const specifiers = node.specifiers
+    .filter(specifier => specifier.type === 'ImportNamespaceSpecifier')
+  return specifiers.length > 0
 }
 
 // Checks whether `node` has any non-default specifiers.
