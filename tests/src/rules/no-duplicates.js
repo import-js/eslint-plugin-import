@@ -1,10 +1,14 @@
 import * as path from 'path'
-import { test } from '../utils'
+import { test as testUtil } from '../utils'
 
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-duplicates')
+
+const test = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2'
+  ? t => testUtil(Object.assign({}, t, {output: t.code}))
+  : testUtil
 
 ruleTester.run('no-duplicates', rule, {
   valid: [

@@ -26,6 +26,11 @@ function checkImports(imported, context) {
 }
 
 function getFix(first, rest, sourceCode) {
+  // Sorry ESLint <= 3 users, no autofix for you.
+  if (typeof sourceCode.getCommentsBefore !== 'function') {
+    return undefined
+  }
+
   const defaultImportNames = new Set(
     [first, ...rest].map(getDefaultImportName).filter(Boolean)
   )
