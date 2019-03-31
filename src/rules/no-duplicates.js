@@ -26,7 +26,12 @@ function checkImports(imported, context) {
 }
 
 function getFix(first, rest, sourceCode) {
-  // Sorry ESLint <= 3 users, no autofix for you.
+  // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
+  // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
+  // update the first one, and remove the rest. Support for multiple
+  // `fixer.whatever()` in a single `fix` was added in ESLint 4.1.
+  // `sourceCode.getCommentsBefore` was added in 4.0, so that's an easy thing to
+  // check for.
   if (typeof sourceCode.getCommentsBefore !== 'function') {
     return undefined
   }
