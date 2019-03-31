@@ -189,9 +189,6 @@ const newDefaultImportExists = specifiers =>
   specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER)
 
 module.exports = {
-  isNodeModule,
-  doPreparation,
-  getSrc,
   meta: {
     docs: { url: docsUrl('no-unused-modules') },
     schema: [{
