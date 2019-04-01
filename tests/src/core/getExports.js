@@ -315,6 +315,7 @@ describe('ExportMap', function () {
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
       ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
+      ['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }],
     ]
 
     configs.forEach(([description, parserConfig]) => {
