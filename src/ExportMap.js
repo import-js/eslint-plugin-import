@@ -455,6 +455,7 @@ ExportMap.parse = function (path, content, context) {
           case 'TSInterfaceDeclaration':
           case 'TSAbstractClassDeclaration':
           case 'TSModuleDeclaration':
+          case 'TSTypeAliasDeclaration':
             m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n))
             break
           case 'VariableDeclaration':
