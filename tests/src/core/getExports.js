@@ -1,4 +1,6 @@
 import { expect } from  'chai'
+import semver from 'semver'
+import { linter } from 'eslint'
 import ExportMap from '../../../src/ExportMap'
 
 import * as fs from 'fs'
@@ -315,8 +317,11 @@ describe('ExportMap', function () {
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
       ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
-      ['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }],
     ]
+
+    if (semver.satisfies(linter.version, '>5.0.0')) {
+      configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }])
+    }
 
     configs.forEach(([description, parserConfig]) => {
 
