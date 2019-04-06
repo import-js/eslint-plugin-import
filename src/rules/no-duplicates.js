@@ -94,7 +94,7 @@ function getFix(first, rest, sourceCode) {
     return undefined
   }
 
-  return function* (fixer) {
+  return fixer => {
     const tokens = sourceCode.getTokens(first)
     const openBrace = tokens.find(token => isPunctuator(token, '{'))
     const closeBrace = tokens.find(token => isPunctuator(token, '}'))
@@ -118,38 +118,44 @@ function getFix(first, rest, sourceCode) {
       ['', !firstHasTrailingComma && !firstIsEmpty]
     )
 
+    const fixes = []
+
     if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import def, {...} from './foo'`
-      yield fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
+      fixes.push(
+        fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
+      )
     } else if (shouldAddDefault && openBrace == null && !shouldAddSpecifiers) {
       // `import './foo'` → `import def from './foo'`
-      yield fixer.insertTextAfter(firstToken, ` ${defaultImportName} from`)
+      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName} from`))
     } else if (shouldAddDefault && openBrace != null && closeBrace != null) {
       // `import {...} from './foo'` → `import def, {...} from './foo'`
-      yield fixer.insertTextAfter(firstToken, ` ${defaultImportName},`)
+      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName},`))
       if (shouldAddSpecifiers) {
         // `import def, {...} from './foo'` → `import def, {..., ...} from './foo'`
-        yield fixer.insertTextBefore(closeBrace, specifiersText)
+        fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
       }
     } else if (!shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import {...} from './foo'`
-      yield fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`)
+      fixes.push(fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`))
     } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
       // `import {...} './foo'` → `import {..., ...} from './foo'`
-      yield fixer.insertTextBefore(closeBrace, specifiersText)
+      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
     }
 
     // Remove imports whose specifiers have been moved into the first import.
     for (const specifier of specifiers) {
-      yield fixer.remove(specifier.importNode)
+      fixes.push(fixer.remove(specifier.importNode))
     }
 
     // Remove imports whose default import has been moved to the first import,
     // and side-effect-only imports that are unnecessary due to the first
     // import.
     for (const node of unnecessaryImports) {
-      yield fixer.remove(node)
+      fixes.push(fixer.remove(node))
     }
+
+    return fixes
   }
 }
 
