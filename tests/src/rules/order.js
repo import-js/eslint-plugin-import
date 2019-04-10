@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, testVersion } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -1276,5 +1276,21 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     }),
-  ],
+    // fix incorrect order with @typescript-eslint/parser
+    testVersion('>5.0.0', {
+      code: `
+        var async = require('async');
+        var fs = require('fs');
+      `,
+      output: `
+        var fs = require('fs');
+        var async = require('async');
+      `,
+      parser: '@typescript-eslint/parser',
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+  ].filter((t) => !!t),
 })

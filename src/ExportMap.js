@@ -465,6 +465,7 @@ ExportMap.parse = function (path, content, context) {
           case 'TypeAlias': // flowtype with babel-eslint parser
           case 'InterfaceDeclaration':
           case 'TSEnumDeclaration':
+          case 'TSTypeAliasDeclaration':
           case 'TSInterfaceDeclaration':
           case 'TSAbstractClassDeclaration':
           case 'TSModuleDeclaration':

@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
+    "@typescript-eslint/parser": "^1.5.0",
     "babel-eslint": "^8.2.6",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-preset-es2015-argon": "latest",
@@ -67,9 +68,10 @@
     "nyc": "^11.9.0",
     "redux": "^3.7.2",
     "rimraf": "^2.6.3",
+    "semver": "^6.0.0",
     "sinon": "^2.4.1",
     "typescript": "^3.2.2",
-    "typescript-eslint-parser": "^21.0.2"
+    "typescript-eslint-parser": "^22.0.0"
   },
   "peerDependencies": {
     "eslint": "2.x - 5.x"
