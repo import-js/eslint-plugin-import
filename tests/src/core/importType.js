@@ -7,6 +7,7 @@ import { testContext } from '../utils'
 
 describe('importType(name)', function () {
   const context = testContext()
+  const pathToTestFiles = path.join(__dirname, '..', '..', 'files')
 
   it("should return 'absolute' for paths starting with a /", function() {
     expect(importType('/', context)).to.equal('absolute')
@@ -42,18 +43,34 @@ describe('importType(name)', function () {
   })
 
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
-    const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
+    const pathContext = testContext({ "import/resolver": { node: { paths: [pathToTestFiles] } } })
     expect(importType('importType', pathContext)).to.equal('internal')
   })
 
   it.skip("should return 'internal' for scoped packages resolved outside of node_modules", function () {
-    const pathContext = testContext({ "import/resolver": { node: { paths: [ path.join(__dirname, '..', '..', 'files') ] } } })
+    const pathContext = testContext({ "import/resolver": { node: { paths: [pathToTestFiles] } } })
     expect(importType('@importType/index', pathContext)).to.equal('internal')
   })
     
   it("should return 'internal' for internal modules that are referenced by aliases", function () {
-    const pathContext = testContext({ 'import/resolver': { node: { paths: [path.join(__dirname, '..', '..', 'files')] } } })
+    const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('@my-alias/fn', pathContext)).to.equal('internal')
+  })
+
+  it("should return 'internal' for aliased internal modules that look like core modules (node resolver)", function () {
+    const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
+    expect(importType('constants/index', pathContext)).to.equal('internal')
+    expect(importType('constants/', pathContext)).to.equal('internal')
+    // resolves exact core modules over internal modules
+    expect(importType('constants', pathContext)).to.equal('builtin')
+  })
+
+  it("should return 'internal' for aliased internal modules that look like core modules (webpack resolver)", function () {
+    const webpackConfig = { resolve: { modules: [pathToTestFiles, 'node_modules'] } }
+    const pathContext = testContext({ 'import/resolver': { webpack: { config: webpackConfig } } })
+    expect(importType('constants/index', pathContext)).to.equal('internal')
+    expect(importType('constants/', pathContext)).to.equal('internal')
+    expect(importType('constants', pathContext)).to.equal('internal')
   })
 
   it("should return 'parent' for internal modules that go through the parent", function() {
