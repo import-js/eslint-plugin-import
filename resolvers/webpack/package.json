@@ -38,7 +38,7 @@
     "interpret": "^1.0.0",
     "lodash": "^4.17.4",
     "node-libs-browser": "^1.0.0 || ^2.0.0",
-    "resolve": "^1.4.0",
+    "resolve": "^1.10.0",
     "semver": "^5.3.0"
   },
   "peerDependencies": {
