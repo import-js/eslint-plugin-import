@@ -139,7 +139,7 @@ context('Typescript', function () {
             export const Foo = 1;
             export interface Foo {}
           `,
-        }, parserConfig),
+        }, parserConfig))),
       ],
       invalid: [],
     })
