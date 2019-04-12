@@ -126,21 +126,25 @@ context('Typescript', function () {
       },
     }
 
+    const isLT4 = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2';
+    const valid = [
+      test(Object.assign({
+        code: `
+          export const Foo = 1;
+          export interface Foo {}
+        `,
+      }, parserConfig)),
+    ]
+    if (!isLT4) {
+      valid.unshift(test(Object.assign({
+        code: `
+          export const Foo = 1;
+          export type Foo = number;
+        `,
+      }, parserConfig)))
+    }
     ruleTester.run('export', rule, {
-      valid: [
-        test(Object.assign({
-          code: `
-            export const Foo = 1;
-            export type Foo = number;
-          `,
-        }, parserConfig),
-        test(Object.assign({
-          code: `
-            export const Foo = 1;
-            export interface Foo {}
-          `,
-        }, parserConfig))),
-      ],
+      valid: valid,
       invalid: [],
     })
   })
