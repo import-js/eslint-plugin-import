@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.11.1 - 2019-04-13
+
+### Fixed
+- [fix] match coreLibs after resolveSync in webpack-resolver ([#1297])
 
 ## 0.11.0 - 2018-01-22
 
@@ -113,6 +117,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#1297]: https://github.com/benmosher/eslint-plugin-import/pull/1297
 [#1261]: https://github.com/benmosher/eslint-plugin-import/pull/1261
 [#1220]: https://github.com/benmosher/eslint-plugin-import/pull/1220
 [#1091]: https://github.com/benmosher/eslint-plugin-import/pull/1091
