@@ -126,26 +126,154 @@ context('Typescript', function () {
       },
     }
 
-    const isLT4 = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2';
-    const valid = [
-      test(Object.assign({
-        code: `
-          export const Foo = 1;
-          export interface Foo {}
-        `,
-      }, parserConfig)),
-    ]
-    if (!isLT4) {
-      valid.unshift(test(Object.assign({
-        code: `
-          export const Foo = 1;
-          export type Foo = number;
-        `,
-      }, parserConfig)))
-    }
     ruleTester.run('export', rule, {
-      valid: valid,
-      invalid: [],
+      valid: [
+        // type/value name clash
+        test(Object.assign({
+          code: `
+            export const Foo = 1;
+            export type Foo = number;
+          `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            export const Foo = 1;
+            export interface Foo {}
+          `,
+        }, parserConfig)),
+
+        // namespace
+        test(Object.assign({
+          code: `
+            export const Bar = 1;
+            export namespace Foo {
+              export const Bar = 1;
+            }
+          `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            export type Bar = string;
+            export namespace Foo {
+              export type Bar = string;
+            }
+          `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            export const Bar = 1;
+            export type Bar = string;
+            export namespace Foo {
+              export const Bar = 1;
+              export type Bar = string;
+            }
+          `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            export namespace Foo {
+              export const Foo = 1;
+              export namespace Bar {
+                export const Foo = 2;
+              }
+              export namespace Baz {
+                export const Foo = 3;
+              }
+            }
+          `,
+        }, parserConfig)),
+      ],
+      invalid: [
+        // type/value name clash
+        test(Object.assign({
+          code: `
+            export type Foo = string;
+            export type Foo = number;
+          `,
+          errors: [
+            {
+              message: `Multiple exports of name 'Foo'.`,
+              line: 2,
+            },
+            {
+              message: `Multiple exports of name 'Foo'.`,
+              line: 3,
+            },
+          ],
+        }, parserConfig)),
+
+        // namespace
+        test(Object.assign({
+          code: `
+            export const a = 1
+            export namespace Foo {
+              export const a = 2;
+              export const a = 3;
+            }
+          `,
+          errors: [
+            {
+              message: `Multiple exports of name 'a'.`,
+              line: 4,
+            },
+            {
+              message: `Multiple exports of name 'a'.`,
+              line: 5,
+            },
+          ],
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            declare module 'foo' {
+              const Foo = 1;
+              export default Foo;
+              export default Foo;
+            }
+          `,
+          errors: [
+            {
+              message: 'Multiple default exports.',
+              line: 4,
+            },
+            {
+              message: 'Multiple default exports.',
+              line: 5,
+            },
+          ],
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            export namespace Foo {
+              export namespace Bar {
+                export const Foo = 1;
+                export const Foo = 2;
+              }
+              export namespace Baz {
+                export const Bar = 3;
+                export const Bar = 4;
+              }
+            }
+          `,
+          errors: [
+            {
+              message: `Multiple exports of name 'Foo'.`,
+              line: 4,
+            },
+            {
+              message: `Multiple exports of name 'Foo'.`,
+              line: 5,
+            },
+            {
+              message: `Multiple exports of name 'Bar'.`,
+              line: 8,
+            },
+            {
+              message: `Multiple exports of name 'Bar'.`,
+              line: 9,
+            },
+          ],
+        }, parserConfig)),
+      ],
     })
   })
 })
