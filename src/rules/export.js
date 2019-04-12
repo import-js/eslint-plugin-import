@@ -1,5 +1,6 @@
 import ExportMap, { recursivePatternCapture } from '../ExportMap'
 import docsUrl from '../docsUrl'
+import includes from 'array-includes'
 
 module.exports = {
   meta: {
@@ -12,12 +13,13 @@ module.exports = {
   create: function (context) {
     const named = new Map()
 
-    function addNamed(name, node) {
-      let nodes = named.get(name)
+    function addNamed(name, node, type) {
+      const key = type ? `${type}:${name}` : name
+      let nodes = named.get(key)
 
       if (nodes == null) {
         nodes = new Set()
-        named.set(name, nodes)
+        named.set(key, nodes)
       }
 
       nodes.add(node)
@@ -34,7 +36,14 @@ module.exports = {
         if (node.declaration == null) return
 
         if (node.declaration.id != null) {
-          addNamed(node.declaration.id.name, node.declaration.id)
+          if (includes([
+            'TSTypeAliasDeclaration',
+            'TSInterfaceDeclaration',
+          ], node.declaration.type)) {
+            addNamed(node.declaration.id.name, node.declaration.id, 'type')
+          } else {
+            addNamed(node.declaration.id.name, node.declaration.id)
+          }
         }
 
         if (node.declaration.declarations != null) {

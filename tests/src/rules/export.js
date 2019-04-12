@@ -1,6 +1,7 @@
 import { test, SYNTAX_CASES } from '../utils'
 
-import { RuleTester } from 'eslint'
+import { RuleTester, linter } from 'eslint'
+import semver from 'semver'
 
 var ruleTester = new RuleTester()
   , rule = require('rules/export')
@@ -105,4 +106,42 @@ ruleTester.run('export', rule, {
       errors: [`No named exports found in module './default-export'.`],
     }),
   ],
+})
+
+
+context('Typescript', function () {
+  // Typescript
+  const parsers = ['typescript-eslint-parser']
+
+  if (semver.satisfies(linter.version, '>5.0.0')) {
+    parsers.push('@typescript-eslint/parser')
+  }
+
+  parsers.forEach((parser) => {
+    const parserConfig = {
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }
+
+    ruleTester.run('export', rule, {
+      valid: [
+        test(Object.assign({
+          code: `
+            export const Foo = 1;
+            export type Foo = number;
+          `,
+        }, parserConfig),
+        test(Object.assign({
+          code: `
+            export const Foo = 1;
+            export interface Foo {}
+          `,
+        }, parserConfig),
+      ],
+      invalid: [],
+    })
+  })
 })

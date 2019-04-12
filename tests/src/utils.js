@@ -12,7 +12,7 @@ export function testFilePath(relativePath) {
 export const FILENAME = testFilePath('foo.js')
 
 export function testVersion(specifier, t) {
-  return semver.satisfies(linter.version) && test(t)
+  return semver.satisfies(linter.version, specifier) && test(t)
 }
 
 export function test(t) {
