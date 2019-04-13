@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.17.1] - 2019-04-13
+
+### Fixed
+- require v2.4 of `eslint-module-utils` ([#1322])
+
 ## [2.17.0] - 2019-04-13
 
 ### Added
@@ -648,6 +653,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
+[#1322]: https://github.com/benmosher/eslint-plugin-import/issues/1322
 [#1300]: https://github.com/benmosher/eslint-plugin-import/issues/1300
 [#1293]: https://github.com/benmosher/eslint-plugin-import/issues/1293
 [#1266]: https://github.com/benmosher/eslint-plugin-import/issues/1266
