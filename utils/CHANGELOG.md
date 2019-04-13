@@ -5,6 +5,15 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.4.0 - 2019-04-13
+
+### Added
+ - no-useless-path-segments: Add noUselessIndex option ([#1290], thanks [@timkraut])
+
+### Fixed
+ - Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
+
+
 ## v2.3.0 - 2019-01-22
 ### Fixed
 - use `process.hrtime()` for cache dates ([#1160], thanks [@hulkish])
@@ -37,6 +46,12 @@ Yanked due to critical issue with cache key resulting from #839.
 
 
 
+[#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
+[#1218]: https://github.com/benmosher/eslint-plugin-import/pull/1218
+[#1166]: https://github.com/benmosher/eslint-plugin-import/issues/1166
 [#1160]: https://github.com/benmosher/eslint-plugin-import/pull/1160
+[#1035]: https://github.com/benmosher/eslint-plugin-import/issues/1035
 
 [@hulkish]: https://github.com/hulkish
+[@timkraut]: https://github.com/timkraut
+[@vikr01]: https://github.com/vikr01
