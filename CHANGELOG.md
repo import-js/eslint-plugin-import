@@ -4,11 +4,33 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [2.17.0] - 2019-04-13
+
 ### Added
 - Autofixer for [`no-duplicates`] rule ([#1312], thanks [@lydell])
+- [`no-useless-path-segments`]: Add `noUselessIndex` option ([#1290], thanks [@timkraut])
+- [`no-duplicates`]: Add autofix ([#1312], thanks [@lydell])
+- Add [`no-unused-modules`] rule ([#1142], thanks [@rfermann])
+- support export type named exports from typescript ([#1304], thanks [@bradennapier] and [@schmod])
 
 ### Fixed
 - [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
+- allow aliases that start with @ to be "internal" ([#1293], [#1294], thanks [@jeffshaver])
+- aliased internal modules that look like core modules ([#1297], thanks [@echenley])
+- [`namespace`]: add check for null ExportMap ([#1235], [#1144], thanks [@ljqx])
+- [ExportMap] fix condition for checking if block comment ([#1234], [#1233], thanks [@ljqx])
+- Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
+- [`export`]: false positives for typescript type + value export ([#1319], thanks [@bradzacher])
+- [`export`]: Support typescript namespaces ([#1320], [#1300], thanks [@bradzacher])
+
+### Docs
+- Update readme for Typescript ([#1256], [#1277], thanks [@kirill-konshin])
+- make rule names consistent ([#1112], thanks [@feychenie])
+
+### Tests
+- fix broken tests on master ([#1295], thanks [@jeffshaver] and [@ljharb])
+- [`no-commonjs`]: add tests that show corner cases ([#1308], thanks [@TakeScoop])
 
 
 ## [2.16.0] - 2019-01-29
@@ -477,73 +499,89 @@ for info on changes for earlier releases.
 [`import/core-modules` setting]: ./README.md#importcore-modules
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 
-[`no-unresolved`]: ./docs/rules/no-unresolved.md
-[`no-deprecated`]: ./docs/rules/no-deprecated.md
-[`no-commonjs`]: ./docs/rules/no-commonjs.md
-[`no-amd`]: ./docs/rules/no-amd.md
-[`namespace`]: ./docs/rules/namespace.md
-[`no-namespace`]: ./docs/rules/no-namespace.md
-[`no-named-default`]: ./docs/rules/no-named-default.md
-[`no-named-as-default`]: ./docs/rules/no-named-as-default.md
-[`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
-[`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`default`]: ./docs/rules/default.md
+[`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
+[`export`]: ./docs/rules/export.md
+[`exports-last`]: ./docs/rules/exports-last.md
 [`extensions`]: ./docs/rules/extensions.md
 [`first`]: ./docs/rules/first.md
-[`imports-first`]: ./docs/rules/first.md
-[`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
-[`order`]: ./docs/rules/order.md
-[`named`]: ./docs/rules/named.md
-[`default`]: ./docs/rules/default.md
-[`export`]: ./docs/rules/export.md
-[`newline-after-import`]: ./docs/rules/newline-after-import.md
-[`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
-[`prefer-default-export`]: ./docs/rules/prefer-default-export.md
-[`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
-[`no-absolute-path`]: ./docs/rules/no-absolute-path.md
-[`max-dependencies`]: ./docs/rules/max-dependencies.md
-[`no-internal-modules`]: ./docs/rules/no-internal-modules.md
-[`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
-[`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
-[`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
-[`unambiguous`]: ./docs/rules/unambiguous.md
-[`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
-[`exports-last`]: ./docs/rules/exports-last.md
 [`group-exports`]: ./docs/rules/group-exports.md
-[`no-self-import`]: ./docs/rules/no-self-import.md
-[`no-default-export`]: ./docs/rules/no-default-export.md
-[`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
+[`imports-first`]: ./docs/rules/first.md
+[`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`named`]: ./docs/rules/named.md
+[`namespace`]: ./docs/rules/namespace.md
+[`newline-after-import`]: ./docs/rules/newline-after-import.md
+[`no-absolute-path`]: ./docs/rules/no-absolute-path.md
+[`no-amd`]: ./docs/rules/no-amd.md
+[`no-anonymous-default-export`]: ./docs/rules/no-anonymous-default-export.md
+[`no-commonjs`]: ./docs/rules/no-commonjs.md
 [`no-cycle`]: ./docs/rules/no-cycle.md
-[`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
-[`no-named-export`]: ./docs/rules/no-named-export.md
+[`no-default-export`]: ./docs/rules/no-default-export.md
+[`no-deprecated`]: ./docs/rules/no-deprecated.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
+[`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
+[`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
+[`no-internal-modules`]: ./docs/rules/no-internal-modules.md
+[`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
+[`no-named-as-default-member`]: ./docs/rules/no-named-as-default-member.md
+[`no-named-as-default`]: ./docs/rules/no-named-as-default.md
+[`no-named-default`]: ./docs/rules/no-named-default.md
+[`no-named-export`]: ./docs/rules/no-named-export.md
+[`no-namespace`]: ./docs/rules/no-namespace.md
+[`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
+[`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`no-self-import`]: ./docs/rules/no-self-import.md
+[`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
+[`no-unresolved`]: ./docs/rules/no-unresolved.md
+[`no-unused-modules`]: ./docs/rules/no-unused-modules.md
+[`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
+[`no-webpack-loader-syntax`]: ./docs/rules/no-webpack-loader-syntax.md
+[`order`]: ./docs/rules/order.md
+[`prefer-default-export`]: ./docs/rules/prefer-default-export.md
+[`unambiguous`]: ./docs/rules/unambiguous.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1320]: https://github.com/benmosher/eslint-plugin-import/pull/1320
+[#1319]: https://github.com/benmosher/eslint-plugin-import/pull/1319
 [#1312]: https://github.com/benmosher/eslint-plugin-import/pull/1312
+[#1308]: https://github.com/benmosher/eslint-plugin-import/pull/1308
+[#1304]: https://github.com/benmosher/eslint-plugin-import/pull/1304
+[#1297]: https://github.com/benmosher/eslint-plugin-import/pull/1297
+[#1295]: https://github.com/benmosher/eslint-plugin-import/pull/1295
+[#1294]: https://github.com/benmosher/eslint-plugin-import/pull/1294
+[#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
+[#1277]: https://github.com/benmosher/eslint-plugin-import/pull/1277
 [#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
+[#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
+[#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
 [#1232]: https://github.com/benmosher/eslint-plugin-import/pull/1232
+[#1218]: https://github.com/benmosher/eslint-plugin-import/pull/1218
 [#1176]: https://github.com/benmosher/eslint-plugin-import/pull/1176
 [#1163]: https://github.com/benmosher/eslint-plugin-import/pull/1163
 [#1157]: https://github.com/benmosher/eslint-plugin-import/pull/1157
 [#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
+[#1142]: https://github.com/benmosher/eslint-plugin-import/pull/1142
 [#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
 [#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
 [#1128]: https://github.com/benmosher/eslint-plugin-import/pull/1128
 [#1126]: https://github.com/benmosher/eslint-plugin-import/pull/1126
 [#1122]: https://github.com/benmosher/eslint-plugin-import/pull/1122
+[#1112]: https://github.com/benmosher/eslint-plugin-import/pull/1112
 [#1106]: https://github.com/benmosher/eslint-plugin-import/pull/1106
 [#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
+[#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 [#908]: https://github.com/benmosher/eslint-plugin-import/pull/908
 [#891]: https://github.com/benmosher/eslint-plugin-import/pull/891
 [#889]: https://github.com/benmosher/eslint-plugin-import/pull/889
 [#880]: https://github.com/benmosher/eslint-plugin-import/pull/880
+[#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#858]: https://github.com/benmosher/eslint-plugin-import/pull/858
 [#843]: https://github.com/benmosher/eslint-plugin-import/pull/843
-[#871]: https://github.com/benmosher/eslint-plugin-import/pull/871
 [#797]: https://github.com/benmosher/eslint-plugin-import/pull/797
 [#794]: https://github.com/benmosher/eslint-plugin-import/pull/794
 [#744]: https://github.com/benmosher/eslint-plugin-import/pull/744
@@ -586,6 +624,7 @@ for info on changes for earlier releases.
 [#322]: https://github.com/benmosher/eslint-plugin-import/pull/322
 [#321]: https://github.com/benmosher/eslint-plugin-import/pull/321
 [#316]: https://github.com/benmosher/eslint-plugin-import/pull/316
+[#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
 [#308]: https://github.com/benmosher/eslint-plugin-import/pull/308
 [#298]: https://github.com/benmosher/eslint-plugin-import/pull/298
 [#297]: https://github.com/benmosher/eslint-plugin-import/pull/297
@@ -608,22 +647,27 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
-[#314]: https://github.com/benmosher/eslint-plugin-import/pull/314
-[#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
 
+[#1300]: https://github.com/benmosher/eslint-plugin-import/issues/1300
+[#1293]: https://github.com/benmosher/eslint-plugin-import/issues/1293
 [#1266]: https://github.com/benmosher/eslint-plugin-import/issues/1266
+[#1256]: https://github.com/benmosher/eslint-plugin-import/issues/1256
+[#1233]: https://github.com/benmosher/eslint-plugin-import/issues/1233
 [#1175]: https://github.com/benmosher/eslint-plugin-import/issues/1175
+[#1166]: https://github.com/benmosher/eslint-plugin-import/issues/1166
+[#1144]: https://github.com/benmosher/eslint-plugin-import/issues/1144
 [#1058]: https://github.com/benmosher/eslint-plugin-import/issues/1058
+[#1035]: https://github.com/benmosher/eslint-plugin-import/issues/1035
 [#931]: https://github.com/benmosher/eslint-plugin-import/issues/931
 [#886]: https://github.com/benmosher/eslint-plugin-import/issues/886
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#717]: https://github.com/benmosher/eslint-plugin-import/issues/717
 [#686]: https://github.com/benmosher/eslint-plugin-import/issues/686
 [#671]: https://github.com/benmosher/eslint-plugin-import/issues/671
-[#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
 [#660]: https://github.com/benmosher/eslint-plugin-import/issues/660
 [#653]: https://github.com/benmosher/eslint-plugin-import/issues/653
 [#627]: https://github.com/benmosher/eslint-plugin-import/issues/627
@@ -683,7 +727,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.16.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.17.0...HEAD
+[2.17.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.16.0...v2.17.0
 [2.16.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.15.0...v2.16.0
 [2.15.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.14.0...v2.15.0
 [2.14.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.13.0...v2.14.0
@@ -815,3 +860,13 @@ for info on changes for earlier releases.
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@ephys]: https://github.com/ephys
 [@lydell]: https://github.com/lydell
+[@jeffshaver]: https://github.com/jeffshaver
+[@timkraut]: https://github.com/timkraut
+[@TakeScoop]: https://github.com/TakeScoop
+[@rfermann]: https://github.com/rfermann
+[@bradennapier]: https://github.com/bradennapier
+[@schmod]: https://github.com/schmod
+[@echenley]: https://github.com/echenley
+[@vikr01]: https://github.com/vikr01
+[@bradzacher]: https://github.com/bradzacher
+[@feychenie]: https://github.com/feychenie
