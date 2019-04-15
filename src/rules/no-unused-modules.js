@@ -261,7 +261,7 @@ module.exports = {
       ignoreExports = [],
       missingExports,
       unusedExports,
-    } = context.options[0]
+    } = context.options[0] || {}
 
     if (unusedExports && !preparationDone) {
       doPreparation(src, ignoreExports, context)
