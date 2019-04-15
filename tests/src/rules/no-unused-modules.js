@@ -22,6 +22,7 @@ const unusedExportsOptions = [{
 // tests for missing exports
 ruleTester.run('no-unused-modules', rule, {
   valid: [
+    test({ code: 'export default function noOptions() {}' }),
     test({ options: missingExportsOptions,
            code: 'export default () => 1'}),
     test({ options: missingExportsOptions,
