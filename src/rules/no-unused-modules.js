@@ -274,6 +274,10 @@ module.exports = {
         return
       }
 
+      if (ignoredFiles.has(file)) {
+        return
+      }
+
       const exportCount = exportList.get(file)
       const exportAll = exportCount.get(EXPORT_ALL_DECLARATION)
       const namespaceImports = exportCount.get(IMPORT_NAMESPACE_SPECIFIER)

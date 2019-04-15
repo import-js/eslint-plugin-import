@@ -549,3 +549,18 @@ describe('test behaviour for new file', () => {
     }
   })
 })
+
+describe('do not report missing export for ignored file', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: [{
+               src: [testFilePath('./no-unused-modules/**/*.js')],
+               ignoreExports: [testFilePath('./no-unused-modules/*ignored*.js')],
+               missingExports: true
+              }],
+             code: 'export const test = true',
+             filename: testFilePath('./no-unused-modules/file-ignored-a.js')}),
+    ],
+    invalid: [],
+  })
+})
