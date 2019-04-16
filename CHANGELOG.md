@@ -5,6 +5,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.17.2] - 2019-04-16
+
+### Fixed
+- [`no-unused-modules`]: avoid crash when using `ignoreExports`-option ([#1331], [#1323], thanks [@rfermann])
+- [`no-unused-modules`]: make sure that rule with no options will not fail ([#1330], [#1334], thanks [@kiwka])
+
 ## [2.17.1] - 2019-04-13
 
 ### Fixed
@@ -547,6 +553,8 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1331]: https://github.com/benmosher/eslint-plugin-import/pull/1331
+[#1330]: https://github.com/benmosher/eslint-plugin-import/pull/1330
 [#1320]: https://github.com/benmosher/eslint-plugin-import/pull/1320
 [#1319]: https://github.com/benmosher/eslint-plugin-import/pull/1319
 [#1312]: https://github.com/benmosher/eslint-plugin-import/pull/1312
@@ -653,6 +661,8 @@ for info on changes for earlier releases.
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
 
+[#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
+[#1323]: https://github.com/benmosher/eslint-plugin-import/issues/1323
 [#1322]: https://github.com/benmosher/eslint-plugin-import/issues/1322
 [#1300]: https://github.com/benmosher/eslint-plugin-import/issues/1300
 [#1293]: https://github.com/benmosher/eslint-plugin-import/issues/1293
@@ -876,3 +886,4 @@ for info on changes for earlier releases.
 [@vikr01]: https://github.com/vikr01
 [@bradzacher]: https://github.com/bradzacher
 [@feychenie]: https://github.com/feychenie
+[@kiwka]: https://github.com/kiwka
