@@ -462,7 +462,7 @@ module.exports = {
         // support for export { value } from 'module'
         if (astNode.type === EXPORT_NAMED_DECLARATION) {
           if (astNode.source) {
-            resolvedPath = resolve(astNode.source.value, context)
+            resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context)
             astNode.specifiers.forEach(specifier => {
               let name
               if (specifier.exported.name === DEFAULT) {
@@ -476,12 +476,12 @@ module.exports = {
         }
 
         if (astNode.type === EXPORT_ALL_DECLARATION) {
-          resolvedPath = resolve(astNode.source.value, context)
+          resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context)
           newExportAll.add(resolvedPath)
         }
 
         if (astNode.type === IMPORT_DECLARATION) {
-          resolvedPath = resolve(astNode.source.value, context)       
+          resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context)
           if (!resolvedPath) {
             return
           }
