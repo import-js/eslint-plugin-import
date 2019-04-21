@@ -503,7 +503,7 @@ module.exports = {
                 specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
               return
             }
-            newImports.set(specifier.local.name, resolvedPath)
+            newImports.set(specifier.imported.name, resolvedPath)
           })
         }
       })

@@ -254,6 +254,34 @@ ruleTester.run('no-unused-modules', rule, {
   ],
 })
 
+// add renamed named import for file with named export
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+           code: `import { g as g1 } from '${testFilePath('./no-unused-modules/file-g.js')}'; import eslint from 'eslint'`,
+           filename: testFilePath('./no-unused-modules/file-0.js')}),
+    test({ options: unusedExportsOptions,
+            code: 'export const g = 2',
+            filename: testFilePath('./no-unused-modules/file-g.js')}),
+    ],
+  invalid: [],
+})
+
+// add different renamed named import for file with named export
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+           code: `import { g1 as g } from '${testFilePath('./no-unused-modules/file-g.js')}'`,
+           filename: testFilePath('./no-unused-modules/file-0.js')}),
+  ],
+  invalid: [
+    test({ options: unusedExportsOptions,
+           code: 'export const g = 2',
+           filename: testFilePath('./no-unused-modules/file-g.js'),
+           errors: [error(`exported declaration 'g' not used within other modules`)]}),
+  ],
+})
+
 // remove default import for file with default export
 ruleTester.run('no-unused-modules', rule, {
   valid: [
@@ -556,7 +584,7 @@ describe('do not report missing export for ignored file', () => {
       test({ options: [{
                src: [testFilePath('./no-unused-modules/**/*.js')],
                ignoreExports: [testFilePath('./no-unused-modules/*ignored*.js')],
-               missingExports: true
+               missingExports: true,
               }],
              code: 'export const test = true',
              filename: testFilePath('./no-unused-modules/file-ignored-a.js')}),
