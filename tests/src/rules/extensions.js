@@ -7,6 +7,7 @@ const ruleTester = new RuleTester()
 ruleTester.run('extensions', rule, {
   valid: [
     test({ code: 'import a from "a"' }),
+    test({ code: 'import a from "asn1.js"' }),
     test({ code: 'import dot from "./file.with.dot"' }),
     test({
       code: 'import a from "a/index.js"',
@@ -118,6 +119,27 @@ ruleTester.run('extensions', rule, {
     }),
 
     test({
+      code: 'const a = require("a")',
+      options: [ {commonjs: true} ],
+    }),
+    test({
+      code: 'const a = require("asn1.js")',
+      options: [ {commonjs: true} ],
+    }),
+    test({
+      code: 'const dot = require("./file.with.dot")',
+      options: [ {commonjs: true} ],
+    }),
+    test({
+      code: 'const a = require("a/index.js")',
+      options: [ 'always', {commonjs: true} ],
+    }),
+    test({
+      code: 'const dot = require("./file.with.dot.js")',
+      options: [ 'always', {commonjs: true} ],
+    }),
+
+    test({
       code: `
         const foo = require('./foo.js')
         const bar = require('./bar.json')
@@ -143,6 +165,14 @@ ruleTester.run('extensions', rule, {
       code: 'import a from "a/index.js"',
       errors: [ {
         message: 'Unexpected use of file extension "js" for "a/index.js"',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import a from "asn1.js/index.js"',
+      errors: [ {
+        message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
         line: 1,
         column: 15,
       } ],
@@ -376,6 +406,45 @@ ruleTester.run('extensions', rule, {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
           line: 1,
           column: 21,
+        },
+      ],
+    }),
+
+    test({
+      code: 'const a = require ("a/index.js")',
+      options: [ {commonjs: true} ],
+      errors: [ {
+        message: 'Unexpected use of file extension "js" for "a/index.js"',
+        line: 1,
+        column: 11,
+      } ],
+    }),
+    test({
+      code: 'const a = require ("asn1.js/index.js")',
+      options: [ {commonjs: true} ],
+      errors: [ {
+        message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
+        line: 1,
+        column: 11,
+      } ],
+    }),
+    test({
+      code: 'const a = require("a")',
+      options: [ 'always', {commonjs: true} ],
+      errors: [ {
+        message: 'Missing file extension "js" for "a"',
+        line: 1,
+        column: 11,
+      } ],
+    }),
+    test({
+      code: 'const dot = require("./file.with.dot")',
+      options: [ 'always', {commonjs: true} ],
+      errors: [
+        {
+          message: 'Missing file extension "js" for "./file.with.dot"',
+          line: 1,
+          column: 13,
         },
       ],
     }),
