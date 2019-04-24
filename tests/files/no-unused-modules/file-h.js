@@ -4,4 +4,6 @@ function h2() {
   return 3
 }
 
-export { h1, h2 }
+const h3 = true
+
+export { h1, h2, h3 }
