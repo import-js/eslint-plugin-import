@@ -2,6 +2,7 @@ import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
+import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
@@ -23,6 +24,7 @@ function buildProperties(context) {
       defaultConfig: 'never',
       pattern: {},
       ignorePackages: false,
+      commonjs: false,
     }
 
     context.options.forEach(obj => {
@@ -47,6 +49,11 @@ function buildProperties(context) {
       // If ignorePackages is provided, transfer it to result
       if (obj.ignorePackages !== undefined) {
         result.ignorePackages = obj.ignorePackages
+      }
+
+      // If commonjs is provided, transfer it to result
+      if (obj.commonjs !== undefined) {
+        result.commonjs = obj.commonjs
       }
     })
 
@@ -121,14 +128,7 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context)
     }
 
-    function checkFileExtension(node) {
-      const { source } = node
-
-      // bail if the declaration doesn't have a source, e.g. "export { foo };"
-      if (!source) return
-
-      const importPath = source.value
-
+    function checkFileExtension(importPath, node) {
       // don't enforce anything on builtins
       if (isBuiltIn(importPath, context.settings)) return
 
@@ -147,7 +147,7 @@ module.exports = {
         const extensionForbidden = isUseOfExtensionForbidden(extension)
         if (extensionRequired && !extensionForbidden) {
           context.report({
-            node: source,
+            node,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPath}"`,
           })
@@ -155,16 +155,38 @@ module.exports = {
       } else if (extension) {
         if (isUseOfExtensionForbidden(extension) && isResolvableWithoutExtension(importPath)) {
           context.report({
-            node: source,
+            node,
             message: `Unexpected use of file extension "${extension}" for "${importPath}"`,
           })
         }
       }
     }
 
+    function checkImportFileExtension(node) {
+      const { source } = node
+
+      // bail if the declaration doesn't have a source, e.g. "export { foo };"
+      if (!source) return
+
+      const importPath = source.value
+
+      checkFileExtension(importPath, source)
+    }
+
+    function checkCommonJSFileExtension(node) {
+      if (!props.commonjs) return
+
+      if (!isStaticRequire(node)) return
+
+      const importPath = node.arguments[0].value
+
+      checkFileExtension(importPath, node)
+    }
+
     return {
-      ImportDeclaration: checkFileExtension,
-      ExportNamedDeclaration: checkFileExtension,
+      ImportDeclaration: checkImportFileExtension,
+      ExportNamedDeclaration: checkImportFileExtension,
+      CallExpression: checkCommonJSFileExtension,
     }
   },
 }
