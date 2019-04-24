@@ -116,6 +116,26 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: [ 'never' ],
     }),
+
+    test({
+      code: `
+        const foo = require('./foo.js')
+        const bar = require('./bar.json')
+        const Component = require('./Component.jsx')
+        const express = require('express')
+      `,
+      options: [ 'always', {commonjs: true, ignorePackages: true} ],
+    }),
+
+    test({
+      code: `
+        const foo = require('./foo')
+        const bar = require('./bar')
+        const Component = require('./Component')
+        const express = require('express')
+      `,
+      options: [ 'never', {commonjs: true, ignorePackages: true} ],
+    }),
   ],
 
   invalid: [
@@ -358,6 +378,49 @@ ruleTester.run('extensions', rule, {
           column: 21,
         },
       ],
+    }),
+
+    test({
+      code: `
+        const foo = require('./foo.js')
+        const bar = require('./bar.json')
+        const Component = require('./Component')
+        const baz = require('foo/baz')
+        const express = require('express')
+      `,
+      options: [ 'always', {commonjs: true, ignorePackages: true} ],
+      errors: [
+        {
+          message: 'Missing file extension for "./Component"',
+          line: 4,
+          column: 27,
+        }, {
+          message: 'Missing file extension for "foo/baz"',
+          line: 5,
+          column: 21,
+        },
+      ],
+    }),
+
+    test({
+      code: `
+        const foo = require('./foo.js')
+        const bar = require('./bar.json')
+        const Component = require('./Component.jsx')
+        const express = require('express')
+      `,
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 2,
+          column: 21,
+        }, {
+          message: 'Unexpected use of file extension "jsx" for "./Component.jsx"',
+          line: 4,
+          column: 27,
+        },
+      ],
+      options: [ 'never', {commonjs: true, ignorePackages: true} ],
     }),
   ],
 })
