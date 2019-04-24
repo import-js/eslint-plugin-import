@@ -36,9 +36,11 @@ function buildProperties(context) {
       }
 
       // If this is not the new structure, transfer all props to result.pattern
-      if (obj.pattern === undefined &&
+      if (
+        obj.pattern === undefined &&
         obj.ignorePackages === undefined &&
-        obj.commonjs === undefined) {
+        obj.commonjs === undefined
+      ) {
         Object.assign(result.pattern, obj)
         return
       }
