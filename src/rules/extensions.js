@@ -174,8 +174,6 @@ module.exports = {
     }
 
     function checkCommonJSFileExtension(node) {
-      if (!props.commonjs) return
-
       if (!isStaticRequire(node)) return
 
       const importPath = node.arguments[0].value
@@ -186,7 +184,7 @@ module.exports = {
     return {
       ImportDeclaration: checkImportFileExtension,
       ExportNamedDeclaration: checkImportFileExtension,
-      CallExpression: checkCommonJSFileExtension,
+      CallExpression: props.commonjs ? checkCommonJSFileExtension : null,
     }
   },
 }
