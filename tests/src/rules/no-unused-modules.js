@@ -592,3 +592,13 @@ describe('do not report missing export for ignored file', () => {
     invalid: [],
   })
 })
+
+// lint file not available in `src`
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+            code: `export const jsxFoo = 'foo'; export const jsxBar = 'bar'`,
+            filename: testFilePath('../jsx/named.jsx')}),
+  ],
+  invalid: [],
+})
