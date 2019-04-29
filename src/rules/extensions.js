@@ -185,10 +185,15 @@ module.exports = {
       checkFileExtension(importPath, node)
     }
 
-    return {
+    const ext = {
       ImportDeclaration: checkImportFileExtension,
       ExportNamedDeclaration: checkImportFileExtension,
-      CallExpression: props.commonjs ? checkCommonJSFileExtension : undefined,
     }
+
+    if (props.commonjs) {
+      ext.CallExpression = checkCommonJSFileExtension
+    }
+
+    return ext
   },
 }
