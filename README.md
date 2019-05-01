@@ -53,6 +53,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
 * Forbid the use of extraneous packages ([`no-extraneous-dependencies`])
 * Forbid the use of mutable exports with `var` or `let`. ([`no-mutable-exports`])
+* Report modules without exports, or exports without matching import in another module ([`no-unused-modules`])
 
 [`export`]: ./docs/rules/export.md
 [`no-named-as-default`]: ./docs/rules/no-named-as-default.md
@@ -60,6 +61,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`no-mutable-exports`]: ./docs/rules/no-mutable-exports.md
+[`no-unused-modules`]: ./docs/rules/no-unused-modules.md
 
 ### Module systems
 

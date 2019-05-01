@@ -8,15 +8,26 @@ Note: dynamic imports are currently not supported.
 
 ## Rule Details
 
+### Usage
+
+In order for this plugin to work, one of the options `missingExports` or `unusedExports` must be enabled (see "Options" section below). In the future, these options will be enabled by default (see https://github.com/benmosher/eslint-plugin-import/issues/1324)
+
+Example: 
+```
+"rules: {
+  ...otherRules,
+  "import/no-unused-modules": [1, {"unusedExports": true}]
+}
+```
 
 ### Options
 
 This rule takes the following option:
 
+- **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
+- **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
 - `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
 - `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package) 
-- `missingExports`: if `true`, files without any exports are reported  
-- `unusedExports`: if `true`, exports without any static usage within other modules are reported.
 
 
 ### Example for missing exports
