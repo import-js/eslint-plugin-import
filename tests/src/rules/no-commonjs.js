@@ -60,6 +60,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
 
     // imports
     { code: 'var x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+    { code: 'x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
     { code: 'require("x")', errors: [ { message: IMPORT_MESSAGE }] },
 
     // exports

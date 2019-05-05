@@ -91,6 +91,7 @@ module.exports = {
         if (
           call.parent.type !== 'ExpressionStatement'
           && call.parent.type !== 'VariableDeclarator'
+          && call.parent.type !== 'AssignmentExpression'
         ) return
 
         if (call.callee.type !== 'Identifier') return
