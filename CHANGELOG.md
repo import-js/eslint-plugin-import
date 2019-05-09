@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 - [`named`]: ignore Flow `typeof` imports and `type` exports ([#1345], thanks [@loganfsmyth])
+- Added new rule [`max-depth`]. ([#1355], thanks [@kwelch])
 
 ## [2.17.2] - 2019-04-16
 
