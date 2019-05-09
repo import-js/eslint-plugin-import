@@ -13,6 +13,8 @@ ruleTester.run('max-depth', rule, {
     test({code: 'import b from "../bar/baz.js"'}),
     test({code: 'const a = require("./foo.js")'}),
     test({code: 'const b = require("../bar/baz.js")'}),
+    test({code: 'import "@scope/foo"'}),
+    test({code: 'import "@scope/bar-baz"'}),
     test({code: 'import "lodash"'}),
     test({code: 'import _ from "lodash"'}),
     test({code: 'const _ = require("lodash")'}),
@@ -53,6 +55,18 @@ ruleTester.run('max-depth', rule, {
         errors: [
           'Import \'lodash/fp/map\' exceeds max nesting depth of 1 (actual: 2).',
         ],
+    }),
+    test({
+      code: 'import "@scope/foo/file"',
+      errors: [
+        'Import \'@scope/foo/file\' exceeds max nesting depth of 0 (actual: 1).',
+      ],
+    }),
+    test({
+      code: 'import "@scope/bar-baz/nested/directory"',
+      errors: [
+        'Import \'@scope/bar-baz/nested/directory\' exceeds max nesting depth of 0 (actual: 2).',
+      ],
     }),
   ],
 })
