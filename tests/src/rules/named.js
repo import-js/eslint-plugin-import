@@ -292,98 +292,100 @@ context('Typescript', function () {
   }
 
   parsers.forEach((parser) => {
-    ruleTester.run('named', rule, {
-      valid: [
-        test({
-          code: 'import { MyType } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: 'import { Foo } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: 'import { Bar } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: 'import { getFoo } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: 'import { MyEnum } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `
-            import { MyModule } from "./typescript"
-            MyModule.ModuleFunction()
-          `,
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `
-            import { MyNamespace } from "./typescript"
-            MyNamespace.NSModule.NSModuleFunction()
-          `,
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-      ],
+    ['typescript', 'typescript-declare', 'typescript-export-assign'].forEach((source) => {
+      ruleTester.run(`named`, rule, {
+        valid: [
+          test({
+            code: `import { MyType } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import { Foo } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import { Bar } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import { getFoo } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import { MyEnum } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `
+              import { MyModule } from "./${source}"
+              MyModule.ModuleFunction()
+            `,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `
+              import { MyNamespace } from "./${source}"
+              MyNamespace.NSModule.NSModuleFunction()
+            `,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+        ],
 
-      invalid: [
-        test({
-          code: 'import { MissingType } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: [{
-            message: "MissingType not found in './typescript'",
-            type: 'Identifier',
-          }],
-        }),
-        test({
-          code: 'import { NotExported } from "./typescript"',
-          parser: parser,
-          settings: {
-            'import/parsers': { [parser]: ['.ts'] },
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: [{
-            message: "NotExported not found in './typescript'",
-            type: 'Identifier',
-          }],
-        }),
-      ],
+        invalid: [
+          test({
+            code: `import { MissingType } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+            errors: [{
+              message: `MissingType not found in './${source}'`,
+              type: 'Identifier',
+            }],
+          }),
+          test({
+            code: `import { NotExported } from "./${source}"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+            errors: [{
+              message: `NotExported not found in './${source}'`,
+              type: 'Identifier',
+            }],
+          }),
+        ],
+      })
     })
   })
 })
