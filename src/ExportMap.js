@@ -464,6 +464,7 @@ ExportMap.parse = function (path, content, context) {
           case 'ClassDeclaration':
           case 'TypeAlias': // flowtype with babel-eslint parser
           case 'InterfaceDeclaration':
+          case 'DeclareFunction':
           case 'TSDeclareFunction':
           case 'TSEnumDeclaration':
           case 'TSTypeAliasDeclaration':
@@ -513,14 +514,20 @@ ExportMap.parse = function (path, content, context) {
 
     // This doesn't declare anything, but changes what's being exported.
     if (n.type === 'TSExportAssignment') {
-      const d = ast.body.find(
-        b => b.type === 'TSModuleDeclaration' && b.id.name === n.expression.name
+      const md = ast.body.find(
+        (b) => b.type === 'TSModuleDeclaration' && b.id.name === n.expression.name
       )
-      if (d && d.body && d.body.body) {
-        d.body.body.forEach(b => {
+      if (md && md.body && md.body.body) {
+        md.body.body.forEach((b) => {
           // Export-assignment exports all members in the namespace, explicitly exported or not.
           const s = b.type === 'ExportNamedDeclaration' ? b.declaration : b
-          m.namespace.set(s.id.name, captureDoc(source, docStyleParsers, b))
+          if (s.type === 'VariableDeclaration') {
+            s.declarations.forEach((d) =>
+              recursivePatternCapture(d.id,
+                id => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n))))
+          } else {
+            m.namespace.set(s.id.name, captureDoc(source, docStyleParsers, b))
+          }
         })
       }
     }
