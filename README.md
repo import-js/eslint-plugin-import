@@ -27,6 +27,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid a module from importing a module with a dependency path back to itself ([`no-cycle`])
 * Prevent unnecessary path segments in import and require statements ([`no-useless-path-segments`])
 * Forbid importing modules from parent directories ([`no-relative-parent-imports`])
+* Forbid modules without any export, and exports not imported by any modules. ([`no-unused-modules`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -41,6 +42,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-cycle`]: ./docs/rules/no-cycle.md
 [`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
 [`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
+[`no-unused-modules`]: ./docs/rules/no-unused-modules.md
 
 ### Helpful warnings
 
