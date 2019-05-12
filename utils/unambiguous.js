@@ -18,7 +18,7 @@ exports.test = function isMaybeUnambiguousModule(content) {
 }
 
 // future-/Babel-proof at the expense of being a little loose
-const unambiguousNodeType = /^(((Exp|Imp)ort.*Declaration)|TSExportAssignment)$/
+const unambiguousNodeType = /^(?:(?:Exp|Imp)ort.*Declaration|TSExportAssignment)$/
 
 /**
  * Given an AST, return true if the AST unambiguously represents a module.
