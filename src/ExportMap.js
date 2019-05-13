@@ -517,8 +517,6 @@ ExportMap.parse = function (path, content, context) {
       const moduleDecl = ast.body.find((bodyNode) =>
         bodyNode.type === 'TSModuleDeclaration' && bodyNode.id.name === n.expression.name
       )
-      log(moduleDecl)
-      log(moduleDecl.body)
       if (moduleDecl && moduleDecl.body && moduleDecl.body.body) {
         moduleDecl.body.body.forEach((moduleBlockNode) => {
           // Export-assignment exports all members in the namespace, explicitly exported or not.
