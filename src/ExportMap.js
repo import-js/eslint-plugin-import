@@ -532,7 +532,8 @@ ExportMap.parse = function (path, content, context) {
               )
             )
           } else {
-            m.namespace.set(exportedDecl.id.name,
+            m.namespace.set(
+              exportedDecl.id.name,
               captureDoc(source, docStyleParsers, moduleBlockNode))
           }
         })
