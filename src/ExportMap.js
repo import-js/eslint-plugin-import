@@ -527,7 +527,8 @@ ExportMap.parse = function (path, content, context) {
           if (exportedDecl.type === 'VariableDeclaration') {
             exportedDecl.declarations.forEach((decl) =>
               recursivePatternCapture(decl.id,(id) => m.namespace.set(
-                id.name, captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
+                id.name,
+                captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
               )
             )
           } else {
