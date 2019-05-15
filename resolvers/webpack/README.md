@@ -66,3 +66,16 @@ settings:
             - .js
             - .jsx
 ```
+
+If your config relies on [environment variables](https://webpack.js.org/guides/environment-variables/), they can be specified using the `env` parameter.  If your config is a function, it will be invoked with the value assigned to `env`:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack:
+      config: 'webpack.config.js'
+      env:
+        NODE_ENV: 'local'
+        production: true
+```
