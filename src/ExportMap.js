@@ -4,7 +4,7 @@ import doctrine from 'doctrine'
 
 import debug from 'debug'
 
-import SourceCode from 'eslint/lib/util/source-code'
+import { SourceCode } from 'eslint'
 
 import parse from 'eslint-module-utils/parse'
 import resolve from 'eslint-module-utils/resolve'

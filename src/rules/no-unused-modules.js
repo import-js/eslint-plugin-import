@@ -1,5 +1,5 @@
 /**
- * @fileOverview Ensures that modules contain exports and/or all 
+ * @fileOverview Ensures that modules contain exports and/or all
  * modules are consumed within other modules.
  * @author René Fermann
  */
@@ -9,19 +9,28 @@ import resolve from 'eslint-module-utils/resolve'
 import docsUrl from '../docsUrl'
 
 // eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
+// and has been moved to eslint/lib/cli-engine/file-enumerator in version 6
 let listFilesToProcess
 try {
-  listFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
-} catch (err) {
-  listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
+  var FileEnumerator = require('eslint/lib/cli-engine/file-enumerator').FileEnumerator
+  listFilesToProcess = function (src) {
+    var e = new FileEnumerator()
+    return Array.from(e.iterateFiles(src))
+  }
+} catch (e1) {
+  try {
+    listFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
+  } catch (e2) {
+    listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
+  }
 }
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration'
 const EXPORT_NAMED_DECLARATION = 'ExportNamedDeclaration'
 const EXPORT_ALL_DECLARATION = 'ExportAllDeclaration'
-const IMPORT_DECLARATION = 'ImportDeclaration' 
+const IMPORT_DECLARATION = 'ImportDeclaration'
 const IMPORT_NAMESPACE_SPECIFIER = 'ImportNamespaceSpecifier'
-const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier' 
+const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
 const DEFAULT = 'default'
@@ -37,7 +46,7 @@ const isNodeModule = path => {
 
 /**
  * read all files matching the patterns in src and ignoreExports
- * 
+ *
  * return all files matching src pattern, which are not matching the ignoreExports pattern
  */
 const resolveFiles = (src, ignoreExports) => {
@@ -73,7 +82,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
         currentExportAll.add(value().path)
       })
       exportAll.set(file, currentExportAll)
-      
+
       reexports.forEach((value, key) => {
         if (key === DEFAULT) {
           exports.set(IMPORT_DEFAULT_SPECIFIER, { whereUsed: new Set() })
@@ -106,7 +115,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
         imports.set(key, value.importedSpecifiers)
       })
       importList.set(file, imports)
-      
+
       // build up export list only, if file is not ignored
       if (ignoredFiles.has(file)) {
         return
@@ -266,7 +275,7 @@ module.exports = {
     if (unusedExports && !preparationDone) {
       doPreparation(src, ignoreExports, context)
     }
-    
+
     const file = context.getFilename()
 
     const checkExportPresence = node => {
@@ -329,9 +338,9 @@ module.exports = {
       }
 
       const exportStatement = exports.get(exportedValue)
-      
+
       const value = exportedValue === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportedValue
-      
+
       if (typeof exportStatement !== 'undefined'){
         if (exportStatement.whereUsed.size < 1) {
           context.report(
@@ -410,7 +419,7 @@ module.exports = {
       // preserve information about namespace imports
       let exportAll = exports.get(EXPORT_ALL_DECLARATION)
       let namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER)
-      
+
       if (typeof namespaceImports === 'undefined') {
         namespaceImports = { whereUsed: new Set() }
       }
@@ -434,13 +443,13 @@ module.exports = {
       if (typeof oldImportPaths === 'undefined') {
         oldImportPaths = new Map()
       }
-      
+
       const oldNamespaceImports = new Set()
       const newNamespaceImports = new Set()
 
       const oldExportAll = new Set()
       const newExportAll = new Set()
-      
+
       const oldDefaultImports = new Set()
       const newDefaultImports = new Set()
 
@@ -493,7 +502,7 @@ module.exports = {
           if (!resolvedPath) {
             return
           }
-          
+
           if (isNodeModule(resolvedPath)) {
             return
           }
