@@ -1,5 +1,6 @@
 import { test, SYNTAX_CASES } from '../utils'
-import { RuleTester, linter } from 'eslint'
+import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
 import semver from 'semver'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
@@ -287,7 +288,7 @@ context('Typescript', function () {
   // Typescript
   const parsers = ['typescript-eslint-parser']
 
-  if (semver.satisfies(linter.version, '>5.0.0')) {
+  if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
     parsers.push('@typescript-eslint/parser')
   }
 

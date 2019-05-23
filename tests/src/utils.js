@@ -1,5 +1,5 @@
 import path from 'path'
-import { linter } from 'eslint'
+import eslintPkg from 'eslint/package.json'
 import semver from 'semver'
 
 // warms up the module cache. this import takes a while (>500ms)
@@ -12,7 +12,7 @@ export function testFilePath(relativePath) {
 export const FILENAME = testFilePath('foo.js')
 
 export function testVersion(specifier, t) {
-  return semver.satisfies(linter.version, specifier) && test(t)
+  return semver.satisfies(eslintPkg.version, specifier) && test(t)
 }
 
 export function test(t) {

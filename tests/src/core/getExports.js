@@ -1,6 +1,6 @@
 import { expect } from  'chai'
 import semver from 'semver'
-import { linter } from 'eslint'
+import eslintPkg from 'eslint/package.json'
 import ExportMap from '../../../src/ExportMap'
 
 import * as fs from 'fs'
@@ -335,7 +335,7 @@ describe('ExportMap', function () {
       ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
     ]
 
-    if (semver.satisfies(linter.version, '>5.0.0')) {
+    if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
       configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }])
     }
 
