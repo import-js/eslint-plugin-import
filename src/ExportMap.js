@@ -464,6 +464,8 @@ ExportMap.parse = function (path, content, context) {
           case 'ClassDeclaration':
           case 'TypeAlias': // flowtype with babel-eslint parser
           case 'InterfaceDeclaration':
+          case 'DeclareFunction':
+          case 'TSDeclareFunction':
           case 'TSEnumDeclaration':
           case 'TSTypeAliasDeclaration':
           case 'TSInterfaceDeclaration':
@@ -508,6 +510,34 @@ ExportMap.parse = function (path, content, context) {
         // todo: JSDoc
         m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) })
       })
+    }
+
+    // This doesn't declare anything, but changes what's being exported.
+    if (n.type === 'TSExportAssignment') {
+      const moduleDecl = ast.body.find((bodyNode) =>
+        bodyNode.type === 'TSModuleDeclaration' && bodyNode.id.name === n.expression.name
+      )
+      if (moduleDecl && moduleDecl.body && moduleDecl.body.body) {
+        moduleDecl.body.body.forEach((moduleBlockNode) => {
+          // Export-assignment exports all members in the namespace, explicitly exported or not.
+          const exportedDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
+            moduleBlockNode.declaration :
+            moduleBlockNode
+
+          if (exportedDecl.type === 'VariableDeclaration') {
+            exportedDecl.declarations.forEach((decl) =>
+              recursivePatternCapture(decl.id,(id) => m.namespace.set(
+                id.name,
+                captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
+              )
+            )
+          } else {
+            m.namespace.set(
+              exportedDecl.id.name,
+              captureDoc(source, docStyleParsers, moduleBlockNode))
+          }
+        })
+      }
     }
   })
 
