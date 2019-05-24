@@ -5,7 +5,22 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.17.3] - 2019-05-23
+
+### Fixed
+- [`no-common-js`]: Also throw an error when assigning ([#1354], thanks [@charlessuh])
+- [`no-unused-modules`]: don't crash when lint file outside src-folder ([#1347], thanks [@rfermann])
+- [`no-unused-modules`]: make `import { name as otherName }` work ([#1340], [#1342], thanks [@rfermann])
+- [`no-unused-modules`]: make appveyor tests passing ([#1333], thanks [@rfermann])
 - [`named`]: ignore Flow `typeof` imports and `type` exports ([#1345], thanks [@loganfsmyth])
+- [refactor] fix eslint 6 compat by fixing imports (thank [@ljharb])
+- Improve support for Typescript declare structures ([#1356], thanks [@christophercurrie])
+
+### Docs
+- add missing `no-unused-modules` in README ([#1358], thanks [@golopot])
+- [`no-unused-modules`]: Indicates usage, plugin defaults to no-op, and add description to main README.md ([#1352], thanks [@johndevedu])
+[@christophercurrie]: https://github.com/christophercurrie
+- Document `env` option for `eslint-import-resolver-webpack` ([#1363], thanks [@kgregory])
 
 ## [2.17.2] - 2019-04-16
 
@@ -555,7 +570,16 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1363]: https://github.com/benmosher/eslint-plugin-import/pull/1363
+[#1358]: https://github.com/benmosher/eslint-plugin-import/pull/1358
+[#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
+[#1354]: https://github.com/benmosher/eslint-plugin-import/pull/1354
+[#1352]: https://github.com/benmosher/eslint-plugin-import/pull/1352
+[#1347]: https://github.com/benmosher/eslint-plugin-import/pull/1347
 [#1345]: https://github.com/benmosher/eslint-plugin-import/pull/1345
+[#1342]: https://github.com/benmosher/eslint-plugin-import/pull/1342
+[#1340]: https://github.com/benmosher/eslint-plugin-import/pull/1340
+[#1333]: https://github.com/benmosher/eslint-plugin-import/pull/1333
 [#1331]: https://github.com/benmosher/eslint-plugin-import/pull/1331
 [#1330]: https://github.com/benmosher/eslint-plugin-import/pull/1330
 [#1320]: https://github.com/benmosher/eslint-plugin-import/pull/1320
@@ -891,3 +915,7 @@ for info on changes for earlier releases.
 [@feychenie]: https://github.com/feychenie
 [@kiwka]: https://github.com/kiwka
 [@loganfsmyth]: https://github.com/loganfsmyth
+[@johndevedu]: https://github.com/johndevedu
+[@charlessuh]: https://github.com/charlessuh
+[@kgregory]: https://github.com/kgregory
+[@christophercurrie]: https://github.com/christophercurrie
