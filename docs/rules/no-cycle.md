@@ -10,7 +10,9 @@ This includes cycles of depth 1 (imported module imports me) to `Infinity`, if t
 import './dep-a.js'
 
 export function b() { /* ... */ }
+```
 
+```js
 // dep-a.js
 import { b } from './dep-b.js' // reported: Dependency cycle detected.
 ```
@@ -36,12 +38,16 @@ There is a `maxDepth` option available to prevent full expansion of very deep de
 
 // dep-c.js
 import './dep-a.js'
+```
 
+```js
 // dep-b.js
 import './dep-c.js'
 
 export function b() { /* ... */ }
+```
 
+```js
 // dep-a.js
 import { b } from './dep-b.js' // not reported as the cycle is at depth 2
 ```
