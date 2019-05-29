@@ -140,7 +140,8 @@ function isPlainRequireModule(node) {
     return false
   }
   const decl = node.declarations[0]
-  const result = (decl.id != null &&  decl.id.type === 'Identifier') &&
+  const result = decl.id &&
+    (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern') &&
     decl.init != null &&
     decl.init.type === 'CallExpression' &&
     decl.init.callee != null &&

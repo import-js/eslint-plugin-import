@@ -518,6 +518,21 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     }),
+    // fix destructured commonjs import
+    test({
+      code: `
+        var {b} = require('async');
+        var {a} = require('fs');
+      `,
+      output: `
+        var {a} = require('fs');
+        var {b} = require('async');
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`fs` import should occur before import of `async`',
+      }],
+    }),
     // fix order of multile import
     test({
       code: `
