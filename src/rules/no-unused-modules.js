@@ -33,6 +33,7 @@ const IMPORT_NAMESPACE_SPECIFIER = 'ImportNamespaceSpecifier'
 const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
+const CLASS_DECLARATION = 'ClassDeclaration'
 const DEFAULT = 'default'
 
 let preparationDone = false
@@ -390,7 +391,10 @@ module.exports = {
             })
           }
           if (declaration) {
-            if (declaration.type === FUNCTION_DECLARATION) {
+            if (
+              declaration.type === FUNCTION_DECLARATION ||
+              declaration.type === CLASS_DECLARATION
+            ) {
               newExportIdentifiers.add(declaration.id.name)
             }   
             if (declaration.type === VARIABLE_DECLARATION) {
@@ -712,7 +716,10 @@ module.exports = {
             checkUsage(node, specifier.exported.name)
         })
         if (node.declaration) {
-          if (node.declaration.type === FUNCTION_DECLARATION) {
+          if (
+            node.declaration.type === FUNCTION_DECLARATION ||
+            node.declaration.type === CLASS_DECLARATION
+          ) {
             checkUsage(node, node.declaration.id.name)
           }
           if (node.declaration.type === VARIABLE_DECLARATION) {
