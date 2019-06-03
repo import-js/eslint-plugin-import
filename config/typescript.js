@@ -1,9 +1,8 @@
 /**
  * Adds `.jsx`, `.ts` and `.tsx` as an extension, and enables JSX/TSX parsing.
  */
-var jsExtensions = ['.js', '.jsx'];
-var tsExtensions = ['.ts', '.tsx'];
-var allExtensions = jsExtensions.concat(tsExtensions);
+
+var allExtensions = ['.ts', '.tsx', '.d.ts', '.js', '.jsx'];
 
 module.exports = {
 
