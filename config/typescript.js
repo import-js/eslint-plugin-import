@@ -9,7 +9,7 @@ module.exports = {
   settings: {
     'import/extensions': allExtensions,
     'import/parsers': {
-      '@typescript-eslint/parser': tsExtensions
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.d.ts']
     },
     'import/resolver': {
       'node': {
