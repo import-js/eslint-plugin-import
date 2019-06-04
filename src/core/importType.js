@@ -17,8 +17,20 @@ function baseModule(name) {
   return pkg
 }
 
-export function isAbsolute(name) {
-  return name.indexOf('/') === 0
+export function isAbsolute(name, settings, path, groups = []) {
+  const absoluteGroup = groups.find(({ name }) => name === 'absolute')
+  const pattern = absoluteGroup && absoluteGroup.pattern
+  const regexp = pattern && new RegExp(pattern)
+
+  return name.indexOf('/') === 0 || regexp && regexp.test(name)
+}
+
+export function isPrivate(name, settings, path, groups = []) {
+  const absoluteGroup = groups.find(({ name }) => name === 'private')
+  const pattern = absoluteGroup && absoluteGroup.pattern
+  const regexp = !!pattern && new RegExp(pattern)
+
+  return !!regexp && regexp.test(name)
 }
 
 // path is defined only when a resolver resolves to a non-standard path
@@ -78,6 +90,7 @@ function isRelativeToSibling(name) {
 
 const typeTest = cond([
   [isAbsolute, constant('absolute')],
+  [isPrivate, constant('private')],
   [isBuiltIn, constant('builtin')],
   [isInternalModule, constant('internal')],
   [isExternalModule, constant('external')],
@@ -88,6 +101,6 @@ const typeTest = cond([
   [constant(true), constant('unknown')],
 ])
 
-export default function resolveImportType(name, context) {
-  return typeTest(name, context.settings, resolve(name, context))
+export default function resolveImportType(name, context, groups) {
+  return typeTest(name, context.settings, resolve(name, context), groups)
 }

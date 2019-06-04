@@ -16,6 +16,7 @@ ruleTester.run('order', rule, {
       code: `
         var fs = require('fs');
         var async = require('async');
+        var button = require('youla/button');
         var relParent1 = require('../foo');
         var relParent2 = require('../foo/bar');
         var relParent3 = require('../');
@@ -27,11 +28,33 @@ ruleTester.run('order', rule, {
       code: `
         import fs from 'fs';
         import async, {foo1} from 'async';
+
+        import button from 'pattern1-lib/but5ton'
+        import button2 from 'pattern1-lib/4button'
+
+        import ololol from 'absolute-pattern/ololol3';
+        import ololol3 from 'absolute-pattern/ololo4l';
+
         import relParent1 from '../foo';
         import relParent2, {foo2} from '../foo/bar';
         import relParent3 from '../';
+
         import sibling, {foo3} from './foo';
+
         import index from './';`,
+      options: [
+        {
+          groups: [
+            ['builtin', 'external'],
+            { name: 'private', pattern: '^pattern1'},
+            { name: 'absolute', pattern: '^absolute-pattern'},
+            'parent',
+            'sibling',
+            'index',
+          ],
+          'newlines-between': 'always',
+        },
+      ],
       }),
     // Multiple module of the same rank next to each other
     test({
@@ -42,7 +65,7 @@ ruleTester.run('order', rule, {
         var _ = require('lodash');
         var async = require('async');`,
       }),
-    // Overriding order to be the reverse of the default order
+    // // Overriding order to be the reverse of the default order
     test({
       code: `
         var index = require('./');
@@ -55,7 +78,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
     }),
-    // Ignore dynamic requires
+    // // Ignore dynamic requires
     test({
       code: `
         var path = require('path');
@@ -82,25 +105,6 @@ ruleTester.run('order', rule, {
           require('fs');
         }`,
     }),
-    // Ignore unknown/invalid cases
-    test({
-      code: `
-        var unknown1 = require('/unknown1');
-        var fs = require('fs');
-        var unknown2 = require('/unknown2');
-        var async = require('async');
-        var unknown3 = require('/unknown3');
-        var foo = require('../foo');
-        var unknown4 = require('/unknown4');
-        var bar = require('../foo/bar');
-        var unknown5 = require('/unknown5');
-        var parent = require('../');
-        var unknown6 = require('/unknown6');
-        var foo = require('./foo');
-        var unknown7 = require('/unknown7');
-        var index = require('./');
-        var unknown8 = require('/unknown8');
-    `}),
     // Ignoring unassigned values by default (require)
     test({
       code: `
@@ -279,7 +283,7 @@ ruleTester.run('order', rule, {
         } from 'bar';
         import external from 'external'
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with multiline imports #2
     test({
@@ -290,7 +294,7 @@ ruleTester.run('order', rule, {
 
         import external from 'external'
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with multiline imports #3
     test({
@@ -301,7 +305,7 @@ ruleTester.run('order', rule, {
         import bar
           from './sibling';
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with not assigned import #1
     test({
@@ -313,7 +317,7 @@ ruleTester.run('order', rule, {
 
         import _ from 'lodash';
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'never' with not assigned import #2
     test({
@@ -323,7 +327,7 @@ ruleTester.run('order', rule, {
         import 'something-else';
         import _ from 'lodash';
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'always' with not assigned require #1
     test({
@@ -335,7 +339,7 @@ ruleTester.run('order', rule, {
 
         var _ = require('lodash');
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'never' with not assigned require #2
     test({
@@ -345,7 +349,7 @@ ruleTester.run('order', rule, {
         require('something-else');
         var _ = require('lodash');
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'never' should ignore nested require statement's #1
     test({
@@ -362,7 +366,7 @@ ruleTester.run('order', rule, {
           }
         }
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'always' should ignore nested require statement's #2
     test({
@@ -378,7 +382,7 @@ ruleTester.run('order', rule, {
           }
         }
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option: newlines-between: 'always-and-inside-groups'
     test({
@@ -423,7 +427,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     }),
-    // fix order with spaces on the end of line
+ //    // fix order with spaces on the end of line
     test({
       code: `
         var async = require('async');
