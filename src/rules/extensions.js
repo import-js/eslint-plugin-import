@@ -1,8 +1,8 @@
 import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
+import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
-import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
@@ -132,7 +132,9 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context)
     }
 
-    function checkFileExtension(importPath, node) {
+    function checkFileExtension(source, node) {
+      const importPath = source.value
+
       // don't enforce anything on builtins
       if (isBuiltIn(importPath, context.settings)) return
 
@@ -166,34 +168,6 @@ module.exports = {
       }
     }
 
-    function checkImportFileExtension(node) {
-      const { source } = node
-
-      // bail if the declaration doesn't have a source, e.g. "export { foo };"
-      if (!source) return
-
-      const importPath = source.value
-
-      checkFileExtension(importPath, source)
-    }
-
-    function checkCommonJSFileExtension(node) {
-      if (!isStaticRequire(node)) return
-
-      const importPath = node.arguments[0].value
-
-      checkFileExtension(importPath, node)
-    }
-
-    const ext = {
-      ImportDeclaration: checkImportFileExtension,
-      ExportNamedDeclaration: checkImportFileExtension,
-    }
-
-    if (props.commonjs) {
-      ext.CallExpression = checkCommonJSFileExtension
-    }
-
-    return ext
+    return moduleVisitor(checkFileExtension, props)
   },
 }
