@@ -174,6 +174,12 @@ ruleTester.run('extensions', rule, {
       } ],
     }),
     test({
+      code: 'import a from "asn1.js/index.js"',
+      errors: [ {
+        message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
+      } ],
+    }),
+    test({
       code: 'import a from "a"',
       options: [ 'always' ],
       errors: [ {

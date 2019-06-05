@@ -70,9 +70,13 @@ ruleTester.run('named', rule, {
     test({ code: 'import { deepProp } from "./named-exports"' }),
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
 
-    // should ignore imported flow types, even if they don’t exist
+    // should ignore imported/exported flow types, even if they don’t exist
     test({
       code: 'import type { MissingType } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import typeof { MissingType } from "./flowtypes"',
       parser: 'babel-eslint',
     }),
     test({
@@ -80,7 +84,31 @@ ruleTester.run('named', rule, {
       parser: 'babel-eslint',
     }),
     test({
-      code: 'import  { type MyOpaqueType, MyClass } from "./flowtypes"',
+      code: 'import typeof { MyOpaqueType } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import { type MyOpaqueType, MyClass } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import { typeof MyOpaqueType, MyClass } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import typeof MissingType from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'import typeof * as MissingType from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'export type { MissingType } from "./flowtypes"',
+      parser: 'babel-eslint',
+    }),
+    test({
+      code: 'export type { MyOpaqueType } from "./flowtypes"',
       parser: 'babel-eslint',
     }),
 

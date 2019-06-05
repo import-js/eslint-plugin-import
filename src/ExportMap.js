@@ -405,7 +405,7 @@ ExportMap.parse = function (path, content, context) {
           importedSpecifiers.add(specifier.type)
         }
         if (specifier.type === 'ImportSpecifier') {
-          importedSpecifiers.add(specifier.local.name)
+          importedSpecifiers.add(specifier.imported.name)
         }
       })
     }

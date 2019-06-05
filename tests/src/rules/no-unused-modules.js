@@ -118,7 +118,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-g.js'),
            errors: [error(`exported declaration 'g' not used within other modules`)]}),
     test({ options: unusedExportsOptions,
-           code: 'const h1 = 3; function h2() { return 3 }; export { h1, h2 }',
+           code: 'const h1 = 3; function h2() { return 3 }; const h3 = true; export { h1, h2, h3 }',
            filename: testFilePath('./no-unused-modules/file-h.js'),
            errors: [error(`exported declaration 'h1' not used within other modules`)]}),
     test({ options: unusedExportsOptions,
@@ -591,4 +591,14 @@ describe('do not report missing export for ignored file', () => {
     ],
     invalid: [],
   })
+})
+
+// lint file not available in `src`
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+            code: `export const jsxFoo = 'foo'; export const jsxBar = 'bar'`,
+            filename: testFilePath('../jsx/named.jsx')}),
+  ],
+  invalid: [],
 })

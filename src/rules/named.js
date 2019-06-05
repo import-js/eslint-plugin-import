@@ -12,8 +12,11 @@ module.exports = {
 
   create: function (context) {
     function checkSpecifiers(key, type, node) {
-      // ignore local exports and type imports
-      if (node.source == null || node.importKind === 'type') return
+      // ignore local exports and type imports/exports
+      if (node.source == null || node.importKind === 'type' ||
+          node.importKind === 'typeof'  || node.exportKind === 'type') {
+        return
+      }
 
       if (!node.specifiers
             .some(function (im) { return im.type === type })) {
@@ -32,7 +35,7 @@ module.exports = {
         if (im.type !== type) return
 
         // ignore type imports
-        if (im.importKind === 'type') return
+        if (im.importKind === 'type' || im.importKind === 'typeof') return
 
         const deepLookup = imports.hasDeep(im[key].name)
 

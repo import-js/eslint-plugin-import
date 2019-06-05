@@ -302,6 +302,14 @@ module.exports = {
         return
       }
 
+      // refresh list of source files
+      const srcFiles = resolveFiles(getSrc(src), ignoreExports)
+
+      // make sure file to be linted is included in source files
+      if (!srcFiles.has(file)) {
+        return
+      }
+
       exports = exportList.get(file)
 
       // special case: export * from 

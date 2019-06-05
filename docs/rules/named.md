@@ -8,7 +8,7 @@ Note: for packages, the plugin will find exported names
 from [`jsnext:main`], if present in `package.json`.
 Redux's npm module includes this key, and thereby is lintable, for example.
 
-A module path that is [ignored] or not [unambiguously an ES module] will not be reported when imported. Note that type imports, as used by [Flow], are always ignored.
+A module path that is [ignored] or not [unambiguously an ES module] will not be reported when imported. Note that type imports and exports, as used by [Flow], are always ignored.
 
 [ignored]: ../../README.md#importignore
 [unambiguously an ES module]: https://github.com/bmeck/UnambiguousJavaScriptGrammar

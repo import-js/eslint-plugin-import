@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+- [`named`]: ignore Flow `typeof` imports and `type` exports ([#1345], thanks [@loganfsmyth])
+
 ## [2.17.2] - 2019-04-16
 
 ### Fixed
@@ -553,6 +555,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1345]: https://github.com/benmosher/eslint-plugin-import/pull/1345
 [#1331]: https://github.com/benmosher/eslint-plugin-import/pull/1331
 [#1330]: https://github.com/benmosher/eslint-plugin-import/pull/1330
 [#1320]: https://github.com/benmosher/eslint-plugin-import/pull/1320
@@ -887,3 +890,4 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@feychenie]: https://github.com/feychenie
 [@kiwka]: https://github.com/kiwka
+[@loganfsmyth]: https://github.com/loganfsmyth
