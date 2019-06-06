@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+- [`order`]: Adds support for correctly sorting unknown types into a single group (thanks [@swernerx])
+
 ## [2.17.3] - 2019-05-23
 
 ### Fixed
