@@ -164,6 +164,42 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
+    // Using unknown import types (e.g. using an resolver alias via babel)
+    test({
+      code: `
+        import fs from 'fs';
+        import { Input } from '-/components/Input';
+        import { Button } from '-/components/Button';
+        import { add } from './helper';`,
+    }),
+    // Using unknown import types (e.g. using an resolver alias via babel) with
+    // a custom group list.
+    test({
+      code: `
+        import { Input } from '-/components/Input';
+        import { Button } from '-/components/Button';
+        import fs from 'fs';
+        import { add } from './helper';`,
+      options: [{
+        groups: [ 'unknown', 'builtin', 'external', 'parent', 'sibling', 'index' ],
+      }],
+    }),
+    // Using unknown import types (e.g. using an resolver alias via babel)
+    // Option: newlines-between: 'always'
+    test({
+      code: `
+        import fs from 'fs';
+
+        import { Input } from '-/components/Input';
+        import { Button } from '-/components/Button';
+
+        import { add } from './helper';`,
+      options: [
+        {
+          'newlines-between': 'always',
+        },
+      ],
+    }),
     // Option: newlines-between: 'always'
     test({
       code: `
@@ -884,6 +920,57 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
+    }),
+    // Default order using import with custom import alias
+    test({
+      code: `
+        import { Button } from '-/components/Button';
+        import { add } from './helper';
+        import fs from 'fs';
+      `,
+      output: `
+        import fs from 'fs';
+        import { Button } from '-/components/Button';
+        import { add } from './helper';
+      `,
+      errors: [
+        {
+          line: 4,
+          message: '`fs` import should occur before import of `-/components/Button`',
+        },
+      ],
+    }),
+    // Default order using import with custom import alias
+    test({
+      code: `
+        import fs from 'fs';
+        import { Button } from '-/components/Button';
+        import { LinkButton } from '-/components/Link';
+        import { add } from './helper';
+      `,
+      output: `
+        import fs from 'fs';
+
+        import { Button } from '-/components/Button';
+        import { LinkButton } from '-/components/Link';
+
+        import { add } from './helper';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+        },
+      ],
+      errors: [
+        {
+          line: 2,
+          message: 'There should be at least one empty line between import groups',
+        },
+        {
+          line: 4,
+          message: 'There should be at least one empty line between import groups',
+        },
+      ],
     }),
     // Option newlines-between: 'never' - should report unnecessary line between groups
     test({
