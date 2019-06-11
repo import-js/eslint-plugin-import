@@ -164,16 +164,19 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
-    // Using unknown import types (e.g. using an resolver alias via babel)
+    // Addijg unknown import types (e.g. using an resolver alias via babel) to the groups.
     test({
       code: `
         import fs from 'fs';
         import { Input } from '-/components/Input';
         import { Button } from '-/components/Button';
         import { add } from './helper';`,
+      options: [{
+        groups: ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index'],
+      }],
     }),
     // Using unknown import types (e.g. using an resolver alias via babel) with
-    // a custom group list.
+    // an alternative custom group list.
     test({
       code: `
         import { Input } from '-/components/Input';
@@ -197,6 +200,7 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
+          groups: ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index'],
         },
       ],
     }),
@@ -933,6 +937,11 @@ ruleTester.run('order', rule, {
         import { Button } from '-/components/Button';
         import { add } from './helper';
       `,
+      options: [
+        {
+          groups: ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index'],
+        },
+      ],
       errors: [
         {
           line: 4,
@@ -958,6 +967,7 @@ ruleTester.run('order', rule, {
       `,
       options: [
         {
+          groups: ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index'],
           'newlines-between': 'always',
         },
       ],

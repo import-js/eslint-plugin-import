@@ -86,7 +86,7 @@ How groups are defined, and the order to respect. `groups` must be an array of `
   // Then the rest: internal and external type
 ]
 ```
-The default value is `["builtin", "external", "unknown", "parent", "sibling", "index"]`.
+The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 
 You can set the options like this:
 

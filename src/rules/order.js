@@ -4,7 +4,7 @@ import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
-const defaultGroups = ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index']
+const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
 // REPORTING AND FIXING
 
