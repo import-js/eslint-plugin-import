@@ -259,7 +259,7 @@ function isInVariableDeclarator(node) {
     (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
 }
 
-const types = ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']
+const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index']
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }

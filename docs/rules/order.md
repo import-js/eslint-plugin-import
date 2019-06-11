@@ -77,7 +77,7 @@ This rule supports the following options:
 
 ### `groups: [array]`:
 
-How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
 ```js
 [
   'builtin', // Built-in types are first
