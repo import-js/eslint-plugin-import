@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - '12'
   - '10'
   - '8'
   - '6'
@@ -18,6 +19,8 @@ env:
 matrix:
   include:
   - env: PACKAGE=resolvers/node
+    node_js: 12
+  - env: PACKAGE=resolvers/node
     node_js: 10
   - env: PACKAGE=resolvers/node
     node_js: 8
@@ -25,6 +28,8 @@ matrix:
     node_js: 6
   - env: PACKAGE=resolvers/node
     node_js: 4
+  - env: PACKAGE=resolvers/webpack
+    node_js: 12
   - env: PACKAGE=resolvers/webpack
     node_js: 10
   - env: PACKAGE=resolvers/webpack
@@ -34,6 +39,9 @@ matrix:
   - env: PACKAGE=resolvers/webpack
     node_js: 4
 
+  - os: osx
+    env: ESLINT_VERSION=5
+    node_js: 12
   - os: osx
     env: ESLINT_VERSION=5
     node_js: 10
