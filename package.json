@@ -15,6 +15,8 @@
     "memo-parser"
   ],
   "scripts": {
+    "build": "babel --quiet --out-dir lib src",
+    "prebuild": "rimraf lib",
     "watch": "npm run mocha -- --watch tests/src",
     "pretest": "linklocal",
     "posttest": "eslint ./src",
@@ -22,7 +24,7 @@
     "test": "npm run mocha tests/src",
     "test-compiled": "npm run prepublish && NODE_PATH=./lib mocha --compilers js:babel-register --recursive tests/src",
     "test-all": "npm test && for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done",
-    "prepublish": "gulp prepublish",
+    "prepublish": "npm run build",
     "coveralls": "nyc report --reporter lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -46,6 +48,8 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "@typescript-eslint/parser": "^1.5.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-preset-es2015-argon": "latest",
@@ -62,8 +66,6 @@
     "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "eslint-plugin-import": "2.x",
-    "gulp": "^3.9.1",
-    "gulp-babel": "6.1.2",
     "linklocal": "^2.8.2",
     "mocha": "^3.5.3",
     "nyc": "^11.9.0",
