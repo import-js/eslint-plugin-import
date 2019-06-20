@@ -94,6 +94,32 @@ You can set the options like this:
 "import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
 ```
 
+### `pathGroups: [array of objects]`:
+
+To be able so group by paths mostly needed with aliases pathGroups can be defined.
+
+Properties of the objects
+
+| property       | required | type   | description   |
+|----------------|:--------:|--------|---------------|
+| pattern        |     x    | string | minimatch pattern for the paths to be in this group (will not be used for builtins or externals) |
+| patternOptions |          | object | options for minimatch, default: { nocomment: true } |
+| group          |     x    | string | one of the allowed groups, the pathGroup will be positioned relative to this group |
+| position       |          | string | defines where around the group the pathGroup will be positioned, can be 'after' or 'before', if not provided pathGroup will be positioned like the group |
+
+```json
+{
+  "import/order": ["error", {
+    "pathGroups": [
+      {
+        "pattern": "~/**",
+        "group": "external"
+      }
+    ]
+  }]
+}
+```
+
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 
 

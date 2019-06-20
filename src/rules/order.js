@@ -1,5 +1,6 @@
 'use strict'
 
+import minimatch from 'minimatch'
 import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
@@ -244,9 +245,29 @@ function makeOutOfOrderReport(context, imported) {
 
 // DETECTING
 
+function computePathRank(ranks, pathGroups, path, maxPosition) {
+  for (let i = 0, l = pathGroups.length; i < l; i++) {
+    const { pattern, patternOptions, group, position = 1 } = pathGroups[i]
+    if (minimatch(path, pattern, patternOptions || { nocomment: true })) {
+      return ranks[group] + (position / maxPosition)
+    }
+  }
+}
+
 function computeRank(context, ranks, name, type) {
-  return ranks[importType(name, context)] +
-    (type === 'import' ? 0 : 100)
+  const impType = importType(name, context)
+  let rank
+  if (impType !== 'builtin' && impType !== 'external') {
+    rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
+  }
+  if (!rank) {
+    rank = ranks.groups[impType]
+  }
+  if (type !== 'import') {
+    rank += 100
+  }
+
+  return rank
 }
 
 function registerNode(context, node, name, type, ranks, imported) {
@@ -292,6 +313,49 @@ function convertGroupsToRanks(groups) {
     res[type] = groups.length
     return res
   }, rankObject)
+}
+
+function convertPathGroupsForRanks(pathGroups) {
+  const after = {}
+  const before = {}
+
+  const transformed = pathGroups.map((pathGroup, index) => {
+    const { group, position: positionString } = pathGroup
+    let position = 0
+    if (positionString === 'after') {
+      if (!after[group]) {
+        after[group] = 1
+      }
+      position = after[group]++
+    } else if (positionString === 'before') {
+      if (!before[group]) {
+        before[group] = []
+      }
+      before[group].push(index)
+    }
+
+    return Object.assign({}, pathGroup, { position })
+  })
+
+  let maxPosition = 1
+
+  Object.keys(before).forEach((group) => {
+    const groupLength = before[group].length
+    before[group].forEach((groupIndex, index) => {
+      transformed[groupIndex].position = -1 * (groupLength - index)
+    })
+    maxPosition = Math.max(maxPosition, groupLength)
+  })
+
+  Object.keys(after).forEach((key) => {
+    const groupNextPosition = after[key]
+    maxPosition = Math.max(maxPosition, groupNextPosition - 1)
+  })
+
+  return {
+    pathGroups: transformed,
+    maxPosition: maxPosition > 10 ? Math.pow(10, Math.ceil(Math.log10(maxPosition))) : 10,
+  }
 }
 
 function fixNewLineAfterImport(context, previousImport) {
@@ -378,6 +442,29 @@ module.exports = {
           groups: {
             type: 'array',
           },
+          pathGroups: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                pattern: {
+                  type: 'string',
+                },
+                patternOptions: {
+                  type: 'object',
+                },
+                group: {
+                  type: 'string',
+                  enum: types,
+                },
+                position: {
+                  type: 'string',
+                  enum: ['after', 'before'],
+                },
+              },
+              required: ['pattern', 'group'],
+            },
+          },
           'newlines-between': {
             enum: [
               'ignore',
@@ -398,7 +485,12 @@ module.exports = {
     let ranks
 
     try {
-      ranks = convertGroupsToRanks(options.groups || defaultGroups)
+      const { pathGroups, maxPosition } = convertPathGroupsForRanks(options.pathGroups || [])
+      ranks = {
+        groups: convertGroupsToRanks(options.groups || defaultGroups),
+        pathGroups,
+        maxPosition,
+      }
     } catch (error) {
       // Malformed configuration
       return {

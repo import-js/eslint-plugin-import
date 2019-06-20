@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 - [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
 - [`no-unused-modules`]: add flow type support ([#1542], thanks [@rfermann])
+- [`order`]: Adds support for pathGroups to allow ordering by defined patterns ([#795], [#1386], thanks [@Mairu])
 
 ### Fixed
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
@@ -644,6 +645,7 @@ for info on changes for earlier releases.
 [#1401]: https://github.com/benmosher/eslint-plugin-import/pull/1401
 [#1393]: https://github.com/benmosher/eslint-plugin-import/pull/1393
 [#1389]: https://github.com/benmosher/eslint-plugin-import/pull/1389
+[#1386]: https://github.com/benmosher/eslint-plugin-import/pull/1386
 [#1377]: https://github.com/benmosher/eslint-plugin-import/pull/1377
 [#1375]: https://github.com/benmosher/eslint-plugin-import/pull/1375
 [#1372]: https://github.com/benmosher/eslint-plugin-import/pull/1372
@@ -788,6 +790,7 @@ for info on changes for earlier releases.
 [#863]: https://github.com/benmosher/eslint-plugin-import/issues/863
 [#842]: https://github.com/benmosher/eslint-plugin-import/issues/842
 [#839]: https://github.com/benmosher/eslint-plugin-import/issues/839
+[#795]: https://github.com/benmosher/eslint-plugin-import/issues/795
 [#793]: https://github.com/benmosher/eslint-plugin-import/issues/793
 [#720]: https://github.com/benmosher/eslint-plugin-import/issues/720
 [#717]: https://github.com/benmosher/eslint-plugin-import/issues/717
@@ -1025,3 +1028,4 @@ for info on changes for earlier releases.
 [@Taranys]: https://github.com/Taranys
 [@maxmalov]: https://github.com/maxmalov
 [@marcusdarmstrong]: https://github.com/marcusdarmstrong
+[@Mairu]: https://github.com/Mairu

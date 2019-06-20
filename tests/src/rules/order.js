@@ -204,6 +204,79 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+
+    // Using pathGroups to customize ordering, position 'after'
+    test({
+      code: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { Input } from '~/components/Input';
+        import { Button } from '#/components/Button';
+        import { add } from './helper';`,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'after' },
+          { pattern: '#/**', group: 'external', position: 'after' },
+        ],
+      }],
+    }),
+    // pathGroup without position means "equal" with group
+    test({
+      code: `
+        import fs from 'fs';
+        import { Input } from '~/components/Input';
+        import async from 'async';
+        import { Button } from '#/components/Button';
+        import _ from 'lodash';
+        import { add } from './helper';`,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external' },
+          { pattern: '#/**', group: 'external' },
+        ],
+      }],
+    }),
+    // Using pathGroups to customize ordering, position 'before'
+    test({
+      code: `
+        import fs from 'fs';
+
+        import { Input } from '~/components/Input';
+
+        import { Button } from '#/components/Button';
+
+        import _ from 'lodash';
+
+        import { add } from './helper';`,
+      options: [{
+        'newlines-between': 'always',
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'before' },
+          { pattern: '#/**', group: 'external', position: 'before' },
+        ],
+      }],
+    }),
+    // Using pathGroups to customize ordering, with patternOptions
+    test({
+      code: `
+        import fs from 'fs';
+
+        import _ from 'lodash';
+
+        import { Input } from '~/components/Input';
+
+        import { Button } from '!/components/Button';
+
+        import { add } from './helper';`,
+      options: [{
+        'newlines-between': 'always',
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'after' },
+          { pattern: '!/**', patternOptions: { nonegate: true }, group: 'external', position: 'after' },
+        ],
+      }],
+    }),
+
     // Option: newlines-between: 'always'
     test({
       code: `
@@ -573,7 +646,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     }),
-    // fix order of multile import
+    // fix order of multiline import
     test({
       code: `
         var async = require('async');
@@ -1396,6 +1469,153 @@ ruleTester.run('order', rule, {
         '`./local2` import should occur after import of `global4`',
       ],
     }),
+
+    // pathGroup with position 'after'
+    test({
+      code: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { add } from './helper';
+        import { Input } from '~/components/Input';
+        `,
+      output: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { Input } from '~/components/Input';
+        import { add } from './helper';
+        `,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'after' },
+        ],
+      }],
+      errors: [{
+        ruleId: 'order',
+        message: '`~/components/Input` import should occur before import of `./helper`',
+      }],
+    }),
+    // pathGroup without position
+    test({
+      code: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { add } from './helper';
+        import { Input } from '~/components/Input';
+        import async from 'async';
+        `,
+      output: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { Input } from '~/components/Input';
+        import async from 'async';
+        import { add } from './helper';
+        `,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external' },
+        ],
+      }],
+      errors: [{
+        ruleId: 'order',
+        message: '`./helper` import should occur after import of `async`',
+      }],
+    }),
+    // pathGroup with position 'before'
+    test({
+      code: `
+        import fs from 'fs';
+        import _ from 'lodash';
+        import { add } from './helper';
+        import { Input } from '~/components/Input';
+        `,
+      output: `
+        import fs from 'fs';
+        import { Input } from '~/components/Input';
+        import _ from 'lodash';
+        import { add } from './helper';
+        `,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'before' },
+        ],
+      }],
+      errors: [{
+        ruleId: 'order',
+        message: '`~/components/Input` import should occur before import of `lodash`',
+      }],
+    }),
+    // multiple pathGroup with different positions for same group, fix for 'after'
+    test({
+      code: `
+        import fs from 'fs';
+        import { Import } from '$/components/Import';
+        import _ from 'lodash';
+        import { Output } from '~/components/Output';
+        import { Input } from '#/components/Input';
+        import { add } from './helper';
+        import { Export } from '-/components/Export';
+        `,
+      output: `
+        import fs from 'fs';
+        import { Export } from '-/components/Export';
+        import { Import } from '$/components/Import';
+        import _ from 'lodash';
+        import { Output } from '~/components/Output';
+        import { Input } from '#/components/Input';
+        import { add } from './helper';
+        `,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'after' },
+          { pattern: '#/**', group: 'external', position: 'after' },
+          { pattern: '-/**', group: 'external', position: 'before' },
+          { pattern: '$/**', group: 'external', position: 'before' },
+        ],
+      }],
+      errors: [
+        {
+          ruleId: 'order',
+          message: '`-/components/Export` import should occur before import of `$/components/Import`',
+        },
+      ],
+    }),
+
+    // multiple pathGroup with different positions for same group, fix for 'before'
+    test({
+      code: `
+        import fs from 'fs';
+        import { Export } from '-/components/Export';
+        import { Import } from '$/components/Import';
+        import _ from 'lodash';
+        import { Input } from '#/components/Input';
+        import { add } from './helper';
+        import { Output } from '~/components/Output';
+        `,
+      output: `
+        import fs from 'fs';
+        import { Export } from '-/components/Export';
+        import { Import } from '$/components/Import';
+        import _ from 'lodash';
+        import { Output } from '~/components/Output';
+        import { Input } from '#/components/Input';
+        import { add } from './helper';
+        `,
+      options: [{
+        pathGroups: [
+          { pattern: '~/**', group: 'external', position: 'after' },
+          { pattern: '#/**', group: 'external', position: 'after' },
+          { pattern: '-/**', group: 'external', position: 'before' },
+          { pattern: '$/**', group: 'external', position: 'before' },
+        ],
+      }],
+      errors: [
+        {
+          ruleId: 'order',
+          message: '`~/components/Output` import should occur before import of `#/components/Input`',
+        },
+      ],
+    }),
+
     // reorder fix cannot cross non import or require
     test(withoutAutofixOutput({
       code: `
@@ -1469,7 +1689,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
-    // cannot require in case of not assignement require
+    // cannot require in case of not assignment require
     test(withoutAutofixOutput({
       code: `
         var async = require('async');
@@ -1493,7 +1713,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
-    // reorder cannot cross variable assignemet (import statement)
+    // reorder cannot cross variable assignment (import statement)
     test(withoutAutofixOutput({
       code: `
         import async from 'async';
@@ -1517,7 +1737,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
-    // cannot reorder in case of not assignement import
+    // cannot reorder in case of not assignment import
     test(withoutAutofixOutput({
       code: `
         import async from 'async';
