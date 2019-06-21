@@ -14,7 +14,7 @@ fixed in Babel 6. Before upgrading an existing codebase to Babel 6, it can be
 useful to run this lint rule.
 
 
-[blog]: https://medium.com/@kentcdodds/misunderstanding-es6-modules-upgrading-babel-tears-and-a-solution-ad2d5ab93ce0
+[blog]: https://kentcdodds.com/blog/misunderstanding-es6-modules-upgrading-babel-tears-and-a-solution
 
 
 ## Rule Details
