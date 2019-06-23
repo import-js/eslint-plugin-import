@@ -48,7 +48,7 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
-    "@typescript-eslint/parser": "^1.5.0",
+    "@typescript-eslint/parser": "1.10.3-alpha.13",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
