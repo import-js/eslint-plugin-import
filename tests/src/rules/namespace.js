@@ -25,6 +25,7 @@ const valid = [
     parserOptions: {
       sourceType: 'module',
       ecmaFeatures: { jsx: true },
+      ecmaVersion: 2015,
     },
   }),
   test({ code: "import * as foo from './common';" }),
