@@ -15,7 +15,10 @@ try {
   var FileEnumerator = require('eslint/lib/cli-engine/file-enumerator').FileEnumerator
   listFilesToProcess = function (src) {
     var e = new FileEnumerator()
-    return Array.from(e.iterateFiles(src))
+    return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({
+      ignored,
+      filename: filePath,
+    }))
   }
 } catch (e1) {
   try {
