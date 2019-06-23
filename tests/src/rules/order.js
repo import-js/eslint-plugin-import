@@ -1373,7 +1373,7 @@ ruleTester.run('order', rule, {
       }],
     })),
     // fix incorrect order with typescript-eslint-parser
-    testVersion('<6.0.0', {
+    testVersion('<6.0.0', () => ({
       code: `
         var async = require('async');
         var fs = require('fs');
@@ -1387,9 +1387,9 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
-    }),
+    })),
     // fix incorrect order with @typescript-eslint/parser
-    testVersion('>5.0.0', {
+    testVersion('>5.0.0', () => ({
       code: `
         var async = require('async');
         var fs = require('fs');
@@ -1403,6 +1403,6 @@ ruleTester.run('order', rule, {
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
-    }),
+    })),
   ].filter((t) => !!t),
 })
