@@ -336,11 +336,14 @@ describe('ExportMap', function () {
 
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
-      ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
     ]
 
     if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
       configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }])
+    }
+
+    if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+      configs.push(['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }])
     }
 
     configs.forEach(([description, parserConfig]) => {

@@ -1373,7 +1373,7 @@ ruleTester.run('order', rule, {
       }],
     })),
     // fix incorrect order with typescript-eslint-parser
-    test({
+    testVersion('<6.0.0', {
       code: `
         var async = require('async');
         var fs = require('fs');
