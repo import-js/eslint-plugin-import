@@ -9,7 +9,7 @@ node_js:
 os: linux
 
 env:
-  - ESLINT_VERSION=^6.0.0-alpha
+  - ESLINT_VERSION=6
   - ESLINT_VERSION=5
   - ESLINT_VERSION=4
   - ESLINT_VERSION=3
@@ -59,16 +59,16 @@ matrix:
   - node_js: '4'
     env: ESLINT_VERSION=5
   - node_js: '4'
-    env: ESLINT_VERSION=^6.0.0-alpha
+    env: ESLINT_VERSION=6
   - node_js: '6'
-    env: ESLINT_VERSION=^6.0.0-alpha
+    env: ESLINT_VERSION=6
 
   fast_finish: true
   allow_failures:
   # issues with typescript deps in this version intersection
   - node_js: '4'
     env: ESLINT_VERSION=4
-  - env: ESLINT_VERSION=^6.0.0-alpha
+  - env: ESLINT_VERSION=6
 
 before_install:
   - 'nvm install-latest-npm'
