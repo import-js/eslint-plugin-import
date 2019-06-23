@@ -58,7 +58,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export { a, b } from "foo.js"',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
 
     // no exports at all
@@ -74,15 +74,15 @@ ruleTester.run('no-default-export', rule, {
 
     test({
       code: `export type UserId = number;`,
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
     test({
       code: 'export foo from "foo.js"',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
   ],
   invalid: [
@@ -112,7 +112,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export default from "foo.js"',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       errors: [{
         ruleId: 'ExportNamedDeclaration',
         message: 'Prefer named exports.',

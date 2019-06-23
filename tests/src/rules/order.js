@@ -1382,7 +1382,7 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
         var async = require('async');
       `,
-      parser: 'typescript-eslint-parser',
+      parser: require.resolve('typescript-eslint-parser'),
       errors: [{
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
@@ -1398,7 +1398,7 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
         var async = require('async');
       `,
-      parser: '@typescript-eslint/parser',
+      parser: require.resolve('@typescript-eslint/parser'),
       errors: [{
         ruleId: 'order',
         message: '`fs` import should occur before import of `async`',

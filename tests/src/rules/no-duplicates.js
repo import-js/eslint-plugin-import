@@ -23,7 +23,7 @@ ruleTester.run('no-duplicates', rule, {
     // #225: ignore duplicate if is a flow type import
     test({
       code: "import { x } from './foo'; import type { y } from './foo'",
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
   ],
   invalid: [
@@ -64,7 +64,7 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
       output: "import type { x , y } from './foo'; ",
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 

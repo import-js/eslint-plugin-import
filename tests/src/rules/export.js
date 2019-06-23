@@ -112,10 +112,10 @@ ruleTester.run('export', rule, {
 
 context('Typescript', function () {
   // Typescript
-  const parsers = ['typescript-eslint-parser']
+  const parsers = [require.resolve('typescript-eslint-parser')]
 
   if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-    parsers.push('@typescript-eslint/parser')
+    parsers.push(require.resolve('@typescript-eslint/parser'))
   }
 
   parsers.forEach((parser) => {

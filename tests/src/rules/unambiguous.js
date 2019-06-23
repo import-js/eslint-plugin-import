@@ -38,7 +38,7 @@ ruleTester.run('unambiguous', rule, {
     },
     {
       code: 'function x() {}; export * as y from "z"',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {

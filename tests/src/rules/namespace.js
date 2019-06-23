@@ -56,16 +56,16 @@ const valid = [
   // es7 //
   /////////
   test({ code: 'export * as names from "./named-exports"'
-       , parser: 'babel-eslint' }),
+       , parser: require.resolve('babel-eslint') }),
   test({ code: 'export defport, * as names from "./named-exports"'
-       , parser: 'babel-eslint' }),
+       , parser: require.resolve('babel-eslint') }),
   // non-existent is handled by no-unresolved
   test({ code: 'export * as names from "./does-not-exist"'
-       , parser: 'babel-eslint' }),
+       , parser: require.resolve('babel-eslint') }),
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Users)',
-    parser: 'babel-eslint',
+    parser: require.resolve('babel-eslint'),
   }),
 
   // respect hoisting
@@ -80,11 +80,11 @@ const valid = [
   test({ code: "import * as names from './default-export'; console.log(names.default)" }),
   test({
    code: 'export * as names from "./default-export"',
-   parser: 'babel-eslint',
+   parser: require.resolve('babel-eslint'),
   }),
   test({
     code: 'export defport, * as names from "./default-export"',
-    parser: 'babel-eslint',
+    parser: require.resolve('babel-eslint'),
   }),
 
   // #456: optionally ignore computed references
@@ -102,7 +102,7 @@ const valid = [
   }),
   test({
     code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
-    parser: 'babel-eslint',
+    parser: require.resolve('babel-eslint'),
   }),
 
   // #1144: should handle re-export CommonJS as namespace
@@ -163,7 +163,7 @@ const invalid = [
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Foo)',
-    parser: 'babel-eslint',
+    parser: require.resolve('babel-eslint'),
     errors: ["'Foo' not found in imported namespace 'Endpoints'."],
   }),
 
@@ -217,7 +217,7 @@ const invalid = [
 ///////////////////////
 // deep dereferences //
 //////////////////////
-;[['deep', 'espree'], ['deep-es7', 'babel-eslint']].forEach(function ([folder, parser]) { // close over params
+;[['deep', require.resolve('espree')], ['deep-es7', require.resolve('babel-eslint')]].forEach(function ([folder, parser]) { // close over params
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),

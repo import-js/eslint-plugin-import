@@ -76,7 +76,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import type MyType from "myflowtyped";',
       options: [{packageDir: packageDirWithFlowTyped}],
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
     }),
     test({
       code: 'import react from "react";',
@@ -289,5 +289,5 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
     }),
-  ]
+  ],
 })

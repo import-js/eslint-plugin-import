@@ -29,11 +29,11 @@ function runResolverTests(resolver) {
       test({ code: 'import "./importType"', options: [{ noUselessIndex: true }] }), // ./importType.js does not exist
 
       test({ code: 'import(".")'
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
       test({ code: 'import("..")'
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
       test({ code: 'import("fs").then(function(fs){})'
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
     ],
 
     invalid: [
@@ -199,17 +199,17 @@ function runResolverTests(resolver) {
       test({
         code: 'import("./")',
         errors: [ 'Useless path segments for "./", should be "."'],
-        parser: 'babel-eslint',
+        parser: require.resolve('babel-eslint'),
       }),
       test({
         code: 'import("../")',
         errors: [ 'Useless path segments for "../", should be ".."'],
-        parser: 'babel-eslint',
+        parser: require.resolve('babel-eslint'),
       }),
       test({
         code: 'import("./deep//a")',
         errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
-        parser: 'babel-eslint',
+        parser: require.resolve('babel-eslint'),
       }),
     ],
   })
