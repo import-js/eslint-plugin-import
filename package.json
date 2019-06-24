@@ -47,7 +47,8 @@
   },
   "homepage": "https://github.com/benmosher/eslint-plugin-import",
   "devDependencies": {
-    "@typescript-eslint/parser": "^1.5.0",
+    "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
+    "@typescript-eslint/parser": "1.10.3-alpha.13",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
@@ -58,13 +59,12 @@
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "cross-env": "^4.0.0",
-    "eslint": "2.x - 5.x",
+    "eslint": "2.x - 6.x",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-typescript": "^1.0.2",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
-    "eslint-module-utils": "file:./utils",
     "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
-    "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
+    "eslint-module-utils": "file:./utils",
     "eslint-plugin-import": "2.x",
     "linklocal": "^2.8.2",
     "mocha": "^3.5.3",
@@ -77,7 +77,7 @@
     "typescript-eslint-parser": "^22.0.0"
   },
   "peerDependencies": {
-    "eslint": "2.x - 5.x"
+    "eslint": "2.x - 6.x"
   },
   "dependencies": {
     "array-includes": "^3.0.3",

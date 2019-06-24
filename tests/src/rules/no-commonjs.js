@@ -9,14 +9,14 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   valid: [
 
     // imports
-    { code: 'import "x";', parserOptions: { sourceType: 'module' } },
-    { code: 'import x from "x"', parserOptions: { sourceType: 'module' } },
-    { code: 'import x from "x"', parserOptions: { sourceType: 'module' } },
-    { code: 'import { x } from "x"', parserOptions: { sourceType: 'module' } },
+    { code: 'import "x";', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'import x from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'import x from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'import { x } from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
 
     // exports
-    { code: 'export default "x"', parserOptions: { sourceType: 'module' } },
-    { code: 'export function house() {}', parserOptions: { sourceType: 'module' } },
+    { code: 'export default "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'export function house() {}', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     {
       code:
       'function someFunc() {\n'+
@@ -24,7 +24,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
       '\n'+
       '  expect(exports.someProp).toEqual({ a: \'value\' });\n'+
       '}',
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
 
     // allowed requires

@@ -187,6 +187,7 @@ describe('ExportMap', function () {
       jsdocTests({
         parserPath: 'espree',
         parserOptions: {
+          ecmaVersion: 2015,
           sourceType: 'module',
           attachComment: true,
         },
@@ -195,6 +196,7 @@ describe('ExportMap', function () {
       jsdocTests({
         parserPath: 'espree',
         parserOptions: {
+          ecmaVersion: 2015,
           sourceType: 'module',
           attachComment: true,
         },
@@ -206,6 +208,7 @@ describe('ExportMap', function () {
       jsdocTests({
         parserPath: 'babel-eslint',
         parserOptions: {
+          ecmaVersion: 2015,
           sourceType: 'module',
           attachComment: true,
         },
@@ -214,6 +217,7 @@ describe('ExportMap', function () {
       jsdocTests({
         parserPath: 'babel-eslint',
         parserOptions: {
+          ecmaVersion: 2015,
           sourceType: 'module',
           attachComment: true,
         },
@@ -223,8 +227,8 @@ describe('ExportMap', function () {
   })
 
   context('exported static namespaces', function () {
-    const espreeContext = { parserPath: 'espree', parserOptions: { sourceType: 'module' }, settings: {} }
-    const babelContext = { parserPath: 'babel-eslint', parserOptions: { sourceType: 'module' }, settings: {} }
+    const espreeContext = { parserPath: 'espree', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, settings: {} }
+    const babelContext = { parserPath: 'babel-eslint', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, settings: {} }
 
     it('works with espree & traditional namespace exports', function () {
       const path = getFilename('deep/a.js')
@@ -255,7 +259,7 @@ describe('ExportMap', function () {
   })
 
   context('deep namespace caching', function () {
-    const espreeContext = { parserPath: 'espree', parserOptions: { sourceType: 'module' }, settings: {} }
+    const espreeContext = { parserPath: 'espree', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, settings: {} }
     let a
     before('sanity check and prime cache', function (done) {
       // first version
@@ -332,11 +336,14 @@ describe('ExportMap', function () {
 
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
-      ['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }],
     ]
 
     if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
       configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }])
+    }
+
+    if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+      configs.push(['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }])
     }
 
     configs.forEach(([description, parserConfig]) => {

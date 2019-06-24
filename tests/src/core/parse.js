@@ -20,7 +20,7 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   })
 
   it('infers jsx from ecmaFeatures when using stock parser', function () {
-    expect(() => parse(path, content, { settings: {}, parserPath: 'espree', parserOptions: { sourceType: 'module', ecmaFeatures: { jsx: true } } }))
+    expect(() => parse(path, content, { settings: {}, parserPath: 'espree', parserOptions: { ecmaVersion: 2015, sourceType: 'module', ecmaFeatures: { jsx: true } } }))
       .not.to.throw(Error)
   })
 

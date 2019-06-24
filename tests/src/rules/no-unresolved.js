@@ -30,7 +30,7 @@ function runResolverTests(resolver) {
       rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
       rest({ code: "import('fs');"
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
 
       rest({ code: 'import * as foo from "a"' }),
 
@@ -40,9 +40,9 @@ function runResolverTests(resolver) {
 
       // stage 1 proposal for export symmetry,
       rest({ code: 'export * as bar from "./bar"'
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
       rest({ code: 'export bar from "./bar"'
-           , parser: 'babel-eslint' }),
+           , parser: require.resolve('babel-eslint') }),
       rest({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
 
       // commonjs setting
@@ -122,7 +122,7 @@ function runResolverTests(resolver) {
                           "module 'in-alternate-root'."
                 , type: 'Literal',
                 }],
-      parser: 'babel-eslint'}),
+      parser: require.resolve('babel-eslint')}),
 
       rest({ code: 'export { foo } from "./does-not-exist"'
            , errors: ["Unable to resolve path to module './does-not-exist'."] }),
@@ -133,11 +133,11 @@ function runResolverTests(resolver) {
 
       // export symmetry proposal
       rest({ code: 'export * as bar from "./does-not-exist"'
-           , parser: 'babel-eslint'
+           , parser: require.resolve('babel-eslint')
            , errors: ["Unable to resolve path to module './does-not-exist'."],
            }),
       rest({ code: 'export bar from "./does-not-exist"'
-           , parser: 'babel-eslint'
+           , parser: require.resolve('babel-eslint')
            , errors: ["Unable to resolve path to module './does-not-exist'."],
            }),
 

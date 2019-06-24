@@ -25,11 +25,11 @@ ruleTester.run('no-mutable-exports', rule, {
     test({ code: 'class Counter {}\nexport default Counter'}),
     test({ code: 'class Counter {}\nexport { Counter as default }'}),
     test({
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       code: 'export Something from "./something";',
     }),
     test({
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       code: 'type Foo = {}\nexport type {Foo}',
     }),
   ],

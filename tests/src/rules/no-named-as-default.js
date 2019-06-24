@@ -13,13 +13,13 @@ ruleTester.run('no-named-as-default', rule, {
 
     // es7
     test({ code: 'export bar, { foo } from "./bar";'
-         , parser: 'babel-eslint' }),
+         , parser: require.resolve('babel-eslint') }),
     test({ code: 'export bar from "./bar";'
-         , parser: 'babel-eslint' }),
+         , parser: require.resolve('babel-eslint') }),
 
     // #566: don't false-positive on `default` itself
     test({ code: 'export default from "./bar";'
-         , parser: 'babel-eslint' }),
+         , parser: require.resolve('babel-eslint') }),
 
     ...SYNTAX_CASES,
   ],
@@ -39,13 +39,13 @@ ruleTester.run('no-named-as-default', rule, {
     // es7
     test({
       code: 'export foo from "./bar";',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
       , type: 'ExportDefaultSpecifier' } ] }),
     test({
       code: 'export foo, { foo as bar } from "./bar";',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.'
     , type: 'ExportDefaultSpecifier' } ] }),

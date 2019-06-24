@@ -66,7 +66,7 @@ ruleTester.run('max-dependencies', rule, {
 
     test({
       code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-      parser: 'babel-eslint',
+      parser: require.resolve('babel-eslint'),
       options: [{
         max: 1,
       }],

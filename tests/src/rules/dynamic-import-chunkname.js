@@ -14,7 +14,7 @@ const pickyCommentOptions = [{
 const multipleImportFunctionOptions = [{
   importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
 }]
-const parser = 'babel-eslint'
+const parser = require.resolve('babel-eslint')
 
 const noLeadingCommentError = 'dynamic imports require a leading comment with the webpack chunkname'
 const nonBlockCommentError = 'dynamic imports require a /* foo */ style comment, not a // foo comment'

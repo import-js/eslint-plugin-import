@@ -65,63 +65,63 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           return somethingElse();
       }
     }`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';\nimport foo from 'foo';\n`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';import foo from 'foo';\n`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';import foo from 'foo';\n\nvar bar = 42;`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\nvar bar = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ 'count': 2 }],
     },
     {
       code: `import foo from 'foo';\n\n\n\n\nvar bar = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ 'count': 4 }],
     },
     {
       code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ 'count': 2 }],
     },
     {
       code: `var foo = require('foo-module');\n\n\n\n\nvar foo = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ 'count': 4 }],
     },
     {
       code: `require('foo-module');\n\nvar foo = 'bar';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\nimport { bar } from './bar-lib';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\n\nvar a = 123;\n\nvar bar = require('bar-lib');`,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `
@@ -130,7 +130,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           foo();
         }
       `,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `
@@ -139,7 +139,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           foo();
         }
       `,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `
@@ -149,7 +149,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           var bar = 42;
         }
       `,
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `//issue 592
@@ -157,13 +157,13 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         @SomeDecorator(require('./some-file'))
         class App {}
       `,
-      parserOptions: { sourceType: 'module' },
-      parser: 'babel-eslint',
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
     },
     {
       code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      parserOptions: { sourceType: 'module' },
-      parser: 'babel-eslint',
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
     },
   ],
 
@@ -176,7 +176,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
@@ -187,7 +187,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar something = 123;`,
@@ -197,7 +197,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
@@ -208,7 +208,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar something = 123;`,
@@ -218,7 +218,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;`,
@@ -234,7 +234,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
       }],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar a = 123;\n\nvar bar = require('bar-lib');\nvar b=456;`,
@@ -250,7 +250,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           column: 1,
           message: REQUIRE_ERROR_MESSAGE,
         }],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar a = 123;\n\nrequire('bar-lib');\nvar b=456;`,
@@ -266,7 +266,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           column: 1,
           message: REQUIRE_ERROR_MESSAGE,
         }],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var path = require('path');\nvar foo = require('foo');\nvar bar = 42;`,
@@ -316,7 +316,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';import foo from 'foo';var bar = 42;`,
@@ -326,7 +326,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 25,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
@@ -336,8 +336,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
-      parser: 'babel-eslint',
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
@@ -347,8 +347,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
       } ],
-      parserOptions: { sourceType: 'module' },
-      parser: 'babel-eslint',
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
     },
   ],
 })

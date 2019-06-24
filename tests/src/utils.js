@@ -12,7 +12,7 @@ export function testFilePath(relativePath) {
 export const FILENAME = testFilePath('foo.js')
 
 export function testVersion(specifier, t) {
-  return semver.satisfies(eslintPkg.version, specifier) && test(t)
+  return semver.satisfies(eslintPkg.version, specifier) && test(t())
 }
 
 export function test(t) {
@@ -46,7 +46,7 @@ export const SYNTAX_CASES = [
   test({ code: 'for (let [ foo, bar ] of baz) {}' }),
 
   test({ code: 'const { x, y } = bar' }),
-  test({ code: 'const { x, y, ...z } = bar', parser: 'babel-eslint' }),
+  test({ code: 'const { x, y, ...z } = bar', parser: require.resolve('babel-eslint') }),
 
   // all the exports
   test({ code: 'let x; export { x }' }),
@@ -54,7 +54,7 @@ export const SYNTAX_CASES = [
 
   // not sure about these since they reference a file
   // test({ code: 'export { x } from "./y.js"'}),
-  // test({ code: 'export * as y from "./y.js"', parser: 'babel-eslint'}),
+  // test({ code: 'export * as y from "./y.js"', parser: require.resolve('babel-eslint')}),
 
   test({ code: 'export const x = null' }),
   test({ code: 'export var x = null' }),
