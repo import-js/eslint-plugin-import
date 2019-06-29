@@ -1,6 +1,9 @@
 # import/no-namespace
 
-Reports if namespace import is used.
+Enforce a convention of not using namespace (a.k.a. "wildcard" `*`) imports.
+
++(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule, provided that the namespace object is only used for direct member access, e.g. `namespace.a`.
+The `--fix` functionality for this rule requires ESLint 5 or newer.
 
 ## Rule Details
 
@@ -12,10 +15,13 @@ import { a, b }  from './bar'
 import defaultExport, { a, b }  from './foobar'
 ```
 
-...whereas here imports will be reported:
+Invalid:
 
 ```js
 import * as foo from 'foo';
+```
+
+```js
 import defaultExport, * as foo from 'foo';
 ```
 

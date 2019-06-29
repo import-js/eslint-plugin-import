@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
+- [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
 
 ### Added
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
@@ -617,6 +618,7 @@ for info on changes for earlier releases.
 [#1412]: https://github.com/benmosher/eslint-plugin-import/pull/1412
 [#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
 [#1404]: https://github.com/benmosher/eslint-plugin-import/pull/1404
+[#1401]: https://github.com/benmosher/eslint-plugin-import/pull/1401
 [#1393]: https://github.com/benmosher/eslint-plugin-import/pull/1393
 [#1389]: https://github.com/benmosher/eslint-plugin-import/pull/1389
 [#1377]: https://github.com/benmosher/eslint-plugin-import/pull/1377
@@ -989,3 +991,4 @@ for info on changes for earlier releases.
 [@JounQin]: https://github.com/JounQin
 [@atikenny]: https://github.com/atikenny
 [@schmidsi]: https://github.com/schmidsi
+[@TrevorBurnham]: https://github.com/TrevorBurnham
