@@ -1,6 +1,9 @@
 import { test, SYNTAX_CASES } from '../utils'
 
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
+
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-deprecated')
@@ -196,4 +199,46 @@ ruleTester.run('no-deprecated: hoisting', rule, {
     }),
 
   ],
+})
+
+describe('Typescript', function () {
+  // Typescript
+  const parsers = []
+
+  if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
+    parsers.push(require.resolve('@typescript-eslint/parser'))
+  }
+
+  if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+    parsers.push(require.resolve('typescript-eslint-parser'))
+  }
+
+  parsers.forEach((parser) => {
+    const parserConfig = {
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }
+
+    ruleTester.run(parser, rule, {
+      valid: [
+        test({
+          code: "import * as hasDeprecated from './ts-deprecated.ts'",
+          ...parserConfig,
+        })
+      ],
+      invalid: [
+        test({
+          code: "import { foo } from './ts-deprecated.ts'; console.log(foo())",
+          errors: [
+            { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this!' },
+            { type: "Identifier", message: "Deprecated: don\'t use this!" }
+          ],
+          ...parserConfig,
+        })
+      ]
+    })
+  })
 })
