@@ -4,7 +4,6 @@ import { isArray, isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
-import importType from '../core/importType'
 import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
@@ -107,12 +106,15 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     return
   }
 
-  if (importType(name, context) !== 'external') {
+  let resolved
+  try {
+    resolved = resolve.full(name, context)
+  } catch (err) {
     return
   }
-
-  const resolved = resolve(name, context)
-  if (!resolved) { return }
+  if (resolved.type !== 'external') {
+    return
+  }
 
   const splitName = name.split('/')
   const packageName = splitName[0][0] === '@'

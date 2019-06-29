@@ -58,6 +58,12 @@ The first resolver to return `{found: true}` is considered the source of truth. 
 
 - `found`: `true` if the `source` module can be resolved relative to `file`, else `false`
 - `path`: an absolute path `String` if the module can be located on the filesystem; else, `null`.
+- `type`: optional `String`. if present, value should be one of
+  - `builtin` - a platform dependency (e.g. `crypto`, `electron`), probably without a `path`
+  - `internal` - your project code, referenced via alias (e.g. `src/graphql`, `./index`)
+  - `external` - external dependencies (e.g. `left-pad`, `express`). `path` may or may not be defined.
+
+  If not present or an unknown value, the plugin may attempt to infer from the path.
 
 An example of a `null` path is a Node core module, such as `fs` or `crypto`. These modules can always be resolved, but the path need not be provided as the plugin will not attempt to parse core modules at this time.
 

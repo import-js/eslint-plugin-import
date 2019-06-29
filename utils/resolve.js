@@ -5,6 +5,7 @@ const pkgDir = require('pkg-dir')
 
 const fs = require('fs')
 const path = require('path')
+const resolveLegacyResolverType = require('./legacyImportType')
 
 const hashObject = require('./hash').hashObject
     , ModuleCache = require('./ModuleCache').default
@@ -15,13 +16,13 @@ exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 const fileExistsCache = new ModuleCache()
 
 function tryRequire(target) {
-  let resolved;
+  let resolved
   try {
     // Check if the target exists
     resolved = require.resolve(target);
   } catch(e) {
     // If the target does not exist then just return undefined
-    return undefined;
+    return undefined
   }
 
   // If the target exists then return the loaded module
@@ -71,11 +72,11 @@ function fullResolve(modulePath, sourceFile, settings) {
 
   const cacheSettings = ModuleCache.getSettings(settings)
 
-  const cachedPath = fileExistsCache.get(cacheKey, cacheSettings)
-  if (cachedPath !== undefined) return { found: true, path: cachedPath }
+  const cachedObject = fileExistsCache.get(cacheKey, cacheSettings)
+  if (cachedObject !== undefined) return cachedObject
 
-  function cache(resolvedPath) {
-    fileExistsCache.set(cacheKey, resolvedPath)
+  function cache(resolved) {
+    fileExistsCache.set(cacheKey, resolved)
   }
 
   function withResolver(resolver, config) {
@@ -84,14 +85,22 @@ function fullResolve(modulePath, sourceFile, settings) {
       try {
         const resolved = resolver.resolveImport(modulePath, sourceFile, config)
         if (resolved === undefined) return { found: false }
-        return { found: true, path: resolved }
+        return {
+          found: true,
+          path: resolved,
+          type: resolveLegacyResolverType(modulePath, settings, resolved),
+        }
       } catch (err) {
         return { found: false }
       }
     }
 
     function v2() {
-      return resolver.resolve(modulePath, sourceFile, config)
+      const result = resolver.resolve(modulePath, sourceFile, config)
+      if (result && !result.type) {
+        result.type = resolveLegacyResolverType(modulePath, settings, result.path)
+      }
+      return result
     }
 
     switch (resolver.interfaceVersion) {
@@ -118,7 +127,7 @@ function fullResolve(modulePath, sourceFile, settings) {
     if (!resolved.found) continue
 
     // else, counts
-    cache(resolved.path)
+    cache(resolved)
     return resolved
   }
 
@@ -182,9 +191,10 @@ const erroredContexts = new Set()
  * Given
  * @param  {string} p - module path
  * @param  {object} context - ESLint context
- * @return {string} - the full module filesystem path;
- *                    null if package is core;
- *                    undefined if not found
+ * @return {{path: string, type: "builtin" | "internal" | "external"} | undefined} -
+ *    the full module filesystem path;
+ *    null if package is core;
+ *    undefined if not found
  */
 function resolve(p, context) {
   try {
@@ -203,4 +213,5 @@ function resolve(p, context) {
   }
 }
 resolve.relative = relative
+resolve.full = (p, context) => fullResolve(p, context.getFilename(), context.settings)
 exports.default = resolve
