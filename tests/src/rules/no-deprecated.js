@@ -224,21 +224,19 @@ describe('Typescript', function () {
 
     ruleTester.run(parser, rule, {
       valid: [
-        test({
-          code: "import * as hasDeprecated from './ts-deprecated.ts'",
-          ...parserConfig,
-        })
+        test(Object.assign({
+          code: 'import * as hasDeprecated from \'./ts-deprecated.ts\'',
+        }, parserConfig)),
       ],
       invalid: [
-        test({
-          code: "import { foo } from './ts-deprecated.ts'; console.log(foo())",
+        test(Object.assign({
+          code: 'import { foo } from \'./ts-deprecated.ts\'; console.log(foo())',
           errors: [
             { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this!' },
-            { type: "Identifier", message: "Deprecated: don\'t use this!" }
-          ],
-          ...parserConfig,
-        })
-      ]
+            { type: 'Identifier', message: 'Deprecated: don\'t use this!' },
+          ]},
+          parserConfig)),
+      ],
     })
   })
 })
