@@ -105,7 +105,8 @@ export function doAnything() {
 export default 5 // will not be reported
 ```
 
-
+#### Important Note
+Exports from files listed as a main file (`main`, `browser`, or `bin` fields in `package.json`) will be ignored by default. This only applies if the `package.json` is not set to `private: true`
 
 ## When not to use
 

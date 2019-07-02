@@ -7,6 +7,10 @@
 import Exports from '../ExportMap'
 import resolve from 'eslint-module-utils/resolve'
 import docsUrl from '../docsUrl'
+import { dirname, join } from 'path'
+import readPkgUp from 'read-pkg-up'
+import values from 'object.values'
+import includes from 'array-includes'
 
 // eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
 // and has been moved to eslint/lib/cli-engine/file-enumerator in version 6
@@ -80,7 +84,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
     if (currentExports) {
       const { dependencies, reexports, imports: localImportList, namespace  } = currentExports
 
-      // dependencies === export * from 
+      // dependencies === export * from
       const currentExportAll = new Set()
       dependencies.forEach(value => {
         currentExportAll.add(value().path)
@@ -146,7 +150,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
 }
 
 /**
- * traverse through all imports and add the respective path to the whereUsed-list 
+ * traverse through all imports and add the respective path to the whereUsed-list
  * of the corresponding export
  */
 const determineUsage = () => {
@@ -200,6 +204,58 @@ const newNamespaceImportExists = specifiers =>
 
 const newDefaultImportExists = specifiers =>
   specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER)
+
+const fileIsInPkg = file => {
+  const { path, pkg } = readPkgUp.sync({cwd: file, normalize: false})
+  const basePath = dirname(path)
+
+  const checkPkgFieldString = pkgField => {
+    if (join(basePath, pkgField) === file) {
+        return true
+      }
+  }
+
+  const checkPkgFieldObject = pkgField => {
+      const pkgFieldFiles = values(pkgField).map(value => join(basePath, value))
+      if (includes(pkgFieldFiles, file)) {
+        return true
+      }
+  }
+
+  const checkPkgField = pkgField => {
+    if (typeof pkgField === 'string') {
+      return checkPkgFieldString(pkgField)
+    }
+
+    if (typeof pkgField === 'object') {
+      return checkPkgFieldObject(pkgField)
+    }
+  }
+
+  if (pkg.private === true) {
+    return false
+  }
+
+  if (pkg.bin) {
+    if (checkPkgField(pkg.bin)) {
+      return true
+    }
+  }
+
+  if (pkg.browser) {
+    if (checkPkgField(pkg.browser)) {
+      return true
+    }
+  }
+
+  if (pkg.main) {
+    if (checkPkgFieldString(pkg.main)) {
+      return true
+    }
+  }
+
+  return false
+}
 
 module.exports = {
   meta: {
@@ -315,6 +371,10 @@ module.exports = {
         return
       }
 
+      if (fileIsInPkg(file)) {
+        return
+      }
+
       // refresh list of source files
       const srcFiles = resolveFiles(getSrc(src), ignoreExports)
 
@@ -325,7 +385,7 @@ module.exports = {
 
       exports = exportList.get(file)
 
-      // special case: export * from 
+      // special case: export * from
       const exportAll = exports.get(EXPORT_ALL_DECLARATION)
       if (typeof exportAll !== 'undefined' && exportedValue !== IMPORT_DEFAULT_SPECIFIER) {
         if (exportAll.whereUsed.size > 0) {
@@ -362,7 +422,7 @@ module.exports = {
 
     /**
      * only useful for tools like vscode-eslint
-     * 
+     *
      * update lists of existing exports during runtime
      */
     const updateExportUsage = node => {
@@ -384,7 +444,7 @@ module.exports = {
       node.body.forEach(({ type, declaration, specifiers }) => {
         if (type === EXPORT_DEFAULT_DECLARATION) {
           newExportIdentifiers.add(IMPORT_DEFAULT_SPECIFIER)
-        } 
+        }
         if (type === EXPORT_NAMED_DECLARATION) {
           if (specifiers.length > 0) {
             specifiers.forEach(specifier => {
@@ -399,7 +459,7 @@ module.exports = {
               declaration.type === CLASS_DECLARATION
             ) {
               newExportIdentifiers.add(declaration.id.name)
-            }   
+            }
             if (declaration.type === VARIABLE_DECLARATION) {
               declaration.declarations.forEach(({ id }) => {
                 newExportIdentifiers.add(id.name)
@@ -438,7 +498,7 @@ module.exports = {
 
     /**
      * only useful for tools like vscode-eslint
-     * 
+     *
      * update lists of existing imports during runtime
      */
     const updateImportUsage = node => {

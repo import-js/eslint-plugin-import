@@ -611,3 +611,31 @@ ruleTester.run('no-unused-modules', rule, {
   ],
   invalid: [],
 })
+
+describe('do not report unused export for files mentioned in package.json', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+             code: 'export const bin = "bin"',
+             filename: testFilePath('./no-unused-modules/bin.js')}),
+      test({ options: unusedExportsOptions,
+             code: 'export const binObject = "binObject"',
+             filename: testFilePath('./no-unused-modules/binObject/index.js')}),
+      test({ options: unusedExportsOptions,
+             code: 'export const browser = "browser"',
+             filename: testFilePath('./no-unused-modules/browser.js')}),
+      test({ options: unusedExportsOptions,
+             code: 'export const browserObject = "browserObject"',
+             filename: testFilePath('./no-unused-modules/browserObject/index.js')}),
+      test({ options: unusedExportsOptions,
+             code: 'export const main = "main"',
+             filename: testFilePath('./no-unused-modules/main/index.js')}),
+    ],
+    invalid: [
+      test({ options: unusedExportsOptions,
+             code: 'export const privatePkg = "privatePkg"',
+             filename: testFilePath('./no-unused-modules/privatePkg/index.js'),
+             errors: [error(`exported declaration 'privatePkg' not used within other modules`)]}),
+    ],
+  })
+})
