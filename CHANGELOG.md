@@ -62,7 +62,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [2.17.0] - 2019-04-13
 
 ### Added
-- Autofixer for [`no-duplicates`] rule ([#1312], thanks [@lydell])
 - [`no-useless-path-segments`]: Add `noUselessIndex` option ([#1290], thanks [@timkraut])
 - [`no-duplicates`]: Add autofix ([#1312], thanks [@lydell])
 - Add [`no-unused-modules`] rule ([#1142], thanks [@rfermann])
