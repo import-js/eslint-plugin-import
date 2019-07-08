@@ -30,7 +30,7 @@ module.exports = {
     const { webpackChunknameFormat = '[0-9a-zA-Z-_/.]+' } = config || {}
 
     const paddedCommentRegex = /^ (\S[\s\S]+\S) $/
-    const commentStyleRegex = /^( \w+: ("[^"]*"|\d+|false|true),?)+ $/
+    const commentStyleRegex = /^( \w+: ("[^"]*"|\/.*\/|\d+|false|true),?)+ $/
     const chunkSubstrFormat = ` webpackChunkName: "${webpackChunknameFormat}",? `
     const chunkSubstrRegex = new RegExp(chunkSubstrFormat)
 

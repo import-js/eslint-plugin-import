@@ -34,6 +34,30 @@ ruleTester.run('dynamic-import-chunkname', rule, {
     },
     {
       code: `dynamicImport(
+        /* webpackInclude: /some-regex/ */
+        /* webpackChunkName: "someModule" */
+        'test'
+      )`,
+      options,
+    },
+    {
+      code: `dynamicImport(
+        /* webpackChunkName: "someModule" */
+        /* webpackInclude: /some-regex/ */
+        'test'
+      )`,
+      options,
+    },
+    {
+      code: `dynamicImport(
+        /* webpackExclude: /some-regex/ */
+        /* webpackChunkName: "someModule" */
+        'test'
+      )`,
+      options,
+    },
+    {
+      code: `dynamicImport(
         /* webpackChunkName: "Some_Other_Module" */
         "test"
       )`,
