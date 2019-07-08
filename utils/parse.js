@@ -31,7 +31,14 @@ exports.default = function parse(path, content, context) {
   // provide the `filePath` like eslint itself does, in `parserOptions`
   // https://github.com/eslint/eslint/blob/3ec436ee/lib/linter.js#L637
   parserOptions.filePath = path
-
+  
+  // @typescript-eslint/parser will parse the entire project with typechecking if you provide
+  // "project" or "projects" in parserOptions. Removing these options means the parser will
+  // only parse one file in isolate mode, which is much, much faster.
+  // https://github.com/benmosher/eslint-plugin-import/issues/1408#issuecomment-509298962
+  delete parserOptions.project;
+  delete parserOptions.projects;
+  
   // require the parser relative to the main module (i.e., ESLint)
   const parser = moduleRequire(parserPath)
 
