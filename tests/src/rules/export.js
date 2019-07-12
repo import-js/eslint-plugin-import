@@ -118,7 +118,7 @@ context('Typescript', function () {
     parsers.push(require.resolve('@typescript-eslint/parser'))
   }
 
-  if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+  if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
     parsers.push(require.resolve('typescript-eslint-parser'))
   }
 
@@ -144,6 +144,14 @@ context('Typescript', function () {
           code: `
             export const Foo = 1;
             export interface Foo {}
+          `,
+        }, parserConfig)),
+
+        test(Object.assign({
+          code: `
+            export function fff(a: string);
+            export function fff(a: number);
+            export function fff(a: string|number) {};
           `,
         }, parserConfig)),
 

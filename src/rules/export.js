@@ -24,6 +24,21 @@ ambient namespaces:
 const rootProgram = 'root'
 const tsTypePrefix = 'type:'
 
+/**
+ * Detect function overloads like:
+ * ```ts
+ * export function foo(a: number);
+ * export function foo(a: string);
+ * export function foo(a: number|string) { return a; }
+ * ```
+ * @param {Set<Object>} nodes
+ * @returns {boolean}
+ */
+function isTypescriptFunctionOverloads(nodes) {
+  const types = new Set(Array.from(nodes, node => node.parent.type))
+  return types.size === 2 && types.has('TSDeclareFunction') && types.has('FunctionDeclaration')
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -122,6 +137,8 @@ module.exports = {
         for (let [, named] of namespace) {
           for (let [name, nodes] of named) {
             if (nodes.size <= 1) continue
+
+            if (isTypescriptFunctionOverloads(nodes)) continue
 
             for (let node of nodes) {
               if (name === 'default') {
