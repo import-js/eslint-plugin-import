@@ -47,8 +47,15 @@ module.exports = {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return
 
-        // don't count flow types exports
+        // don't warn on single type aliases or declarations
         if (node.exportKind === 'type') return
+
+        if (
+          node.declaration.type === 'TSTypeAliasDeclaration' ||
+          node.declaration.type === 'TypeAlias'
+        ) {
+          return
+        }
 
         if (node.declaration.declarations) {
           node.declaration.declarations.forEach(function(declaration) {

@@ -1,6 +1,8 @@
 import { test } from '../utils'
 
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/prefer-default-export')
@@ -83,7 +85,6 @@ ruleTester.run('prefer-default-export', rule, {
       code: 'export { a, b } from "foo.js"',
       parser: require.resolve('babel-eslint'),
     }),
-
     // ...SYNTAX_CASES,
   ],
   invalid: [
@@ -129,4 +130,66 @@ ruleTester.run('prefer-default-export', rule, {
       }],
     }),
   ],
-})
+});
+
+context('Typescript', function() {
+  // Typescript
+  const parsers = [require.resolve('babel-eslint')];
+
+  if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
+    parsers.push(require.resolve('typescript-eslint-parser'));
+  }
+
+  if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
+    parsers.push(require.resolve('@typescript-eslint/parser'));
+  }
+
+  parsers.forEach((parser) => {
+    const parserConfig = {
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    };
+
+    ruleTester.run('prefer-default-export', rule, {
+      valid: [
+        // Exporting types
+        test(
+          {
+            code: `
+        export type foo = string;
+        export type bar = number;`,
+            parser,
+          },
+          parserConfig,
+        ),
+        test(
+          {
+            code: `
+        export type foo = string;
+        export type bar = number;`,
+            parser,
+          },
+          parserConfig,
+        ),
+        test(
+          {
+            code: 'export type foo = string',
+            parser,
+          },
+          parserConfig,
+        ),
+        test(
+          {
+            code: 'export type foo = string',
+            parser,
+          },
+          parserConfig,
+        ),
+      ],
+      invalid: [],
+    });
+  });
+});
