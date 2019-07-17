@@ -1,12 +1,7 @@
-import cond from 'lodash/cond'
 import coreModules from 'resolve/lib/core'
 import { join } from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
-
-function constant(value) {
-  return () => value
-}
 
 function baseModule(name) {
   if (isScoped(name)) {
@@ -76,17 +71,17 @@ function isRelativeToSibling(name) {
   return /^\.[\\/]/.test(name)
 }
 
-const typeTest = cond([
-  [isAbsolute, constant('absolute')],
-  [isBuiltIn, constant('builtin')],
-  [isInternalModule, constant('internal')],
-  [isExternalModule, constant('external')],
-  [isScoped, constant('external')],
-  [isRelativeToParent, constant('parent')],
-  [isIndex, constant('index')],
-  [isRelativeToSibling, constant('sibling')],
-  [constant(true), constant('unknown')],
-])
+function typeTest(name, settings, path) {
+  if (isAbsolute(name, settings, path)) { return 'absolute' }
+  if (isBuiltIn(name, settings, path)) { return 'builtin' }
+  if (isInternalModule(name, settings, path)) { return 'internal' }
+  if (isExternalModule(name, settings, path)) { return 'external' }
+  if (isScoped(name, settings, path)) { return 'external' }
+  if (isRelativeToParent(name, settings, path)) { return 'parent' }
+  if (isIndex(name, settings, path)) { return 'index' }
+  if (isRelativeToSibling(name, settings, path)) { return 'sibling' }
+  return 'unknown'
+}
 
 export default function resolveImportType(name, context) {
   return typeTest(name, context.settings, resolve(name, context))
