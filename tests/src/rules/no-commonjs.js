@@ -1,4 +1,6 @@
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
 
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
     , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
@@ -59,9 +61,11 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   invalid: [
 
     // imports
-    { code: 'var x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
-    { code: 'x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
-    { code: 'require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+    ...(semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
+      { code: 'var x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+      { code: 'x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+      { code: 'require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+    ]),
 
     // exports
     { code: 'exports.face = "palm"', errors: [ { message: EXPORT_MESSAGE }] },
