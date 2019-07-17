@@ -87,7 +87,6 @@
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-module-utils": "^2.4.0",
     "has": "^1.0.3",
-    "lodash": "^4.17.11",
     "minimatch": "^3.0.4",
     "read-pkg-up": "^2.0.0",
     "resolve": "^1.11.0"

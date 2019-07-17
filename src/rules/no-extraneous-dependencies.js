@@ -1,6 +1,5 @@
 import path from 'path'
 import fs from 'fs'
-import { isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -31,7 +30,7 @@ function getDependencies(context, packageDir) {
       peerDependencies: {},
     }
 
-    if (!isEmpty(packageDir)) {
+    if (packageDir && packageDir.length > 0) {
       if (!Array.isArray(packageDir)) {
         paths = [path.resolve(packageDir)]
       } else {
@@ -39,7 +38,7 @@ function getDependencies(context, packageDir) {
       }
     }
 
-    if (!isEmpty(paths)) {
+    if (paths.length > 0) {
       // use rule config to find package.json
       paths.forEach(dir => {
         const _packageContent = extractDepFields(
@@ -70,7 +69,7 @@ function getDependencies(context, packageDir) {
 
     return packageContent
   } catch (e) {
-    if (!isEmpty(paths) && e.code === 'ENOENT') {
+    if (paths.length > 0 && e.code === 'ENOENT') {
       context.report({
         message: 'The package.json file could not be found.',
         loc: { line: 0, column: 0 },
