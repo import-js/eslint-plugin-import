@@ -209,7 +209,8 @@ describe('Typescript', function () {
     parsers.push(require.resolve('@typescript-eslint/parser'))
   }
 
-  if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+  // typescript-eslint-parser doesn't support this rule on ESLint <4 for some reason
+  if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
     parsers.push(require.resolve('typescript-eslint-parser'))
   }
 
