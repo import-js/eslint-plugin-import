@@ -7,7 +7,7 @@ npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
 # completely remove the new typescript parser for ESLint < v5
 if [[ "$ESLINT_VERSION" -lt "5" ]]; then
   echo "Removing @typescript-eslint/parser..."
-  npm uninstall @typescript-eslint/parser
+  npm uninstall --no-save @typescript-eslint/parser
 fi
 
 # use these alternate typescript dependencies for ESLint < v4
