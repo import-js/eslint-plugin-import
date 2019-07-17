@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { isArray, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
@@ -32,7 +32,7 @@ function getDependencies(context, packageDir) {
     }
 
     if (!isEmpty(packageDir)) {
-      if (!isArray(packageDir)) {
+      if (!Array.isArray(packageDir)) {
         paths = [path.resolve(packageDir)]
       } else {
         paths = packageDir.map(dir => path.resolve(dir))
