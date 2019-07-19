@@ -1,7 +1,5 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils'
 import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
 
@@ -285,18 +283,7 @@ ruleTester.run('named (export *)', rule, {
 
 
 context('Typescript', function () {
-  // Typescript
-  const parsers = []
-
-  if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-    parsers.push(require.resolve('@typescript-eslint/parser'))
-  }
-
-  if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
-    parsers.push(require.resolve('typescript-eslint-parser'))
-  }
-
-  parsers.forEach((parser) => {
+  getTSParsers().forEach((parser) => {
     ['typescript', 'typescript-declare', 'typescript-export-assign'].forEach((source) => {
       ruleTester.run(`named`, rule, {
         valid: [

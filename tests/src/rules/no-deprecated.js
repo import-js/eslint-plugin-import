@@ -1,9 +1,6 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
-
 
 const ruleTester = new RuleTester()
     , rule = require('rules/no-deprecated')
@@ -202,19 +199,7 @@ ruleTester.run('no-deprecated: hoisting', rule, {
 })
 
 describe('Typescript', function () {
-  // Typescript
-  const parsers = []
-
-  if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-    parsers.push(require.resolve('@typescript-eslint/parser'))
-  }
-
-  // typescript-eslint-parser doesn't support this rule on ESLint <4 for some reason
-  if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
-    parsers.push(require.resolve('typescript-eslint-parser'))
-  }
-
-  parsers.forEach((parser) => {
+  getTSParsers().forEach((parser) => {
     const parserConfig = {
       parser: parser,
       settings: {
