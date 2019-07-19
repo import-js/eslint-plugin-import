@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.18.2] - 2019-07-19
+ - Skip warning on type interfaces ([#1425], thanks [@lencioni])
+
 ## [2.18.1] - 2019-07-18
 
 ### Fixed
@@ -455,7 +458,7 @@ memoizing parser, and takes only 27s with naked `babel-eslint` (thus, reparsing 
   something that looks like an `export` is detected in the module content.
 
 ## [1.2.0] - 2016-03-19
-Thanks @lencioni for identifying a huge amount of rework in resolve and kicking
+Thanks [@lencioni] for identifying a huge amount of rework in resolve and kicking
 off a bunch of memoization.
 
 I'm seeing 62% improvement over my normal test codebase when executing only
@@ -595,6 +598,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
 [#1419]: https://github.com/benmosher/eslint-plugin-import/pull/1419
 [#1412]: https://github.com/benmosher/eslint-plugin-import/pull/1412
 [#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
@@ -965,3 +969,4 @@ for info on changes for earlier releases.
 [@fooloomanzoo]: https://github.com/fooloomanzoo
 [@sheepsteak]: https://github.com/sheepsteak
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
+[@lencioni]: https://github.com/lencioni
