@@ -5,6 +5,16 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.18.1] - 2019-07-18
+
+### Fixed
+ - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
+ - [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
+ - [`no-unused-modules`]: Exclude package "main"/"bin"/"browser" entry points ([#1404], thanks [@rfermann])
+ - [`export`]: false positive for typescript overloads ([#1412], thanks [@golopot])
+
+### Refactors
+ - [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
 
 ## [2.18.0] - 2019-06-24
 
@@ -14,7 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: add fixer for destructuring commonjs import ([#1372], thanks [@golopot])
 - typescript config: add TS def extensions + defer to TS over JS ([#1366], thanks [@benmosher])
 
-### Fixes
+### Fixed
 - [`no-unused-modules`]: handle ClassDeclaration ([#1371], thanks [@golopot])
 
 ### Docs
@@ -586,8 +596,13 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1419]: https://github.com/benmosher/eslint-plugin-import/pull/1419
+[#1412]: https://github.com/benmosher/eslint-plugin-import/pull/1412
+[#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
+[#1404]: https://github.com/benmosher/eslint-plugin-import/pull/1404
 [#1393]: https://github.com/benmosher/eslint-plugin-import/pull/1393
 [#1389]: https://github.com/benmosher/eslint-plugin-import/pull/1389
+[#1377]: https://github.com/benmosher/eslint-plugin-import/pull/1377
 [#1375]: https://github.com/benmosher/eslint-plugin-import/pull/1375
 [#1372]: https://github.com/benmosher/eslint-plugin-import/pull/1372
 [#1371]: https://github.com/benmosher/eslint-plugin-import/pull/1371
@@ -950,3 +965,4 @@ for info on changes for earlier releases.
 [@benmosher]: https://github.com/benmosher
 [@fooloomanzoo]: https://github.com/fooloomanzoo
 [@sheepsteak]: https://github.com/sheepsteak
+[@sharmilajesupaul]: https://github.com/sharmilajesupaul
