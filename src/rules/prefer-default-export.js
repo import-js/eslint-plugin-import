@@ -47,12 +47,16 @@ module.exports = {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return
 
-        // don't warn on single type aliases or declarations
+        // don't warn on single type aliases, declarations, or interfaces
         if (node.exportKind === 'type') return
 
+        const { type } = node.declaration
+
         if (
-          node.declaration.type === 'TSTypeAliasDeclaration' ||
-          node.declaration.type === 'TypeAlias'
+          type === 'TSTypeAliasDeclaration' ||
+          type === 'TypeAlias' ||
+          type === 'TSInterfaceDeclaration' ||
+          type === 'InterfaceDeclaration'
         ) {
           return
         }

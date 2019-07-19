@@ -175,6 +175,13 @@ context('Typescript', function() {
           },
           parserConfig,
         ),
+        test (
+          {
+            code: 'export interface foo { bar: string; }',
+            parser,
+          },
+          parserConfig,
+        ),
       ],
       invalid: [],
     });
