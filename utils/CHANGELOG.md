@@ -5,6 +5,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.4.1 - 2019-07-19
+
+### Fixed
+ - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
+ - Improve support for Typescript declare structures ([#1356], thanks [@christophercurrie])
+
 ## v2.4.0 - 2019-04-13
 
 ### Added
@@ -46,6 +52,8 @@ Yanked due to critical issue with cache key resulting from #839.
 
 
 
+[#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
+[#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
 [#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
 [#1218]: https://github.com/benmosher/eslint-plugin-import/pull/1218
 [#1166]: https://github.com/benmosher/eslint-plugin-import/issues/1166
@@ -55,3 +63,5 @@ Yanked due to critical issue with cache key resulting from #839.
 [@hulkish]: https://github.com/hulkish
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01
+[@bradzacher]: https://github.com/bradzacher
+[@christophercurrie]: https://github.com/christophercurrie
