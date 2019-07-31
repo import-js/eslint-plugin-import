@@ -128,6 +128,22 @@ ruleTester.run('no-duplicates', rule, {
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
+    // #1403: first default and rest named imports should be merged
+    test({
+      code: "import def from './foo'; import {x} from './foo';",
+      output: "import def, {x} from './foo'; ",
+      parser: require.resolve('babel-eslint'),
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    // #1403: first default and rest named imports should be merged
+    test({
+      code: "import def, {x} from './foo'; import {y} from './foo';",
+      output: "import def, {x,y} from './foo'; ",
+      parser: require.resolve('babel-eslint'),
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
     test({
       code: "import {x} from './foo'; import def from './foo'",
       output: "import def, {x} from './foo'; ",

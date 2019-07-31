@@ -86,7 +86,8 @@ function getFix(first, rest, sourceCode) {
     !specifiers.some(specifier => specifier.importNode === node)
   )
 
-  const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1
+  const firstHasDefault = getDefaultImportName(first) != null
+  const shouldAddDefault = !firstHasDefault && defaultImportNames.size === 1
   const shouldAddSpecifiers = specifiers.length > 0
   const shouldRemoveUnnecessary = unnecessaryImports.length > 0
 
@@ -96,6 +97,7 @@ function getFix(first, rest, sourceCode) {
 
   return fixer => {
     const tokens = sourceCode.getTokens(first)
+    const defaultSpecifier = firstHasDefault && getDefaultImportSpecifier(first)
     const openBrace = tokens.find(token => isPunctuator(token, '{'))
     const closeBrace = tokens.find(token => isPunctuator(token, '}'))
     const firstToken = sourceCode.getFirstToken(first)
@@ -120,7 +122,11 @@ function getFix(first, rest, sourceCode) {
 
     const fixes = []
 
-    if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
+    if (defaultSpecifier && openBrace == null && shouldAddSpecifiers) {
+      fixes.push(fixer.insertTextAfter(defaultSpecifier, `, {${specifiersText}}`))
+    } else if (defaultSpecifier && openBrace != null && shouldAddSpecifiers) {
+      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
+    } else if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import def, {...} from './foo'`
       fixes.push(
         fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
@@ -163,10 +169,14 @@ function isPunctuator(node, value) {
   return node.type === 'Punctuator' && node.value === value
 }
 
+// Get the specifier of the default import of `node`, if any.
+function getDefaultImportSpecifier(node) {
+  return node.specifiers.find(specifier => specifier.type === 'ImportDefaultSpecifier')
+}
+
 // Get the name of the default import of `node`, if any.
 function getDefaultImportName(node) {
-  const defaultSpecifier = node.specifiers
-    .find(specifier => specifier.type === 'ImportDefaultSpecifier')
+  const defaultSpecifier = getDefaultImportSpecifier(node)
   return defaultSpecifier != null ? defaultSpecifier.local.name : undefined
 }
 
