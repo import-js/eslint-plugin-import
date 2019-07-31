@@ -86,8 +86,8 @@ function getFix(first, rest, sourceCode) {
     !specifiers.some(specifier => specifier.importNode === node)
   )
 
-  const firstHasDefault = getDefaultImportName(first) != null
-  const shouldAddDefault = !firstHasDefault && defaultImportNames.size === 1
+  const firstDefaultSpecifier = getDefaultImportSpecifier(first)
+  const shouldAddDefault = !firstDefaultSpecifier && defaultImportNames.size === 1
   const shouldAddSpecifiers = specifiers.length > 0
   const shouldRemoveUnnecessary = unnecessaryImports.length > 0
 
@@ -97,7 +97,6 @@ function getFix(first, rest, sourceCode) {
 
   return fixer => {
     const tokens = sourceCode.getTokens(first)
-    const defaultSpecifier = firstHasDefault && getDefaultImportSpecifier(first)
     const openBrace = tokens.find(token => isPunctuator(token, '{'))
     const closeBrace = tokens.find(token => isPunctuator(token, '}'))
     const firstToken = sourceCode.getFirstToken(first)
@@ -122,9 +121,9 @@ function getFix(first, rest, sourceCode) {
 
     const fixes = []
 
-    if (defaultSpecifier && openBrace == null && shouldAddSpecifiers) {
-      fixes.push(fixer.insertTextAfter(defaultSpecifier, `, {${specifiersText}}`))
-    } else if (defaultSpecifier && openBrace != null && shouldAddSpecifiers) {
+    if (firstDefaultSpecifier && openBrace == null && shouldAddSpecifiers) {
+      fixes.push(fixer.insertTextAfter(firstDefaultSpecifier, `, {${specifiersText}}`))
+    } else if (firstDefaultSpecifier && openBrace != null && shouldAddSpecifiers) {
       fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
     } else if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import def, {...} from './foo'`
