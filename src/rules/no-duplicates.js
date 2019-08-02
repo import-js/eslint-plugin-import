@@ -7,7 +7,7 @@ function checkImports(imported, context) {
       const message = `'${module}' imported multiple times.`
       const [first, ...rest] = nodes
       const sourceCode = context.getSourceCode()
-      const fix = getFix(first, rest, sourceCode)
+      const fix = getFix(nodes, sourceCode)
 
       context.report({
         node: first.source,
@@ -25,7 +25,7 @@ function checkImports(imported, context) {
   }
 }
 
-function getFix(first, rest, sourceCode) {
+function getFix(nodes, sourceCode) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
   // update the first one, and remove the rest. Support for multiple
@@ -36,129 +36,108 @@ function getFix(first, rest, sourceCode) {
     return undefined
   }
 
-  // Adjusting the first import might make it multiline, which could break
-  // `eslint-disable-next-line` comments and similar, so bail if the first
-  // import has comments. Also, if the first import is `import * as ns from
-  // './foo'` there's nothing we can do.
-  if (hasProblematicComments(first, sourceCode) || hasNamespace(first)) {
-    return undefined
-  }
+  // Do not try to fix namespace imports or ones surrounded by comments.
+  const fixableNodes = nodes.filter(node =>
+    !hasNamespace(node) && !hasProblematicComments(node, sourceCode))
 
-  const defaultImportNames = new Set(
-    [first, ...rest].map(getDefaultImportName).filter(Boolean)
-  )
-
-  // Bail if there are multiple different default import names – it's up to the
-  // user to choose which one to keep.
-  if (defaultImportNames.size > 1) {
-    return undefined
-  }
-
-  // Leave it to the user to handle comments. Also skip `import * as ns from
-  // './foo'` imports, since they cannot be merged into another import.
-  const restWithoutComments = rest.filter(node => !(
-    hasProblematicComments(node, sourceCode) ||
-    hasNamespace(node)
-  ))
-
-  const specifiers = restWithoutComments
-    .map(node => {
-      const tokens = sourceCode.getTokens(node)
-      const openBrace = tokens.find(token => isPunctuator(token, '{'))
-      const closeBrace = tokens.find(token => isPunctuator(token, '}'))
-
-      if (openBrace == null || closeBrace == null) {
-        return undefined
-      }
-
-      return {
-        importNode: node,
-        text: sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]),
-        hasTrailingComma: isPunctuator(sourceCode.getTokenBefore(closeBrace), ','),
-        isEmpty: !hasSpecifiers(node),
-      }
-    })
-    .filter(Boolean)
-
-  const unnecessaryImports = restWithoutComments.filter(node =>
-    !hasSpecifiers(node) &&
-    !hasNamespace(node) &&
-    !specifiers.some(specifier => specifier.importNode === node)
-  )
-
-  const firstDefaultSpecifier = getDefaultImportSpecifier(first)
-  const shouldAddDefault = !firstDefaultSpecifier && defaultImportNames.size === 1
-  const shouldAddSpecifiers = specifiers.length > 0
-  const shouldRemoveUnnecessary = unnecessaryImports.length > 0
-
-  if (!(shouldAddDefault || shouldAddSpecifiers || shouldRemoveUnnecessary)) {
+  // Bail if we can not fix anything.
+  if (fixableNodes.length <= 1) {
     return undefined
   }
 
   return fixer => {
+    const first = fixableNodes.find(node => node.specifiers.length > 0)
+
+    // If there are no imports with specifiers, keep only first.
+    if (!first) {
+      return fixableNodes.slice(1).map((node) => fixer.remove(node))
+    }
+
+    const rest = fixableNodes.filter(node => node !== first)
     const tokens = sourceCode.getTokens(first)
-    const openBrace = tokens.find(token => isPunctuator(token, '{'))
-    const closeBrace = tokens.find(token => isPunctuator(token, '}'))
-    const firstToken = sourceCode.getFirstToken(first)
-    const [defaultImportName] = defaultImportNames
-
-    const firstHasTrailingComma =
-      closeBrace != null &&
-      isPunctuator(sourceCode.getTokenBefore(closeBrace), ',')
-    const firstIsEmpty = !hasSpecifiers(first)
-
-    const [specifiersText] = specifiers.reduce(
-      ([result, needsComma], specifier) => {
-        return [
-          needsComma && !specifier.isEmpty
-            ? `${result},${specifier.text}`
-            : `${result}${specifier.text}`,
-          specifier.isEmpty ? needsComma : true,
-        ]
-      },
-      ['', !firstHasTrailingComma && !firstIsEmpty]
+    const firstDefaultSpecifier = first.specifiers
+      .find(specifier => specifier.type === 'ImportDefaultSpecifier')
+    const firstNamedSpecifierTexts = new Set(
+      first.specifiers
+        .filter(specifier => specifier.type === 'ImportSpecifier')
+        .map(specifier => sourceCode.getText(specifier))
     )
+
+    let defaultSpecifierText
+    let namedSpecifierTexts = new Set()
+
+    rest.forEach((node) => {
+      node.specifiers.forEach((specifier) => {
+        const specifierText = sourceCode.getText(specifier)
+
+        if (specifier.type === 'ImportSpecifier' && !firstNamedSpecifierTexts.has(specifierText)) {
+          namedSpecifierTexts.add(specifierText)
+        }
+
+        if (specifier.type === 'ImportDefaultSpecifier') {
+          // Imports can't have multiple default specifiers, so we add this as
+          // named specifier with alias.
+          if (defaultSpecifierText || firstDefaultSpecifier) {
+            const namedSpecifierText = `default as ${specifierText}`
+
+            if (!firstNamedSpecifierTexts.has(namedSpecifierText)) {
+              namedSpecifierTexts.add(namedSpecifierText)
+            }
+          } else if (!defaultSpecifierText && !firstDefaultSpecifier) {
+            defaultSpecifierText = specifierText
+          }
+        }
+      })
+    })
 
     const fixes = []
 
-    if (firstDefaultSpecifier && openBrace == null && shouldAddSpecifiers) {
-      fixes.push(fixer.insertTextAfter(firstDefaultSpecifier, `, {${specifiersText}}`))
-    } else if (firstDefaultSpecifier && openBrace != null && shouldAddSpecifiers) {
-      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
-    } else if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
-      // `import './foo'` → `import def, {...} from './foo'`
-      fixes.push(
-        fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
-      )
-    } else if (shouldAddDefault && openBrace == null && !shouldAddSpecifiers) {
-      // `import './foo'` → `import def from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName} from`))
-    } else if (shouldAddDefault && openBrace != null && closeBrace != null) {
-      // `import {...} from './foo'` → `import def, {...} from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName},`))
-      if (shouldAddSpecifiers) {
-        // `import def, {...} from './foo'` → `import def, {..., ...} from './foo'`
-        fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
+    const importToken = tokens.find(token => token.value === 'import')
+    const fromToken = tokens.find(token => token.value === 'from')
+    const closeBraceToken = tokens.find(token => isPunctuator(token, '}'))
+
+    if (defaultSpecifierText) {
+      let text = ` ${defaultSpecifierText}`
+
+      if (closeBraceToken) {
+        text = `${text},`
       }
-    } else if (!shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
-      // `import './foo'` → `import {...} from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`))
-    } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
-      // `import {...} './foo'` → `import {..., ...} from './foo'`
-      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
+
+      fixes.push(fixer.insertTextAfter(importToken, text))
     }
 
-    // Remove imports whose specifiers have been moved into the first import.
-    for (const specifier of specifiers) {
-      fixes.push(fixer.remove(specifier.importNode))
+    if (namedSpecifierTexts.size > 0) {
+      let text = Array.from(namedSpecifierTexts).join(',')
+
+      if (closeBraceToken) {
+        const tokenBeforeCloseBrace = sourceCode.getTokenBefore(closeBraceToken)
+
+        // Prepend comma if the last specifier didn't have it, or there are
+        // empty braces.
+        if (tokenBeforeCloseBrace.value !== '{' && tokenBeforeCloseBrace.value !== ',') {
+          text = `,${text}`
+        }
+
+        fixes.push(fixer.insertTextBefore(closeBraceToken, text))
+      } else {
+        // Wrap specifiers in `{`, `}`
+        text = `{${text}}`
+
+        // Add after `default` specifier or before `from` token.
+        if (firstDefaultSpecifier) {
+          // Add coma if there already `import def`.
+          text = `,${text}`
+
+          fixes.push(fixer.insertTextAfter(firstDefaultSpecifier, text))
+        } else {
+          fixes.push(fixer.insertTextBefore(fromToken, text))
+        }
+      }
     }
 
-    // Remove imports whose default import has been moved to the first import,
-    // and side-effect-only imports that are unnecessary due to the first
-    // import.
-    for (const node of unnecessaryImports) {
+    rest.forEach((node) => {
       fixes.push(fixer.remove(node))
-    }
+    })
 
     return fixes
   }
@@ -168,29 +147,10 @@ function isPunctuator(node, value) {
   return node.type === 'Punctuator' && node.value === value
 }
 
-// Get the specifier of the default import of `node`, if any.
-function getDefaultImportSpecifier(node) {
-  return node.specifiers.find(specifier => specifier.type === 'ImportDefaultSpecifier')
-}
-
-// Get the name of the default import of `node`, if any.
-function getDefaultImportName(node) {
-  const defaultSpecifier = getDefaultImportSpecifier(node)
-  return defaultSpecifier != null ? defaultSpecifier.local.name : undefined
-}
-
 // Checks whether `node` has a namespace import.
 function hasNamespace(node) {
-  const specifiers = node.specifiers
-    .filter(specifier => specifier.type === 'ImportNamespaceSpecifier')
-  return specifiers.length > 0
-}
-
-// Checks whether `node` has any non-default specifiers.
-function hasSpecifiers(node) {
-  const specifiers = node.specifiers
-    .filter(specifier => specifier.type === 'ImportSpecifier')
-  return specifiers.length > 0
+  return node.specifiers
+    .some(specifier => specifier.type === 'ImportNamespaceSpecifier')
 }
 
 // It's not obvious what the user wants to do with comments associated with
@@ -199,7 +159,7 @@ function hasProblematicComments(node, sourceCode) {
   return (
     hasCommentBefore(node, sourceCode) ||
     hasCommentAfter(node, sourceCode) ||
-    hasCommentInsideNonSpecifiers(node, sourceCode)
+    hasCommentsInside(node, sourceCode)
   )
 }
 
@@ -217,19 +177,11 @@ function hasCommentAfter(node, sourceCode) {
     .some(comment => comment.loc.start.line === node.loc.end.line)
 }
 
-// Checks whether `node` has any comments _inside,_ except inside the `{...}`
-// part (if any).
-function hasCommentInsideNonSpecifiers(node, sourceCode) {
+// Checks whether `node` has any comments _inside_.
+function hasCommentsInside(node, sourceCode) {
   const tokens = sourceCode.getTokens(node)
-  const openBraceIndex = tokens.findIndex(token => isPunctuator(token, '{'))
-  const closeBraceIndex = tokens.findIndex(token => isPunctuator(token, '}'))
-  // Slice away the first token, since we're no looking for comments _before_
-  // `node` (only inside). If there's a `{...}` part, look for comments before
-  // the `{`, but not before the `}` (hence the `+1`s).
-  const someTokens = openBraceIndex >= 0 && closeBraceIndex >= 0
-    ? tokens.slice(1, openBraceIndex + 1).concat(tokens.slice(closeBraceIndex + 1))
-    : tokens.slice(1)
-  return someTokens.some(token => sourceCode.getCommentsBefore(token).length > 0)
+
+  return tokens.some(token => sourceCode.getCommentsBefore(token).length > 0)
 }
 
 module.exports = {
