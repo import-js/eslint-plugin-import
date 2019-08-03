@@ -112,6 +112,10 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-named-export`]: ./docs/rules/no-named-export.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
 
+## Support
+
+[Get supported eslint-plugin-import with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-eslint-plugin-import?utm_source=npm-eslint-plugin-import&utm_medium=referral&utm_campaign=readme)
+
 ## Installation
 
 ```sh
