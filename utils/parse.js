@@ -42,6 +42,24 @@ exports.default = function parse(path, content, context) {
   // require the parser relative to the main module (i.e., ESLint)
   const parser = moduleRequire(parserPath)
 
+  if (typeof parser.parseForESLint === 'function') {
+    let ast
+    try {
+      ast = parser.parseForESLint(content, parserOptions).ast
+    } catch (e) {
+      //
+    }
+    if (!ast || typeof ast !== 'object') {
+      console.warn(
+        '`parseForESLint` from parser `' +
+          parserPath +
+          '` is invalid and will just be ignored'
+      )
+    } else {
+      return ast
+    }
+  }
+
   return parser.parse(content, parserOptions)
 }
 

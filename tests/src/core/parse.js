@@ -9,6 +9,8 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   const path = getFilename('jsx.js')
   const parseStubParser = require('./parseStubParser')
   const parseStubParserPath = require.resolve('./parseStubParser')
+  const eslintParser = require('./eslintParser')
+  const eslintParserPath = require.resolve('./eslintParser')
   let content
 
   before((done) =>
@@ -41,6 +43,15 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.tokens equal to true').to.have.property('tokens', true)
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.range equal to true').to.have.property('range', true)
     expect(parseSpy.args[0][1], 'custom parser to get parserOptions.filePath equal to the full path of the source file').to.have.property('filePath', path)
+  })
+
+  it('passes with custom `parseForESLint` parser', function () {
+    const parseForESLintSpy = sinon.spy(eslintParser, 'parseForESLint')
+    const parseSpy = sinon.spy()
+    eslintParser.parse = parseSpy
+    parse(path, content, { settings: {}, parserPath: eslintParserPath })
+    expect(parseForESLintSpy.callCount, 'custom `parseForESLint` parser to be called once').to.equal(1)
+    expect(parseSpy.callCount, '`parseForESLint` takes higher priority than `parse`').to.equal(0)
   })
 
   it('throws on context == null', function () {

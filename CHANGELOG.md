@@ -5,16 +5,19 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Added
+- support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
+
 ## [2.18.2] - 2019-07-19
- - Skip warning on type interfaces ([#1425], thanks [@lencioni])
+- Skip warning on type interfaces ([#1425], thanks [@lencioni])
 
 ## [2.18.1] - 2019-07-18
 
 ### Fixed
- - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
- - [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
- - [`no-unused-modules`]: Exclude package "main"/"bin"/"browser" entry points ([#1404], thanks [@rfermann])
- - [`export`]: false positive for typescript overloads ([#1412], thanks [@golopot])
+- Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
+- [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
+- [`no-unused-modules`]: Exclude package "main"/"bin"/"browser" entry points ([#1404], thanks [@rfermann])
+- [`export`]: false positive for typescript overloads ([#1412], thanks [@golopot])
 
 ### Refactors
  - [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
@@ -598,6 +601,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
 [#1419]: https://github.com/benmosher/eslint-plugin-import/pull/1419
 [#1412]: https://github.com/benmosher/eslint-plugin-import/pull/1412
@@ -972,3 +976,4 @@ for info on changes for earlier releases.
 [@sheepsteak]: https://github.com/sheepsteak
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
 [@lencioni]: https://github.com/lencioni
+[@JounQin]: https://github.com/JounQin
