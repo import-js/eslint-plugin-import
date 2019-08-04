@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
+- [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
 
 ### Fixed
 - `default`: make error message less confusing ([#1470], thanks [@golopot])
@@ -609,6 +610,7 @@ for info on changes for earlier releases.
 
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
+[#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
 [#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
 [#1419]: https://github.com/benmosher/eslint-plugin-import/pull/1419
@@ -986,3 +988,4 @@ for info on changes for earlier releases.
 [@lencioni]: https://github.com/lencioni
 [@JounQin]: https://github.com/JounQin
 [@atikenny]: https://github.com/atikenny
+[@schmidsi]: https://github.com/schmidsi

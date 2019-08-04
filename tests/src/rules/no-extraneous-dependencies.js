@@ -18,6 +18,9 @@ const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-type
 const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
 const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
 const packageDirWithEmpty = path.join(__dirname, '../../files/empty')
+const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps')
+const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object')
+const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition')
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -105,6 +108,19 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import rightpad from "right-pad";',
       options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+    }),
+    test({ code: 'import foo from "@generated/foo"'}),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{packageDir: packageDirBundleDeps}],
+    }),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{packageDir: packageDirBundledDepsAsObject}],
+    }),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{packageDir: packageDirBundledDepsRaceCondition}],
     }),
   ],
   invalid: [
@@ -288,6 +304,20 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         ruleId: 'no-extraneous-dependencies',
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
+    }),
+    test({
+      code: 'import bar from "@generated/bar"',
+      errors: ["'@generated/bar' should be listed in the project's dependencies. Run 'npm i -S @generated/bar' to add it"],
+    }),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{bundledDependencies: false}],
+      errors: ["'@generated/foo' should be listed in the project's dependencies. Run 'npm i -S @generated/foo' to add it"],
+    }),
+    test({
+      code: 'import bar from "@generated/bar"',
+      options: [{packageDir: packageDirBundledDepsRaceCondition}],
+      errors: ["'@generated/bar' should be listed in the project's dependencies. Run 'npm i -S @generated/bar' to add it"],
     }),
   ],
 })

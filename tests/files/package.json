@@ -15,5 +15,6 @@
   },
   "optionalDependencies": {
     "lodash.isarray": "^4.0.0"
-  }
+  },
+  "bundledDependencies": ["@generated/foo"]
 }
