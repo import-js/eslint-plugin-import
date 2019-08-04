@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: Adds support for pathGroups to allow ordering by defined patterns ([#795], [#1386], thanks [@Mairu])
 - [`no-duplicates`]: Add `considerQueryString` option : allow duplicate imports with different query strings ([#1107], thanks [@pcorpet]).
 - [`order`]: Add support for alphabetical sorting of import paths within import groups ([#1360], [#1105], [#629], thanks [@duncanbeevers], [@stropho], [@luczsoma], [@randallreedjr])
+- [`no-commonjs`]: add `allowConditionalRequire` option ([#1439], thanks [@Pessimistress])
 
 ### Fixed
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
@@ -624,6 +625,7 @@ for info on changes for earlier releases.
 [#1493]: https://github.com/benmosher/eslint-plugin-import/pull/1493
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
+[#1439]: https://github.com/benmosher/eslint-plugin-import/pull/1439
 [#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
 [#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
@@ -1026,3 +1028,4 @@ for info on changes for earlier releases.
 [@luczsoma]: https://github.com/luczsoma
 [@christophercurrie]: https://github.com/christophercurrie
 [@randallreedjr]: https://github.com/randallreedjr
+[@Pessimistress]: https://github.com/Pessimistress

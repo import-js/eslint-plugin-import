@@ -25,6 +25,26 @@ function allowRequire(node, options) {
   return options.allowRequire
 }
 
+function allowConditionalRequire(node, options) {
+  return options.allowConditionalRequire !== false
+}
+
+function validateScope(scope) {
+  return scope.variableScope.type === 'module'
+}
+
+// https://github.com/estree/estree/blob/master/es5.md
+function isConditional(node) {
+  if (
+    node.type === 'IfStatement'
+    || node.type === 'TryStatement'
+    || node.type === 'LogicalExpression'
+    || node.type === 'ConditionalExpression'
+  ) return true
+  if (node.parent) return isConditional(node.parent)
+  return false
+}
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -35,6 +55,7 @@ const schemaObject = {
   properties: {
     allowPrimitiveModules: { 'type': 'boolean' },
     allowRequire: { 'type': 'boolean' },
+    allowConditionalRequire: { 'type': 'boolean' },
   },
   additionalProperties: false,
 }
@@ -87,12 +108,7 @@ module.exports = {
 
       },
       'CallExpression': function (call) {
-        if (context.getScope().type !== 'module') return
-        if (
-          call.parent.type !== 'ExpressionStatement'
-          && call.parent.type !== 'VariableDeclarator'
-          && call.parent.type !== 'AssignmentExpression'
-        ) return
+        if (!validateScope(context.getScope())) return
 
         if (call.callee.type !== 'Identifier') return
         if (call.callee.name !== 'require') return
@@ -104,6 +120,8 @@ module.exports = {
         if (typeof module.value !== 'string') return
 
         if (allowRequire(call, options)) return
+
+        if (allowConditionalRequire(call, options) && isConditional(call.parent)) return
 
         // keeping it simple: all 1-string-arg `require` calls are reported
         context.report({

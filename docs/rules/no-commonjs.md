@@ -27,15 +27,30 @@ If `allowRequire` option is set to `true`, `require` calls are valid:
 
 ```js
 /*eslint no-commonjs: [2, { allowRequire: true }]*/
-
-if (typeof window !== "undefined") {
-  require('that-ugly-thing');
-}
+var mod = require('./mod');
 ```
 
 but `module.exports` is reported as usual.
 
-This is useful for conditional requires.
+### Allow conditional require
+
+By default, conditional requires are allowed:
+
+```js
+var a = b && require("c")
+
+if (typeof window !== "undefined") {
+  require('that-ugly-thing');
+}
+
+var fs = null;
+try {
+  fs = require("fs")
+} catch (error) {}
+```
+
+If the `allowConditionalRequire` option is set to `false`, they will be reported.
+
 If you don't rely on synchronous module loading, check out [dynamic import](https://github.com/airbnb/babel-plugin-dynamic-import-node).
 
 ### Allow primitive modules
