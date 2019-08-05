@@ -34,7 +34,7 @@ function isExternalPath(path, name, settings) {
 }
 
 const externalModuleRegExp = /^\w/
-function isExternalModule(name, settings, path) {
+export function isExternalModule(name, settings, path) {
   return externalModuleRegExp.test(name) && isExternalPath(path, name, settings)
 }
 

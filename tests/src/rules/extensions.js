@@ -301,10 +301,6 @@ ruleTester.run('extensions', rule, {
           message: 'Missing file extension for "./Component"',
           line: 4,
           column: 31,
-        }, {
-          message: 'Missing file extension for "foo/baz"',
-          line: 5,
-          column: 25,
         },
       ],
     }),
