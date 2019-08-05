@@ -29,12 +29,29 @@ By providing both a string and an object, the string will set the default settin
   <severity>,
   "never" | "always" | "ignorePackages",
   {
-    <extension>: "never" | "always" | "ignorePackages" 
+    <extension>: "never" | "always" | "ignorePackages"
   }
 ]
 ```
 
 For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
+
+`ignorePackages` can be set as a separate boolean option like this:
+```
+"import/extensions": [
+  <severity>,
+  "never" | "always" | "ignorePackages",
+  {
+    ignorePackages: true | false,
+    pattern: {
+      <extension>: "never" | "always" | "ignorePackages"
+    }
+  }
+]
+```
+In that case, if you still want to specify extensions, you can do so inside the **pattern** property.
+Default value of `ignorePackages` is `false`.
+
 
 ### Exception
 

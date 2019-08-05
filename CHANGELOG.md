@@ -16,6 +16,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
 - [`extensions`]: Ignore query strings when checking for extensions ([#1572], thanks [@pcorpet])
 
+### Docs
+- [`extensions`]: improve `ignorePackages` docs ([#1248], thanks [@ivo-stefchev])
+
 ### Added
 - [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
 
@@ -693,6 +696,7 @@ for info on changes for earlier releases.
 [#1277]: https://github.com/benmosher/eslint-plugin-import/pull/1277
 [#1257]: https://github.com/benmosher/eslint-plugin-import/pull/1257
 [#1253]: https://github.com/benmosher/eslint-plugin-import/pull/1253
+[#1248]: https://github.com/benmosher/eslint-plugin-import/pull/1248
 [#1238]: https://github.com/benmosher/eslint-plugin-import/pull/1238
 [#1235]: https://github.com/benmosher/eslint-plugin-import/pull/1235
 [#1234]: https://github.com/benmosher/eslint-plugin-import/pull/1234
@@ -1063,3 +1067,4 @@ for info on changes for earlier releases.
 [@dbrewer5]: https://github.com/dbrewer5
 [@rsolomon]: https://github.com/rsolomon
 [@joaovieira]: https://github.com/joaovieira
+[@ivo-stefchev]: https://github.com/ivo-stefchev
