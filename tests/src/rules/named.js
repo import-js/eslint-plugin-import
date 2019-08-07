@@ -26,6 +26,7 @@ ruleTester.run('named', rule, {
     test({code: 'import { destructingRenamedAssign } from "./named-exports"'}),
     test({code: 'import { ActionTypes } from "./qc"'}),
     test({code: 'import {a, b, c, d} from "./re-export"'}),
+    test({code: 'import {RuleTester} from "./re-export-node_modules"'}),
 
     test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"'
          , settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } } }),
