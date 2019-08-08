@@ -47,6 +47,7 @@ let preparationDone = false
 const importList = new Map()
 const exportList = new Map()
 const ignoredFiles = new Set()
+const filesOutsideSrc = new Set()
 
 const isNodeModule = path => {
   return /\/(node_modules)\//.test(path)
@@ -192,8 +193,9 @@ const getSrc = src => {
  * prepare the lists of existing imports and exports - should only be executed once at
  * the start of a new eslint run
  */
+let srcFiles
 const doPreparation = (src, ignoreExports, context) => {
-  const srcFiles = resolveFiles(getSrc(src), ignoreExports)
+  srcFiles = resolveFiles(getSrc(src), ignoreExports)
   prepareImportsAndExports(srcFiles, context)
   determineUsage()
   preparationDone = true
@@ -375,12 +377,17 @@ module.exports = {
         return
       }
 
-      // refresh list of source files
-      const srcFiles = resolveFiles(getSrc(src), ignoreExports)
+      if (filesOutsideSrc.has(file)) {
+        return
+      }
 
       // make sure file to be linted is included in source files
       if (!srcFiles.has(file)) {
-        return
+        srcFiles = resolveFiles(getSrc(src), ignoreExports)
+        if (!srcFiles.has(file)) {
+          filesOutsideSrc.add(file)
+          return
+        }
       }
 
       exports = exportList.get(file)
