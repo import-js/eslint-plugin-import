@@ -79,3 +79,7 @@ settings:
         NODE_ENV: 'local'
         production: true
 ```
+
+## Support
+
+[Get supported eslint-import-resolver-webpack with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-eslint-import-resolver-webpack?utm_source=npm-eslint-import-resolver-webpack&utm_medium=referral&utm_campaign=readme)
