@@ -45,6 +45,10 @@ ruleTester.run('prefer-default-export', rule, {
       }),
     test({
       code: `
+        export const [a, b] = item;`,
+      }),
+    test({
+      code: `
         let item;
         export const foo = item;
         export { item };`,
@@ -122,6 +126,14 @@ ruleTester.run('prefer-default-export', rule, {
     test({
       code: `
         export const { foo: { bar } } = { foo: { bar: "baz" } };`,
+      errors: [{
+        ruleId: 'ExportNamedDeclaration',
+        message: 'Prefer default export.',
+      }],
+    }),
+    test({
+      code: `
+        export const [a] = ["foo"]`,
       errors: [{
         ruleId: 'ExportNamedDeclaration',
         message: 'Prefer default export.',

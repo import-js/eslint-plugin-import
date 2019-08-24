@@ -23,7 +23,10 @@ module.exports = {
           .forEach(function(property) {
             captureDeclaration(property.value)
           })
-      } else {
+      } else if (identifierOrPattern.type === 'ArrayPattern') {
+        identifierOrPattern.elements
+          .forEach(captureDeclaration)
+      } else  {
       // assume it's a single standard identifier
         specifierExportCount++
       }
