@@ -165,18 +165,24 @@ ruleTester.run('extensions', rule, {
       code: 'import a from "a/index.js"',
       errors: [ {
         message: 'Unexpected use of file extension "js" for "a/index.js"',
+        line: 1,
+        column: 15,
       } ],
     }),
     test({
       code: 'import a from "asn1.js/index.js"',
       errors: [ {
         message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
+        line: 1,
+        column: 15,
       } ],
     }),
     test({
       code: 'import a from "asn1.js/index.js"',
       errors: [ {
         message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
+        line: 1,
+        column: 15,
       } ],
     }),
     test({
@@ -184,6 +190,8 @@ ruleTester.run('extensions', rule, {
       options: [ 'always' ],
       errors: [ {
         message: 'Missing file extension "js" for "a"',
+        line: 1,
+        column: 15,
       } ],
     }),
     test({
@@ -192,6 +200,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Missing file extension "js" for "./file.with.dot"',
+          line: 1,
+          column: 17,
         },
       ],
     }),
@@ -205,9 +215,14 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Unexpected use of file extension "js" for "a/index.js"',
+          line: 1,
+          column: 15,
+
         },
         {
           message: 'Missing file extension "json" for "./package"',
+          line: 2,
+          column: 27,
         },
       ],
     }),
@@ -222,6 +237,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 17,
         },
       ],
     }),
@@ -236,6 +253,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 17,
         },
       ],
     }),
@@ -250,6 +269,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "jsx" for "./bar.jsx"',
+            line: 1,
+            column: 23,
         },
       ],
     }),
@@ -258,6 +279,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Unexpected use of file extension "coffee" for "./bar.coffee"',
+          line: 1,
+          column: 8,
         },
       ],
       options: ['never', { js: 'always', jsx: 'always' }],
@@ -275,6 +298,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 19,
         },
       ],
     }),
@@ -290,6 +315,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "js" for "./bar.js"',
+            line: 1,
+            column: 19,
         },
       ],
     }),
@@ -301,6 +328,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Unexpected use of file extension "js" for "./fake-file.js"',
+            line: 1,
+            column: 19,
         },
       ],
     }),
@@ -310,6 +339,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
             message: 'Missing file extension for "non-package"',
+            line: 1,
+            column: 19,
         },
       ],
     }),
@@ -327,8 +358,12 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Missing file extension for "./Component"',
+          line: 4,
+          column: 31,
         }, {
           message: 'Missing file extension for "foo/baz"',
+          line: 5,
+          column: 25,
         },
       ],
     }),
@@ -343,8 +378,12 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 2,
+          column: 25,
         }, {
           message: 'Unexpected use of file extension "jsx" for "./Component.jsx"',
+          line: 4,
+          column: 31,
         },
       ],
       options: [ 'never', {ignorePackages: true} ],
@@ -360,6 +399,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Missing file extension for "./foo"',
+          line: 1,
+          column: 21,
         },
       ],
     }),
@@ -372,6 +413,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 1,
+          column: 21,
         },
       ],
     }),
@@ -381,6 +424,8 @@ ruleTester.run('extensions', rule, {
       options: [ {commonjs: true} ],
       errors: [ {
         message: 'Unexpected use of file extension "js" for "a/index.js"',
+        line: 1,
+        column: 20,
       } ],
     }),
     test({
@@ -388,6 +433,8 @@ ruleTester.run('extensions', rule, {
       options: [ {commonjs: true} ],
       errors: [ {
         message: 'Unexpected use of file extension "js" for "asn1.js/index.js"',
+        line: 1,
+        column: 20,
       } ],
     }),
     test({
@@ -395,6 +442,8 @@ ruleTester.run('extensions', rule, {
       options: [ 'always', {commonjs: true} ],
       errors: [ {
         message: 'Missing file extension "js" for "a"',
+        line: 1,
+        column: 19,
       } ],
     }),
     test({
@@ -403,6 +452,8 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Missing file extension "js" for "./file.with.dot"',
+          line: 1,
+          column: 21,
         },
       ],
     }),
@@ -419,8 +470,12 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Missing file extension for "./Component"',
+          line: 4,
+          column: 35,
         }, {
           message: 'Missing file extension for "foo/baz"',
+          line: 5,
+          column: 29,
         },
       ],
     }),
@@ -435,8 +490,12 @@ ruleTester.run('extensions', rule, {
       errors: [
         {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
+          line: 2,
+          column: 29,
         }, {
           message: 'Unexpected use of file extension "jsx" for "./Component.jsx"',
+          line: 4,
+          column: 35,
         },
       ],
       options: [ 'never', {commonjs: true, ignorePackages: true} ],

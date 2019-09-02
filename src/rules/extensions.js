@@ -132,7 +132,7 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context)
     }
 
-    function checkFileExtension(source, node) {
+    function checkFileExtension(source) {
       const importPath = source.value
 
       // don't enforce anything on builtins
@@ -153,7 +153,7 @@ module.exports = {
         const extensionForbidden = isUseOfExtensionForbidden(extension)
         if (extensionRequired && !extensionForbidden) {
           context.report({
-            node,
+            node: source,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPath}"`,
           })
@@ -161,7 +161,7 @@ module.exports = {
       } else if (extension) {
         if (isUseOfExtensionForbidden(extension) && isResolvableWithoutExtension(importPath)) {
           context.report({
-            node,
+            node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPath}"`,
           })
         }
