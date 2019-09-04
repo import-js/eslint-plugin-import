@@ -13,14 +13,9 @@ module.exports = {
 
     function checkDefault(specifierType, node) {
 
-      // poor man's Array.find
-      let defaultSpecifier
-      node.specifiers.some((n) => {
-        if (n.type === specifierType) {
-          defaultSpecifier = n
-          return true
-        }
-      })
+      const defaultSpecifier = node.specifiers.find(
+        specifier => specifier.type === specifierType
+      )
 
       if (!defaultSpecifier) return
       var imports = Exports.get(node.source.value, context)
@@ -29,7 +24,10 @@ module.exports = {
       if (imports.errors.length) {
         imports.reportErrors(context, node)
       } else if (imports.get('default') === undefined) {
-        context.report(defaultSpecifier, 'No default export found in module.')
+        context.report({
+          node: defaultSpecifier,
+          message: `No default export found in imported module "${node.source.value}".`,
+        })
       }
     }
 

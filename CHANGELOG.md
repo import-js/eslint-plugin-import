@@ -8,6 +8,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 
+### Fixed
+- `default`: make error message less confusing ([#1470], thanks [@golopot])
+
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
 
@@ -601,6 +604,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
 [#1419]: https://github.com/benmosher/eslint-plugin-import/pull/1419

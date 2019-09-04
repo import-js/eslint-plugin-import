@@ -102,7 +102,7 @@ ruleTester.run('default', rule, {
 
     test({
       code: 'import baz from "./named-exports";',
-      errors: [{ message: 'No default export found in module.'
+      errors: [{ message: 'No default export found in imported module "./named-exports".'
                , type: 'ImportDefaultSpecifier'}]}),
 
     test({
@@ -114,29 +114,29 @@ ruleTester.run('default', rule, {
     test({
       code: 'export baz from "./named-exports"',
       parser: require.resolve('babel-eslint'),
-      errors: ['No default export found in module.'],
+      errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, { bar } from "./named-exports"',
       parser: require.resolve('babel-eslint'),
-      errors: ['No default export found in module.'],
+      errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, * as names from "./named-exports"',
       parser: require.resolve('babel-eslint'),
-      errors: ['No default export found in module.'],
+      errors: ['No default export found in imported module "./named-exports".'],
     }),
     // exports default from a module with no default
     test({
       code: 'import twofer from "./broken-trampoline"',
       parser: require.resolve('babel-eslint'),
-      errors: ['No default export found in module.'],
+      errors: ['No default export found in imported module "./broken-trampoline".'],
     }),
 
     // #328: * exports do not include default
     test({
       code: 'import barDefault from "./re-export"',
-      errors: [`No default export found in module.`],
+      errors: ['No default export found in imported module "./re-export".'],
     }),
   ],
 })
@@ -152,7 +152,7 @@ if (!CASE_SENSITIVE_FS) {
     invalid: [
       test({
         code: 'import bar from "./Named-Exports"',
-        errors: ['No default export found in module.'],
+        errors: ['No default export found in imported module "./Named-Exports".'],
       }),
     ],
   })
