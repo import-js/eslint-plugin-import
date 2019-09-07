@@ -27,6 +27,12 @@ export {
 ```
 
 ```js
+// Aggregating exports -> ok
+export { default as module1 } from 'module-1'
+export { default as module2 } from 'module-2'
+```
+
+```js
 // A single exports assignment -> ok
 module.exports = {
   first: true,
@@ -61,6 +67,12 @@ module.exports = test
 // Multiple named export statements -> not ok!
 export const first = true
 export const second = true
+```
+
+```js
+// Aggregating exports from the same module -> not ok!
+export { module1 } from 'module-1'
+export { module2 } from 'module-1'
 ```
 
 ```js

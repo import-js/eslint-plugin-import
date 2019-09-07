@@ -45,6 +45,10 @@ ruleTester.run('group-exports', rule, {
       // test
       export default {}
     ` }),
+    test({ code: `
+      export { default as module1 } from './module-1'
+      export { default as module2 } from './module-2'
+    ` }),
     test({ code: 'module.exports = {} '}),
     test({ code: `
       module.exports = { test: true,
@@ -105,6 +109,16 @@ ruleTester.run('group-exports', rule, {
       code: `
         export const test = true
         export const another = true
+      `,
+      errors: [
+        errors.named,
+        errors.named,
+      ],
+    }),
+    test({
+      code: `
+        export { method1 } from './module-1'
+        export { method2 } from './module-1'
       `,
       errors: [
         errors.named,

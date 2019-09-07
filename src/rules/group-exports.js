@@ -1,4 +1,6 @@
 import docsUrl from '../docsUrl'
+import values from 'object.values'
+import flat from 'array.prototype.flat'
 
 const meta = {
   type: 'suggestion',
@@ -46,11 +48,18 @@ function create(context) {
   const nodes = {
     modules: new Set(),
     commonjs: new Set(),
+    sources: {},
   }
 
   return {
     ExportNamedDeclaration(node) {
-      nodes.modules.add(node)
+      if (!node.source) {
+        nodes.modules.add(node)
+      } else if (Array.isArray(nodes.sources[node.source.value])) {
+        nodes.sources[node.source.value].push(node)
+      } else {
+        nodes.sources[node.source.value] = [node]
+      }
     },
 
     AssignmentExpression(node) {
@@ -85,6 +94,16 @@ function create(context) {
           })
         })
       }
+
+      // Report multiple `aggregated exports` from the same module (ES2015 modules)
+      flat(values(nodes.sources)
+        .filter(nodesWithSource => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
+        .forEach((node) => {
+          context.report({
+            node,
+            message: errors[node.type],
+          })
+        })
 
       // Report multiple `module.exports` assignments (CommonJS)
       if (nodes.commonjs.size > 1) {

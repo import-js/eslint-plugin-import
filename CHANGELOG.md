@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Added
+- [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
+
+### Added
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 
 ### Fixed
@@ -604,6 +607,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1425]: https://github.com/benmosher/eslint-plugin-import/pull/1425
@@ -981,3 +985,4 @@ for info on changes for earlier releases.
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
 [@lencioni]: https://github.com/lencioni
 [@JounQin]: https://github.com/JounQin
+[@atikenny]: https://github.com/atikenny

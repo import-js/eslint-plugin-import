@@ -81,6 +81,7 @@
   },
   "dependencies": {
     "array-includes": "^3.0.3",
+    "array.prototype.flat": "^1.2.1",
     "contains-path": "^0.1.0",
     "debug": "^2.6.9",
     "doctrine": "1.5.0",
