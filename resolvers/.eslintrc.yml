@@ -1,0 +1,17 @@
+---
+env:
+  es6: false
+rules:
+  semi: [1, 'never']
+  comma-dangle: [1, 'always-multiline']
+  no-unused-vars: 1
+  no-console: 1
+  no-extra-semi: 1
+  no-useless-escape: 1
+  quotes:
+    - 1
+    - single
+    - allowTemplateLiterals: true
+      avoidEscape: true
+  import/default: 1
+  import/no-extraneous-dependencies: 1
