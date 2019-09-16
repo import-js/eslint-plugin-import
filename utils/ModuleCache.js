@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 exports.__esModule = true
 
 const log = require('debug')('eslint-module-utils:ModuleCache')

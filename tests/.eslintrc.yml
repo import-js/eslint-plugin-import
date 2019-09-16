@@ -4,17 +4,5 @@ parserOptions:
 env:
   mocha: true
 rules:
-  no-unused-expressions: 0
   max-len: 0
-  semi: [1, 'never']
-  comma-dangle: [1, 'always-multiline']
-  no-console: 1
-  no-extra-semi: 1
-  no-useless-escape: 1
-  quotes:
-    - 1
-    - single
-    - allowTemplateLiterals: true
-      avoidEscape: true
-  import/default: 1
-  import/no-extraneous-dependencies: 1
+  import/default: 0

@@ -197,7 +197,7 @@ ruleTester.run('named', rule, {
     test({
       code: 'import { baz } from "./broken-trampoline"',
       parser: require.resolve('babel-eslint'),
-      errors: ["baz not found via broken-trampoline.js -> named-exports.js"],
+      errors: ['baz not found via broken-trampoline.js -> named-exports.js'],
     }),
 
     // parse errors

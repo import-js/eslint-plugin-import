@@ -8,7 +8,7 @@ const ruleTester = new RuleTester()
 
 const error = {
   ruleId: 'no-unassigned-import',
-  message: 'Imported module should be assigned'
+  message: 'Imported module should be assigned',
 }
 
 ruleTester.run('no-unassigned-import', rule, {

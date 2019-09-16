@@ -22,7 +22,7 @@ ruleTester.run('first', rule, {
          , errors: 1
          , output: "import { x } from './foo';\
                   import { y } from './bar';\
-                  export { x };"
+                  export { x };",
          })
   , test({ code: "import { x } from './foo';\
                   export { x };\
@@ -32,11 +32,11 @@ ruleTester.run('first', rule, {
          , output: "import { x } from './foo';\
                   import { y } from './bar';\
                   import { z } from './baz';\
-                  export { x };"
+                  export { x };",
          })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'"
          , options: ['absolute-first']
-         , errors: 1
+         , errors: 1,
          })
   , test({ code: "import { x } from 'foo';\
                   'use directive';\
@@ -44,7 +44,7 @@ ruleTester.run('first', rule, {
          , errors: 1
          , output: "import { x } from 'foo';\
                   import { y } from 'bar';\
-                  'use directive';"
+                  'use directive';",
          })
   , test({ code: "var a = 1;\
                   import { y } from './bar';\
@@ -56,12 +56,12 @@ ruleTester.run('first', rule, {
                   var a = 1;\
                   if (true) { x() };\
                   import { x } from './foo';\
-                  import { z } from './baz';"
+                  import { z } from './baz';",
   })
   , test({ code: "if (true) { console.log(1) }import a from 'b'"
          , errors: 1
-         , output: "import a from 'b'\nif (true) { console.log(1) }"
+         , output: "import a from 'b'\nif (true) { console.log(1) }",
   })
   ,
-  ]
+  ],
 })
