@@ -4,7 +4,6 @@ env:
 rules:
   semi: [1, 'never']
   comma-dangle: [1, 'always-multiline']
-  no-unused-vars: 1
   no-console: 1
   no-extra-semi: 1
   no-useless-escape: 1

@@ -1,7 +1,6 @@
 import { test, testFilePath } from '../utils'
 
 import { RuleTester } from 'eslint'
-import { expect } from 'chai'
 import fs from 'fs'
 
 const ruleTester = new RuleTester()
@@ -148,7 +147,7 @@ ruleTester.run('no-unused-modules', rule, {
   ],
 })
 
-// // test for export from 
+// // test for export from
 ruleTester.run('no-unused-modules', rule, {
   valid: [],
   invalid: [

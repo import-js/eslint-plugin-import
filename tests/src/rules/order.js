@@ -1,4 +1,4 @@
-import { test, testVersion, getTSParsers } from '../utils'
+import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 
