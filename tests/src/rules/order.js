@@ -1,4 +1,4 @@
-import { test, testVersion, getTSParsers } from '../utils'
+import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -319,7 +319,7 @@ ruleTester.run('order', rule, {
         } from 'bar';
         import external from 'external'
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with multiline imports #2
     test({
@@ -330,7 +330,7 @@ ruleTester.run('order', rule, {
 
         import external from 'external'
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with multiline imports #3
     test({
@@ -341,7 +341,7 @@ ruleTester.run('order', rule, {
         import bar
           from './sibling';
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'always' with not assigned import #1
     test({
@@ -353,7 +353,7 @@ ruleTester.run('order', rule, {
 
         import _ from 'lodash';
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'never' with not assigned import #2
     test({
@@ -363,7 +363,7 @@ ruleTester.run('order', rule, {
         import 'something-else';
         import _ from 'lodash';
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'always' with not assigned require #1
     test({
@@ -375,7 +375,7 @@ ruleTester.run('order', rule, {
 
         var _ = require('lodash');
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option newlines-between: 'never' with not assigned require #2
     test({
@@ -385,7 +385,7 @@ ruleTester.run('order', rule, {
         require('something-else');
         var _ = require('lodash');
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'never' should ignore nested require statement's #1
     test({
@@ -402,7 +402,7 @@ ruleTester.run('order', rule, {
           }
         }
       `,
-      options: [{ 'newlines-between': 'never' }]
+      options: [{ 'newlines-between': 'never' }],
     }),
     // Option newlines-between: 'always' should ignore nested require statement's #2
     test({
@@ -418,7 +418,7 @@ ruleTester.run('order', rule, {
           }
         }
       `,
-      options: [{ 'newlines-between': 'always' }]
+      options: [{ 'newlines-between': 'always' }],
     }),
     // Option: newlines-between: 'always-and-inside-groups'
     test({

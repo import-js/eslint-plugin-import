@@ -1,0 +1,8 @@
+---
+parserOptions:
+  ecmaVersion: 8
+env:
+  mocha: true
+rules:
+  max-len: 0
+  import/default: 0

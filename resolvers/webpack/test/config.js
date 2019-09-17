@@ -119,8 +119,8 @@ describe("config", function () {
     var settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       argv: {
-        mode: 'test'
-      }
+        mode: 'test',
+      },
     }
 
     expect(resolve('baz', file, settings)).to.have.property('path')
@@ -130,7 +130,7 @@ describe("config", function () {
   it('passes a default empty argv object to config when it is a function', function() {
     var settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
-      argv: undefined
+      argv: undefined,
     }
 
     expect(function () { resolve('baz', file, settings) }).to.not.throw(Error)

@@ -10,19 +10,19 @@ export function testFilePath(relativePath) {
 }
 
 export function getTSParsers() {
-  const parsers = [];
+  const parsers = []
   if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
-    parsers.push(require.resolve('typescript-eslint-parser'));
+    parsers.push(require.resolve('typescript-eslint-parser'))
   }
 
   if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-    parsers.push(require.resolve('@typescript-eslint/parser'));
+    parsers.push(require.resolve('@typescript-eslint/parser'))
   }
-  return parsers;
+  return parsers
 }
 
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(require.resolve('babel-eslint'));
+  return getTSParsers().concat(require.resolve('babel-eslint'))
 }
 
 export const FILENAME = testFilePath('foo.js')

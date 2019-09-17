@@ -15,16 +15,16 @@ ruleTester.run('no-deprecated', rule, {
 
     test({
       code: "import { fn } from './deprecated'",
-      settings: { 'import/docstyle': ['tomdoc'] }
+      settings: { 'import/docstyle': ['tomdoc'] },
     }),
 
     test({
       code: "import { fine } from './tomdoc-deprecated'",
-      settings: { 'import/docstyle': ['tomdoc'] }
+      settings: { 'import/docstyle': ['tomdoc'] },
     }),
     test({
       code: "import { _undocumented } from './tomdoc-deprecated'",
-      settings: { 'import/docstyle': ['tomdoc'] }
+      settings: { 'import/docstyle': ['tomdoc'] },
     }),
 
     // naked namespace is fine
@@ -70,7 +70,7 @@ ruleTester.run('no-deprecated', rule, {
     test({
       code: "import { fn } from './tomdoc-deprecated'",
       settings: { 'import/docstyle': ['tomdoc'] },
-      errors: ["Deprecated: This function is terrible."],
+      errors: ['Deprecated: This function is terrible.'],
     }),
 
     test({

@@ -111,8 +111,8 @@ describe('resolve', function () {
   })
 
   it('reports loaded resolver with invalid interface', function () {
-    const resolverName = './foo-bar-resolver-invalid';
-    const testContext = utils.testContext({ 'import/resolver': resolverName });
+    const resolverName = './foo-bar-resolver-invalid'
+    const testContext = utils.testContext({ 'import/resolver': resolverName })
     const testContextReports = []
     testContext.report = function (reportInfo) {
       testContextReports.push(reportInfo)

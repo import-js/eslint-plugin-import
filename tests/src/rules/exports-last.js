@@ -8,8 +8,8 @@ const ruleTester = new RuleTester()
 const error = type => ({
   ruleId: 'exports-last',
   message: 'Export statements should appear at the end of the file',
-  type
-});
+  type,
+})
 
 ruleTester.run('exports-last', rule, {
   valid: [

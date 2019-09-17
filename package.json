@@ -19,7 +19,7 @@
     "prebuild": "rimraf lib",
     "watch": "npm run mocha -- --watch tests/src",
     "pretest": "linklocal",
-    "posttest": "eslint ./src",
+    "posttest": "eslint .",
     "mocha": "cross-env BABEL_ENV=test NODE_PATH=./src nyc -s mocha -R dot --recursive -t 5s",
     "test": "npm run mocha tests/src",
     "test-compiled": "npm run prepublish && NODE_PATH=./lib mocha --compilers js:babel-register --recursive tests/src",

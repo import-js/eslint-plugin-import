@@ -23,10 +23,10 @@ module.exports = {
     'bootstrap',
     function (context, request, callback) {
       if (request === 'underscore') {
-        return callback(null, 'underscore');
-      };
-      callback();
-    }
+        return callback(null, 'underscore')
+      }
+      callback()
+    },
   ],
 
   plugins: [
@@ -34,7 +34,7 @@ module.exports = {
       new pluginsTest.SimpleResolver(
         path.join(__dirname, 'some', 'bar', 'bar.js'),
         path.join(__dirname, 'some', 'bar')
-      )
-    ])
-  ]
+      ),
+    ]),
+  ],
 }

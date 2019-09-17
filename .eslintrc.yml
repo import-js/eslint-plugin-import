@@ -24,6 +24,7 @@ rules:
     - 2
     - single
     - allowTemplateLiterals: true
+      avoidEscape: true
 
   # dog fooding
   import/no-extraneous-dependencies: "error"

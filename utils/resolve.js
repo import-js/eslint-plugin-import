@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 exports.__esModule = true
 
 const pkgDir = require('pkg-dir')
@@ -15,17 +15,17 @@ exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 const fileExistsCache = new ModuleCache()
 
 function tryRequire(target) {
-  let resolved;
+  let resolved
   try {
     // Check if the target exists
-    resolved = require.resolve(target);
+    resolved = require.resolve(target)
   } catch(e) {
     // If the target does not exist then just return undefined
-    return undefined;
+    return undefined
   }
 
   // If the target exists then return the loaded module
-  return require(resolved);
+  return require(resolved)
 }
 
 // http://stackoverflow.com/a/27382838

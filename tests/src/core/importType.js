@@ -43,12 +43,12 @@ describe('importType(name)', function () {
   })
 
   it("should return 'internal' for non-builtins resolved outside of node_modules", function () {
-    const pathContext = testContext({ "import/resolver": { node: { paths: [pathToTestFiles] } } })
+    const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('importType', pathContext)).to.equal('internal')
   })
 
   it.skip("should return 'internal' for scoped packages resolved outside of node_modules", function () {
-    const pathContext = testContext({ "import/resolver": { node: { paths: [pathToTestFiles] } } })
+    const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('@importType/index', pathContext)).to.equal('internal')
   })
     

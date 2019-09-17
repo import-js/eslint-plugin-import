@@ -128,7 +128,7 @@ ruleTester.run('prefer-default-export', rule, {
       }],
     }),
   ],
-});
+})
 
 context('Typescript', function() {
   getNonDefaultParsers().forEach((parser) => {
@@ -138,7 +138,7 @@ context('Typescript', function() {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    };
+    }
 
     ruleTester.run('prefer-default-export', rule, {
       valid: [
@@ -184,6 +184,6 @@ context('Typescript', function() {
         ),
       ],
       invalid: [],
-    });
-  });
-});
+    })
+  })
+})
