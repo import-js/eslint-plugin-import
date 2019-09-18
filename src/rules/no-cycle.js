@@ -36,7 +36,7 @@ module.exports = {
     if (myPath === '<text>') return {} // can't cycle-check a non-file
 
     const options = context.options[0] || {}
-    const maxDepth = options.maxDepth || Infinity
+    const maxDepth = +options.maxDepth || Infinity
 
     function checkSourceValue(sourceNode, importer) {
       const imported = Exports.get(sourceNode.value, context)
