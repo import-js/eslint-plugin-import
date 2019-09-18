@@ -15,8 +15,18 @@ module.exports = {
     schema: [makeOptionsSchema({
       maxDepth:{
         description: 'maximum dependency depth to traverse',
-        type: 'integer',
-        minimum: 1,
+        oneOf: [
+          {
+            description: 'maximum dependency depth to traverse',
+            type: 'integer',
+            minimum: 1,
+          },
+          {
+            description: 'Infinity can\'t be used within JSON',
+            type: 'String',
+            enum: ['Infinity'],
+          }
+        ]
       },
     })],
   },
