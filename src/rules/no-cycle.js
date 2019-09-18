@@ -14,7 +14,6 @@ module.exports = {
     docs: { url: docsUrl('no-cycle') },
     schema: [makeOptionsSchema({
       maxDepth:{
-        description: 'maximum dependency depth to traverse',
         oneOf: [
           {
             description: 'maximum dependency depth to traverse',
@@ -23,7 +22,7 @@ module.exports = {
           },
           {
             description: 'Infinity can\'t be used within JSON',
-            type: 'String',
+            type: 'string',
             enum: ['Infinity'],
           }
         ]
