@@ -168,4 +168,8 @@ import sibling from './foo';
 
 - [`import/external-module-folders`] setting
 
+- [`import/internal-regex`] setting
+
 [`import/external-module-folders`]: ../../README.md#importexternal-module-folders
+
+[`import/internal-regex`]: ../../README.md#importinternal-regex

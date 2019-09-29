@@ -54,8 +54,9 @@ export function isScopedMain(name) {
 }
 
 function isInternalModule(name, settings, path) {
+  const internalScope = (settings && settings['import/internal-regex'])
   const matchesScopedOrExternalRegExp = scopedRegExp.test(name) || externalModuleRegExp.test(name)
-  return (matchesScopedOrExternalRegExp && !isExternalPath(path, name, settings))
+  return (matchesScopedOrExternalRegExp && (internalScope && new RegExp(internalScope).test(name) || !isExternalPath(path, name, settings)))
 }
 
 function isRelativeToParent(name) {

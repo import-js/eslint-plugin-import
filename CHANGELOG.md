@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Added
+- [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
+
+### Added
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
 - [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])

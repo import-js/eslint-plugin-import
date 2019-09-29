@@ -402,6 +402,20 @@ settings:
 [`eslint_d`]: https://www.npmjs.com/package/eslint_d
 [`eslint-loader`]: https://www.npmjs.com/package/eslint-loader
 
+#### `import/internal-regex`
+
+A regex for packages should be treated as internal. Useful when you are utilizing a monorepo setup or developing a set of packages that depend on each other.
+
+By default, any package referenced from [`import/external-module-folders`](#importexternal-module-folders) will be considered as "external", including packages in a monorepo like yarn workspace or lerna emvironentment. If you want to mark these packages as "internal" this will be useful.
+
+For example, if you pacakges in a monorepo are all in `@scope`, you can configure `import/internal-regex` like this
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/internal-regex: ^@scope/
+```
+
 
 ## SublimeLinter-eslint
 

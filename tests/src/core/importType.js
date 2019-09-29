@@ -51,7 +51,7 @@ describe('importType(name)', function () {
     const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('@importType/index', pathContext)).to.equal('internal')
   })
-    
+
   it("should return 'internal' for internal modules that are referenced by aliases", function () {
     const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('@my-alias/fn', pathContext)).to.equal('internal')
@@ -128,6 +128,16 @@ describe('importType(name)', function () {
   it("should return 'internal' for module from 'node_modules' if 'node_modules' missed in 'external-module-folders'", function() {
     const foldersContext = testContext({ 'import/external-module-folders': [] })
     expect(importType('resolve', foldersContext)).to.equal('internal')
+  })
+
+  it("should return 'internal' for module from 'node_modules' if its name matched 'internal-regex'", function() {
+    const foldersContext = testContext({ 'import/internal-regex': '^@org' })
+    expect(importType('@org/foobar', foldersContext)).to.equal('internal')
+  })
+
+  it("should return 'external' for module from 'node_modules' if its name did not match 'internal-regex'", function() {
+    const foldersContext = testContext({ 'import/internal-regex': '^@bar' })
+    expect(importType('@org/foobar', foldersContext)).to.equal('external')
   })
 
   it("should return 'external' for module from 'node_modules' if 'node_modules' contained in 'external-module-folders'", function() {
