@@ -30,6 +30,7 @@ describe('importType(name)', function () {
   })
 
   it("should return 'external' for scopes packages", function() {
+    expect(importType('@cycle/', context)).to.equal('external')
     expect(importType('@cycle/core', context)).to.equal('external')
     expect(importType('@cycle/dom', context)).to.equal('external')
     expect(importType('@some-thing/something', context)).to.equal('external')
@@ -55,6 +56,7 @@ describe('importType(name)', function () {
   it("should return 'internal' for internal modules that are referenced by aliases", function () {
     const pathContext = testContext({ 'import/resolver': { node: { paths: [pathToTestFiles] } } })
     expect(importType('@my-alias/fn', pathContext)).to.equal('internal')
+    expect(importType('@importType', pathContext)).to.equal('internal')
   })
 
   it("should return 'internal' for aliased internal modules that look like core modules (node resolver)", function () {
@@ -96,7 +98,6 @@ describe('importType(name)', function () {
   })
 
   it("should return 'unknown' for any unhandled cases", function() {
-    expect(importType('@malformed', context)).to.equal('unknown')
     expect(importType('  /malformed', context)).to.equal('unknown')
     expect(importType('   foo', context)).to.equal('unknown')
   })

@@ -19,11 +19,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
 - Improve performance of `ExportMap.for` by only loading paths when necessary. ([#1519], thanks [@brendo])
 - Support export of a merged TypeScript namespace declaration ([#1495], thanks [@benmunro])
-- [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
+- [`order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
 - [`extensions`]: Fix `ignorePackages` to produce errors ([#1521], thanks [@saschanaz])
 - [`no-unused-modules`]: fix crash due to `export *` ([#1496], thanks [@Taranys])
 - [`no-cycle`]: should not warn for Flow imports ([#1494], thanks [@maxmalov])
+- [`order`]: fix `@someModule` considered as `unknown` instead of `internal` ([#1493], thanks [@aamulumi])
 
 ### Docs
 - [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
@@ -146,7 +147,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: ignore Flow imports ([#1126], thanks [@gajus])
 - fix Flow type imports ([#1106], thanks [@syymza])
 - [`no-relative-parent-imports`]: resolve paths ([#1135], thanks [@chrislloyd])
-- [`import/order`]: fix autofixer when using typescript-eslint-parser ([#1137], thanks [@justinanastos])
+- [`order`]: fix autofixer when using typescript-eslint-parser ([#1137], thanks [@justinanastos])
 - repeat fix from [#797] for [#717], in another place (thanks [@ljharb])
 
 ### Refactors
@@ -633,6 +634,7 @@ for info on changes for earlier releases.
 [#1496]: https://github.com/benmosher/eslint-plugin-import/pull/1496
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1494]: https://github.com/benmosher/eslint-plugin-import/pull/1494
+[#1493]: https://github.com/benmosher/eslint-plugin-import/pull/1493
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
@@ -1029,3 +1031,4 @@ for info on changes for earlier releases.
 [@maxmalov]: https://github.com/maxmalov
 [@marcusdarmstrong]: https://github.com/marcusdarmstrong
 [@Mairu]: https://github.com/Mairu
+[@aamulumi]: https://github.com/aamulumi
