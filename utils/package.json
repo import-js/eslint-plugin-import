@@ -27,5 +27,8 @@
   "dependencies": {
     "debug": "^2.6.8",
     "pkg-dir": "^2.0.0"
+  },
+  "peerDependencies": {
+    "eslint-import-resolver-node": "^0.3.2"
   }
 }
