@@ -404,18 +404,26 @@ ExportMap.parse = function (path, content, context) {
 
   function captureDependency(declaration) {
     if (declaration.source == null) return null
+    if (declaration.importKind === 'type') return null // skip Flow type imports
     const importedSpecifiers = new Set()
     const supportedTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier'])
+    let hasImportedType = false
     if (declaration.specifiers) {
       declaration.specifiers.forEach(specifier => {
-        if (supportedTypes.has(specifier.type)) {
+        const isType = specifier.importKind === 'type'
+        hasImportedType = hasImportedType || isType
+
+        if (supportedTypes.has(specifier.type) && !isType) {
           importedSpecifiers.add(specifier.type)
         }
-        if (specifier.type === 'ImportSpecifier') {
+        if (specifier.type === 'ImportSpecifier' && !isType) {
           importedSpecifiers.add(specifier.imported.name)
         }
       })
     }
+
+    // only Flow types were imported
+    if (hasImportedType && importedSpecifiers.size === 0) return null
 
     const p = remotePath(declaration.source.value)
     if (p == null) return null

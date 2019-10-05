@@ -53,6 +53,10 @@ ruleTester.run('no-cycle', rule, {
       code: 'import type { FooType, BarType } from "./depth-one"',
       parser: require.resolve('babel-eslint'),
     }),
+    test({
+      code: 'import { bar } from "./flow-types"',
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
   invalid: [
     test({
@@ -119,6 +123,11 @@ ruleTester.run('no-cycle', rule, {
       code: 'import("./depth-three-indirect")',
       errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
       parser: require.resolve('babel-eslint'),
+    }),
+    test({
+      code: 'import { bar } from "./flow-types-depth-one"',
+      parser: require.resolve('babel-eslint'),
+      errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./depth-one:1`)],
     }),
   ],
 })

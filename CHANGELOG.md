@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
 - [`extensions`]: Fix `ignorePackages` to produce errors ([#1521], thanks [@saschanaz])
 - [`no-unused-modules`]: fix crash due to `export *` ([#1496], thanks [@Taranys])
+- [`no-cycle`]: should not warn for Flow imports ([#1494], thanks [@maxmalov])
 
 ### Docs
 - [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
@@ -629,6 +630,7 @@ for info on changes for earlier releases.
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
 [#1496]: https://github.com/benmosher/eslint-plugin-import/pull/1496
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
+[#1494]: https://github.com/benmosher/eslint-plugin-import/pull/1494
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
@@ -1019,3 +1021,4 @@ for info on changes for earlier releases.
 [@saschanaz]: https://github.com/saschanaz
 [@brettz9]: https://github.com/brettz9
 [@Taranys]: https://github.com/Taranys
+[@maxmalov]: https://github.com/maxmalov
