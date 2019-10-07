@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - `default`: make error message less confusing ([#1470], thanks [@golopot])
+- Support export of a merged typescript namespace declaration ([#1495], thanks [@benmunro])
 
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
@@ -609,6 +610,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
@@ -992,3 +994,4 @@ for info on changes for earlier releases.
 [@atikenny]: https://github.com/atikenny
 [@schmidsi]: https://github.com/schmidsi
 [@TrevorBurnham]: https://github.com/TrevorBurnham
+[@benmunro]: https://github.com/benmunro

@@ -514,30 +514,32 @@ ExportMap.parse = function (path, content, context) {
 
     // This doesn't declare anything, but changes what's being exported.
     if (n.type === 'TSExportAssignment') {
-      const moduleDecl = ast.body.find((bodyNode) =>
+      const moduleDecls = ast.body.filter((bodyNode) =>
         bodyNode.type === 'TSModuleDeclaration' && bodyNode.id.name === n.expression.name
       )
-      if (moduleDecl && moduleDecl.body && moduleDecl.body.body) {
-        moduleDecl.body.body.forEach((moduleBlockNode) => {
-          // Export-assignment exports all members in the namespace, explicitly exported or not.
-          const exportedDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
-            moduleBlockNode.declaration :
-            moduleBlockNode
+      moduleDecls.forEach((moduleDecl) => {
+        if (moduleDecl && moduleDecl.body && moduleDecl.body.body) {
+          moduleDecl.body.body.forEach((moduleBlockNode) => {
+            // Export-assignment exports all members in the namespace, explicitly exported or not.
+            const exportedDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
+              moduleBlockNode.declaration :
+              moduleBlockNode
 
-          if (exportedDecl.type === 'VariableDeclaration') {
-            exportedDecl.declarations.forEach((decl) =>
-              recursivePatternCapture(decl.id,(id) => m.namespace.set(
-                id.name,
-                captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
+            if (exportedDecl.type === 'VariableDeclaration') {
+              exportedDecl.declarations.forEach((decl) =>
+                recursivePatternCapture(decl.id,(id) => m.namespace.set(
+                  id.name,
+                  captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
+                )
               )
-            )
-          } else {
-            m.namespace.set(
-              exportedDecl.id.name,
-              captureDoc(source, docStyleParsers, moduleBlockNode))
-          }
-        })
-      }
+            } else {
+              m.namespace.set(
+                exportedDecl.id.name,
+                captureDoc(source, docStyleParsers, moduleBlockNode))
+            }
+          })
+        }
+      })
     }
   })
 
