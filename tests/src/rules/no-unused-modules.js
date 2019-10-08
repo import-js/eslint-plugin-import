@@ -453,6 +453,11 @@ describe('test behaviour for new file', () => {
       test({ options: unusedExportsOptions,
              code: `export * from '${testFilePath('./no-unused-modules/file-added-0.js')}'`,
              filename: testFilePath('./no-unused-modules/file-0.js')}),
+      // Test export * from 'external-compiled-library'
+      test({ options: unusedExportsOptions,
+        code: `export * from 'external-compiled-library'`,
+        filename: testFilePath('./no-unused-modules/file-r.js'),
+      }),
     ],
     invalid: [
       test({ options: unusedExportsOptions,
@@ -668,5 +673,16 @@ describe('correctly report flow types', () => {
         ],
       }),
     ],
+  })
+})
+
+describe('Avoid errors if re-export all from umd compiled library', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+        code: `export * from '${testFilePath('./no-unused-modules/bin.js')}'`,
+        filename: testFilePath('./no-unused-modules/main/index.js')}),
+    ],
+    invalid: [],
   })
 })

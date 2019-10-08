@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
 - [`extensions`]: Fix `ignorePackages` to produce errors ([#1521], thanks [@saschanaz])
+- [`no-unused-modules`]: fix crash due to `export *` ([#1496], thanks [@Taranys])
 
 ### Docs
 - [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
@@ -626,6 +627,7 @@ for info on changes for earlier releases.
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
+[#1496]: https://github.com/benmosher/eslint-plugin-import/pull/1496
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
@@ -1016,3 +1018,4 @@ for info on changes for earlier releases.
 [@brendo]: https://github.com/brendo
 [@saschanaz]: https://github.com/saschanaz
 [@brettz9]: https://github.com/brettz9
+[@Taranys]: https://github.com/Taranys

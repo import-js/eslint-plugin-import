@@ -88,8 +88,13 @@ const prepareImportsAndExports = (srcFiles, context) => {
 
       // dependencies === export * from
       const currentExportAll = new Set()
-      dependencies.forEach(value => {
-        currentExportAll.add(value().path)
+      dependencies.forEach(getDependency => {
+        const dependency = getDependency()
+        if (dependency === null) {
+          return
+        }
+
+        currentExportAll.add(dependency.path)
       })
       exportAll.set(file, currentExportAll)
 
