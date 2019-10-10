@@ -152,7 +152,7 @@ rules:
   # etc...
 ```
 
-# Typescript
+# TypeScript
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 

@@ -108,7 +108,7 @@ ruleTester.run('export', rule, {
 })
 
 
-context('Typescript', function () {
+context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
       parser: parser,

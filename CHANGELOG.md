@@ -13,7 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - `default`: make error message less confusing ([#1470], thanks [@golopot])
-- Support export of a merged typescript namespace declaration ([#1495], thanks [@benmunro])
+- Support export of a merged TypeScript namespace declaration ([#1495], thanks [@benmunro])
 - [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 
 ## [2.18.2] - 2019-07-19
@@ -25,7 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
 - [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
 - [`no-unused-modules`]: Exclude package "main"/"bin"/"browser" entry points ([#1404], thanks [@rfermann])
-- [`export`]: false positive for typescript overloads ([#1412], thanks [@golopot])
+- [`export`]: false positive for TypeScript overloads ([#1412], thanks [@golopot])
 
 ### Refactors
  - [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
@@ -36,7 +36,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Support eslint v6 ([#1393], thanks [@sheepsteak])
 - [`order`]: Adds support for correctly sorting unknown types into a single group ([#1375], thanks [@swernerx])
 - [`order`]: add fixer for destructuring commonjs import ([#1372], thanks [@golopot])
-- typescript config: add TS def extensions + defer to TS over JS ([#1366], thanks [@benmosher])
+- TypeScript config: add TS def extensions + defer to TS over JS ([#1366], thanks [@benmosher])
 
 ### Fixed
 - [`no-unused-modules`]: handle ClassDeclaration ([#1371], thanks [@golopot])
@@ -54,7 +54,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: make appveyor tests passing ([#1333], thanks [@rfermann])
 - [`named`]: ignore Flow `typeof` imports and `type` exports ([#1345], thanks [@loganfsmyth])
 - [refactor] fix eslint 6 compat by fixing imports (thank [@ljharb])
-- Improve support for Typescript declare structures ([#1356], thanks [@christophercurrie])
+- Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
 
 ### Docs
 - add missing `no-unused-modules` in README ([#1358], thanks [@golopot])
@@ -79,7 +79,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-useless-path-segments`]: Add `noUselessIndex` option ([#1290], thanks [@timkraut])
 - [`no-duplicates`]: Add autofix ([#1312], thanks [@lydell])
 - Add [`no-unused-modules`] rule ([#1142], thanks [@rfermann])
-- support export type named exports from typescript ([#1304], thanks [@bradennapier] and [@schmod])
+- support export type named exports from TypeScript ([#1304], thanks [@bradennapier] and [@schmod])
 
 ### Fixed
 - [`order`]: Fix interpreting some external modules being interpreted as internal modules ([#793], [#794] thanks [@ephys])
@@ -88,11 +88,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`namespace`]: add check for null ExportMap ([#1235], [#1144], thanks [@ljqx])
 - [ExportMap] fix condition for checking if block comment ([#1234], [#1233], thanks [@ljqx])
 - Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
-- [`export`]: false positives for typescript type + value export ([#1319], thanks [@bradzacher])
-- [`export`]: Support typescript namespaces ([#1320], [#1300], thanks [@bradzacher])
+- [`export`]: false positives for TypeScript type + value export ([#1319], thanks [@bradzacher])
+- [`export`]: Support TypeScript namespaces ([#1320], [#1300], thanks [@bradzacher])
 
 ### Docs
-- Update readme for Typescript ([#1256], [#1277], thanks [@kirill-konshin])
+- Update readme for TypeScript ([#1256], [#1277], thanks [@kirill-konshin])
 - make rule names consistent ([#1112], thanks [@feychenie])
 
 ### Tests

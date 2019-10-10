@@ -9,7 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
  - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
- - Improve support for Typescript declare structures ([#1356], thanks [@christophercurrie])
+ - Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
 
 ## v2.4.0 - 2019-04-13
 

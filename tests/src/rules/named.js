@@ -282,7 +282,7 @@ ruleTester.run('named (export *)', rule, {
 })
 
 
-context('Typescript', function () {
+context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     ['typescript', 'typescript-declare', 'typescript-export-assign', 'typescript-export-assign-merged'].forEach((source) => {
       ruleTester.run(`named`, rule, {

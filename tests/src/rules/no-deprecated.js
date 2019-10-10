@@ -198,7 +198,7 @@ ruleTester.run('no-deprecated: hoisting', rule, {
   ],
 })
 
-describe('Typescript', function () {
+describe('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
       parser: parser,

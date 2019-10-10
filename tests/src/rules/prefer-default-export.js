@@ -142,7 +142,7 @@ ruleTester.run('prefer-default-export', rule, {
   ],
 })
 
-context('Typescript', function() {
+context('TypeScript', function() {
   getNonDefaultParsers().forEach((parser) => {
     const parserConfig = {
       parser: parser,

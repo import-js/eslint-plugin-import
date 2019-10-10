@@ -3,7 +3,7 @@ import docsUrl from '../docsUrl'
 import includes from 'array-includes'
 
 /*
-Notes on Typescript namespaces aka TSModuleDeclaration:
+Notes on TypeScript namespaces aka TSModuleDeclaration:
 
 There are two forms:
 - active namespaces: namespace Foo {} / module Foo {}
@@ -86,7 +86,7 @@ module.exports = {
         if (node.declaration == null) return
 
         const parent = getParent(node)
-        // support for old typescript versions
+        // support for old TypeScript versions
         const isTypeVariableDecl = node.declaration.kind === 'type'
 
         if (node.declaration.id != null) {

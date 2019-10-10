@@ -4,13 +4,13 @@
 
 npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
 
-# completely remove the new typescript parser for ESLint < v5
+# completely remove the new TypeScript parser for ESLint < v5
 if [[ "$ESLINT_VERSION" -lt "5" ]]; then
   echo "Removing @typescript-eslint/parser..."
   npm uninstall --no-save @typescript-eslint/parser
 fi
 
-# use these alternate typescript dependencies for ESLint < v4
+# use these alternate TypeScript dependencies for ESLint < v4
 if [[ "$ESLINT_VERSION" -lt "4" ]]; then
   echo "Downgrading babel-eslint..."
   npm i --no-save babel-eslint@8.0.3
