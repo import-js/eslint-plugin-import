@@ -164,7 +164,7 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
-    // Addijg unknown import types (e.g. using an resolver alias via babel) to the groups.
+    // Adding unknown import types (e.g. using a resolver alias via babel) to the groups.
     test({
       code: `
         import fs from 'fs';
@@ -175,7 +175,7 @@ ruleTester.run('order', rule, {
         groups: ['builtin', 'external', 'unknown', 'parent', 'sibling', 'index'],
       }],
     }),
-    // Using unknown import types (e.g. using an resolver alias via babel) with
+    // Using unknown import types (e.g. using a resolver alias via babel) with
     // an alternative custom group list.
     test({
       code: `
@@ -187,7 +187,7 @@ ruleTester.run('order', rule, {
         groups: [ 'unknown', 'builtin', 'external', 'parent', 'sibling', 'index' ],
       }],
     }),
-    // Using unknown import types (e.g. using an resolver alias via babel)
+    // Using unknown import types (e.g. using a resolver alias via babel)
     // Option: newlines-between: 'always'
     test({
       code: `
