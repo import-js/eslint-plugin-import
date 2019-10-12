@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Added
+- [New] enable passing cwd as an option to `eslint-import-resolver-webpack` ([#1503], thanks [@Aghassi])
+
 ## 0.11.1 - 2019-04-13
 
 ### Fixed
@@ -117,6 +120,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#1503]: https://github.com/benmosher/eslint-plugin-import/pull/1503
 [#1297]: https://github.com/benmosher/eslint-plugin-import/pull/1297
 [#1261]: https://github.com/benmosher/eslint-plugin-import/pull/1261
 [#1220]: https://github.com/benmosher/eslint-plugin-import/pull/1220
@@ -166,3 +170,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@mattkrick]: https://github.com/mattkrick
 [@idudinov]: https://github.com/idudinov
 [@keann]: https://github.com/keann
+[@Aghassi]: https://github.com/Aghassi

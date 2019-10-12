@@ -6,6 +6,7 @@ var resolve = require('../index').resolve
 
 
 var file = path.join(__dirname, 'files', 'src', 'dummy.js')
+var webpackDir = path.join(__dirname, "different-package-location")
 
 describe("root", function () {
   it("works", function () {
@@ -32,5 +33,13 @@ describe("root", function () {
       .property('path')
       .to.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'))
   })
-
+  it("supports passing a different directory to load webpack from", function () {
+    // Webpack should still be able to resolve the config here
+    expect(resolve('main-module', file, { config: "webpack.config.js", cwd: webpackDir}))
+      .property('path')
+      .to.equal(path.join(__dirname, 'files', 'src', 'main-module.js'))
+    expect(resolve('typeahead', file, { config: "webpack.config.js", cwd: webpackDir}))
+      .property('path')
+      .to.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'))
+  })
 })

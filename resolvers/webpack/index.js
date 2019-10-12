@@ -20,7 +20,15 @@ exports.interfaceVersion = 2
  * resolveImport('./foo', '/Users/ben/bar.js') => '/Users/ben/foo.js'
  * @param  {string} source - the module to resolve; i.e './some-module'
  * @param  {string} file - the importing file's full path; i.e. '/usr/local/bin/file.js'
- * TODO: take options as a third param, with webpack config file name
+ * @param  {object} settings - the webpack config file name, as well as cwd
+ * @example
+ * options: {
+ *  // Path to the webpack config
+ *  config: 'webpack.config.js',
+ *  // Path to be used to determine where to resolve webpack from
+ *  // (may differ from the cwd in some cases)
+ *  cwd: process.cwd()
+ * }
  * @return {string?} the resolved path to source, undefined if not resolved, or null
  *                   if resolved to a non-FS resource (i.e. script tag at page load)
  */
@@ -41,6 +49,11 @@ exports.resolve = function (source, file, settings) {
   var webpackConfig
 
   var configPath = get(settings, 'config')
+    /**
+     * Attempt to set the current working directory.
+     * If none is passed, default to the `cwd` where the config is located.
+     */
+    , cwd = get(settings, 'cwd')
     , configIndex = get(settings, 'config-index')
     , env = get(settings, 'env')
     , argv = get(settings, 'argv', {})
@@ -114,7 +127,7 @@ exports.resolve = function (source, file, settings) {
   }
 
   // otherwise, resolve "normally"
-  var resolveSync = getResolveSync(configPath, webpackConfig)
+  var resolveSync = getResolveSync(configPath, webpackConfig, cwd)
 
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) }
@@ -130,13 +143,13 @@ exports.resolve = function (source, file, settings) {
 
 var MAX_CACHE = 10
 var _cache = []
-function getResolveSync(configPath, webpackConfig) {
+function getResolveSync(configPath, webpackConfig, cwd) {
   var cacheKey = { configPath: configPath, webpackConfig: webpackConfig }
   var cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey) })
   if (!cached) {
     cached = {
       key: cacheKey,
-      value: createResolveSync(configPath, webpackConfig),
+      value: createResolveSync(configPath, webpackConfig, cwd),
     }
     // put in front and pop last item
     if (_cache.unshift(cached) > MAX_CACHE) {
@@ -146,15 +159,18 @@ function getResolveSync(configPath, webpackConfig) {
   return cached.value
 }
 
-function createResolveSync(configPath, webpackConfig) {
+function createResolveSync(configPath, webpackConfig, cwd) {
   var webpackRequire
     , basedir = null
 
   if (typeof configPath === 'string') {
-    basedir = path.dirname(configPath)
+    // This can be changed via the settings passed in when defining the resolver
+    basedir = cwd || configPath
+    log(`Attempting to load webpack path from ${basedir}`)
   }
 
   try {
+    // Attempt to resolve webpack from the given `basedir`
     var webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false })
     var webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false }
 
