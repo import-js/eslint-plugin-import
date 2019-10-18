@@ -73,3 +73,7 @@ import "./pages/index.js"; // should be "./pages" (auto-fixable)
 ```
 
 Note: `noUselessIndex` only avoids ambiguous imports for `.js` files if you haven't specified other resolved file extensions. See [Settings: import/extensions](https://github.com/benmosher/eslint-plugin-import#importextensions) for details.
+
+### commonjs
+
+When set to `true`, this rule checks CommonJS imports. Default to `false`.

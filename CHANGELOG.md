@@ -19,6 +19,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
 - [`extensions`]: Fix `ignorePackages` to produce errors ([#1521], thanks [@saschanaz])
 
+### Docs
+- [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
+
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
 
@@ -614,6 +617,7 @@ for info on changes for earlier releases.
 
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
+[#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
