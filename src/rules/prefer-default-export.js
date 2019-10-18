@@ -14,6 +14,7 @@ module.exports = {
     let specifierExportCount = 0
     let hasDefaultExport = false
     let hasStarExport = false
+    let hasTypeExport = false
     let namedExportNode = null
 
     function captureDeclaration(identifierOrPattern) {
@@ -50,9 +51,6 @@ module.exports = {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return
 
-        // don't warn on single type aliases, declarations, or interfaces
-        if (node.exportKind === 'type') return
-
         const { type } = node.declaration
 
         if (
@@ -61,6 +59,8 @@ module.exports = {
           type === 'TSInterfaceDeclaration' ||
           type === 'InterfaceDeclaration'
         ) {
+          specifierExportCount++
+          hasTypeExport = true
           return
         }
 
@@ -86,7 +86,7 @@ module.exports = {
       },
 
       'Program:exit': function() {
-        if (specifierExportCount === 1 && !hasDefaultExport && !hasStarExport) {
+        if (specifierExportCount === 1 && !hasDefaultExport && !hasStarExport && !hasTypeExport) {
           context.report(namedExportNode, 'Prefer default export.')
         }
       },

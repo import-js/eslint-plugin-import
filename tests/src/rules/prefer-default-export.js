@@ -3,7 +3,7 @@ import { test, getNonDefaultParsers } from '../utils'
 import { RuleTester } from 'eslint'
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/prefer-default-export')
+    , rule = require('../../../src/rules/prefer-default-export')
 
 ruleTester.run('prefer-default-export', rule, {
   valid: [
@@ -190,6 +190,13 @@ context('TypeScript', function() {
         test (
           {
             code: 'export interface foo { bar: string; }',
+            parser,
+          },
+          parserConfig,
+        ),
+        test (
+          {
+            code: 'export interface foo { bar: string; }; export function goo() {}',
             parser,
           },
           parserConfig,
