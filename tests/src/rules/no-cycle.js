@@ -1,6 +1,7 @@
 import { test as _test, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-cycle');
@@ -11,9 +12,10 @@ const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
 }));
 
-// describe.only("no-cycle", () => {
+const testDialects = ['es6'];
+
 ruleTester.run('no-cycle', rule, {
-  valid: [
+  valid: [].concat(
     // this rule doesn't care if the cycle length is 0
     test({ code: 'import foo from "./foo.js"' }),
 
@@ -33,14 +35,6 @@ ruleTester.run('no-cycle', rule, {
       filename: '<text>',
     }),
     test({
-      code: 'import { foo } from "./depth-two"',
-      options: [{ maxDepth: 1 }],
-    }),
-    test({
-      code: 'import { foo, bar } from "./depth-two"',
-      options: [{ maxDepth: 1 }],
-    }),
-    test({
       code: 'import { foo } from "cycles/external/depth-one"',
       options: [{ ignoreExternal: true }],
       settings: {
@@ -56,19 +50,31 @@ ruleTester.run('no-cycle', rule, {
         'import/external-module-folders': ['cycles/external'],
       },
     }),
-    test({
-      code: 'import("./depth-two").then(function({ foo }){})',
-      options: [{ maxDepth: 1 }],
-      parser: require.resolve('babel-eslint'),
-    }),
-    test({
-      code: 'import type { FooType } from "./depth-one"',
-      parser: require.resolve('babel-eslint'),
-    }),
-    test({
-      code: 'import type { FooType, BarType } from "./depth-one"',
-      parser: require.resolve('babel-eslint'),
-    }),
+
+    flatMap(testDialects, (testDialect) => [
+      test({
+        code: `import { foo } from "./${testDialect}/depth-two"`,
+        options: [{ maxDepth: 1 }],
+      }),
+      test({
+        code: `import { foo, bar } from "./${testDialect}/depth-two"`,
+        options: [{ maxDepth: 1 }],
+      }),
+      test({
+        code: `import("./${testDialect}/depth-two").then(function({ foo }){})`,
+        options: [{ maxDepth: 1 }],
+        parser: require.resolve('babel-eslint'),
+      }),
+      test({
+        code: `import type { FooType } from "./${testDialect}/depth-one"`,
+        parser: require.resolve('babel-eslint'),
+      }),
+      test({
+        code: `import type { FooType, BarType } from "./${testDialect}/depth-one"`,
+        parser: require.resolve('babel-eslint'),
+      }),
+    ]),
+
     test({
       code: 'import { bar } from "./flow-types"',
       parser: require.resolve('babel-eslint'),
@@ -81,12 +87,9 @@ ruleTester.run('no-cycle', rule, {
       code: 'import { bar } from "./flow-types-only-importing-multiple-types"',
       parser: require.resolve('babel-eslint'),
     }),
-  ],
-  invalid: [
-    test({
-      code: 'import { foo } from "./depth-one"',
-      errors: [error(`Dependency cycle detected.`)],
-    }),
+  ),
+
+  invalid: [].concat(
     test({
       code: 'import { bar } from "./flow-types-some-type-imports"',
       parser: require.resolve('babel-eslint'),
@@ -108,82 +111,89 @@ ruleTester.run('no-cycle', rule, {
         'import/external-module-folders': ['cycles/external'],
       },
     }),
-    test({
-      code: 'import { foo } from "./depth-one"',
-      options: [{ maxDepth: 1 }],
-      errors: [error(`Dependency cycle detected.`)],
-    }),
-    test({
-      code: 'const { foo } = require("./depth-one")',
-      errors: [error(`Dependency cycle detected.`)],
-      options: [{ commonjs: true }],
-    }),
-    test({
-      code: 'require(["./depth-one"], d1 => {})',
-      errors: [error(`Dependency cycle detected.`)],
-      options: [{ amd: true }],
-    }),
-    test({
-      code: 'define(["./depth-one"], d1 => {})',
-      errors: [error(`Dependency cycle detected.`)],
-      options: [{ amd: true }],
-    }),
-    test({
-      code: 'import { foo } from "./depth-two"',
-      errors: [error(`Dependency cycle via ./depth-one:1`)],
-    }),
-    test({
-      code: 'import { foo } from "./depth-two"',
-      options: [{ maxDepth: 2 }],
-      errors: [error(`Dependency cycle via ./depth-one:1`)],
-    }),
-    test({
-      code: 'const { foo } = require("./depth-two")',
-      errors: [error(`Dependency cycle via ./depth-one:1`)],
-      options: [{ commonjs: true }],
-    }),
-    test({
-      code: 'import { two } from "./depth-three-star"',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-    }),
-    test({
-      code: 'import one, { two, three } from "./depth-three-star"',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-    }),
-    test({
-      code: 'import { bar } from "./depth-three-indirect"',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-    }),
-    test({
-      code: 'import { bar } from "./depth-three-indirect"',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-      parser: require.resolve('babel-eslint'),
-    }),
-    test({
-      code: 'import("./depth-three-star")',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-      parser: require.resolve('babel-eslint'),
-    }),
-    test({
-      code: 'import("./depth-three-indirect")',
-      errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-      parser: require.resolve('babel-eslint'),
-    }),
+
+    flatMap(testDialects, (testDialect) => [
+      test({
+        code: `import { foo } from "./${testDialect}/depth-one"`,
+        errors: [error(`Dependency cycle detected.`)],
+      }),
+      test({
+        code: `import { foo } from "./${testDialect}/depth-one"`,
+        options: [{ maxDepth: 1 }],
+        errors: [error(`Dependency cycle detected.`)],
+      }),
+      test({
+        code: `const { foo } = require("./${testDialect}/depth-one")`,
+        errors: [error(`Dependency cycle detected.`)],
+        options: [{ commonjs: true }],
+      }),
+      test({
+        code: `require(["./${testDialect}/depth-one"], d1 => {})`,
+        errors: [error(`Dependency cycle detected.`)],
+        options: [{ amd: true }],
+      }),
+      test({
+        code: `define(["./${testDialect}/depth-one"], d1 => {})`,
+        errors: [error(`Dependency cycle detected.`)],
+        options: [{ amd: true }],
+      }),
+      test({
+        code: `import { foo } from "./${testDialect}/depth-two"`,
+        errors: [error(`Dependency cycle via ./depth-one:1`)],
+      }),
+      test({
+        code: `import { foo } from "./${testDialect}/depth-two"`,
+        options: [{ maxDepth: 2 }],
+        errors: [error(`Dependency cycle via ./depth-one:1`)],
+      }),
+      test({
+        code: `const { foo } = require("./${testDialect}/depth-two")`,
+        errors: [error(`Dependency cycle via ./depth-one:1`)],
+        options: [{ commonjs: true }],
+      }),
+      test({
+        code: `import { two } from "./${testDialect}/depth-three-star"`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      }),
+      test({
+        code: `import one, { two, three } from "./${testDialect}/depth-three-star"`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      }),
+      test({
+        code: `import { bar } from "./${testDialect}/depth-three-indirect"`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+      }),
+      test({
+        code: `import { bar } from "./${testDialect}/depth-three-indirect"`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+        parser: require.resolve('babel-eslint'),
+      }),
+      test({
+        code: `import("./${testDialect}/depth-three-star")`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+        parser: require.resolve('babel-eslint'),
+      }),
+      test({
+        code: `import("./${testDialect}/depth-three-indirect")`,
+        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+        parser: require.resolve('babel-eslint'),
+      }),
+      test({
+        code: `import { foo } from "./${testDialect}/depth-two"`,
+        options: [{ maxDepth: Infinity }],
+        errors: [error(`Dependency cycle via ./depth-one:1`)],
+      }),
+      test({
+        code: `import { foo } from "./${testDialect}/depth-two"`,
+        options: [{ maxDepth: '∞' }],
+        errors: [error(`Dependency cycle via ./depth-one:1`)],
+      }),
+    ]),
+
     test({
       code: 'import { bar } from "./flow-types-depth-one"',
       parser: require.resolve('babel-eslint'),
-      errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./depth-one:1`)],
+      errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./es6/depth-one:1`)],
     }),
-    test({
-      code: 'import { foo } from "./depth-two"',
-      options: [{ maxDepth: Infinity }],
-      errors: [error(`Dependency cycle via ./depth-one:1`)],
-    }),
-    test({
-      code: 'import { foo } from "./depth-two"',
-      options: [{ maxDepth: '∞' }],
-      errors: [error(`Dependency cycle via ./depth-one:1`)],
-    }),
-  ],
+  ),
 });
-// })

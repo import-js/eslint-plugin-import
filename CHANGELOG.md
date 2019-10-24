@@ -20,9 +20,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/`importType`: fix isScoped treating @/abc as scoped module ([#2146], thanks [@rperello])
 
 ### Changed
-- [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
-- [Tests] `order`: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
-- [Docs] `order`:  improve the documentation for the `pathGroupsExcludedImportTypes` option ([#2156], thanks [@liby])
+- [Docs] [`extensions`]: removed incorrect cases ([#2138], thanks [@wenfangdu])
+- [Tests] [`order`]: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
+- [Docs] [`order`]:  improve the documentation for the `pathGroupsExcludedImportTypes` option ([#2156], thanks [@liby])
+- [Tests] [`no-cycle`]: Restructure test files ([#1517], thanks [@soryy708])
 
 ## [2.23.4] - 2021-05-29
 
@@ -909,6 +910,7 @@ for info on changes for earlier releases.
 [#1526]: https://github.com/benmosher/eslint-plugin-import/pull/1526
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
+[#1517]: https://github.com/benmosher/eslint-plugin-import/pull/1517
 [#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
 [#1496]: https://github.com/benmosher/eslint-plugin-import/pull/1496
@@ -1421,6 +1423,7 @@ for info on changes for earlier releases.
 [@skozin]: https://github.com/skozin
 [@skyrpex]: https://github.com/skyrpex
 [@sompylasar]: https://github.com/sompylasar
+[@soryy708]: https://github.com/soryy708
 [@spalger]: https://github.com/spalger
 [@st-sloth]: https://github.com/st-sloth
 [@stekycz]: https://github.com/stekycz
