@@ -12,7 +12,7 @@ const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
 }));
 
-const testDialects = ['es6'];
+const testDialects = ['es6', 'cjs'];
 
 ruleTester.run('no-cycle', rule, {
   valid: [].concat(
