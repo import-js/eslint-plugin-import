@@ -12,11 +12,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
 
 ### Fixed
-- `default`: make error message less confusing ([#1470], thanks [@golopot])
+- [`default`]: make error message less confusing ([#1470], thanks [@golopot])
 - Improve performance of `ExportMap.for` by only loading paths when necessary. ([#1519], thanks [@brendo])
 - Support export of a merged TypeScript namespace declaration ([#1495], thanks [@benmunro])
 - [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
+- [`extensions`]: Fix `ignorePackages` to produce errors ([#1521], thanks [@saschanaz])
 
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
@@ -611,6 +612,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
@@ -1001,3 +1003,4 @@ for info on changes for earlier releases.
 [@benmunro]: https://github.com/benmunro
 [@tihonove]: https://github.com/tihonove
 [@brendo]: https://github.com/brendo
+[@saschanaz]: https://github.com/saschanaz

@@ -50,6 +50,11 @@ function buildProperties(context) {
       }
     })
 
+    if (result.defaultConfig === 'ignorePackages') {
+      result.defaultConfig = 'always'
+      result.ignorePackages = true
+    }
+
     return result
 }
 
