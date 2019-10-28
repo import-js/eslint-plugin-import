@@ -15,7 +15,7 @@ function runResolverTests(resolver) {
   function rest(specs) {
     specs.settings = Object.assign({},
       specs.settings,
-      { 'import/resolver': resolver }
+      { 'import/resolver': resolver },
     )
 
     return test(specs)

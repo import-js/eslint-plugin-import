@@ -23,7 +23,7 @@ function extractDepFields(pkg) {
     peerDependencies: pkg.peerDependencies || {},
     // BundledDeps should be in the form of an array, but object notation is also supported by
     // `npm`, so we convert it to an array if it is an object
-    bundledDependencies: arrayOrKeys(pkg.bundleDependencies || pkg.bundledDependencies || [])
+    bundledDependencies: arrayOrKeys(pkg.bundleDependencies || pkg.bundledDependencies || []),
   }
 }
 

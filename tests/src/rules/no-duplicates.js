@@ -45,7 +45,7 @@ ruleTester.run('no-duplicates', rule, {
       output: "import { x , y } from './bar'; ",
       settings: { 'import/resolve': {
         paths: [path.join( process.cwd()
-                         , 'tests', 'files'
+                         , 'tests', 'files',
                          )] }},
       errors: 2, // path ends up hardcoded
      }),
