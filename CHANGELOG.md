@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - `default`: make error message less confusing ([#1470], thanks [@golopot])
+- Improve performance of `ExportMap.for` by only loading paths when necessary. ([#1519], thanks [@brendo])
 - Support export of a merged TypeScript namespace declaration ([#1495], thanks [@benmunro])
 - [`import/order`]: fix autofix to not move imports across fn calls ([#1253], thanks [@tihonove])
 - [`prefer-default-export`]: fix false positive with type export ([#1506], thanks [@golopot])
@@ -610,6 +611,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1506]: https://github.com/benmosher/eslint-plugin-import/pull/1506
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
@@ -998,3 +1000,4 @@ for info on changes for earlier releases.
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@benmunro]: https://github.com/benmunro
 [@tihonove]: https://github.com/tihonove
+[@brendo]: https://github.com/brendo

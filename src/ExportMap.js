@@ -310,11 +310,18 @@ ExportMap.for = function (context) {
     return null
   }
 
+  // check for and cache ignore
+  if (isIgnored(path, context)) {
+    log('ignored path due to ignore settings:', path)
+    exportCache.set(cacheKey, null)
+    return null
+  }
+
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
-  // check for and cache ignore
-  if (isIgnored(path, context) || !unambiguous.test(content)) {
-    log('ignored path due to unambiguous regex or ignore settings:', path)
+  // check for and cache unambigious modules
+  if (!unambiguous.test(content)) {
+    log('ignored path due to unambiguous regex:', path)
     exportCache.set(cacheKey, null)
     return null
   }
