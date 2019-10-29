@@ -8,6 +8,7 @@ module.exports = {
 
   settings: {
     'import/extensions': allExtensions,
+    'import/external-module-folders': ['node_modules', 'node_modules/@types'],
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx', '.d.ts'],
     },

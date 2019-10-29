@@ -11,9 +11,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
-
-### Fixed
 - [`import/extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
+- TypeScript config: lookup for external modules in @types folder ([#1526], thanks [@joaovieira])
 
 ## [2.19.1] - 2019-12-08
 ### Fixed
@@ -634,6 +633,7 @@ for info on changes for earlier releases.
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
+[#1526]: https://github.com/benmosher/eslint-plugin-import/pull/1526
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
@@ -1054,3 +1054,4 @@ for info on changes for earlier releases.
 [@stekycz]: https://github.com/stekycz
 [@dbrewer5]: https://github.com/dbrewer5
 [@rsolomon]: https://github.com/rsolomon
+[@joaovieira]: https://github.com/joaovieira
