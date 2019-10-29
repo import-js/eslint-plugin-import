@@ -341,6 +341,24 @@ Contribution of more such shared configs for other platforms are welcome!
 
 An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to considered modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
 
+#### `import/external-modules`
+
+An array of modules. Imports from those modules will be considered as "external".
+For example with
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/external-modules: [ my-module ]
+```
+
+these imports will be considered as "external".
+
+```js
+import myModule from 'my-module'
+import mySubModule from 'my-module/submodule'
+```
+
 #### `import/parsers`
 
 A map from parsers to file extension arrays. If a file extension is matched, the
