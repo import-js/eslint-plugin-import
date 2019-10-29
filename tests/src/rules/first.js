@@ -13,6 +13,10 @@ ruleTester.run('first', rule, {
   , test({ code: "import { x } from './foo'; import { y } from 'bar'" })
   , test({ code: "'use directive';\
                   import { x } from 'foo';" })
+  , test({ code: "export { y } from 'bar';\
+                  import { x } from 'foo';" })
+  , test({ code: "export * from 'bar';\
+                  import { x } from 'foo';" })
   ,
   ],
   invalid: [
