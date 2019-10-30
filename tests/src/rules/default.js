@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils'
 import { RuleTester } from 'eslint'
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
@@ -152,3 +152,56 @@ if (!CASE_SENSITIVE_FS) {
     ],
   })
 }
+
+context('TypeScript', function () {
+  getTSParsers().forEach((parser) => {
+      ruleTester.run(`default`, rule, {
+        valid: [
+          test({
+            code: `import foobar from "./typescript-default"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import foobar from "./typescript-export-assign-default"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import foobar from "./typescript-export-assign-mixed"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
+            code: `import foobar from "./typescript-export-assign-default-reexport"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+        ],
+
+        invalid: [
+          test({
+            code: `import foobar from "./typescript"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+            errors: ['No default export found in imported module "./typescript".'],
+          }),
+        ],
+      })
+    })
+})

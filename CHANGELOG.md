@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Added
+- [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
+
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
@@ -697,6 +700,7 @@ for info on changes for earlier releases.
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
+[#1528]: https://github.com/benmosher/eslint-plugin-import/pull/1528
 [#1526]: https://github.com/benmosher/eslint-plugin-import/pull/1526
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
