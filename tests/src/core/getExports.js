@@ -85,7 +85,7 @@ describe('ExportMap', function () {
     var imports = ExportMap.parse(
       path,
       contents,
-      { parserPath: 'babel-eslint', settings: {} }
+      { parserPath: 'babel-eslint', settings: {} },
     )
 
     expect(imports, 'imports').to.exist
