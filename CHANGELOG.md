@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
 - [`extensions`]/[`no-cycle`]/[`no-extraneous-dependencies`]: Correct module real path resolution ([#1696], thanks [@paztis])
 - [`no-named-default`]: ignore Flow import type and typeof ([#1983], thanks [@christianvuerings])
+- [`no-extraneous-dependencies`]: Exclude flow `typeof` imports ([#1534], thanks [@devongovett])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -819,6 +820,7 @@ for info on changes for earlier releases.
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
+[#1534]: https://github.com/benmosher/eslint-plugin-import/pull/1534
 [#1528]: https://github.com/benmosher/eslint-plugin-import/pull/1528
 [#1526]: https://github.com/benmosher/eslint-plugin-import/pull/1526
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
@@ -1338,3 +1340,4 @@ for info on changes for earlier releases.
 [@panrafal]: https://github.com/panrafal
 [@ttmarek]: https://github.com/ttmarek
 [@christianvuerings]: https://github.com/christianvuerings
+[@devongovett]: https://github.com/devongovett

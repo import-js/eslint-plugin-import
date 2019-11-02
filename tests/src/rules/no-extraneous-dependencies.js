@@ -87,6 +87,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       parser: require.resolve('babel-eslint'),
     }),
     test({
+      code: `
+        // @flow                                                                                                                                                                                                   
+        import typeof TypeScriptModule from 'typescript';
+      `,
+      options: [{ packageDir: packageDirWithFlowTyped }],
+      parser: require.resolve('babel-eslint'),
+    }),
+    test({
       code: 'import react from "react";',
       options: [{ packageDir: packageDirMonoRepoWithNested }],
     }),

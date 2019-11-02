@@ -128,7 +128,7 @@ function getModuleRealName(resolved) {
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types
-  if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type')) {
+  if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type') || node.importKind === 'typeof') {
     return;
   }
 
