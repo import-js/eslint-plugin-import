@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 - [`no-extraneous-dependencies`]: Implement support for [bundledDependencies](https://npm.github.io/using-pkgs-docs/package-json/types/bundleddependencies.html) ([#1436], thanks [@schmidsi]))
+- [`no-unused-modules`]: add flow type support ([#1542], thanks [@rfermann])
 
 ### Fixed
 - [`default`]: make error message less confusing ([#1470], thanks [@golopot])
@@ -620,6 +621,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
+[#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
