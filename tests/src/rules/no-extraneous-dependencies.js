@@ -122,6 +122,8 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import foo from "@generated/foo"',
       options: [{packageDir: packageDirBundledDepsRaceCondition}],
     }),
+    test({ code: 'export { foo } from "lodash.cond"' }),
+    test({ code: 'export * from "lodash.cond"' }),
   ],
   invalid: [
     test({
@@ -318,6 +320,20 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import bar from "@generated/bar"',
       options: [{packageDir: packageDirBundledDepsRaceCondition}],
       errors: ["'@generated/bar' should be listed in the project's dependencies. Run 'npm i -S @generated/bar' to add it"],
+    }),
+    test({
+      code: 'export { foo } from "not-a-dependency";',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'export * from "not-a-dependency";',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
     }),
   ],
 })

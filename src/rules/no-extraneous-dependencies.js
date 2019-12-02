@@ -205,6 +205,12 @@ module.exports = {
       ImportDeclaration: function (node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
+      ExportNamedDeclaration: function (node) {
+        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+      },
+      ExportAllDeclaration: function (node) {
+        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+      },
       CallExpression: function handleRequires(node) {
         if (isStaticRequire(node)) {
           reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)

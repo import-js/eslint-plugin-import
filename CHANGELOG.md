@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- [`no-extraneous-dependencies`]: Check `export from` ([#1049], thanks [@marcusdarmstrong])
 
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
@@ -691,6 +692,7 @@ for info on changes for earlier releases.
 [#1093]: https://github.com/benmosher/eslint-plugin-import/pull/1093
 [#1085]: https://github.com/benmosher/eslint-plugin-import/pull/1085
 [#1068]: https://github.com/benmosher/eslint-plugin-import/pull/1068
+[#1049]: https://github.com/benmosher/eslint-plugin-import/pull/1049
 [#1046]: https://github.com/benmosher/eslint-plugin-import/pull/1046
 [#944]: https://github.com/benmosher/eslint-plugin-import/pull/944
 [#912]: https://github.com/benmosher/eslint-plugin-import/pull/912
@@ -1022,3 +1024,4 @@ for info on changes for earlier releases.
 [@brettz9]: https://github.com/brettz9
 [@Taranys]: https://github.com/Taranys
 [@maxmalov]: https://github.com/maxmalov
+[@marcusdarmstrong]: https://github.com/marcusdarmstrong
