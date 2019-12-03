@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Changed
+ - Avoid superfluous calls and code ([#1551], thanks [@brettz9])
+
 ## v2.4.1 - 2019-07-19
 
 ### Fixed
@@ -52,6 +55,7 @@ Yanked due to critical issue with cache key resulting from #839.
 
 
 
+[#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
 [#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
 [#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
@@ -65,3 +69,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@vikr01]: https://github.com/vikr01
 [@bradzacher]: https://github.com/bradzacher
 [@christophercurrie]: https://github.com/christophercurrie
+[@brettz9]: https://github.com/brettz9

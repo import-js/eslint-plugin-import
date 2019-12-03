@@ -64,7 +64,7 @@ function relative(modulePath, sourceFile, settings) {
 function fullResolve(modulePath, sourceFile, settings) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules'])
-  if (coreSet != null && coreSet.has(modulePath)) return { found: true, path: null }
+  if (coreSet.has(modulePath)) return { found: true, path: null }
 
   const sourceDir = path.dirname(sourceFile)
       , cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath

@@ -7,8 +7,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
-
-### Added
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
 - [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
@@ -24,6 +22,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Docs
 - [`no-useless-path-segments`]: add docs for option `commonjs` ([#1507], thanks [@golopot])
+
+### Changed
+- [`no-unused-modules`]/`eslint-module-utils`: Avoid superfluous calls and code ([#1551], thanks [@brettz9])
 
 ## [2.18.2] - 2019-07-19
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
@@ -618,6 +619,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
 [#1507]: https://github.com/benmosher/eslint-plugin-import/pull/1507
@@ -1011,3 +1013,4 @@ for info on changes for earlier releases.
 [@tihonove]: https://github.com/tihonove
 [@brendo]: https://github.com/brendo
 [@saschanaz]: https://github.com/saschanaz
+[@brettz9]: https://github.com/brettz9

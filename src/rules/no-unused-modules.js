@@ -355,7 +355,7 @@ module.exports = {
 
       exportCount.delete(EXPORT_ALL_DECLARATION)
       exportCount.delete(IMPORT_NAMESPACE_SPECIFIER)
-      if (missingExports && exportCount.size < 1) {
+      if (exportCount.size < 1) {
         // node.body[0] === 'undefined' only happens, if everything is commented out in the file
         // being linted
         context.report(node.body[0] ? node.body[0] : node, 'No exports found')

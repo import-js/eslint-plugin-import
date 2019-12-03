@@ -340,7 +340,7 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
         context.report({
           node: previousImport.node,
           message: 'There should be at least one empty line between import groups',
-          fix: fixNewLineAfterImport(context, previousImport, currentImport),
+          fix: fixNewLineAfterImport(context, previousImport),
         })
       } else if (currentImport.rank === previousImport.rank
         && emptyLinesBetween > 0
