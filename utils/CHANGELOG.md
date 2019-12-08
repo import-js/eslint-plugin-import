@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.5.0 - 2019-12-07
+
+### Added
+- support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
+
 ### Changed
  - Avoid superfluous calls and code ([#1551], thanks [@brettz9])
 
@@ -56,6 +61,7 @@ Yanked due to critical issue with cache key resulting from #839.
 
 
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
+[#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
 [#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
 [#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
 [#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
@@ -70,3 +76,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@bradzacher]: https://github.com/bradzacher
 [@christophercurrie]: https://github.com/christophercurrie
 [@brettz9]: https://github.com/brettz9
+[@JounQin]: https://github.com/JounQin
