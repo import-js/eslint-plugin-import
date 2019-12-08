@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [2.19.0] - 2019-12-08
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
@@ -849,7 +851,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.0...HEAD
+[2.19.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.1...v2.18.2
 [2.18.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.0...v2.18.1
 [2.18.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.17.3...v2.18.0
