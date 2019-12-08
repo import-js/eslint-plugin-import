@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.12.0 - 2019-12-07
+
 ### Added
 - [New] enable passing cwd as an option to `eslint-import-resolver-webpack` ([#1503], thanks [@Aghassi])
 
