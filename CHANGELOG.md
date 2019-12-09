@@ -12,7 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.19.0] - 2019-12-08
 ### Added
-- [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
+- [`internal-regex` setting]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
 - [`no-namespace`]: Make rule fixable ([#1401], thanks [@TrevorBurnham])
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
@@ -575,6 +575,7 @@ for info on changes for earlier releases.
 [`import/parsers` setting]: ./README.md#importparsers
 [`import/core-modules` setting]: ./README.md#importcore-modules
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
+[`internal-regex` setting]: ./README.md#importinternal-regex
 
 [`default`]: ./docs/rules/default.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
