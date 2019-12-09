@@ -36,6 +36,26 @@ By providing both a string and an object, the string will set the default settin
 
 For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
+### Options
+
+By default, only ES6 imports will be resolved:
+
+```js
+/*eslint import/extensions: 2*/
+import x from './foo' // reports Missing file extension "js" for "./foo"
+
+import x from './foo.js' // no problem
+```
+
+If `{commonjs: true}` is provided, `require` calls will be resolved:
+
+```js
+/*eslint import/extensions: [2, { commonjs: true }]*/
+const x = require('./foo') // reports Missing file extension "js" for "./foo"
+
+const x = require('./foo.js') // no problem
+```
+
 ### Exception
 
 When disallowing the use of certain extensions this rule makes an exception and allows the use of extension when the file would not be resolvable without extension.

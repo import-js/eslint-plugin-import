@@ -1,6 +1,7 @@
 import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
+import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
 import docsUrl from '../docsUrl'
 
@@ -23,6 +24,7 @@ function buildProperties(context) {
       defaultConfig: 'never',
       pattern: {},
       ignorePackages: false,
+      commonjs: false,
     }
 
     context.options.forEach(obj => {
@@ -34,7 +36,11 @@ function buildProperties(context) {
       }
 
       // If this is not the new structure, transfer all props to result.pattern
-      if (obj.pattern === undefined && obj.ignorePackages === undefined) {
+      if (
+        obj.pattern === undefined &&
+        obj.ignorePackages === undefined &&
+        obj.commonjs === undefined
+      ) {
         Object.assign(result.pattern, obj)
         return
       }
@@ -47,6 +53,11 @@ function buildProperties(context) {
       // If ignorePackages is provided, transfer it to result
       if (obj.ignorePackages !== undefined) {
         result.ignorePackages = obj.ignorePackages
+      }
+
+      // If commonjs is provided, transfer it to result
+      if (obj.commonjs !== undefined) {
+        result.commonjs = obj.commonjs
       }
     })
 
@@ -126,12 +137,7 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context)
     }
 
-    function checkFileExtension(node) {
-      const { source } = node
-
-      // bail if the declaration doesn't have a source, e.g. "export { foo };"
-      if (!source) return
-
+    function checkFileExtension(source) {
       const importPath = source.value
 
       // don't enforce anything on builtins
@@ -167,9 +173,6 @@ module.exports = {
       }
     }
 
-    return {
-      ImportDeclaration: checkFileExtension,
-      ExportNamedDeclaration: checkFileExtension,
-    }
+    return moduleVisitor(checkFileExtension, props)
   },
 }
