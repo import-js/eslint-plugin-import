@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.19.1] - 2019-12-08
+### Fixed
+- [`no-extraneous-dependencies`]: ensure `node.source` exists
+
 ## [2.19.0] - 2019-12-08
 ### Added
 - [`internal-regex`]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
@@ -851,7 +855,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...HEAD
+[2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.1...v2.18.2
 [2.18.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.0...v2.18.1
