@@ -206,7 +206,9 @@ module.exports = {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
       },
       ExportNamedDeclaration: function (node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        if (node.source) {
+          reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        }
       },
       ExportAllDeclaration: function (node) {
         reportIfMissing(context, deps, depsOptions, node, node.source.value)
