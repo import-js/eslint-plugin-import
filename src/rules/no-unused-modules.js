@@ -5,6 +5,7 @@
  */
 
 import Exports from '../ExportMap'
+import { getFileExtensions } from 'eslint-module-utils/ignore'
 import resolve from 'eslint-module-utils/resolve'
 import docsUrl from '../docsUrl'
 import { dirname, join } from 'path'
@@ -16,19 +17,40 @@ import includes from 'array-includes'
 // and has been moved to eslint/lib/cli-engine/file-enumerator in version 6
 let listFilesToProcess
 try {
-  var FileEnumerator = require('eslint/lib/cli-engine/file-enumerator').FileEnumerator
-  listFilesToProcess = function (src) {
-    var e = new FileEnumerator()
+  const FileEnumerator = require('eslint/lib/cli-engine/file-enumerator').FileEnumerator
+  listFilesToProcess = function (src, extensions) {
+    const e = new FileEnumerator({
+      extensions: extensions,
+    })
     return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({
       ignored,
       filename: filePath,
     }))
   }
 } catch (e1) {
+  // Prevent passing invalid options (extensions array) to old versions of the function.
+  // https://github.com/eslint/eslint/blob/v5.16.0/lib/util/glob-utils.js#L178-L280
+  // https://github.com/eslint/eslint/blob/v5.2.0/lib/util/glob-util.js#L174-L269
+  let originalListFilesToProcess
   try {
-    listFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
+    originalListFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess
+    listFilesToProcess = function (src, extensions) {
+      return originalListFilesToProcess(src, {
+        extensions: extensions,
+      })
+    }
   } catch (e2) {
-    listFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
+    originalListFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess
+
+    listFilesToProcess = function (src, extensions) {
+      const patterns = src.reduce((carry, pattern) => {
+        return carry.concat(extensions.map((extension) => {
+          return /\*\*|\*\./.test(pattern) ? pattern : `${pattern}/**/*${extension}`
+        }))
+      }, src.slice())
+
+      return originalListFilesToProcess(patterns)
+    }
   }
 }
 
@@ -44,7 +66,6 @@ const CLASS_DECLARATION = 'ClassDeclaration'
 const DEFAULT = 'default'
 const TYPE_ALIAS = 'TypeAlias'
 
-let preparationDone = false
 const importList = new Map()
 const exportList = new Map()
 const ignoredFiles = new Set()
@@ -59,12 +80,14 @@ const isNodeModule = path => {
  *
  * return all files matching src pattern, which are not matching the ignoreExports pattern
  */
-const resolveFiles = (src, ignoreExports) => {
+const resolveFiles = (src, ignoreExports, context) => {
+  const extensions = Array.from(getFileExtensions(context.settings))
+
   const srcFiles = new Set()
-  const srcFileList = listFilesToProcess(src)
+  const srcFileList = listFilesToProcess(src, extensions)
 
   // prepare list of ignored files
-  const ignoredFilesList =  listFilesToProcess(ignoreExports)
+  const ignoredFilesList =  listFilesToProcess(ignoreExports, extensions)
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename))
 
   // prepare list of source files, don't consider files from node_modules
@@ -200,11 +223,26 @@ const getSrc = src => {
  * the start of a new eslint run
  */
 let srcFiles
+let lastPrepareKey
 const doPreparation = (src, ignoreExports, context) => {
-  srcFiles = resolveFiles(getSrc(src), ignoreExports)
+  const prepareKey = JSON.stringify({
+    src: (src || []).sort(),
+    ignoreExports: (ignoreExports || []).sort(),
+    extensions: Array.from(getFileExtensions(context.settings)).sort(),
+  })
+  if (prepareKey === lastPrepareKey) {
+    return
+  }
+
+  importList.clear()
+  exportList.clear()
+  ignoredFiles.clear()
+  filesOutsideSrc.clear()
+
+  srcFiles = resolveFiles(getSrc(src), ignoreExports, context)
   prepareImportsAndExports(srcFiles, context)
   determineUsage()
-  preparationDone = true
+  lastPrepareKey = prepareKey
 }
 
 const newNamespaceImportExists = specifiers =>
@@ -340,7 +378,7 @@ module.exports = {
       unusedExports,
     } = context.options[0] || {}
 
-    if (unusedExports && !preparationDone) {
+    if (unusedExports) {
       doPreparation(src, ignoreExports, context)
     }
 
@@ -389,7 +427,7 @@ module.exports = {
 
       // make sure file to be linted is included in source files
       if (!srcFiles.has(file)) {
-        srcFiles = resolveFiles(getSrc(src), ignoreExports)
+        srcFiles = resolveFiles(getSrc(src), ignoreExports, context)
         if (!srcFiles.has(file)) {
           filesOutsideSrc.add(file)
           return

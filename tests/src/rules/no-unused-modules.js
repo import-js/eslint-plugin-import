@@ -1,9 +1,13 @@
 import { test, testFilePath } from '../utils'
+import jsxConfig from '../../../config/react'
+import typescriptConfig from '../../../config/typescript'
 
 import { RuleTester } from 'eslint'
 import fs from 'fs'
 
 const ruleTester = new RuleTester()
+    , typescriptRuleTester = new RuleTester(typescriptConfig)
+    , jsxRuleTester = new RuleTester(jsxConfig)
     , rule = require('rules/no-unused-modules')
 
 const error = message => ({ ruleId: 'no-unused-modules', message })
@@ -16,6 +20,18 @@ const unusedExportsOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/**/*.js')],
   ignoreExports: [testFilePath('./no-unused-modules/*ignored*.js')],
+}]
+
+const unusedExportsTypescriptOptions = [{
+  unusedExports: true,
+  src: [testFilePath('./no-unused-modules/typescript')],
+  ignoreExports: undefined,
+}]
+
+const unusedExportsJsxOptions = [{
+  unusedExports: true,
+  src: [testFilePath('./no-unused-modules/jsx')],
+  ignoreExports: undefined,
 }]
 
 // tests for missing exports
@@ -684,5 +700,53 @@ describe('Avoid errors if re-export all from umd compiled library', () => {
         filename: testFilePath('./no-unused-modules/main/index.js')}),
     ],
     invalid: [],
+  })
+})
+
+describe('correctly work with Typescript only files', () => {
+  typescriptRuleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsTypescriptOptions,
+        code: 'import a from "file-ts-a";',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      }),
+    ],
+    invalid: [
+      test({
+        options: unusedExportsTypescriptOptions,
+        code: `export const b = 2;`,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
+        errors: [
+          error(`exported declaration 'b' not used within other modules`),
+        ],
+      }),
+    ],
+  })
+})
+
+describe('correctly work with JSX only files', () => {
+  jsxRuleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsJsxOptions,
+        code: 'import a from "file-jsx-a";',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/jsx/file-jsx-a.jsx'),
+      }),
+    ],
+    invalid: [
+      test({
+        options: unusedExportsJsxOptions,
+        code: `export const b = 2;`,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/jsx/file-jsx-b.jsx'),
+        errors: [
+          error(`exported declaration 'b' not used within other modules`),
+        ],
+      }),
+    ],
   })
 })
