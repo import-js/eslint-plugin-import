@@ -124,6 +124,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({ code: 'export { foo } from "lodash.cond"' }),
     test({ code: 'export * from "lodash.cond"' }),
+    test({ code: 'export function getToken() {}' }),
   ],
   invalid: [
     test({
