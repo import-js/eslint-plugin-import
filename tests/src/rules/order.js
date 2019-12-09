@@ -560,6 +560,21 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'desc'},
       }],
     }),
+    // Option alphabetize with newlines-between: {order: 'asc', newlines-between: 'always'}
+    test({
+      code: `
+        import b from 'Bar';
+        import c from 'bar';
+        import a from 'foo';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'asc'},
+        'newlines-between': 'always',
+      }],
+    }),
   ],
   invalid: [
     // builtin before external module (require)

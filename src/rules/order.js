@@ -599,15 +599,15 @@ module.exports = {
         registerNode(context, node, name, 'require', ranks, imported)
       },
       'Program:exit': function reportAndReset() {
+        if (newlinesBetweenImports !== 'ignore') {
+          makeNewlinesBetweenReport(context, imported, newlinesBetweenImports)
+        }
+
         if (alphabetize.order !== 'ignore') {
           mutateRanksToAlphabetize(imported, alphabetize.order)
         }
 
         makeOutOfOrderReport(context, imported)
-
-        if (newlinesBetweenImports !== 'ignore') {
-          makeNewlinesBetweenReport(context, imported, newlinesBetweenImports)
-        }
 
         imported = []
       },
