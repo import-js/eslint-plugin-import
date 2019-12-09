@@ -26,5 +26,8 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import#readme",
   "peerDependencies": {
     "eslint": ">=3.5.0"
+  },
+  "dependencies": {
+    "eslint-module-utils": "^2.5.0"
   }
 }
