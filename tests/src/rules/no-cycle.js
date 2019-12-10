@@ -195,5 +195,12 @@ ruleTester.run('no-cycle', rule, {
       parser: require.resolve('babel-eslint'),
       errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./es6/depth-one:1`)],
     }),
+
+    _test({
+      code: 'import "app"',
+      parser: require.resolve('babel-eslint'),
+      errors: [error(`Dependency cycle via `)],
+      filename: testFilePath('./cycles/alias/index.js'),
+    }),
   ),
 });

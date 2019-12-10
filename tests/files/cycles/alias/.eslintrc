@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "import/no-cycle": 2
+  }
+}

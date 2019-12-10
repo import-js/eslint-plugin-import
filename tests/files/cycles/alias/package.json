@@ -1,0 +1,11 @@
+{
+  "name": "eslint-no-cycle-aliases",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "license": "MIT",
+  "devDependencies": {
+    "app": "file:app",
+    "exports": "file:exports"
+  }
+}
