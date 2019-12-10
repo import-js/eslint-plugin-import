@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`import/extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
+
 ## [2.19.1] - 2019-12-08
 ### Fixed
 - [`no-extraneous-dependencies`]: ensure `node.source` exists
@@ -620,6 +623,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1563]: https://github.com/benmosher/eslint-plugin-import/pull/1563
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521

@@ -1,7 +1,7 @@
 import path from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
-import { isBuiltIn, isExternalModuleMain, isScopedMain } from '../core/importType'
+import { isBuiltIn, isExternalModule, isScoped } from '../core/importType'
 import docsUrl from '../docsUrl'
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] }
@@ -110,8 +110,8 @@ module.exports = {
       return props.pattern[extension] || props.defaultConfig
     }
 
-    function isUseOfExtensionRequired(extension, isPackageMain) {
-      return getModifier(extension) === 'always' && (!props.ignorePackages || !isPackageMain)
+    function isUseOfExtensionRequired(extension, isPackage) {
+      return getModifier(extension) === 'always' && (!props.ignorePackages || !isPackage)
     }
 
     function isUseOfExtensionForbidden(extension) {
@@ -144,11 +144,11 @@ module.exports = {
       const extension = path.extname(resolvedPath || importPath).substring(1)
 
       // determine if this is a module
-      const isPackageMain = isExternalModuleMain(importPath, context.settings)
-        || isScopedMain(importPath)
+      const isPackage = isExternalModule(importPath, context.settings)
+        || isScoped(importPath)
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
-        const extensionRequired = isUseOfExtensionRequired(extension, isPackageMain)
+        const extensionRequired = isUseOfExtensionRequired(extension, isPackage)
         const extensionForbidden = isUseOfExtensionForbidden(extension)
         if (extensionRequired && !extensionForbidden) {
           context.report({

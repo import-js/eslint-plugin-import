@@ -34,7 +34,7 @@ function isExternalPath(path, name, settings) {
 }
 
 const externalModuleRegExp = /^\w/
-function isExternalModule(name, settings, path) {
+export function isExternalModule(name, settings, path) {
   return externalModuleRegExp.test(name) && isExternalPath(path, name, settings)
 }
 
@@ -44,7 +44,7 @@ export function isExternalModuleMain(name, settings, path) {
 }
 
 const scopedRegExp = /^@[^/]+\/?[^/]+/
-function isScoped(name) {
+export function isScoped(name) {
   return scopedRegExp.test(name)
 }
 
