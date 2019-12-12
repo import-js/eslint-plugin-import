@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extentions`]: Fix scope regex ([#1611], thanks [@yordis])
 - [`no-duplicates`]: allow duplicate imports if one is a namespace and the other not ([#1612], thanks [@sveyret])
 - Add some missing rule meta schemas and types ([#1620], thanks [@bmish])
+- [`named`]: for importing from a module which re-exports named exports from a `node_modules` module ([#1569], [#1447], thanks [@redbugz], [@kentcdodds])
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
@@ -655,6 +656,7 @@ for info on changes for earlier releases.
 [#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572
+[#1569]: https://github.com/benmosher/eslint-plugin-import/pull/1569
 [#1563]: https://github.com/benmosher/eslint-plugin-import/pull/1563
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
@@ -670,6 +672,7 @@ for info on changes for earlier releases.
 [#1493]: https://github.com/benmosher/eslint-plugin-import/pull/1493
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
+[#1447]: https://github.com/benmosher/eslint-plugin-import/pull/1447
 [#1439]: https://github.com/benmosher/eslint-plugin-import/pull/1439
 [#1436]: https://github.com/benmosher/eslint-plugin-import/pull/1436
 [#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
@@ -1089,3 +1092,5 @@ for info on changes for earlier releases.
 [@yordis]: https://github.com/yordis
 [@sveyret]: https://github.com/sveyret
 [@bmish]: https://github.com/bmish
+[@redbugz]: https://github.com/redbugz
+[@kentcdodds]: https://github.com/kentcdodds

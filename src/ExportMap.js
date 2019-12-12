@@ -106,6 +106,7 @@ export default class ExportMap {
     if (name !== 'default') {
       for (let dep of this.dependencies) {
         let innerMap = dep()
+        if (innerMap == null) return { found: true, path: [this] }
         // todo: report as unresolved?
         if (!innerMap) continue
 
