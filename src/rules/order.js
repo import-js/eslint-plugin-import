@@ -269,7 +269,7 @@ function importsSorterDesc(importA, importB) {
 
 function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   const groupedByRanks = imported.reduce(function(acc, importedItem) {
-    if (!Array.isArray(acc[importedItem.rank])) { 
+    if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = []
     }
     acc[importedItem.rank].push(importedItem.name)
@@ -312,10 +312,10 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, ranks, name, type) {
+function computeRank(context, ranks, name, type, excludedImportTypes) {
   const impType = importType(name, context)
   let rank
-  if (impType !== 'builtin' && impType !== 'external') {
+  if (!excludedImportTypes.has(impType)) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
   }
   if (!rank) {
@@ -328,8 +328,8 @@ function computeRank(context, ranks, name, type) {
   return rank
 }
 
-function registerNode(context, node, name, type, ranks, imported) {
-  const rank = computeRank(context, ranks, name, type)
+function registerNode(context, node, name, type, ranks, imported, excludedImportTypes) {
+  const rank = computeRank(context, ranks, name, type, excludedImportTypes)
   if (rank !== -1) {
     imported.push({name, rank, node})
   }
@@ -508,6 +508,9 @@ module.exports = {
           groups: {
             type: 'array',
           },
+          pathGroupsExcludedImportTypes: {
+            type: 'array',
+          },
           pathGroups: {
             type: 'array',
             items: {
@@ -562,6 +565,7 @@ module.exports = {
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
     const newlinesBetweenImports = options['newlines-between'] || 'ignore'
+    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external'])
     const alphabetize = getAlphabetizeConfig(options)
     let ranks
 
@@ -594,7 +598,15 @@ module.exports = {
       ImportDeclaration: function handleImports(node) {
         if (node.specifiers.length) { // Ignoring unassigned imports
           const name = node.source.value
-          registerNode(context, node, name, 'import', ranks, imported)
+          registerNode(
+            context,
+            node,
+            name,
+            'import',
+            ranks,
+            imported,
+            pathGroupsExcludedImportTypes
+          )
         }
       },
       CallExpression: function handleRequires(node) {
@@ -602,7 +614,15 @@ module.exports = {
           return
         }
         const name = node.arguments[0].value
-        registerNode(context, node, name, 'require', ranks, imported)
+        registerNode(
+          context,
+          node,
+          name,
+          'require',
+          ranks,
+          imported,
+          pathGroupsExcludedImportTypes
+        )
       },
       'Program:exit': function reportAndReset() {
         if (newlinesBetweenImports !== 'ignore') {

@@ -16,6 +16,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
 - [`extensions`]: Ignore query strings when checking for extensions ([#1572], thanks [@pcorpet])
 
+### Added
+- [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
+
 ## [2.19.1] - 2019-12-08
 ### Fixed
 - [`no-extraneous-dependencies`]: ensure `node.source` exists
@@ -789,6 +792,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1565]: https://github.com/benmosher/eslint-plugin-import/issues/1565
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
 [#1323]: https://github.com/benmosher/eslint-plugin-import/issues/1323

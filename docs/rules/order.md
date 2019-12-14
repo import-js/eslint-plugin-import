@@ -96,7 +96,7 @@ You can set the options like this:
 
 ### `pathGroups: [array of objects]`:
 
-To be able so group by paths mostly needed with aliases pathGroups can be defined.
+To be able to group by paths mostly needed with aliases pathGroups can be defined.
 
 Properties of the objects
 
@@ -119,6 +119,28 @@ Properties of the objects
   }]
 }
 ```
+
+### `pathGroupsExcludedImportTypes: [array]`:
+
+This defines import types that are not handled by configured pathGroups.
+This is mostly needed when you want to handle path groups that look like external imports.
+
+Example:
+```json
+{
+  "import/order": ["error", {
+    "pathGroups": [
+      {
+        "pattern": "@app/**",
+        "group": "external",
+        "position": "after"
+      }
+    ],
+    "pathGroupsExcludedImportTypes": ["builtin"]
+  }]
+}
+```
+The default value is `["builtin", "external"]`.
 
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 

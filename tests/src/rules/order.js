@@ -276,6 +276,28 @@ ruleTester.run('order', rule, {
         ],
       }],
     }),
+    // Using pathGroups to customize ordering for imports that are recognized as 'external'
+    // by setting pathGroupsExcludedImportTypes without 'external'
+    test({
+      code: `
+        import fs from 'fs';
+
+        import { Input } from '@app/components/Input';
+
+        import { Button } from '@app2/components/Button';
+
+        import _ from 'lodash';
+
+        import { add } from './helper';`,
+      options: [{
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: ['builtin'],
+        pathGroups: [
+          { pattern: '@app/**', group: 'external', position: 'before' },
+          { pattern: '@app2/**', group: 'external', position: 'before' },
+        ],
+      }],
+    }),
 
     // Option: newlines-between: 'always'
     test({
