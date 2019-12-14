@@ -109,7 +109,7 @@ function optDepErrorMessage(packageName) {
     `not optionalDependencies.`
 }
 
-function reportIfMissing(context, deps, depsOptions, node, name) {
+function reportIfMissing(context, deps, depsOptions, whitelist, node, name) {
   // Do not report when importing types
   if (node.importKind === 'type') {
     return
@@ -126,6 +126,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
     : splitName[0]
+  const isInWhitelist = whitelist.includes(packageName)
   const isInDeps = deps.dependencies[packageName] !== undefined
   const isInDevDeps = deps.devDependencies[packageName] !== undefined
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined
@@ -133,6 +134,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const isInBundledDeps = deps.bundledDependencies.indexOf(packageName) !== -1
 
   if (isInDeps ||
+    isInWhitelist ||
     (depsOptions.allowDevDeps && isInDevDeps) ||
     (depsOptions.allowPeerDeps && isInPeerDeps) ||
     (depsOptions.allowOptDeps && isInOptDeps) ||
@@ -182,6 +184,7 @@ module.exports = {
           'peerDependencies': { 'type': ['boolean', 'array'] },
           'bundledDependencies': { 'type': ['boolean', 'array'] },
           'packageDir': { 'type': ['string', 'array'] },
+          'whitelist': { 'type': 'array' },
         },
         'additionalProperties': false,
       },
@@ -192,6 +195,7 @@ module.exports = {
     const options = context.options[0] || {}
     const filename = context.getFilename()
     const deps = getDependencies(context, options.packageDir) || extractDepFields({})
+    const whitelist = options.whitelist || [];
 
     const depsOptions = {
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,
@@ -203,19 +207,19 @@ module.exports = {
     // todo: use module visitor from module-utils core
     return {
       ImportDeclaration: function (node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        reportIfMissing(context, deps, depsOptions, whitelist, node, node.source.value)
       },
       ExportNamedDeclaration: function (node) {
         if (node.source) {
-          reportIfMissing(context, deps, depsOptions, node, node.source.value)
+          reportIfMissing(context, deps, depsOptions, whitelist, node, node.source.value)
         }
       },
       ExportAllDeclaration: function (node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        reportIfMissing(context, deps, depsOptions, whitelist, node, node.source.value)
       },
       CallExpression: function handleRequires(node) {
         if (isStaticRequire(node)) {
-          reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
+          reportIfMissing(context, deps, depsOptions, whitelist, node, node.arguments[0].value)
         }
       },
     }

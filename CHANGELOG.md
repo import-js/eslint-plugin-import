@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`no-extraneous-dependencies`]: add whitelist option ([#1553])
+
 ### Fixed
 - [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
 
@@ -779,6 +782,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1553]: https://github.com/benmosher/eslint-plugin-import/issues/1553
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
 [#1323]: https://github.com/benmosher/eslint-plugin-import/issues/1323

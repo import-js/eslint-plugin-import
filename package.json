@@ -22,7 +22,7 @@
     "posttest": "eslint .",
     "mocha": "cross-env BABEL_ENV=test NODE_PATH=./src nyc -s mocha -R dot --recursive -t 5s",
     "test": "npm run mocha tests/src",
-    "test-compiled": "npm run prepublish && NODE_PATH=./lib mocha --compilers js:babel-register --recursive tests/src",
+    "test-compiled": "npm run prepublish && cross-env NODE_PATH=./lib mocha --compilers js:babel-register --recursive tests/src",
     "test-all": "npm test && for resolver in ./resolvers/*; do cd $resolver && npm test && cd ../..; done",
     "prepublish": "npm run build",
     "coveralls": "nyc report --reporter lcovonly && cat ./coverage/lcov.info | coveralls"

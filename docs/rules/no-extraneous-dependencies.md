@@ -17,6 +17,8 @@ This rule supports the following options:
 
 `bundledDependencies`: If set to `false`, then the rule will show an error when `bundledDependencies` are imported. Defaults to `true`.
 
+`whitelist`: Defines a whitelist of packages which will be ignored in this rule.
+
 You can set the options like this:
 
 ```js
@@ -116,6 +118,10 @@ import foo from '"@generated/foo"';
 
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 import react from 'react';
+
+/* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": false, "whitelist": ["ava"]}] */
+import test from 'ava';
+var test = require('ava');
 ```
 
 

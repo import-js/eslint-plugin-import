@@ -125,6 +125,22 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'export { foo } from "lodash.cond"' }),
     test({ code: 'export * from "lodash.cond"' }),
     test({ code: 'export function getToken() {}' }),
+    test({
+      code: 'import "not-a-dependency"',
+      options: [{whitelist: ['not-a-dependency']}],
+    }),
+    test({
+      code: 'export { foo } from "@org/not-a-dependency";',
+      options: [{whitelist: ['@org/not-a-dependency']}],
+    }),
+    test({
+      code: 'export * from "@org/not-a-dependency/foo";',
+      options: [{whitelist: ['@org/not-a-dependency']}],
+    }),
+    test({
+      code: 'var foo = require("glob")',
+      options: [{devDependencies: false, whitelist: ['glob']}],
+    }),
   ],
   invalid: [
     test({
@@ -331,6 +347,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'export * from "not-a-dependency";',
+      errors: [{
+        ruleId: 'no-extraneous-dependencies',
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      options: [{packageDir: packageDirMonoRepoRoot, whitelist: ['an-unused-dependency'] }],
       errors: [{
         ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
