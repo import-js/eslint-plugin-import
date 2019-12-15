@@ -195,7 +195,7 @@ module.exports = {
     const options = context.options[0] || {}
     const filename = context.getFilename()
     const deps = getDependencies(context, options.packageDir) || extractDepFields({})
-    const whitelist = options.whitelist || [];
+    const whitelist = options.whitelist || []
 
     const depsOptions = {
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,
