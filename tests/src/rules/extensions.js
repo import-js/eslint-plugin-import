@@ -116,6 +116,16 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: [ 'never' ],
     }),
+
+    // Query strings.
+    test({
+      code: 'import bare from "./foo?a=True.ext"',
+      options: [ 'never' ],
+    }),
+    test({
+      code: 'import bare from "./foo.js?a=True"',
+      options: [ 'always' ],
+    }),
   ],
 
   invalid: [
@@ -372,6 +382,30 @@ ruleTester.run('extensions', rule, {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
           line: 1,
           column: 21,
+        },
+      ],
+    }),
+
+    // Query strings.
+    test({
+      code: 'import withExtension from "./foo.js?a=True"',
+      options: [ 'never' ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./foo.js?a=True"',
+          line: 1,
+          column: 27,
+        },
+      ],
+    }),
+    test({
+      code: 'import withoutExtension from "./foo?a=True.ext"',
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo?a=True.ext"',
+          line: 1,
+          column: 30,
         },
       ],
     }),

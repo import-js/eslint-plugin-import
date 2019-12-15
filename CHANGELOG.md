@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`import/extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
 - TypeScript config: lookup for external modules in @types folder ([#1526], thanks [@joaovieira])
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
+- [`extensions`]: Ignore query strings when checking for extensions ([#1572], thanks [@pcorpet])
 
 ## [2.19.1] - 2019-12-08
 ### Fixed
@@ -631,6 +632,7 @@ for info on changes for earlier releases.
 
 [#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
+[#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572
 [#1563]: https://github.com/benmosher/eslint-plugin-import/pull/1563
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551

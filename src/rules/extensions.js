@@ -132,10 +132,12 @@ module.exports = {
       // bail if the declaration doesn't have a source, e.g. "export { foo };"
       if (!source) return
 
-      const importPath = source.value
+      const importPathWithQueryString = source.value
 
       // don't enforce anything on builtins
-      if (isBuiltIn(importPath, context.settings)) return
+      if (isBuiltIn(importPathWithQueryString, context.settings)) return
+
+      const importPath = importPathWithQueryString.replace(/\?(.*)$/, '')
 
       const resolvedPath = resolve(importPath, context)
 
@@ -154,14 +156,14 @@ module.exports = {
           context.report({
             node: source,
             message:
-              `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPath}"`,
+              `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPathWithQueryString}"`,
           })
         }
       } else if (extension) {
         if (isUseOfExtensionForbidden(extension) && isResolvableWithoutExtension(importPath)) {
           context.report({
             node: source,
-            message: `Unexpected use of file extension "${extension}" for "${importPath}"`,
+            message: `Unexpected use of file extension "${extension}" for "${importPathWithQueryString}"`,
           })
         }
       }
