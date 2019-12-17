@@ -64,6 +64,7 @@ module.exports = {
     docs: {
       url: docsUrl('extensions'),
     },
+    fixable: 'code',
 
     schema: {
       anyOf: [
@@ -155,6 +156,10 @@ module.exports = {
             node: source,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPath}"`,
+            fix: extension && ((fixer) => fixer.replaceText(
+              source,
+              JSON.stringify(`${importPath}.${extension}`)
+            )),
           })
         }
       } else if (extension) {
@@ -162,6 +167,10 @@ module.exports = {
           context.report({
             node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPath}"`,
+            fix: (fixer) => fixer.replaceText(
+              source,
+              JSON.stringify(importPath.replace(new RegExp(`\\.${extension}$`), ''))
+            ),
           })
         }
       }

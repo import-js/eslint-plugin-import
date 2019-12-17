@@ -129,6 +129,7 @@ ruleTester.run('extensions', rule, {
     }),
     test({
       code: 'import a from "a"',
+      output: 'import a from "a.js"',
       options: [ 'always' ],
       errors: [ {
         message: 'Missing file extension "js" for "a"',
@@ -138,6 +139,7 @@ ruleTester.run('extensions', rule, {
     }),
     test({
       code: 'import dot from "./file.with.dot"',
+      output: 'import dot from "./file.with.dot.js"',
       options: [ 'always' ],
       errors: [
         {
@@ -151,6 +153,10 @@ ruleTester.run('extensions', rule, {
       code: [
         'import a from "a/index.js"',
         'import packageConfig from "./package"',
+      ].join('\n'),
+      output: [
+        'import a from "a/index"',
+        'import packageConfig from "./package.json"',
       ].join('\n'),
       options: [ { json: 'always', js: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.json' ] } },
@@ -173,6 +179,11 @@ ruleTester.run('extensions', rule, {
         'import component from "./bar.jsx"',
         'import data from "./bar.json"',
       ].join('\n'),
+      output: [
+        'import lib from "./bar"',
+        'import component from "./bar.jsx"',
+        'import data from "./bar.json"',
+      ].join('\n'),
       options: [ 'never' ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
@@ -186,6 +197,11 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'import lib from "./bar.js"',
+        'import component from "./bar.jsx"',
+        'import data from "./bar.json"',
+      ].join('\n'),
+      output: [
+        'import lib from "./bar"',
         'import component from "./bar.jsx"',
         'import data from "./bar.json"',
       ].join('\n'),
@@ -205,6 +221,10 @@ ruleTester.run('extensions', rule, {
         'import component from "./bar.jsx"',
         'import data from "./bar.json"',
       ].join('\n'),
+      output: [
+        'import component from "./bar"',
+        'import data from "./bar.json"',
+      ].join('\n'),
       options: [ { json: 'always', js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.jsx', '.json', '.js' ] } },
       errors: [
@@ -217,6 +237,7 @@ ruleTester.run('extensions', rule, {
     }),
     test({
       code: 'import "./bar.coffee"',
+      output: 'import "./bar"',
       errors: [
         {
           message: 'Unexpected use of file extension "coffee" for "./bar.coffee"',
@@ -231,6 +252,11 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'import barjs from "./bar.js"',
+        'import barjson from "./bar.json"',
+        'import barnone from "./bar"',
+      ].join('\n'),
+      output: [
+        'import barjs from "./bar"',
         'import barjson from "./bar.json"',
         'import barnone from "./bar"',
       ].join('\n'),
@@ -251,6 +277,11 @@ ruleTester.run('extensions', rule, {
         'import barjson from "./bar.json"',
         'import barnone from "./bar"',
       ].join('\n'),
+      output: [
+        'import barjs from "./bar"',
+        'import barjson from "./bar.json"',
+        'import barnone from "./bar"',
+      ].join('\n'),
       options: [ 'never', { json: 'always', js: 'never', jsx: 'never' } ],
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
@@ -265,6 +296,7 @@ ruleTester.run('extensions', rule, {
     // unresolved (#271/#295)
     test({
       code: 'import thing from "./fake-file.js"',
+      output: 'import thing from "./fake-file"',
       options: [ 'never' ],
       errors: [
         {
@@ -332,6 +364,12 @@ ruleTester.run('extensions', rule, {
         import Component from './Component.jsx'
         import express from 'express'
       `,
+      output: `
+        import foo from './foo'
+        import bar from './bar.json'
+        import Component from './Component'
+        import express from 'express'
+      `,
       errors: [
         {
           message: 'Unexpected use of file extension "js" for "./foo.js"',
@@ -364,6 +402,10 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'export { foo } from "./foo.js"',
+        'let bar; export { bar }',
+      ].join('\n'),
+      output: [
+        'export { foo } from "./foo"',
         'let bar; export { bar }',
       ].join('\n'),
       options: [ 'never' ],
