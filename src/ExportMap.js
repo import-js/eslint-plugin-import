@@ -387,7 +387,12 @@ ExportMap.parse = function (path, content, context) {
   const namespaces = new Map();
 
   function remotePath(value) {
-    return resolve.relative(value, path, context.settings);
+    const file = resolve.relative(value, path, context.settings);
+    try {
+      return file && fs.realpathSync(file);
+    } catch (e) {
+      return file;
+    }
   }
 
   function resolveImport(value) {
@@ -627,8 +632,8 @@ ExportMap.parse = function (path, content, context) {
                 namespaceDecl.declarations.forEach((d) =>
                   recursivePatternCapture(d.id, (id) => m.namespace.set(
                     id.name,
-                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode)
-                  ))
+                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode),
+                  )),
                 );
               } else {
                 m.namespace.set(

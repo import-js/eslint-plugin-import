@@ -197,7 +197,7 @@ ruleTester.run('no-cycle', rule, {
     }),
 
     _test({
-      code: 'import "app"',
+      code: 'import "./"',
       parser: require.resolve('babel-eslint'),
       errors: [error(`Dependency cycle via `)],
       filename: testFilePath('./cycles/alias/index.js'),
