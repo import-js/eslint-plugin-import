@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`order`]: added `caseInsensitive` as an additional option to `alphabetize` ([#1586], thanks [@dbrewer5])
+
 ### Fixed
 - [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
 
@@ -625,6 +628,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1563]: https://github.com/benmosher/eslint-plugin-import/pull/1563
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
@@ -1046,3 +1050,4 @@ for info on changes for earlier releases.
 [@randallreedjr]: https://github.com/randallreedjr
 [@Pessimistress]: https://github.com/Pessimistress
 [@stekycz]: https://github.com/stekycz
+[@dbrewer5]: https://github.com/dbrewer5

@@ -189,16 +189,18 @@ import index from './';
 import sibling from './foo';
 ```
 
-### `alphabetize: {order: asc|desc|ignore}`:
+### `alphabetize: {order: asc|desc|ignore, caseInsensitive: true|false}`:
 
 Sort the order within each group in alphabetical manner based on **import path**:
 
 - `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
+- `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
 
 Example setting:
 ```js
 alphabetize: {
   order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
+  caseInsensitive: true /* ignore case. Options: [true, false] */
 }
 ```
 
@@ -210,12 +212,14 @@ import React, { PureComponent } from 'react';
 import aTypes from 'prop-types';
 import { compose, apply } from 'xcompose';
 import * as classnames from 'classnames';
+import blist from 'BList';
 ```
 
 While this will pass:
 
 ```js
 /* eslint import/order: ["error", {"alphabetize": true}] */
+import blist from 'BList';
 import * as classnames from 'classnames';
 import aTypes from 'prop-types';
 import React, { PureComponent } from 'react';

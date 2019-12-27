@@ -1870,5 +1870,51 @@ ruleTester.run('order', rule, {
         message: '`bar` import should occur before import of `Bar`',
       }],
     }),
+    // Option alphabetize {order: 'asc': caseInsensitive: true}
+    test({
+      code: `
+        import b from 'foo';
+        import a from 'Bar';
+
+        import index from './';
+      `,
+      output: `
+        import a from 'Bar';
+        import b from 'foo';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'asc', caseInsensitive: true},
+      }],
+      errors: [{
+        ruleID: 'order',
+        message: '`Bar` import should occur before import of `foo`',
+      }],
+    }),
+    // Option alphabetize {order: 'desc': caseInsensitive: true}
+    test({
+      code: `
+        import a from 'Bar';
+        import b from 'foo';
+
+        import index from './';
+      `,
+      output: `
+        import b from 'foo';
+        import a from 'Bar';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'desc', caseInsensitive: true},
+      }],
+      errors: [{
+        ruleID: 'order',
+        message: '`foo` import should occur before import of `Bar`',
+      }],
+    }),
   ].filter((t) => !!t),
 })

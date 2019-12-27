@@ -267,7 +267,7 @@ function importsSorterDesc(importA, importB) {
   return 0
 }
 
-function mutateRanksToAlphabetize(imported, order) {
+function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   const groupedByRanks = imported.reduce(function(acc, importedItem) {
     if (!Array.isArray(acc[importedItem.rank])) { 
       acc[importedItem.rank] = []
@@ -278,10 +278,11 @@ function mutateRanksToAlphabetize(imported, order) {
 
   const groupRanks = Object.keys(groupedByRanks)
 
-  const sorterFn = order === 'asc' ? importsSorterAsc : importsSorterDesc
+  const sorterFn = alphabetizeOptions.order === 'asc' ? importsSorterAsc : importsSorterDesc
+  const comparator = alphabetizeOptions.caseInsensitive ? (a, b) => sorterFn(String(a).toLowerCase(), String(b).toLowerCase()) : (a, b) => sorterFn(a, b)
   // sort imports locally within their group
   groupRanks.forEach(function(groupRank) {
-    groupedByRanks[groupRank].sort(sorterFn)
+    groupedByRanks[groupRank].sort(comparator)
   })
 
   // assign globally unique rank to each import
@@ -487,8 +488,9 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
 function getAlphabetizeConfig(options) {
   const alphabetize = options.alphabetize || {}
   const order = alphabetize.order || 'ignore'
+  const caseInsensitive = alphabetize.caseInsensitive || false
 
-  return {order}
+  return {order, caseInsensitive}
 }
 
 module.exports = {
@@ -540,6 +542,10 @@ module.exports = {
           alphabetize: {
             type: 'object',
             properties: {
+              caseInsensitive: {
+                type: 'boolean',
+                default: false,
+              },
               order: {
                 enum: ['ignore', 'asc', 'desc'],
                 default: 'ignore',
@@ -604,7 +610,7 @@ module.exports = {
         }
 
         if (alphabetize.order !== 'ignore') {
-          mutateRanksToAlphabetize(imported, alphabetize.order)
+          mutateRanksToAlphabetize(imported, alphabetize)
         }
 
         makeOutOfOrderReport(context, imported)
