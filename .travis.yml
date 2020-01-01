@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - '13'
   - '12'
   - '10'
   - '8'
@@ -18,6 +19,8 @@ env:
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
   include:
+  - env: PACKAGE=resolvers/node
+    node_js: 13
   - env: PACKAGE=resolvers/node
     node_js: 12
   - env: PACKAGE=resolvers/node
