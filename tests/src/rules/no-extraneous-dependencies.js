@@ -125,6 +125,9 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({ code: 'export { foo } from "lodash.cond"' }),
     test({ code: 'export * from "lodash.cond"' }),
     test({ code: 'export function getToken() {}' }),
+    test({ code: 'export class Component extends React.Component {}' }),
+    test({ code: 'export function Component() {}' }),
+    test({ code: 'export const Component = () => {}' }),
   ],
   invalid: [
     test({

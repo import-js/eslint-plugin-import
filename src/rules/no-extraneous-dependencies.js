@@ -203,7 +203,9 @@ module.exports = {
     // todo: use module visitor from module-utils core
     return {
       ImportDeclaration: function (node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        if (node.source) {
+          reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        }
       },
       ExportNamedDeclaration: function (node) {
         if (node.source) {
@@ -211,7 +213,9 @@ module.exports = {
         }
       },
       ExportAllDeclaration: function (node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        if (node.source) {
+          reportIfMissing(context, deps, depsOptions, node, node.source.value)
+        }
       },
       CallExpression: function handleRequires(node) {
         if (isStaticRequire(node)) {
