@@ -4,6 +4,7 @@ exports.__esModule = true
 const pkgDir = require('pkg-dir')
 
 const fs = require('fs')
+const Module = require('module')
 const path = require('path')
 
 const hashObject = require('./hash').hashObject
@@ -14,11 +15,26 @@ exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 
 const fileExistsCache = new ModuleCache()
 
-function tryRequire(target) {
+// Polyfill Node's `Module.createRequireFromPath` if not present (added in Node v10.12.0)
+const createRequireFromPath = Module.createRequireFromPath || function (filename) {
+  const mod = new Module(filename, null)
+  mod.filename = filename
+  mod.paths = Module._nodeModulePaths(path.dirname(filename))
+
+  mod._compile(`module.exports = require;`, filename)
+
+  return mod.exports
+}
+
+function tryRequire(target, sourceFile) {
   let resolved
   try {
     // Check if the target exists
-    resolved = require.resolve(target)
+    if (sourceFile != null) {
+      resolved = createRequireFromPath(sourceFile).resolve(target)
+    } else {
+      resolved = require.resolve(target)
+    }
   } catch(e) {
     // If the target does not exist then just return undefined
     return undefined
@@ -154,8 +170,8 @@ function getBaseDir(sourceFile) {
 }
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
-  let resolver = tryRequire(`eslint-import-resolver-${name}`) ||
-    tryRequire(name) ||
+  let resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
+    tryRequire(name, sourceFile) ||
     tryRequire(path.resolve(getBaseDir(sourceFile), name))
 
   if (!resolver) {

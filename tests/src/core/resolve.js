@@ -94,6 +94,14 @@ describe('resolve', function () {
                       )).to.equal(utils.testFilePath('./bar.jsx'))
   })
 
+  it('finds resolvers from the source files rather than eslint-module-utils', function () {
+    const testContext = utils.testContext({ 'import/resolver': { 'foo': {} } })
+
+    expect(resolve( '../files/foo'
+                      , Object.assign({}, testContext, { getFilename: function () { return utils.getFilename('foo.js') } }),
+                      )).to.equal(utils.testFilePath('./bar.jsx'))
+  })
+
   it('reports invalid import/resolver config', function () {
     const testContext = utils.testContext({ 'import/resolver': 123.456 })
     const testContextReports = []
