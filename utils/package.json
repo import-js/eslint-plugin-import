@@ -6,6 +6,7 @@
     "node": ">=4"
   },
   "scripts": {
+    "prepublishOnly": "cp ../{LICENSE,.npmrc} ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

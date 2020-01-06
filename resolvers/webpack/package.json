@@ -4,6 +4,7 @@
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
+    "prepublishOnly": "cp ../{LICENSE,.npmrc} ./",
     "test": "nyc mocha -t 5s",
     "report": "nyc report --reporter=html",
     "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/webpack/coverage/lcov.info"

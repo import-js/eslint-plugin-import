@@ -7,6 +7,7 @@
   "description": "Memoizing wrapper for any ESLint-compatible parser module.",
   "main": "index.js",
   "scripts": {
+    "prepublishOnly": "cp ../{LICENSE,.npmrc} ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

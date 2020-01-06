@@ -15,8 +15,10 @@
     "memo-parser"
   ],
   "scripts": {
-    "build": "babel --quiet --out-dir lib src",
     "prebuild": "rimraf lib",
+    "build": "babel --quiet --out-dir lib src",
+    "postbuild": "npm run copy-metafiles",
+    "copy-metafiles": "for DIR in memo-parser resolvers/node resolvers/webpack utils; do cp LICENSE .npmrc \"${DIR}/\"; done",
     "watch": "npm run mocha -- --watch tests/src",
     "pretest": "linklocal",
     "posttest": "eslint .",

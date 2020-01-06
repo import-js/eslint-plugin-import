@@ -74,9 +74,10 @@ matrix:
 
 before_install:
   - 'nvm install-latest-npm'
+  - 'npm run copy-metafiles'
   - 'if [ -n "${PACKAGE-}" ]; then cd "${PACKAGE}"; fi'
 install:
-  - npm install
+  - 'npm install'
   - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
 
 script:
