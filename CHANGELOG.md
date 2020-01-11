@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [2.20.0] - 2020-01-10
 ### Added
 - [`order`]: added `caseInsensitive` as an additional option to `alphabetize` ([#1586], thanks [@dbrewer5])
 - [`no-restricted-paths`]: New `except` option per `zone`, allowing exceptions to be defined for a restricted zone ([#1238], thanks [@rsolomon])
@@ -881,7 +883,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.0...HEAD
+[2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.18.1...v2.18.2
