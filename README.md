@@ -339,7 +339,19 @@ Contribution of more such shared configs for other platforms are welcome!
 
 #### `import/external-module-folders`
 
-An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to considered modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
+An array of folders. Resolved modules only from those folders will be considered as "external". By default - `["node_modules"]`. Makes sense if you have configured your path or webpack to handle your internal paths differently and want to consider modules from some folders, for example `bower_components` or `jspm_modules`, as "external".
+
+This option is also useful in a monorepo setup: list here all directories that contain monorepo's packages and they will be treated as external ones no matter which resolver is used.
+
+Each item in this array is either a folder's name, its subpath, or its absolute prefix path:
+
+- `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.
+
+- `packages/core` will match any path that contains these two segments, for example `/home/me/project/packages/core/src/utils.js`.
+
+- `/home/me/project/packages` will only match files and directories inside this directory, and the directory itself.
+
+Please note that incomplete names are not allowed here so `components` won't match `bower_components` and `packages/ui` won't match `packages/ui-utils` (but will match `packages/ui/utils`).
 
 #### `import/parsers`
 

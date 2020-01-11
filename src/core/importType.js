@@ -1,5 +1,4 @@
 import coreModules from 'resolve/lib/core'
-import { join } from 'path'
 
 import resolve from 'eslint-module-utils/resolve'
 
@@ -26,11 +25,19 @@ export function isBuiltIn(name, settings, path) {
 
 function isExternalPath(path, name, settings) {
   const folders = (settings && settings['import/external-module-folders']) || ['node_modules']
+  return !path || folders.some(folder => isSubpath(folder, path))
+}
 
-  // extract the part before the first / (redux-saga/effects => redux-saga)
-  const packageName = name.match(/([^/]+)/)[0]
-
-  return !path || folders.some(folder => -1 < path.indexOf(join(folder, packageName)))
+function isSubpath(subpath, path) {
+  const normSubpath = subpath.replace(/[/]$/, '')
+  if (normSubpath.length === 0) {
+    return false
+  }
+  const left = path.indexOf(normSubpath)
+  const right = left + normSubpath.length
+  return left !== -1 &&
+        (left === 0 || normSubpath[0] !== '/' && path[left - 1] === '/') &&
+        (right >= path.length || path[right] === '/')
 }
 
 const externalModuleRegExp = /^\w/

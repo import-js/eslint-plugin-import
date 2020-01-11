@@ -5,6 +5,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Fixed
+- [`import/external-module-folders` setting] now correctly works with directories containing modules symlinked from `node_modules` ([#1605], thanks [@skozin])
+
+### Changed
+- [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
 
 ## [2.20.0] - 2020-01-10
 ### Added
@@ -636,6 +641,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1605]: https://github.com/benmosher/eslint-plugin-import/pull/1605
 [#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
 [#1572]: https://github.com/benmosher/eslint-plugin-import/pull/1572
@@ -1069,3 +1075,4 @@ for info on changes for earlier releases.
 [@rsolomon]: https://github.com/rsolomon
 [@joaovieira]: https://github.com/joaovieira
 [@ivo-stefchev]: https://github.com/ivo-stefchev
+[@skozin]: https://github.com/skozin

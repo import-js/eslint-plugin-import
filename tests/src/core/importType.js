@@ -3,7 +3,7 @@ import * as path from 'path'
 
 import importType from 'core/importType'
 
-import { testContext } from '../utils'
+import { testContext, testFilePath } from '../utils'
 
 describe('importType(name)', function () {
   const context = testContext()
@@ -144,5 +144,84 @@ describe('importType(name)', function () {
   it("should return 'external' for module from 'node_modules' if 'node_modules' contained in 'external-module-folders'", function() {
     const foldersContext = testContext({ 'import/external-module-folders': ['node_modules'] })
     expect(importType('resolve', foldersContext)).to.equal('external')
+  })
+
+  it('returns "external" for a scoped symlinked module', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'node',
+      'import/external-module-folders': ['node_modules'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
+  })
+
+  // We're using Webpack resolver here since it resolves all symlinks, which means that
+  // directory path will not contain node_modules/<package-name> but will point to the
+  // actual directory inside 'files' instead
+  it('returns "external" for a scoped module from a symlinked directory which name is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['symlinked-module'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
+  })
+
+  it('returns "internal" for a scoped module from a symlinked directory which incomplete name is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext_1 = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['symlinked-mod'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext_1)).to.equal('internal')
+
+    const foldersContext_2 = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['linked-module'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext_2)).to.equal('internal')
+  })
+
+  it('returns "external" for a scoped module from a symlinked directory which partial path is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['files/symlinked-module'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
+  })
+
+  it('returns "internal" for a scoped module from a symlinked directory which partial path w/ incomplete segment is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext_1 = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['files/symlinked-mod'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext_1)).to.equal('internal')
+
+    const foldersContext_2 = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['les/symlinked-module'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext_2)).to.equal('internal')
+  })
+
+  it('returns "external" for a scoped module from a symlinked directory which partial path ending w/ slash is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['files/symlinked-module/'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
+  })
+
+  it('returns "internal" for a scoped module from a symlinked directory when "external-module-folders" contains an absolute path resembling directory‘s relative path (webpack resolver)', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': ['/files/symlinked-module'],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('internal')
+  })
+
+  it('returns "external" for a scoped module from a symlinked directory which absolute path is contained in "external-module-folders" (webpack resolver)', function() {
+    const foldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': [testFilePath('symlinked-module')],
+    })
+    expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
   })
 })

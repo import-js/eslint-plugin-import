@@ -298,7 +298,55 @@ ruleTester.run('order', rule, {
         ],
       }],
     }),
+    // Monorepo setup, using Webpack resolver, workspace folder name in external-module-folders
+    test({
+      code: `
+        import _ from 'lodash';
+        import m from '@test-scope/some-module';
 
+        import bar from './bar';
+      `,
+      options: [{
+        'newlines-between': 'always',
+      }],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['node_modules', 'symlinked-module'],
+      },
+    }),
+    // Monorepo setup, using Webpack resolver, partial workspace folder path
+    // in external-module-folders
+    test({
+      code: `
+        import _ from 'lodash';
+        import m from '@test-scope/some-module';
+
+        import bar from './bar';
+      `,
+      options: [{
+        'newlines-between': 'always',
+      }],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['node_modules', 'files/symlinked-module'],
+      },
+    }),
+    // Monorepo setup, using Node resolver (doesn't resolve symlinks)
+    test({
+      code: `
+        import _ from 'lodash';
+        import m from '@test-scope/some-module';
+
+        import bar from './bar';
+      `,
+      options: [{
+        'newlines-between': 'always',
+      }],
+      settings: {
+        'import/resolver': 'node',
+        'import/external-module-folders': ['node_modules', 'files/symlinked-module'],
+      },
+    }),
     // Option: newlines-between: 'always'
     test({
       code: `
