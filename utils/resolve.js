@@ -18,7 +18,8 @@ const ERROR_NAME = 'EslintPluginImportResolveError'
 const fileExistsCache = new ModuleCache()
 
 // Polyfill Node's `Module.createRequireFromPath` if not present (added in Node v10.12.0)
-const createRequireFromPath = Module.createRequireFromPath || function (filename) {
+// Use `Module.createRequire` if available (added in Node v12.2.0)
+const createRequire = Module.createRequire || Module.createRequireFromPath || function (filename) {
   const mod = new Module(filename, null)
   mod.filename = filename
   mod.paths = Module._nodeModulePaths(path.dirname(filename))
@@ -33,7 +34,7 @@ function tryRequire(target, sourceFile) {
   try {
     // Check if the target exists
     if (sourceFile != null) {
-      resolved = createRequireFromPath(sourceFile).resolve(target)
+      resolved = createRequire(path.resolve(sourceFile)).resolve(target)
     } else {
       resolved = require.resolve(target)
     }
