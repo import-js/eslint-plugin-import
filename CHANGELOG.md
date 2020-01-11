@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
+- [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -677,6 +678,7 @@ for info on changes for earlier releases.
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
@@ -1148,3 +1150,4 @@ for info on changes for earlier releases.
 [@astorije]: https://github.com/astorije
 [@Ephem]: https://github.com/Ephem
 [@kmui2]: https://github.com/kmui2
+[@arvigeus]: https://github.com/arvigeus
