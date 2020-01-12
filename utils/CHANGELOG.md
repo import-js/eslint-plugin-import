@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.5.2 - 2020-01-12
+
+### Fixed
 - Makes the loader resolution more tolerant ([#1606], thanks [@arcanis])
 - Use `createRequire` instead of `createRequireFromPath` if available ([#1602], thanks [@iamnapo])
 
