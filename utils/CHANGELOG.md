@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+- Makes the loader resolution more tolerant ([#1606], thanks [@arcanis])
 - Use `createRequire` instead of `createRequireFromPath` if available ([#1602], thanks [@iamnapo])
 
 ## v2.5.1 - 2020-01-11
@@ -66,6 +67,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#1606]: https://github.com/benmosher/eslint-plugin-import/pull/1606
 [#1602]: https://github.com/benmosher/eslint-plugin-import/pull/1602
 [#1591]: https://github.com/benmosher/eslint-plugin-import/pull/1591
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551

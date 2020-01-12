@@ -34,7 +34,11 @@ function tryRequire(target, sourceFile) {
   try {
     // Check if the target exists
     if (sourceFile != null) {
-      resolved = createRequire(path.resolve(sourceFile)).resolve(target)
+      try {
+        resolved = createRequire(path.resolve(sourceFile)).resolve(target)
+      } catch (e) {
+        resolved = require.resolve(target)
+      }
     } else {
       resolved = require.resolve(target)
     }
