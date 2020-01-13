@@ -145,4 +145,14 @@ describe('importType(name)', function () {
     const foldersContext = testContext({ 'import/external-module-folders': ['node_modules'] })
     expect(importType('resolve', foldersContext)).to.equal('external')
   })
+
+  it("should return 'internal' for 'core/importType' if 'core' missed in 'external-modules'", function() {
+    const foldersContext = testContext({ 'import/external-modules': [] })
+    expect(importType('core/importType', foldersContext)).to.equal('external')
+  })
+
+  it("should return 'external' for 'core/importType' if 'core' contained in 'external-modules'", function() {
+    const foldersContext = testContext({ 'import/external-modules': ['core'] })
+    expect(importType('core/importType', foldersContext)).to.equal('external')
+  })
 })
