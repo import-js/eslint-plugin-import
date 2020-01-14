@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`import/external-module-folders` setting] now correctly works with directories containing modules symlinked from `node_modules` ([#1605], thanks [@skozin])
 - [`extensions`]: for invalid code where `name` does not exist, do not crash ([#1613], thanks [@ljharb])
+- [`extentions`]: Fix scope regex ([#1611], thanks [@yordis])
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
@@ -643,6 +644,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
+[#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
 [#1605]: https://github.com/benmosher/eslint-plugin-import/pull/1605
 [#1589]: https://github.com/benmosher/eslint-plugin-import/issues/1589
 [#1586]: https://github.com/benmosher/eslint-plugin-import/pull/1586
@@ -1078,3 +1080,4 @@ for info on changes for earlier releases.
 [@joaovieira]: https://github.com/joaovieira
 [@ivo-stefchev]: https://github.com/ivo-stefchev
 [@skozin]: https://github.com/skozin
+[@yordis]: https://github.com/yordis

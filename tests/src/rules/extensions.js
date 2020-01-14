@@ -6,6 +6,7 @@ const ruleTester = new RuleTester()
 
 ruleTester.run('extensions', rule, {
   valid: [
+    test({ code: 'import a from "@/a"' }),
     test({ code: 'import a from "a"' }),
     test({ code: 'import dot from "./file.with.dot"' }),
     test({

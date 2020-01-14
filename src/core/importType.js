@@ -50,7 +50,7 @@ export function isExternalModuleMain(name, settings, path) {
   return externalModuleMainRegExp.test(name) && isExternalPath(path, name, settings)
 }
 
-const scopedRegExp = /^@[^/]+\/?[^/]+/
+const scopedRegExp = /^@[^/]*\/?[^/]+/
 export function isScoped(name) {
   return name && scopedRegExp.test(name)
 }
