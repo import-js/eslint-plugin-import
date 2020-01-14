@@ -10,19 +10,17 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`order`]: added `caseInsensitive` as an additional option to `alphabetize` ([#1586], thanks [@dbrewer5])
 - [`no-restricted-paths`]: New `except` option per `zone`, allowing exceptions to be defined for a restricted zone ([#1238], thanks [@rsolomon])
+- [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
 
 ### Fixed
 - [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
-- [`import/extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
+- [`extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
 - TypeScript config: lookup for external modules in @types folder ([#1526], thanks [@joaovieira])
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
 - [`extensions`]: Ignore query strings when checking for extensions ([#1572], thanks [@pcorpet])
 
 ### Docs
 - [`extensions`]: improve `ignorePackages` docs ([#1248], thanks [@ivo-stefchev])
-
-### Added
-- [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
 
 ## [2.19.1] - 2019-12-08
 ### Fixed
