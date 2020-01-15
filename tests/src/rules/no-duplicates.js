@@ -31,12 +31,20 @@ ruleTester.run('no-duplicates', rule, {
       code: "import x from './bar?optionX'; import y from './bar?optionY';",
       options: [{'considerQueryString': true}],
       settings: { 'import/resolver': 'webpack' },
-     }),
+    }),
     test({
       code: "import x from './foo'; import y from './bar';",
       options: [{'considerQueryString': true}],
       settings: { 'import/resolver': 'webpack' },
-     }),
+    }),
+
+    // #1538: It is impossible to import namespace and other in one line, so allow this.
+    test({
+      code: "import * as ns from './foo'; import {y} from './foo'",
+    }),
+    test({
+      code: "import {y} from './foo'; import * as ns from './foo'",
+    }),
   ],
   invalid: [
     test({
@@ -179,9 +187,16 @@ ruleTester.run('no-duplicates', rule, {
     }),
 
     test({
-      code: "import * as ns from './foo'; import {y} from './foo'",
-      // Autofix bail because first import is a namespace import.
-      output: "import * as ns from './foo'; import {y} from './foo'",
+      code: "import * as ns1 from './foo'; import * as ns2 from './foo'",
+      // Autofix bail because cannot merge namespace imports.
+      output: "import * as ns1 from './foo'; import * as ns2 from './foo'",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: "import * as ns from './foo'; import {x} from './foo'; import {y} from './foo'",
+      // Autofix could merge some imports, but not the namespace import.
+      output: "import * as ns from './foo'; import {x,y} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -189,7 +204,7 @@ ruleTester.run('no-duplicates', rule, {
       code: "import {x} from './foo'; import * as ns from './foo'; import {y} from './foo'; import './foo'",
       // Autofix could merge some imports, but not the namespace import.
       output: "import {x,y} from './foo'; import * as ns from './foo';  ",
-      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({

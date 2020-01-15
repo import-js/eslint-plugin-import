@@ -257,12 +257,14 @@ module.exports = {
     }) : defaultResolver
 
     const imported = new Map()
+    const nsImported = new Map()
     const typesImported = new Map()
     return {
       'ImportDeclaration': function (n) {
         // resolved path will cover aliased duplicates
         const resolvedPath = resolver(n.source.value)
-        const importMap = n.importKind === 'type' ? typesImported : imported
+        const importMap = n.importKind === 'type' ? typesImported :
+          (hasNamespace(n) ? nsImported : imported)
 
         if (importMap.has(resolvedPath)) {
           importMap.get(resolvedPath).push(n)
@@ -273,6 +275,7 @@ module.exports = {
 
       'Program:exit': function () {
         checkImports(imported, context)
+        checkImports(nsImported, context)
         checkImports(typesImported, context)
       },
     }
