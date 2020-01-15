@@ -17,7 +17,7 @@ export function isAbsolute(name) {
 
 // path is defined only when a resolver resolves to a non-standard path
 export function isBuiltIn(name, settings, path) {
-  if (path) return false
+  if (path || !name) return false
   const base = baseModule(name)
   const extras = (settings && settings['import/core-modules']) || []
   return coreModules[base] || extras.indexOf(base) > -1
@@ -52,12 +52,12 @@ export function isExternalModuleMain(name, settings, path) {
 
 const scopedRegExp = /^@[^/]+\/?[^/]+/
 export function isScoped(name) {
-  return scopedRegExp.test(name)
+  return name && scopedRegExp.test(name)
 }
 
 const scopedMainRegExp = /^@[^/]+\/?[^/]+$/
 export function isScopedMain(name) {
-  return scopedMainRegExp.test(name)
+  return name && scopedMainRegExp.test(name)
 }
 
 function isInternalModule(name, settings, path) {
