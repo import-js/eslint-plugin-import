@@ -136,6 +136,13 @@ context('TypeScript', function () {
           code: `
             export function fff(a: string);
             export function fff(a: number);
+          `,
+        }, parserConfig)),
+
+        test(Object.assign({
+          code: `
+            export function fff(a: string);
+            export function fff(a: number);
             export function fff(a: string|number) {};
           `,
         }, parserConfig)),

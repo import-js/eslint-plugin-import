@@ -36,7 +36,13 @@ const tsTypePrefix = 'type:'
  */
 function isTypescriptFunctionOverloads(nodes) {
   const types = new Set(Array.from(nodes, node => node.parent.type))
-  return types.size === 2 && types.has('TSDeclareFunction') && types.has('FunctionDeclaration')
+  return (
+    types.has('TSDeclareFunction') &&
+    (
+      types.size === 1 ||
+      (types.size === 2 && types.has('FunctionDeclaration'))
+    )
+  )
 }
 
 module.exports = {
