@@ -12,6 +12,7 @@ module.exports = {
     docs: {
       url: docsUrl('unambiguous'),
     },
+    schema: [],
   },
 
   create: function (context) {

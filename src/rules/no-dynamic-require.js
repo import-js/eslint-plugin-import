@@ -19,6 +19,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-dynamic-require'),
     },
+    schema: [],
   },
 
   create: function (context) {

@@ -211,16 +211,6 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
-      code: `var foo = require('foo-module');\nvar something = 123;`,
-      output: `var foo = require('foo-module');\n\nvar something = 123;`,
-      errors: [ {
-        line: 1,
-        column: 1,
-        message: REQUIRE_ERROR_MESSAGE,
-      } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
       code: `import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;`,
       output: `import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';\n\nvar b=456;`,
       errors: [

@@ -15,6 +15,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-webpack-loader-syntax'),
     },
+    schema: [],
   },
 
   create: function (context) {

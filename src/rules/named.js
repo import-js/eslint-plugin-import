@@ -8,6 +8,7 @@ module.exports = {
     docs: {
       url: docsUrl('named'),
     },
+    schema: [],
   },
 
   create: function (context) {

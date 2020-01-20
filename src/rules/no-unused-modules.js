@@ -305,6 +305,7 @@ const fileIsInPkg = file => {
 
 module.exports = {
   meta: {
+    type: 'suggestion',
     docs: { url: docsUrl('no-unused-modules') },
     schema: [{
       properties: {

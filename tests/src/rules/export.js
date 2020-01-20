@@ -15,8 +15,6 @@ ruleTester.run('export', rule, {
     test({ code: 'export var foo = "foo", bar = "bar";' }),
     test({ code: 'export var { foo, bar } = object;' }),
     test({ code: 'export var [ foo, bar ] = array;' }),
-    test({ code: 'export var { foo, bar } = object;' }),
-    test({ code: 'export var [ foo, bar ] = array;' }),
     test({ code: 'let foo; export { foo, foo as bar }' }),
     test({ code: 'let bar; export { bar }; export * from "./export-all"' }),
     test({ code: 'export * from "./export-all"' }),

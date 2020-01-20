@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: for invalid code where `name` does not exist, do not crash ([#1613], thanks [@ljharb])
 - [`extentions`]: Fix scope regex ([#1611], thanks [@yordis])
 - [`no-duplicates`]: allow duplicate imports if one is a namespace and the other not ([#1612], thanks [@sveyret])
+- Add some missing rule meta schemas and types ([#1620], thanks [@bmish])
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])

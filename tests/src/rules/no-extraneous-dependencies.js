@@ -66,11 +66,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js', '*.spec.js']}],
       filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
-    test({
-      code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js', '*.spec.js']}],
-      filename: path.join(process.cwd(), 'foo.spec.js'),
-    }),
     test({ code: 'require(6)' }),
     test({
       code: 'import "doctrine"',
@@ -100,10 +95,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import leftpad from "left-pad";',
       options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
-    }),
-    test({
-      code: 'import leftpad from "left-pad";',
-      options: [{packageDir: [packageDirMonoRepoWithNested, packageDirMonoRepoRoot]}],
     }),
     test({
       code: 'import rightpad from "right-pad";',

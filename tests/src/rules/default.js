@@ -105,11 +105,6 @@ ruleTester.run('default', rule, {
       errors: [{ message: 'No default export found in imported module "./named-exports".'
                , type: 'ImportDefaultSpecifier'}]}),
 
-    test({
-      code: "import Foo from './jsx/FooES7.js';",
-      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
-    }),
-
     // es7 export syntax
     test({
       code: 'export baz from "./named-exports"',

@@ -6,6 +6,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-mutable-exports'),
     },
+    schema: [],
   },
 
   create: function (context) {

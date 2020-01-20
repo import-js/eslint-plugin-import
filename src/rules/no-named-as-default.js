@@ -8,6 +8,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-named-as-default'),
     },
+    schema: [],
   },
 
   create: function (context) {

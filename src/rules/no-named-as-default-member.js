@@ -18,6 +18,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-named-as-default-member'),
     },
+    schema: [],
   },
 
   create: function(context) {

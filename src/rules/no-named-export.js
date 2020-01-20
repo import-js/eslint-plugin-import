@@ -4,6 +4,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: { url: docsUrl('no-named-export') },
+    schema: [],
   },
 
   create(context) {

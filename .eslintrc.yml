@@ -1,8 +1,10 @@
 ---
 plugins:
+  - eslint-plugin
   - import
 extends:
   - eslint:recommended
+  - plugin:eslint-plugin/recommended
   - plugin:import/recommended
 
 env:
@@ -25,6 +27,16 @@ rules:
     - single
     - allowTemplateLiterals: true
       avoidEscape: true
+
+  eslint-plugin/consistent-output: "error"
+  eslint-plugin/meta-property-ordering: "error"
+  eslint-plugin/no-deprecated-context-methods: "error"
+  eslint-plugin/no-deprecated-report-api: "off"
+  eslint-plugin/prefer-output-null: "error"
+  eslint-plugin/prefer-replace-text: "error"
+  eslint-plugin/report-message-format: "error"
+  eslint-plugin/require-meta-schema: "error"
+  eslint-plugin/require-meta-type: "error"
 
   # dog fooding
   import/no-extraneous-dependencies: "error"

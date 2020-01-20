@@ -21,6 +21,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-deprecated'),
     },
+    schema: [],
   },
 
   create: function (context) {

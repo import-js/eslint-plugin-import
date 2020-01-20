@@ -12,6 +12,7 @@ module.exports = {
     docs: {
       url: docsUrl('exports-last'),
     },
+    schema: [],
   },
 
   create: function (context) {

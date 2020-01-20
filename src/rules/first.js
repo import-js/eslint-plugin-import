@@ -7,6 +7,12 @@ module.exports = {
       url: docsUrl('first'),
     },
     fixable: 'code',
+    schema: [
+      {
+        type: 'string',
+        enum: ['absolute-first'],
+      },
+    ],
   },
 
   create: function (context) {

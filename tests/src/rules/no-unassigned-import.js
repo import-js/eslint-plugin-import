@@ -23,7 +23,6 @@ ruleTester.run('no-unassigned-import', rule, {
     test({ code: 'const {foo} = require("lodash")'}),
     test({ code: 'const {foo: bar} = require("lodash")'}),
     test({ code: 'const [a, b] = require("lodash")'}),
-    test({ code: 'const _ = require("lodash")'}),
     test({ code: 'const _ = require("./")'}),
     test({ code: 'foo(require("lodash"))'}),
     test({ code: 'require("lodash").foo'}),

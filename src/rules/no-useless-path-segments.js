@@ -43,6 +43,8 @@ module.exports = {
       url: docsUrl('no-useless-path-segments'),
     },
 
+    fixable: 'code',
+
     schema: [
       {
         type: 'object',
@@ -53,8 +55,6 @@ module.exports = {
         additionalProperties: false,
       },
     ],
-
-    fixable: 'code',
   },
 
   create(context) {

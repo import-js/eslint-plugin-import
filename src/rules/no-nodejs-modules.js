@@ -14,6 +14,21 @@ module.exports = {
     docs: {
       url: docsUrl('no-nodejs-modules'),
     },
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          allow: {
+            type: 'array',
+            uniqueItems: true,
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create: function (context) {

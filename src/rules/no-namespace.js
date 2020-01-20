@@ -17,6 +17,7 @@ module.exports = {
       url: docsUrl('no-namespace'),
     },
     fixable: 'code',
+    schema: [],
   },
 
   create: function (context) {

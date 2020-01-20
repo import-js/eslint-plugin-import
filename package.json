@@ -68,6 +68,7 @@
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
     "eslint-import-test-order-redirect": "file:./tests/files/order-redirect",
     "eslint-module-utils": "file:./utils",
+    "eslint-plugin-eslint-plugin": "^2.2.1",
     "eslint-plugin-import": "2.x",
     "linklocal": "^2.8.2",
     "mocha": "^3.5.3",

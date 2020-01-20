@@ -15,6 +15,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-amd'),
     },
+    schema: [],
   },
 
   create: function (context) {

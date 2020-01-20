@@ -2,6 +2,7 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {},
+    schema: [],
   },
 
   create(context) {

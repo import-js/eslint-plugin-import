@@ -49,6 +49,7 @@ module.exports = {
     docs: {
       url: docsUrl('newline-after-import'),
     },
+    fixable: 'whitespace',
     schema: [
       {
         'type': 'object',
@@ -61,7 +62,6 @@ module.exports = {
         'additionalProperties': false,
       },
     ],
-    fixable: 'whitespace',
   },
   create: function (context) {
     let level = 0

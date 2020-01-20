@@ -13,7 +13,6 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     // imports
     { code: 'import "x";', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import x from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
-    { code: 'import x from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import { x } from "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
 
     // exports
@@ -61,7 +60,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: 'if (typeof window !== "undefined") require("x")', options: [{ allowRequire: false }] },
     { code: 'if (typeof window !== "undefined") { require("x") }', options: [{ allowRequire: true }] },
     { code: 'if (typeof window !== "undefined") { require("x") }', options: [{ allowRequire: false }] },
-  
+
     { code: 'try { require("x") } catch (error) {}' },
   ],
 

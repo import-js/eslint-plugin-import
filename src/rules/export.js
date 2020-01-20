@@ -45,6 +45,7 @@ module.exports = {
     docs: {
       url: docsUrl('export'),
     },
+    schema: [],
   },
 
   create: function (context) {
