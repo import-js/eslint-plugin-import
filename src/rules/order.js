@@ -289,7 +289,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   let newRank = 0
   const alphabetizedRanks = groupRanks.sort().reduce(function(acc, groupRank) {
     groupedByRanks[groupRank].forEach(function(importedItemName) {
-      acc[importedItemName] = newRank
+      acc[importedItemName] = parseInt(groupRank, 10) + newRank
       newRank += 1
     })
     return acc

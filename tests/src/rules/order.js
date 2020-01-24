@@ -645,6 +645,22 @@ ruleTester.run('order', rule, {
         'newlines-between': 'always',
       }],
     }),
+    // Alphabetize with require
+    test({
+      code: `
+        import { hello } from './hello';
+        import { int } from './int';
+        const blah = require('./blah');
+        const { cello } = require('./cello');
+      `,
+      options: [
+        {
+          alphabetize: {
+            order: 'asc',
+          },
+        },
+      ],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -1984,6 +2000,22 @@ ruleTester.run('order', rule, {
       errors: [{
         ruleID: 'order',
         message: '`foo` import should occur before import of `Bar`',
+      }],
+    }),
+    // Alphabetize with require
+    test({
+      code: `
+        const { cello } = require('./cello');
+        import { int } from './int';
+        const blah = require('./blah');
+        import { hello } from './hello';
+      `,
+      errors: [{
+        ruleId: 'order',
+        message: '`./int` import should occur before import of `./cello`',
+      }, {
+        ruleId: 'order',
+        message: '`./hello` import should occur before import of `./cello`',
       }],
     }),
   ].filter((t) => !!t),

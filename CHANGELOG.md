@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: allow duplicate imports if one is a namespace and the other not ([#1612], thanks [@sveyret])
 - Add some missing rule meta schemas and types ([#1620], thanks [@bmish])
 - [`named`]: for importing from a module which re-exports named exports from a `node_modules` module ([#1569], [#1447], thanks [@redbugz], [@kentcdodds])
+- [`order`]: Fix alphabetize for mixed requires and imports ([#5625], thanks [@wschurman])
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
@@ -650,6 +651,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
+[#1625]: https://github.com/benmosher/eslint-plugin-import/pull/1625
 [#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
 [#1619]: https://github.com/benmosher/eslint-plugin-import/pull/1619
 [#1616]: https://github.com/benmosher/eslint-plugin-import/issues/1616
@@ -1099,3 +1101,4 @@ for info on changes for earlier releases.
 [@redbugz]: https://github.com/redbugz
 [@kentcdodds]: https://github.com/kentcdodds
 [@IvanGoncharov]: https://github.com/IvanGoncharov
+[@wschurman]: https://github.com/wschurman
