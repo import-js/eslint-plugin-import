@@ -19,6 +19,8 @@ env:
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
   include:
+  - env: LINT=true
+    node_js: lts/*
   - env: PACKAGE=resolvers/node
     node_js: 13
   - env: PACKAGE=resolvers/node
@@ -81,7 +83,7 @@ install:
   - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
 
 script:
-  - 'npm test'
+  - 'if [ -n "${LINT-}" ]; then npm run posttest ; else npm run tests-only ; fi'
 
 after_success:
   - npm run coveralls

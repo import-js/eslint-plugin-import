@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "prepublishOnly": "cp ../../{LICENSE,.npmrc} ./",
-    "test": "nyc mocha -t 5s",
+    "tests-only": "nyc mocha -t 5s",
+    "test": "npm run tests-only",
     "report": "nyc report --reporter=html",
     "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/webpack/coverage/lcov.info"
   },

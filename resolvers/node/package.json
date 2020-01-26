@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "prepublishOnly": "cp ../../{LICENSE,.npmrc} ./",
-    "test": "nyc mocha",
+    "tests-only": "nyc mocha",
+    "test": "npm run tests-only",
     "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/node/coverage/lcov.info"
   },
   "repository": {
