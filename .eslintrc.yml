@@ -28,11 +28,10 @@ rules:
     - allowTemplateLiterals: true
       avoidEscape: true
 
-  eslint-plugin/consistent-output: "error"
+  eslint-plugin/consistent-output: ["error", "always"]
   eslint-plugin/meta-property-ordering: "error"
   eslint-plugin/no-deprecated-context-methods: "error"
   eslint-plugin/no-deprecated-report-api: "off"
-  eslint-plugin/prefer-output-null: "error"
   eslint-plugin/prefer-replace-text: "error"
   eslint-plugin/report-message-format: "error"
   eslint-plugin/require-meta-schema: "error"

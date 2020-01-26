@@ -50,6 +50,7 @@ ruleTester.run('unambiguous', rule, {
     {
       code: 'function x() {}',
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      output: 'function x() {}',
       errors: ['This module could be parsed as a valid script.'],
     },
   ],
