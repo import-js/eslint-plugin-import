@@ -645,6 +645,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
 [#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612
 [#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
@@ -1085,3 +1086,4 @@ for info on changes for earlier releases.
 [@skozin]: https://github.com/skozin
 [@yordis]: https://github.com/yordis
 [@sveyret]: https://github.com/sveyret
+[@bmish]: https://github.com/bmish
