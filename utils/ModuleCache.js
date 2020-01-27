@@ -22,7 +22,7 @@ class ModuleCache {
   get(cacheKey, settings) {
     if (this.map.has(cacheKey)) {
       const f = this.map.get(cacheKey)
-      // check fresness
+      // check freshness
       if (process.hrtime(f.lastSeen)[0] < settings.lifetime) return f.result
     } else log('cache miss for', cacheKey)
     // cache miss

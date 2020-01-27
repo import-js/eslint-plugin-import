@@ -319,7 +319,7 @@ ExportMap.for = function (context) {
 
   const content = fs.readFileSync(path, { encoding: 'utf8' })
 
-  // check for and cache unambigious modules
+  // check for and cache unambiguous modules
   if (!unambiguous.test(content)) {
     log('ignored path due to unambiguous regex:', path)
     exportCache.set(cacheKey, null)
