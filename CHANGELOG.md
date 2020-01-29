@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
+- [meta] fix "files" field to include/exclude the proper files ([#1635], thanks [@ljharb])
 
 ## [2.20.0] - 2020-01-10
 ### Added
@@ -645,6 +646,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
 [#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
 [#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612

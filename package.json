@@ -10,9 +10,12 @@
     "test": "tests"
   },
   "files": [
+    "*.md",
+    "LICENSE",
+    "docs",
     "lib",
     "config",
-    "memo-parser"
+    "memo-parser/{*.js,LICENSE,*.md}"
   ],
   "scripts": {
     "prebuild": "rimraf lib",
