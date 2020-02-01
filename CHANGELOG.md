@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Fixed
+- [`no-absolute-path`]: fix a crash with invalid import syntax ([#1616], thanks [@ljharb])
 - [`import/external-module-folders` setting] now correctly works with directories containing modules symlinked from `node_modules` ([#1605], thanks [@skozin])
 - [`extensions`]: for invalid code where `name` does not exist, do not crash ([#1613], thanks [@ljharb])
 - [`extentions`]: Fix scope regex ([#1611], thanks [@yordis])
@@ -649,6 +650,7 @@ for info on changes for earlier releases.
 
 [#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
 [#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
+[#1616]: https://github.com/benmosher/eslint-plugin-import/issues/1616
 [#1613]: https://github.com/benmosher/eslint-plugin-import/issues/1613
 [#1612]: https://github.com/benmosher/eslint-plugin-import/pull/1612
 [#1611]: https://github.com/benmosher/eslint-plugin-import/pull/1611
