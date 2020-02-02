@@ -66,8 +66,54 @@ const CLASS_DECLARATION = 'ClassDeclaration'
 const DEFAULT = 'default'
 const TYPE_ALIAS = 'TypeAlias'
 
+/**
+ * List of imports per file.
+ *
+ * Represented by a two-level Map to a Set of identifiers. The upper-level Map
+ * keys are the paths to the modules containing the imports, while the
+ * lower-level Map keys are the paths to the files which are being imported
+ * from. Lastly, the Set of identifiers contains either names being imported
+ * or a special AST node name listed above (e.g ImportDefaultSpecifier).
+ *
+ * For example, if we have a file named foo.js containing:
+ *
+ *   import { o2 } from './bar.js';
+ *
+ * Then we will have a structure that looks like:
+ *
+ *   Map { 'foo.js' => Map { 'bar.js' => Set { 'o2' } } }
+ *
+ * @type {Map<string, Map<string, Set<string>>>}
+ */
 const importList = new Map()
+
+/**
+ * List of exports per file.
+ *
+ * Represented by a two-level Map to an object of metadata. The upper-level Map
+ * keys are the paths to the modules containing the exports, while the
+ * lower-level Map keys are the specific identifiers or special AST node names
+ * being exported. The leaf-level metadata object at the moment only contains a
+ * `whereUsed` propoerty, which contains a Set of paths to modules that import
+ * the name.
+ *
+ * For example, if we have a file named bar.js containing the following exports:
+ *
+ *   const o2 = 'bar';
+ *   export { o2 };
+ *
+ * And a file named foo.js containing the following import:
+ *
+ *   import { o2 } from './bar.js';
+ *
+ * Then we will have a structure that looks like:
+ *
+ *   Map { 'bar.js' => Map { 'o2' => { whereUsed: Set { 'foo.js' } } } }
+ *
+ * @type {Map<string, Map<string, object>>}
+ */
 const exportList = new Map()
+
 const ignoredFiles = new Set()
 const filesOutsideSrc = new Set()
 
@@ -453,9 +499,12 @@ module.exports = {
         }
       }
 
-      const exportStatement = exports.get(exportedValue)
+      // exportsList will always map any imported value of 'default' to 'ImportDefaultSpecifier'
+      const exportsKey = exportedValue === DEFAULT ? IMPORT_DEFAULT_SPECIFIER : exportedValue
 
-      const value = exportedValue === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportedValue
+      const exportStatement = exports.get(exportsKey)
+
+      const value = exportsKey === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportsKey
 
       if (typeof exportStatement !== 'undefined'){
         if (exportStatement.whereUsed.size < 1) {

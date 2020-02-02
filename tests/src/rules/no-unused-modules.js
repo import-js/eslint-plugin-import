@@ -110,7 +110,8 @@ ruleTester.run('no-unused-modules', rule, {
            import * as l from './file-l'
            export * from './file-n'
            export { default, o0, o3 } from './file-o'
-           export { p } from './file-p'`,
+           export { p } from './file-p'
+           import s from './file-s'`,
            filename: testFilePath('./no-unused-modules/file-0.js'),
            errors: [
              error(`exported declaration 'default' not used within other modules`),
@@ -165,7 +166,11 @@ ruleTester.run('no-unused-modules', rule, {
 
 // // test for export from
 ruleTester.run('no-unused-modules', rule, {
-  valid: [],
+  valid: [
+    test({ options: unusedExportsOptions,
+           code: `export { default } from './file-o'`,
+           filename: testFilePath('./no-unused-modules/file-s.js')}),
+  ],
   invalid: [
     test({ options: unusedExportsOptions,
            code: `export { k } from '${testFilePath('./no-unused-modules/file-k.js')}'`,
