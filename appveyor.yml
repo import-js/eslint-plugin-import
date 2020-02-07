@@ -8,7 +8,7 @@ environment:
   # - nodejs_version: "4"
 
 matrix:
-  fast_finish: true
+  fast_finish: false
 
   # allow_failures:
   #   - nodejs_version: "4" # for eslint 5
@@ -26,6 +26,9 @@ install:
   - ps: >-
       if ($env:nodejs_version -eq "4") {
         npm install -g npm@3;
+      }
+      if ($env:nodejs_version -in @("8", "10", "12")) {
+        npm install -g npm@6.10.3;
       }
   - npm install
 
