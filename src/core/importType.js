@@ -29,15 +29,16 @@ function isExternalPath(path, name, settings) {
 }
 
 function isSubpath(subpath, path) {
-  const normSubpath = subpath.replace(/[/]$/, '')
+  const normPath = path.replace(/\\/g, '/')
+  const normSubpath = subpath.replace(/\\/g, '/').replace(/\/$/, '')
   if (normSubpath.length === 0) {
     return false
   }
-  const left = path.indexOf(normSubpath)
+  const left = normPath.indexOf(normSubpath)
   const right = left + normSubpath.length
   return left !== -1 &&
-        (left === 0 || normSubpath[0] !== '/' && path[left - 1] === '/') &&
-        (right >= path.length || path[right] === '/')
+        (left === 0 || normSubpath[0] !== '/' && normPath[left - 1] === '/') &&
+        (right >= normPath.length || normPath[right] === '/')
 }
 
 const externalModuleRegExp = /^\w/

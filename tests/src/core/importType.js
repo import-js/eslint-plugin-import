@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as path from 'path'
 
-import importType from 'core/importType'
+import importType, {isExternalModule} from 'core/importType'
 
 import { testContext, testFilePath } from '../utils'
 
@@ -180,6 +180,12 @@ describe('importType(name)', function () {
   })
 
   it('returns "external" for a scoped module from a symlinked directory which partial path is contained in "external-module-folders" (webpack resolver)', function() {
+    const originalFoldersContext = testContext({
+      'import/resolver': 'webpack',
+      'import/external-module-folders': [],
+    })
+    expect(importType('@test-scope/some-module', originalFoldersContext)).to.equal('internal')
+
     const foldersContext = testContext({
       'import/resolver': 'webpack',
       'import/external-module-folders': ['files/symlinked-module'],
@@ -223,5 +229,12 @@ describe('importType(name)', function () {
       'import/external-module-folders': [testFilePath('symlinked-module')],
     })
     expect(importType('@test-scope/some-module', foldersContext)).to.equal('external')
+  })
+
+  it('`isExternalModule` works with windows directory separator', function() {
+    expect(isExternalModule('foo', {}, 'E:\\path\\to\\node_modules\\foo')).to.equal(true)
+    expect(isExternalModule('foo', {
+      'import/external-module-folders': ['E:\\path\\to\\node_modules'],
+    }, 'E:\\path\\to\\node_modules\\foo')).to.equal(true)
   })
 })
