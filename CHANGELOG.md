@@ -12,7 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-absolute-path`]: fix a crash with invalid import syntax ([#1616], thanks [@ljharb])
 - [`import/external-module-folders` setting] now correctly works with directories containing modules symlinked from `node_modules` ([#1605], thanks [@skozin])
 - [`extensions`]: for invalid code where `name` does not exist, do not crash ([#1613], thanks [@ljharb])
-- [`extentions`]: Fix scope regex ([#1611], thanks [@yordis])
+- [`extensions`]: Fix scope regex ([#1611], thanks [@yordis])
 - [`no-duplicates`]: allow duplicate imports if one is a namespace and the other not ([#1612], thanks [@sveyret])
 - Add some missing rule meta schemas and types ([#1620], thanks [@bmish])
 - [`named`]: for importing from a module which re-exports named exports from a `node_modules` module ([#1569], [#1447], thanks [@redbugz], [@kentcdodds])
