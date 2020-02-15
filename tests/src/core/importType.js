@@ -20,6 +20,12 @@ describe('importType(name)', function () {
     expect(importType('path', context)).to.equal('builtin')
   })
 
+  it("should return 'builtin' for node.js modules (webpack resolver)", function() {
+    const webpackContext = testContext({ 'import/resolver': 'webpack' })
+    expect(importType('fs', webpackContext)).to.equal('builtin')
+    expect(importType('path', webpackContext)).to.equal('builtin')
+  })
+
   it("should return 'external' for non-builtin modules without a relative path", function() {
     expect(importType('lodash', context)).to.equal('external')
     expect(importType('async', context)).to.equal('external')
