@@ -133,7 +133,7 @@ exports.resolve = function (source, file, settings) {
     return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
     if (source in coreLibs) {
-      return { found: true, path: coreLibs[source] }
+      return { found: true, path: null }
     }
 
     log('Error during module resolution:', err)
