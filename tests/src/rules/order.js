@@ -19,6 +19,7 @@ ruleTester.run('order', rule, {
         var relParent1 = require('../foo');
         var relParent2 = require('../foo/bar');
         var relParent3 = require('../');
+        var relParent4 = require('..');
         var sibling = require('./foo');
         var index = require('./');`,
       }),
@@ -196,7 +197,13 @@ ruleTester.run('order', rule, {
         import { Input } from '-/components/Input';
         import { Button } from '-/components/Button';
 
-        import { add } from './helper';`,
+        import p from '..';
+        import q from '../';
+
+        import { add } from './helper';
+
+        import i from '.';
+        import j from './';`,
       options: [
         {
           'newlines-between': 'always',
@@ -2000,6 +2007,25 @@ ruleTester.run('order', rule, {
       errors: [{
         ruleID: 'order',
         message: '`foo` import should occur before import of `Bar`',
+      }],
+    }),
+    // Alphabetize with parent paths
+    test({
+      code: `
+        import a from '../a';
+        import p from '..';
+      `,
+      output: `
+        import p from '..';
+        import a from '../a';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: {order: 'asc'},
+      }],
+      errors: [{
+        ruleID: 'order',
+        message: '`..` import should occur before import of `../a`',
       }],
     }),
     // Alphabetize with require

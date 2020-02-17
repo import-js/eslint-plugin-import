@@ -68,7 +68,7 @@ function isInternalModule(name, settings, path) {
 }
 
 function isRelativeToParent(name) {
-  return /^\.\.[\\/]/.test(name)
+  return/^\.\.$|^\.\.[\\/]/.test(name)
 }
 
 const indexFiles = ['.', './', './index', './index.js']
