@@ -40,10 +40,21 @@ describe("default options", function () {
       .equal(path.resolve(__dirname, './native.mjs'))
   })
 
+  it("finds .node modules, with lowest precedence", function () {
+    expect(node.resolve('./native.node', './test/file.js'))
+      .to.have.property('path')
+      .equal(path.resolve(__dirname, './native.node'))
+  })
+
+  it("finds .node modules", function () {
+    expect(node.resolve('./dot-node', './test/file.js'))
+      .to.have.property('path')
+      .equal(path.resolve(__dirname, './dot-node.node'))
+  })
+
   it("still finds .js if explicit", function () {
     expect(node.resolve('./native.js', './test/file.js'))
       .to.have.property('path')
       .equal(path.resolve(__dirname, './native.js'))
   })
-
 })

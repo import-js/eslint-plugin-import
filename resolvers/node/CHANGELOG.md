@@ -4,10 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+### Added
+- add `.node` extension ([#1663])
 
 ## v0.3.2 - 2018-01-05
 ### Added
-- `.mjs` extension detected by default to support `experimental-modules` (#939)
+- `.mjs` extension detected by default to support `experimental-modules` ([#939])
 
 ### Deps
 - update `debug`, `resolve`
@@ -42,6 +44,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 [#438]: https://github.com/benmosher/eslint-plugin-import/pull/438
 
+[#1663]: https://github.com/benmosher/eslint-plugin-import/issues/1663
 [#939]: https://github.com/benmosher/eslint-plugin-import/issues/939
 [#531]: https://github.com/benmosher/eslint-plugin-import/issues/531
 [#437]: https://github.com/benmosher/eslint-plugin-import/issues/437
