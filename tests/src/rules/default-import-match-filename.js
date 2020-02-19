@@ -52,6 +52,9 @@ ruleTester.run('default-import-match-filename', rule, {
     'import cat from "./cat/index.css"',
     'import cat from "../cat/index.js"',
     'import merge from "lodash/merge"',
+    'import cat from "/cat.js"', // absolute path
+    'import cat from "C:\\cat.js"',
+    'import cat from "C:/cat.js"',
     'import loudCat from "./loud-cat"',
     'import LOUDCAT from "./loud-cat"',
     'import loud_cat from "./loud-cat"',
