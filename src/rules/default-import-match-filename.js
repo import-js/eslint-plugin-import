@@ -36,12 +36,13 @@ function isCompatible(localName, filename) {
 }
 
 /**
- * Match 'foo' but not 'foo/bar.js' and './foo'
+ * Match 'foo' and '@foo/bar' but not 'foo/bar.js', './foo', or '@foo/bar/a.js'
  * @param {string} path
  * @returns {boolean}
  */
 function isBarePackageImport(path) {
-  return path !== '.' && path !== '..' && !path.includes('/')
+  return (path !== '.' && path !== '..' && !path.includes('/') && !path.startsWith('@')) ||
+    /@[^/]+\/[^/]+$/.test(path)
 }
 
 /**
