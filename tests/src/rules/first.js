@@ -11,6 +11,9 @@ ruleTester.run('first', rule, {
                   export { x, y }" })
   , test({ code: "import { x } from 'foo'; import { y } from './bar'" })
   , test({ code: "import { x } from './foo'; import { y } from 'bar'" })
+  , test({ code: "import { x } from './foo'; import { y } from 'bar'"
+         , options: ['disable-absolute-first'],
+         })
   , test({ code: "'use directive';\
                   import { x } from 'foo';" })
   ,

@@ -10,7 +10,7 @@ module.exports = {
     schema: [
       {
         type: 'string',
-        enum: ['absolute-first'],
+        enum: ['absolute-first', 'disable-absolute-first'],
       },
     ],
   },

@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: recognize ".." as a "parent" path ([#1658], thanks [@golopot])
 - [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 - [`no-unused-modules`]: Handle `export { default } from` syntax ([#1631], thanks [@richardxia])
+- [`first`]: Add a way to disable `absolute-first` explicitly ([#1664], thanks [@TheCrueltySage])
 
 ## [2.20.1] - 2020-02-01
 ### Fixed
@@ -658,6 +659,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
+[#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
 [#1651]: https://github.com/benmosher/eslint-plugin-import/pull/1651
 [#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
@@ -1116,3 +1118,4 @@ for info on changes for earlier releases.
 [@wschurman]: https://github.com/wschurman
 [@fisker]: https://github.com/fisker
 [@richardxia]: https://github.com/richardxia
+[@TheCrueltySage]: https://github.com/TheCrueltySage
