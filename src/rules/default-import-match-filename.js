@@ -1,6 +1,8 @@
 import docsUrl from '../docsUrl'
 import isStaticRequire from '../core/staticRequire'
 import Path from 'path'
+import minimatch from 'minimatch'
+import resolve from 'eslint-module-utils/resolve'
 
 /**
  * @param {string} filename
@@ -102,12 +104,15 @@ function getFilename(path, context) {
 }
 
 /**
+ * @param {object} context
  * @param {string[]} ignorePaths
  * @param {string} path
  * @returns {boolean}
  */
-function isIgnored(ignorePaths, path) {
-  return ignorePaths.some(pattern => path.includes(pattern))
+function isIgnored(context, ignorePaths, path) {
+  const resolvedPath = resolve(path, context)
+  return resolvedPath != null &&
+    ignorePaths.some(pattern => minimatch(resolvedPath, pattern))
 }
 
 module.exports = {
@@ -158,7 +163,7 @@ module.exports = {
 
         if (
           !isCompatible(defaultImportName, filename) &&
-          !isIgnored(ignorePaths, node.source.value)
+          !isIgnored(context, ignorePaths, node.source.value)
         ) {
           context.report({
             node: defaultImportSpecifier,
@@ -186,7 +191,7 @@ module.exports = {
 
         if (
           !isCompatible(localName, filename) &&
-          !isIgnored(ignorePaths, node.arguments[0].value)
+          !isIgnored(context, ignorePaths, node.arguments[0].value)
         ) {
           context.report({
             node: node.parent.id,

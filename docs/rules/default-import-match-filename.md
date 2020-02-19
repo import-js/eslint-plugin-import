@@ -8,7 +8,7 @@ Enforces default import name to match filename. Name matching is case-insensitiv
 
 #### `ignorePaths`
 
-Set this option to `['some-dir/', 'bb']` to ignore import statements whose path contains either `some-dir/` or `bb` as a substring.
+This option accepts an array of glob patterns. The glob patterns are to be matched against the resolved **abosolute** path of import statements. As an example, with the option `{ignorePaths: ['**/foo.js']}`, the statement `import whatever from './foo.js'` is ignored, since `./foo.js` resolves to, say, `/home/me/thing/foo.js`, which matches the glob pattern `**/foo.js`.
 
 ### Fail
 
@@ -39,6 +39,6 @@ import FoObAr from './foo-bar';
 import catModel from './cat.model.js';
 const foo = require('./foo');
 
-// Option `{ ignorePaths: ['format/'] }`
-import QWERTY from '../format/date';
+// Option `{ ignorePaths: ['**/models/*.js'] }`
+import whatever from '../models/foo.js';
 ```

@@ -73,11 +73,19 @@ ruleTester.run('default-import-match-filename', rule, {
     'const doge = require("cat")',
     'const {f, g} = require("./cat")',
     {
-      code: `
-        import QWER from './ignore-dir/a';
-        import WRYYY from '../models/mmm';
-      `,
-      options: [{ignorePaths: ['ignore-dir/', 'mmm']}],
+      code: `import whatever from './ignored/foo.js'`,
+      filename: testFilePath('default-import-match-filename/main.js'),
+      options: [{ignorePaths: ['**/ignored/*.js']}],
+    },
+    {
+      code: `import whatever from '../ignored/foo.js'`,
+      filename: testFilePath('default-import-match-filename/some-directory/a.js'),
+      options: [{ignorePaths: ['**/ignored/*.js']}],
+    },
+    {
+      code: `import whatever from './ignored/foo.js'`,
+      filename: testFilePath('default-import-match-filename/main.js'),
+      options: [{ignorePaths: ['**/foo.js']}],
     },
     {
       code: `
@@ -222,10 +230,11 @@ ruleTester.run('default-import-match-filename', rule, {
       testFilePath('default-import-match-filename/some-directory/foo/a.js'),
     ),
     {
-      code: `import QWERTY from '../bbb/ccc';`,
-      output: `import QWERTY from '../bbb/ccc';`,
-      options: [{ignorePaths: ['aaa']}],
-      errors: [{message: getMessage('ccc')}],
+      code: `import wrongName from './some-directory/a.js';`,
+      output: `import wrongName from './some-directory/a.js';`,
+      filename: testFilePath('default-import-match-filename/main.js'),
+      options: [{ignorePaths: ['**/b.js', 'a.js', './a.js']}],
+      errors: [{message: getMessage('a.js')}],
     },
     {
       code: 'import JordanHarband from "./NotJordanHarband.js";',
