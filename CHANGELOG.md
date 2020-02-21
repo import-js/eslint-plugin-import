@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
 - [`order`]: recognize ".." as a "parent" path ([#1658], thanks [@golopot])
+- [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 
 ## [2.20.1] - 2020-02-01
 ### Fixed
@@ -655,6 +656,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
 [#1651]: https://github.com/benmosher/eslint-plugin-import/pull/1651
 [#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635

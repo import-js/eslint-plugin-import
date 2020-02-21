@@ -136,8 +136,13 @@ function getFix(first, rest, sourceCode) {
         fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
       }
     } else if (!shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
-      // `import './foo'` → `import {...} from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`))
+      if (first.specifiers.length === 0) {
+        // `import './foo'` → `import {...} from './foo'`
+        fixes.push(fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`))
+      } else {
+        // `import def from './foo'` → `import def, {...} from './foo'`
+        fixes.push(fixer.insertTextAfter(first.specifiers[0], `, {${specifiersText}}`))
+      }
     } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
       // `import {...} './foo'` → `import {..., ...} from './foo'`
       fixes.push(fixer.insertTextBefore(closeBrace, specifiersText))
