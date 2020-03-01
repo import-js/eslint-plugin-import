@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Added
+[New] Print more helpful info if parsing fails ([#1671], thanks [@kaiyoma])
+
 ## v2.5.2 - 2020-01-12
 
 ### Fixed
@@ -70,6 +73,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#1671]: https://github.com/benmosher/eslint-plugin-import/pull/1671
 [#1606]: https://github.com/benmosher/eslint-plugin-import/pull/1606
 [#1602]: https://github.com/benmosher/eslint-plugin-import/pull/1602
 [#1591]: https://github.com/benmosher/eslint-plugin-import/pull/1591
@@ -94,3 +98,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@arcanis]: https://github.com/arcanis
 [@sompylasar]: https://github.com/sompylasar
 [@iamnapo]: https://github.com/iamnapo
+[@kaiyoma]: https://github.com/kaiyoma
