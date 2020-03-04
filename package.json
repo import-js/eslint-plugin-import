@@ -55,7 +55,7 @@
   "devDependencies": {
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
-    "@typescript-eslint/parser": "1.10.3-alpha.13",
+    "@typescript-eslint/parser": "^2.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
@@ -84,7 +84,7 @@
     "rimraf": "^2.7.1",
     "semver": "^6.3.0",
     "sinon": "^2.4.1",
-    "typescript": "~3.2.2",
+    "typescript": "~3.8.3",
     "typescript-eslint-parser": "^22.0.0"
   },
   "peerDependencies": {
