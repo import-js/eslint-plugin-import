@@ -17,7 +17,30 @@ module.exports = {
       url: docsUrl('no-namespace'),
     },
     fixable: 'code',
-    schema: [],
+    schema: [
+      {
+        oneOf: [
+          {
+            type: "object",
+            properties: {
+              allow: {
+                type: "array"
+              }
+            },
+            additionalProperties: false
+          },
+          {
+            type: "object",
+            properties: {
+              forbid: {
+                type: "array"
+              }
+            },
+            additionalProperties: false
+          }
+        ]
+      }
+    ]
   },
 
   create: function (context) {
@@ -30,6 +53,16 @@ module.exports = {
         const namespaceReferences = namespaceVariable.references
         const namespaceIdentifiers = namespaceReferences.map(reference => reference.identifier)
         const canFix = namespaceIdentifiers.length > 0 && !usesNamespaceAsObject(namespaceIdentifiers)
+
+        const config = context.options[0] || {
+          allow: [],
+        };
+
+        const [type, list] = Array.isArray(config.forbid)
+          ? ['forbid', config.forbid]
+          : ['allow', config.allow];
+
+        if (!shouldReport(type, list, namespaceVariable.name)) { return; }
 
         context.report({
           node,
@@ -156,4 +189,18 @@ function generateLocalNames(names, nameConflicts, namespaceName) {
     localNames[name] = localName
   })
   return localNames
+}
+
+/**
+ *
+ * @param {'forbid' | 'allow'} type
+ * @param {string[]} list
+ * @param {string} name
+ */
+function shouldReport(type, list, name) {
+  if (list.includes(name)) {
+    return type === 'forbid';
+  }
+
+  return type === 'allow';
 }

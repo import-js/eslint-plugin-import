@@ -78,6 +78,8 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
     { code: 'import { a, b } from \'./foo\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'./bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'import * as bar from \'bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, options: [{ allow: ['bar']}] },
+    { code: 'import bar from \'bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, options: [{ forbid: ['bar']}] },
   ],
 
   invalid: [
@@ -102,6 +104,34 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
     test({
       code: 'import * as foo from \'./foo\';',
       output: 'import * as foo from \'./foo\';',
+      errors: [ {
+        line: 1,
+        column: 8,
+        message: ERROR_MESSAGE,
+      } ],
+    }),
+    test({
+      code: 'import * as foo from \'./foo\';',
+      output: 'import * as foo from \'./foo\';',
+      options: [
+        {
+          forbid: ['foo']
+        }
+      ],
+      errors: [ {
+        line: 1,
+        column: 8,
+        message: ERROR_MESSAGE,
+      } ],
+    }),
+    test({
+      code: 'import * as foo from \'./foo\';',
+      output: 'import * as foo from \'./foo\';',
+      options: [
+        {
+          allow: ['bar']
+        }
+      ],
       errors: [ {
         line: 1,
         column: 8,
