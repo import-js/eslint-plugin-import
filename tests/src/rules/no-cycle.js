@@ -41,6 +41,22 @@ ruleTester.run('no-cycle', rule, {
       options: [{ maxDepth: 1 }],
     }),
     test({
+      code: 'import { foo } from "cycles/external/depth-one"',
+      options: [{ ignoreExternal: true }],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['external'],
+      },
+    }),
+    test({
+      code: 'import { foo } from "./external-depth-two"',
+      options: [{ ignoreExternal: true }],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['external'],
+      },
+    }),
+    test({
       code: 'import("./depth-two").then(function({ foo }){})',
       options: [{ maxDepth: 1 }],
       parser: require.resolve('babel-eslint'),
@@ -62,6 +78,22 @@ ruleTester.run('no-cycle', rule, {
     test({
       code: 'import { foo } from "./depth-one"',
       errors: [error(`Dependency cycle detected.`)],
+    }),
+    test({
+      code: 'import { foo } from "cycles/external/depth-one"',
+      errors: [error(`Dependency cycle detected.`)],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['external'],
+      },
+    }),
+    test({
+      code: 'import { foo } from "./external-depth-two"',
+      errors: [error(`Dependency cycle via cycles/external/depth-one:1`)],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['external'],
+      },
     }),
     test({
       code: 'import { foo } from "./depth-one"',

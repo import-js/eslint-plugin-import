@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
+- [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
 
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
@@ -679,6 +680,7 @@ for info on changes for earlier releases.
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
+[#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664

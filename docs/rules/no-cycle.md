@@ -55,6 +55,26 @@ import { b } from './dep-b.js' // not reported as the cycle is at depth 2
 This is not necessarily recommended, but available as a cost/benefit tradeoff mechanism
 for reducing total project lint time, if needed.
 
+#### `ignoreExternal`
+
+An `ignoreExternal` option is available to prevent the cycle detection to expand to external modules:
+
+```js
+/*eslint import/no-cycle: [2, { ignoreExternal: true }]*/
+
+// dep-a.js
+import 'module-b/dep-b.js'
+
+export function a() { /* ... */ }
+```
+
+```js
+// node_modules/module-b/dep-b.js
+import { a } from './dep-a.js' // not reported as this module is external
+```
+
+Its value is `false` by default, but can be set to `true` for reducing total project lint time, if needed.
+
 ## When Not To Use It
 
 This rule is comparatively computationally expensive. If you are pressed for lint
@@ -65,5 +85,8 @@ this rule enabled.
 
 - [Original inspiring issue](https://github.com/benmosher/eslint-plugin-import/issues/941)
 - Rule to detect that module imports itself: [`no-self-import`]
+- [`import/external-module-folders`] setting
 
 [`no-self-import`]: ./no-self-import.md
+
+[`import/external-module-folders`]: ../../README.md#importexternal-module-folders
