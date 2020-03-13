@@ -8,7 +8,7 @@ Enforces default import name to match filename. Name matching is case-insensitiv
 
 #### `ignorePaths`
 
-This option accepts an array of glob patterns. The glob patterns are to be matched against the resolved **abosolute** path of import statements. As an example, with the option `{ignorePaths: ['**/foo.js']}`, the statement `import whatever from './foo.js'` is ignored, since `./foo.js` resolves to, say, `/home/me/thing/foo.js`, which matches the glob pattern `**/foo.js`.
+This option accepts an array of glob patterns. An import statement will be ignored if the import source path matches some of the glob patterns, where the glob patterns are relative to the current working directory where the linter is launched. For example, with the option `{ignorePaths: ['**/foo.js']}`, the statement `import whatever from './foo.js'` will be ignored.
 
 ### Fail
 

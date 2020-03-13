@@ -113,7 +113,9 @@ function getFilename(path, context) {
 function isIgnored(context, ignorePaths, path) {
   const resolvedPath = resolve(path, context)
   return resolvedPath != null &&
-    ignorePaths.some(pattern => minimatch(resolvedPath, pattern))
+    ignorePaths.some(pattern =>
+       minimatch(Path.relative(process.cwd(), resolvedPath), pattern)
+    )
 }
 
 module.exports = {
