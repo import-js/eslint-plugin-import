@@ -1,0 +1,3 @@
+--reporter=dot
+--recursive
+-t 5s

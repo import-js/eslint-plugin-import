@@ -3,7 +3,15 @@
   "sourceMaps": "inline",
   "env": {
     "test": {
-      "plugins": [ "istanbul" ]
+      "plugins": [
+        "istanbul",
+        [ "module-resolver", { "root": [ "./src/" ] } ]
+      ]
+    },
+    "testCompiled": {
+      "plugins": [
+        [ "module-resolver", { "root": [ "./lib/" ] } ]
+      ]
     }
   }
 }

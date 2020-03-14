@@ -51,9 +51,16 @@ describe('package', function () {
       let preamble = 'import/'
 
       for (let rule in module.configs[configFile].rules) {
-        expect(() => require('rules/'+rule.slice(preamble.length)))
+        expect(() => require(getRulePath(rule.slice(preamble.length))))
           .not.to.throw(Error)
       }
+    }
+
+    function getRulePath(ruleName) {
+      // 'require' does not work with dynamic paths because of the compilation step by babel
+      // (which resolves paths according to the root folder configuration)
+      // the usage of require.resolve on a static path gets around this
+      return path.resolve(require.resolve('rules/no-unresolved'), '..', ruleName)
     }
   })
 
