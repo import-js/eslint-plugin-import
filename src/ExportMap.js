@@ -13,6 +13,12 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore'
 import { hashObject } from 'eslint-module-utils/hash'
 import * as unambiguous from 'eslint-module-utils/unambiguous'
 
+import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader'
+
+import includes from 'array-includes'
+
+import {parseConfigFileTextToJson} from 'typescript'
+
 const log = debug('eslint-plugin-import:ExportMap')
 
 const exportCache = new Map()
@@ -445,8 +451,23 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast)
 
-  ast.body.forEach(function (n) {
+  function isEsModuleInterop() {
+    const tsConfigInfo = tsConfigLoader({
+      cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+      getEnv: (key) => process.env[key],
+    })
+    try {
+      if (tsConfigInfo.tsConfigPath !== undefined) {
+        const jsonText = fs.readFileSync(tsConfigInfo.tsConfigPath).toString()
+        const tsConfig = parseConfigFileTextToJson(tsConfigInfo.tsConfigPath, jsonText).config
+        return tsConfig.compilerOptions.esModuleInterop
+      }
+    } catch (e) {
+      return false
+    }
+  }
 
+  ast.body.forEach(function (n) {
     if (n.type === 'ExportDefaultDeclaration') {
       const exportMeta = captureDoc(source, docStyleParsers, n)
       if (n.declaration.type === 'Identifier') {
@@ -528,9 +549,14 @@ ExportMap.parse = function (path, content, context) {
       })
     }
 
+    const isEsModuleInteropTrue = isEsModuleInterop()
+
+    const exports = ['TSExportAssignment']
+    isEsModuleInteropTrue && exports.push('TSNamespaceExportDeclaration')
+
     // This doesn't declare anything, but changes what's being exported.
-    if (n.type === 'TSExportAssignment') {
-      const exportedName = n.expression.name
+    if (includes(exports, n.type)) {
+      const exportedName = n.expression && n.expression.name || n.id.name
       const declTypes = [
         'VariableDeclaration',
         'ClassDeclaration',
@@ -541,17 +567,16 @@ ExportMap.parse = function (path, content, context) {
         'TSAbstractClassDeclaration',
         'TSModuleDeclaration',
       ]
-      const exportedDecls = ast.body.filter(({ type, id, declarations }) => 
-        declTypes.includes(type) && 
-        (
-          (id && id.name === exportedName) ||
-          (declarations && declarations.find(d => d.id.name === exportedName))
-        )
-      )
+      const exportedDecls = ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+        (id && id.name === exportedName) || (declarations && declarations.find((d) => d.id.name === exportedName))
+      ))
       if (exportedDecls.length === 0) {
         // Export is not referencing any local declaration, must be re-exporting
         m.namespace.set('default', captureDoc(source, docStyleParsers, n))
         return
+      }
+      if (isEsModuleInteropTrue) {
+        m.namespace.set('default', {})
       }
       exportedDecls.forEach((decl) => {
         if (decl.type === 'TSModuleDeclaration') {
