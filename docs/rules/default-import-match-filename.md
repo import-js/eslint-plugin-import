@@ -41,4 +41,8 @@ const foo = require('./foo');
 
 // Option `{ ignorePaths: ['**/models/*.js'] }`
 import whatever from '../models/foo.js';
+// Option `{ ignorePaths: ['src/foo/bar.js'] }`
+// Linted file is "${PROJECT_ROOT}/src/a.js"
+// Current working directory is "${PROJECT_ROOT}"  
+import whatever from './foo/bar.js'
 ```
