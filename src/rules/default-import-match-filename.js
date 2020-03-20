@@ -106,14 +106,14 @@ function getFilename(path, context) {
 
 /**
  * @param {object} context
- * @param {string[]} ignorePaths
+ * @param {Set<string>} ignorePaths
  * @param {string} path
  * @returns {boolean}
  */
 function isIgnored(context, ignorePaths, path) {
   const resolvedPath = resolve(path, context)
   return resolvedPath != null &&
-    ignorePaths.some(pattern =>
+    [...ignorePaths].some(pattern =>
        minimatch(Path.relative(process.cwd(), resolvedPath), pattern)
     )
 }
@@ -141,10 +141,11 @@ module.exports = {
   },
 
   create(context) {
-    const ignorePaths = context.options[0]
+    const ignorePaths = new Set(
+      context.options[0]
       ? context.options[0].ignorePaths || []
       : []
-
+    )
     return {
       ImportDeclaration(node) {
         const defaultImportSpecifier = node.specifiers.find(
