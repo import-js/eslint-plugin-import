@@ -92,6 +92,12 @@ ruleTester.run('default-import-match-filename', rule, {
       options: [{ignorePaths: ['**/foo.js']}],
     },
     {
+      code: `import whatever from './some-directory/a.js'`,
+      filename: testFilePath('default-import-match-filename/main.js'),
+      // This test should be ran with project root as process.cwd(). 
+      options: [{ignorePaths: ['tests/files/default-import-match-filename/some-directory/a.js']}],
+    },
+    {
       code: `
         import someDirectory from ".";
         import someDirectory_ from "./";
