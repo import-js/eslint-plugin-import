@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - TypeScript: Add nested namespace handling ([#1763], thanks [@julien1619])
 - [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
 - [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
+- [`no-internal-modules`]: also check `export from` syntax ([#1691], thanks [@adjerbetian])
 
 ### Changed
 - [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
@@ -702,6 +703,7 @@ for info on changes for earlier releases.
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
@@ -1186,3 +1188,4 @@ for info on changes for earlier releases.
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@barbogast]: https://github.com/barbogast
 [@adamborowski]: https://github.com/adamborowski
+[@adjerbetian]: https://github.com/adjerbetian

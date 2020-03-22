@@ -91,6 +91,12 @@ module.exports = {
       ImportDeclaration(node) {
         checkImportForReaching(node.source.value, node.source)
       },
+      ExportAllDeclaration(node) {
+        checkImportForReaching(node.source.value, node.source)
+      },
+      ExportNamedDeclaration(node) {
+        checkImportForReaching(node.source.value, node.source)
+      },
       CallExpression(node) {
         if (isStaticRequire(node)) {
           const [ firstArgument ] = node.arguments
