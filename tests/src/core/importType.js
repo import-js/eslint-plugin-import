@@ -128,7 +128,7 @@ describe('importType(name)', function () {
 
   it("should return 'internal' for module from 'node_modules' if 'node_modules' missed in 'external-module-folders'", function() {
     const foldersContext = testContext({ 'import/external-module-folders': [] });
-    expect(importType('resolve', foldersContext)).to.equal('internal');
+    expect(importType('chai', foldersContext)).to.equal('internal');
   });
 
   it("should return 'internal' for module from 'node_modules' if its name matched 'internal-regex'", function() {
@@ -188,7 +188,7 @@ describe('importType(name)', function () {
 
     const foldersContext = testContext({
       'import/resolver': 'webpack',
-      'import/external-module-folders': ['files/symlinked-module'],
+      'import/external-module-folders': ['symlinked-module'],
     });
     expect(importType('@test-scope/some-module', foldersContext)).to.equal('external');
   });
@@ -202,7 +202,7 @@ describe('importType(name)', function () {
 
     const foldersContext_2 = testContext({
       'import/resolver': 'webpack',
-      'import/external-module-folders': ['les/symlinked-module'],
+      'import/external-module-folders': ['ymlinked-module'],
     });
     expect(importType('@test-scope/some-module', foldersContext_2)).to.equal('internal');
   });
@@ -210,7 +210,7 @@ describe('importType(name)', function () {
   it('returns "external" for a scoped module from a symlinked directory which partial path ending w/ slash is contained in "external-module-folders" (webpack resolver)', function() {
     const foldersContext = testContext({
       'import/resolver': 'webpack',
-      'import/external-module-folders': ['files/symlinked-module/'],
+      'import/external-module-folders': ['symlinked-module/'],
     });
     expect(importType('@test-scope/some-module', foldersContext)).to.equal('external');
   });
@@ -218,7 +218,7 @@ describe('importType(name)', function () {
   it('returns "internal" for a scoped module from a symlinked directory when "external-module-folders" contains an absolute path resembling directory‘s relative path (webpack resolver)', function() {
     const foldersContext = testContext({
       'import/resolver': 'webpack',
-      'import/external-module-folders': ['/files/symlinked-module'],
+      'import/external-module-folders': ['/symlinked-module'],
     });
     expect(importType('@test-scope/some-module', foldersContext)).to.equal('internal');
   });
@@ -232,10 +232,11 @@ describe('importType(name)', function () {
   });
 
   it('`isExternalModule` works with windows directory separator', function() {
-    expect(isExternalModule('foo', {}, 'E:\\path\\to\\node_modules\\foo')).to.equal(true);
+    const context = testContext();
+    expect(isExternalModule('foo', {}, 'E:\\path\\to\\node_modules\\foo', context)).to.equal(true);
     expect(isExternalModule('foo', {
       'import/external-module-folders': ['E:\\path\\to\\node_modules'],
-    }, 'E:\\path\\to\\node_modules\\foo')).to.equal(true);
+    }, 'E:\\path\\to\\node_modules\\foo', context)).to.equal(true);
   });
 
   it('correctly identifies scoped modules with `isScopedModule`', () => {

@@ -45,7 +45,8 @@ module.exports = {
     const ignoreModule = (name) => options.ignoreExternal && isExternalModule(
       name,
       context.settings,
-      resolve(name, context)
+      resolve(name, context),
+      context
     );
 
     function checkSourceValue(sourceNode, importer) {

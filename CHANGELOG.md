@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 - [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
 - [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
+- [`extensions`]/[`no-cycle`]/[`no-extraneous-dependencies`]: Correct module real path resolution ([#1696], thanks [@paztis])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])

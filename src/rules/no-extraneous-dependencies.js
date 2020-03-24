@@ -5,6 +5,7 @@ import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
+import { getFilePackageName } from '../core/packagePath';
 import docsUrl from '../docsUrl';
 
 const depFieldCache = new Map();
@@ -116,6 +117,15 @@ function optDepErrorMessage(packageName) {
     `not optionalDependencies.`;
 }
 
+function getModuleOriginalName(name) {
+  const [first, second] = name.split('/');
+  return first.startsWith('@') ? `${first}/${second}` : first;
+}
+
+function getModuleRealName(resolved) {
+  return getFilePackageName(resolved);
+}
+
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types
   if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type')) {
@@ -129,10 +139,11 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   const resolved = resolve(name, context);
   if (!resolved) { return; }
 
-  const splitName = name.split('/');
-  const packageName = splitName[0][0] === '@'
-    ? splitName.slice(0, 2).join('/')
-    : splitName[0];
+  // get the real name from the resolved package.json
+  // if not aliased imports (alias/react for example) will not be correctly interpreted
+  // fallback on original name in case no package.json found
+  const packageName = getModuleRealName(resolved) || getModuleOriginalName(name);
+
   const isInDeps = deps.dependencies[packageName] !== undefined;
   const isInDevDeps = deps.devDependencies[packageName] !== undefined;
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined;

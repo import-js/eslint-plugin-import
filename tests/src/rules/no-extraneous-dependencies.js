@@ -314,6 +314,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
+    test({
+      code: 'import chai from "alias/chai";',
+      settings: { 'import/resolver': 'webpack' },
+      errors: [{
+        // missing dependency is chai not alias
+        message: "'chai' should be listed in the project's dependencies. Run 'npm i -S chai' to add it",
+      }],
+    }),
   ],
 });
 
