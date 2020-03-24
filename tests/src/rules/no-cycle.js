@@ -45,7 +45,7 @@ ruleTester.run('no-cycle', rule, {
       options: [{ ignoreExternal: true }],
       settings: {
         'import/resolver': 'webpack',
-        'import/external-module-folders': ['external'],
+        'import/external-module-folders': ['cycles/external'],
       },
     }),
     test({
@@ -53,7 +53,7 @@ ruleTester.run('no-cycle', rule, {
       options: [{ ignoreExternal: true }],
       settings: {
         'import/resolver': 'webpack',
-        'import/external-module-folders': ['external'],
+        'import/external-module-folders': ['cycles/external'],
       },
     }),
     test({
@@ -84,7 +84,7 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle detected.`)],
       settings: {
         'import/resolver': 'webpack',
-        'import/external-module-folders': ['external'],
+        'import/external-module-folders': ['cycles/external'],
       },
     }),
     test({
@@ -92,7 +92,7 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle via cycles/external/depth-one:1`)],
       settings: {
         'import/resolver': 'webpack',
-        'import/external-module-folders': ['external'],
+        'import/external-module-folders': ['cycles/external'],
       },
     }),
     test({

@@ -41,8 +41,11 @@ function isSubpath(subpath, path) {
         (right >= normPath.length || normPath[right] === '/');
 }
 
-const externalModuleRegExp = /^\w/;
+const externalModuleRegExp = /^(?:\w|@)/;
 export function isExternalModule(name, settings, path) {
+  if (arguments.length < 3) {
+    throw new TypeError('isExternalModule: name, settings, and path are all required');
+  }
   return externalModuleRegExp.test(name) && isExternalPath(path, name, settings);
 }
 

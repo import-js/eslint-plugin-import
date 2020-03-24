@@ -547,5 +547,34 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
+    test({
+      code: 'import foo from "@/ImNotAScopedModule.js"',
+      options: ['never'],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "@/ImNotAScopedModule.js"',
+          line: 1,
+        },
+      ],
+    }),
+    test({
+      code: `
+        import _ from 'lodash';
+        import m from '@test-scope/some-module/index.js';
+
+        import bar from './bar';
+      `,
+      options: ['never'],
+      settings: {
+        'import/resolver': 'webpack',
+        'import/external-module-folders': ['node_modules', 'symlinked-module'],
+      },
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "@test-scope/some-module/index.js"',
+          line: 3,
+        },
+      ],
+    }),
   ],
 });

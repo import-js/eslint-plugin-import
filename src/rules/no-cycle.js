@@ -3,6 +3,7 @@
  * @author Ben Mosher
  */
 
+import resolve from 'eslint-module-utils/resolve';
 import Exports from '../ExportMap';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
@@ -41,7 +42,11 @@ module.exports = {
 
     const options = context.options[0] || {};
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity;
-    const ignoreModule = (name) => options.ignoreExternal ? isExternalModule(name) : false;
+    const ignoreModule = (name) => options.ignoreExternal && isExternalModule(
+      name,
+      context.settings,
+      resolve(name, context)
+    );
 
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {

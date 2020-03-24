@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
 - [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 - [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
+- [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -788,6 +789,7 @@ for info on changes for earlier releases.
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
 [#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1696]: https://github.com/benmosher/eslint-plugin-import/pull/1696
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1689]: https://github.com/benmosher/eslint-plugin-import/pull/1689
@@ -1310,3 +1312,4 @@ for info on changes for earlier releases.
 [@swernerx]: https://github.com/swernerx
 [@fsmaia]: https://github.com/fsmaia
 [@MatthiasKunnen]: https://github.com/MatthiasKunnen
+[@paztis]: https://github.com/paztis

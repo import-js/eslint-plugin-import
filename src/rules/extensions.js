@@ -157,8 +157,11 @@ module.exports = {
       const extension = path.extname(resolvedPath || importPath).substring(1);
 
       // determine if this is a module
-      const isPackage = isExternalModule(importPath, context.settings)
-        || isScoped(importPath);
+      const isPackage = isExternalModule(
+        importPath,
+        context.settings,
+        resolve(importPath, context)
+      ) || isScoped(importPath);
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
