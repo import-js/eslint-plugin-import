@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.6.0 - 2020-03-28
+
 ### Added
 [New] Print more helpful info if parsing fails ([#1671], thanks [@kaiyoma])
 
