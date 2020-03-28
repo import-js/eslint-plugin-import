@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+## [2.20.2] - 2020-03-28
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
 - [`order`]: recognize ".." as a "parent" path ([#1658], thanks [@golopot])
@@ -919,7 +921,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...HEAD
+[2.20.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.1...v2.20.2
 [2.20.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.0...v2.20.1
 [2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.0...v2.19.1
