@@ -28,6 +28,8 @@ ruleTester.run('no-restricted-paths', rule, {
         zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/other' } ],
       } ],
     }),
+
+    // except (using path)
     test({
       code: 'import a from "./a.js"',
       filename: testFilePath('./restricted-paths/server/one/a.js'),
@@ -50,7 +52,41 @@ ruleTester.run('no-restricted-paths', rule, {
         } ],
       } ],
     }),
+    test({
+      code: 'import a from "../server/two/a.js"',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/client',
+          from: './tests/files/restricted-paths/server',
+          except: ['../server/two'],
+        } ],
+      } ],
+    }),
 
+    // except (using glob pattern)
+    test({
+      code: 'import a from "../server/one/a.js"',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/client',
+          from: './tests/files/restricted-paths/server',
+          except: ['**/one/**'],
+        } ],
+      } ],
+    }),
+    test({
+      code: 'import a from "../server/one/a"',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/client',
+          from: './tests/files/restricted-paths/server',
+          except: ['**/a.js'],
+        } ],
+      } ],
+    }),
 
     // irrelevant function calls
     test({ code: 'notrequire("../server/b.js")' }),
@@ -137,6 +173,22 @@ ruleTester.run('no-restricted-paths', rule, {
           target: './tests/files/restricted-paths/server/one',
           from: './tests/files/restricted-paths/server',
           except: ['./one'],
+        } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../two/a.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import b from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/one',
+          from: './tests/files/restricted-paths/server',
+          except: ['**/server/**'],
         } ],
       } ],
       errors: [ {

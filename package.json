@@ -99,6 +99,7 @@
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-module-utils": "^2.4.1",
     "has": "^1.0.3",
+    "is-glob": "^4.0.1",
     "minimatch": "^3.0.4",
     "object.values": "^1.1.0",
     "read-pkg-up": "^2.0.0",

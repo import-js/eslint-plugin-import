@@ -1,5 +1,7 @@
 import containsPath from 'contains-path'
 import path from 'path'
+import minimatch from 'minimatch'
+import isGlob from 'is-glob'
 
 import resolve from 'eslint-module-utils/resolve'
 import isStaticRequire from '../core/staticRequire'
@@ -75,13 +77,35 @@ module.exports = {
         }
 
         matchingZones.forEach((zone) => {
-          const exceptionPaths = zone.except || []
+          const exceptions = zone.except || []
           const absoluteFrom = path.resolve(basePath, zone.from)
+          let exceptionPaths = []
+          let exceptionGlobs = []
+
+          exceptions.forEach(exception => {
+            if (isGlob(exception)) {
+              exceptionGlobs.push(exception)
+            } else {
+              exceptionPaths.push(exception)
+            }
+          })
+
 
           if (!containsPath(absoluteImportPath, absoluteFrom)) {
             return
           }
 
+          // exception globs
+          const relativeImportFromFrom = absoluteImportPath.replace(absoluteFrom, '')
+          const pathIsExceptedByExceptionGlob = exceptionGlobs.some((exceptionGlob) =>
+            minimatch(relativeImportFromFrom, exceptionGlob)
+          )
+
+          if (pathIsExceptedByExceptionGlob) {
+            return
+          }
+
+          // exception paths
           const absoluteExceptionPaths = exceptionPaths.map((exceptionPath) =>
             path.resolve(absoluteFrom, exceptionPath)
           )
@@ -93,10 +117,10 @@ module.exports = {
             return
           }
 
-          const pathIsExcepted = absoluteExceptionPaths
+          const pathIsExceptedByExceptionPath = absoluteExceptionPaths
             .some((absoluteExceptionPath) => containsPath(absoluteImportPath, absoluteExceptionPath))
 
-          if (pathIsExcepted) {
+          if (pathIsExceptedByExceptionPath) {
             return
           }
 
