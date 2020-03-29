@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1701], thanks [@KevinHerklotz])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -660,6 +662,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1701]: https://github.com/benmosher/eslint-plugin-import/issues/1701
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
@@ -1117,6 +1120,7 @@ for info on changes for earlier releases.
 [@bmish]: https://github.com/bmish
 [@redbugz]: https://github.com/redbugz
 [@kentcdodds]: https://github.com/kentcdodds
+[@KevinHerklotz]: https://github.com/KevinHerklotz
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@wschurman]: https://github.com/wschurman
 [@fisker]: https://github.com/fisker
