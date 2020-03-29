@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1708], thanks [@KevinHerklotz])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -776,6 +778,7 @@ for info on changes for earlier releases.
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
+[#1708]: https://github.com/benmosher/eslint-plugin-import/pull/1708
 [#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
@@ -1253,6 +1256,7 @@ for info on changes for earlier releases.
 [@bmish]: https://github.com/bmish
 [@redbugz]: https://github.com/redbugz
 [@kentcdodds]: https://github.com/kentcdodds
+[@KevinHerklotz]: https://github.com/KevinHerklotz
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@wschurman]: https://github.com/wschurman
 [@fisker]: https://github.com/fisker
