@@ -119,6 +119,12 @@ exports.resolve = function (source, file, settings) {
     }
   }
 
+  if (webpackConfig == null) {
+    webpackConfig = {}
+
+    console.warn('No webpack configuration with a "resolve" field found. Using empty object instead')
+  }
+
   log('Using config: ', webpackConfig)
 
   // externals
