@@ -62,6 +62,7 @@
     "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-module-resolver": "^2.7.1",
     "babel-preset-es2015-argon": "latest",
+    "babel-preset-flow": "^6.23.0",
     "babel-register": "^6.26.0",
     "babylon": "^6.18.0",
     "chai": "^4.2.0",

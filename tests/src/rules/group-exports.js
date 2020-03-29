@@ -1,6 +1,8 @@
 import { test } from '../utils'
 import { RuleTester } from 'eslint'
 import rule from 'rules/group-exports'
+import {resolve} from 'path'
+import {default as babelPresetFlow} from 'babel-preset-flow'
 
 /* eslint-disable max-len */
 const errors = {
@@ -8,7 +10,16 @@ const errors = {
   commonjs: 'Multiple CommonJS exports; consolidate all exports into a single assignment to `module.exports`',
 }
 /* eslint-enable max-len */
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester({
+  parser: resolve(__dirname, '../../../node_modules/babel-eslint'),
+  parserOptions: {
+    babelOptions: {
+      configFile: false,
+      babelrc: false,
+      presets: [babelPresetFlow],
+    },
+  },
+})
 
 ruleTester.run('group-exports', rule, {
   valid: [
@@ -102,6 +113,27 @@ ruleTester.run('group-exports', rule, {
     test({ code: `
       unrelated = 'assignment'
       module.exports.test = true
+    ` }),
+    test({ code: `
+      type firstType = {
+        propType: string
+      };
+      const first = {};
+      export type { firstType };
+      export { first };
+    ` }),
+    test({ code: `
+      type firstType = {
+        propType: string
+      };
+      type secondType = {
+        propType: string
+      };
+      export type { firstType, secondType };
+    ` }),
+    test({ code: `
+      export type { type1A, type1B } from './module-1'
+      export { method1 } from './module-1'
     ` }),
   ],
   invalid: [
@@ -229,6 +261,34 @@ ruleTester.run('group-exports', rule, {
         errors.commonjs,
         errors.commonjs,
         errors.commonjs,
+      ],
+    }),
+    test({
+      code: `
+        type firstType = {
+          propType: string
+        };
+        type secondType = {
+          propType: string
+        };
+        const first = {};
+        export type { firstType };
+        export type { secondType };
+        export { first };
+      `,
+      errors: [
+        errors.named,
+        errors.named,
+      ],
+    }),
+    test({
+      code: `
+        export type { type1 } from './module-1'
+        export type { type2 } from './module-1'
+      `,
+      errors: [
+        errors.named,
+        errors.named,
       ],
     }),
   ],

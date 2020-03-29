@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
+
 ## [2.20.2] - 2020-03-28
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
@@ -660,6 +663,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
@@ -988,6 +992,7 @@ for info on changes for earlier releases.
 [0.12.1]: https://github.com/benmosher/eslint-plugin-import/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
+
 [@mathieudutour]: https://github.com/mathieudutour
 [@gausie]: https://github.com/gausie
 [@singles]: https://github.com/singles
@@ -1122,3 +1127,4 @@ for info on changes for earlier releases.
 [@fisker]: https://github.com/fisker
 [@richardxia]: https://github.com/richardxia
 [@TheCrueltySage]: https://github.com/TheCrueltySage
+[@ernestostifano]: https://github.com/ernestostifano
