@@ -10,6 +10,7 @@ node_js:
 os: linux
 
 env:
+  - ESLINT_VERSION=^7.0.0-0
   - ESLINT_VERSION=6
   - ESLINT_VERSION=5
   - ESLINT_VERSION=4
@@ -65,8 +66,14 @@ matrix:
     env: ESLINT_VERSION=5
   - node_js: '4'
     env: ESLINT_VERSION=6
+  - node_js: '4'
+    env: ESLINT_VERSION=^7.0.0-0
   - node_js: '6'
     env: ESLINT_VERSION=6
+  - node_js: '6'
+    env: ESLINT_VERSION=^7.0.0-0
+  - node_js: '8'
+    env: ESLINT_VERSION=^7.0.0-0
 
   fast_finish: true
   allow_failures:
