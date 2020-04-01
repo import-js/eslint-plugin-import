@@ -7,7 +7,6 @@ const ruleTester = new RuleTester()
     , rule = require('rules/no-unassigned-import')
 
 const error = {
-  ruleId: 'no-unassigned-import',
   message: 'Imported module should be assigned',
 }
 

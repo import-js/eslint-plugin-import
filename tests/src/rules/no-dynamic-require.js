@@ -6,7 +6,6 @@ const ruleTester = new RuleTester()
     , rule = require('rules/no-dynamic-require')
 
 const error = {
-  ruleId: 'no-dynamic-require',
   message: 'Calls to require() should use string literals',
 }
 

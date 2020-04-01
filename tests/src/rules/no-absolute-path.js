@@ -6,7 +6,6 @@ const ruleTester = new RuleTester()
     , rule = require('rules/no-absolute-path')
 
 const error = {
-  ruleId: 'no-absolute-path',
   message: 'Do not import modules using an absolute path',
 }
 

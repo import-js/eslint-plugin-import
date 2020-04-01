@@ -6,7 +6,6 @@ const ruleTester = new RuleTester()
     , rule = require('rules/no-nodejs-modules')
 
 const error = message => ({
-  ruleId: 'no-nodejs-modules',
   message,
 })
 
