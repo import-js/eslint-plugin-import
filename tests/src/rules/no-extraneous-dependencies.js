@@ -308,3 +308,17 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
   ],
 })
+
+ruleTester.run('no-extraneous-dependencies (webpack-specific)', rule, {
+  valid: [
+    test({
+      code: 'import * as pkg from "alias-package"',
+      settings: {
+        'import/resolver': { 'webpack': { 'config': 'webpack.alias.config.js' } },
+      },
+    }),
+  ],
+  invalid: [],
+})
+
+
