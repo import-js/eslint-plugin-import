@@ -1,6 +1,8 @@
 import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/order')
@@ -886,18 +888,25 @@ ruleTester.run('order', rule, {
       }],
     }),
     // Multiple errors
-    test({
-      code: `
-        var sibling = require('./sibling');
-        var async = require('async');
-        var fs = require('fs');
-      `,
-      errors: [{
-        message: '`async` import should occur before import of `./sibling`',
-      }, {
-        message: '`fs` import should occur before import of `./sibling`',
-      }],
-    }),
+    ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
+      test({
+        code: `
+          var sibling = require('./sibling');
+          var async = require('async');
+          var fs = require('fs');
+        `,
+          output: `
+          var async = require('async');
+          var sibling = require('./sibling');
+          var fs = require('fs');
+        `,
+        errors: [{
+          message: '`async` import should occur before import of `./sibling`',
+        }, {
+          message: '`fs` import should occur before import of `./sibling`',
+        }],
+      }),
+    ],
     // Uses 'after' wording if it creates less errors
     test({
       code: `
@@ -1974,18 +1983,26 @@ ruleTester.run('order', rule, {
       }],
     }),
     // Alphabetize with require
-    test({
-      code: `
-        const { cello } = require('./cello');
-        import { int } from './int';
-        const blah = require('./blah');
-        import { hello } from './hello';
-      `,
-      errors: [{
-        message: '`./int` import should occur before import of `./cello`',
-      }, {
-        message: '`./hello` import should occur before import of `./cello`',
-      }],
-    }),
+    ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
+      test({
+        code: `
+          const { cello } = require('./cello');
+          import { int } from './int';
+          const blah = require('./blah');
+          import { hello } from './hello';
+        `,
+        output: `
+          import { int } from './int';
+          const { cello } = require('./cello');
+          const blah = require('./blah');
+          import { hello } from './hello';
+        `, 
+        errors: [{
+          message: '`./int` import should occur before import of `./cello`',
+        }, {
+          message: '`./hello` import should occur before import of `./cello`',
+        }],
+      }),
+    ],
   ].filter((t) => !!t),
 })
