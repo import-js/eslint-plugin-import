@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
+- [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -663,6 +664,8 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
+[#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
@@ -1128,3 +1131,5 @@ for info on changes for earlier releases.
 [@richardxia]: https://github.com/richardxia
 [@TheCrueltySage]: https://github.com/TheCrueltySage
 [@ernestostifano]: https://github.com/ernestostifano
+[@forivall]: https://github.com/forivall
+[@xpl]: https://github.com/xpl

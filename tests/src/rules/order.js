@@ -307,6 +307,23 @@ ruleTester.run('order', rule, {
         ],
       }],
     }),
+    // Using pathGroups (a test case for https://github.com/benmosher/eslint-plugin-import/pull/1724)
+    test({
+      code: `
+        import fs from 'fs';
+        import external from 'external';
+        import externalTooPlease from './make-me-external';
+
+        import sibling from './sibling';`,
+      options: [{
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: [],
+        pathGroups: [
+          { pattern: './make-me-external', group: 'external' },
+        ],
+        groups: [['builtin', 'external'], 'internal', 'parent', 'sibling', 'index'],
+      }],
+    }),
     // Monorepo setup, using Webpack resolver, workspace folder name in external-module-folders
     test({
       code: `

@@ -318,7 +318,7 @@ function computeRank(context, ranks, name, type, excludedImportTypes) {
   if (!excludedImportTypes.has(impType)) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
   }
-  if (!rank) {
+  if (typeof rank === 'undefined') {
     rank = ranks.groups[impType]
   }
   if (type !== 'import') {
