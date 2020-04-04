@@ -94,7 +94,7 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export function bar() {};`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
       }],
     }),
@@ -102,7 +102,7 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export const foo = 'foo';`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
       }],
     }),
@@ -111,7 +111,7 @@ ruleTester.run('prefer-default-export', rule, {
         const foo = 'foo';
         export { foo };`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportSpecifier',
         message: 'Prefer default export.',
       }],
     }),
@@ -119,7 +119,7 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export const { foo } = { foo: "bar" };`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
       }],
     }),
@@ -127,7 +127,7 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export const { foo: { bar } } = { foo: { bar: "baz" } };`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
       }],
     }),
@@ -135,7 +135,7 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export const [a] = ["foo"]`,
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer default export.',
       }],
     }),

@@ -89,7 +89,7 @@ ruleTester.run('no-default-export', rule, {
     test({
       code: 'export default function bar() {};',
       errors: [{
-        ruleId: 'ExportDefaultDeclaration',
+        type: 'ExportDefaultDeclaration',
         message: 'Prefer named exports.',
       }],
     }),
@@ -98,14 +98,14 @@ ruleTester.run('no-default-export', rule, {
         export const foo = 'foo';
         export default bar;`,
       errors: [{
-        ruleId: 'ExportDefaultDeclaration',
+        type: 'ExportDefaultDeclaration',
         message: 'Prefer named exports.',
       }],
     }),
     test({
       code: 'let foo; export { foo as default }',
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Do not alias `foo` as `default`. Just export `foo` itself ' +
           'instead.',
       }],
@@ -114,7 +114,7 @@ ruleTester.run('no-default-export', rule, {
       code: 'export default from "foo.js"',
       parser: require.resolve('babel-eslint'),
       errors: [{
-        ruleId: 'ExportNamedDeclaration',
+        type: 'ExportNamedDeclaration',
         message: 'Prefer named exports.',
       }],
     }),

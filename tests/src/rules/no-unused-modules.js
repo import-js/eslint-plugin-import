@@ -10,7 +10,7 @@ const ruleTester = new RuleTester()
     , jsxRuleTester = new RuleTester(jsxConfig)
     , rule = require('rules/no-unused-modules')
 
-const error = message => ({ ruleId: 'no-unused-modules', message })
+const error = message => ({ message })
 
 const missingExportsOptions = [{
   missingExports: true,

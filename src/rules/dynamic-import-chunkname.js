@@ -42,7 +42,9 @@ module.exports = {
 
         const sourceCode = context.getSourceCode()
         const arg = node.arguments[0]
-        const leadingComments = sourceCode.getComments(arg).leading
+        const leadingComments = sourceCode.getCommentsBefore
+          ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
+          : sourceCode.getComments(arg).leading // This method is deprecated in ESLint 7.
 
         if (!leadingComments || leadingComments.length === 0) {
           context.report({

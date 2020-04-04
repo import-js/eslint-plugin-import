@@ -6,7 +6,6 @@ const ruleTester = new RuleTester()
     , rule = require('rules/no-self-import')
 
 const error = {
-  ruleId: 'no-self-import',
   message: 'Module imports itself.',
 }
 
