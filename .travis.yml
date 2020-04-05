@@ -51,6 +51,12 @@ matrix:
   - os: osx
     env: ESLINT_VERSION=5
     node_js: 10
+  - os: windows
+    env: ESLINT_VERSION=5
+    node_js: 12
+  - os: windows
+    env: ESLINT_VERSION=5
+    node_js: 10
   - os: osx
     env: ESLINT_VERSION=4
     node_js: 8
