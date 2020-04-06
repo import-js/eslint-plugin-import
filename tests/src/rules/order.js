@@ -3,6 +3,7 @@ import { test, getTSParsers } from '../utils'
 import { RuleTester } from 'eslint'
 import eslintPkg from 'eslint/package.json'
 import semver from 'semver'
+import os from 'os'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/order')
@@ -137,7 +138,7 @@ ruleTester.run('order', rule, {
         var relParent3 = require('../');
         var async = require('async');
         var relParent1 = require('../foo');
-      `,
+      `.split('\n').join(os.EOL),
       options: [{groups: [
         ['builtin', 'index'],
         ['sibling', 'parent', 'external'],
