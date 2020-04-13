@@ -10,6 +10,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 
+### Changed
+- TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
+
 ## [2.20.2] - 2020-03-28
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
@@ -664,6 +667,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
@@ -1133,3 +1137,4 @@ for info on changes for earlier releases.
 [@ernestostifano]: https://github.com/ernestostifano
 [@forivall]: https://github.com/forivall
 [@xpl]: https://github.com/xpl
+[@astorije]: https://github.com/astorije
