@@ -427,6 +427,17 @@ ruleTester.run('no-unused-modules', rule, {
   ],
 })
 
+// Test that import and export in the same file both counts as usage
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+          code: `export const a = 5;export const b = 't1'`,
+          filename: testFilePath('./no-unused-modules/import-export-1.js'),
+        }),
+  ],
+  invalid: [],
+})
+
 describe('test behaviour for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', {encoding: 'utf8'})

@@ -196,7 +196,13 @@ const prepareImportsAndExports = (srcFiles, context) => {
         if (isNodeModule(key)) {
           return
         }
-        imports.set(key, value.importedSpecifiers)
+        let localImport = imports.get(key)
+        if (typeof localImport !== 'undefined') {
+          localImport = new Set([...localImport, ...value.importedSpecifiers])
+        } else {
+          localImport = value.importedSpecifiers
+        }
+        imports.set(key, localImport)
       })
       importList.set(file, imports)
 

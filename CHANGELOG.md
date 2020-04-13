@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
+- [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -669,6 +670,7 @@ for info on changes for earlier releases.
 
 [#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
+[#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
@@ -1138,3 +1140,4 @@ for info on changes for earlier releases.
 [@forivall]: https://github.com/forivall
 [@xpl]: https://github.com/xpl
 [@astorije]: https://github.com/astorije
+[@Ephem]: https://github.com/Ephem
