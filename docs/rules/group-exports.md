@@ -60,6 +60,15 @@ test.another = true
 module.exports = test
 ```
 
+```flow js
+const first = true;
+type firstType = boolean
+
+// A single named export declaration (type exports handled separately) -> ok
+export {first}
+export type {firstType}
+```
+
 
 ### Invalid
 
@@ -92,6 +101,15 @@ module.exports.first = true
 module.exports = () => {}
 module.exports.first = true
 module.exports.second = true
+```
+
+```flow js
+type firstType = boolean
+type secondType = any
+
+// Multiple named type export statements -> not ok!
+export type {firstType}
+export type {secondType}
 ```
 
 ## When Not To Use It

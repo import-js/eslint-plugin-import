@@ -5,7 +5,7 @@ import { RuleTester } from 'eslint'
 const ruleTester = new RuleTester()
     , rule = require('rules/no-cycle')
 
-const error = message => ({ ruleId: 'no-cycle', message })
+const error = message => ({ message })
 
 const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),

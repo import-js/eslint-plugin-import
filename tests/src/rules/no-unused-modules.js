@@ -10,7 +10,7 @@ const ruleTester = new RuleTester()
     , jsxRuleTester = new RuleTester(jsxConfig)
     , rule = require('rules/no-unused-modules')
 
-const error = message => ({ ruleId: 'no-unused-modules', message })
+const error = message => ({ message })
 
 const missingExportsOptions = [{
   missingExports: true,
@@ -425,6 +425,17 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-m.js'),
            errors: [error(`exported declaration 'm' not used within other modules`)]}),
   ],
+})
+
+// Test that import and export in the same file both counts as usage
+ruleTester.run('no-unused-modules', rule, {
+  valid: [
+    test({ options: unusedExportsOptions,
+          code: `export const a = 5;export const b = 't1'`,
+          filename: testFilePath('./no-unused-modules/import-export-1.js'),
+        }),
+  ],
+  invalid: [],
 })
 
 describe('test behaviour for new file', () => {

@@ -8,6 +8,15 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1701], thanks [@KevinHerklotz])
 
+### Fixed
+- [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
+- [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
+- [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
+- [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
+
+### Changed
+- TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
+
 ## [2.20.2] - 2020-03-28
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
@@ -662,7 +671,12 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-[#1701]: https://github.com/benmosher/eslint-plugin-import/issues/1701
+[#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
+[#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
+[#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
+[#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
+[#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
 [#1658]: https://github.com/benmosher/eslint-plugin-import/pull/1658
@@ -991,6 +1005,7 @@ for info on changes for earlier releases.
 [0.12.1]: https://github.com/benmosher/eslint-plugin-import/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/benmosher/eslint-plugin-import/compare/v0.10.1...v0.11.0
+
 [@mathieudutour]: https://github.com/mathieudutour
 [@gausie]: https://github.com/gausie
 [@singles]: https://github.com/singles
@@ -1126,3 +1141,9 @@ for info on changes for earlier releases.
 [@fisker]: https://github.com/fisker
 [@richardxia]: https://github.com/richardxia
 [@TheCrueltySage]: https://github.com/TheCrueltySage
+[@ernestostifano]: https://github.com/ernestostifano
+[@forivall]: https://github.com/forivall
+[@xpl]: https://github.com/xpl
+[@astorije]: https://github.com/astorije
+[@Ephem]: https://github.com/Ephem
+[@kmui2]: https://github.com/kmui2

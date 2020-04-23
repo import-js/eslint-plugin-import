@@ -1,6 +1,8 @@
 import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/order')
@@ -303,6 +305,23 @@ ruleTester.run('order', rule, {
           { pattern: '@app/**', group: 'external', position: 'before' },
           { pattern: '@app2/**', group: 'external', position: 'before' },
         ],
+      }],
+    }),
+    // Using pathGroups (a test case for https://github.com/benmosher/eslint-plugin-import/pull/1724)
+    test({
+      code: `
+        import fs from 'fs';
+        import external from 'external';
+        import externalTooPlease from './make-me-external';
+
+        import sibling from './sibling';`,
+      options: [{
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: [],
+        pathGroups: [
+          { pattern: './make-me-external', group: 'external' },
+        ],
+        groups: [['builtin', 'external'], 'internal', 'parent', 'sibling', 'index'],
       }],
     }),
     // Monorepo setup, using Webpack resolver, workspace folder name in external-module-folders
@@ -681,7 +700,6 @@ ruleTester.run('order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -696,7 +714,6 @@ ruleTester.run('order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -711,7 +728,6 @@ ruleTester.run('order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -726,7 +742,6 @@ ruleTester.run('order', rule, {
         /* comment1 */  var async = require('async'); /* comment2 */
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -741,7 +756,6 @@ ruleTester.run('order', rule, {
         /* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -756,7 +770,6 @@ ruleTester.run('order', rule, {
         `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`
       ,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -776,7 +789,6 @@ ruleTester.run('order', rule, {
           comment3 */
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -791,7 +803,6 @@ ruleTester.run('order', rule, {
         var {b} = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -808,7 +819,6 @@ ruleTester.run('order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -821,7 +831,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
         var async = require('async');` + '\n',
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -836,7 +845,6 @@ ruleTester.run('order', rule, {
         import async from 'async';
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -851,7 +859,6 @@ ruleTester.run('order', rule, {
         var async = require('async');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     }),
@@ -866,7 +873,6 @@ ruleTester.run('order', rule, {
         var parent = require('../parent');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`async` import should occur before import of `../parent`',
       }],
     }),
@@ -881,7 +887,6 @@ ruleTester.run('order', rule, {
         var sibling = require('./sibling');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`../parent` import should occur before import of `./sibling`',
       }],
     }),
@@ -896,25 +901,29 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./sibling` import should occur before import of `./`',
       }],
     }),
     // Multiple errors
-    test({
-      code: `
-        var sibling = require('./sibling');
-        var async = require('async');
-        var fs = require('fs');
-      `,
-      errors: [{
-        ruleId: 'order',
-        message: '`async` import should occur before import of `./sibling`',
-      }, {
-        ruleId: 'order',
-        message: '`fs` import should occur before import of `./sibling`',
-      }],
-    }),
+    ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
+      test({
+        code: `
+          var sibling = require('./sibling');
+          var async = require('async');
+          var fs = require('fs');
+        `,
+          output: `
+          var async = require('async');
+          var sibling = require('./sibling');
+          var fs = require('fs');
+        `,
+        errors: [{
+          message: '`async` import should occur before import of `./sibling`',
+        }, {
+          message: '`fs` import should occur before import of `./sibling`',
+        }],
+      }),
+    ],
     // Uses 'after' wording if it creates less errors
     test({
       code: `
@@ -934,7 +943,6 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./` import should occur after import of `bar`',
       }],
     }),
@@ -950,7 +958,6 @@ ruleTester.run('order', rule, {
       `,
       options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
       errors: [{
-        ruleId: 'order',
         message: '`./` import should occur before import of `fs`',
       }],
     }),
@@ -961,7 +968,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     })),
@@ -972,7 +978,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     })),
@@ -985,7 +990,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     })),
@@ -998,7 +1002,6 @@ ruleTester.run('order', rule, {
           .bar;
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `./foo`',
       }],
     })),
@@ -1021,7 +1024,6 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 'external'],
       ]}],
       errors: [{
-        ruleId: 'order',
         message: '`path` import should occur before import of `./foo`',
       }],
     }),
@@ -1041,7 +1043,6 @@ ruleTester.run('order', rule, {
         // missing 'builtin'
       ]}],
       errors: [{
-        ruleId: 'order',
         message: '`async` import should occur before import of `path`',
       }],
     }),
@@ -1057,7 +1058,6 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 'UNKNOWN', 'internal'],
       ]}],
       errors: [{
-        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
       }],
     }),
@@ -1072,7 +1072,6 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', ['builtin'], 'internal'],
       ]}],
       errors: [{
-        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
       }],
     }),
@@ -1087,7 +1086,6 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 2, 'internal'],
       ]}],
       errors: [{
-        ruleId: 'order',
         message: 'Incorrect configuration of the rule: Unknown type `2`',
       }],
     }),
@@ -1102,7 +1100,6 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 'parent', 'internal'],
       ]}],
       errors: [{
-        ruleId: 'order',
         message: 'Incorrect configuration of the rule: `parent` is duplicated',
       }],
     }),
@@ -1127,7 +1124,6 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./foo` import should occur before import of `fs`',
       }],
     }),
@@ -1143,7 +1139,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
     }),
@@ -1510,7 +1505,6 @@ ruleTester.run('order', rule, {
         fn_call();
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./local` import should occur after import of `global2`',
       }],
     }),
@@ -1533,7 +1527,6 @@ ruleTester.run('order', rule, {
         fn_call();
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./local` import should occur after import of `global2`',
       }],
     }),
@@ -1584,7 +1577,6 @@ ruleTester.run('order', rule, {
         fn_call();
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./local` import should occur after import of `global3`',
       }],
     })),
@@ -1639,7 +1631,6 @@ ruleTester.run('order', rule, {
         ],
       }],
       errors: [{
-        ruleId: 'order',
         message: '`~/components/Input` import should occur before import of `./helper`',
       }],
     }),
@@ -1665,7 +1656,6 @@ ruleTester.run('order', rule, {
         ],
       }],
       errors: [{
-        ruleId: 'order',
         message: '`./helper` import should occur after import of `async`',
       }],
     }),
@@ -1689,7 +1679,6 @@ ruleTester.run('order', rule, {
         ],
       }],
       errors: [{
-        ruleId: 'order',
         message: '`~/components/Input` import should occur before import of `lodash`',
       }],
     }),
@@ -1723,7 +1712,6 @@ ruleTester.run('order', rule, {
       }],
       errors: [
         {
-          ruleId: 'order',
           message: '`-/components/Export` import should occur before import of `$/components/Import`',
         },
       ],
@@ -1759,7 +1747,6 @@ ruleTester.run('order', rule, {
       }],
       errors: [
         {
-          ruleId: 'order',
           message: '`~/components/Output` import should occur before import of `#/components/Input`',
         },
       ],
@@ -1773,7 +1760,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1800,7 +1786,6 @@ ruleTester.run('order', rule, {
         http.createServer(express());
       `,
       errors: [{
-        ruleId: 'order',
         message: '`./config` import should occur after import of `express`',
       }],
     }),
@@ -1812,7 +1797,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1823,7 +1807,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs')(a);
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1834,7 +1817,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1846,7 +1828,6 @@ ruleTester.run('order', rule, {
         var fs = require('fs');
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1858,7 +1839,6 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1870,7 +1850,6 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1882,7 +1861,6 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1894,7 +1872,6 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
       `,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1909,7 +1886,6 @@ ruleTester.run('order', rule, {
       `,
       parser,
       errors: [{
-        ruleId: 'order',
         message: '`fs` import should occur before import of `async`',
       }],
     })),
@@ -1934,7 +1910,6 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'asc'},
       }],
       errors: [{
-        ruleID: 'order',
         message: '`Bar` import should occur before import of `bar`',
       }],
     }),
@@ -1959,7 +1934,6 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'desc'},
       }],
       errors: [{
-        ruleID: 'order',
         message: '`bar` import should occur before import of `Bar`',
       }],
     }),
@@ -1982,7 +1956,6 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'asc', caseInsensitive: true},
       }],
       errors: [{
-        ruleID: 'order',
         message: '`Bar` import should occur before import of `foo`',
       }],
     }),
@@ -2005,7 +1978,6 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'desc', caseInsensitive: true},
       }],
       errors: [{
-        ruleID: 'order',
         message: '`foo` import should occur before import of `Bar`',
       }],
     }),
@@ -2024,25 +1996,30 @@ ruleTester.run('order', rule, {
         alphabetize: {order: 'asc'},
       }],
       errors: [{
-        ruleID: 'order',
         message: '`..` import should occur before import of `../a`',
       }],
     }),
     // Alphabetize with require
-    test({
-      code: `
-        const { cello } = require('./cello');
-        import { int } from './int';
-        const blah = require('./blah');
-        import { hello } from './hello';
-      `,
-      errors: [{
-        ruleId: 'order',
-        message: '`./int` import should occur before import of `./cello`',
-      }, {
-        ruleId: 'order',
-        message: '`./hello` import should occur before import of `./cello`',
-      }],
-    }),
+    ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
+      test({
+        code: `
+          const { cello } = require('./cello');
+          import { int } from './int';
+          const blah = require('./blah');
+          import { hello } from './hello';
+        `,
+        output: `
+          import { int } from './int';
+          const { cello } = require('./cello');
+          const blah = require('./blah');
+          import { hello } from './hello';
+        `, 
+        errors: [{
+          message: '`./int` import should occur before import of `./cello`',
+        }, {
+          message: '`./hello` import should occur before import of `./cello`',
+        }],
+      }),
+    ],
   ].filter((t) => !!t),
 })

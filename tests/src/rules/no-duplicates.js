@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { test as testUtil } from '../utils'
+import { test as testUtil, getNonDefaultParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -399,3 +399,32 @@ ruleTester.run('no-duplicates', rule, {
     }),
   ],
 })
+
+context('TypeScript', function() {
+  getNonDefaultParsers()
+  .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+  .forEach((parser) => {
+    const parserConfig = {
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }
+
+    ruleTester.run('no-duplicates', rule, {
+      valid: [
+        // #1667: ignore duplicate if is a typescript type import
+        test(
+          {
+            code: "import type { x } from './foo'; import y from './foo'",
+            parser,
+          },
+          parserConfig,
+        ),
+      ],
+      invalid: [],
+    })
+  })
+})
+

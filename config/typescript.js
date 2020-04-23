@@ -19,4 +19,10 @@ module.exports = {
     },
   },
 
+  rules: {
+    // analysis/correctness
+
+    // TypeScript compilation already ensures that named imports exist in the referenced module
+    'import/named': 'off',
+  },
 }

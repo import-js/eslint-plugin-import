@@ -126,7 +126,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoRoot }],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
@@ -135,7 +134,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoRoot}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
@@ -143,28 +141,24 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "not-a-dependency"',
       options: [{packageDir: packageDirMonoRepoRoot}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'import "not-a-dependency"',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'var donthaveit = require("@org/not-a-dependency")',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'@org/not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S @org/not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'var donthaveit = require("@org/not-a-dependency/foo")',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'@org/not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S @org/not-a-dependency\' to add it',
       }],
     }),
@@ -172,7 +166,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "eslint"',
       options: [{devDependencies: false, peerDependencies: false}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -180,14 +173,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "lodash.isarray"',
       options: [{optionalDependencies: false}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
     }),
     test({
       code: 'var foo = require("not-a-dependency")',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
@@ -195,7 +186,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'var glob = require("glob")',
       options: [{devDependencies: false}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'glob\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -204,7 +194,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js']}],
       filename: 'foo.tes.js',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -213,7 +202,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js']}],
       filename: path.join(process.cwd(), 'foo.tes.js'),
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -222,7 +210,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js', '*.spec.js']}],
       filename: 'foo.tes.js',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -231,7 +218,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{devDependencies: ['*.test.js', '*.spec.js']}],
       filename: path.join(process.cwd(), 'foo.tes.js'),
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
@@ -239,7 +225,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'var eslint = require("lodash.isarray")',
       options: [{optionalDependencies: false}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
     }),
@@ -247,7 +232,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "not-a-dependency"',
       options: [{packageDir: path.join(__dirname, '../../../')}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
@@ -255,7 +239,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "bar"',
       options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: 'The package.json file could not be found.',
       }],
     }),
@@ -263,7 +246,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import foo from "foo"',
       options: [{packageDir: packageDirWithSyntaxError}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
       }],
     }),
@@ -272,7 +254,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoWithNested}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
       }],
     }),
@@ -280,7 +261,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import react from "react";',
       filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
     }),
@@ -289,7 +269,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
       options: [{packageDir: packageDirMonoRepoRoot}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
     }),
@@ -298,7 +277,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(packageDirWithEmpty, 'index.js'),
       options: [{packageDir: packageDirWithEmpty}],
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
     }),
@@ -319,14 +297,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'export { foo } from "not-a-dependency";',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'export * from "not-a-dependency";',
       errors: [{
-        ruleId: 'no-extraneous-dependencies',
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
