@@ -48,7 +48,7 @@ test_script:
   - npm --version
 
   # core tests
-  - npm test
+  - npm run tests-only
 
   # resolver tests
   - cd .\resolvers\webpack && npm test && cd ..\..
