@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
 
 ### Changed
+- [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
 - [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
@@ -695,6 +696,7 @@ for info on changes for earlier releases.
 [#1751]: https://github.com/benmosher/eslint-plugin-import/pull/1751
 [#1744]: https://github.com/benmosher/eslint-plugin-import/pull/1744
 [#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
+[#1735]: https://github.com/benmosher/eslint-plugin-import/pull/1735
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
@@ -1183,3 +1185,4 @@ for info on changes for earlier releases.
 [@darkartur]: https://github.com/darkartur
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@barbogast]: https://github.com/barbogast
+[@adamborowski]: https://github.com/adamborowski

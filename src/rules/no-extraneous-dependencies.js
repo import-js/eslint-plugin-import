@@ -3,8 +3,8 @@ import fs from 'fs'
 import readPkgUp from 'read-pkg-up'
 import minimatch from 'minimatch'
 import resolve from 'eslint-module-utils/resolve'
+import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 import importType from '../core/importType'
-import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 
 function hasKeys(obj = {}) {
@@ -200,28 +200,8 @@ module.exports = {
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
     }
 
-    // todo: use module visitor from module-utils core
-    return {
-      ImportDeclaration: function (node) {
-        if (node.source) {
-          reportIfMissing(context, deps, depsOptions, node, node.source.value)
-        }
-      },
-      ExportNamedDeclaration: function (node) {
-        if (node.source) {
-          reportIfMissing(context, deps, depsOptions, node, node.source.value)
-        }
-      },
-      ExportAllDeclaration: function (node) {
-        if (node.source) {
-          reportIfMissing(context, deps, depsOptions, node, node.source.value)
-        }
-      },
-      CallExpression: function handleRequires(node) {
-        if (isStaticRequire(node)) {
-          reportIfMissing(context, deps, depsOptions, node, node.arguments[0].value)
-        }
-      },
-    }
+    return moduleVisitor(node => {
+      reportIfMissing(context, deps, depsOptions, node, node.value)
+    }, {commonjs: true})
   },
 }
