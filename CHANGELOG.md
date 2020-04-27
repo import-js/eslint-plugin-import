@@ -49,6 +49,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
 - [meta] fix "files" field to include/exclude the proper files ([#1635], thanks [@ljharb])
+- [Tests] `order`: Add TS import type tests ([#1736], thanks [@kmui2])
 
 ## [2.20.0] - 2020-01-10
 ### Added
@@ -685,6 +686,7 @@ for info on changes for earlier releases.
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
 [#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
+[#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722

@@ -1,4 +1,4 @@
-import { test, getTSParsers } from '../utils'
+import { test, getTSParsers, getNonDefaultParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 import eslintPkg from 'eslint/package.json'
@@ -2071,7 +2071,7 @@ ruleTester.run('order', rule, {
           const { cello } = require('./cello');
           const blah = require('./blah');
           import { hello } from './hello';
-        `, 
+        `,
         errors: [{
           message: '`./int` import should occur before import of `./cello`',
         }, {
@@ -2080,4 +2080,144 @@ ruleTester.run('order', rule, {
       }),
     ],
   ].filter((t) => !!t),
+})
+
+
+context('TypeScript', function () {
+  getNonDefaultParsers()
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      const parserConfig = {
+        parser: parser,
+        settings: {
+          'import/parsers': { [parser]: ['.ts'] },
+          'import/resolver': { 'eslint-import-resolver-typescript': true },
+        },
+      }
+
+      ruleTester.run('order', rule, {
+        valid: [
+          // #1667: typescript type import support
+
+          // Option alphabetize: {order: 'asc'}
+          test(
+            {
+              code: `
+                import c from 'Bar';
+                import type { C } from 'Bar';
+                import b from 'bar';
+                import a from 'foo';
+                import type { A } from 'foo';
+
+                import index from './';
+              `,
+              parser,
+              options: [
+                {
+                  groups: ['external', 'index'],
+                  alphabetize: { order: 'asc' },
+                },
+              ],
+            },
+            parserConfig,
+          ),
+          // Option alphabetize: {order: 'desc'}
+          test(
+            {
+              code: `
+                import a from 'foo';
+                import type { A } from 'foo';
+                import b from 'bar';
+                import c from 'Bar';
+                import type { C } from 'Bar';
+
+                import index from './';
+              `,
+              parser,
+              options: [
+                {
+                  groups: ['external', 'index'],
+                  alphabetize: { order: 'desc' },
+                },
+              ],
+            },
+            parserConfig,
+          ),
+        ],
+        invalid: [
+          // Option alphabetize: {order: 'asc'}
+          test(
+            {
+              code: `
+              import b from 'bar';
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import index from './';
+            `,
+              output: `
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import b from 'bar';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import index from './';
+            `,
+              parser,
+              options: [
+                {
+                  groups: ['external', 'index'],
+                  alphabetize: { order: 'asc' },
+                },
+              ],
+              errors: [
+                {
+                  message: process.env.ESLINT_VERSION === '2' ? '`bar` import should occur after import of `Bar`' : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
+                },
+              ],
+            },
+            parserConfig,
+          ),
+          // Option alphabetize: {order: 'desc'}
+          test(
+            {
+              code: `
+              import a from 'foo';
+              import type { A } from 'foo';
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import b from 'bar';
+
+              import index from './';
+            `,
+              output: `
+              import a from 'foo';
+              import type { A } from 'foo';
+              import b from 'bar';
+              import c from 'Bar';
+              import type { C } from 'Bar';
+
+              import index from './';
+            `,
+              parser,
+              options: [
+                {
+                  groups: ['external', 'index'],
+                  alphabetize: { order: 'desc' },
+                },
+              ],
+              errors: [
+                {
+                  message: process.env.ESLINT_VERSION === '2' ? '`bar` import should occur before import of `Bar`' : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
+                },
+              ],
+            },
+            parserConfig,
+          ),
+        ],
+      })
+    })
 })
