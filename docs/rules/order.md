@@ -216,12 +216,12 @@ import index from './';
 import sibling from './foo';
 ```
 
-### `alphabetize: {order: asc|desc|ignore, caseInsensitive: true|false}`:
+### `alphabetize: {order: asc|desc|ignore, caseInsensitive: true|false|'invert'}`:
 
 Sort the order within each group in alphabetical manner based on **import path**:
 
 - `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
-- `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
+- `caseInsensitive`: use `true` to ignore case, `false` to consider case, and `'invert'` to sort lowercase before uppercase (default: `false`).
 
 Example setting:
 ```js
