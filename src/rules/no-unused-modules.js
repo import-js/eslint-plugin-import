@@ -654,13 +654,12 @@ module.exports = {
           if (astNode.source) {
             resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context)
             astNode.specifiers.forEach(specifier => {
-              let name
-              if (specifier.exported.name === DEFAULT) {
-                name = IMPORT_DEFAULT_SPECIFIER
+              const name = specifier.local.name
+              if (specifier.local.name === DEFAULT) {
+                newDefaultImports.add(resolvedPath)
               } else {
-                name = specifier.local.name
+                newImports.set(name, resolvedPath)
               }
-              newImports.set(name, resolvedPath)
             })
           }
         }

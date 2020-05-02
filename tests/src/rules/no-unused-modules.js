@@ -442,6 +442,31 @@ ruleTester.run('no-unused-modules', rule, {
   invalid: [],
 })
 
+describe('renameDefault', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+        code: 'export { default as Component } from "./Component"',
+        filename: testFilePath('./no-unused-modules/renameDefault/components.js')}),
+      test({ options: unusedExportsOptions,
+        code: 'export default function Component() {}',
+        filename: testFilePath('./no-unused-modules/renameDefault/Component.js')}),
+    ],
+    invalid: [],
+  })
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+        code: 'export { default as ComponentA } from "./ComponentA";export { default as ComponentB } from "./ComponentB";',
+        filename: testFilePath('./no-unused-modules/renameDefault-2/components.js')}),
+      test({ options: unusedExportsOptions,
+        code: 'export default function ComponentA() {};',
+        filename: testFilePath('./no-unused-modules/renameDefault-2/ComponentA.js')}),
+    ],
+    invalid: [],
+  })
+})
+
 describe('test behaviour for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', {encoding: 'utf8'})

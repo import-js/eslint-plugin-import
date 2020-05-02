@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: Revert "[flow] `no-unused-modules`: add flow type support" ([#1770], thanks [@Hypnosphi])
 - TypeScript: Add nested namespace handling ([#1763], thanks [@julien1619])
 - [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
+- [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -688,6 +689,7 @@ for info on changes for earlier releases.
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
 [#1764]: https://github.com/benmosher/eslint-plugin-import/pull/1764
 [#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
+[#1744]: https://github.com/benmosher/eslint-plugin-import/pull/1744
 [#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
@@ -1174,3 +1176,4 @@ for info on changes for earlier releases.
 [@nickofthyme]: https://github.com/nickofthyme
 [@manuth]: https://github.com/manuth
 [@julien1619]: https://github.com/julien1619
+[@darkartur]: https://github.com/darkartur
