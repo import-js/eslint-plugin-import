@@ -35,6 +35,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 - [`no-unused-modules`]: Handle `export { default } from` syntax ([#1631], thanks [@richardxia])
 - [`first`]: Add a way to disable `absolute-first` explicitly ([#1664], thanks [@TheCrueltySage])
+- [Docs] `no-webpack-loader-syntax`: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
 
 ## [2.20.1] - 2020-02-01
 ### Fixed
@@ -689,6 +690,7 @@ for info on changes for earlier releases.
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
 [#1764]: https://github.com/benmosher/eslint-plugin-import/pull/1764
 [#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
+[#1751]: https://github.com/benmosher/eslint-plugin-import/pull/1751
 [#1744]: https://github.com/benmosher/eslint-plugin-import/pull/1744
 [#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
@@ -1177,3 +1179,4 @@ for info on changes for earlier releases.
 [@manuth]: https://github.com/manuth
 [@julien1619]: https://github.com/julien1619
 [@darkartur]: https://github.com/darkartur
+[@MikeyBeLike]: https://github.com/MikeyBeLike
