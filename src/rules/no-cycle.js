@@ -4,6 +4,7 @@
  */
 
 import Exports from '../ExportMap'
+import { isExternalModule } from '../core/importType'
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
 import docsUrl from '../docsUrl'
 
@@ -18,6 +19,11 @@ module.exports = {
         type: 'integer',
         minimum: 1,
       },
+      ignoreExternal: {
+        description: 'ignore external modules',
+        type: 'boolean',
+        default: false,
+      },
     })],
   },
 
@@ -27,8 +33,13 @@ module.exports = {
 
     const options = context.options[0] || {}
     const maxDepth = options.maxDepth || Infinity
+    const ignoreModule = (name) => options.ignoreExternal ? isExternalModule(name) : false
 
     function checkSourceValue(sourceNode, importer) {
+      if (ignoreModule(sourceNode.value)) {
+        return // ignore external modules
+      }
+
       const imported = Exports.get(sourceNode.value, context)
 
       if (importer.importKind === 'type') {
@@ -54,6 +65,7 @@ module.exports = {
         for (let [path, { getter, source }] of m.imports) {
           if (path === myPath) return true
           if (traversed.has(path)) continue
+          if (ignoreModule(source.value)) continue
           if (route.length + 1 < maxDepth) {
             untraversed.push({
               mget: getter,

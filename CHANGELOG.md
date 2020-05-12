@@ -8,14 +8,20 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1701], thanks [@KevinHerklotz])
 
+### Added
+- [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
+- [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
+
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
+- [``newline-after-import`: recognize decorators ([#1139], thanks [@atos1990])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
+- [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -677,6 +683,8 @@ for info on changes for earlier releases.
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1701]: https://github.com/benmosher/eslint-plugin-import/issues/1701
+[#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
+[#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/benmosher/eslint-plugin-import/pull/1664
@@ -700,6 +708,7 @@ for info on changes for earlier releases.
 [#1560]: https://github.com/benmosher/eslint-plugin-import/pull/1560
 [#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
 [#1542]: https://github.com/benmosher/eslint-plugin-import/pull/1542
+[#1528]: https://github.com/benmosher/eslint-plugin-import/pull/1528
 [#1526]: https://github.com/benmosher/eslint-plugin-import/pull/1526
 [#1521]: https://github.com/benmosher/eslint-plugin-import/pull/1521
 [#1519]: https://github.com/benmosher/eslint-plugin-import/pull/1519
@@ -765,6 +774,7 @@ for info on changes for earlier releases.
 [#1157]: https://github.com/benmosher/eslint-plugin-import/pull/1157
 [#1151]: https://github.com/benmosher/eslint-plugin-import/pull/1151
 [#1142]: https://github.com/benmosher/eslint-plugin-import/pull/1142
+[#1139]: https://github.com/benmosher/eslint-plugin-import/pull/1139
 [#1137]: https://github.com/benmosher/eslint-plugin-import/pull/1137
 [#1135]: https://github.com/benmosher/eslint-plugin-import/pull/1135
 [#1128]: https://github.com/benmosher/eslint-plugin-import/pull/1128
@@ -1148,3 +1158,5 @@ for info on changes for earlier releases.
 [@astorije]: https://github.com/astorije
 [@Ephem]: https://github.com/Ephem
 [@kmui2]: https://github.com/kmui2
+[@arvigeus]: https://github.com/arvigeus
+[@atos1990]: https://github.com/atos1990

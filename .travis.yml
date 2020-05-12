@@ -1,5 +1,6 @@
 language: node_js
 node_js:
+  - '14'
   - '13'
   - '12'
   - '10'
@@ -23,7 +24,7 @@ matrix:
   - env: LINT=true
     node_js: lts/*
   - env: PACKAGE=resolvers/node
-    node_js: 13
+    node_js: 14
   - env: PACKAGE=resolvers/node
     node_js: 12
   - env: PACKAGE=resolvers/node
@@ -34,6 +35,8 @@ matrix:
     node_js: 6
   - env: PACKAGE=resolvers/node
     node_js: 4
+  - env: PACKAGE=resolvers/webpack
+    node_js: 14
   - env: PACKAGE=resolvers/webpack
     node_js: 12
   - env: PACKAGE=resolvers/webpack
@@ -45,6 +48,9 @@ matrix:
   - env: PACKAGE=resolvers/webpack
     node_js: 4
 
+  - os: osx
+    env: ESLINT_VERSION=5
+    node_js: 14
   - os: osx
     env: ESLINT_VERSION=5
     node_js: 12

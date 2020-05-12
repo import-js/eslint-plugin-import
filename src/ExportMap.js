@@ -530,30 +530,50 @@ ExportMap.parse = function (path, content, context) {
 
     // This doesn't declare anything, but changes what's being exported.
     if (n.type === 'TSExportAssignment') {
-      const moduleDecls = ast.body.filter((bodyNode) =>
-        bodyNode.type === 'TSModuleDeclaration' && bodyNode.id.name === n.expression.name
+      const exportedName = n.expression.name
+      const declTypes = [
+        'VariableDeclaration',
+        'ClassDeclaration',
+        'TSDeclareFunction',
+        'TSEnumDeclaration',
+        'TSTypeAliasDeclaration',
+        'TSInterfaceDeclaration',
+        'TSAbstractClassDeclaration',
+        'TSModuleDeclaration',
+      ]
+      const exportedDecls = ast.body.filter(({ type, id, declarations }) => 
+        declTypes.includes(type) && 
+        (id && id.name === exportedName || declarations.find(d => d.id.name === exportedName))
       )
-      moduleDecls.forEach((moduleDecl) => {
-        if (moduleDecl && moduleDecl.body && moduleDecl.body.body) {
-          moduleDecl.body.body.forEach((moduleBlockNode) => {
+      if (exportedDecls.length === 0) {
+        // Export is not referencing any local declaration, must be re-exporting
+        m.namespace.set('default', captureDoc(source, docStyleParsers, n))
+        return
+      }
+      exportedDecls.forEach((decl) => {
+        if (decl.type === 'TSModuleDeclaration' && decl && decl.body && decl.body.body) {
+          decl.body.body.forEach((moduleBlockNode) => {
             // Export-assignment exports all members in the namespace, explicitly exported or not.
-            const exportedDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
+            const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
               moduleBlockNode.declaration :
               moduleBlockNode
 
-            if (exportedDecl.type === 'VariableDeclaration') {
-              exportedDecl.declarations.forEach((decl) =>
-                recursivePatternCapture(decl.id,(id) => m.namespace.set(
+            if (namespaceDecl.type === 'VariableDeclaration') {
+              namespaceDecl.declarations.forEach((d) =>
+                recursivePatternCapture(d.id, (id) => m.namespace.set(
                   id.name,
-                  captureDoc(source, docStyleParsers, decl, exportedDecl, moduleBlockNode))
+                  captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode))
                 )
               )
             } else {
               m.namespace.set(
-                exportedDecl.id.name,
+                namespaceDecl.id.name,
                 captureDoc(source, docStyleParsers, moduleBlockNode))
             }
           })
+        } else {
+          // Export as default
+          m.namespace.set('default', captureDoc(source, docStyleParsers, decl))
         }
       })
     }

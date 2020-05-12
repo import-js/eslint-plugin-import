@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Fixed
+- [fix] provide config fallback ([#1705], thanks [@migueloller])
+
 ## 0.12.0 - 2019-12-07
 
 ### Added
@@ -13,7 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## 0.11.1 - 2019-04-13
 
 ### Fixed
-- [fix] match coreLibs after resolveSync in webpack-resolver ([#1297])
+- [fix] match coreLibs after resolveSync in webpack-resolver ([#1297], thanks [@echenley])
 
 ## 0.11.0 - 2018-01-22
 
@@ -122,6 +125,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#1705]: https://github.com/benmosher/eslint-plugin-import/pull/1705
 [#1503]: https://github.com/benmosher/eslint-plugin-import/pull/1503
 [#1297]: https://github.com/benmosher/eslint-plugin-import/pull/1297
 [#1261]: https://github.com/benmosher/eslint-plugin-import/pull/1261
@@ -172,4 +176,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@mattkrick]: https://github.com/mattkrick
 [@idudinov]: https://github.com/idudinov
 [@keann]: https://github.com/keann
+[@echenley]: https://github.com/echenley
 [@Aghassi]: https://github.com/Aghassi
+[@migueloller]: https://github.com/migueloller

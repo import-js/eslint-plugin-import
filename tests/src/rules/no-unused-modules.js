@@ -52,6 +52,10 @@ ruleTester.run('no-unused-modules', rule, {
            code: 'const a = 1; export default a'}),
     test({ options: missingExportsOptions,
            code: 'export class Foo {}'}),
+    test({ options: missingExportsOptions,
+           code: 'export const [foobar] = [];'}),
+    test({ options: missingExportsOptions,
+           code: 'export const [foobar] = foobarFactory();'}),
   ],
   invalid: [
     test({

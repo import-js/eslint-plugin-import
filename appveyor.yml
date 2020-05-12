@@ -1,6 +1,7 @@
 # Test against this version of Node.js
 environment:
   matrix:
+  - nodejs_version: "14"
   - nodejs_version: "12"
   - nodejs_version: "10"
   - nodejs_version: "8"
@@ -48,7 +49,7 @@ test_script:
   - npm --version
 
   # core tests
-  - npm test
+  - npm run tests-only
 
   # resolver tests
   - cd .\resolvers\webpack && npm test && cd ..\..
