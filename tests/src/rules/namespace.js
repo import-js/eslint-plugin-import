@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils'
 import { RuleTester } from 'eslint'
 
 var ruleTester = new RuleTester({ env: { es6: true }})
@@ -119,6 +119,19 @@ const valid = [
       },
     },
   }),
+
+  // Typescript
+  ...getTSParsers().map((parser) => test({
+    code: `
+      import * as foo from "./typescript-declare-nested"
+      foo.bar.MyFunction()
+    `,
+    parser: parser,
+    settings: {
+      'import/parsers': { [parser]: ['.ts'] },
+      'import/resolver': { 'eslint-import-resolver-typescript': true },
+    },
+  })),
 
   ...SYNTAX_CASES,
 ]
