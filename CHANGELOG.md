@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`newline-after-import`]: recognize decorators ([#1139], thanks [@atos1990])
 - [`no-unused-modules`]: Revert "[flow] `no-unused-modules`: add flow type support" ([#1770], thanks [@Hypnosphi])
 - TypeScript: Add nested namespace handling ([#1763], thanks [@julien1619])
+- [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -685,6 +686,7 @@ for info on changes for earlier releases.
 [#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
+[#1764]: https://github.com/benmosher/eslint-plugin-import/pull/1764
 [#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
 [#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726

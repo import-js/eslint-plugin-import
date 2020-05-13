@@ -543,7 +543,10 @@ ExportMap.parse = function (path, content, context) {
       ]
       const exportedDecls = ast.body.filter(({ type, id, declarations }) => 
         declTypes.includes(type) && 
-        (id && id.name === exportedName || declarations.find(d => d.id.name === exportedName))
+        (
+          (id && id.name === exportedName) ||
+          (declarations && declarations.find(d => d.id.name === exportedName))
+        )
       )
       if (exportedDecls.length === 0) {
         // Export is not referencing any local declaration, must be re-exporting
