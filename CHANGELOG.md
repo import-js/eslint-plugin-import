@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Added
-- [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
+- [`default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
 
 ### Fixed
@@ -15,7 +15,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
-- [``newline-after-import`: recognize decorators ([#1139], thanks [@atos1990])
+- [`newline-after-import`]: recognize decorators ([#1139], thanks [@atos1990])
+- [`no-unused-modules`]: Fix multiple imports in same file not registering import specifiers for usage checks ([#1766], fixes [#1745], thanks [@roikoren755])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -675,11 +676,13 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1745]: https://github.com/benmosher/eslint-plugin-import/issues/1745
 [#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
+[#1766]: https://github.com/benmosher/eslint-plugin-import/pull/1766
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
@@ -1156,3 +1159,4 @@ for info on changes for earlier releases.
 [@kmui2]: https://github.com/kmui2
 [@arvigeus]: https://github.com/arvigeus
 [@atos1990]: https://github.com/atos1990
+[@roikoren755]: https://github.com/roikoren755
