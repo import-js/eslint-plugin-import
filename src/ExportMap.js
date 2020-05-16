@@ -429,7 +429,11 @@ ExportMap.parse = function (path, content, context) {
     const p = remotePath(declaration.source.value)
     if (p == null) return null
     const existing = m.imports.get(p)
-    if (existing != null) return existing.getter
+    if (existing != null) {
+      existing.importedSpecifiers.add(...importedSpecifiers.values())
+      m.imports.set(p, existing)
+      return existing.getter
+    }
 
     const getter = thunkFor(p, context)
     m.imports.set(p, {
@@ -541,8 +545,8 @@ ExportMap.parse = function (path, content, context) {
         'TSAbstractClassDeclaration',
         'TSModuleDeclaration',
       ]
-      const exportedDecls = ast.body.filter(({ type, id, declarations }) => 
-        declTypes.includes(type) && 
+      const exportedDecls = ast.body.filter(({ type, id, declarations }) =>
+        declTypes.includes(type) &&
         (id && id.name === exportedName || declarations.find(d => d.id.name === exportedName))
       )
       if (exportedDecls.length === 0) {
