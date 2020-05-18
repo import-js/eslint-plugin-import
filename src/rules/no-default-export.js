@@ -1,8 +1,15 @@
+const schema = {
+  'type': 'object',
+  'properties': {
+    'allowAliasing': { 'type': 'boolean' },
+  },
+  'additionalProperties': false,
+}
 module.exports = {
   meta: {
     type: 'suggestion',
     docs: {},
-    schema: [],
+    schema: [schema],
   },
 
   create(context) {
@@ -16,6 +23,8 @@ module.exports = {
       `Do not alias \`${local.name}\` as \`default\`. Just export ` +
       `\`${local.name}\` itself instead.`
 
+    const { allowAliasing } = context.options[0];
+
     return {
       ExportDefaultDeclaration(node) {
         context.report({node, message: preferNamed})
@@ -27,7 +36,8 @@ module.exports = {
               specifier.exported.name === 'default') {
             context.report({node, message: preferNamed})
           } else if (specifier.type === 'ExportSpecifier' &&
-              specifier.exported.name === 'default') {
+              specifier.exported.name === 'default' && 
+              !allowAliasing) {
             context.report({node, message: noAliasDefault(specifier)})
           }
         })

@@ -58,6 +58,17 @@ export { foo, bar }
 export * from './other-module'
 ```
 
+### `allowAliasing` option
+
+If `allowAliasing` is true, then aliased default exports are allowed.
+
+The following patterns are not considered warnings (if `allowAliasing: true`):
+
+```javascript
+export { foo as default } from "./foo";
+```
+
+
 ## When Not To Use It
 
 If you don't care if default imports are used, or if you prefer default imports over named imports.
