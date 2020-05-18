@@ -84,6 +84,12 @@ ruleTester.run('no-default-export', rule, {
       code: `export Memory, { MemoryValue } from './Memory'`,
       parser: require.resolve('babel-eslint'),
     }),
+
+    // acceptable if allowAliasing is true
+    test({
+      code: 'export { foo as default } from "./foo";',
+      options: [{ allowAliasing: true }],
+    }),
   ],
   invalid: [
     test({
@@ -117,6 +123,15 @@ ruleTester.run('no-default-export', rule, {
         type: 'ExportNamedDeclaration',
         message: 'Prefer named exports.',
       }],
+    }),
+    // still errors if allowAliasing=true
+    test({
+      code: 'export default function bar() {};',
+      errors: [{
+        type: 'ExportDefaultDeclaration',
+        message: 'Prefer named exports.',
+      }],
+      options: [{ allowAliasing: true }],
     }),
   ],
 })
