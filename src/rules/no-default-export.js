@@ -23,7 +23,7 @@ module.exports = {
       `Do not alias \`${local.name}\` as \`default\`. Just export ` +
       `\`${local.name}\` itself instead.`
 
-    const { allowAliasing } = context.options[0] || {};
+    const { allowAliasing } = context.options[0] || {}
 
     return {
       ExportDefaultDeclaration(node) {
