@@ -64,7 +64,6 @@ const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
 const CLASS_DECLARATION = 'ClassDeclaration'
 const DEFAULT = 'default'
-const TYPE_ALIAS = 'TypeAlias'
 
 /**
  * List of imports per file.
@@ -563,8 +562,7 @@ module.exports = {
           if (declaration) {
             if (
               declaration.type === FUNCTION_DECLARATION ||
-              declaration.type === CLASS_DECLARATION ||
-              declaration.type === TYPE_ALIAS
+              declaration.type === CLASS_DECLARATION
             ) {
               newExportIdentifiers.add(declaration.id.name)
             }
@@ -889,8 +887,7 @@ module.exports = {
         if (node.declaration) {
           if (
             node.declaration.type === FUNCTION_DECLARATION ||
-            node.declaration.type === CLASS_DECLARATION ||
-            node.declaration.type === TYPE_ALIAS
+            node.declaration.type === CLASS_DECLARATION
           ) {
             checkUsage(node, node.declaration.id.name)
           }

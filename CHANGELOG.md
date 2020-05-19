@@ -15,7 +15,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
-- [``newline-after-import`: recognize decorators ([#1139], thanks [@atos1990])
+- [`newline-after-import`]: recognize decorators ([#1139], thanks [@atos1990])
+- [`no-unused-modules`]: Revert "[flow] `no-unused-modules`: add flow type support" ([#1770], thanks [@Hypnosphi])
 
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
@@ -675,6 +676,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1770]: https://github.com/benmosher/eslint-plugin-import/issues/1770
 [#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
 [#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
@@ -1156,3 +1158,4 @@ for info on changes for earlier releases.
 [@kmui2]: https://github.com/kmui2
 [@arvigeus]: https://github.com/arvigeus
 [@atos1990]: https://github.com/atos1990
+[@Hypnosphi]: https://github.com/Hypnosphi
