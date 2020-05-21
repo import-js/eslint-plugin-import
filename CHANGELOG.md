@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
 - [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
 - [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
+- [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -687,6 +688,7 @@ for info on changes for earlier releases.
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
 [#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
+[#1776]: https://github.com/benmosher/eslint-plugin-import/pull/1776
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
 [#1764]: https://github.com/benmosher/eslint-plugin-import/pull/1764
 [#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
@@ -1180,3 +1182,4 @@ for info on changes for earlier releases.
 [@julien1619]: https://github.com/julien1619
 [@darkartur]: https://github.com/darkartur
 [@MikeyBeLike]: https://github.com/MikeyBeLike
+[@barbogast]: https://github.com/barbogast
