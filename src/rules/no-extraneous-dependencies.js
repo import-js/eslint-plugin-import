@@ -119,9 +119,6 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     return
   }
 
-  const resolved = resolve(name, context)
-  if (!resolved) { return }
-
   const splitName = name.split('/')
   const packageName = splitName[0][0] === '@'
     ? splitName.slice(0, 2).join('/')
@@ -150,6 +147,9 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     context.report(node, optDepErrorMessage(packageName))
     return
   }
+
+  const resolved = resolve(name, context)
+  if (!resolved) { return }
 
   context.report(node, missingErrorMessage(packageName))
 }
