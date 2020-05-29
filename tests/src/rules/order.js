@@ -167,6 +167,22 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
+    // Export equals expressions should be on top alongside with ordinary import-statements.
+    ...getTSParsers().map(parser => (
+      test({
+        code: `
+          import async, {foo1} from 'async';
+          import relParent2, {foo2} from '../foo/bar';
+          import sibling, {foo3} from './foo';
+          var fs = require('fs');
+          var util = require("util");
+          var relParent1 = require('../foo');
+          var relParent3 = require('../');
+          var index = require('./');
+        `,
+        parser,
+      })
+    )),
     // Adding unknown import types (e.g. using a resolver alias via babel) to the groups.
     test({
       code: `
@@ -1142,6 +1158,24 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
     }),
+    ...getTSParsers().map(parser => (
+      test({
+        code: `
+          var fs = require('fs');
+          import async, {foo1} from 'async';
+          import bar = require("../foo/bar");
+        `,
+        output: `
+          import async, {foo1} from 'async';
+          import bar = require("../foo/bar");
+          var fs = require('fs');
+        `,
+        parser,
+        errors: [{
+          message: '`fs` import should occur after import of `../foo/bar`',
+        }],
+      })
+    )),
     // Default order using import with custom import alias
     test({
       code: `
@@ -1913,6 +1947,30 @@ ruleTester.run('order', rule, {
         message: '`Bar` import should occur before import of `bar`',
       }],
     }),
+    ...getTSParsers().map(parser => (
+        test({
+          code: `
+            import sync = require('sync');
+            import async, {foo1} from 'async';
+
+            import index from './';
+          `,
+          output: `
+            import async, {foo1} from 'async';
+            import sync = require('sync');
+
+            import index from './';
+          `,
+          options: [{
+            groups: ['external', 'index'],
+            alphabetize: {order: 'asc'},
+          }],
+          parser,
+          errors: [{
+            message: '`async` import should occur before import of `sync`',
+          }],
+        })
+      )),
     // Option alphabetize: {order: 'desc'}
     test({
       code: `
