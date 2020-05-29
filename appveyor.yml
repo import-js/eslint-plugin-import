@@ -1,3 +1,7 @@
+configuration:
+  - Native
+  - WSL
+
 # Test against this version of Node.js
 environment:
   matrix:
@@ -8,8 +12,12 @@ environment:
   # - nodejs_version: "6"
   # - nodejs_version: "4"
 
+image: Visual Studio 2019
 matrix:
   fast_finish: false
+  exclude:
+    - configuration: WSL
+      nodejs_version: "8"
 
   # allow_failures:
   #   - nodejs_version: "4" # for eslint 5
@@ -18,45 +26,99 @@ matrix:
 #   - x86
 #   - x64
 
-# Install scripts. (runs after repo cloning)
-install:
-  # Get the latest stable version of Node.js or io.js
-  - ps: Install-Product node $env:nodejs_version
+for:
+-
+  matrix:
+    only:
+      - configuration: Native
+  # Install scripts. (runs after repo cloning)
+  install:
+    # Get the latest stable version of Node.js or io.js
+    - ps: Install-Product node $env:nodejs_version
 
-  # install modules
-  - ps: >-
-      if ($env:nodejs_version -eq "4") {
-        npm install -g npm@3;
-      }
-      if ($env:nodejs_version -in @("8", "10", "12")) {
-        npm install -g npm@6.10.3;
-      }
-  - npm install
+    # install modules
+    - ps: >-
+        if ($env:nodejs_version -eq "4") {
+          npm install -g npm@3;
+        }
+        if ($env:nodejs_version -in @("8", "10", "12")) {
+          npm install -g npm@6.10.3;
+        }
+    - npm install
 
-  # fix symlinks
-  - cmd: git config core.symlinks true
-  - cmd: git reset --hard
+    # fix symlinks
+    - git config core.symlinks true
+    - git reset --hard
 
-  # todo: learn how to do this for all .\resolvers\* on Windows
-  - cd .\resolvers\webpack && npm install && cd ..\..
-  - cd .\resolvers\node && npm install && cd ..\..
+    # todo: learn how to do this for all .\resolvers\* on Windows
+    - cd .\resolvers\webpack && npm install && cd ..\..
+    - cd .\resolvers\node && npm install && cd ..\..
 
-# Post-install test scripts.
-test_script:
+  # Post-install test scripts.
+  test_script:
 
-  # Output useful info for debugging.
-  - node --version
-  - npm --version
+    # Output useful info for debugging.
+    - node --version
+    - npm --version
 
-  # core tests
-  - npm run tests-only
+    # core tests
+    - npm run pretest
+    - npm run tests-only
 
-  # resolver tests
-  - cd .\resolvers\webpack && npm test && cd ..\..
-  - cd .\resolvers\node && npm test && cd ..\..
+    # resolver tests
+    - cd .\resolvers\webpack && npm test && cd ..\..
+    - cd .\resolvers\node && npm test && cd ..\..
 
-on_success:
-  - npm run coveralls
+  on_success:
+    - npm run coveralls
+-
+  matrix:
+    only:
+      - configuration: WSL
+  # Install scripts. (runs after repo cloning)
+  install:
+    # Get the latest stable version of Node.js or io.js
+    - ps: $env:WSLENV += ":nodejs_version"
+    - ps: wsl curl -sL 'https://deb.nodesource.com/setup_${nodejs_version}.x' `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -
+    - wsl sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
+
+    # install modules
+    - ps: >-
+        if ($env:nodejs_version -eq "4") {
+          wsl sudo npm install -g npm@3;
+        }
+        if ($env:nodejs_version -in @("8", "10", "12")) {
+          wsl sudo npm install -g npm@6.10.3;
+        }
+    - wsl npm install
+
+    # fix symlinks
+    - git config core.symlinks true
+    - git reset --hard
+    # reset new-line characters
+    - wsl git reset --hard
+
+    # todo: learn how to do this for all .\resolvers\* on Windows
+    - cd .\resolvers\webpack && wsl npm install && cd ..\..
+    - cd .\resolvers\node && wsl npm install && cd ..\..
+
+  # Post-install test scripts.
+  test_script:
+
+    # Output useful info for debugging.
+    - wsl node --version
+    - wsl npm --version
+
+    # core tests
+    - wsl npm run pretest
+    - wsl npm run tests-only
+
+    # resolver tests
+    - cd .\resolvers\webpack && wsl npm test && cd ..\..
+    - cd .\resolvers\node && wsl npm test && cd ..\..
+
+  on_success:
+    - wsl npm run coveralls
 
 # Don't actually build.
 build: off

@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
 - [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
+- [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -679,6 +680,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
+[#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
 [#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
 [#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
