@@ -229,7 +229,7 @@ alphabetize: {
 This will fail the rule check:
 
 ```js
-/* eslint import/order: ["error", {"alphabetize": true}] */
+/* eslint import/order: ["error", {"alphabetize": {"order": "asc", "caseInsensitive": true}}] */
 import React, { PureComponent } from 'react';
 import aTypes from 'prop-types';
 import { compose, apply } from 'xcompose';
@@ -240,7 +240,7 @@ import blist from 'BList';
 While this will pass:
 
 ```js
-/* eslint import/order: ["error", {"alphabetize": true}] */
+/* eslint import/order: ["error", {"alphabetize": {"order": "asc", "caseInsensitive": true}}] */
 import blist from 'BList';
 import * as classnames from 'classnames';
 import aTypes from 'prop-types';

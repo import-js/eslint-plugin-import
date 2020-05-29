@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
+- [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -676,11 +677,12 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-[#1770]: https://github.com/benmosher/eslint-plugin-import/issues/1770
-[#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
-[#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
+[#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
+[#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
+[#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
+[#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
-[#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
+[#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
@@ -1159,3 +1161,4 @@ for info on changes for earlier releases.
 [@arvigeus]: https://github.com/arvigeus
 [@atos1990]: https://github.com/atos1990
 [@Hypnosphi]: https://github.com/Hypnosphi
+[@nickofthyme]: https://github.com/nickofthyme
