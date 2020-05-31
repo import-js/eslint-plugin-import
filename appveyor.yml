@@ -39,12 +39,17 @@ for:
     # install modules
     - ps: >-
         if ($env:nodejs_version -eq "4") {
-          npm install -g npm@3;
+          cmd /c npm install -g npm@3;
         }
         if ($env:nodejs_version -in @("8", "10", "12")) {
-          npm install -g npm@6.10.3;
+          cmd /c npm install -g npm@6.14.5;
         }
     - npm install
+
+    - ps: >-
+        if ([int]$env:nodejs_version -le 8) {
+          cmd /c npm i eslint@6 2`>`&1;
+        }
 
     # fix symlinks
     - git config core.symlinks true
@@ -53,6 +58,20 @@ for:
     # todo: learn how to do this for all .\resolvers\* on Windows
     - cd .\resolvers\webpack && npm install && cd ..\..
     - cd .\resolvers\node && npm install && cd ..\..
+
+    # Upgrade nyc
+    - npm i --no-save nyc@15.0.1
+    - ps: >-
+        $resolverDir = "./resolvers";
+        Get-ChildItem -Directory $resolverDir |
+        ForEach-Object {
+          Push-Location $(Resolve-Path $(Join-Path $resolverDir $_));
+          cmd /c npm ls nyc 2`>`&1;
+          if ($?) {
+            cmd /c npm i --no-save nyc@15.0.1 2`>`&1;
+          }
+          Pop-Location;
+        }
 
   # Post-install test scripts.
   test_script:

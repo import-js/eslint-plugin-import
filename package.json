@@ -31,7 +31,7 @@
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
     "prepublish": "not-in-publish || npm run build",
-    "coveralls": "nyc report --reporter lcovonly && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "nyc report --reporter lcovonly && coveralls < ./coverage/lcov.info"
   },
   "repository": {
     "type": "git",
