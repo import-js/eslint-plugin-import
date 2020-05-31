@@ -81,6 +81,7 @@
     "glob": "^7.1.6",
     "in-publish": "^2.0.0",
     "linklocal": "^2.8.2",
+    "lodash.isarray": "^4.0.0",
     "mocha": "^3.5.3",
     "npm-which": "^3.0.1",
     "nyc": "^11.9.0",
