@@ -5,10 +5,10 @@ configuration:
 # Test against this version of Node.js
 environment:
   matrix:
-  - nodejs_version: "14"
-  - nodejs_version: "12"
-  - nodejs_version: "10"
-  - nodejs_version: "8"
+    - nodejs_version: "14"
+    - nodejs_version: "12"
+    - nodejs_version: "10"
+    - nodejs_version: "8"
   # - nodejs_version: "6"
   # - nodejs_version: "4"
 
@@ -26,118 +26,113 @@ matrix:
 #   - x86
 #   - x64
 
+# Initialization scripts. (runs before repo cloning)
+init:
+  # Declare version-numbers of packages to install
+  - ps: >-
+      if ($env:nodejs_version -eq "4") {
+        $env:NPM_VERSION="3"
+      }
+      if ($env:nodejs_version -in @("8", "10", "12")) {
+        $env:NPM_VERSION="6.14.5"
+      }
+  - ps: >-
+      if ([int]$env:nodejs_version -le 8) {
+        $env:ESLINT_VERSION="6"
+      }
+  - ps: $env:WINDOWS_NYC_VERSION = "15.0.1"
+
+  # Add `ci`-command to `PATH` for running commands either using cmd or wsl depending on the configuration
+  - ps: $env:PATH += ";$(Join-Path $(pwd) "scripts")"
+
+# Install scripts. (runs after repo cloning)
+before_build:
+  # Install propert `npm`-version
+  - IF DEFINED NPM_VERSION ci sudo npm install -g npm@%NPM_VERSION%
+
+  # Install dependencies
+  - ci npm install
+
+  # fix symlinks
+  - git config core.symlinks true
+  - git reset --hard
+  - ci git reset --hard
+
+  # Install dependencies of resolvers
+  - ps: >-
+      $resolverDir = "./resolvers";
+      $resolvers = @();
+      Get-ChildItem -Directory $resolverDir |
+        ForEach {
+          $resolvers += "$(Resolve-Path $(Join-Path $resolverDir $_))";
+        }
+      $env:RESOLVERS = [string]::Join(";", $resolvers);
+  - FOR %%G in ("%RESOLVERS:;=";"%") do ( pushd %%~G & ci npm install & popd )
+
+  # Install proper `eslint`-version
+  - IF DEFINED ESLINT_VERSION ci npm install --no-save eslint@%ESLINT_VERSION%
+
+# Build scripts (project isn't actually built)
+build_script:
+  - ps: "# This Project isn't actually built"
+
+# Test scripts
+test_script:
+  # Output useful info for debugging.
+  - ci node --version
+  - ci npm --version
+
+  # Run core tests
+  - ci npm run pretest
+  - ci npm run tests-only
+
+  # Run resolver tests
+  - ps: >-
+      $resolverDir = "./resolvers";
+      $resolvers = @();
+      Get-ChildItem -Directory $resolverDir |
+        ForEach {
+          $resolvers += "$(Resolve-Path $(Join-Path $resolverDir $_))";
+        }
+      $env:RESOLVERS = [string]::Join(";", $resolvers);
+  - FOR %%G in ("%RESOLVERS:;=";"%") do ( pushd %%~G & ci npm test & popd )
+
+on_success:
+  - ci npm run coveralls
+
+# Configuration-specific steps
 for:
--
-  matrix:
-    only:
-      - configuration: Native
-  # Install scripts. (runs after repo cloning)
-  install:
-    # Get the latest stable version of Node.js or io.js
-    - ps: Install-Product node $env:nodejs_version
+  - matrix:
+      except:
+        - configuration: WSL
+    install:
+      # Get the latest stable version of Node.js or io.js
+      - ps: Install-Product node $env:nodejs_version
+    before_test:
+      # Upgrade nyc
+      - ci npm i --no-save nyc@%WINDOWS_NYC_VERSION%
+      - ps: >-
+          $resolverDir = "./resolvers";
+          $resolvers = @();
+          Get-ChildItem -Directory $resolverDir |
+            ForEach {
+              Push-Location $(Resolve-Path $(Join-Path $resolverDir $_));
+              ci npm ls nyc > $null;
+              if ($?) {
+                $resolvers += "$(pwd)";
+              }
+              Pop-Location;
+            }
+          $env:RESOLVERS = [string]::Join(";", $resolvers);
+      - IF DEFINED RESOLVERS FOR %%G in ("%RESOLVERS:;=";"%") do ( pushd %%~G & ci npm install --no-save nyc@%WINDOWS_NYC_VERSION% & popd )
+  - matrix:
+      only:
+        - configuration: WSL
+    # Install scripts. (runs after repo cloning)
+    install:
+      # Get a specific version of Node.js
+      - ps: $env:WSLENV += ":nodejs_version"
+      - ps: wsl curl -sL 'https://deb.nodesource.com/setup_${nodejs_version}.x' `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -
+      - wsl sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
 
-    # install modules
-    - ps: >-
-        if ($env:nodejs_version -eq "4") {
-          cmd /c npm install -g npm@3;
-        }
-        if ($env:nodejs_version -in @("8", "10", "12")) {
-          cmd /c npm install -g npm@6.14.5;
-        }
-    - npm install
-
-    - ps: >-
-        if ([int]$env:nodejs_version -le 8) {
-          cmd /c npm i eslint@6 2`>`&1;
-        }
-
-    # fix symlinks
-    - git config core.symlinks true
-    - git reset --hard
-
-    # todo: learn how to do this for all .\resolvers\* on Windows
-    - cd .\resolvers\webpack && npm install && cd ..\..
-    - cd .\resolvers\node && npm install && cd ..\..
-
-    # Upgrade nyc
-    - npm i --no-save nyc@15.0.1
-    - ps: >-
-        $resolverDir = "./resolvers";
-        Get-ChildItem -Directory $resolverDir |
-        ForEach-Object {
-          Push-Location $(Resolve-Path $(Join-Path $resolverDir $_));
-          cmd /c npm ls nyc 2`>`&1;
-          if ($?) {
-            cmd /c npm i --no-save nyc@15.0.1 2`>`&1;
-          }
-          Pop-Location;
-        }
-
-  # Post-install test scripts.
-  test_script:
-
-    # Output useful info for debugging.
-    - node --version
-    - npm --version
-
-    # core tests
-    - npm run pretest
-    - npm run tests-only
-
-    # resolver tests
-    - cd .\resolvers\webpack && npm test && cd ..\..
-    - cd .\resolvers\node && npm test && cd ..\..
-
-  on_success:
-    - npm run coveralls
--
-  matrix:
-    only:
-      - configuration: WSL
-  # Install scripts. (runs after repo cloning)
-  install:
-    # Get the latest stable version of Node.js or io.js
-    - ps: $env:WSLENV += ":nodejs_version"
-    - ps: wsl curl -sL 'https://deb.nodesource.com/setup_${nodejs_version}.x' `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -
-    - wsl sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
-
-    # install modules
-    - ps: >-
-        if ($env:nodejs_version -eq "4") {
-          wsl sudo npm install -g npm@3;
-        }
-        if ($env:nodejs_version -in @("8", "10", "12")) {
-          wsl sudo npm install -g npm@6.10.3;
-        }
-    - wsl npm install
-
-    # fix symlinks
-    - git config core.symlinks true
-    - git reset --hard
-    # reset new-line characters
-    - wsl git reset --hard
-
-    # todo: learn how to do this for all .\resolvers\* on Windows
-    - cd .\resolvers\webpack && wsl npm install && cd ..\..
-    - cd .\resolvers\node && wsl npm install && cd ..\..
-
-  # Post-install test scripts.
-  test_script:
-
-    # Output useful info for debugging.
-    - wsl node --version
-    - wsl npm --version
-
-    # core tests
-    - wsl npm run pretest
-    - wsl npm run tests-only
-
-    # resolver tests
-    - cd .\resolvers\webpack && wsl npm test && cd ..\..
-    - cd .\resolvers\node && wsl npm test && cd ..\..
-
-  on_success:
-    - wsl npm run coveralls
-
-# Don't actually build.
-build: off
+build: on
