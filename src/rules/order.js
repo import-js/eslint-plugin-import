@@ -349,10 +349,6 @@ function convertGroupsToRanks(groups) {
       group = [group]
     }
     group.forEach(function(groupItem) {
-      if (types.indexOf(groupItem) === -1) {
-        throw new Error('Incorrect configuration of the rule: Unknown type `' +
-          JSON.stringify(groupItem) + '`')
-      }
       if (res[groupItem] !== undefined) {
         throw new Error('Incorrect configuration of the rule: `' + groupItem + '` is duplicated')
       }

@@ -1,3 +1,5 @@
+import minimatch from 'minimatch'
+
 import coreModules from 'resolve/lib/core'
 
 import resolve from 'eslint-module-utils/resolve'
@@ -80,7 +82,18 @@ function isRelativeToSibling(name) {
   return /^\.[\\/]/.test(name)
 }
 
-function typeTest(name, settings, path) {
+function findMatchGlobGroup(name, groups) {
+  for (let globPatter of groups) {
+    if (minimatch(name, globPatter)) {
+      return globPatter
+    }
+  }
+}
+
+function typeTest(name, settings, groups, path) {
+  const matchedGlob = findMatchGlobGroup(name, groups)
+
+  if (matchedGlob) { return matchedGlob }
   if (isAbsolute(name, settings, path)) { return 'absolute' }
   if (isBuiltIn(name, settings, path)) { return 'builtin' }
   if (isInternalModule(name, settings, path)) { return 'internal' }
@@ -97,5 +110,7 @@ export function isScopedModule(name) {
 }
 
 export default function resolveImportType(name, context) {
-  return typeTest(name, context.settings, resolve(name, context))
+  const groups = (context.options[0] || {}).groups
+
+  return typeTest(name, context.settings, groups, resolve(name, context))
 }
