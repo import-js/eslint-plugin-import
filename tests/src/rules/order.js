@@ -2057,6 +2057,23 @@ ruleTester.run('order', rule, {
         message: '`..` import should occur before import of `../a`',
       }],
     }),
+    test({
+      code: `
+        import a from 'namespace-1/a'
+        import c from 'namespace-2/c',
+        import b from 'namespace-1/b'
+        import d from 'namespace-2/d'
+      `,
+      output: `
+        import a from 'namespace-1/a'
+        import b from 'namespace-1/b'
+        import c from 'namespace-2/c',
+        import d from 'namespace-2/d'
+      `,
+      options: [{
+        groups: ['namespace-1/**/*', 'namespace-2/**/*'],
+      }],
+    }),
     // Alphabetize with require
     ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
       test({
