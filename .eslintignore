@@ -4,6 +4,7 @@ coverage
 node_modules
 tests/files/malformed.js
 tests/files/with-syntax-error
+tests/files/just-json-files/invalid.json
 resolvers/webpack/test/files
 # we want to ignore "tests/files" here, but unfortunately doing so would
 # interfere with unit test and fail it for some reason.
