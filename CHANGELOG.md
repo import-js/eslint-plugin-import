@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
 - [`order`]: Add support for TypeScript's "import equals"-expressions ([#1785], thanks [@manuth])
 - [`import/default`]: support default export in TSExportAssignment ([#1689], thanks [@Maxim-Mazurok])
+- [`no-restricted-paths`]: add custom message support ([#1802], thanks [@malykhinvi])
 
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
@@ -688,6 +689,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
 [#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
@@ -1192,3 +1194,4 @@ for info on changes for earlier releases.
 [@adamborowski]: https://github.com/adamborowski
 [@adjerbetian]: https://github.com/adjerbetian
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
+[@malykhinvi]: https://github.com/malykhinvi
