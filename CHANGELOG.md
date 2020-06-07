@@ -33,6 +33,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
 - [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
 - [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
+- [eslint] bump minimum v7 version to v7.2.0
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
