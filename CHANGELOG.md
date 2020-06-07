@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
 - [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
 - [`no-internal-modules`]: also check `export from` syntax ([#1691], thanks [@adjerbetian])
+- TypeScript: [`export`]: avoid a crash with `export =` ([#1801], thanks [@ljharb])
 
 ### Changed
 - [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
@@ -690,6 +691,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
+[#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
 [#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785

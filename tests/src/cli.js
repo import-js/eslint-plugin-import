@@ -22,7 +22,7 @@ describe('CLI regression tests', function () {
       })
     })
     it("doesn't throw an error on gratuitous, erroneous self-reference", function () {
-      expect(() => cli.executeOnFiles(['./tests/files/issue210.js'])).not.to.throw(Error)
+      expect(() => cli.executeOnFiles(['./tests/files/issue210.js'])).not.to.throw()
     })
   })
 
@@ -41,7 +41,7 @@ describe('CLI regression tests', function () {
       }
     })
 
-    it('throws an error on invalid JSON', function () {
+    it('throws an error on invalid JSON', () => {
       const invalidJSON = './tests/files/just-json-files/invalid.json'
       const results = cli.executeOnFiles([invalidJSON])
       expect(results).to.eql({

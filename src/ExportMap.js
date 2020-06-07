@@ -590,7 +590,9 @@ ExportMap.parse = function (path, content, context) {
                 moduleBlockNode.declaration :
                 moduleBlockNode
 
-              if (namespaceDecl.type === 'VariableDeclaration') {
+              if (!namespaceDecl) {
+                // TypeScript can check this for us; we needn't
+              } else if (namespaceDecl.type === 'VariableDeclaration') {
                 namespaceDecl.declarations.forEach((d) =>
                   recursivePatternCapture(d.id, (id) => m.namespace.set(
                     id.name,
