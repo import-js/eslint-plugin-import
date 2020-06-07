@@ -6,6 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.21.0] - 2020-06-07
 ### Added
 - [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
@@ -977,7 +978,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.0...HEAD
+[2.21.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...v2.21.0
 [2.20.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.1...v2.20.2
 [2.20.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.0...v2.20.1
 [2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...v2.20.0
