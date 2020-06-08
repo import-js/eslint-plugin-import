@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`order`]: avoid a crash on TypeScript’s `export import` syntax ([#1808], thanks [@ljharb])
+- [`newline-after-import`]: consider TypeScript `import =` syntax' ([#1811], thanks [@ljharb])
 
 ## [2.21.1] - 2020-06-07
 ### Fixed
@@ -900,6 +901,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1811]: https://github.com/benmosher/eslint-plugin-import/issues/1811
 [#1808]: https://github.com/benmosher/eslint-plugin-import/issues/1808
 [#1805]: https://github.com/benmosher/eslint-plugin-import/issues/1805
 [#1565]: https://github.com/benmosher/eslint-plugin-import/issues/1565

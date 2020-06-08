@@ -1,4 +1,7 @@
 import { RuleTester } from 'eslint'
+import flatMap from 'array.prototype.flatmap'
+
+import { getTSParsers } from '../utils'
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.'
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
@@ -175,6 +178,42 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
       parser: require.resolve('babel-eslint'),
     },
+    ...flatMap(getTSParsers(), (parser) => [
+      {
+        code: `
+          import { ExecaReturnValue } from 'execa';
+          import execa = require('execa');
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
+      {
+        code: `
+          import execa = require('execa');
+          import { ExecaReturnValue } from 'execa';
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
+      {
+        code: `
+          import { ExecaReturnValue } from 'execa';
+          import execa = require('execa');
+          import { ExecbReturnValue } from 'execb';
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
+      {
+        code: `
+          import execa = require('execa');
+          import { ExecaReturnValue } from 'execa';
+          import execb = require('execb');
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
+    ]),
   ],
 
   invalid: [
