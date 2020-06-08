@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`order`]: avoid a crash on TypeScript’s `export import` syntax ([#1808], thanks [@ljharb])
+
 ## [2.21.1] - 2020-06-07
 ### Fixed
 - TypeScript: [`import/named`]: avoid requiring `typescript` when not using TS ([#1805], thanks [@ljharb])
@@ -897,6 +900,8 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1808]: https://github.com/benmosher/eslint-plugin-import/issues/1808
+[#1805]: https://github.com/benmosher/eslint-plugin-import/issues/1805
 [#1565]: https://github.com/benmosher/eslint-plugin-import/issues/1565
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334

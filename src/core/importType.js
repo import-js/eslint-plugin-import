@@ -12,7 +12,7 @@ function baseModule(name) {
 }
 
 export function isAbsolute(name) {
-  return name.indexOf('/') === 0
+  return name && name.startsWith('/')
 }
 
 // path is defined only when a resolver resolves to a non-standard path

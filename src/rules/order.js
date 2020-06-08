@@ -611,6 +611,8 @@ module.exports = {
         let name
         if (node.moduleReference.type === 'TSExternalModuleReference') {
           name = node.moduleReference.expression.value
+        } else if (node.isExport) {
+          name = node.moduleReference.name
         } else {
           name = null
         }

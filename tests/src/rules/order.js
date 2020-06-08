@@ -183,6 +183,13 @@ ruleTester.run('order', rule, {
         `,
         parser,
       }),
+
+      test({
+        code: `
+          export import CreateSomething = _CreateSomething;
+        `,
+        parser,
+      }),
     ]),
     // Adding unknown import types (e.g. using a resolver alias via babel) to the groups.
     test({
