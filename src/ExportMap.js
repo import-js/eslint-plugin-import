@@ -17,7 +17,7 @@ import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader'
 
 import includes from 'array-includes'
 
-import {parseConfigFileTextToJson} from 'typescript'
+let parseConfigFileTextToJson
 
 const log = debug('eslint-plugin-import:ExportMap')
 
@@ -459,6 +459,10 @@ ExportMap.parse = function (path, content, context) {
     try {
       if (tsConfigInfo.tsConfigPath !== undefined) {
         const jsonText = fs.readFileSync(tsConfigInfo.tsConfigPath).toString()
+        if (!parseConfigFileTextToJson) {
+          // this is because projects not using TypeScript won't have typescript installed
+          ({parseConfigFileTextToJson} = require('typescript'))
+        }
         const tsConfig = parseConfigFileTextToJson(tsConfigInfo.tsConfigPath, jsonText).config
         return tsConfig.compilerOptions.esModuleInterop
       }
@@ -552,7 +556,9 @@ ExportMap.parse = function (path, content, context) {
     const isEsModuleInteropTrue = isEsModuleInterop()
 
     const exports = ['TSExportAssignment']
-    isEsModuleInteropTrue && exports.push('TSNamespaceExportDeclaration')
+    if (isEsModuleInteropTrue) {
+      exports.push('TSNamespaceExportDeclaration')
+    }
 
     // This doesn't declare anything, but changes what's being exported.
     if (includes(exports, n.type)) {
