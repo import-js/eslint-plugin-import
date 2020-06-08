@@ -3,6 +3,7 @@ import { test, getTSParsers, getNonDefaultParsers } from '../utils'
 import { RuleTester } from 'eslint'
 import eslintPkg from 'eslint/package.json'
 import semver from 'semver'
+import flatMap from 'array.prototype.flatmap'
 
 const ruleTester = new RuleTester()
     , rule = require('rules/order')
@@ -167,8 +168,8 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
-    // Export equals expressions should be on top alongside with ordinary import-statements.
-    ...getTSParsers().map(parser => (
+    ...flatMap(getTSParsers(), parser => [
+      // Export equals expressions should be on top alongside with ordinary import-statements.
       test({
         code: `
           import async, {foo1} from 'async';
@@ -181,8 +182,8 @@ ruleTester.run('order', rule, {
           var index = require('./');
         `,
         parser,
-      })
-    )),
+      }),
+    ]),
     // Adding unknown import types (e.g. using a resolver alias via babel) to the groups.
     test({
       code: `
@@ -1158,7 +1159,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
     }),
-    ...getTSParsers().map(parser => (
+    ...flatMap(getTSParsers(), parser => [
       test({
         code: `
           var fs = require('fs');
@@ -1174,8 +1175,44 @@ ruleTester.run('order', rule, {
         errors: [{
           message: '`fs` import should occur after import of `../foo/bar`',
         }],
-      })
-    )),
+      }),
+      {
+        code: `
+          var async = require('async');
+          var fs = require('fs');
+        `,
+        output: `
+          var fs = require('fs');
+          var async = require('async');
+        `,
+        parser,
+        errors: [{
+          message: '`fs` import should occur before import of `async`',
+        }],
+      },
+      test({
+        code: `
+          import sync = require('sync');
+          import async, {foo1} from 'async';
+
+          import index from './';
+        `,
+        output: `
+          import async, {foo1} from 'async';
+          import sync = require('sync');
+
+          import index from './';
+        `,
+        options: [{
+          groups: ['external', 'index'],
+          alphabetize: {order: 'asc'},
+        }],
+        parser,
+        errors: [{
+          message: '`async` import should occur before import of `sync`',
+        }],
+      }),
+    ]),
     // Default order using import with custom import alias
     test({
       code: `
@@ -1909,20 +1946,6 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
-    ...getTSParsers().map(parser => ({
-      code: `
-        var async = require('async');
-        var fs = require('fs');
-      `,
-      output: `
-        var fs = require('fs');
-        var async = require('async');
-      `,
-      parser,
-      errors: [{
-        message: '`fs` import should occur before import of `async`',
-      }],
-    })),
     // Option alphabetize: {order: 'asc'}
     test({
       code: `
@@ -1947,30 +1970,6 @@ ruleTester.run('order', rule, {
         message: '`Bar` import should occur before import of `bar`',
       }],
     }),
-    ...getTSParsers().map(parser => (
-        test({
-          code: `
-            import sync = require('sync');
-            import async, {foo1} from 'async';
-
-            import index from './';
-          `,
-          output: `
-            import async, {foo1} from 'async';
-            import sync = require('sync');
-
-            import index from './';
-          `,
-          options: [{
-            groups: ['external', 'index'],
-            alphabetize: {order: 'asc'},
-          }],
-          parser,
-          errors: [{
-            message: '`async` import should occur before import of `sync`',
-          }],
-        })
-      )),
     // Option alphabetize: {order: 'desc'}
     test({
       code: `
