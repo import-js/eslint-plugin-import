@@ -80,7 +80,7 @@
     "eslint-plugin-json": "^2.1.1",
     "fs-copy-file-sync": "^1.1.1",
     "glob": "^7.1.6",
-    "in-publish": "^2.0.0",
+    "in-publish": "^2.0.1",
     "linklocal": "^2.8.2",
     "lodash.isarray": "^4.0.0",
     "mocha": "^3.5.3",
@@ -90,7 +90,7 @@
     "rimraf": "^2.7.1",
     "semver": "^6.3.0",
     "sinon": "^2.4.1",
-    "typescript": "~3.8.3",
+    "typescript": "~3.9.5",
     "typescript-eslint-parser": "^22.0.0"
   },
   "peerDependencies": {
