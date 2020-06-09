@@ -95,7 +95,9 @@ module.exports = {
         checkImportForReaching(node.source.value, node.source)
       },
       ExportNamedDeclaration(node) {
-        checkImportForReaching(node.source.value, node.source)
+        if (node.source) {
+          checkImportForReaching(node.source.value, node.source)
+        }
       },
       CallExpression(node) {
         if (isStaticRequire(node)) {
