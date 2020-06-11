@@ -152,6 +152,15 @@ const valid = [
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     }),
+
+    test({
+      code: 'export = function name() {}',
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
   ]),
 
   ...SYNTAX_CASES,
