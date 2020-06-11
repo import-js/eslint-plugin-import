@@ -1,4 +1,4 @@
-import { test, testFilePath } from '../utils'
+import { test, testFilePath, getTSParsers } from '../utils'
 import jsxConfig from '../../../config/react'
 import typescriptConfig from '../../../config/typescript'
 
@@ -736,7 +736,78 @@ describe('correctly work with Typescript only files', () => {
           error(`exported declaration 'b' not used within other modules`),
         ],
       }),
+      test({
+        options: unusedExportsTypescriptOptions,
+        code: `export interface c {};`,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
+        errors: [
+          error(`exported declaration 'c' not used within other modules`),
+        ],
+      }),
+      test({
+        options: unusedExportsTypescriptOptions,
+        code: `export type d = {};`,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
+        errors: [
+          error(`exported declaration 'd' not used within other modules`),
+        ],
+      }),
     ],
+  })
+})
+
+context('TypeScript', function () {
+  getTSParsers().forEach((parser) => {
+    typescriptRuleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: 'import a from "file-ts-a";',
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+        }),
+      ],
+      invalid: [
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export const b = 2;`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
+          errors: [
+            error(`exported declaration 'b' not used within other modules`),
+          ],
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export interface c {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
+          errors: [
+            error(`exported declaration 'c' not used within other modules`),
+          ],
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export type d = {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
+          errors: [
+            error(`exported declaration 'd' not used within other modules`),
+          ],
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export enum e { f };`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e.ts'),
+          errors: [
+            error(`exported declaration 'e' not used within other modules`),
+          ],
+        }),
+      ],
+    })
   })
 })
 

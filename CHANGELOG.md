@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 
 ## [2.21.2] - 2020-06-09
 ### Fixed
@@ -702,6 +704,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819
 [#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
 [#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
 [#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
@@ -1216,3 +1219,4 @@ for info on changes for earlier releases.
 [@adjerbetian]: https://github.com/adjerbetian
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@malykhinvi]: https://github.com/malykhinvi
+[@nicolashenry]: https://github.com/nicolashenry
