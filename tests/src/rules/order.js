@@ -711,6 +711,49 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    ...flatMap(getTSParsers, parser => [
+      // Order of the `import ... = require(...)` syntax
+      test({
+        code: `
+          import blah = require('./blah');
+          import { hello } from './hello';`,
+        parser,
+        options: [
+          {
+            alphabetize: {
+              order: 'asc',
+            },
+          },
+        ],
+      }),
+      // Order of object-imports
+      test({
+        code: `
+          import blah = require('./blah');
+          import log = console.log;`,
+        parser,
+        options: [
+          {
+            alphabetize: {
+              order: 'asc',
+            },
+          },
+        ],
+      }),
+      test({
+        code: `
+          import debug = console.debug;
+          import log = console.log;`,
+        parser,
+        options: [
+          {
+            alphabetize: {
+              order: 'asc',
+            },
+          },
+        ],
+      }),
+    ]),
   ],
   invalid: [
     // builtin before external module (require)
@@ -1167,6 +1210,7 @@ ruleTester.run('order', rule, {
       }],
     }),
     ...flatMap(getTSParsers(), parser => [
+      // Order of the `import ... = require(...)` syntax
       test({
         code: `
           var fs = require('fs');
@@ -1183,7 +1227,7 @@ ruleTester.run('order', rule, {
           message: '`fs` import should occur after import of `../foo/bar`',
         }],
       }),
-      {
+      test({
         code: `
           var async = require('async');
           var fs = require('fs');
@@ -1196,7 +1240,7 @@ ruleTester.run('order', rule, {
         errors: [{
           message: '`fs` import should occur before import of `async`',
         }],
-      },
+      }),
       test({
         code: `
           import sync = require('sync');
@@ -1218,6 +1262,33 @@ ruleTester.run('order', rule, {
         errors: [{
           message: '`async` import should occur before import of `sync`',
         }],
+      }),
+      // Order of object-imports
+      test({
+        code: `
+          import log = console.log;
+          import blah = require('./blah');`,
+        parser,
+        errors: [{
+          message: '`./blah` import should occur before import of `console.log`',
+        }],
+      }),
+      // Alphabetization of object-imports
+      test({
+        code: `
+          import log = console.log;
+          import debug = console.debug;`,
+        parser,
+        errors: [{
+          message: '`console.debug` import should occur before import of `console.log`',
+        }],
+        options: [
+          {
+            alphabetize: {
+              order: 'asc',
+            },
+          },
+        ],
       }),
     ]),
     // Default order using import with custom import alias

@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 
 ### Fixed
+- [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing type from dev dependencies ([#1820], thanks [@fernandopasik])
 - [`default`]: avoid crash with `export =` ([#1822], thanks [@AndrewLeedham])
 
@@ -712,6 +713,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1824]: https://github.com/benmosher/eslint-plugin-import/pull/1824
+[#1823]: https://github.com/benmosher/eslint-plugin-import/pull/1823
 [#1822]: https://github.com/benmosher/eslint-plugin-import/pull/1822
 [#1820]: https://github.com/benmosher/eslint-plugin-import/pull/1820
 [#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819

@@ -248,14 +248,14 @@ function makeOutOfOrderReport(context, imported) {
 }
 
 function getSorter(ascending) {
-  let multiplier = (ascending ? 1 : -1)
+  const multiplier = ascending ? 1 : -1
 
   return function importsSorter(importA, importB) {
     let result
 
-    if ((importA < importB) || importB === null) {
+    if (importA < importB) {
       result = -1
-    } else if ((importA > importB) || importA === null) {
+    } else if (importA > importB) {
       result = 1
     } else {
       result = 0
@@ -310,8 +310,13 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, ranks, name, type, excludedImportTypes) {
-  const impType = importType(name, context)
+function computeRank(context, node, ranks, name, type, excludedImportTypes) {
+  let impType
+  if (type === 'import:object') {
+    impType = 'object'
+  } else {
+    impType = importType(name, context)
+  }
   let rank
   if (!excludedImportTypes.has(impType)) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
@@ -319,7 +324,7 @@ function computeRank(context, ranks, name, type, excludedImportTypes) {
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType]
   }
-  if (type !== 'import') {
+  if (type !== 'import' && !type.startsWith('import:')) {
     rank += 100
   }
 
@@ -327,7 +332,7 @@ function computeRank(context, ranks, name, type, excludedImportTypes) {
 }
 
 function registerNode(context, node, name, type, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, ranks, name, type, excludedImportTypes)
+  const rank = computeRank(context, node, ranks, name, type, excludedImportTypes)
   if (rank !== -1) {
     imported.push({name, rank, node})
   }
@@ -338,7 +343,7 @@ function isInVariableDeclarator(node) {
     (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
 }
 
-const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index']
+const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object']
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
@@ -563,7 +568,7 @@ module.exports = {
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
     const newlinesBetweenImports = options['newlines-between'] || 'ignore'
-    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external'])
+    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object'])
     const alphabetize = getAlphabetizeConfig(options)
     let ranks
 
@@ -609,18 +614,19 @@ module.exports = {
       },
       TSImportEqualsDeclaration: function handleImports(node) {
         let name
+        let type
         if (node.moduleReference.type === 'TSExternalModuleReference') {
           name = node.moduleReference.expression.value
-        } else if (node.isExport) {
-          name = node.moduleReference.name
+          type = 'import'
         } else {
-          name = null
+          name = context.getSourceCode().getText(node.moduleReference)
+          type = 'import:object'
         }
         registerNode(
           context,
           node,
           name,
-          'import',
+          type,
           ranks,
           imported,
           pathGroupsExcludedImportTypes
