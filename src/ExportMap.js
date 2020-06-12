@@ -13,6 +13,12 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore'
 import { hashObject } from 'eslint-module-utils/hash'
 import * as unambiguous from 'eslint-module-utils/unambiguous'
 
+import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader'
+
+import includes from 'array-includes'
+
+let parseConfigFileTextToJson
+
 const log = debug('eslint-plugin-import:ExportMap')
 
 const exportCache = new Map()
@@ -445,8 +451,27 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast)
 
-  ast.body.forEach(function (n) {
+  function isEsModuleInterop() {
+    const tsConfigInfo = tsConfigLoader({
+      cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+      getEnv: (key) => process.env[key],
+    })
+    try {
+      if (tsConfigInfo.tsConfigPath !== undefined) {
+        const jsonText = fs.readFileSync(tsConfigInfo.tsConfigPath).toString()
+        if (!parseConfigFileTextToJson) {
+          // this is because projects not using TypeScript won't have typescript installed
+          ({parseConfigFileTextToJson} = require('typescript'))
+        }
+        const tsConfig = parseConfigFileTextToJson(tsConfigInfo.tsConfigPath, jsonText).config
+        return tsConfig.compilerOptions.esModuleInterop
+      }
+    } catch (e) {
+      return false
+    }
+  }
 
+  ast.body.forEach(function (n) {
     if (n.type === 'ExportDefaultDeclaration') {
       const exportMeta = captureDoc(source, docStyleParsers, n)
       if (n.declaration.type === 'Identifier') {
@@ -528,9 +553,16 @@ ExportMap.parse = function (path, content, context) {
       })
     }
 
+    const isEsModuleInteropTrue = isEsModuleInterop()
+
+    const exports = ['TSExportAssignment']
+    if (isEsModuleInteropTrue) {
+      exports.push('TSNamespaceExportDeclaration')
+    }
+
     // This doesn't declare anything, but changes what's being exported.
-    if (n.type === 'TSExportAssignment') {
-      const exportedName = n.expression.name
+    if (includes(exports, n.type)) {
+      const exportedName = n.expression && n.expression.name || n.id.name
       const declTypes = [
         'VariableDeclaration',
         'ClassDeclaration',
@@ -541,36 +573,45 @@ ExportMap.parse = function (path, content, context) {
         'TSAbstractClassDeclaration',
         'TSModuleDeclaration',
       ]
-      const exportedDecls = ast.body.filter(({ type, id, declarations }) => 
-        declTypes.includes(type) && 
-        (id && id.name === exportedName || declarations.find(d => d.id.name === exportedName))
-      )
+      const exportedDecls = ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+        (id && id.name === exportedName) || (declarations && declarations.find((d) => d.id.name === exportedName))
+      ))
       if (exportedDecls.length === 0) {
         // Export is not referencing any local declaration, must be re-exporting
         m.namespace.set('default', captureDoc(source, docStyleParsers, n))
         return
       }
+      if (isEsModuleInteropTrue) {
+        m.namespace.set('default', {})
+      }
       exportedDecls.forEach((decl) => {
-        if (decl.type === 'TSModuleDeclaration' && decl && decl.body && decl.body.body) {
-          decl.body.body.forEach((moduleBlockNode) => {
-            // Export-assignment exports all members in the namespace, explicitly exported or not.
-            const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
-              moduleBlockNode.declaration :
-              moduleBlockNode
+        if (decl.type === 'TSModuleDeclaration') {
+          if (decl.body && decl.body.type === 'TSModuleDeclaration') {
+            m.namespace.set(decl.body.id.name, captureDoc(source, docStyleParsers, decl.body))
+          } else if (decl.body && decl.body.body) {
+            decl.body.body.forEach((moduleBlockNode) => {
+              // Export-assignment exports all members in the namespace,
+              // explicitly exported or not.
+              const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration' ?
+                moduleBlockNode.declaration :
+                moduleBlockNode
 
-            if (namespaceDecl.type === 'VariableDeclaration') {
-              namespaceDecl.declarations.forEach((d) =>
-                recursivePatternCapture(d.id, (id) => m.namespace.set(
-                  id.name,
-                  captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode))
+              if (!namespaceDecl) {
+                // TypeScript can check this for us; we needn't
+              } else if (namespaceDecl.type === 'VariableDeclaration') {
+                namespaceDecl.declarations.forEach((d) =>
+                  recursivePatternCapture(d.id, (id) => m.namespace.set(
+                    id.name,
+                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode)
+                  ))
                 )
-              )
-            } else {
-              m.namespace.set(
-                namespaceDecl.id.name,
-                captureDoc(source, docStyleParsers, moduleBlockNode))
-            }
-          })
+              } else {
+                m.namespace.set(
+                  namespaceDecl.id.name,
+                  captureDoc(source, docStyleParsers, moduleBlockNode))
+              }
+            })
+          }
         } else {
           // Export as default
           m.namespace.set('default', captureDoc(source, docStyleParsers, decl))

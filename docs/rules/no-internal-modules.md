@@ -49,6 +49,9 @@ The following patterns are considered problems:
 import { settings } from './app/index'; // Reaching to "./app/index" is not allowed
 import userReducer from './reducer/user'; // Reaching to "./reducer/user" is not allowed
 import configureStore from './redux/configureStore'; // Reaching to "./redux/configureStore" is not allowed
+
+export { settings } from './app/index'; // Reaching to "./app/index" is not allowed
+export * from './reducer/user'; // Reaching to "./reducer/user" is not allowed
 ```
 
 The following patterns are NOT considered problems:
@@ -61,4 +64,7 @@ The following patterns are NOT considered problems:
 import 'source-map-support/register';
 import { settings } from '../app';
 import getUser from '../actions/getUser';
+
+export * from 'source-map-support/register';
+export { settings } from '../app';
 ```

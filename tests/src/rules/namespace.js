@@ -1,5 +1,6 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils'
 import { RuleTester } from 'eslint'
+import flatMap from 'array.prototype.flatmap'
 
 var ruleTester = new RuleTester({ env: { es6: true }})
   , rule = require('rules/namespace')
@@ -119,6 +120,48 @@ const valid = [
       },
     },
   }),
+
+  // Typescript
+  ...flatMap(getTSParsers(), (parser) => [
+    test({
+      code: `
+        import * as foo from "./typescript-declare-nested"
+        foo.bar.MyFunction()
+      `,
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+
+    test({
+      code: `import { foobar } from "./typescript-declare-interface"`,
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+
+    test({
+      code: 'export * from "typescript/lib/typescript.d"',
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+
+    test({
+      code: 'export = function name() {}',
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+  ]),
 
   ...SYNTAX_CASES,
 ]

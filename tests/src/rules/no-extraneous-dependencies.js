@@ -3,8 +3,10 @@ import * as path from 'path'
 import * as fs from 'fs'
 
 import { RuleTester } from 'eslint'
+import flatMap from 'array.prototype.flatmap'
+
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-extraneous-dependencies')
+const rule = require('rules/no-extraneous-dependencies')
 
 const packageDirWithSyntaxError = path.join(__dirname, '../../files/with-syntax-error')
 const packageFileWithSyntaxErrorMessage = (() => {
@@ -22,21 +24,25 @@ const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependenc
 const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object')
 const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition')
 
+const {
+  dependencies: deps,
+  devDependencies: devDeps,
+} = require('../../files/package.json')
+
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
-    test({ code: 'import "lodash.cond"'}),
-    test({ code: 'import "pkg-up"'}),
-    test({ code: 'import foo, { bar } from "lodash.cond"'}),
-    test({ code: 'import foo, { bar } from "pkg-up"'}),
+    ...flatMap(Object.keys(deps).concat(Object.keys(devDeps)), (pkg) => [
+      test({ code: `import "${pkg}"` }),
+      test({ code: `import foo, { bar } from "${pkg}"` }),
+      test({ code: `require("${pkg}")` }),
+      test({ code: `var foo = require("${pkg}")` }),
+      test({ code: `export { foo } from "${pkg}"` }),
+      test({ code: `export * from "${pkg}"` }),
+    ]),
     test({ code: 'import "eslint"'}),
     test({ code: 'import "eslint/lib/api"'}),
-    test({ code: 'require("lodash.cond")'}),
-    test({ code: 'require("pkg-up")'}),
-    test({ code: 'var foo = require("lodash.cond")'}),
-    test({ code: 'var foo = require("pkg-up")'}),
     test({ code: 'import "fs"'}),
     test({ code: 'import "./foo"'}),
-    test({ code: 'import "lodash.isarray"'}),
     test({ code: 'import "@org/package"'}),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
@@ -113,8 +119,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import foo from "@generated/foo"',
       options: [{packageDir: packageDirBundledDepsRaceCondition}],
     }),
-    test({ code: 'export { foo } from "lodash.cond"' }),
-    test({ code: 'export * from "lodash.cond"' }),
     test({ code: 'export function getToken() {}' }),
     test({ code: 'export class Component extends React.Component {}' }),
     test({ code: 'export function Component() {}' }),

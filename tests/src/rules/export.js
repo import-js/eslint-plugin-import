@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils'
+import { test, testFilePath, SYNTAX_CASES, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -186,6 +186,10 @@ context('TypeScript', function () {
               }
             }
           `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: 'export * from "./file1.ts"',
+          filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
       ],
       invalid: [

@@ -157,8 +157,12 @@ function isPlainImportModule(node) {
   return node.type === 'ImportDeclaration' && node.specifiers != null && node.specifiers.length > 0
 }
 
+function isPlainImportEquals(node) {
+  return node.type === 'TSImportEqualsDeclaration' && node.moduleReference.expression
+}
+
 function canCrossNodeWhileReorder(node) {
-  return isPlainRequireModule(node) || isPlainImportModule(node)
+  return isPlainRequireModule(node) || isPlainImportModule(node) || isPlainImportEquals(node)
 }
 
 function canReorderItems(firstNode, secondNode) {
@@ -243,28 +247,22 @@ function makeOutOfOrderReport(context, imported) {
   reportOutOfOrder(context, imported, outOfOrder, 'before')
 }
 
-function importsSorterAsc(importA, importB) {
-  if (importA < importB) {
-    return -1
+function getSorter(ascending) {
+  let multiplier = (ascending ? 1 : -1)
+
+  return function importsSorter(importA, importB) {
+    let result
+
+    if ((importA < importB) || importB === null) {
+      result = -1
+    } else if ((importA > importB) || importA === null) {
+      result = 1
+    } else {
+      result = 0
+    }
+
+    return result * multiplier
   }
-
-  if (importA > importB) {
-    return 1
-  }
-
-  return 0
-}
-
-function importsSorterDesc(importA, importB) {
-  if (importA < importB) {
-    return 1
-  }
-
-  if (importA > importB) {
-    return -1
-  }
-
-  return 0
 }
 
 function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
@@ -278,7 +276,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   const groupRanks = Object.keys(groupedByRanks)
 
-  const sorterFn = alphabetizeOptions.order === 'asc' ? importsSorterAsc : importsSorterDesc
+  const sorterFn = getSorter(alphabetizeOptions.order === 'asc')
   const comparator = alphabetizeOptions.caseInsensitive ? (a, b) => sorterFn(String(a).toLowerCase(), String(b).toLowerCase()) : (a, b) => sorterFn(a, b)
   // sort imports locally within their group
   groupRanks.forEach(function(groupRank) {
@@ -608,6 +606,25 @@ module.exports = {
             pathGroupsExcludedImportTypes
           )
         }
+      },
+      TSImportEqualsDeclaration: function handleImports(node) {
+        let name
+        if (node.moduleReference.type === 'TSExternalModuleReference') {
+          name = node.moduleReference.expression.value
+        } else if (node.isExport) {
+          name = node.moduleReference.name
+        } else {
+          name = null
+        }
+        registerNode(
+          context,
+          node,
+          name,
+          'import',
+          ranks,
+          imported,
+          pathGroupsExcludedImportTypes
+        )
       },
       CallExpression: function handleRequires(node) {
         if (level !== 0 || !isStaticRequire(node) || !isInVariableDeclarator(node.parent)) {

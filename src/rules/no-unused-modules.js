@@ -63,8 +63,32 @@ const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
 const CLASS_DECLARATION = 'ClassDeclaration'
-const DEFAULT = 'default'
+const INTERFACE_DECLARATION = 'InterfaceDeclaration'
 const TYPE_ALIAS = 'TypeAlias'
+const TS_INTERFACE_DECLARATION = 'TSInterfaceDeclaration'
+const TS_TYPE_ALIAS_DECLARATION = 'TSTypeAliasDeclaration'
+const TS_ENUM_DECLARATION = 'TSEnumDeclaration'
+const DEFAULT = 'default'
+
+function forEachDeclarationIdentifier(declaration, cb) {
+  if (declaration) {
+    if (
+      declaration.type === FUNCTION_DECLARATION ||
+      declaration.type === CLASS_DECLARATION ||
+      declaration.type === INTERFACE_DECLARATION ||
+      declaration.type === TYPE_ALIAS ||
+      declaration.type === TS_INTERFACE_DECLARATION ||
+      declaration.type === TS_TYPE_ALIAS_DECLARATION ||
+      declaration.type === TS_ENUM_DECLARATION
+    ) {
+      cb(declaration.id.name)
+    } else if (declaration.type === VARIABLE_DECLARATION) {
+      declaration.declarations.forEach(({ id }) => {
+        cb(id.name)
+      })
+    }
+  }
+}
 
 /**
  * List of imports per file.
@@ -560,20 +584,9 @@ module.exports = {
               }
             })
           }
-          if (declaration) {
-            if (
-              declaration.type === FUNCTION_DECLARATION ||
-              declaration.type === CLASS_DECLARATION ||
-              declaration.type === TYPE_ALIAS
-            ) {
-              newExportIdentifiers.add(declaration.id.name)
-            }
-            if (declaration.type === VARIABLE_DECLARATION) {
-              declaration.declarations.forEach(({ id }) => {
-                newExportIdentifiers.add(id.name)
-              })
-            }
-          }
+          forEachDeclarationIdentifier(declaration, (name) => {
+            newExportIdentifiers.add(name)
+          })
         }
       })
 
@@ -656,13 +669,12 @@ module.exports = {
           if (astNode.source) {
             resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context)
             astNode.specifiers.forEach(specifier => {
-              let name
-              if (specifier.exported.name === DEFAULT) {
-                name = IMPORT_DEFAULT_SPECIFIER
+              const name = specifier.local.name
+              if (specifier.local.name === DEFAULT) {
+                newDefaultImports.add(resolvedPath)
               } else {
-                name = specifier.local.name
+                newImports.set(name, resolvedPath)
               }
-              newImports.set(name, resolvedPath)
             })
           }
         }
@@ -886,20 +898,9 @@ module.exports = {
         node.specifiers.forEach(specifier => {
             checkUsage(node, specifier.exported.name)
         })
-        if (node.declaration) {
-          if (
-            node.declaration.type === FUNCTION_DECLARATION ||
-            node.declaration.type === CLASS_DECLARATION ||
-            node.declaration.type === TYPE_ALIAS
-          ) {
-            checkUsage(node, node.declaration.id.name)
-          }
-          if (node.declaration.type === VARIABLE_DECLARATION) {
-            node.declaration.declarations.forEach(declaration => {
-              checkUsage(node, declaration.id.name)
-            })
-          }
-        }
+        forEachDeclarationIdentifier(node.declaration, (name) => {
+          checkUsage(node, name)
+        })
       },
     }
   },

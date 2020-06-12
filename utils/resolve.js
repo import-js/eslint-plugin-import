@@ -10,7 +10,7 @@ const path = require('path')
 const hashObject = require('./hash').hashObject
     , ModuleCache = require('./ModuleCache').default
 
-const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname, 'reSOLVE.js'))
+const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname.toUpperCase(), 'reSOLVE.js'))
 exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS
 
 const ERROR_NAME = 'EslintPluginImportResolveError'

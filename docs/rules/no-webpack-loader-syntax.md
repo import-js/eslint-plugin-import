@@ -2,12 +2,12 @@
 
 Forbid Webpack loader syntax in imports.
 
-[Webpack](http://webpack.github.io) allows specifying the [loaders](http://webpack.github.io/docs/loaders.html) to use in the import source string using a special syntax like this:
+[Webpack](https://webpack.js.org) allows specifying the [loaders](https://webpack.js.org/concepts/loaders/) to use in the import source string using a special syntax like this:
 ```js
 var moduleWithOneLoader = require("my-loader!./my-awesome-module");
 ```
 
-This syntax is non-standard, so it couples the code to Webpack. The recommended way to specify Webpack loader configuration is in a [Webpack configuration file](http://webpack.github.io/docs/loaders.html#loaders-by-config).
+This syntax is non-standard, so it couples the code to Webpack. The recommended way to specify Webpack loader configuration is in a [Webpack configuration file](https://webpack.js.org/concepts/loaders/#configuration).
 
 ## Rule Details
 

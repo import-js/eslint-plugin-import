@@ -7,21 +7,47 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1701], thanks [@KevinHerklotz])
+- [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 
+## [2.21.2] - 2020-06-09
+### Fixed
+- [`order`]: avoid a crash on TypeScript’s `export import` syntax ([#1808], thanks [@ljharb])
+- [`newline-after-import`]: consider TypeScript `import =` syntax' ([#1811], thanks [@ljharb])
+- [`no-internal-modules`]: avoid a crash on a named export declaration ([#1814], thanks [@ljharb])
+
+## [2.21.1] - 2020-06-07
+### Fixed
+- TypeScript: [`import/named`]: avoid requiring `typescript` when not using TS ([#1805], thanks [@ljharb])
+
+## [2.21.0] - 2020-06-07
 ### Added
 - [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
+- [`order`]: Add support for TypeScript's "import equals"-expressions ([#1785], thanks [@manuth])
+- [`import/default`]: support default export in TSExportAssignment ([#1689], thanks [@Maxim-Mazurok])
+- [`no-restricted-paths`]: add custom message support ([#1802], thanks [@malykhinvi])
 
 ### Fixed
 - [`group-exports`]: Flow type export awareness ([#1702], thanks [@ernestostifano])
 - [`order`]: Recognize pathGroup config for first group ([#1719], [#1724], thanks [@forivall], [@xpl])
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
-- [``newline-after-import`: recognize decorators ([#1139], thanks [@atos1990])
+- [`newline-after-import`]: recognize decorators ([#1139], thanks [@atos1990])
+- [`no-unused-modules`]: Revert "[flow] `no-unused-modules`: add flow type support" ([#1770], thanks [@Hypnosphi])
+- TypeScript: Add nested namespace handling ([#1763], thanks [@julien1619])
+- [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
+- [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
+- [`no-internal-modules`]: also check `export from` syntax ([#1691], thanks [@adjerbetian])
+- TypeScript: [`export`]: avoid a crash with `export =` ([#1801], thanks [@ljharb])
 
 ### Changed
+- [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
+- [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
+- [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
+- [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
+- [eslint] bump minimum v7 version to v7.2.0
 
 ## [2.20.2] - 2020-03-28
 ### Fixed
@@ -30,6 +56,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 - [`no-unused-modules`]: Handle `export { default } from` syntax ([#1631], thanks [@richardxia])
 - [`first`]: Add a way to disable `absolute-first` explicitly ([#1664], thanks [@TheCrueltySage])
+- [Docs] `no-webpack-loader-syntax`: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
 
 ## [2.20.1] - 2020-02-01
 ### Fixed
@@ -46,6 +73,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
 - [meta] fix "files" field to include/exclude the proper files ([#1635], thanks [@ljharb])
+- [Tests] `order`: Add TS import type tests ([#1736], thanks [@kmui2])
 
 ## [2.20.0] - 2020-01-10
 ### Added
@@ -677,13 +705,29 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-[#1726]: https://github.com/benmosher/eslint-plugin-import/issues/1726
-[#1724]: https://github.com/benmosher/eslint-plugin-import/issues/1724
+[#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819
+[#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
+[#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
+[#1788]: https://github.com/benmosher/eslint-plugin-import/pull/1788
+[#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
+[#1785]: https://github.com/benmosher/eslint-plugin-import/pull/1785
+[#1776]: https://github.com/benmosher/eslint-plugin-import/pull/1776
+[#1770]: https://github.com/benmosher/eslint-plugin-import/pull/1770
+[#1764]: https://github.com/benmosher/eslint-plugin-import/pull/1764
+[#1763]: https://github.com/benmosher/eslint-plugin-import/pull/1763
+[#1751]: https://github.com/benmosher/eslint-plugin-import/pull/1751
+[#1744]: https://github.com/benmosher/eslint-plugin-import/pull/1744
+[#1736]: https://github.com/benmosher/eslint-plugin-import/pull/1736
+[#1735]: https://github.com/benmosher/eslint-plugin-import/pull/1735
+[#1726]: https://github.com/benmosher/eslint-plugin-import/pull/1726
+[#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
-[#1719]: https://github.com/benmosher/eslint-plugin-import/issues/1719
+[#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1701]: https://github.com/benmosher/eslint-plugin-import/issues/1701
+[#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
+[#1689]: https://github.com/benmosher/eslint-plugin-import/pull/1689
 [#1681]: https://github.com/benmosher/eslint-plugin-import/pull/1681
 [#1676]: https://github.com/benmosher/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/benmosher/eslint-plugin-import/pull/1666
@@ -864,6 +908,10 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#1814]: https://github.com/benmosher/eslint-plugin-import/issues/1814
+[#1811]: https://github.com/benmosher/eslint-plugin-import/issues/1811
+[#1808]: https://github.com/benmosher/eslint-plugin-import/issues/1808
+[#1805]: https://github.com/benmosher/eslint-plugin-import/issues/1805
 [#1565]: https://github.com/benmosher/eslint-plugin-import/issues/1565
 [#1366]: https://github.com/benmosher/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/benmosher/eslint-plugin-import/issues/1334
@@ -949,7 +997,10 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.2...HEAD
+[2.21.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.21.2
+[2.21.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.0...v2.21.1
+[2.21.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...v2.21.0
 [2.20.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.1...v2.20.2
 [2.20.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.0...v2.20.1
 [2.19.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.19.1...v2.20.0
@@ -1160,3 +1211,15 @@ for info on changes for earlier releases.
 [@kmui2]: https://github.com/kmui2
 [@arvigeus]: https://github.com/arvigeus
 [@atos1990]: https://github.com/atos1990
+[@Hypnosphi]: https://github.com/Hypnosphi
+[@nickofthyme]: https://github.com/nickofthyme
+[@manuth]: https://github.com/manuth
+[@julien1619]: https://github.com/julien1619
+[@darkartur]: https://github.com/darkartur
+[@MikeyBeLike]: https://github.com/MikeyBeLike
+[@barbogast]: https://github.com/barbogast
+[@adamborowski]: https://github.com/adamborowski
+[@adjerbetian]: https://github.com/adjerbetian
+[@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
+[@malykhinvi]: https://github.com/malykhinvi
+[@nicolashenry]: https://github.com/nicolashenry

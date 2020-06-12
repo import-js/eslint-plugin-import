@@ -34,6 +34,7 @@ module.exports = {
                   },
                   uniqueItems: true,
                 },
+                message: { type: 'string' },
               },
               additionalProperties: false,
             },
@@ -126,7 +127,7 @@ module.exports = {
 
           context.report({
             node,
-            message: `Unexpected path "{{importPath}}" imported in restricted zone.`,
+            message: `Unexpected path "{{importPath}}" imported in restricted zone.${zone.message ? ` ${zone.message}` : ''}`,
             data: { importPath },
           })
         })

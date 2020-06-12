@@ -58,27 +58,21 @@ given file-f:
 ```js
 import { e } from 'file-a'
 import { f } from 'file-b'
-import * from  'file-c'
-export * from 'file-d'
-export { default, i0 } from 'file-e' // both will be reported
+import * as fileC from  'file-c'
+export { default, i0 } from 'file-d' // both will be reported
 
 export const j = 99 // will be reported 
 ```
-and file-e:
+and file-d:
 ```js
 export const i0 = 9 // will not be reported
 export const i1 = 9 // will be reported
 export default () => {} // will not be reported
 ```
-and file-d:
+and file-c:
 ```js
 export const h = 8 // will not be reported
 export default () => {} // will be reported, as export * only considers named exports and ignores default exports
-```
-and file-c:
-```js
-export const g = 7 // will not be reported
-export default () => {} // will not be reported
 ```
 and file-b:
 ```js

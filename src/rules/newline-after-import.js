@@ -115,16 +115,19 @@ after ${type} statement not followed by another ${type}.`,
       level--
     }
 
-    return {
-      ImportDeclaration: function (node) {
+    function checkImport(node) {
         const { parent } = node
         const nodePosition = parent.body.indexOf(node)
         const nextNode = parent.body[nodePosition + 1]
 
-        if (nextNode && nextNode.type !== 'ImportDeclaration') {
+        if (nextNode && nextNode.type !== 'ImportDeclaration' && nextNode.type !== 'TSImportEqualsDeclaration') {
           checkForNewLine(node, nextNode, 'import')
         }
-      },
+    }
+
+    return {
+      ImportDeclaration: checkImport,
+      TSImportEqualsDeclaration: checkImport,
       CallExpression: function(node) {
         if (isStaticRequire(node) && level === 0) {
           requireCalls.push(node)
