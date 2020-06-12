@@ -175,6 +175,14 @@ context('TypeScript', function () {
             },
           }),
           test({
+            code: `import foobar from "./typescript-export-assign-function"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
+          test({
             code: `import foobar from "./typescript-export-assign-mixed"`,
             parser: parser,
             settings: {
