@@ -8,6 +8,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 
+### Fixed
+- [`no-extraneous-dependencies`]/TypeScript: do not error when importing type from dev dependencies ([#1820], thanks [@fernandopasik])
+
 ## [2.21.2] - 2020-06-09
 ### Fixed
 - [`order`]: avoid a crash on TypeScript’s `export import` syntax ([#1808], thanks [@ljharb])
@@ -704,6 +707,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1820]: https://github.com/benmosher/eslint-plugin-import/pull/1820
 [#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819
 [#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
 [#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
@@ -1220,3 +1224,4 @@ for info on changes for earlier releases.
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@malykhinvi]: https://github.com/malykhinvi
 [@nicolashenry]: https://github.com/nicolashenry
+[@fernandopasik]: https://github.com/fernandopasik

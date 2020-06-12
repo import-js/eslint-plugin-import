@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { getTSParsers, test } from '../utils'
 import * as path from 'path'
 import * as fs from 'fs'
 
@@ -17,6 +17,7 @@ const packageFileWithSyntaxErrorMessage = (() => {
   }
 })()
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
+const packageDirWithTypescriptDevDependencies = path.join(__dirname, '../../files/with-typescript-dev-dependencies')
 const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
 const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
 const packageDirWithEmpty = path.join(__dirname, '../../files/empty')
@@ -311,4 +312,57 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       }],
     }),
   ],
+})
+
+describe('TypeScript', function () {
+  getTSParsers()
+    .forEach((parser) => {
+      const parserConfig = {
+        parser: parser,
+        settings: {
+          'import/parsers': { [parser]: ['.ts'] },
+          'import/resolver': { 'eslint-import-resolver-typescript': true },
+        },
+      }
+
+      if (parser !== require.resolve('typescript-eslint-parser')) {
+        ruleTester.run('no-extraneous-dependencies', rule, {
+          valid: [
+            test(Object.assign({
+              code: 'import type { JSONSchema7Type } from "@types/json-schema";',
+              options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            }, parserConfig)),
+          ],
+          invalid: [
+            test(Object.assign({
+              code: 'import { JSONSchema7Type } from "@types/json-schema";',
+              options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+              errors: [{
+                message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              }],
+            }, parserConfig)),
+          ],
+        })
+      } else {
+        ruleTester.run('no-extraneous-dependencies', rule, {
+          valid: [],
+          invalid: [
+            test(Object.assign({
+              code: 'import { JSONSchema7Type } from "@types/json-schema";',
+              options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+              errors: [{
+                message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              }],
+            }, parserConfig)),
+            test(Object.assign({
+              code: 'import type { JSONSchema7Type } from "@types/json-schema";',
+              options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+              errors: [{
+                message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              }],
+            }, parserConfig)),
+          ],
+        })
+      }
+    })
 })
