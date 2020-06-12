@@ -38,13 +38,13 @@ and the configuration set to:
 } ] }
 ```
 
-#### Fail:
+#### The following patterns are considered problems (with the above setup):
 
 ```js
 import api from '../server/api';
 ```
 
-#### Pass:
+#### The following patterns are not considered problems (with the above setup):
 
 ```js
 import about from './about';
@@ -81,13 +81,13 @@ and the current configuration is set to:
 } ] }
 ```
 
-#### Fail:
+#### The following patterns are considered problems (with the above setup):
 
 ```js
 import a from '../server/api/a'
 ```
 
-#### Pass:
+#### The following patterns are not considered problems (with the above setup):
 
 ```js
 import { MyType } from '../server/api/types'

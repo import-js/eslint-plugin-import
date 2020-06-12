@@ -6,7 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 ### Added
-- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1701], thanks [@KevinHerklotz])
+- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1708], thanks [@KevinHerklotz])
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 
 ## [2.21.2] - 2020-06-09
@@ -723,8 +723,8 @@ for info on changes for earlier releases.
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
+[#1708]: https://github.com/benmosher/eslint-plugin-import/pull/1708
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
-[#1701]: https://github.com/benmosher/eslint-plugin-import/issues/1701
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
 [#1689]: https://github.com/benmosher/eslint-plugin-import/pull/1689
