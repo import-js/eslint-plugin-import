@@ -20,6 +20,7 @@ rules:
   semi: [2, "never"]
   curly: [2, "multi-line"]
   comma-dangle: [2, always-multiline]
+  eol-last: [2, "always"]
   eqeqeq: [2, "allow-null"]
   no-shadow: 1
   quotes:
