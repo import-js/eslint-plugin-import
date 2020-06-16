@@ -5,8 +5,15 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.12.2 - 2020-06-16
+
 ### Fixed
 - [fix] provide config fallback ([#1705], thanks [@migueloller])
+
+## 0.12.1 - 2020-01-10
+
+### Changed
+- [meta] copy LICENSE file to all npm packages on prepublish ([#1595], thanks [@opichals])
 
 ## 0.12.0 - 2019-12-07
 
@@ -126,6 +133,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
 [#1705]: https://github.com/benmosher/eslint-plugin-import/pull/1705
+[#1595]: https://github.com/benmosher/eslint-plugin-import/pull/1595
 [#1503]: https://github.com/benmosher/eslint-plugin-import/pull/1503
 [#1297]: https://github.com/benmosher/eslint-plugin-import/pull/1297
 [#1261]: https://github.com/benmosher/eslint-plugin-import/pull/1261
@@ -179,3 +187,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@echenley]: https://github.com/echenley
 [@Aghassi]: https://github.com/Aghassi
 [@migueloller]: https://github.com/migueloller
+[@opichals]: https://github.com/opichals
