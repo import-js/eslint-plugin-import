@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing type from dev dependencies ([#1820], thanks [@fernandopasik])
 - [`default`]: avoid crash with `export =` ([#1822], thanks [@AndrewLeedham])
+- [`order`]/[`newline-after-import`]: ignore TypeScript's "export import object" ([#1830], thanks [@be5invis])
 
 ### Changed
 - [`no-extraneous-dependencies`]: add tests for importing types ([#1824], thanks [@taye])
@@ -712,6 +713,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1830]: https://github.com/benmosher/eslint-plugin-import/pull/1830
 [#1824]: https://github.com/benmosher/eslint-plugin-import/pull/1824
 [#1823]: https://github.com/benmosher/eslint-plugin-import/pull/1823
 [#1822]: https://github.com/benmosher/eslint-plugin-import/pull/1822
@@ -1235,3 +1237,4 @@ for info on changes for earlier releases.
 [@fernandopasik]: https://github.com/fernandopasik
 [@taye]: https://github.com/taye
 [@AndrewLeedham]: https://github.com/AndrewLeedham
+[@be5invis]: https://github.com/be5invis

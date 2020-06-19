@@ -615,6 +615,10 @@ module.exports = {
       TSImportEqualsDeclaration: function handleImports(node) {
         let name
         let type
+        // skip "export import"s
+        if (node.isExport) {
+          return
+        }
         if (node.moduleReference.type === 'TSExternalModuleReference') {
           name = node.moduleReference.expression.value
           type = 'import'

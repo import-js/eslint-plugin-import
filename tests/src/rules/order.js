@@ -753,6 +753,21 @@ ruleTester.run('order', rule, {
           },
         ],
       }),
+      test({
+        code: `
+          import { a } from "./a";
+          export namespace SomeNamespace {
+              export import a2 = a;
+          }
+        `,
+        parser,
+        options: [
+          {
+            groups: ['external', 'index'],
+            alphabetize: { order: 'asc' },
+          },
+        ],
+      }),
     ]),
   ],
   invalid: [
