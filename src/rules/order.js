@@ -11,11 +11,7 @@ const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
 function reverse(array) {
   return array.map(function (v) {
-    return {
-      name: v.name,
-      rank: -v.rank,
-      node: v.node,
-    }
+    return Object.assign({}, v, { rank: -v.rank })
   }).reverse()
 }
 
@@ -197,8 +193,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
     newCode = newCode + '\n'
   }
 
-  const message = '`' + secondNode.name + '` import should occur ' + order +
-      ' import of `' + firstNode.name + '`'
+  const message = `\`${secondNode.displayName}\` import should occur ${order} import of \`${firstNode.displayName}\``
 
   if (order === 'before') {
     context.report({
@@ -270,7 +265,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = []
     }
-    acc[importedItem.rank].push(importedItem.name)
+    acc[importedItem.rank].push(importedItem.value)
     return acc
   }, {})
 
@@ -295,7 +290,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   // mutate the original group-rank with alphabetized-rank
   imported.forEach(function(importedItem) {
-    importedItem.rank = alphabetizedRanks[importedItem.name]
+    importedItem.rank = alphabetizedRanks[importedItem.value]
   })
 }
 
@@ -310,31 +305,31 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, node, ranks, name, type, excludedImportTypes) {
+function computeRank(context, ranks, importEntry, excludedImportTypes) {
   let impType
-  if (type === 'import:object') {
+  let rank
+  if (importEntry.type === 'import:object') {
     impType = 'object'
   } else {
-    impType = importType(name, context)
+    impType = importType(importEntry.value, context)
   }
-  let rank
   if (!excludedImportTypes.has(impType)) {
-    rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
+    rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition)
   }
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType]
   }
-  if (type !== 'import' && !type.startsWith('import:')) {
+  if (importEntry.type !== 'import' && !importEntry.type.startsWith('import:')) {
     rank += 100
   }
 
   return rank
 }
 
-function registerNode(context, node, name, type, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, node, ranks, name, type, excludedImportTypes)
+function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
+  const rank = computeRank(context, ranks, importEntry, excludedImportTypes)
   if (rank !== -1) {
-    imported.push({name, rank, node})
+    imported.push(Object.assign({}, importEntry, { rank }))
   }
 }
 
@@ -603,9 +598,12 @@ module.exports = {
           const name = node.source.value
           registerNode(
             context,
-            node,
-            name,
-            'import',
+            {
+              node,
+              value: name,
+              displayName: name,
+              type: 'import',
+            },
             ranks,
             imported,
             pathGroupsExcludedImportTypes
@@ -613,24 +611,30 @@ module.exports = {
         }
       },
       TSImportEqualsDeclaration: function handleImports(node) {
-        let name
+        let displayName
+        let value
         let type
         // skip "export import"s
         if (node.isExport) {
           return
         }
         if (node.moduleReference.type === 'TSExternalModuleReference') {
-          name = node.moduleReference.expression.value
+          value = node.moduleReference.expression.value
+          displayName = value
           type = 'import'
         } else {
-          name = context.getSourceCode().getText(node.moduleReference)
+          value = ''
+          displayName = context.getSourceCode().getText(node.moduleReference)
           type = 'import:object'
         }
         registerNode(
           context,
-          node,
-          name,
-          type,
+          {
+            node,
+            value,
+            displayName,
+            type,
+          },
           ranks,
           imported,
           pathGroupsExcludedImportTypes
@@ -643,9 +647,12 @@ module.exports = {
         const name = node.arguments[0].value
         registerNode(
           context,
-          node,
-          name,
-          'require',
+          {
+            node,
+            value: name,
+            displayName: name,
+            type: 'require',
+          },
           ranks,
           imported,
           pathGroupsExcludedImportTypes

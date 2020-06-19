@@ -740,10 +740,24 @@ ruleTester.run('order', rule, {
           },
         ],
       }),
+      // Object-imports should not be forced to be alphabetized
       test({
         code: `
           import debug = console.debug;
           import log = console.log;`,
+        parser,
+        options: [
+          {
+            alphabetize: {
+              order: 'asc',
+            },
+          },
+        ],
+      }),
+      test({
+        code: `
+          import log = console.log;
+          import debug = console.debug;`,
         parser,
         options: [
           {
@@ -1287,23 +1301,6 @@ ruleTester.run('order', rule, {
         errors: [{
           message: '`./blah` import should occur before import of `console.log`',
         }],
-      }),
-      // Alphabetization of object-imports
-      test({
-        code: `
-          import log = console.log;
-          import debug = console.debug;`,
-        parser,
-        errors: [{
-          message: '`console.debug` import should occur before import of `console.log`',
-        }],
-        options: [
-          {
-            alphabetize: {
-              order: 'asc',
-            },
-          },
-        ],
       }),
     ]),
     // Default order using import with custom import alias
