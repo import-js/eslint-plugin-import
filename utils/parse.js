@@ -3,8 +3,33 @@ exports.__esModule = true
 
 const moduleRequire = require('./module-require').default
 const extname = require('path').extname
+const fs = require('fs')
 
 const log = require('debug')('eslint-plugin-import:parse')
+
+function getBabelVisitorKeys(parserPath) {
+  const hypotheticalLocation = parserPath.replace('index.js', 'visitor-keys.js')
+  if (fs.existsSync(hypotheticalLocation)) {
+    const keys = moduleRequire(hypotheticalLocation)
+    return keys.default || keys
+  }
+  return null
+}
+
+function keysFromParser(parserPath, parserInstance, parsedResult) {
+  if (/.*espree.*/.test(parserPath)) {
+    return parserInstance.VisitorKeys
+  }
+  if (/.*(babel-eslint|@babel\/eslint-parser).*/.test(parserPath)) {
+    return getBabelVisitorKeys(parserPath)
+  }
+  if (/.*@typescript-eslint\/parser/.test(parserPath)) {
+    if (parsedResult) {
+      return parsedResult.visitorKeys
+    }
+  }
+  return null
+}
 
 exports.default = function parse(path, content, context) {
 
@@ -45,7 +70,12 @@ exports.default = function parse(path, content, context) {
   if (typeof parser.parseForESLint === 'function') {
     let ast
     try {
-      ast = parser.parseForESLint(content, parserOptions).ast
+      const parserRaw = parser.parseForESLint(content, parserOptions)
+      ast = parserRaw.ast
+      return {
+        ast,
+        visitorKeys: keysFromParser(parserPath, parser, parserRaw),
+      }
     } catch (e) {
       console.warn()
       console.warn('Error while parsing ' + parserOptions.filePath)
@@ -58,12 +88,20 @@ exports.default = function parse(path, content, context) {
           '` is invalid and will just be ignored'
       )
     } else {
-      return ast
+      return {
+        ast,
+        visitorKeys: keysFromParser(parserPath, parser, undefined),
+      }
     }
   }
 
-  return parser.parse(content, parserOptions)
+  const keys = keysFromParser(parserPath, parser, undefined)
+  return {
+    ast: parser.parse(content, parserOptions),
+    visitorKeys: keys,
+  }
 }
+
 
 function getParserPath(path, context) {
   const parsers = context.settings['import/parsers']

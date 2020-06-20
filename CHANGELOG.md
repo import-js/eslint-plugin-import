@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 - [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
+- [`no-unused-modules`]: support dynamic imports ([#1660], thanks [@maxkomarychev])
 
 ### Fixed
 - [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
@@ -55,6 +56,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.21.0] - 2020-06-07
 ### Added
+
 - [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
 - [`order`]: Add support for TypeScript's "import equals"-expressions ([#1785], thanks [@manuth])

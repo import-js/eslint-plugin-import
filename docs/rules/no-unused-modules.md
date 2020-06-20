@@ -3,8 +3,8 @@
 Reports:
   - modules without any exports
   - individual exports not being statically `import`ed or `require`ed from other modules in the same project
+  - dynamic imports are supported if argument is a literal string
 
-Note: dynamic imports are currently not supported.
 
 ## Rule Details
 
