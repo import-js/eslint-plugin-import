@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
+- [`no-unused-modules`]: support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
 
 ## [2.24.2] - 2021-08-24
 
@@ -906,6 +907,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
+[#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
 [#2194]: https://github.com/import-js/eslint-plugin-import/pull/2194
 [#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184
@@ -983,6 +985,7 @@ for info on changes for earlier releases.
 [#1676]: https://github.com/import-js/eslint-plugin-import/pull/1676
 [#1666]: https://github.com/import-js/eslint-plugin-import/pull/1666
 [#1664]: https://github.com/import-js/eslint-plugin-import/pull/1664
+[#1660]: https://github.com/import-js/eslint-plugin-import/pull/1660
 [#1658]: https://github.com/import-js/eslint-plugin-import/pull/1658
 [#1651]: https://github.com/import-js/eslint-plugin-import/pull/1651
 [#1626]: https://github.com/import-js/eslint-plugin-import/pull/1626
@@ -1487,6 +1490,7 @@ for info on changes for earlier releases.
 [@MatthiasKunnen]: https://github.com/MatthiasKunnen
 [@mattijsbliek]: https://github.com/mattijsbliek
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
+[@maxkomarychev]: https://github.com/maxkomarychev
 [@maxmalov]: https://github.com/maxmalov
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis

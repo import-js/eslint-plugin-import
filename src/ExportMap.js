@@ -7,6 +7,7 @@ import debug from 'debug';
 import { SourceCode } from 'eslint';
 
 import parse from 'eslint-module-utils/parse';
+import visit from 'eslint-module-utils/visit';
 import resolve from 'eslint-module-utils/resolve';
 import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 
@@ -354,15 +355,57 @@ ExportMap.parse = function (path, content, context) {
   const isEsModuleInteropTrue = isEsModuleInterop();
 
   let ast;
+  let visitorKeys;
   try {
-    ast = parse(path, content, context);
+    const result = parse(path, content, context);
+    ast = result.ast;
+    visitorKeys = result.visitorKeys;
   } catch (err) {
-    log('parse error:', path, err);
     m.errors.push(err);
     return m; // can't continue
   }
 
-  if (!unambiguous.isModule(ast)) return null;
+  m.visitorKeys = visitorKeys;
+
+  let hasDynamicImports = false;
+
+  function processDynamicImport(source) {
+    hasDynamicImports = true;
+    if (source.type !== 'Literal') {
+      return null;
+    }
+    const p = remotePath(source.value);
+    if (p == null) {
+      return null;
+    }
+    const importedSpecifiers = new Set();
+    importedSpecifiers.add('ImportNamespaceSpecifier');
+    const getter = thunkFor(p, context);
+    m.imports.set(p, {
+      getter,
+      declarations: new Set([{
+        source: {
+        // capturing actual node reference holds full AST in memory!
+          value: source.value,
+          loc: source.loc,
+        },
+        importedSpecifiers,
+      }]),
+    });
+  }
+
+  visit(ast, visitorKeys, {
+    ImportExpression(node) {
+      processDynamicImport(node.source);
+    },
+    CallExpression(node) {
+      if (node.callee.type === 'Import') {
+        processDynamicImport(node.arguments[0]);
+      }
+    },
+  });
+
+  if (!unambiguous.isModule(ast) && !hasDynamicImports) return null;
 
   const docstyle = (context.settings && context.settings['import/docstyle']) || ['jsdoc'];
   const docStyleParsers = {};

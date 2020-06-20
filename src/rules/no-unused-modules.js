@@ -7,6 +7,7 @@
 import Exports, { recursivePatternCapture } from '../ExportMap';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
+import visit from 'eslint-module-utils/visit';
 import docsUrl from '../docsUrl';
 import { dirname, join } from 'path';
 import readPkgUp from 'read-pkg-up';
@@ -154,6 +155,8 @@ const importList = new Map();
  */
 const exportList = new Map();
 
+const visitorKeyMap = new Map();
+
 const ignoredFiles = new Set();
 const filesOutsideSrc = new Set();
 
@@ -193,8 +196,15 @@ const prepareImportsAndExports = (srcFiles, context) => {
     const imports = new Map();
     const currentExports = Exports.get(file, context);
     if (currentExports) {
-      const { dependencies, reexports, imports: localImportList, namespace  } = currentExports;
+      const {
+        dependencies,
+        reexports,
+        imports: localImportList,
+        namespace,
+        visitorKeys,
+      } = currentExports;
 
+      visitorKeyMap.set(file, visitorKeys);
       // dependencies === export * from
       const currentExportAll = new Set();
       dependencies.forEach(getDependency => {
@@ -673,6 +683,28 @@ module.exports = {
             oldImports.set(val, key);
           }
         });
+      });
+
+      function processDynamicImport(source) {
+        if (source.type !== 'Literal') {
+          return null;
+        }
+        const p = resolve(source.value, context);
+        if (p == null) {
+          return null;
+        }
+        newNamespaceImports.add(p);
+      }
+
+      visit(node, visitorKeyMap.get(file), {
+        ImportExpression(child) {
+          processDynamicImport(child.source);
+        },
+        CallExpression(child) {
+          if (child.callee.type === 'Import') {
+            processDynamicImport(child.arguments[0]);
+          }
+        },
       });
 
       node.body.forEach(astNode => {
