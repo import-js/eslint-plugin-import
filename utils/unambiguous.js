@@ -1,8 +1,7 @@
 'use strict';
 exports.__esModule = true;
 
-
-const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))/m;
+const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
 /**
  * detect possible imports/exports without a full parse.
  *
@@ -26,5 +25,5 @@ const unambiguousNodeType = /^(?:(?:Exp|Imp)ort.*Declaration|TSExportAssignment)
  * @return {Boolean}
  */
 exports.isModule = function isUnambiguousModule(ast) {
-  return ast.body.some(node => unambiguousNodeType.test(node.type));
+  return ast.body && ast.body.some(node => unambiguousNodeType.test(node.type));
 };

@@ -3,8 +3,41 @@ exports.__esModule = true;
 
 const moduleRequire = require('./module-require').default;
 const extname = require('path').extname;
+const fs = require('fs');
 
 const log = require('debug')('eslint-plugin-import:parse');
+
+function getBabelVisitorKeys(parserPath) {
+  if (parserPath.endsWith('index.js')) {
+    const hypotheticalLocation = parserPath.replace('index.js', 'visitor-keys.js');
+    if (fs.existsSync(hypotheticalLocation)) {
+      const keys = moduleRequire(hypotheticalLocation);
+      return keys.default || keys;
+    }
+  } else if (parserPath.endsWith('index.cjs')) {
+    const hypotheticalLocation = parserPath.replace('index.cjs', 'worker/ast-info.cjs');
+    if (fs.existsSync(hypotheticalLocation)) {
+      const astInfo = moduleRequire(hypotheticalLocation);
+      return astInfo.getVisitorKeys();
+    }
+  }
+  return null;
+}
+
+function keysFromParser(parserPath, parserInstance, parsedResult) {
+  if (/.*espree.*/.test(parserPath)) {
+    return parserInstance.VisitorKeys;
+  }
+  if (/.*(babel-eslint|@babel\/eslint-parser).*/.test(parserPath)) {
+    return getBabelVisitorKeys(parserPath);
+  }
+  if (/.*@typescript-eslint\/parser/.test(parserPath)) {
+    if (parsedResult) {
+      return parsedResult.visitorKeys;
+    }
+  }
+  return null;
+}
 
 exports.default = function parse(path, content, context) {
 
@@ -45,20 +78,36 @@ exports.default = function parse(path, content, context) {
   if (typeof parser.parseForESLint === 'function') {
     let ast;
     try {
-      ast = parser.parseForESLint(content, parserOptions).ast;
+      const parserRaw = parser.parseForESLint(content, parserOptions);
+      ast = parserRaw.ast;
+      return {
+        ast,
+        visitorKeys: keysFromParser(parserPath, parser, parserRaw),
+      };
     } catch (e) {
       console.warn();
       console.warn('Error while parsing ' + parserOptions.filePath);
       console.warn('Line ' + e.lineNumber + ', column ' + e.column + ': ' + e.message);
     }
     if (!ast || typeof ast !== 'object') {
-      console.warn('`parseForESLint` from parser `' + parserPath + '` is invalid and will just be ignored');
+      console.warn(
+        '`parseForESLint` from parser `' +
+          parserPath +
+          '` is invalid and will just be ignored',
+      );
     } else {
-      return ast;
+      return {
+        ast,
+        visitorKeys: keysFromParser(parserPath, parser, undefined),
+      };
     }
   }
 
-  return parser.parse(content, parserOptions);
+  const keys = keysFromParser(parserPath, parser, undefined);
+  return {
+    ast: parser.parse(content, parserOptions),
+    visitorKeys: keys,
+  };
 };
 
 function getParserPath(path, context) {

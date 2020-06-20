@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - `fileExistsWithCaseSync`: add `strict` argument ([#1262], thanks [@sergei-startsev])
+- add `visit`, to support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
 
 ## v2.6.2 - 2021-08-08
 
@@ -93,10 +94,12 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2026]: https://github.com/import-js/eslint-plugin-import/pull/2026
 [#1786]: https://github.com/import-js/eslint-plugin-import/pull/1786
 [#1671]: https://github.com/import-js/eslint-plugin-import/pull/1671
+[#1660]: https://github.com/import-js/eslint-plugin-import/pull/1660
 [#1606]: https://github.com/import-js/eslint-plugin-import/pull/1606
 [#1602]: https://github.com/import-js/eslint-plugin-import/pull/1602
 [#1591]: https://github.com/import-js/eslint-plugin-import/pull/1591
@@ -127,3 +130,6 @@ Yanked due to critical issue with cache key resulting from #839.
 [@sompylasar]: https://github.com/sompylasar
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01
+[@maxkomarychev]: https://github.com/maxkomarychev
+[@aladdin-add]: https://github.com/aladdin-add
+[@Hypnosphi]: https://github.com/Hypnosphi

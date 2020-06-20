@@ -69,5 +69,4 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, parserOptions })).not.to.throw(Error);
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1);
   });
-
 });
