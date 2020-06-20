@@ -34,78 +34,85 @@ module.exports = {
     const chunkSubstrFormat = ` webpackChunkName: "${webpackChunknameFormat}",? `
     const chunkSubstrRegex = new RegExp(chunkSubstrFormat)
 
-    return {
-      CallExpression(node) {
-        if (node.callee.type !== 'Import' && importFunctions.indexOf(node.callee.name) < 0) {
-          return
-        }
+    function run(node, arg) {
+      const sourceCode = context.getSourceCode()
+      const leadingComments = sourceCode.getCommentsBefore
+        ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
+        : sourceCode.getComments(arg).leading // This method is deprecated in ESLint 7.
 
-        const sourceCode = context.getSourceCode()
-        const arg = node.arguments[0]
-        const leadingComments = sourceCode.getCommentsBefore
-          ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
-          : sourceCode.getComments(arg).leading // This method is deprecated in ESLint 7.
+      if (!leadingComments || leadingComments.length === 0) {
+        context.report({
+          node,
+          message: 'dynamic imports require a leading comment with the webpack chunkname',
+        })
+        return
+      }
 
-        if (!leadingComments || leadingComments.length === 0) {
+      let isChunknamePresent = false
+
+      for (const comment of leadingComments) {
+        if (comment.type !== 'Block') {
           context.report({
             node,
-            message: 'dynamic imports require a leading comment with the webpack chunkname',
+            message: 'dynamic imports require a /* foo */ style comment, not a // foo comment',
           })
           return
         }
 
-        let isChunknamePresent = false
-
-        for (const comment of leadingComments) {
-          if (comment.type !== 'Block') {
-            context.report({
-              node,
-              message: 'dynamic imports require a /* foo */ style comment, not a // foo comment',
-            })
-            return
-          }
-
-          if (!paddedCommentRegex.test(comment.value)) {
-            context.report({
-              node,
-              message: `dynamic imports require a block comment padded with spaces - /* foo */`,
-            })
-            return
-          }
-
-          try {
-            // just like webpack itself does
-            vm.runInNewContext(`(function(){return {${comment.value}}})()`)
-          }
-          catch (error) {
-            context.report({
-              node,
-              message: `dynamic imports require a "webpack" comment with valid syntax`,
-            })
-            return
-          }
-
-          if (!commentStyleRegex.test(comment.value)) {
-            context.report({
-              node,
-              message:
-                `dynamic imports require a leading comment in the form /*${chunkSubstrFormat}*/`,
-            })
-            return
-          }
-
-          if (chunkSubstrRegex.test(comment.value)) {
-            isChunknamePresent = true
-          }
+        if (!paddedCommentRegex.test(comment.value)) {
+          context.report({
+            node,
+            message: `dynamic imports require a block comment padded with spaces - /* foo */`,
+          })
+          return
         }
 
-        if (!isChunknamePresent) {
+        try {
+          // just like webpack itself does
+          vm.runInNewContext(`(function(){return {${comment.value}}})()`)
+        }
+        catch (error) {
+          context.report({
+            node,
+            message: `dynamic imports require a "webpack" comment with valid syntax`,
+          })
+          return
+        }
+
+        if (!commentStyleRegex.test(comment.value)) {
           context.report({
             node,
             message:
               `dynamic imports require a leading comment in the form /*${chunkSubstrFormat}*/`,
           })
+          return
         }
+
+        if (chunkSubstrRegex.test(comment.value)) {
+          isChunknamePresent = true
+        }
+      }
+
+      if (!isChunknamePresent) {
+        context.report({
+          node,
+          message:
+            `dynamic imports require a leading comment in the form /*${chunkSubstrFormat}*/`,
+        })
+      }
+    }
+
+    return {
+      ImportExpression(node) {
+        run(node, node.source)
+      },
+
+      CallExpression(node) {
+        if (node.callee.type !== 'Import' && importFunctions.indexOf(node.callee.name) < 0) {
+          return
+        }
+
+        run(node, node.arguments[0])
       },
     }
   },
