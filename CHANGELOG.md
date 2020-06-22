@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
+- [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
 
 ### Fixed
 - [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])

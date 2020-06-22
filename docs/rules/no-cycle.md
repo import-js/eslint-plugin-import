@@ -2,7 +2,7 @@
 
 Ensures that there is no resolvable path back to this module via its dependencies.
 
-This includes cycles of depth 1 (imported module imports me) to `Infinity`, if the
+This includes cycles of depth 1 (imported module imports me) to `"∞"` (or `Infinity`), if the
 [`maxDepth`](#maxdepth) option is not set.
 
 ```js
