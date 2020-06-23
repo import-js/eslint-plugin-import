@@ -1,7 +1,11 @@
+import docsUrl from '../docsUrl'
+
 module.exports = {
   meta: {
     type: 'suggestion',
-    docs: {},
+    docs: {
+      url: docsUrl('no-default-export'),
+    },
     schema: [],
   },
 
