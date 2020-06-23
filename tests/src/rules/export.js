@@ -24,6 +24,15 @@ ruleTester.run('export', rule, {
     test({ code: 'export default foo; export * from "./bar"' }),
 
     ...SYNTAX_CASES,
+
+    test({
+      code: `
+        import * as A from './named-export-collision/a';
+        import * as B from './named-export-collision/b';
+
+        export { A, B };
+      `,
+    }),
   ],
 
   invalid: [
@@ -191,6 +200,14 @@ context('TypeScript', function () {
           code: 'export * from "./file1.ts"',
           filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
+
+        test({
+          code: `
+            export * as A from './named-export-collision/a';
+            export * as B from './named-export-collision/b';
+          `,
+          parser: parser,
+        }),
       ],
       invalid: [
         // type/value name clash

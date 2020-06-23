@@ -118,6 +118,9 @@ module.exports = {
       'ExportAllDeclaration': function (node) {
         if (node.source == null) return // not sure if this is ever true
 
+        // `export * as X from 'path'` does not conflict
+        if (node.exported && node.exported.name) return
+
         const remoteExports = ExportMap.get(node.source.value, context)
         if (remoteExports == null) return
 
@@ -135,8 +138,10 @@ module.exports = {
           addNamed(name, node, parent))
 
         if (!any) {
-          context.report(node.source,
-            `No named exports found in module '${node.source.value}'.`)
+          context.report(
+            node.source,
+            `No named exports found in module '${node.source.value}'.`
+          )
         }
       },
 
