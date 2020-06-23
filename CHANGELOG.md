@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]/[`newline-after-import`]: ignore TypeScript's "export import object" ([#1830], thanks [@be5invis])
 - [`dynamic-import-chunkname`]/TypeScript: supports `@typescript-eslint/parser` ([#1833], thanks [@noelebrun])
 - [`order`]/TypeScript: ignore ordering of object imports ([#1831], thanks [@manuth])
+- [`namespace`]: do not report on shadowed import names ([#518], thanks [@ljharb])
 
 ### Changed
 - [`no-extraneous-dependencies`]: add tests for importing types ([#1824], thanks [@taye])
@@ -887,6 +888,7 @@ for info on changes for earlier releases.
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
+[#518]: https://github.com/benmosher/eslint-plugin-import/pull/518
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503

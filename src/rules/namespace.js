@@ -106,6 +106,7 @@ module.exports = {
       MemberExpression(dereference) {
         if (dereference.object.type !== 'Identifier') return
         if (!namespaces.has(dereference.object.name)) return
+        if (declaredScope(context, dereference.object.name) !== 'module') return
 
         if (dereference.parent.type === 'AssignmentExpression' && dereference.parent.left === dereference) {
             context.report(
