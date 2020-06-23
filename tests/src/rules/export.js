@@ -203,7 +203,7 @@ context('TypeScript', function () {
           filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
 
-        ...(semver.satisfies(eslintPkg.version, '< 6' ? [] : [
+        ...(semver.satisfies(eslintPkg.version, '< 6') ? [] : [
           test({
             code: `
               export * as A from './named-export-collision/a';
@@ -211,7 +211,7 @@ context('TypeScript', function () {
             `,
             parser: parser,
           }),
-        ])),
+        ]),
       ],
       invalid: [
         // type/value name clash
