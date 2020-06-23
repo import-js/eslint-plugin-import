@@ -1,6 +1,8 @@
 import { test, testFilePath, SYNTAX_CASES, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
+import eslintPkg from 'eslint/package.json'
+import semver from 'semver'
 
 var ruleTester = new RuleTester()
   , rule = require('rules/export')
@@ -201,13 +203,15 @@ context('TypeScript', function () {
           filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
 
-        test({
-          code: `
-            export * as A from './named-export-collision/a';
-            export * as B from './named-export-collision/b';
-          `,
-          parser: parser,
-        }),
+        ...(semver.satisfies(eslintPkg.version, '< 6' ? [] : [
+          test({
+            code: `
+              export * as A from './named-export-collision/a';
+              export * as B from './named-export-collision/b';
+            `,
+            parser: parser,
+          }),
+        ])),
       ],
       invalid: [
         // type/value name clash
