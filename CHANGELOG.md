@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [`no-extraneous-dependencies`]: add tests for importing types ([#1824], thanks [@taye])
 - [docs] [`no-default-export`]: Fix docs url ([#1836], thanks [@beatrizrezener])
+- [docs] [`imports-first`]: deprecation info and link to `first` docs ([#1835], thanks [@beatrizrezener])
 
 ## [2.21.2] - 2020-06-09
 ### Fixed
@@ -718,6 +719,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
+[#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
 [#1833]: https://github.com/benmosher/eslint-plugin-import/pull/1833
 [#1831]: https://github.com/benmosher/eslint-plugin-import/pull/1831
 [#1830]: https://github.com/benmosher/eslint-plugin-import/pull/1830
