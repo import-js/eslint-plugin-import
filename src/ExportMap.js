@@ -564,7 +564,7 @@ ExportMap.parse = function (path, content, context) {
     if (includes(exports, n.type)) {
       const exportedName = n.type === 'TSNamespaceExportDeclaration'
         ? n.id.name
-        : n.expression && n.expression.name || n.expression.id.name
+        : (n.expression && n.expression.name || (n.expression.id && n.expression.id.name) || null)
       const declTypes = [
         'VariableDeclaration',
         'ClassDeclaration',

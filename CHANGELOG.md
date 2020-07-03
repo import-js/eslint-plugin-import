@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
+
 ## [2.22.0] - 2020-06-26
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
@@ -722,6 +725,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
 [#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
 [#1834]: https://github.com/benmosher/eslint-plugin-import/issues/1834

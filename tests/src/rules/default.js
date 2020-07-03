@@ -220,6 +220,14 @@ context('TypeScript', function () {
               tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-as-default-namespace/'),
             },
           }),
+          test({
+            code: `import foobar from "./typescript-export-assign-property"`,
+            parser: parser,
+            settings: {
+              'import/parsers': { [parser]: ['.ts'] },
+              'import/resolver': { 'eslint-import-resolver-typescript': true },
+            },
+          }),
         ],
 
         invalid: [
