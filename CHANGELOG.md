@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-dynamic-require`]: add option `esmodule` ([#1223], thanks [@vikr01])
 - [`named`]: add `commonjs` option ([#1222], thanks [@vikr01])
 - [`no-namespace`]: Add `ignore` option ([#2112], thanks [@aberezkin])
+- [`max-dependencies`]: add option `ignoreTypeImports` ([#1847], thanks [@rfermann])
 
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
@@ -853,6 +854,7 @@ for info on changes for earlier releases.
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1860]: https://github.com/benmosher/eslint-plugin-import/pull/1860
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
+[#1847]: https://github.com/benmosher/eslint-plugin-import/pull/1847
 [#1846]: https://github.com/benmosher/eslint-plugin-import/pull/1846
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
 [#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
