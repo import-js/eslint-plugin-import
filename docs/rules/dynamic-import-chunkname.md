@@ -39,12 +39,6 @@ import(
   'someModule',
 );
 
-// using single quotes instead of double quotes
-import(
-  /* webpackChunkName: 'someModule' */
-  'someModule',
-);
-
 // invalid syntax for webpack comment
 import(
   /* totally not webpackChunkName: "someModule" */
@@ -76,6 +70,12 @@ The following patterns are valid:
   );
   import(
     /* webpackChunkName: "someModule", webpackPrefetch: true */
+    'someModule',
+  );
+
+  // using single quotes instead of double quotes
+  import(
+    /* webpackChunkName: 'someModule' */
     'someModule',
   );
 ```

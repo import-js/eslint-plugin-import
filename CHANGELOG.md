@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
 - allow using rest operator in named export ([#1878], thanks [@foray1010])
+- [`dynamic-import-chunkname`]: allow single quotes to match Webpack support ([#1848], thanks [@straub])
 
 ### Changed
 - [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
@@ -732,6 +733,7 @@ for info on changes for earlier releases.
 
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
+[#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
 [#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
 [#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
@@ -1271,3 +1273,4 @@ for info on changes for earlier releases.
 [@3nuc]: https://github.com/3nuc
 [@foray1010]: https://github.com/foray1010
 [@tomprats]: https://github.com/tomprats
+[@straub]: https://github.com/straub
