@@ -4,7 +4,10 @@ Use this rule to prevent importing the submodules of other modules.
 
 ## Rule Details
 
-This rule has one option, `allow` which is an array of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) patterns that whitelist paths and import statements that can be imported with reaching.
+This rule has two mutally exclusive options that are arrays of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) patterns:
+
+- `allow` that include paths and import statements that can be imported with reaching.
+- `forbid` that exclude paths and import statements that can be imported with reaching.
 
 ### Examples
 
@@ -33,7 +36,7 @@ And the .eslintrc file:
   ...
   "rules": {
     "import/no-internal-modules": [ "error", {
-      "allow": [ "**/actions/*", "source-map-support/*" ]
+      "allow": [ "**/actions/*", "source-map-support/*" ],
     } ]
   }
 }
@@ -67,4 +70,63 @@ import getUser from '../actions/getUser';
 
 export * from 'source-map-support/register';
 export { settings } from '../app';
+```
+
+Given the following folder structure:
+
+```
+my-project
+├── actions
+│   └── getUser.js
+│   └── updateUser.js
+├── reducer
+│   └── index.js
+│   └── user.js
+├── redux
+│   └── index.js
+│   └── configureStore.js
+└── app
+│   └── index.js
+│   └── settings.js
+└── entry.js
+```
+
+And the .eslintrc file:
+```
+{
+  ...
+  "rules": {
+    "import/no-internal-modules": [ "error", {
+      "forbid": [ "**/actions/*", "source-map-support/*" ],
+    } ]
+  }
+}
+```
+
+The following patterns are considered problems:
+
+```js
+/**
+ *  in my-project/entry.js
+ */
+
+import 'source-map-support/register';
+import getUser from '../actions/getUser';
+
+export * from 'source-map-support/register';
+export getUser from '../actions/getUser';
+```
+
+The following patterns are NOT considered problems:
+
+```js
+/**
+ *  in my-project/entry.js
+ */
+
+import 'source-map-support';
+import { getUser } from '../actions';
+
+export * from 'source-map-support';
+export { getUser } from '../actions';
 ```

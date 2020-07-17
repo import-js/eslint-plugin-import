@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`no-commonjs`]: Also detect require calls with expressionless template literals: ``` require(`x`) ``` ([#1958], thanks [@FloEdelmann])
+- [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -765,6 +766,7 @@ for info on changes for earlier releases.
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
+[#1846]: https://github.com/benmosher/eslint-plugin-import/pull/1846
 [#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
 [#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
 [#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
@@ -1322,3 +1324,4 @@ for info on changes for earlier releases.
 [@paztis]: https://github.com/paztis
 [@FloEdelmann]: https://github.com/FloEdelmann
 [@bicstone]: https://github.com/bicstone
+[@guillaumewuip]: https://github.com/guillaumewuip
