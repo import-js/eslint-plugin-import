@@ -19,6 +19,7 @@ export const rules = {
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
   'no-anonymous-default-export': require('./rules/no-anonymous-default-export'),
   'no-unused-modules': require('./rules/no-unused-modules'),
+  'match-default-export-name': require('./rules/match-default-export-name'),
 
   'no-commonjs': require('./rules/no-commonjs'),
   'no-amd': require('./rules/no-amd'),

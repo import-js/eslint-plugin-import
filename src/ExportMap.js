@@ -474,6 +474,7 @@ ExportMap.parse = function (path, content, context) {
   ast.body.forEach(function (n) {
     if (n.type === 'ExportDefaultDeclaration') {
       const exportMeta = captureDoc(source, docStyleParsers, n)
+      exportMeta.identifierName = n.declaration.id ? n.declaration.id.name : n.declaration.name
       if (n.declaration.type === 'Identifier') {
         addNamespace(exportMeta, n.declaration)
       }
