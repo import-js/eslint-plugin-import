@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 - [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
+- [`match-default-export-name`]: new rule added
 
 ### Fixed
 - [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
@@ -692,6 +693,7 @@ for info on changes for earlier releases.
 [`group-exports`]: ./docs/rules/group-exports.md
 [`imports-first`]: ./docs/rules/first.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`match-default-export-name`]: ./docs/rules/match-default-export-name.md
 [`named`]: ./docs/rules/named.md
 [`namespace`]: ./docs/rules/namespace.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
