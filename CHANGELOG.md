@@ -10,11 +10,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
 
+### Added
+- [`match-default-export-name`]: new rule added
+
 ## [2.22.0] - 2020-06-26
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 - [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
-- [`match-default-export-name`]: new rule added
 
 ### Fixed
 - [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
