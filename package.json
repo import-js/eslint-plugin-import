@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "^2.23.0 || ^3.3.0",
     "array.prototype.flatmap": "^1.2.3",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
+    "babel-core": "^7.11.2",
     "babel-eslint": "^8.2.6",
     "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-module-resolver": "^2.7.1",
