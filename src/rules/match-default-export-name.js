@@ -4,7 +4,7 @@ import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
-    type: 'problem',
+    type: 'suggestion',
     docs: {
       url: docsUrl('match-default-export-name'),
     },
