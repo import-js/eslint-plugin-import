@@ -31,6 +31,60 @@ ruleTester.run('match-default-export-name', rule, {
       parser: require.resolve('babel-eslint'),
     }),
 
+    // overrides
+    test({
+      code: 'import React from "react";',
+      options: [
+        {
+          overrides: [
+            {
+              module: 'react',
+              name: 'React',
+            },
+          ],
+        },
+      ],
+    }),
+    test({
+      code: 'import styles from "./match-default-export-name/styles.css";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/[^\\w]styles\\.css$/',
+              name: 'styles',
+            },
+          ],
+        },
+      ],
+    }),
+    test({
+      code: 'import componentStyles from "./match-default-export-name/component.module.css";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/(\\w+)\\.module\\.css$/',
+              name: '$1Styles',
+            },
+          ],
+        },
+      ],
+    }),
+    test({
+      code: 'import id from "./match-default-export-name/id";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/(\\w+)$/',
+              name: '$1',
+            },
+          ],
+        },
+      ],
+    }),
+
     // #566: don't false-positive on `default` itself
     test({
       code: 'export default from "./bar";',
@@ -101,6 +155,80 @@ ruleTester.run('match-default-export-name', rule, {
       errors: [{
         message: 'Expected export \'myClass\' to match the default export \'MyClass\'.',
         type: 'ExportDefaultSpecifier',
+      }],
+    }),
+
+    // overrides
+    test({
+      code: 'import react from "react";',
+      output: 'import React from "react";',
+      options: [
+        {
+          overrides: [
+            {
+              module: 'react',
+              name: 'React',
+            },
+          ],
+        },
+      ],
+      errors: [{
+        message: 'Expected import \'react\' to match \'React\'.',
+        type: 'ImportDefaultSpecifier',
+      }],
+    }),
+    test({
+      code: 'import css from "./match-default-export-name/styles.css";',
+      output: 'import styles from "./match-default-export-name/styles.css";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/[^\\w]styles\\.css$/',
+              name: 'styles',
+            },
+          ],
+        },
+      ],
+      errors: [{
+        message: 'Expected import \'css\' to match \'styles\'.',
+        type: 'ImportDefaultSpecifier',
+      }],
+    }),
+    test({
+      code: 'import css from "./match-default-export-name/component.module.css";',
+      output: 'import componentStyles from "./match-default-export-name/component.module.css";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/(\\w+)\\.module\\.css$/',
+              name: '$1Styles',
+            },
+          ],
+        },
+      ],
+      errors: [{
+        message: 'Expected import \'css\' to match \'componentStyles\'.',
+        type: 'ImportDefaultSpecifier',
+      }],
+    }),
+    test({
+      code: 'import myConstant from "./match-default-export-name/id";',
+      output: 'import id from "./match-default-export-name/id";',
+      options: [
+        {
+          overrides: [
+            {
+              module: '/(\\w+)$/',
+              name: '$1',
+            },
+          ],
+        },
+      ],
+      errors: [{
+        message: 'Expected import \'myConstant\' to match \'id\'.',
+        type: 'ImportDefaultSpecifier',
       }],
     }),
   ],
