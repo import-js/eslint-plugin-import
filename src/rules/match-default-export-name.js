@@ -94,7 +94,6 @@ module.exports = {
     docs: {
       url: docsUrl('match-default-export-name'),
     },
-    fixable: 'code',
     schema: [
       {
         type: 'object',
@@ -156,7 +155,6 @@ module.exports = {
                 : '\' to match the default export \''
             ) + exportedName +
             '\'.',
-            fix: fixer => fixer.replaceText(defaultSpecifier[nameKey], exportedName),
           })
         }
       }

@@ -120,7 +120,6 @@ ruleTester.run('match-default-export-name', rule, {
 
     test({
       code: 'import someConstant from "./match-default-export-name/id";',
-      output: 'import myConstant from "./match-default-export-name/id";',
       errors: [{
         message: 'Expected import \'someConstant\' to match the default export \'myConstant\'.',
         type: 'ImportDefaultSpecifier',
@@ -128,7 +127,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import myFnction from "./match-default-export-name/fn";',
-      output: 'import myFunction from "./match-default-export-name/fn";',
       errors: [{
         message: 'Expected import \'myFnction\' to match the default export \'myFunction\'.',
         type: 'ImportDefaultSpecifier',
@@ -136,7 +134,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import myClass from "./match-default-export-name/class";',
-      output: 'import MyClass from "./match-default-export-name/class";',
       errors: [{
         message: 'Expected import \'myClass\' to match the default export \'MyClass\'.',
         type: 'ImportDefaultSpecifier',
@@ -146,7 +143,6 @@ ruleTester.run('match-default-export-name', rule, {
     // es7
     test({
       code: 'export someConstant from "./match-default-export-name/id";',
-      output: 'export myConstant from "./match-default-export-name/id";',
       parser: require.resolve('babel-eslint'),
       errors: [{
         message: 'Expected export \'someConstant\' to match the default export \'myConstant\'.',
@@ -155,7 +151,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'export myFnction from "./match-default-export-name/fn";',
-      output: 'export myFunction from "./match-default-export-name/fn";',
       parser: require.resolve('babel-eslint'),
       errors: [{
         message: 'Expected export \'myFnction\' to match the default export \'myFunction\'.',
@@ -164,7 +159,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'export myClass from "./match-default-export-name/class";',
-      output: 'export MyClass from "./match-default-export-name/class";',
       parser: require.resolve('babel-eslint'),
       errors: [{
         message: 'Expected export \'myClass\' to match the default export \'MyClass\'.',
@@ -175,7 +169,6 @@ ruleTester.run('match-default-export-name', rule, {
     // overrides
     test({
       code: 'import react from "react";',
-      output: 'import React from "react";',
       options: [
         {
           overrides: [
@@ -193,7 +186,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import css from "./match-default-export-name/styles.css";',
-      output: 'import styles from "./match-default-export-name/styles.css";',
       options: [
         {
           overrides: [
@@ -211,7 +203,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import css from "./match-default-export-name/component.module.css";',
-      output: 'import componentStyles from "./match-default-export-name/component.module.css";',
       options: [
         {
           overrides: [
@@ -229,7 +220,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import css from "./match-default-export-name/some-component.module.css";',
-      output: 'import someComponentStyles from "./match-default-export-name/some-component.module.css";',
       options: [
         {
           overrides: [
@@ -248,7 +238,6 @@ ruleTester.run('match-default-export-name', rule, {
     }),
     test({
       code: 'import myConstant from "./match-default-export-name/id";',
-      output: 'import id from "./match-default-export-name/id";',
       options: [
         {
           overrides: [
