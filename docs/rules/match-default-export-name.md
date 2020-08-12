@@ -44,10 +44,11 @@ This defines custom default import names for specific modules.
 
 Properties of the objects
 
-| property | required | type   | description   |
-|----------|:--------:|--------|---------------|
-| module   |     x    | string | module name to match |
-| name     |     x    | string | default import name pattern |
+| property  | required | type   | description   |
+|-----------|:--------:|--------|---------------|
+| module    |     x    | string | module name to match |
+| name      |     x    | string | default import name pattern |
+| transform |          | string | transform default import name pattern to given case, can be 'camelCase', 'PascalCase' or 'snake_case' |
 
 ```json
 {
@@ -62,8 +63,9 @@ Properties of the objects
         "name": "styles"
       },
       {
-        "module": "/(\\w+)\\.module\\.css$/",
-        "name": "$1Styles"
+        "module": "/([\\w-]+)\\.module\\.css$/",
+        "name": "$1Styles",
+        "transform": "camelCase"
       }
     ]
   }]

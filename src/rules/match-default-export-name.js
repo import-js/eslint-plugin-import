@@ -1,3 +1,6 @@
+import { camelCase } from 'camel-case'
+import { pascalCase } from 'pascal-case'
+import { snakeCase } from 'snake-case'
 import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 import docsUrl from '../docsUrl'
@@ -21,12 +24,29 @@ function getDefaultExportName(declaration, context) {
   return imports.get('default').identifierName
 }
 
+function applyCaseTransform(value, transform) {
+  switch (transform) {
+    case 'camelCase':
+      return camelCase(value)
+    case 'PascalCase':
+      return pascalCase(value)
+    case 'snake_case':
+      return snakeCase(value)
+    default:
+      return value
+  }
+}
+
 function createCustomDefaultExportNameGetter(overrides) {
   if (!Array.isArray(overrides)) {
     return () => null
   }
 
-  const getCustomDefaultExportName = overrides.reduce((prevGetter, { module, name }) => {
+  const getCustomDefaultExportName = overrides.reduce((prevGetter, {
+    module,
+    name,
+    transform,
+  }) => {
     const moduleRegExp = /^\/.*\/$/.test(module)
       ? new RegExp(module.replace(/(^\/)|(\/$)/g, ''))
       : null
@@ -38,10 +58,13 @@ function createCustomDefaultExportNameGetter(overrides) {
       }
       : moduleQuery => moduleQuery === module ? [] : null
     const getter = (moduleQuery) => {
-      const result = exec(moduleQuery)
+      const results = exec(moduleQuery)
 
-      if (result) {
-        return name.replace(/(?:^|[^\\])\$(\d+)/g, (_, index) => result[parseInt(index, 10) - 1])
+      if (results) {
+        return applyCaseTransform(
+          name.replace(/(?:^|[^\\])\$(\d+)/g, (_, index) => results[parseInt(index, 10) - 1]),
+          transform
+        )
       }
 
       return null
@@ -92,6 +115,11 @@ module.exports = {
                   description: 'default import name pattern '
                     + '(e. g. "React", "styles", "$1Styles")',
                   type: 'string',
+                },
+                transform: {
+                  description: 'transform default import name pattern to given case',
+                  type: 'string',
+                  enum: ['camelCase', 'PascalCase', 'snake_case'],
                 },
               },
               required: ['module', 'name'],
