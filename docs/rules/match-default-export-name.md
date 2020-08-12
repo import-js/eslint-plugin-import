@@ -38,6 +38,10 @@ export myFn from './foo.js';
 
 This rule supports the following options:
 
+### `ignore: [array of string]`:
+
+This defines patterns to ignore files. Defaults to `["/node_modules/"]`.
+
 ### `overrides: [array of objects]`:
 
 This defines custom default import names for specific modules.

@@ -5,10 +5,10 @@ import Exports from '../ExportMap'
 import importDeclaration from '../importDeclaration'
 import docsUrl from '../docsUrl'
 
-function getDefaultExportName(declaration, context) {
+function getDefaultExportName(declaration, context, matchIgnore) {
   const imports = Exports.get(declaration.source.value, context)
 
-  if (imports == null) {
+  if (imports == null || matchIgnore(imports.path)) {
     return null
   }
 
@@ -37,6 +37,12 @@ function applyCaseTransform(value, transform) {
   }
 }
 
+function stringToRegExp(string) {
+  return /^\/.*\/$/.test(string)
+    ? new RegExp(string.replace(/(^\/)|(\/$)/g, ''))
+    : null
+}
+
 function createCustomDefaultExportNameGetter(overrides) {
   if (!Array.isArray(overrides)) {
     return () => null
@@ -47,9 +53,7 @@ function createCustomDefaultExportNameGetter(overrides) {
     name,
     transform,
   }) => {
-    const moduleRegExp = /^\/.*\/$/.test(module)
-      ? new RegExp(module.replace(/(^\/)|(\/$)/g, ''))
-      : null
+    const moduleRegExp = stringToRegExp(module)
     const exec = moduleRegExp
       ? (moduleQuery) => {
         const result = moduleRegExp.exec(moduleQuery)
@@ -88,6 +92,29 @@ function createCustomDefaultExportNameGetter(overrides) {
   return declaration => getCustomDefaultExportName(declaration.source.value)
 }
 
+function createIngoreMathcer(ignore) {
+  return ignore.reduce((prevMatcher, pattern) => {
+    const patternRegExp = stringToRegExp(pattern)
+    const matcher = patternRegExp
+      ? (path) => patternRegExp.test(path)
+      : (path) => path.indexOf(pattern) > -1
+
+    if (prevMatcher) {
+      return (path) => {
+        const result = prevMatcher(path)
+
+        if (result) {
+          return true
+        }
+
+        return matcher(path)
+      }
+    }
+
+    return matcher
+  }, null)
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -98,6 +125,14 @@ module.exports = {
       {
         type: 'object',
         items: {
+          ignore: {
+            description: 'ignore matched files (defaults to ["/node_modules/"])',
+            type: 'array',
+            items: {
+              description: 'string or RegExp',
+              type: 'string',
+            },
+          },
           overrides: {
             description: 'custom default import names for specific modules',
             type: 'array',
@@ -131,6 +166,8 @@ module.exports = {
 
   create: function (context) {
     const options = context.options[0] || {}
+    const ignore = options.ignore || ['/node_modules/']
+    const matchIgnore = createIngoreMathcer(ignore)
     const getCustomDefaultExportName = createCustomDefaultExportNameGetter(options.overrides)
     const checkDefault = (nameKey, expected, defaultSpecifier) => {
       // #566: default is a valid specifier
@@ -140,7 +177,8 @@ module.exports = {
 
       const declaration = importDeclaration(context)
       const customExportedName = getCustomDefaultExportName(declaration)
-      const exportedName = customExportedName || getDefaultExportName(declaration, context)
+      const exportedName = customExportedName
+        || getDefaultExportName(declaration, context, matchIgnore)
 
       if (exportedName) {
         const importedName = defaultSpecifier[nameKey].name
