@@ -13,9 +13,9 @@ export class ExportedClass {
 
 // destructuring exports
 
-export var { destructuredProp } = {}
+export var { destructuredProp, ...restProps } = {}
          , { destructingAssign = null } = {}
          , { destructingAssign: destructingRenamedAssign = null } = {}
-         , [ arrayKeyProp ] = []
+         , [ arrayKeyProp, ...arrayRestKeyProps ] = []
          , [ { deepProp } ] = []
          , { arr: [ ,, deepSparseElement ] } = {}

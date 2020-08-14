@@ -650,6 +650,10 @@ export function recursivePatternCapture(pattern, callback) {
 
     case 'ObjectPattern':
       pattern.properties.forEach(p => {
+        if (p.type === 'ExperimentalRestProperty' || p.type === 'RestElement') {
+          callback(p.argument)
+          return
+        }
         recursivePatternCapture(p.value, callback)
       })
       break
@@ -657,6 +661,10 @@ export function recursivePatternCapture(pattern, callback) {
     case 'ArrayPattern':
       pattern.elements.forEach((element) => {
         if (element == null) return
+        if (element.type === 'ExperimentalRestProperty' || element.type === 'RestElement') {
+          callback(element.argument)
+          return
+        }
         recursivePatternCapture(element, callback)
       })
       break
