@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { test, testVersion, SYNTAX_CASES, getTSParsers } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -271,14 +271,64 @@ if (!CASE_SENSITIVE_FS) {
 ruleTester.run('named (export *)', rule, {
   valid: [
     test({
-      code: 'import { foo } from "./export-all"',
+      code: '/* default parser */ import { foo } from "./export-all"',
     }),
+    test({
+      code: '/* babel-eslint */ import { foo } from "./export-all"',
+      parser: require.resolve('babel-eslint'),
+    }),
+    testVersion('>= 6', () => ({
+      code: '/* default parser */ import { mod1 } from "./export-star-as"',
+      parserOptions: {
+        'ecmaVersion': 2020,
+      },
+    })),
+    testVersion('>= 6', () => ({
+      code: '/* babel-eslint */ import { mod1 } from "./export-star-as"',
+      parserOptions: {
+        'ecmaVersion': 2020,
+      },
+      parser: require.resolve('babel-eslint'),
+    })),
+    testVersion('>= 6', () => ({
+      code: '/* default parser */ import { foo } from "./export-all-as"',
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    })),
+    testVersion('>= 6', () => ({
+      code: '/* babel-eslint */ import { foo } from "./export-all-as"',
+      parser: require.resolve('babel-eslint'),
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    })),
   ],
   invalid: [
     test({
-      code: 'import { bar } from "./export-all"',
+      code: '/* default parser */ import { bar } from "./export-all"',
       errors: [`bar not found in './export-all'`],
     }),
+    test({
+      code: '/* babel-eslint */ import { bar } from "./export-all"',
+      parser: require.resolve('babel-eslint'),
+      errors: [`bar not found in './export-all'`],
+    }),
+    testVersion('>= 6', () => ({
+      code: '/* default parser */ import { bar } from "./export-all-as"',
+      errors: [`bar not found in './export-all-as'`],
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    })),
+    testVersion('>= 6', () => ({
+      code: '/* babel-eslint */ import { bar } from "./export-all-as"',
+      parser: require.resolve('babel-eslint'),
+      errors: [`bar not found in './export-all-as'`],
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    })),
   ],
 });
 

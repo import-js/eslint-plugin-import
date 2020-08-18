@@ -46,26 +46,18 @@ module.exports = {
               .map(i => path.relative(path.dirname(context.getFilename()), i.path))
               .join(' -> ');
 
-            context.report(im[key],
-              `${im[key].name} not found via ${deepPath}`);
+            context.report(im[key], `${im[key].name} not found via ${deepPath}`);
           } else {
-            context.report(im[key],
-              im[key].name + ' not found in \'' + node.source.value + '\'');
+            context.report(im[key], `${im[key].name} not found in '${node.source.value}'`);
           }
         }
       });
     }
 
     return {
-      'ImportDeclaration': checkSpecifiers.bind( null
-        , 'imported'
-        , 'ImportSpecifier'
-      ),
+      ImportDeclaration: checkSpecifiers.bind(null, 'imported', 'ImportSpecifier'),
 
-      'ExportNamedDeclaration': checkSpecifiers.bind( null
-        , 'local'
-        , 'ExportSpecifier'
-      ),
+      ExportNamedDeclaration: checkSpecifiers.bind(null, 'local', 'ExportSpecifier'),
     };
 
   },
