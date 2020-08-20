@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
+
 ## [2.22.1] - 2020-09-27
 ### Fixed
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
@@ -732,6 +735,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
@@ -1276,3 +1280,4 @@ for info on changes for earlier releases.
 [@foray1010]: https://github.com/foray1010
 [@tomprats]: https://github.com/tomprats
 [@straub]: https://github.com/straub
+[@andreubotella]: https://github.com/andreubotella

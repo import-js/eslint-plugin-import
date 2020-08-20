@@ -221,6 +221,30 @@ context('TypeScript', function () {
             parser: parser,
           }),
         ]),
+
+        // Exports in ambient modules
+        test(Object.assign({
+          code: `
+            declare module "a" {
+              const Foo = 1;
+              export {Foo as default};
+            }
+            declare module "b" {
+              const Bar = 2;
+              export {Bar as default};
+            }
+          `,
+        }, parserConfig)),
+        test(Object.assign({
+          code: `
+            declare module "a" {
+              const Foo = 1;
+              export {Foo as default};
+            }
+            const Bar = 2;
+            export {Bar as default};
+          `,
+        }, parserConfig)),
       ],
       invalid: [
         // type/value name clash
@@ -308,6 +332,30 @@ context('TypeScript', function () {
             },
             {
               message: `Multiple exports of name 'Bar'.`,
+              line: 9,
+            },
+          ],
+        }, parserConfig)),
+
+        // Exports in ambient modules
+        test(Object.assign({
+          code: `
+            declare module "a" {
+              const Foo = 1;
+              export {Foo as default};
+            }
+            const Bar = 2;
+            export {Bar as default};
+            const Baz = 3;
+            export {Baz as default};
+          `,
+          errors: [
+            {
+              message: 'Multiple default exports.',
+              line: 7,
+            },
+            {
+              message: 'Multiple default exports.',
               line: 9,
             },
           ],
