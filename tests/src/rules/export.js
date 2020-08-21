@@ -35,6 +35,15 @@ ruleTester.run('export', rule, {
         export { A, B };
       `,
     }),
+    test({
+      code: `
+        export * as A from './named-export-collision/a';
+        export * as B from './named-export-collision/b';
+      `,
+      parserOptions: {
+        ecmaVersion: 2020,
+      },
+    }),
   ],
 
   invalid: [

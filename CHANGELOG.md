@@ -11,6 +11,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
 - allow using rest operator in named export ([#1878], thanks [@foray1010])
 
+### Changed
+- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
+
 ## [2.22.0] - 2020-06-26
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
@@ -758,6 +761,7 @@ for info on changes for earlier releases.
 [#1724]: https://github.com/benmosher/eslint-plugin-import/pull/1724
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
+[#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
@@ -1266,3 +1270,4 @@ for info on changes for earlier releases.
 [@beatrizrezener]: https://github.com/beatrizrezener
 [@3nuc]: https://github.com/3nuc
 [@foray1010]: https://github.com/foray1010
+[@tomprats]: https://github.com/tomprats
