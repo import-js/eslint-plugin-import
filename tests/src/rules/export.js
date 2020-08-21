@@ -1,4 +1,4 @@
-import { test, testFilePath, SYNTAX_CASES, getTSParsers } from '../utils'
+import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../utils'
 
 import { RuleTester } from 'eslint'
 import eslintPkg from 'eslint/package.json'
@@ -35,7 +35,7 @@ ruleTester.run('export', rule, {
         export { A, B };
       `,
     }),
-    test({
+    testVersion('>= 6', () => ({
       code: `
         export * as A from './named-export-collision/a';
         export * as B from './named-export-collision/b';
@@ -43,7 +43,7 @@ ruleTester.run('export', rule, {
       parserOptions: {
         ecmaVersion: 2020,
       },
-    }),
+    })),
   ],
 
   invalid: [
