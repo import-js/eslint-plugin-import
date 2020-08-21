@@ -8,7 +8,7 @@ var ruleTester = new RuleTester()
   , rule = require('rules/export')
 
 ruleTester.run('export', rule, {
-  valid: [
+  valid: [].concat(
     test({ code: 'import "./malformed.js"' }),
 
     // default
@@ -43,8 +43,8 @@ ruleTester.run('export', rule, {
       parserOptions: {
         ecmaVersion: 2020,
       },
-    })),
-  ],
+    })) || [],
+  ),
 
   invalid: [
     // multiple defaults
