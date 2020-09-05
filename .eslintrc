@@ -1,0 +1,58 @@
+{
+    "root": true,
+    "plugins": [
+        "eslint-plugin",
+        "import",
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:eslint-plugin/recommended",
+        "plugin:import/recommended",
+    ],
+    "env": {
+        "node": true,
+        "es6": true,
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 6,
+    },
+    "rules": {
+        "max-len": [1, 99, 2],
+        "semi": [2, "never"],
+        "curly": [2, "multi-line"],
+        "comma-dangle": [2, "always-multiline"],
+        "eol-last": [2, "always"],
+        "eqeqeq": [2, "allow-null"],
+        "no-shadow": 1,
+        "quotes": [2, "single", {
+            "allowTemplateLiterals": true,
+            "avoidEscape": true,
+        }],
+        "eslint-plugin/consistent-output": [
+            "error",
+            "always",
+        ],
+        "eslint-plugin/meta-property-ordering": "error",
+        "eslint-plugin/no-deprecated-context-methods": "error",
+        "eslint-plugin/no-deprecated-report-api": "off",
+        "eslint-plugin/prefer-replace-text": "error",
+        "eslint-plugin/report-message-format": "error",
+        "eslint-plugin/require-meta-schema": "error",
+        "eslint-plugin/require-meta-type": "error",
+
+        // dog fooding
+        "import/no-extraneous-dependencies": "error",
+        "import/unambiguous": "off",
+    },
+
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "paths": [
+                    "src",
+                ],
+            },
+        },
+    },
+}
