@@ -1,6 +1,7 @@
 {
   "presets": [ "es2015-argon" ],
   "sourceMaps": "inline",
+  "retainLines": true,
   "env": {
     "test": {
       "plugins": [

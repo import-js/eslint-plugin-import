@@ -37,7 +37,7 @@ export function test(t) {
   }, t, {
     parserOptions: Object.assign({
       sourceType: 'module',
-      ecmaVersion: 6,
+      ecmaVersion: 9,
     }, t.parserOptions),
   })
 }

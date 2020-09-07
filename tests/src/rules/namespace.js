@@ -164,6 +164,14 @@ const valid = [
   ]),
 
   ...SYNTAX_CASES,
+
+  test({
+    code: `
+    import * as color from './color';
+    export const getBackgroundFromColor = (color) => color.bg;
+    export const getExampleColor = () => color.example
+    `,
+  }),
 ]
 
 const invalid = [

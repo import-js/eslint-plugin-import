@@ -23,6 +23,9 @@ matrix:
   include:
   - env: LINT=true
     node_js: lts/*
+  - env: TS_PARSER=2 ESLINT_VERSION=7
+    node_js: lts/*
+    before_script: 'npm install --no-save @typescript-eslint/parser@2'
   - env: PACKAGE=resolvers/node
     node_js: 14
   - env: PACKAGE=resolvers/node

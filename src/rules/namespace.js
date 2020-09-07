@@ -12,17 +12,15 @@ module.exports = {
 
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'allowComputed': {
-            'description':
-              'If `false`, will report computed (and thus, un-lintable) references ' +
-              'to namespace members.',
-            'type': 'boolean',
-            'default': false,
+        type: 'object',
+        properties: {
+          allowComputed: {
+            description: 'If `false`, will report computed (and thus, un-lintable) references to namespace members.',
+            type: 'boolean',
+            default: false,
           },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
@@ -37,15 +35,12 @@ module.exports = {
     const namespaces = new Map()
 
     function makeMessage(last, namepath) {
-       return `'${last.name}' not found in` +
-              (namepath.length > 1 ? ' deeply ' : ' ') +
-              `imported namespace '${namepath.join('.')}'.`
+      return `'${last.name}' not found in ${namepath.length > 1 ? 'deeply ' : ''}imported namespace '${namepath.join('.')}'.`
     }
 
     return {
-
       // pick up all imports at body entry time, to properly respect hoisting
-      Program: function ({ body }) {
+      Program({ body }) {
         function processBodyStatement(declaration) {
           if (declaration.type !== 'ImportDeclaration') return
 
@@ -63,8 +58,10 @@ module.exports = {
             switch (specifier.type) {
               case 'ImportNamespaceSpecifier':
                 if (!imports.size) {
-                  context.report(specifier,
-                    `No exported names found in module '${declaration.source.value}'.`)
+                  context.report(
+                    specifier,
+                    `No exported names found in module '${declaration.source.value}'.`
+                  )
                 }
                 namespaces.set(specifier.local.name, imports)
                 break
@@ -72,8 +69,9 @@ module.exports = {
               case 'ImportSpecifier': {
                 const meta = imports.get(
                   // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
-                  specifier.imported ? specifier.imported.name : 'default')
-                if (!meta || !meta.namespace) break
+                  specifier.imported ? specifier.imported.name : 'default'
+                )
+                if (!meta || !meta.namespace) { break }
                 namespaces.set(specifier.local.name, meta.namespace)
                 break
               }
@@ -84,7 +82,7 @@ module.exports = {
       },
 
       // same as above, but does not add names to local map
-      ExportNamespaceSpecifier: function (namespace) {
+      ExportNamespaceSpecifier(namespace) {
         var declaration = importDeclaration(context)
 
         var imports = Exports.get(declaration.source.value, context)
@@ -96,35 +94,39 @@ module.exports = {
         }
 
         if (!imports.size) {
-          context.report(namespace,
-            `No exported names found in module '${declaration.source.value}'.`)
+          context.report(
+            namespace,
+            `No exported names found in module '${declaration.source.value}'.`
+          )
         }
       },
 
       // todo: check for possible redefinition
 
-      MemberExpression: function (dereference) {
+      MemberExpression(dereference) {
         if (dereference.object.type !== 'Identifier') return
         if (!namespaces.has(dereference.object.name)) return
+        if (declaredScope(context, dereference.object.name) !== 'module') return
 
-        if (dereference.parent.type === 'AssignmentExpression' &&
-            dereference.parent.left === dereference) {
-            context.report(dereference.parent,
-                `Assignment to member of namespace '${dereference.object.name}'.`)
+        if (dereference.parent.type === 'AssignmentExpression' && dereference.parent.left === dereference) {
+            context.report(
+              dereference.parent,
+              `Assignment to member of namespace '${dereference.object.name}'.`
+            )
         }
 
         // go deep
         var namespace = namespaces.get(dereference.object.name)
         var namepath = [dereference.object.name]
         // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports &&
-               dereference.type === 'MemberExpression') {
+        while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
 
           if (dereference.computed) {
             if (!allowComputed) {
-              context.report(dereference.property,
-                'Unable to validate computed reference to imported namespace \'' +
-                dereference.object.name + '\'.')
+              context.report(
+                dereference.property,
+                `Unable to validate computed reference to imported namespace '${dereference.object.name}'.`
+              )
             }
             return
           }
@@ -132,7 +134,8 @@ module.exports = {
           if (!namespace.has(dereference.property.name)) {
             context.report(
               dereference.property,
-              makeMessage(dereference.property, namepath))
+              makeMessage(dereference.property, namepath)
+            )
             break
           }
 
@@ -147,7 +150,7 @@ module.exports = {
 
       },
 
-      VariableDeclarator: function ({ id, init }) {
+      VariableDeclarator({ id, init }) {
         if (init == null) return
         if (init.type !== 'Identifier') return
         if (!namespaces.has(init.name)) return
@@ -199,7 +202,7 @@ module.exports = {
         testKey(id, namespaces.get(init.name))
       },
 
-      JSXMemberExpression: function({object, property}) {
+      JSXMemberExpression({object, property}) {
          if (!namespaces.has(object.name)) return
          var namespace = namespaces.get(object.name)
          if (!namespace.has(property.name)) {

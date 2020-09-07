@@ -93,7 +93,7 @@ function typeTest(name, settings, path) {
 }
 
 export function isScopedModule(name) {
-  return name.indexOf('@') === 0
+  return name.indexOf('@') === 0 && !name.startsWith('@/')
 }
 
 export default function resolveImportType(name, context) {

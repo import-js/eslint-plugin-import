@@ -22,6 +22,8 @@ import bar from './bar';
 import baz from './bar/baz';
 // 6. "index" of the current directory
 import main from './';
+// 7. "object"-imports (only available in TypeScript)
+import log = console.log;
 ```
 
 Unassigned imports are ignored, as the order they are imported in may be important.
@@ -77,12 +79,15 @@ This rule supports the following options:
 
 ### `groups: [array]`:
 
-How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are: `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`. The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are:
+`"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`.
+The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
 ```js
 [
   'builtin', // Built-in types are first
   ['sibling', 'parent'], // Then sibling and parent types. They can be mingled together
   'index', // Then the index file
+  'object',
   // Then the rest: internal and external type
 ]
 ```
@@ -91,7 +96,7 @@ The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 You can set the options like this:
 
 ```js
-"import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin"]}]
+"import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin", "object"]}]
 ```
 
 ### `pathGroups: [array of objects]`:

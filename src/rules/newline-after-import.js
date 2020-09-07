@@ -119,8 +119,13 @@ after ${type} statement not followed by another ${type}.`,
         const { parent } = node
         const nodePosition = parent.body.indexOf(node)
         const nextNode = parent.body[nodePosition + 1]
+        
+        // skip "export import"s
+        if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
+          return
+        }
 
-        if (nextNode && nextNode.type !== 'ImportDeclaration' && nextNode.type !== 'TSImportEqualsDeclaration') {
+        if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
           checkForNewLine(node, nextNode, 'import')
         }
     }

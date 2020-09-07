@@ -161,6 +161,16 @@ ruleTester.run('no-cycle', rule, {
       parser: require.resolve('babel-eslint'),
       errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./depth-one:1`)],
     }),
+    test({
+      code: 'import { foo } from "./depth-two"',
+      options: [{ maxDepth: Infinity }],
+      errors: [error(`Dependency cycle via ./depth-one:1`)],
+    }),
+    test({
+      code: 'import { foo } from "./depth-two"',
+      options: [{ maxDepth: '∞' }],
+      errors: [error(`Dependency cycle via ./depth-one:1`)],
+    }),
   ],
 })
 // })

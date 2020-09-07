@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "2.21.2",
+  "version": "2.22.0",
   "description": "Import with sanity.",
   "engines": {
     "node": ">=4"
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
-    "@typescript-eslint/parser": "^2.23.0",
+    "@typescript-eslint/parser": "^2.23.0 || ^3.3.0",
     "array.prototype.flatmap": "^1.2.3",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

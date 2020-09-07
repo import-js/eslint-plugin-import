@@ -111,7 +111,7 @@ function optDepErrorMessage(packageName) {
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types
-  if (node.importKind === 'type') {
+  if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type')) {
     return
   }
 

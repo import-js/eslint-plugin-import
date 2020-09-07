@@ -5,9 +5,36 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+
+### Fixed
+- [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
+- [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
+- allow using rest operator in named export ([#1878], thanks [@foray1010])
+- [`dynamic-import-chunkname`]: allow single quotes to match Webpack support ([#1848], thanks [@straub])
+
+### Changed
+- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
+
+## [2.22.0] - 2020-06-26
 ### Added
 - [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1708], thanks [@KevinHerklotz])
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
+- [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
+
+### Fixed
+- [`order`]/TypeScript: properly support `import = object` expressions ([#1823], thanks [@manuth])
+- [`no-extraneous-dependencies`]/TypeScript: do not error when importing type from dev dependencies ([#1820], thanks [@fernandopasik])
+- [`default`]: avoid crash with `export =` ([#1822], thanks [@AndrewLeedham])
+- [`order`]/[`newline-after-import`]: ignore TypeScript's "export import object" ([#1830], thanks [@be5invis])
+- [`dynamic-import-chunkname`]/TypeScript: supports `@typescript-eslint/parser` ([#1833], thanks [@noelebrun])
+- [`order`]/TypeScript: ignore ordering of object imports ([#1831], thanks [@manuth])
+- [`namespace`]: do not report on shadowed import names ([#518], thanks [@ljharb])
+- [`export`]: avoid warning on `export * as` non-conflicts ([#1834], thanks [@ljharb])
+
+### Changed
+- [`no-extraneous-dependencies`]: add tests for importing types ([#1824], thanks [@taye])
+- [docs] [`no-default-export`]: Fix docs url ([#1836], thanks [@beatrizrezener])
+- [docs] [`imports-first`]: deprecation info and link to `first` docs ([#1835], thanks [@beatrizrezener])
 
 ## [2.21.2] - 2020-06-09
 ### Fixed
@@ -705,6 +732,20 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
+[#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
+[#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
+[#1841]: https://github.com/benmosher/eslint-plugin-import/issues/1841
+[#1836]: https://github.com/benmosher/eslint-plugin-import/pull/1836
+[#1835]: https://github.com/benmosher/eslint-plugin-import/pull/1835
+[#1834]: https://github.com/benmosher/eslint-plugin-import/issues/1834
+[#1833]: https://github.com/benmosher/eslint-plugin-import/pull/1833
+[#1831]: https://github.com/benmosher/eslint-plugin-import/pull/1831
+[#1830]: https://github.com/benmosher/eslint-plugin-import/pull/1830
+[#1824]: https://github.com/benmosher/eslint-plugin-import/pull/1824
+[#1823]: https://github.com/benmosher/eslint-plugin-import/pull/1823
+[#1822]: https://github.com/benmosher/eslint-plugin-import/pull/1822
+[#1820]: https://github.com/benmosher/eslint-plugin-import/pull/1820
 [#1819]: https://github.com/benmosher/eslint-plugin-import/pull/1819
 [#1802]: https://github.com/benmosher/eslint-plugin-import/pull/1802
 [#1801]: https://github.com/benmosher/eslint-plugin-import/issues/1801
@@ -724,6 +765,7 @@ for info on changes for earlier releases.
 [#1722]: https://github.com/benmosher/eslint-plugin-import/issues/1722
 [#1719]: https://github.com/benmosher/eslint-plugin-import/pull/1719
 [#1708]: https://github.com/benmosher/eslint-plugin-import/pull/1708
+[#1704]: https://github.com/benmosher/eslint-plugin-import/issues/1704
 [#1702]: https://github.com/benmosher/eslint-plugin-import/issues/1702
 [#1691]: https://github.com/benmosher/eslint-plugin-import/pull/1691
 [#1690]: https://github.com/benmosher/eslint-plugin-import/pull/1690
@@ -866,6 +908,7 @@ for info on changes for earlier releases.
 [#555]: https://github.com/benmosher/eslint-plugin-import/pull/555
 [#538]: https://github.com/benmosher/eslint-plugin-import/pull/538
 [#527]: https://github.com/benmosher/eslint-plugin-import/pull/527
+[#518]: https://github.com/benmosher/eslint-plugin-import/pull/518
 [#509]: https://github.com/benmosher/eslint-plugin-import/pull/509
 [#508]: https://github.com/benmosher/eslint-plugin-import/pull/508
 [#503]: https://github.com/benmosher/eslint-plugin-import/pull/503
@@ -997,7 +1040,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.0...HEAD
+[2.22.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.22.0
 [2.21.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.21.2
 [2.21.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.0...v2.21.1
 [2.21.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.20.2...v2.21.0
@@ -1223,3 +1267,13 @@ for info on changes for earlier releases.
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@malykhinvi]: https://github.com/malykhinvi
 [@nicolashenry]: https://github.com/nicolashenry
+[@fernandopasik]: https://github.com/fernandopasik
+[@taye]: https://github.com/taye
+[@AndrewLeedham]: https://github.com/AndrewLeedham
+[@be5invis]: https://github.com/be5invis
+[@noelebrun]: https://github.com/noelebrun
+[@beatrizrezener]: https://github.com/beatrizrezener
+[@3nuc]: https://github.com/3nuc
+[@foray1010]: https://github.com/foray1010
+[@tomprats]: https://github.com/tomprats
+[@straub]: https://github.com/straub

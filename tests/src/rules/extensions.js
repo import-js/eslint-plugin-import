@@ -444,5 +444,15 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
+    test({
+      code: 'import foo from "@/ImNotAScopedModule"',
+      options: ['always'],
+      errors: [
+        {
+          message: 'Missing file extension for "@/ImNotAScopedModule"',
+          line: 1,
+        },
+      ],
+    }),
   ],
 })

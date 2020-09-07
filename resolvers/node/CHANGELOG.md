@@ -4,8 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+
+## v0.3.4 - 2020-06-16
 ### Added
 - add `.node` extension ([#1663])
+
+## v0.3.3 - 2020-01-10
+### Changed
+- [meta] copy LICENSE file to all npm packages on prepublish ([#1595], thanks [@opichals])
 
 ## v0.3.2 - 2018-01-05
 ### Added
@@ -45,6 +51,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#438]: https://github.com/benmosher/eslint-plugin-import/pull/438
 
 [#1663]: https://github.com/benmosher/eslint-plugin-import/issues/1663
+[#1595]: https://github.com/benmosher/eslint-plugin-import/pull/1595
 [#939]: https://github.com/benmosher/eslint-plugin-import/issues/939
 [#531]: https://github.com/benmosher/eslint-plugin-import/issues/531
 [#437]: https://github.com/benmosher/eslint-plugin-import/issues/437
@@ -53,3 +60,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@lukeapage]: https://github.com/lukeapage
 [@SkeLLLa]: https://github.com/SkeLLLa
 [@ljharb]: https://github.com/ljharb
+[@opichals]: https://github.com/opichals

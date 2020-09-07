@@ -213,6 +213,24 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser: parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
+      {
+        code: `
+          export import a = obj;\nf(a);
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
+      {
+        code: `
+          import { a } from "./a";
+
+          export namespace SomeNamespace {
+              export import a2 = a;
+              f(a);
+          }`,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
     ]),
   ],
 

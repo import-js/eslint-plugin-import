@@ -37,25 +37,53 @@ const unusedExportsJsxOptions = [{
 // tests for missing exports
 ruleTester.run('no-unused-modules', rule, {
   valid: [
-    test({ code: 'export default function noOptions() {}' }),
-    test({ options: missingExportsOptions,
-           code: 'export default () => 1'}),
-    test({ options: missingExportsOptions,
-           code: 'export const a = 1'}),
-    test({ options: missingExportsOptions,
-           code: 'const a = 1; export { a }'}),
-    test({ options: missingExportsOptions,
-           code: 'function a() { return true }; export { a }'}),
-    test({ options: missingExportsOptions,
-           code: 'const a = 1; const b = 2; export { a, b }'}),
-    test({ options: missingExportsOptions,
-           code: 'const a = 1; export default a'}),
-    test({ options: missingExportsOptions,
-           code: 'export class Foo {}'}),
-    test({ options: missingExportsOptions,
-           code: 'export const [foobar] = [];'}),
-    test({ options: missingExportsOptions,
-           code: 'export const [foobar] = foobarFactory();'}),
+    test({
+      code: 'export default function noOptions() {}',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'export default () => 1',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'export const a = 1',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'const a = 1; export { a }',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'function a() { return true }; export { a }',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'const a = 1; const b = 2; export { a, b }',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'const a = 1; export default a',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'export class Foo {}',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'export const [foobar] = [];',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: 'export const [foobar] = foobarFactory();',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: `
+        export default function NewComponent () {
+          return 'I am new component'
+        }
+      `,
+    }),
   ],
   invalid: [
     test({

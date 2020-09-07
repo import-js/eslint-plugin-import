@@ -14,10 +14,18 @@ module.exports = {
     type: 'suggestion',
     docs: { url: docsUrl('no-cycle') },
     schema: [makeOptionsSchema({
-      maxDepth:{
-        description: 'maximum dependency depth to traverse',
-        type: 'integer',
-        minimum: 1,
+      maxDepth: {
+        oneOf: [
+          {
+            description: 'maximum dependency depth to traverse',
+            type: 'integer',
+            minimum: 1,
+          },
+          {
+            enum: ['∞'],
+            type: 'string',
+          },
+        ],
       },
       ignoreExternal: {
         description: 'ignore external modules',
@@ -32,7 +40,7 @@ module.exports = {
     if (myPath === '<text>') return {} // can't cycle-check a non-file
 
     const options = context.options[0] || {}
-    const maxDepth = options.maxDepth || Infinity
+    const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity
     const ignoreModule = (name) => options.ignoreExternal ? isExternalModule(name) : false
 
     function checkSourceValue(sourceNode, importer) {

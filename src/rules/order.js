@@ -11,11 +11,7 @@ const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index']
 
 function reverse(array) {
   return array.map(function (v) {
-    return {
-      name: v.name,
-      rank: -v.rank,
-      node: v.node,
-    }
+    return Object.assign({}, v, { rank: -v.rank })
   }).reverse()
 }
 
@@ -197,8 +193,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
     newCode = newCode + '\n'
   }
 
-  const message = '`' + secondNode.name + '` import should occur ' + order +
-      ' import of `' + firstNode.name + '`'
+  const message = `\`${secondNode.displayName}\` import should occur ${order} import of \`${firstNode.displayName}\``
 
   if (order === 'before') {
     context.report({
@@ -248,14 +243,14 @@ function makeOutOfOrderReport(context, imported) {
 }
 
 function getSorter(ascending) {
-  let multiplier = (ascending ? 1 : -1)
+  const multiplier = ascending ? 1 : -1
 
   return function importsSorter(importA, importB) {
     let result
 
-    if ((importA < importB) || importB === null) {
+    if (importA < importB) {
       result = -1
-    } else if ((importA > importB) || importA === null) {
+    } else if (importA > importB) {
       result = 1
     } else {
       result = 0
@@ -270,7 +265,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = []
     }
-    acc[importedItem.rank].push(importedItem.name)
+    acc[importedItem.rank].push(importedItem.value)
     return acc
   }, {})
 
@@ -295,7 +290,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   // mutate the original group-rank with alphabetized-rank
   imported.forEach(function(importedItem) {
-    importedItem.rank = alphabetizedRanks[importedItem.name]
+    importedItem.rank = alphabetizedRanks[importedItem.value]
   })
 }
 
@@ -310,26 +305,31 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, ranks, name, type, excludedImportTypes) {
-  const impType = importType(name, context)
+function computeRank(context, ranks, importEntry, excludedImportTypes) {
+  let impType
   let rank
+  if (importEntry.type === 'import:object') {
+    impType = 'object'
+  } else {
+    impType = importType(importEntry.value, context)
+  }
   if (!excludedImportTypes.has(impType)) {
-    rank = computePathRank(ranks.groups, ranks.pathGroups, name, ranks.maxPosition)
+    rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition)
   }
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType]
   }
-  if (type !== 'import') {
+  if (importEntry.type !== 'import' && !importEntry.type.startsWith('import:')) {
     rank += 100
   }
 
   return rank
 }
 
-function registerNode(context, node, name, type, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, ranks, name, type, excludedImportTypes)
+function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
+  const rank = computeRank(context, ranks, importEntry, excludedImportTypes)
   if (rank !== -1) {
-    imported.push({name, rank, node})
+    imported.push(Object.assign({}, importEntry, { rank }))
   }
 }
 
@@ -338,7 +338,7 @@ function isInVariableDeclarator(node) {
     (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
 }
 
-const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index']
+const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object']
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
@@ -563,7 +563,7 @@ module.exports = {
   create: function importOrderRule (context) {
     const options = context.options[0] || {}
     const newlinesBetweenImports = options['newlines-between'] || 'ignore'
-    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external'])
+    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object'])
     const alphabetize = getAlphabetizeConfig(options)
     let ranks
 
@@ -598,9 +598,12 @@ module.exports = {
           const name = node.source.value
           registerNode(
             context,
-            node,
-            name,
-            'import',
+            {
+              node,
+              value: name,
+              displayName: name,
+              type: 'import',
+            },
             ranks,
             imported,
             pathGroupsExcludedImportTypes
@@ -608,19 +611,30 @@ module.exports = {
         }
       },
       TSImportEqualsDeclaration: function handleImports(node) {
-        let name
+        let displayName
+        let value
+        let type
+        // skip "export import"s
+        if (node.isExport) {
+          return
+        }
         if (node.moduleReference.type === 'TSExternalModuleReference') {
-          name = node.moduleReference.expression.value
-        } else if (node.isExport) {
-          name = node.moduleReference.name
+          value = node.moduleReference.expression.value
+          displayName = value
+          type = 'import'
         } else {
-          name = null
+          value = ''
+          displayName = context.getSourceCode().getText(node.moduleReference)
+          type = 'import:object'
         }
         registerNode(
           context,
-          node,
-          name,
-          'import',
+          {
+            node,
+            value,
+            displayName,
+            type,
+          },
           ranks,
           imported,
           pathGroupsExcludedImportTypes
@@ -633,9 +647,12 @@ module.exports = {
         const name = node.arguments[0].value
         registerNode(
           context,
-          node,
-          name,
-          'require',
+          {
+            node,
+            value: name,
+            displayName: name,
+            type: 'require',
+          },
           ranks,
           imported,
           pathGroupsExcludedImportTypes
