@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
+- [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -759,6 +760,7 @@ for info on changes for earlier releases.
 [#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
 [#1947]: https://github.com/benmosher/eslint-plugin-import/pull/1947
 [#1940]: https://github.com/benmosher/eslint-plugin-import/pull/1940
+[#1897]: https://github.com/benmosher/eslint-plugin-import/pull/1897
 [#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
@@ -1319,3 +1321,4 @@ for info on changes for earlier releases.
 [@MatthiasKunnen]: https://github.com/MatthiasKunnen
 [@paztis]: https://github.com/paztis
 [@FloEdelmann]: https://github.com/FloEdelmann
+[@bicstone]: https://github.com/bicstone

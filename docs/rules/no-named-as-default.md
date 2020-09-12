@@ -31,7 +31,7 @@ For post-ES2015 `export` extensions, this also prevents exporting the default fr
 
 ```js
 // valid:
-export foo from './foo.js'
+export foo from './foo.js';
 
 // message: Using exported name 'bar' as identifier for default export.
 export bar from './foo.js';
