@@ -6,6 +6,14 @@ import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 import importType from '../core/importType'
 
+const allowedImportKindsSchema = {
+  type: 'array',
+  items: {
+    type: 'string',
+  },
+  uniqueItems: true,
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -32,12 +40,14 @@ module.exports = {
                   },
                   uniqueItems: true,
                 },
+                allowedImportKinds: allowedImportKindsSchema,
                 message: { type: 'string' },
               },
               additionalProperties: false,
             },
           },
           basePath: { type: 'string' },
+          allowedImportKinds: allowedImportKindsSchema,
         },
         additionalProperties: false,
       },
@@ -48,6 +58,7 @@ module.exports = {
     const options = context.options[0] || {}
     const restrictedPaths = options.zones || []
     const basePath = options.basePath || process.cwd()
+    const allowedImportKinds = options.allowedImportKinds || []
     const currentFilename = context.getFilename()
     const matchingZones = restrictedPaths.filter((zone) => {
       const targetPath = path.resolve(basePath, zone.target)
@@ -98,6 +109,13 @@ module.exports = {
             .some((absoluteExceptionPath) => containsPath(absoluteImportPath, absoluteExceptionPath))
 
           if (pathIsExcepted) {
+            return
+          }
+
+          const typeIsExpected = (zone.allowedImportKinds || allowedImportKinds)
+            .some((kind) => node.parent && kind === node.parent.importKind)
+
+          if (typeIsExpected) {
             return
           }
 
