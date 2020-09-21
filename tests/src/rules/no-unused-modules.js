@@ -932,11 +932,14 @@ describe('correctly report flow types', () => {
       test({
         options: unusedExportsOptions,
         code: `// @flow strict
-               export type Bar = number;`,
+               export type Bar = number;
+               export interface BarInterface {};
+               `,
         parser: require.resolve('babel-eslint'),
         filename: testFilePath('./no-unused-modules/flow/flow-1.js'),
         errors: [
           error(`exported declaration 'Bar' not used within other modules`),
+          error(`exported declaration 'BarInterface' not used within other modules`),
         ],
       }),
     ],
