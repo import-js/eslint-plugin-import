@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.13.0 - 2020-09-27
+
+### Breaking
+- [Breaking] Allow to resolve config path relative to working directory (#1276)
+
 ## 0.12.2 - 2020-06-16
 
 ### Fixed
