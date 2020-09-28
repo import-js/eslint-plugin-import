@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
 - allow using rest operator in named export ([#1878], thanks [@foray1010])
 - [`dynamic-import-chunkname`]: allow single quotes to match Webpack support ([#1848], thanks [@straub])
+- [`no-relative-parent-imports`]: check unresolved dependency type ([#1610], thanks [@bogdanb])
 
 ### Changed
 - [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
@@ -719,6 +720,7 @@ for info on changes for earlier releases.
 [`no-named-export`]: ./docs/rules/no-named-export.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
+[`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
@@ -732,6 +734,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1610]: https://github.com/benmosher/eslint-plugin-import/issues/1610
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
@@ -1276,3 +1279,4 @@ for info on changes for earlier releases.
 [@foray1010]: https://github.com/foray1010
 [@tomprats]: https://github.com/tomprats
 [@straub]: https://github.com/straub
+[@bogdanb]: https://github.com/bogdanb
