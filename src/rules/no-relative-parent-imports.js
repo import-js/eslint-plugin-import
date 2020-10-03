@@ -18,13 +18,7 @@ module.exports = {
     const myPath = context.getFilename()
     if (myPath === '<text>') return {} // can't check a non-file
 
-    function checkSourceValue(sourceNode) {
-      const depPath = sourceNode.value
-
-      if (importType(depPath, context) === 'external') { // ignore packages
-        return
-      }
-
+    function resolvedImportType(depPath) {
       const absDepPath = resolve(depPath, context)
 
       if (!absDepPath) { // unable to resolve path
@@ -33,7 +27,18 @@ module.exports = {
 
       const relDepPath = relative(dirname(myPath), absDepPath)
 
-      if (importType(relDepPath, context) === 'parent') {
+      return importType(relDepPath, context)
+    }
+
+    function checkSourceValue(sourceNode) {
+      const depPath = sourceNode.value
+      const depType = importType(depPath, context)
+
+      if (depType === 'external') { // ignore packages
+        return
+      }
+
+      if (depType === 'parent' || resolvedImportType(depPath) === 'parent') {
         context.report({
           node: sourceNode,
           message: 'Relative imports from parent directories are not allowed. ' +
