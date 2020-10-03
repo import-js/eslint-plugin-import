@@ -78,9 +78,80 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
     { code: 'import { a, b } from \'./foo\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'./bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    {
+      code: 'import * as foo from \'foo\';',
+      options: [{
+        denyList: ['bar'],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: 'import * as bar from \'foo\';',
+      options: [{
+        denyList: ['bar'],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: 'import * as foo from \'foo\';',
+      options: [{
+        allowList: ['foo'],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: 'import * as lib from \'some-lib\';',
+      options: [{
+        allowList: ['some-lib'],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: 'import * as scopedLib from \'@scoped/lib\';',
+      options: [{
+        allowList: ['@scoped/lib'],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
   ],
 
   invalid: [
+    test({
+      code: 'import * as foo from \'foo\';',
+      output: 'import * as foo from \'foo\';',
+      options: [{
+        allowList: ['bar'],
+      }],
+      errors: [ {
+        line: 1,
+        column: 8,
+        message: ERROR_MESSAGE,
+      } ],
+    }),
+    test({
+      code: 'import * as bar from \'foo\';',
+      output: 'import * as bar from \'foo\';',
+      options: [{
+        allowList: ['bar'],
+      }],
+      errors: [ {
+        line: 1,
+        column: 8,
+        message: ERROR_MESSAGE,
+      } ],
+    }),
+    test({
+      code: 'import * as foo from \'foo\';',
+      output: 'import * as foo from \'foo\';',
+      options: [{
+        denyList: ['foo'],
+      }],
+      errors: [ {
+        line: 1,
+        column: 8,
+        message: ERROR_MESSAGE,
+      } ],
+    }),
     test({
       code: 'import * as foo from \'foo\';',
       output: 'import * as foo from \'foo\';',

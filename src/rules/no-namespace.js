@@ -17,19 +17,49 @@ module.exports = {
       url: docsUrl('no-namespace'),
     },
     fixable: 'code',
-    schema: [],
+    schema: [
+      {
+        oneOf: [
+          {
+            type: 'object',
+            properties: {
+              allowList: {
+                type: 'array',
+              },
+            },
+            additionalProperties: false,
+          },
+          {
+            type: 'object',
+            properties: {
+              denyList: {
+                type: 'array',
+              },
+            },
+            additionalProperties: false,
+          },
+        ],
+      },
+    ],
   },
 
   create: function (context) {
     return {
       'ImportNamespaceSpecifier': function (node) {
+        const options = context.options[0] || {};
+        const [mode, identifiers] = Array.isArray(options.denyList)
+          ? ['deny', options.denyList]
+          : ['allow', options.allowList || []];
+
         const scopeVariables = context.getScope().variables;
-        const namespaceVariable = scopeVariables.find((variable) =>
-          variable.defs[0].node === node
-        );
+        const namespaceVariable = scopeVariables.find((variable) => variable.defs[0].node === node);
         const namespaceReferences = namespaceVariable.references;
         const namespaceIdentifiers = namespaceReferences.map(reference => reference.identifier);
         const canFix = namespaceIdentifiers.length > 0 && !usesNamespaceAsObject(namespaceIdentifiers);
+
+        if (!shouldReport(mode, identifiers, namespaceIdentifiers)) {
+          return;
+        }
 
         context.report({
           node,
@@ -86,6 +116,20 @@ module.exports = {
     };
   },
 };
+
+/**
+ *
+ * @param {'deny' | 'allow'} mode
+ * @param {string[]} list
+ * @param {TSESTree.Identifier[]} namespaceIdentifiers
+ */
+function shouldReport(mode, list, identifiers) {
+  for (const identifier of identifiers) {
+    if (list.includes(identifier)) {
+      return mode === 'deny';
+    }
+  }
+}
 
 /**
  * @param {Identifier[]} namespaceIdentifiers
