@@ -75,6 +75,44 @@ module.exports = {
             } else {
               lastLegalImp = node
             }
+          } else if (node.type === 'TSImportEqualsDeclaration') {
+            const moduleReference = node.moduleReference
+            if (moduleReference.type !== 'TSExternalModuleReference') {
+              nonImportCount++
+            } else {
+              if (absoluteFirst) {
+                const source = moduleReference.expression
+                if (/^\./.test(source.value)) {
+                  anyRelative = true
+                } else if (anyRelative) {
+                  context.report({
+                    node: source,
+                    message: 'Absolute imports should come before relative imports.',
+                  })
+                }
+              }
+              if (nonImportCount > 0) {
+                for (let variable of context.getDeclaredVariables(node)) {
+                  if (!shouldSort) break
+                  const references = variable.references
+                  if (references.length) {
+                    for (let reference of references) {
+                      if (reference.identifier.range[0] < node.range[1]) {
+                        shouldSort = false
+                        break
+                      }
+                    }
+                  }
+                }
+                shouldSort && (lastSortNodesIndex = errorInfos.length)
+                errorInfos.push({
+                  node,
+                  range: [body[index - 1].range[1], node.range[1]],
+                })
+              } else {
+                lastLegalImp = node
+              }
+            }
           } else {
             nonImportCount++
           }

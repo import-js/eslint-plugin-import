@@ -1,8 +1,9 @@
-import { test } from '../utils'
+import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
+import flatMap from 'array.prototype.flatmap'
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester({ parserOptions: { sourceType: 'module' } })
     , rule = require('rules/first')
 
 ruleTester.run('first', rule, {
@@ -16,7 +17,42 @@ ruleTester.run('first', rule, {
          })
   , test({ code: "'use directive';\
                   import { x } from 'foo';" })
-  ,
+  , ...flatMap(getTSParsers(), parser => [
+      test({
+        parser,
+        code: `
+          import fs = require('fs');
+          import { x } from './foo';
+          import { y } from './bar';
+        `,
+      }),
+      test({
+        parser,
+        code: `
+          import fs = require('fs');
+          import { x } from './foo';
+          import { y } from './bar';
+        `,
+        options: ['absolute-first'],
+      }),
+      test({
+        parser,
+        code: `
+          import { x } from './foo';
+          import fs = require('fs');
+          import { y } from './bar';
+        `,
+      }),
+      test({
+        parser,
+        code: `
+          import { x } from './foo';
+          import fs = require('fs');
+          import { y } from './bar';
+        `,
+        options: ['disable-absolute-first'],
+      }),
+    ]),
   ],
   invalid: [
     test({ code: "import { x } from './foo';\
@@ -65,6 +101,28 @@ ruleTester.run('first', rule, {
          , errors: 1
          , output: "import a from 'b'\nif (true) { console.log(1) }",
   })
-  ,
+  , ...flatMap(getTSParsers(), parser => [
+      {
+        parser,
+        code: `
+          import { x } from './foo';
+          import fs = require('fs');
+        `,
+        options: ['absolute-first'],
+        errors: 1,
+      },
+      {
+        parser,
+        code: `
+          var a = 1;
+          import fs = require('fs');
+        `,
+        errors: 1,
+        output: `
+          import fs = require('fs');
+          var a = 1;
+        `,
+      },
+    ]),
   ],
 })

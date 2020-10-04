@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+### Added
+- [`first`]/TypeScript: Add support for `import =` expressions ([#1917], thanks [@ExE-Boss])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -735,6 +737,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1917]: https://github.com/benmosher/eslint-plugin-import/pull/1917
 [#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
@@ -1281,3 +1284,4 @@ for info on changes for earlier releases.
 [@tomprats]: https://github.com/tomprats
 [@straub]: https://github.com/straub
 [@andreubotella]: https://github.com/andreubotella
+[@ExE-Boss]: https://github.com/ExE-Boss
