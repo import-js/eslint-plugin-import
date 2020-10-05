@@ -2,7 +2,8 @@
   "dummy": true,
   "devDependencies": {
     "glob": "1.0.0",
-    "eslint": "2.x"
+    "eslint": "2.x",
+    "uuid": "^8.3.0"
   },
   "peerDependencies": {
     "eslint": "2.x"
