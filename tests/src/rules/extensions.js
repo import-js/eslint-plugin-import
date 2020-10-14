@@ -339,6 +339,7 @@ ruleTester.run('extensions', rule, {
         import Component from './Component'
         import baz from 'foo/baz'
         import baw from '@scoped/baw/import'
+        import chart from '@/configs/chart'
         import express from 'express'
       `,
       options: [ 'always', { ignorePackages: true } ],
@@ -358,6 +359,7 @@ ruleTester.run('extensions', rule, {
         import Component from './Component'
         import baz from 'foo/baz'
         import baw from '@scoped/baw/import'
+        import chart from '@/configs/chart'
         import express from 'express'
       `,
       options: [ 'ignorePackages' ],
@@ -503,12 +505,19 @@ ruleTester.run('extensions', rule, {
       ],
     }),
     test({
-      code: 'import foo from "@/ImNotAScopedModule"',
+      code: `
+        import foo from "@/ImNotAScopedModule";
+        import chart from '@/configs/chart';
+      `,
       options: ['always'],
       errors: [
         {
           message: 'Missing file extension for "@/ImNotAScopedModule"',
-          line: 1,
+          line: 2,
+        },
+        {
+          message: 'Missing file extension for "@/configs/chart"',
+          line: 3,
         },
       ],
     }),
