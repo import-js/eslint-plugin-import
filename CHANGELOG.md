@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+- [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
 
 ## [2.28.1] - 2023-08-18
 
