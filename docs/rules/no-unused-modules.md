@@ -12,7 +12,7 @@ Note: dynamic imports are currently not supported.
 
 In order for this plugin to work, one of the options `missingExports` or `unusedExports` must be enabled (see "Options" section below). In the future, these options will be enabled by default (see https://github.com/benmosher/eslint-plugin-import/issues/1324)
 
-Example: 
+Example:
 ```
 "rules: {
   ...otherRules,
@@ -27,13 +27,13 @@ This rule takes the following option:
 - **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
 - **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
 - `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
-- `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package) 
+- `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
 
 
 ### Example for missing exports
 #### The following will be reported
 ```js
-const class MyClass { /*...*/ } 
+const class MyClass { /*...*/ }
 
 function makeClass() { return new MyClass(...arguments) }
 ```
@@ -41,10 +41,10 @@ function makeClass() { return new MyClass(...arguments) }
 #### The following will not be reported
 
 ```js
-export default function () { /*...*/ } 
+export default function () { /*...*/ }
 ```
 ```js
-export const foo = function () { /*...*/ } 
+export const foo = function () { /*...*/ }
 ```
 ```js
 export { foo, bar }
@@ -61,7 +61,7 @@ import { f } from 'file-b'
 import * as fileC from  'file-c'
 export { default, i0 } from 'file-d' // both will be reported
 
-export const j = 99 // will be reported 
+export const j = 99 // will be reported
 ```
 and file-d:
 ```js
