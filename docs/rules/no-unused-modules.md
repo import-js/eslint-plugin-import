@@ -52,6 +52,9 @@ export { foo, bar }
 ```js
 export { foo as bar }
 ```
+```js
+export foo from 'bar'
+```
 
 ### Example for unused exports
 given file-f:
