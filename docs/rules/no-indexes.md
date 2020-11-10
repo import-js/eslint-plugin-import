@@ -10,7 +10,7 @@ The rule accepts an optional `ignore` setting, which can be used to ignore any f
 
 For example, the following would allow `index` files in the `allowed` directory:
 
-```
+```javascript
 {
   rules: {
     'import/no-indexes': [
