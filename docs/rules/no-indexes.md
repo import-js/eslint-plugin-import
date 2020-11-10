@@ -6,7 +6,7 @@ For example, with the `no-indexes` rule enabled, files named `index.js`, `index.
 
 ## Ignore
 
-The rule accepts an optional `ignore` setting, which can be used to ignore files whose path matches one of the given regular expression string patterns.
+The rule accepts an optional `ignore` setting, which can be used to ignore any file whose path matches one of the given regular expression patterns.
 
 For example, the following would allow `index` files in the `allowed` directory:
 
