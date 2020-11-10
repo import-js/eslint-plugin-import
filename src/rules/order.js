@@ -333,9 +333,21 @@ function registerNode(context, importEntry, ranks, imported, excludedImportTypes
   }
 }
 
-function isInVariableDeclarator(node) {
-  return node &&
-    (node.type === 'VariableDeclarator' || isInVariableDeclarator(node.parent))
+function isModuleLevelRequire(node) {
+  let n = node
+  // Handle cases like `const baz = require('foo').bar.baz`
+  // and `const foo = require('foo')()`
+  while ( 
+    (n.parent.type === 'MemberExpression' && n.parent.object === n) ||
+    (n.parent.type === 'CallExpression' && n.parent.callee === n)
+   ) {
+    n = n.parent
+  }
+  return (
+    n.parent.type === 'VariableDeclarator' &&
+    n.parent.parent.type === 'VariableDeclaration' &&
+    n.parent.parent.parent.type === 'Program' 
+  )
 }
 
 const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object']
@@ -583,14 +595,6 @@ module.exports = {
       }
     }
     let imported = []
-    let level = 0
-
-    function incrementLevel() {
-      level++
-    }
-    function decrementLevel() {
-      level--
-    }
 
     return {
       ImportDeclaration: function handleImports(node) {
@@ -641,7 +645,7 @@ module.exports = {
         )
       },
       CallExpression: function handleRequires(node) {
-        if (level !== 0 || !isStaticRequire(node) || !isInVariableDeclarator(node.parent)) {
+        if (!isStaticRequire(node) || !isModuleLevelRequire(node)) {
           return
         }
         const name = node.arguments[0].value
@@ -671,16 +675,6 @@ module.exports = {
 
         imported = []
       },
-      FunctionDeclaration: incrementLevel,
-      FunctionExpression: incrementLevel,
-      ArrowFunctionExpression: incrementLevel,
-      BlockStatement: incrementLevel,
-      ObjectExpression: incrementLevel,
-      'FunctionDeclaration:exit': decrementLevel,
-      'FunctionExpression:exit': decrementLevel,
-      'ArrowFunctionExpression:exit': decrementLevel,
-      'BlockStatement:exit': decrementLevel,
-      'ObjectExpression:exit': decrementLevel,
     }
   },
 }
