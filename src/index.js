@@ -14,6 +14,7 @@ export const rules = {
 
   'no-self-import': require('./rules/no-self-import'),
   'no-cycle': require('./rules/no-cycle'),
+  'no-indexes': require('./rules/no-indexes'),
   'no-named-default': require('./rules/no-named-default'),
   'no-named-as-default': require('./rules/no-named-as-default'),
   'no-named-as-default-member': require('./rules/no-named-as-default-member'),
