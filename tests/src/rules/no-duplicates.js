@@ -306,7 +306,7 @@ ruleTester.run('no-duplicates', rule, {
       // Not autofix bail.
       output: `
         import {x,y} from './foo'
-
+        
         // some-tool-disable-next-line
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
@@ -324,7 +324,7 @@ ruleTester.run('no-duplicates', rule, {
         import {x,y} from './foo'
         // comment
 
-
+        
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
