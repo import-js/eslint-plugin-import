@@ -1,6 +1,8 @@
 import { expect } from  'chai';
 import semver from 'semver';
+import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
+import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
 import ExportMap from '../../../src/ExportMap';
 
 import * as fs from 'fs';
@@ -51,7 +53,8 @@ describe('ExportMap', function () {
     const differentSettings = Object.assign(
       {},
       fakeContext,
-      { parserPath: 'espree' });
+      { parserPath: 'espree' },
+    );
 
     expect(ExportMap.get('./named-exports', differentSettings))
       .to.exist.and
@@ -338,11 +341,11 @@ describe('ExportMap', function () {
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
     ];
 
-    if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
+    if (semver.satisfies(eslintPkg.version, '>5')) {
       configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }]);
     }
 
-    if (semver.satisfies(eslintPkg.version, '<6.0.0')) {
+    if (semver.satisfies(eslintPkg.version, '<6')) {
       configs.push(['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }]);
     }
 
@@ -358,7 +361,11 @@ describe('ExportMap', function () {
         let imports;
         before('load imports', function () {
           this.timeout(20000);  // takes a long time :shrug:
+          sinon.spy(tsConfigLoader, 'tsConfigLoader');
           imports = ExportMap.get('./typescript.ts', context);
+        });
+        after('clear spies', function () {
+          tsConfigLoader.tsConfigLoader.restore();
         });
 
         it('returns something for a TypeScript file', function () {
@@ -388,9 +395,38 @@ describe('ExportMap', function () {
         it('has exported abstract class', function () {
           expect(imports.has('Bar')).to.be.true;
         });
+
+        it('should cache tsconfig until tsconfigRootDir parser option changes', function () {
+          const customContext = Object.assign(
+            {},
+            context,
+            {
+              parserOptions: {
+                tsconfigRootDir: null,
+              },
+            },
+          );
+          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(0);
+          ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
+          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
+          ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
+          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
+
+          const differentContext = Object.assign(
+            {},
+            context,
+            {
+              parserOptions: {
+                tsconfigRootDir: process.cwd(),
+              },
+            },
+          );
+
+          ExportMap.parse('./baz.ts', 'export const baz = 5', differentContext);
+          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
+        });
       });
     });
-
   });
 
   // todo: move to utils

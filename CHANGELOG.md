@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks @fa93hws)
 - [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks @ljharb)
 - [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
+- [`import/no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -741,6 +742,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
+[#1944]: https://github.com/benmosher/eslint-plugin-import/pull/1944
 [#1924]: https://github.com/benmosher/eslint-plugin-import/issues/1924
 [#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
 [#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
@@ -1293,3 +1295,4 @@ for info on changes for earlier releases.
 [@straub]: https://github.com/straub
 [@andreubotella]: https://github.com/andreubotella
 [@cherryblossom000]: https://github.com/cherryblossom000
+[@Blasz]: https://github.com/Blasz
