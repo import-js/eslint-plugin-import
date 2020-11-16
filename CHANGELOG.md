@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
 - [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])
+- [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks @leonardodino)
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -736,6 +737,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1947]: https://github.com/benmosher/eslint-plugin-import/pull/1947
 [#1940]: https://github.com/benmosher/eslint-plugin-import/pull/1940
 [#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878

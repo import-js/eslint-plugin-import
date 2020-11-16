@@ -1,4 +1,4 @@
-import { test } from '../utils'
+import { test, getTSParsers } from '../utils'
 
 import { RuleTester } from 'eslint'
 
@@ -71,4 +71,27 @@ ruleTester.run('no-webpack-loader-syntax', rule, {
       ],
     }),
   ],
+})
+
+context('TypeScript', function () {
+  getTSParsers().forEach((parser) => {
+    const parserConfig = {
+      parser: parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }
+    ruleTester.run('no-webpack-loader-syntax', rule, {
+      valid: [
+        test(Object.assign({
+          code: 'import { foo } from\nalert()',
+        }, parserConfig)),
+        test(Object.assign({
+          code: 'import foo from\nalert()',
+        }, parserConfig)),
+      ],
+      invalid: [],
+    })
+  })
 })
