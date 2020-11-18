@@ -7,6 +7,8 @@ import moduleVisitor from 'eslint-module-utils/moduleVisitor'
 import importType from '../core/importType'
 import docsUrl from '../docsUrl'
 
+const depFieldCache = new Map()
+
 function hasKeys(obj = {}) {
   return Object.keys(obj).length > 0
 }
@@ -49,9 +51,14 @@ function getDependencies(context, packageDir) {
     if (paths.length > 0) {
       // use rule config to find package.json
       paths.forEach(dir => {
-        const _packageContent = extractDepFields(
-          JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8'))
-        )
+        const packageJsonPath = path.join(dir, 'package.json')
+        if (!depFieldCache.has(packageJsonPath)) {
+          const depFields = extractDepFields(
+            JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+          )
+          depFieldCache.set(packageJsonPath, depFields)
+        }
+        const _packageContent = depFieldCache.get(packageJsonPath)
         Object.keys(packageContent).forEach(depsKey =>
           Object.assign(packageContent[depsKey], _packageContent[depsKey])
         )
