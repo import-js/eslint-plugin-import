@@ -31,15 +31,24 @@ function extractDepFields(pkg) {
 
 function getDependencies(context, packageDir) {
   let paths = []
-  try {
-    const packageContent = {
-      dependencies: {},
-      devDependencies: {},
-      optionalDependencies: {},
-      peerDependencies: {},
-      bundledDependencies: [],
-    }
 
+  const packageContent = {
+    dependencies: {},
+    devDependencies: {},
+    optionalDependencies: {},
+    peerDependencies: {},
+    bundledDependencies: [],
+  }
+
+  const haveAddedAnyDependencies = () => [
+    packageContent.dependencies,
+    packageContent.devDependencies,
+    packageContent.optionalDependencies,
+    packageContent.peerDependencies,
+    packageContent.bundledDependencies,
+  ].some(hasKeys)
+
+  try {
     if (packageDir && packageDir.length > 0) {
       if (!Array.isArray(packageDir)) {
         paths = [path.resolve(packageDir)]
@@ -73,19 +82,18 @@ function getDependencies(context, packageDir) {
       )
     }
 
-    if (![
-      packageContent.dependencies,
-      packageContent.devDependencies,
-      packageContent.optionalDependencies,
-      packageContent.peerDependencies,
-      packageContent.bundledDependencies,
-    ].some(hasKeys)) {
+    if (!haveAddedAnyDependencies()) {
       return null
     }
 
     return packageContent
   } catch (e) {
     if (paths.length > 0 && e.code === 'ENOENT') {
+      if (haveAddedAnyDependencies()) {
+        console.warn('[no-extraneous-dependencies] Some packageDir paths not exist.')
+        return packageContent
+      }
+
       context.report({
         message: 'The package.json file could not be found.',
         loc: { line: 0, column: 0 },
