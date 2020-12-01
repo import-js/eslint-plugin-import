@@ -45,6 +45,11 @@ function isConditional(node) {
   return false;
 }
 
+function isLiteralString(node) {
+  return (node.type === 'Literal' && typeof node.value === 'string') ||
+    (node.type === 'TemplateLiteral' && node.expressions.length === 0);
+}
+
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
@@ -114,10 +119,7 @@ module.exports = {
         if (call.callee.name !== 'require') return;
 
         if (call.arguments.length !== 1) return;
-        const module = call.arguments[0];
-
-        if (module.type !== 'Literal') return;
-        if (typeof module.value !== 'string') return;
+        if (!isLiteralString(call.arguments[0])) return;
 
         if (allowRequire(call, options)) return;
 

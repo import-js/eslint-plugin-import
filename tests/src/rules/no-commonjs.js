@@ -37,6 +37,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: "var bar = require('./bar', true);" },
     { code: "var bar = proxyquire('./bar');" },
     { code: "var bar = require('./ba' + 'r');" },
+    { code: 'var bar = require(`x${1}`);', parserOptions: { ecmaVersion: 2015 } },
     { code: 'var zero = require(0);' },
     { code: 'require("x")', options: [{ allowRequire: true }] },
 
@@ -71,6 +72,11 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
       { code: 'var x = require("x")', output: 'var x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
       { code: 'x = require("x")', output: 'x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
       { code: 'require("x")', output: 'require("x")', errors: [ { message: IMPORT_MESSAGE }] },
+      { code: 'require(`x`)',
+        parserOptions: { ecmaVersion: 2015 },
+        output: 'require(`x`)',
+        errors: [ { message: IMPORT_MESSAGE }],
+      },
 
       { code: 'if (typeof window !== "undefined") require("x")',
         options: [{ allowConditionalRequire: false }],

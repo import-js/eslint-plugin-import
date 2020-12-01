@@ -44,5 +44,13 @@ ruleTester.run('no-dynamic-require', rule, {
       code: 'require(name + "foo", "bar")',
       errors: [error],
     }),
+    test({
+      code: 'require(`foo${x}`)',
+      errors: [error],
+    }),
+    test({
+      code: 'var foo = require(`foo${x}`)',
+      errors: [error],
+    }),
   ],
 });
