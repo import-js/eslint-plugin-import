@@ -1,4 +1,4 @@
-import { test } from '../utils';
+import { test, getTSParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -65,4 +65,52 @@ ruleTester.run('first', rule, {
       output: "import a from 'b'\nif (true) { console.log(1) }",
     }),  
   ],
+});
+
+context('TypeScript', function () {
+  getTSParsers()
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      const parserConfig = {
+        parser: parser,
+        settings: {
+          'import/parsers': { [parser]: ['.ts'] },
+          'import/resolver': { 'eslint-import-resolver-typescript': true },
+        },
+      };
+
+      ruleTester.run('order', rule, {
+        valid: [
+          test(
+            {
+              code: `
+                import y = require('bar');
+                import { x } from 'foo';
+                import z = require('baz');
+              `,
+              parser,
+            },
+            parserConfig,
+          ),
+        ],
+        invalid: [
+          test(
+            {
+              code: `
+                import { x } from './foo';
+                import y = require('bar');
+              `,
+              options: ['absolute-first'],
+              parser,
+              errors: [
+                {
+                  message: 'Absolute imports should come before relative imports.',
+                },
+              ],
+            },
+            parserConfig,
+          ),
+        ],
+      });
+    });
 });

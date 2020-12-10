@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks [@ljharb])
 - [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
 - [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
+- [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -1308,3 +1309,4 @@ for info on changes for earlier releases.
 [@Librazy]: https://github.com/Librazy
 [@swernerx]: https://github.com/swernerx
 [@fsmaia]: https://github.com/fsmaia
+[@MatthiasKunnen]: https://github.com/MatthiasKunnen

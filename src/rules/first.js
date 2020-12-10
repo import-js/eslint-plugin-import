@@ -1,5 +1,11 @@
 import docsUrl from '../docsUrl';
 
+function getImportValue(node) {
+  return node.type === 'ImportDeclaration'
+    ? node.source.value
+    : node.moduleReference.expression.value;
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -43,13 +49,13 @@ module.exports = {
 
           anyExpressions = true;
 
-          if (node.type === 'ImportDeclaration') {
+          if (node.type === 'ImportDeclaration' || node.type === 'TSImportEqualsDeclaration') {
             if (absoluteFirst) {
-              if (/^\./.test(node.source.value)) {
+              if (/^\./.test(getImportValue(node))) {
                 anyRelative = true;
               } else if (anyRelative) {
                 context.report({
-                  node: node.source,
+                  node: node.type === 'ImportDeclaration' ? node.source : node.moduleReference,
                   message: 'Absolute imports should come before relative imports.',
                 });
               }
