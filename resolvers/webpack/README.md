@@ -4,6 +4,10 @@
 
 Webpack-literate module resolution plugin for [`eslint-plugin-import`](https://www.npmjs.com/package/eslint-plugin-import).
 
+> :boom: Only "synchronous" Webpack configs are supported at the moment.
+> If your config returns a `Promise`, this will cause problems.
+> Consider splitting your asynchronous configuration to a separate config.
+
 Published separately to allow pegging to a specific version in case of breaking
 changes.
 

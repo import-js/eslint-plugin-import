@@ -145,4 +145,14 @@ describe("config", function () {
 
     expect(function () { resolve('baz', file, settings); }).to.not.throw(Error);
   });
+
+  it('prevents async config using', function() {
+    const settings = {
+      config: require(path.join(__dirname, './files/webpack.config.async.js')),
+    };
+    const result = resolve('foo', file, settings);
+
+    expect(result).not.to.have.property('path');
+    expect(result).to.have.property('found').to.be.false;
+  });
 });

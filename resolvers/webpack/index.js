@@ -125,10 +125,16 @@ exports.resolve = function (source, file, settings) {
     }
   }
 
+  if (typeof webpackConfig.then === 'function') {
+    webpackConfig = {};
+
+    console.warn('Webpack config returns a `Promise`; that signature is not supported at the moment. Using empty object instead.');
+  }
+
   if (webpackConfig == null) {
     webpackConfig = {};
 
-    console.warn('No webpack configuration with a "resolve" field found. Using empty object instead');
+    console.warn('No webpack configuration with a "resolve" field found. Using empty object instead.');
   }
 
   log('Using config: ', webpackConfig);
@@ -243,19 +249,15 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
   const SyncNodeJsInputFileSystem = webpackRequire('enhanced-resolve/lib/SyncNodeJsInputFileSystem');
 
   const ModuleAliasPlugin = webpackRequire('enhanced-resolve/lib/ModuleAliasPlugin');
-  const ModulesInDirectoriesPlugin =
-    webpackRequire('enhanced-resolve/lib/ModulesInDirectoriesPlugin');
+  const ModulesInDirectoriesPlugin = webpackRequire('enhanced-resolve/lib/ModulesInDirectoriesPlugin');
   const ModulesInRootPlugin = webpackRequire('enhanced-resolve/lib/ModulesInRootPlugin');
   const ModuleAsFilePlugin = webpackRequire('enhanced-resolve/lib/ModuleAsFilePlugin');
   const ModuleAsDirectoryPlugin = webpackRequire('enhanced-resolve/lib/ModuleAsDirectoryPlugin');
-  const DirectoryDescriptionFilePlugin =
-    webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFilePlugin');
-  const DirectoryDefaultFilePlugin =
-    webpackRequire('enhanced-resolve/lib/DirectoryDefaultFilePlugin');
+  const DirectoryDescriptionFilePlugin = webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFilePlugin');
+  const DirectoryDefaultFilePlugin = webpackRequire('enhanced-resolve/lib/DirectoryDefaultFilePlugin');
   const FileAppendPlugin = webpackRequire('enhanced-resolve/lib/FileAppendPlugin');
   const ResultSymlinkPlugin = webpackRequire('enhanced-resolve/lib/ResultSymlinkPlugin');
-  const DirectoryDescriptionFileFieldAliasPlugin =
-    webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin');
+  const DirectoryDescriptionFileFieldAliasPlugin = webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin');
 
   const resolver = new Resolver(new SyncNodeJsInputFileSystem());
 
