@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])
 - [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks @leonardodino)
 - [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks @fa93hws)
+- [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks @ljharb)
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -738,6 +739,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
 [#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
 [#1947]: https://github.com/benmosher/eslint-plugin-import/pull/1947
 [#1940]: https://github.com/benmosher/eslint-plugin-import/pull/1940
