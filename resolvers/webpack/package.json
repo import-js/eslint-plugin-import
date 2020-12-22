@@ -38,8 +38,8 @@
     "find-root": "^1.1.0",
     "has": "^1.0.3",
     "interpret": "^1.2.0",
+    "is-core-module": "^2.0.0",
     "lodash": "^4.17.15",
-    "node-libs-browser": "^1.0.0 || ^2.0.0",
     "resolve": "^1.13.1",
     "semver": "^5.7.1"
   },

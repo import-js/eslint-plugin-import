@@ -5,7 +5,7 @@ var findRoot = require('find-root')
   , find = require('array-find')
   , interpret = require('interpret')
   , fs = require('fs')
-  , coreLibs = require('node-libs-browser')
+  , isCore = require('is-core-module')
   , resolve = require('resolve')
   , semver = require('semver')
   , has = require('has')
@@ -142,8 +142,8 @@ exports.resolve = function (source, file, settings) {
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
-    if (source in coreLibs) {
-      return { found: true, path: coreLibs[source] }
+    if (isCore(source)) {
+      return { found: true, path: null }
     }
 
     log('Error during module resolution:', err)
