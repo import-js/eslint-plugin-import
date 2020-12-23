@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Changed
+- [`import/no-extraneous-dependencies`]: more compatible when pass not exist paths ([#1959])
+
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
 - [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])

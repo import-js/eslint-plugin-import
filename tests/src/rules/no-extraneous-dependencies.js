@@ -28,6 +28,7 @@ const packageDirWithEmpty = path.join(__dirname, '../../files/empty')
 const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps')
 const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object')
 const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition')
+const packageDirNotFoundCondition = [path.join(__dirname, '../../files/bundled-dependencies/race-condition'), path.join(__dirname, '../../files/bundled-dependencies/no-such-module')]
 
 const {
   dependencies: deps,
@@ -123,6 +124,10 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import foo from "@generated/foo"',
       options: [{packageDir: packageDirBundledDepsRaceCondition}],
+    }),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{packageDir: packageDirNotFoundCondition}],
     }),
     test({ code: 'export function getToken() {}' }),
     test({ code: 'export class Component extends React.Component {}' }),
