@@ -23,6 +23,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
 
+### Added
+- [`match-default-export-name`]: new rule added
+
 ## [2.22.0] - 2020-06-26
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
@@ -705,6 +708,7 @@ for info on changes for earlier releases.
 [`group-exports`]: ./docs/rules/group-exports.md
 [`imports-first`]: ./docs/rules/first.md
 [`max-dependencies`]: ./docs/rules/max-dependencies.md
+[`match-default-export-name`]: ./docs/rules/match-default-export-name.md
 [`named`]: ./docs/rules/named.md
 [`namespace`]: ./docs/rules/namespace.md
 [`newline-after-import`]: ./docs/rules/newline-after-import.md
