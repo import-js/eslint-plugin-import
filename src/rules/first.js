@@ -1,5 +1,16 @@
 import docsUrl from '../docsUrl'
 
+function isReexport(node) {
+  switch (node.type) {
+    case 'ExportAllDeclaration':
+      return true
+    case 'ExportNamedDeclaration':
+      return !!node.source
+    default:
+      return false
+  }
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -75,7 +86,7 @@ module.exports = {
             } else {
               lastLegalImp = node
             }
-          } else {
+          } else if (!isReexport(node)) {
             nonImportCount++
           }
         })
