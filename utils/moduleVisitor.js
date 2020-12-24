@@ -49,8 +49,15 @@ exports.default = function visitModules(visitor, options) {
   // for CommonJS `require` calls
   // adapted from @mctep: http://git.io/v4rAu
   function checkCommon(call) {
-    if (call.callee.type !== 'Identifier') return
-    if (call.callee.name !== 'require') return
+    if (call.callee.type === 'Identifier') {
+      if (call.callee.name !== 'require') return
+    }
+    else if (call.callee.type === 'MemberExpression') {
+      if (call.callee.object.name !== 'require') return
+      if (call.callee.property.name !== 'resolve') return
+    }
+    else return
+
     if (call.arguments.length !== 1) return
 
     const modulePath = call.arguments[0]

@@ -159,6 +159,23 @@ function runResolverTests(resolver) {
         }],
       }),
 
+      rest({
+        code: 'var bar = require.resolve("./baz")',
+        options: [{ commonjs: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+      rest({
+        code: 'require.resolve("./baz")',
+        options: [{ commonjs: true }],
+        errors: [{
+          message: "Unable to resolve path to module './baz'.",
+          type: 'Literal',
+        }],
+      }),
+
       // amd
       rest({
         code: 'require(["./baz"], function (bar) {})',
