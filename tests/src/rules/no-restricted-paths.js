@@ -67,6 +67,17 @@ ruleTester.run('no-restricted-paths', rule, {
 
     // builtin (ignore)
     test({ code: 'require("os")' }),
+
+    // type imports
+    test({
+      code: 'import type a from "../client/a.js"',
+      parser: require.resolve('babel-eslint'),
+      filename: testFilePath('./restricted-paths/server/b.js'),
+      options: [ {
+        allowedImportKinds: ['type'],
+        zones: [ { target: './tests/files/restricted-paths/server', from: './tests/files/restricted-paths/client' } ],
+      } ],
+    }),
   ],
 
   invalid: [
@@ -177,6 +188,63 @@ ruleTester.run('no-restricted-paths', rule, {
           '`from` path for that zone.',
         line: 1,
         column: 15,
+      } ],
+    }),
+
+    // type imports
+    test({
+      code: 'import type T from "../server/b.js";',
+      parser: require.resolve('babel-eslint'),
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 1,
+        column: 20,
+      } ],
+    }),
+    test({
+      code: `
+        import type { T } from "../server/b.js";
+        import b from "../server/b.js";
+      `,
+      parser: require.resolve('babel-eslint'),
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        allowedImportKinds: ['type'],
+        zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 3,
+        column: 23,
+      } ],
+    }),
+    test({
+      code: `
+        import type { T } from "../server/b.js";
+        import b from "../server/b.js";
+      `,
+      parser: require.resolve('babel-eslint'),
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        allowedImportKinds: ['type'],
+        zones: [ {
+          target: './tests/files/restricted-paths/client',
+          from: './tests/files/restricted-paths/server',
+          allowedImportKinds: [],
+        } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 2,
+        column: 32,
+      }, {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 3,
+        column: 23,
       } ],
     }),
   ],

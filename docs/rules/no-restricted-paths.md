@@ -8,8 +8,10 @@ In order to prevent such scenarios this rule allows you to define restricted zon
 ## Rule Details
 
 This rule has one option. The option is an object containing the definition of all restricted `zones` and the optional `basePath` which is used to resolve relative paths within.
-The default value for `basePath` is the current working directory.
-Each zone consists of the `target` path and a `from` path. The `target` is the path where the restricted imports should be applied. The `from` path defines the folder that is not allowed to be used in an import. An optional `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that `except` is relative to `from` and cannot backtrack to a parent directory.
+It may also specify an `allowedImportKinds`.
+The default value for `basePath` is the current working directory and the default value for `allowedImportKinds` is an empty array.
+
+Each zone consists of the `target` path and a `from` path. The `target` is the path where the restricted imports should be applied. The `from` path defines the folder that is not allowed to be used in an import. An optional `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that `except` is relative to `from` and cannot backtrack to a parent directory. Additionally an override of `allowedImportKinds` can be given for each zone.
 You may also specify an optional `message` for a zone, which will be displayed in case of the rule violation.
 
 ### Examples
@@ -64,7 +66,8 @@ and the current configuration is set to:
     "target": "./tests/files/restricted-paths/server/one",
     "from": "./tests/files/restricted-paths/server",
     "except": ["./one"]
-} ] }
+} ],
+"allowedImportKinds": ["type"] }
 ```
 
 The following pattern is considered a problem:
@@ -73,8 +76,12 @@ The following pattern is considered a problem:
 import a from '../two/a'
 ```
 
-The following pattern is not considered a problem:
+The following patterns are not considered a problem:
 
 ```js
 import b from './b'
+```
+
+```ts
+import type T from '../two/a'
 ```

@@ -6,6 +6,14 @@ import isStaticRequire from '../core/staticRequire'
 import docsUrl from '../docsUrl'
 import importType from '../core/importType'
 
+const allowedImportKindsSchema = {
+  type: 'array',
+  items: {
+    type: 'string',
+  },
+  uniqueItems: true,
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -32,12 +40,14 @@ module.exports = {
                   },
                   uniqueItems: true,
                 },
+                allowedImportKinds: allowedImportKindsSchema,
                 message: { type: 'string' },
               },
               additionalProperties: false,
             },
           },
           basePath: { type: 'string' },
+          allowedImportKinds: allowedImportKindsSchema,
         },
         additionalProperties: false,
       },
@@ -48,6 +58,7 @@ module.exports = {
     const options = context.options[0] || {}
     const restrictedPaths = options.zones || []
     const basePath = options.basePath || process.cwd()
+    const allowedImportKinds = options.allowedImportKinds || []
     const currentFilename = context.getFilename()
     const matchingZones = restrictedPaths.filter((zone) => {
       const targetPath = path.resolve(basePath, zone.target)
@@ -68,8 +79,8 @@ module.exports = {
       })
     }
 
-    function checkForRestrictedImportPath(importPath, node) {
-        const absoluteImportPath = resolve(importPath, context)
+    function checkForRestrictedImportPath(importPathNode, importNode) {
+        const absoluteImportPath = resolve(importPathNode.value, context)
 
         if (!absoluteImportPath) {
           return
@@ -90,7 +101,7 @@ module.exports = {
             .every((absoluteExceptionPath) => isValidExceptionPath(absoluteFrom, absoluteExceptionPath))
 
           if (!hasValidExceptionPaths) {
-            reportInvalidExceptionPath(node)
+            reportInvalidExceptionPath(importPathNode)
             return
           }
 
@@ -101,23 +112,30 @@ module.exports = {
             return
           }
 
+          const typeIsExpected = (zone.allowedImportKinds || allowedImportKinds)
+            .some((kind) => kind === importNode.importKind)
+
+          if (typeIsExpected) {
+            return
+          }
+
           context.report({
-            node,
+            node: importPathNode,
             message: `Unexpected path "{{importPath}}" imported in restricted zone.${zone.message ? ` ${zone.message}` : ''}`,
-            data: { importPath },
+            data: { importPath: importPathNode.value },
           })
         })
     }
 
     return {
       ImportDeclaration(node) {
-        checkForRestrictedImportPath(node.source.value, node.source)
+        checkForRestrictedImportPath(node.source, node)
       },
       CallExpression(node) {
         if (isStaticRequire(node)) {
           const [ firstArgument ] = node.arguments
 
-          checkForRestrictedImportPath(firstArgument.value, firstArgument)
+          checkForRestrictedImportPath(firstArgument, node)
         }
       },
     }
