@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- [`no-restricted-paths`]: Add `exemptFrom` option to allow files within `from` to import eachother, even if `from` is inside `target`.
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])

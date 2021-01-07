@@ -32,6 +32,7 @@ module.exports = {
                   },
                   uniqueItems: true,
                 },
+                exemptFrom: { type: 'boolean' },
                 message: { type: 'string' },
               },
               additionalProperties: false,
@@ -51,6 +52,11 @@ module.exports = {
     const currentFilename = context.getFilename()
     const matchingZones = restrictedPaths.filter((zone) => {
       const targetPath = path.resolve(basePath, zone.target)
+      const fromPath = path.resolve(basePath, zone.from)
+
+      if (zone.exemptFrom && containsPath(currentFilename, fromPath)) {
+        return false
+      }
 
       return containsPath(currentFilename, targetPath)
     })

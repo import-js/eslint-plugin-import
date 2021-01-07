@@ -9,7 +9,7 @@ In order to prevent such scenarios this rule allows you to define restricted zon
 
 This rule has one option. The option is an object containing the definition of all restricted `zones` and the optional `basePath` which is used to resolve relative paths within.
 The default value for `basePath` is the current working directory.
-Each zone consists of the `target` path and a `from` path. The `target` is the path where the restricted imports should be applied. The `from` path defines the folder that is not allowed to be used in an import. An optional `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that `except` is relative to `from` and cannot backtrack to a parent directory.
+Each zone consists of the `target` path and a `from` path. The `target` is the path where the restricted imports should be applied. The `from` path defines the folder that is not allowed to be used in an import. If `exemptFrom` is `true` files within the `from` path will be allowed to import from the `from` path. This can be useful if `from` is nested inside `target`. An optional `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that `except` is relative to `from` and cannot backtrack to a parent directory.
 You may also specify an optional `message` for a zone, which will be displayed in case of the rule violation.
 
 ### Examples
@@ -77,4 +77,41 @@ The following pattern is not considered a problem:
 
 ```js
 import b from './b'
+```
+
+---------------
+
+Given the following folder structure:
+
+```
+my-project
+├── client
+│   └── foo.js
+└── server
+    └── a.js
+    └── b.js
+```
+
+and the current file being linted is `my-project/server/a.js`.
+
+and the current configuration is set to:
+
+```
+{ "zones": [ {
+    "target": "./tests/files/restricted-paths/",
+    "from": "./tests/files/restricted-paths/server",
+    "exemptFrom": true,
+} ] }
+```
+
+The following pattern is not considered a problem:
+
+```js
+import b from './b.js'
+```
+
+But for `my-project/client/foo.js` the following pattern is considered a problem:
+
+```js
+import b from '../server/b.js'
 ```
