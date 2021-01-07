@@ -1,8 +1,6 @@
 'use strict'
 exports.__esModule = true
 
-const pkgDir = require('pkg-dir')
-
 const fs = require('fs')
 const Module = require('module')
 const path = require('path')
@@ -174,14 +172,26 @@ function resolverReducer(resolvers, map) {
   throw err
 }
 
-function getBaseDir(sourceFile) {
-  return pkgDir.sync(sourceFile) || process.cwd()
-}
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
-  let resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
+  let resolver =
+    /**
+     * normal abbreviation for third-party package
+     * like config `webpack` convert to `eslint-import-resolver-webpack`
+     */
+    tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
+    /**
+     * normal full-name for third-party package or absolute path
+     * like config `@xxx/webpack-resolver` or `/your/absolute/path/resolver.js`
+     */
     tryRequire(name, sourceFile) ||
-    tryRequire(path.resolve(getBaseDir(sourceFile), name))
+    /**
+     * relative path to current work dir in monorepo
+     * like config `./utils/simple-custom-resolver.js`
+     * convert to absolute path `/<project root path>/utils/simple-custom-resolver.js`
+     * for both all of monorepo
+     */
+    tryRequire(path.resolve(name))
 
   if (!resolver) {
     const err = new Error(`unable to load resolver "${name}".`)
