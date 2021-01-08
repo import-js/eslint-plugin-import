@@ -744,57 +744,88 @@ describe('Avoid errors if re-export all from umd compiled library', () => {
   })
 })
 
-describe('correctly work with Typescript only files', () => {
-  typescriptRuleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
-        options: unusedExportsTypescriptOptions,
-        code: 'import a from "file-ts-a";',
-        parser: require.resolve('babel-eslint'),
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      }),
-    ],
-    invalid: [
-      test({
-        options: unusedExportsTypescriptOptions,
-        code: `export const b = 2;`,
-        parser: require.resolve('babel-eslint'),
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
-        errors: [
-          error(`exported declaration 'b' not used within other modules`),
-        ],
-      }),
-      test({
-        options: unusedExportsTypescriptOptions,
-        code: `export interface c {};`,
-        parser: require.resolve('babel-eslint'),
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
-        errors: [
-          error(`exported declaration 'c' not used within other modules`),
-        ],
-      }),
-      test({
-        options: unusedExportsTypescriptOptions,
-        code: `export type d = {};`,
-        parser: require.resolve('babel-eslint'),
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
-        errors: [
-          error(`exported declaration 'd' not used within other modules`),
-        ],
-      }),
-    ],
-  })
-})
-
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     typescriptRuleTester.run('no-unused-modules', rule, {
       valid: [
         test({
           options: unusedExportsTypescriptOptions,
-          code: 'import a from "file-ts-a";',
+          code: `
+          import {b} from './file-ts-b';
+          import {c} from './file-ts-c';
+          import {d} from './file-ts-d';
+          import {e} from './file-ts-e';
+
+          const a = b + 1 + e.f;
+          const a2: c = {};
+          const a3: d = {};
+          `,
           parser: parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export const b = 2;`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export interface c {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export type d = {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export enum e { f };`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `
+          import type {b} from './file-ts-b-used-as-type';
+          import type {c} from './file-ts-c-used-as-type';
+          import type {d} from './file-ts-d-used-as-type';
+          import type {e} from './file-ts-e-used-as-type';
+
+          const a: typeof b = 2;
+          const a2: c = {};
+          const a3: d = {};
+          const a4: typeof e = undefined;
+          `,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a-import-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export const b = 2;`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-b-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export interface c {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export type d = {};`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export enum e { f };`,
+          parser: parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e-used-as-type.ts'),
         }),
       ],
       invalid: [
@@ -802,7 +833,7 @@ context('TypeScript', function () {
           options: unusedExportsTypescriptOptions,
           code: `export const b = 2;`,
           parser: parser,
-          filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-b-unused.ts'),
           errors: [
             error(`exported declaration 'b' not used within other modules`),
           ],
@@ -811,7 +842,7 @@ context('TypeScript', function () {
           options: unusedExportsTypescriptOptions,
           code: `export interface c {};`,
           parser: parser,
-          filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c-unused.ts'),
           errors: [
             error(`exported declaration 'c' not used within other modules`),
           ],
@@ -820,7 +851,7 @@ context('TypeScript', function () {
           options: unusedExportsTypescriptOptions,
           code: `export type d = {};`,
           parser: parser,
-          filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d-unused.ts'),
           errors: [
             error(`exported declaration 'd' not used within other modules`),
           ],
@@ -829,7 +860,7 @@ context('TypeScript', function () {
           options: unusedExportsTypescriptOptions,
           code: `export enum e { f };`,
           parser: parser,
-          filename: testFilePath('./no-unused-modules/typescript/file-ts-e.ts'),
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e-unused.ts'),
           errors: [
             error(`exported declaration 'e' not used within other modules`),
           ],
@@ -862,3 +893,51 @@ describe('correctly work with JSX only files', () => {
     ],
   })
 })
+
+describe('ignore flow types', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'import { type FooType, type FooInterface } from "./flow-2";',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/flow/flow-0.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `// @flow strict
+               export type FooType = string;
+               export interface FooInterface {};
+               `,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/flow/flow-2.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: 'import type { FooType, FooInterface } from "./flow-4";',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/flow/flow-3.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `// @flow strict
+               export type FooType = string;
+               export interface FooInterface {};
+               `,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/flow/flow-4.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `// @flow strict
+               export type Bar = number;
+               export interface BarInterface {};
+               `,
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/flow/flow-1.js'),
+      }),
+    ],
+    invalid: [],
+  })
+})
+

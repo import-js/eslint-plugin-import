@@ -19,13 +19,13 @@ module.exports = {
     let namedExportNode = null
 
     function captureDeclaration(identifierOrPattern) {
-      if (identifierOrPattern.type === 'ObjectPattern') {
+      if (identifierOrPattern && identifierOrPattern.type === 'ObjectPattern') {
         // recursively capture
         identifierOrPattern.properties
           .forEach(function(property) {
             captureDeclaration(property.value)
           })
-      } else if (identifierOrPattern.type === 'ArrayPattern') {
+      } else if (identifierOrPattern && identifierOrPattern.type === 'ArrayPattern') {
         identifierOrPattern.elements
           .forEach(captureDeclaration)
       } else  {

@@ -5,7 +5,7 @@ var findRoot = require('find-root')
   , find = require('array-find')
   , interpret = require('interpret')
   , fs = require('fs')
-  , coreLibs = require('node-libs-browser')
+  , isCore = require('is-core-module')
   , resolve = require('resolve')
   , semver = require('semver')
   , has = require('has')
@@ -48,7 +48,7 @@ exports.resolve = function (source, file, settings) {
 
   var webpackConfig
 
-  var configPath = get(settings, 'config')
+  var _configPath = get(settings, 'config')
     /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
@@ -58,6 +58,10 @@ exports.resolve = function (source, file, settings) {
     , env = get(settings, 'env')
     , argv = get(settings, 'argv', {})
     , packageDir
+
+  var configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
+    ? path.resolve(_configPath)
+    : _configPath
 
   log('Config path from settings:', configPath)
 
@@ -138,8 +142,8 @@ exports.resolve = function (source, file, settings) {
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) }
   } catch (err) {
-    if (source in coreLibs) {
-      return { found: true, path: coreLibs[source] }
+    if (isCore(source)) {
+      return { found: true, path: null }
     }
 
     log('Error during module resolution:', err)

@@ -74,7 +74,7 @@ ruleTester.run('order', rule, {
         var result = add(1, 2);
         var _ = require('lodash');`,
     }),
-    // Ignore requires that are not at the top-level
+    // Ignore requires that are not at the top-level #1
     test({
       code: `
         var index = require('./');
@@ -85,6 +85,18 @@ ruleTester.run('order', rule, {
         if (a) {
           require('fs');
         }`,
+    }),
+    // Ignore requires that are not at the top-level #2
+    test({
+      code: `
+        const foo = [
+          require('./foo'),
+          require('fs'),
+        ]`,
+    }),
+    // Ignore requires in template literal (#1936)
+    test({
+      code: "const foo = `${require('./a')} ${require('fs')}`",
     }),
     // Ignore unknown/invalid cases
     test({

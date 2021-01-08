@@ -42,7 +42,7 @@ settings:
       config: 'webpack.dev.config.js'
 ```
 
-or with explicit config file name:
+or with explicit config file index:
 
 ```yaml
 ---
@@ -51,6 +51,16 @@ settings:
     webpack:
       config: 'webpack.multiple.config.js'
       config-index: 1   # take the config at index 1
+```
+
+or with explicit config file path relative to your projects's working directory:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack:
+      config: './configs/webpack.dev.config.js'
 ```
 
 or with explicit config object:

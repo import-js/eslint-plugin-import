@@ -1,4 +1,4 @@
-import coreModules from 'resolve/lib/core'
+import isCoreModule from 'is-core-module'
 
 import resolve from 'eslint-module-utils/resolve'
 
@@ -20,7 +20,7 @@ export function isBuiltIn(name, settings, path) {
   if (path || !name) return false
   const base = baseModule(name)
   const extras = (settings && settings['import/core-modules']) || []
-  return coreModules[base] || extras.indexOf(base) > -1
+  return isCoreModule(base) || extras.indexOf(base) > -1
 }
 
 function isExternalPath(path, name, settings) {

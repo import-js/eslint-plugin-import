@@ -87,7 +87,11 @@ module.exports = {
     return {
       'ExportDefaultDeclaration': (node) => addNamed('default', node, getParent(node)),
 
-      'ExportSpecifier': (node) => addNamed(node.exported.name, node.exported, getParent(node)),
+      'ExportSpecifier': (node) => addNamed(
+        node.exported.name,
+        node.exported,
+        getParent(node.parent)
+      ),
 
       'ExportNamedDeclaration': function (node) {
         if (node.declaration == null) return

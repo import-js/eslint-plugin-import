@@ -63,8 +63,6 @@ const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier'
 const VARIABLE_DECLARATION = 'VariableDeclaration'
 const FUNCTION_DECLARATION = 'FunctionDeclaration'
 const CLASS_DECLARATION = 'ClassDeclaration'
-const INTERFACE_DECLARATION = 'InterfaceDeclaration'
-const TYPE_ALIAS = 'TypeAlias'
 const TS_INTERFACE_DECLARATION = 'TSInterfaceDeclaration'
 const TS_TYPE_ALIAS_DECLARATION = 'TSTypeAliasDeclaration'
 const TS_ENUM_DECLARATION = 'TSEnumDeclaration'
@@ -75,8 +73,6 @@ function forEachDeclarationIdentifier(declaration, cb) {
     if (
       declaration.type === FUNCTION_DECLARATION ||
       declaration.type === CLASS_DECLARATION ||
-      declaration.type === INTERFACE_DECLARATION ||
-      declaration.type === TYPE_ALIAS ||
       declaration.type === TS_INTERFACE_DECLARATION ||
       declaration.type === TS_TYPE_ALIAS_DECLARATION ||
       declaration.type === TS_ENUM_DECLARATION

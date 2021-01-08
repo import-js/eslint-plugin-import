@@ -88,6 +88,12 @@ ruleTester.run('prefer-default-export', rule, {
       parser: require.resolve('babel-eslint'),
     }),
     // ...SYNTAX_CASES,
+    test({
+      code: `
+        export const [CounterProvider,, withCounter] = func();;
+      `,
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
   invalid: [
     test({

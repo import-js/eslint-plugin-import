@@ -7,6 +7,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Fixed
+- [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
+- [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])
+- [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks @leonardodino)
+- [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks @fa93hws)
+- [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks @ljharb)
+
+## [2.22.1] - 2020-09-27
+### Fixed
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
 - allow using rest operator in named export ([#1878], thanks [@foray1010])
@@ -732,6 +740,11 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
+[#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
+[#1947]: https://github.com/benmosher/eslint-plugin-import/pull/1947
+[#1940]: https://github.com/benmosher/eslint-plugin-import/pull/1940
+[#1889]: https://github.com/benmosher/eslint-plugin-import/pull/1889
 [#1878]: https://github.com/benmosher/eslint-plugin-import/pull/1878
 [#1854]: https://github.com/benmosher/eslint-plugin-import/issues/1854
 [#1848]: https://github.com/benmosher/eslint-plugin-import/pull/1848
@@ -1040,7 +1053,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.1...HEAD
+[2.22.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.0...v2.22.1
 [2.22.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.22.0
 [2.21.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.21.2
 [2.21.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.0...v2.21.1
@@ -1277,3 +1291,4 @@ for info on changes for earlier releases.
 [@foray1010]: https://github.com/foray1010
 [@tomprats]: https://github.com/tomprats
 [@straub]: https://github.com/straub
+[@andreubotella]: https://github.com/andreubotella
