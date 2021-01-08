@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Added
+- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1708], thanks [@KevinHerklotz])
+
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
 - [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])
@@ -25,7 +28,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [2.22.0] - 2020-06-26
 ### Added
-- [`no-restricted-paths`]: Now you can also add glob patterns to the `except` option ([#1708], thanks [@KevinHerklotz])
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 - [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
 
