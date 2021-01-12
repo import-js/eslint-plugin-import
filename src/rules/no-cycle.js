@@ -48,11 +48,18 @@ module.exports = {
         return; // ignore external modules
       }
 
-      const imported = Exports.get(sourceNode.value, context);
-
-      if (importer.importKind === 'type') {
-        return; // no Flow import resolution
+      if (
+        importer.type === 'ImportDeclaration' && (
+          // import type { Foo } (TS and Flow)
+          importer.importKind === 'type' ||
+          // import { type Foo } (Flow)
+          importer.specifiers.every(({ importKind }) => importKind === 'type')
+        )
+      ) {
+        return; // ignore type imports
       }
+
+      const imported = Exports.get(sourceNode.value, context);
 
       if (imported == null) {
         return;  // no-unresolved territory
@@ -70,15 +77,20 @@ module.exports = {
         if (traversed.has(m.path)) return;
         traversed.add(m.path);
 
-        for (const [path, { getter, source }] of m.imports) {
+        for (const [path, { getter, declarations }] of m.imports) {
           if (path === myPath) return true;
           if (traversed.has(path)) continue;
-          if (ignoreModule(source.value)) continue;
-          if (route.length + 1 < maxDepth) {
-            untraversed.push({
-              mget: getter,
-              route: route.concat(source),
-            });
+          for (const { source, isOnlyImportingTypes } of declarations) {
+            if (ignoreModule(source.value)) continue;
+            // Ignore only type imports
+            if (isOnlyImportingTypes) continue;
+
+            if (route.length + 1 < maxDepth) {
+              untraversed.push({
+                mget: getter,
+                route: route.concat(source),
+              });
+            }
           }
         }
       }

@@ -827,6 +827,31 @@ context('TypeScript', function () {
           parser: parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-e-used-as-type.ts'),
         }),
+        // Should also be valid when the exporting files are linted before the importing ones
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export interface g {}`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-g.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `import {g} from './file-ts-g';`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-f.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `export interface g {};`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-g-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptOptions,
+          code: `import type {g} from './file-ts-g';`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-f-import-type.ts'),
+        }),
       ],
       invalid: [
         test({
@@ -940,4 +965,3 @@ describe('ignore flow types', () => {
     invalid: [],
   });
 });
-

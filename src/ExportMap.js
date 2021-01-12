@@ -83,8 +83,8 @@ export default class ExportMap {
 
   /**
    * ensure that imported name fully resolves.
-   * @param  {[type]}  name [description]
-   * @return {Boolean}      [description]
+   * @param  {string} name
+   * @return {{ found: boolean, path: ExportMap[] }}
    */
   hasDeep(name) {
     if (this.namespace.has(name)) return { found: true, path: [this] };
@@ -241,8 +241,8 @@ const availableDocStyleParsers = {
 
 /**
  * parse JSDoc from leading comments
- * @param  {...[type]} comments [description]
- * @return {{doc: object}}
+ * @param {object[]} comments
+ * @return {{ doc: object }}
  */
 function captureJsDoc(comments) {
   let doc;
@@ -285,6 +285,8 @@ function captureTomDoc(comments) {
     };
   }
 }
+
+const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
 
 ExportMap.get = function (source, context) {
   const path = resolve(source, context);
@@ -410,43 +412,27 @@ ExportMap.parse = function (path, content, context) {
     return object;
   }
 
-  function captureDependency(declaration) {
-    if (declaration.source == null) return null;
-    if (declaration.importKind === 'type') return null; // skip Flow type imports
-    const importedSpecifiers = new Set();
-    const supportedTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
-    let hasImportedType = false;
-    if (declaration.specifiers) {
-      declaration.specifiers.forEach(specifier => {
-        const isType = specifier.importKind === 'type';
-        hasImportedType = hasImportedType || isType;
+  function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
+    if (source == null) return null;
 
-        if (supportedTypes.has(specifier.type) && !isType) {
-          importedSpecifiers.add(specifier.type);
-        }
-        if (specifier.type === 'ImportSpecifier' && !isType) {
-          importedSpecifiers.add(specifier.imported.name);
-        }
-      });
+    const p = remotePath(source.value);
+    if (p == null) return null;
+
+    const declarationMetadata = {
+      // capturing actual node reference holds full AST in memory!
+      source: { value: source.value, loc: source.loc },
+      isOnlyImportingTypes,
+      importedSpecifiers,
+    };
+
+    const existing = m.imports.get(p);
+    if (existing != null) {
+      existing.declarations.add(declarationMetadata);
+      return existing.getter;
     }
 
-    // only Flow types were imported
-    if (hasImportedType && importedSpecifiers.size === 0) return null;
-
-    const p = remotePath(declaration.source.value);
-    if (p == null) return null;
-    const existing = m.imports.get(p);
-    if (existing != null) return existing.getter;
-
     const getter = thunkFor(p, context);
-    m.imports.set(p, {
-      getter,
-      source: {  // capturing actual node reference holds full AST in memory!
-        value: declaration.source.value,
-        loc: declaration.source.loc,
-      },
-      importedSpecifiers,
-    });
+    m.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
     return getter;
   }
 
@@ -483,14 +469,32 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportAllDeclaration') {
-      const getter = captureDependency(n);
+      const getter = captureDependency(n, n.exportKind === 'type');
       if (getter) m.dependencies.add(getter);
       return;
     }
 
     // capture namespaces in case of later export
     if (n.type === 'ImportDeclaration') {
-      captureDependency(n);
+      // import type { Foo } (TS and Flow)
+      const declarationIsType = n.importKind === 'type';
+      let isOnlyImportingTypes = declarationIsType;
+      const importedSpecifiers = new Set();
+      n.specifiers.forEach(specifier => {
+        if (supportedImportTypes.has(specifier.type)) {
+          importedSpecifiers.add(specifier.type);
+        }
+        if (specifier.type === 'ImportSpecifier') {
+          importedSpecifiers.add(specifier.imported.name);
+        }
+
+        // import { type Foo } (Flow)
+        if (!declarationIsType) {
+          isOnlyImportingTypes = specifier.importKind === 'type';
+        }
+      });
+      captureDependency(n, isOnlyImportingTypes, importedSpecifiers);
+
       const ns = n.specifiers.find(s => s.type === 'ImportNamespaceSpecifier');
       if (ns) {
         namespaces.set(ns.local.name, n.source.value);

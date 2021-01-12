@@ -114,7 +114,7 @@ const importList = new Map();
  * keys are the paths to the modules containing the exports, while the
  * lower-level Map keys are the specific identifiers or special AST node names
  * being exported. The leaf-level metadata object at the moment only contains a
- * `whereUsed` propoerty, which contains a Set of paths to modules that import
+ * `whereUsed` property, which contains a Set of paths to modules that import
  * the name.
  *
  * For example, if we have a file named bar.js containing the following exports:
@@ -216,12 +216,10 @@ const prepareImportsAndExports = (srcFiles, context) => {
         if (isNodeModule(key)) {
           return;
         }
-        let localImport = imports.get(key);
-        if (typeof localImport !== 'undefined') {
-          localImport = new Set([...localImport, ...value.importedSpecifiers]);
-        } else {
-          localImport = value.importedSpecifiers;
-        }
+        const localImport = imports.get(key) || new Set();
+        value.declarations.forEach(({ importedSpecifiers }) =>
+          importedSpecifiers.forEach(specifier => localImport.add(specifier))
+        );
         imports.set(key, localImport);
       });
       importList.set(file, imports);
