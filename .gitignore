@@ -49,3 +49,6 @@ lib/
 yarn.lock
 package-lock.json
 npm-shrinkwrap.json
+
+# macOS
+.DS_Store
