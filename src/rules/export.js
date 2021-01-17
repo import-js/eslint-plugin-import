@@ -136,10 +136,12 @@ module.exports = {
         const parent = getParent(node);
 
         let any = false;
-        remoteExports.forEach((v, name) =>
-          name !== 'default' &&
-          (any = true) && // poor man's filter
-          addNamed(name, node, parent));
+        remoteExports.forEach((v, name) => {
+          if (name !== 'default') {
+            any = true; // poor man's filter
+            addNamed(name, node, parent);
+          }
+        });
 
         if (!any) {
           context.report(

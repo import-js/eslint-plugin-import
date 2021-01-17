@@ -491,8 +491,8 @@ ExportMap.parse = function (path, content, context) {
     // capture namespaces in case of later export
     if (n.type === 'ImportDeclaration') {
       captureDependency(n);
-      let ns;
-      if (n.specifiers.some(s => s.type === 'ImportNamespaceSpecifier' && (ns = s))) {
+      const ns = n.specifiers.find(s => s.type === 'ImportNamespaceSpecifier');
+      if (ns) {
         namespaces.set(ns.local.name, n.source.value);
       }
       return;

@@ -26,6 +26,8 @@
         "func-call-spacing": 2,
         "indent": [2, 2],
         "max-len": [1, 99, 2],
+        "no-cond-assign": [2, "always"],
+        "no-return-assign": [2, "always"],
         "no-shadow": 1,
         "no-var": 2,
         "object-curly-spacing": [2, "always"],

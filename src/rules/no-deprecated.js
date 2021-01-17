@@ -9,10 +9,7 @@ function message(deprecation) {
 function getDeprecation(metadata) {
   if (!metadata || !metadata.doc) return;
 
-  let deprecation;
-  if (metadata.doc.tags.some(t => t.title === 'deprecated' && (deprecation = t))) {
-    return deprecation;
-  }
+  return metadata.doc.tags.find(t => t.title === 'deprecated');
 }
 
 module.exports = {
@@ -35,9 +32,8 @@ module.exports = {
       const imports = Exports.get(node.source.value, context);
       if (imports == null) return;
 
-      let moduleDeprecation;
-      if (imports.doc &&
-          imports.doc.tags.some(t => t.title === 'deprecated' && (moduleDeprecation = t))) {
+      const moduleDeprecation = imports.doc && imports.doc.tags.find(t => t.title === 'deprecated');
+      if (moduleDeprecation) {
         context.report({ node, message: message(moduleDeprecation) });
       }
 
