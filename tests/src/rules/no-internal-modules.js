@@ -1,10 +1,10 @@
-import { RuleTester } from 'eslint'
-import flatMap from 'array.prototype.flatmap'
-import rule from 'rules/no-internal-modules'
+import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
+import rule from 'rules/no-internal-modules';
 
-import { test, testFilePath, getTSParsers } from '../utils'
+import { test, testFilePath, getTSParsers } from '../utils';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-internal-modules', rule, {
   valid: [
@@ -252,4 +252,4 @@ ruleTester.run('no-internal-modules', rule, {
       ],
     }),
   ],
-})
+});

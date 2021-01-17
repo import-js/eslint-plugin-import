@@ -18,17 +18,17 @@
         "ecmaVersion": 6,
     },
     "rules": {
-        "max-len": [1, 99, 2],
-        "semi": [2, "never"],
-        "curly": [2, "multi-line"],
         "comma-dangle": [2, "always-multiline"],
+        "curly": [2, "multi-line"],
         "eol-last": [2, "always"],
         "eqeqeq": [2, "allow-null"],
+        "max-len": [1, 99, 2],
         "no-shadow": 1,
         "quotes": [2, "single", {
             "allowTemplateLiterals": true,
             "avoidEscape": true,
         }],
+        "semi": [2, "always"],
         "eslint-plugin/consistent-output": [
             "error",
             "always",

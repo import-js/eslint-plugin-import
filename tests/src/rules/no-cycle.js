@@ -1,15 +1,15 @@
-import { test as _test, testFilePath } from '../utils'
+import { test as _test, testFilePath } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-cycle')
+    , rule = require('rules/no-cycle');
 
-const error = message => ({ message })
+const error = message => ({ message });
 
 const test = def => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
-}))
+}));
 
 // describe.only("no-cycle", () => {
 ruleTester.run('no-cycle', rule, {
@@ -172,5 +172,5 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle via ./depth-one:1`)],
     }),
   ],
-})
+});
 // })

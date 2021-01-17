@@ -1,38 +1,38 @@
-import { getTSParsers, test, testFilePath } from '../utils'
-import typescriptConfig from '../../../config/typescript'
-import path from 'path'
-import fs from 'fs'
-import semver from 'semver'
-import eslintPkg from 'eslint/package.json'
+import { getTSParsers, test, testFilePath } from '../utils';
+import typescriptConfig from '../../../config/typescript';
+import path from 'path';
+import fs from 'fs';
+import semver from 'semver';
+import eslintPkg from 'eslint/package.json';
 
-import { RuleTester } from 'eslint'
-import flatMap from 'array.prototype.flatmap'
+import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
-const ruleTester = new RuleTester()
-const typescriptRuleTester = new RuleTester(typescriptConfig)
-const rule = require('rules/no-extraneous-dependencies')
+const ruleTester = new RuleTester();
+const typescriptRuleTester = new RuleTester(typescriptConfig);
+const rule = require('rules/no-extraneous-dependencies');
 
-const packageDirWithSyntaxError = path.join(__dirname, '../../files/with-syntax-error')
+const packageDirWithSyntaxError = path.join(__dirname, '../../files/with-syntax-error');
 const packageFileWithSyntaxErrorMessage = (() => {
   try {
-    JSON.parse(fs.readFileSync(path.join(packageDirWithSyntaxError, 'package.json')))
+    JSON.parse(fs.readFileSync(path.join(packageDirWithSyntaxError, 'package.json')));
   } catch (error) {
-    return error.message
+    return error.message;
   }
-})()
-const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed')
-const packageDirWithTypescriptDevDependencies = path.join(__dirname, '../../files/with-typescript-dev-dependencies')
-const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo')
-const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package')
-const packageDirWithEmpty = path.join(__dirname, '../../files/empty')
-const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps')
-const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object')
-const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition')
+})();
+const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed');
+const packageDirWithTypescriptDevDependencies = path.join(__dirname, '../../files/with-typescript-dev-dependencies');
+const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo');
+const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package');
+const packageDirWithEmpty = path.join(__dirname, '../../files/empty');
+const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps');
+const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object');
+const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition');
 
 const {
   dependencies: deps,
   devDependencies: devDeps,
-} = require('../../files/package.json')
+} = require('../../files/package.json');
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
@@ -316,7 +316,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       }],
     }),
   ],
-})
+});
 
 describe('TypeScript', function () {
   getTSParsers().forEach((parser) => {
@@ -326,7 +326,7 @@ describe('TypeScript', function () {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    }
+    };
 
     if (parser !== require.resolve('typescript-eslint-parser')) {
       ruleTester.run('no-extraneous-dependencies', rule, {
@@ -345,7 +345,7 @@ describe('TypeScript', function () {
             }],
           }, parserConfig)),
         ],
-      })
+      });
     } else {
       ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [],
@@ -365,10 +365,10 @@ describe('TypeScript', function () {
             }],
           }, parserConfig)),
         ],
-      })
+      });
     }
-  })
-})
+  });
+});
 
 if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
   typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', rule, {
@@ -386,5 +386,5 @@ if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
     ],
     invalid: [
     ],
-  })
+  });
 }

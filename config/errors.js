@@ -11,4 +11,4 @@ module.exports = {
          , 'import/default': 2
          , 'import/export': 2,
          },
-}
+};

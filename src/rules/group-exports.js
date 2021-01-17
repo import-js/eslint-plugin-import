@@ -1,18 +1,18 @@
-import docsUrl from '../docsUrl'
-import values from 'object.values'
-import flat from 'array.prototype.flat'
+import docsUrl from '../docsUrl';
+import values from 'object.values';
+import flat from 'array.prototype.flat';
 
 const meta = {
   type: 'suggestion',
   docs: {
     url: docsUrl('group-exports'),
   },
-}
+};
 /* eslint-disable max-len */
 const errors = {
   ExportNamedDeclaration: 'Multiple named export declarations; consolidate all named exports into a single export declaration',
   AssignmentExpression: 'Multiple CommonJS exports; consolidate all exports into a single assignment to `module.exports`',
-}
+};
 /* eslint-enable max-len */
 
 /**
@@ -28,20 +28,20 @@ const errors = {
  * @private
  */
 function accessorChain(node) {
-  const chain = []
+  const chain = [];
 
   do {
-    chain.unshift(node.property.name)
+    chain.unshift(node.property.name);
 
     if (node.object.type === 'Identifier') {
-      chain.unshift(node.object.name)
-      break
+      chain.unshift(node.object.name);
+      break;
     }
 
-    node = node.object
-  } while (node.type === 'MemberExpression')
+    node = node.object;
+  } while (node.type === 'MemberExpression');
 
-  return chain
+  return chain;
 }
 
 function create(context) {
@@ -57,39 +57,39 @@ function create(context) {
     commonjs: {
       set: new Set(),
     },
-  }
+  };
 
   return {
     ExportNamedDeclaration(node) {
-      let target = node.exportKind === 'type' ? nodes.types : nodes.modules
+      let target = node.exportKind === 'type' ? nodes.types : nodes.modules;
       if (!node.source) {
-        target.set.add(node)
+        target.set.add(node);
       } else if (Array.isArray(target.sources[node.source.value])) {
-        target.sources[node.source.value].push(node)
+        target.sources[node.source.value].push(node);
       } else {
-        target.sources[node.source.value] = [node]
+        target.sources[node.source.value] = [node];
       }
     },
 
     AssignmentExpression(node) {
       if (node.left.type !== 'MemberExpression') {
-        return
+        return;
       }
 
-      const chain = accessorChain(node.left)
+      const chain = accessorChain(node.left);
 
       // Assignments to module.exports
       // Deeper assignments are ignored since they just modify what's already being exported
       // (ie. module.exports.exported.prop = true is ignored)
       if (chain[0] === 'module' && chain[1] === 'exports' && chain.length <= 3) {
-        nodes.commonjs.set.add(node)
-        return
+        nodes.commonjs.set.add(node);
+        return;
       }
 
       // Assignments to exports (exports.* = *)
       if (chain[0] === 'exports' && chain.length === 2) {
-        nodes.commonjs.set.add(node)
-        return
+        nodes.commonjs.set.add(node);
+        return;
       }
     },
 
@@ -100,8 +100,8 @@ function create(context) {
           context.report({
             node,
             message: errors[node.type],
-          })
-        })
+          });
+        });
       }
 
       // Report multiple `aggregated exports` from the same module (ES2015 modules)
@@ -111,8 +111,8 @@ function create(context) {
           context.report({
             node,
             message: errors[node.type],
-          })
-        })
+          });
+        });
 
       // Report multiple `export type` declarations (FLOW ES2015 modules)
       if (nodes.types.set.size > 1) {
@@ -120,8 +120,8 @@ function create(context) {
           context.report({
             node,
             message: errors[node.type],
-          })
-        })
+          });
+        });
       }
 
       // Report multiple `aggregated type exports` from the same module (FLOW ES2015 modules)
@@ -131,8 +131,8 @@ function create(context) {
           context.report({
             node,
             message: errors[node.type],
-          })
-        })
+          });
+        });
 
       // Report multiple `module.exports` assignments (CommonJS)
       if (nodes.commonjs.set.size > 1) {
@@ -140,14 +140,14 @@ function create(context) {
           context.report({
             node,
             message: errors[node.type],
-          })
-        })
+          });
+        });
       }
     },
-  }
+  };
 }
 
 module.exports = {
   meta,
   create,
-}
+};

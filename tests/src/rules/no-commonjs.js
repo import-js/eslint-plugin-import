@@ -1,11 +1,11 @@
-import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
+import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
 const EXPORT_MESSAGE = 'Expected "export" or "export default"'
-    , IMPORT_MESSAGE = 'Expected "import" instead of "require()"'
+    , IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   valid: [
@@ -106,4 +106,4 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
       errors: [ { message: EXPORT_MESSAGE }],
     },
   ],
-})
+});

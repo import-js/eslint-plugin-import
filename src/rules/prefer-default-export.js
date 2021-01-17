@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-import docsUrl from '../docsUrl'
+import docsUrl from '../docsUrl';
 
 module.exports = {
   meta: {
@@ -12,47 +12,47 @@ module.exports = {
   },
 
   create: function(context) {
-    let specifierExportCount = 0
-    let hasDefaultExport = false
-    let hasStarExport = false
-    let hasTypeExport = false
-    let namedExportNode = null
+    let specifierExportCount = 0;
+    let hasDefaultExport = false;
+    let hasStarExport = false;
+    let hasTypeExport = false;
+    let namedExportNode = null;
 
     function captureDeclaration(identifierOrPattern) {
       if (identifierOrPattern && identifierOrPattern.type === 'ObjectPattern') {
         // recursively capture
         identifierOrPattern.properties
           .forEach(function(property) {
-            captureDeclaration(property.value)
-          })
+            captureDeclaration(property.value);
+          });
       } else if (identifierOrPattern && identifierOrPattern.type === 'ArrayPattern') {
         identifierOrPattern.elements
-          .forEach(captureDeclaration)
+          .forEach(captureDeclaration);
       } else  {
       // assume it's a single standard identifier
-        specifierExportCount++
+        specifierExportCount++;
       }
     }
 
     return {
       'ExportDefaultSpecifier': function() {
-        hasDefaultExport = true
+        hasDefaultExport = true;
       },
 
       'ExportSpecifier': function(node) {
         if (node.exported.name === 'default') {
-          hasDefaultExport = true
+          hasDefaultExport = true;
         } else {
-          specifierExportCount++
-          namedExportNode = node
+          specifierExportCount++;
+          namedExportNode = node;
         }
       },
 
       'ExportNamedDeclaration': function(node) {
         // if there are specifiers, node.declaration should be null
-        if (!node.declaration) return
+        if (!node.declaration) return;
 
-        const { type } = node.declaration
+        const { type } = node.declaration;
 
         if (
           type === 'TSTypeAliasDeclaration' ||
@@ -60,37 +60,37 @@ module.exports = {
           type === 'TSInterfaceDeclaration' ||
           type === 'InterfaceDeclaration'
         ) {
-          specifierExportCount++
-          hasTypeExport = true
-          return
+          specifierExportCount++;
+          hasTypeExport = true;
+          return;
         }
 
         if (node.declaration.declarations) {
           node.declaration.declarations.forEach(function(declaration) {
-            captureDeclaration(declaration.id)
-          })
+            captureDeclaration(declaration.id);
+          });
         }
         else {
           // captures 'export function foo() {}' syntax
-          specifierExportCount++
+          specifierExportCount++;
         }
 
-        namedExportNode = node
+        namedExportNode = node;
       },
 
       'ExportDefaultDeclaration': function() {
-        hasDefaultExport = true
+        hasDefaultExport = true;
       },
 
       'ExportAllDeclaration': function() {
-        hasStarExport = true
+        hasStarExport = true;
       },
 
       'Program:exit': function() {
         if (specifierExportCount === 1 && !hasDefaultExport && !hasStarExport && !hasTypeExport) {
-          context.report(namedExportNode, 'Prefer default export.')
+          context.report(namedExportNode, 'Prefer default export.');
         }
       },
-    }
+    };
   },
-}
+};

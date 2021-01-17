@@ -1,9 +1,9 @@
-import docsUrl from '../docsUrl'
+import docsUrl from '../docsUrl';
 
 function isNonExportStatement({ type }) {
   return type !== 'ExportDefaultDeclaration' &&
     type !== 'ExportNamedDeclaration' &&
-    type !== 'ExportAllDeclaration'
+    type !== 'ExportAllDeclaration';
 }
 
 module.exports = {
@@ -20,10 +20,10 @@ module.exports = {
       Program: function ({ body }) {
         const lastNonExportStatementIndex = body.reduce(function findLastIndex(acc, item, index) {
           if (isNonExportStatement(item)) {
-            return index
+            return index;
           }
-          return acc
-        }, -1)
+          return acc;
+        }, -1);
 
         if (lastNonExportStatementIndex !== -1) {
           body.slice(0, lastNonExportStatementIndex).forEach(function checkNonExport(node) {
@@ -31,11 +31,11 @@ module.exports = {
               context.report({
                 node,
                 message: 'Export statements should appear at the end of the file',
-              })
+              });
             }
-          })
+          });
         }
       },
-    }
+    };
   },
-}
+};

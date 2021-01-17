@@ -2,7 +2,7 @@
  * Adds `.jsx`, `.ts` and `.tsx` as an extension, and enables JSX/TSX parsing.
  */
 
-var allExtensions = ['.ts', '.tsx', '.d.ts', '.js', '.jsx']
+var allExtensions = ['.ts', '.tsx', '.d.ts', '.js', '.jsx'];
 
 module.exports = {
 
@@ -25,4 +25,4 @@ module.exports = {
     // TypeScript compilation already ensures that named imports exist in the referenced module
     'import/named': 'off',
   },
-}
+};

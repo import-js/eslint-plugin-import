@@ -48,7 +48,7 @@ export const rules = {
 
   // deprecated aliases to rules
   'imports-first': require('./rules/imports-first'),
-}
+};
 
 export const configs = {
   'recommended': require('../config/recommended'),
@@ -64,4 +64,4 @@ export const configs = {
   'react-native': require('../config/react-native'),
   'electron': require('../config/electron'),
   'typescript': require('../config/typescript'),
-}
+};

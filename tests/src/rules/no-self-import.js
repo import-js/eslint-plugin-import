@@ -1,13 +1,13 @@
-import { test, testFilePath } from '../utils'
+import { test, testFilePath } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-self-import')
+    , rule = require('rules/no-self-import');
 
 const error = {
   message: 'Module imports itself.',
-}
+};
 
 ruleTester.run('no-self-import', rule, {
   valid: [
@@ -117,4 +117,4 @@ ruleTester.run('no-self-import', rule, {
       filename: testFilePath('./no-self-import-folder/index.js'),
     }),
   ],
-})
+});

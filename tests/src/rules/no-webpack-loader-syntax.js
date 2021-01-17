@@ -1,11 +1,11 @@
-import { test, getTSParsers } from '../utils'
+import { test, getTSParsers } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-webpack-loader-syntax')
+    , rule = require('rules/no-webpack-loader-syntax');
 
-const message = 'Do not use import syntax to configure webpack loaders.'
+const message = 'Do not use import syntax to configure webpack loaders.';
 
 ruleTester.run('no-webpack-loader-syntax', rule, {
   valid: [
@@ -71,7 +71,7 @@ ruleTester.run('no-webpack-loader-syntax', rule, {
       ],
     }),
   ],
-})
+});
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
@@ -81,7 +81,7 @@ context('TypeScript', function () {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    }
+    };
     ruleTester.run('no-webpack-loader-syntax', rule, {
       valid: [
         test(Object.assign({
@@ -92,6 +92,6 @@ context('TypeScript', function () {
         }, parserConfig)),
       ],
       invalid: [],
-    })
-  })
-})
+    });
+  });
+});

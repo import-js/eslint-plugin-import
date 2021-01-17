@@ -1,11 +1,11 @@
-import path from 'path'
-import { test, SYNTAX_CASES, getTSParsers } from '../utils'
-import { RuleTester } from 'eslint'
+import path from 'path';
+import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { RuleTester } from 'eslint';
 
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 var ruleTester = new RuleTester()
-  , rule = require('rules/default')
+  , rule = require('rules/default');
 
 ruleTester.run('default', rule, {
   valid: [
@@ -135,7 +135,7 @@ ruleTester.run('default', rule, {
       errors: ['No default export found in imported module "./re-export".'],
     }),
   ],
-})
+});
 
 // #311: import of mismatched case
 if (!CASE_SENSITIVE_FS) {
@@ -151,7 +151,7 @@ if (!CASE_SENSITIVE_FS) {
         errors: ['No default export found in imported module "./Named-Exports".'],
       }),
     ],
-  })
+  });
 }
 
 context('TypeScript', function () {
@@ -259,6 +259,6 @@ context('TypeScript', function () {
             errors: ['No default export found in imported module "./typescript-export-as-default-namespace".'],
           }),
         ],
-      })
-    })
-})
+      });
+    });
+});

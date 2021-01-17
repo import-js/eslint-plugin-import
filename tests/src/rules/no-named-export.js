@@ -1,8 +1,8 @@
-import { RuleTester } from 'eslint'
-import { test } from '../utils'
+import { RuleTester } from 'eslint';
+import { test } from '../utils';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-named-export')
+    , rule = require('rules/no-named-export');
 
 ruleTester.run('no-named-export', rule, {
   valid: [
@@ -177,4 +177,4 @@ ruleTester.run('no-named-export', rule, {
       }],
     }),
   ],
-})
+});

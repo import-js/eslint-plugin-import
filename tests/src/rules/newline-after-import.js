@@ -1,15 +1,15 @@
-import { RuleTester } from 'eslint'
-import flatMap from 'array.prototype.flatmap'
+import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
-import { getTSParsers } from '../utils'
+import { getTSParsers } from '../utils';
 
-const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.'
+const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
-    return `Expected ${count} empty lines after import statement not followed by another import.`
-}
-const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.'
+    return `Expected ${count} empty lines after import statement not followed by another import.`;
+};
+const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   valid: [
@@ -430,4 +430,4 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: require.resolve('babel-eslint'),
     },
   ],
-})
+});

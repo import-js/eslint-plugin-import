@@ -1,9 +1,9 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-default-export')
+    , rule = require('rules/no-default-export');
 
 ruleTester.run('no-default-export', rule, {
   valid: [
@@ -119,4 +119,4 @@ ruleTester.run('no-default-export', rule, {
       }],
     }),
   ],
-})
+});

@@ -1,9 +1,9 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/first')
+    , rule = require('rules/first');
 
 ruleTester.run('first', rule, {
   valid: [
@@ -67,4 +67,4 @@ ruleTester.run('first', rule, {
   })
   ,
   ],
-})
+});

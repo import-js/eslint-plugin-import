@@ -1,13 +1,13 @@
-import * as path from 'path'
+import * as path from 'path';
 
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES } from '../utils';
 
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 var ruleTester = new RuleTester()
-  , rule = require('rules/no-unresolved')
+  , rule = require('rules/no-unresolved');
 
 function runResolverTests(resolver) {
   // redefine 'test' to set a resolver
@@ -16,9 +16,9 @@ function runResolverTests(resolver) {
     specs.settings = Object.assign({},
       specs.settings,
       { 'import/resolver': resolver },
-    )
+    );
 
-    return test(specs)
+    return test(specs);
   }
 
   ruleTester.run(`no-unresolved (${resolver})`, rule, {
@@ -188,7 +188,7 @@ function runResolverTests(resolver) {
         }],
       }),
     ],
-  })
+  });
 
   ruleTester.run(`issue #333 (${resolver})`, rule, {
     valid: [
@@ -209,7 +209,7 @@ function runResolverTests(resolver) {
           errors: ["Unable to resolve path to module './foo.json'."],
         }),
     ],
-  })
+  });
 
   if (!CASE_SENSITIVE_FS) {
     ruleTester.run('case sensitivity', rule, {
@@ -231,12 +231,12 @@ function runResolverTests(resolver) {
           errors: [`Casing of ./jsx/MyUncoolComponent.jsx does not match the underlying filesystem.`],
         }),
       ],
-    })
+    });
   }
 
 }
 
-['node', 'webpack'].forEach(runResolverTests)
+['node', 'webpack'].forEach(runResolverTests);
 
 ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
   valid: [
@@ -270,7 +270,7 @@ ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
       errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
     }),
   ],
-})
+});
 
 ruleTester.run('no-unresolved (webpack-specific)', rule, {
   valid: [
@@ -295,7 +295,7 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
       errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
     }),
   ],
-})
+});
 
 
 ruleTester.run('no-unresolved ignore list', rule, {
@@ -333,7 +333,7 @@ ruleTester.run('no-unresolved ignore list', rule, {
       errors: [ "Unable to resolve path to module './test.png'." ],
     }),
   ],
-})
+});
 
 ruleTester.run('no-unresolved unknown resolver', rule, {
   valid: [],
@@ -361,7 +361,7 @@ ruleTester.run('no-unresolved unknown resolver', rule, {
       ],
     }),
   ],
-})
+});
 
 ruleTester.run('no-unresolved electron', rule, {
   valid: [
@@ -376,9 +376,9 @@ ruleTester.run('no-unresolved electron', rule, {
       errors: [`Unable to resolve path to module 'electron'.`],
     }),
   ],
-})
+});
 
 ruleTester.run('no-unresolved syntax verification', rule, {
   valid: SYNTAX_CASES,
   invalid:[],
-})
+});

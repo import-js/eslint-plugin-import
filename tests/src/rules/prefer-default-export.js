@@ -1,9 +1,9 @@
-import { test, getNonDefaultParsers } from '../utils'
+import { test, getNonDefaultParsers } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('../../../src/rules/prefer-default-export')
+    , rule = require('../../../src/rules/prefer-default-export');
 
 ruleTester.run('prefer-default-export', rule, {
   valid: [
@@ -146,7 +146,7 @@ ruleTester.run('prefer-default-export', rule, {
       }],
     }),
   ],
-})
+});
 
 context('TypeScript', function() {
   getNonDefaultParsers().forEach((parser) => {
@@ -156,7 +156,7 @@ context('TypeScript', function() {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    }
+    };
 
     ruleTester.run('prefer-default-export', rule, {
       valid: [
@@ -209,6 +209,6 @@ context('TypeScript', function() {
         ),
       ],
       invalid: [],
-    })
-  })
-})
+    });
+  });
+});

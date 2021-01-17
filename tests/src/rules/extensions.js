@@ -1,8 +1,8 @@
-import { RuleTester } from 'eslint'
-import rule from 'rules/extensions'
-import { test, testFilePath } from '../utils'
+import { RuleTester } from 'eslint';
+import rule from 'rules/extensions';
+import { test, testFilePath } from '../utils';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('extensions', rule, {
   valid: [
@@ -455,4 +455,4 @@ ruleTester.run('extensions', rule, {
       ],
     }),
   ],
-})
+});

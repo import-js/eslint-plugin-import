@@ -1,14 +1,14 @@
-import * as path from 'path'
-import { test as testUtil, getNonDefaultParsers } from '../utils'
+import * as path from 'path';
+import { test as testUtil, getNonDefaultParsers } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-duplicates')
+    , rule = require('rules/no-duplicates');
 
 const test = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2'
   ? t => testUtil(Object.assign({}, t, {output: t.code}))
-  : testUtil
+  : testUtil;
 
 ruleTester.run('no-duplicates', rule, {
   valid: [
@@ -398,7 +398,7 @@ ruleTester.run('no-duplicates', rule, {
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
   ],
-})
+});
 
 context('TypeScript', function() {
   getNonDefaultParsers()
@@ -410,7 +410,7 @@ context('TypeScript', function() {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    }
+    };
 
     ruleTester.run('no-duplicates', rule, {
       valid: [
@@ -424,7 +424,7 @@ context('TypeScript', function() {
         ),
       ],
       invalid: [],
-    })
-  })
-})
+    });
+  });
+});
 

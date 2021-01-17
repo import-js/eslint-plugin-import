@@ -1,34 +1,34 @@
-import path from 'path'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
+import path from 'path';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
 // warms up the module cache. this import takes a while (>500ms)
-import 'babel-eslint'
+import 'babel-eslint';
 
 export function testFilePath(relativePath) {
-  return path.join(process.cwd(), './tests/files', relativePath)
+  return path.join(process.cwd(), './tests/files', relativePath);
 }
 
 export function getTSParsers() {
-  const parsers = []
+  const parsers = [];
   if (semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0')) {
-    parsers.push(require.resolve('typescript-eslint-parser'))
+    parsers.push(require.resolve('typescript-eslint-parser'));
   }
 
   if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-    parsers.push(require.resolve('@typescript-eslint/parser'))
+    parsers.push(require.resolve('@typescript-eslint/parser'));
   }
-  return parsers
+  return parsers;
 }
 
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(require.resolve('babel-eslint'))
+  return getTSParsers().concat(require.resolve('babel-eslint'));
 }
 
-export const FILENAME = testFilePath('foo.js')
+export const FILENAME = testFilePath('foo.js');
 
 export function testVersion(specifier, t) {
-  return semver.satisfies(eslintPkg.version, specifier) && test(t())
+  return semver.satisfies(eslintPkg.version, specifier) && test(t());
 }
 
 export function test(t) {
@@ -39,16 +39,16 @@ export function test(t) {
       sourceType: 'module',
       ecmaVersion: 9,
     }, t.parserOptions),
-  })
+  });
 }
 
 export function testContext(settings) {
-  return { getFilename: function () { return FILENAME }
-         , settings: settings || {} }
+  return { getFilename: function () { return FILENAME; }
+         , settings: settings || {} };
 }
 
 export function getFilename(file) {
-  return path.join(__dirname, '..', 'files', file || 'foo.js')
+  return path.join(__dirname, '..', 'files', file || 'foo.js');
 }
 
 /**
@@ -116,4 +116,4 @@ export const SYNTAX_CASES = [
     code: 'import { foo } from "./ignore.invalid.extension"',
   }),
 
-]
+];

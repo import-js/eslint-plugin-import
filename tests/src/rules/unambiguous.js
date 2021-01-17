@@ -1,7 +1,7 @@
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/unambiguous')
+    , rule = require('rules/unambiguous');
 
 ruleTester.run('unambiguous', rule, {
   valid: [
@@ -54,4 +54,4 @@ ruleTester.run('unambiguous', rule, {
       errors: ['This module could be parsed as a valid script.'],
     },
   ],
-})
+});

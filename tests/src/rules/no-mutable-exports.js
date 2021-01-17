@@ -1,8 +1,8 @@
-import {test} from '../utils'
-import {RuleTester} from 'eslint'
-import rule from 'rules/no-mutable-exports'
+import {test} from '../utils';
+import {RuleTester} from 'eslint';
+import rule from 'rules/no-mutable-exports';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-mutable-exports', rule, {
   valid: [
@@ -77,4 +77,4 @@ ruleTester.run('no-mutable-exports', rule, {
     //   errors: ['Exporting mutable global binding, use \'const\' instead.'],
     // }),
   ],
-})
+});

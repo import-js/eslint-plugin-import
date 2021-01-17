@@ -3,10 +3,10 @@
  * @author Ben Mosher
  */
 
-import Exports from '../ExportMap'
-import { isExternalModule } from '../core/importType'
-import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor'
-import docsUrl from '../docsUrl'
+import Exports from '../ExportMap';
+import { isExternalModule } from '../core/importType';
+import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
+import docsUrl from '../docsUrl';
 
 // todo: cache cycles / deep relationships for faster repeat evaluation
 module.exports = {
@@ -36,69 +36,69 @@ module.exports = {
   },
 
   create: function (context) {
-    const myPath = context.getFilename()
-    if (myPath === '<text>') return {} // can't cycle-check a non-file
+    const myPath = context.getFilename();
+    if (myPath === '<text>') return {}; // can't cycle-check a non-file
 
-    const options = context.options[0] || {}
-    const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity
-    const ignoreModule = (name) => options.ignoreExternal ? isExternalModule(name) : false
+    const options = context.options[0] || {};
+    const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity;
+    const ignoreModule = (name) => options.ignoreExternal ? isExternalModule(name) : false;
 
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {
-        return // ignore external modules
+        return; // ignore external modules
       }
 
-      const imported = Exports.get(sourceNode.value, context)
+      const imported = Exports.get(sourceNode.value, context);
 
       if (importer.importKind === 'type') {
-        return // no Flow import resolution
+        return; // no Flow import resolution
       }
 
       if (imported == null) {
-        return  // no-unresolved territory
+        return;  // no-unresolved territory
       }
 
       if (imported.path === myPath) {
-        return  // no-self-import territory
+        return;  // no-self-import territory
       }
 
-      const untraversed = [{mget: () => imported, route:[]}]
-      const traversed = new Set()
+      const untraversed = [{mget: () => imported, route:[]}];
+      const traversed = new Set();
       function detectCycle({mget, route}) {
-        const m = mget()
-        if (m == null) return
-        if (traversed.has(m.path)) return
-        traversed.add(m.path)
+        const m = mget();
+        if (m == null) return;
+        if (traversed.has(m.path)) return;
+        traversed.add(m.path);
 
         for (let [path, { getter, source }] of m.imports) {
-          if (path === myPath) return true
-          if (traversed.has(path)) continue
-          if (ignoreModule(source.value)) continue
+          if (path === myPath) return true;
+          if (traversed.has(path)) continue;
+          if (ignoreModule(source.value)) continue;
           if (route.length + 1 < maxDepth) {
             untraversed.push({
               mget: getter,
               route: route.concat(source),
-            })
+            });
           }
         }
       }
 
       while (untraversed.length > 0) {
-        const next = untraversed.shift() // bfs!
+        const next = untraversed.shift(); // bfs!
         if (detectCycle(next)) {
           const message = (next.route.length > 0
             ? `Dependency cycle via ${routeString(next.route)}`
-            : 'Dependency cycle detected.')
-          context.report(importer, message)
-          return
+            : 'Dependency cycle detected.');
+          context.report(importer, message);
+          return;
         }
       }
     }
 
-    return moduleVisitor(checkSourceValue, context.options[0])
+    return moduleVisitor(checkSourceValue, context.options[0]);
   },
-}
+};
 
 function routeString(route) {
-  return route.map(s => `${s.value}:${s.loc.start.line}`).join('=>')
+  return route.map(s => `${s.value}:${s.loc.start.line}`).join('=>');
 }

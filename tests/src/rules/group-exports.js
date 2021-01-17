@@ -1,14 +1,14 @@
-import { test } from '../utils'
-import { RuleTester } from 'eslint'
-import rule from 'rules/group-exports'
-import {resolve} from 'path'
-import {default as babelPresetFlow} from 'babel-preset-flow'
+import { test } from '../utils';
+import { RuleTester } from 'eslint';
+import rule from 'rules/group-exports';
+import {resolve} from 'path';
+import {default as babelPresetFlow} from 'babel-preset-flow';
 
 /* eslint-disable max-len */
 const errors = {
   named: 'Multiple named export declarations; consolidate all named exports into a single export declaration',
   commonjs: 'Multiple CommonJS exports; consolidate all exports into a single assignment to `module.exports`',
-}
+};
 /* eslint-enable max-len */
 const ruleTester = new RuleTester({
   parser: resolve(__dirname, '../../../node_modules/babel-eslint'),
@@ -19,7 +19,7 @@ const ruleTester = new RuleTester({
       presets: [babelPresetFlow],
     },
   },
-})
+});
 
 ruleTester.run('group-exports', rule, {
   valid: [
@@ -292,4 +292,4 @@ ruleTester.run('group-exports', rule, {
       ],
     }),
   ],
-})
+});

@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'path';
 
 export default {
   resolve: {
@@ -20,4 +20,4 @@ export default {
     { 'jquery': 'jQuery' },
     'bootstrap',
   ],
-}
+};

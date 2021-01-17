@@ -1,28 +1,28 @@
-import { SYNTAX_CASES, getTSParsers } from '../utils'
-import { RuleTester } from 'eslint'
-import semver from 'semver'
+import { SYNTAX_CASES, getTSParsers } from '../utils';
+import { RuleTester } from 'eslint';
+import semver from 'semver';
 
-const rule = require('rules/dynamic-import-chunkname')
-const ruleTester = new RuleTester()
+const rule = require('rules/dynamic-import-chunkname');
+const ruleTester = new RuleTester();
 
-const commentFormat = '[0-9a-zA-Z-_/.]+'
-const pickyCommentFormat = '[a-zA-Z-_/.]+'
-const options = [{ importFunctions: ['dynamicImport'] }]
+const commentFormat = '[0-9a-zA-Z-_/.]+';
+const pickyCommentFormat = '[a-zA-Z-_/.]+';
+const options = [{ importFunctions: ['dynamicImport'] }];
 const pickyCommentOptions = [{
   importFunctions: ['dynamicImport'],
   webpackChunknameFormat: pickyCommentFormat,
-}]
+}];
 const multipleImportFunctionOptions = [{
   importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
-}]
-const parser = require.resolve('babel-eslint')
+}];
+const parser = require.resolve('babel-eslint');
 
-const noLeadingCommentError = 'dynamic imports require a leading comment with the webpack chunkname'
-const nonBlockCommentError = 'dynamic imports require a /* foo */ style comment, not a // foo comment'
-const noPaddingCommentError = 'dynamic imports require a block comment padded with spaces - /* foo */'
-const invalidSyntaxCommentError = 'dynamic imports require a "webpack" comment with valid syntax'
-const commentFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${commentFormat}["'],? */`
-const pickyCommentFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${pickyCommentFormat}["'],? */`
+const noLeadingCommentError = 'dynamic imports require a leading comment with the webpack chunkname';
+const nonBlockCommentError = 'dynamic imports require a /* foo */ style comment, not a // foo comment';
+const noPaddingCommentError = 'dynamic imports require a block comment padded with spaces - /* foo */';
+const invalidSyntaxCommentError = 'dynamic imports require a "webpack" comment with valid syntax';
+const commentFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${commentFormat}["'],? */`;
+const pickyCommentFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${pickyCommentFormat}["'],? */`;
 
 ruleTester.run('dynamic-import-chunkname', rule, {
   valid: [
@@ -491,13 +491,13 @@ ruleTester.run('dynamic-import-chunkname', rule, {
       }],
     },
   ],
-})
+});
 
 context('TypeScript', () => {
   getTSParsers().forEach((typescriptParser) => {
     const nodeType = typescriptParser.includes('typescript-eslint-parser') || (typescriptParser.includes('@typescript-eslint/parser') && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '^2'))
       ? 'CallExpression'
-      : 'ImportExpression'
+      : 'ImportExpression';
 
     ruleTester.run('dynamic-import-chunkname', rule, {
       valid: [
@@ -818,6 +818,6 @@ context('TypeScript', () => {
           }],
         },
       ],
-    })
-  })
-})
+    });
+  });
+});

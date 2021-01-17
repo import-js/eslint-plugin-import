@@ -1,9 +1,9 @@
-import { RuleTester } from 'eslint'
-import rule from 'rules/no-restricted-paths'
+import { RuleTester } from 'eslint';
+import rule from 'rules/no-restricted-paths';
 
-import { test, testFilePath } from '../utils'
+import { test, testFilePath } from '../utils';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-restricted-paths', rule, {
   valid: [
@@ -180,4 +180,4 @@ ruleTester.run('no-restricted-paths', rule, {
       } ],
     }),
   ],
-})
+});

@@ -1,38 +1,38 @@
-import { test, testFilePath, getTSParsers } from '../utils'
-import jsxConfig from '../../../config/react'
-import typescriptConfig from '../../../config/typescript'
+import { test, testFilePath, getTSParsers } from '../utils';
+import jsxConfig from '../../../config/react';
+import typescriptConfig from '../../../config/typescript';
 
-import { RuleTester } from 'eslint'
-import fs from 'fs'
+import { RuleTester } from 'eslint';
+import fs from 'fs';
 
 const ruleTester = new RuleTester()
     , typescriptRuleTester = new RuleTester(typescriptConfig)
     , jsxRuleTester = new RuleTester(jsxConfig)
-    , rule = require('rules/no-unused-modules')
+    , rule = require('rules/no-unused-modules');
 
-const error = message => ({ message })
+const error = message => ({ message });
 
 const missingExportsOptions = [{
   missingExports: true,
-}]
+}];
 
 const unusedExportsOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/**/*.js')],
   ignoreExports: [testFilePath('./no-unused-modules/*ignored*.js')],
-}]
+}];
 
 const unusedExportsTypescriptOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/typescript')],
   ignoreExports: undefined,
-}]
+}];
 
 const unusedExportsJsxOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/jsx')],
   ignoreExports: undefined,
-}]
+}];
 
 // tests for missing exports
 ruleTester.run('no-unused-modules', rule, {
@@ -97,7 +97,7 @@ ruleTester.run('no-unused-modules', rule, {
       errors: [error(`No exports found`)],
     }),
   ],
-})
+});
 
 
 // tests for  exports
@@ -156,7 +156,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-n.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
   ],
-})
+});
 
 // test for unused exports
 ruleTester.run('no-unused-modules', rule, {
@@ -194,7 +194,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-k.js'),
            errors: [error(`exported declaration 'k' not used within other modules`)]}),
   ],
-})
+});
 
 // // test for export from
 ruleTester.run('no-unused-modules', rule, {
@@ -209,7 +209,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-j.js'),
            errors: [error(`exported declaration 'k' not used within other modules`)]}),
   ],
-})
+});
 
 ruleTester.run('no-unused-modules', rule, {
   valid: [
@@ -218,7 +218,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-k.js')}),
   ],
   invalid: [],
-})
+});
 
 // test for ignored files
 ruleTester.run('no-unused-modules', rule, {
@@ -243,7 +243,7 @@ ruleTester.run('no-unused-modules', rule, {
       filename: testFilePath('./no-unused-modules/file-ignored-l.js')}),
     ],
   invalid: [],
-})
+});
 
 // add named import for file with default export
 ruleTester.run('no-unused-modules', rule, {
@@ -258,7 +258,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-f.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
     ],
-})
+});
 
 // add default import for file with default export
 ruleTester.run('no-unused-modules', rule, {
@@ -271,7 +271,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-f.js')}),
     ],
   invalid: [],
-})
+});
 
 // add default import for file with named export
 ruleTester.run('no-unused-modules', rule, {
@@ -285,7 +285,7 @@ ruleTester.run('no-unused-modules', rule, {
             code: 'export const g = 2',
             filename: testFilePath('./no-unused-modules/file-g.js'),
             errors: [error(`exported declaration 'g' not used within other modules`)]})],
-})
+});
 
 // add named import for file with named export
 ruleTester.run('no-unused-modules', rule, {
@@ -298,7 +298,7 @@ ruleTester.run('no-unused-modules', rule, {
             filename: testFilePath('./no-unused-modules/file-g.js')}),
     ],
   invalid: [],
-})
+});
 
 // add different named import for file with named export
 ruleTester.run('no-unused-modules', rule, {
@@ -313,7 +313,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-b.js'),
            errors: [error(`exported declaration 'b' not used within other modules`)]}),
   ],
-})
+});
 
 // add renamed named import for file with named export
 ruleTester.run('no-unused-modules', rule, {
@@ -326,7 +326,7 @@ ruleTester.run('no-unused-modules', rule, {
             filename: testFilePath('./no-unused-modules/file-g.js')}),
     ],
   invalid: [],
-})
+});
 
 // add different renamed named import for file with named export
 ruleTester.run('no-unused-modules', rule, {
@@ -341,7 +341,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-g.js'),
            errors: [error(`exported declaration 'g' not used within other modules`)]}),
   ],
-})
+});
 
 // remove default import for file with default export
 ruleTester.run('no-unused-modules', rule, {
@@ -356,7 +356,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-a.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
   ],
-})
+});
 
 // add namespace import for file with unused exports
 ruleTester.run('no-unused-modules', rule, {
@@ -371,7 +371,7 @@ ruleTester.run('no-unused-modules', rule, {
              error(`exported declaration 'default' not used within other modules`),
           ]}),
   ],
-})
+});
 ruleTester.run('no-unused-modules', rule, {
   valid: [
     test({ options: unusedExportsOptions,
@@ -382,7 +382,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-m.js')}),
   ],
   invalid: [],
-})
+});
 
 // remove all exports
 ruleTester.run('no-unused-modules', rule, {
@@ -401,7 +401,7 @@ ruleTester.run('no-unused-modules', rule, {
         error(`exported declaration 'default' not used within other modules`),
      ]}),
   ],
-})
+});
 
 ruleTester.run('no-unused-modules', rule, {
   valid: [
@@ -410,7 +410,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-0.js')}),
   ],
   invalid: [],
-})
+});
 ruleTester.run('no-unused-modules', rule, {
   valid: [],
   invalid: [
@@ -419,7 +419,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-m.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
   ],
-})
+});
 
 ruleTester.run('no-unused-modules', rule, {
   valid: [],
@@ -436,7 +436,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-m.js'),
            errors: [error(`exported declaration 'default' not used within other modules`)]}),
   ],
-})
+});
 
 ruleTester.run('no-unused-modules', rule, {
   valid: [
@@ -457,7 +457,7 @@ ruleTester.run('no-unused-modules', rule, {
            filename: testFilePath('./no-unused-modules/file-m.js'),
            errors: [error(`exported declaration 'm' not used within other modules`)]}),
   ],
-})
+});
 
 // Test that import and export in the same file both counts as usage
 ruleTester.run('no-unused-modules', rule, {
@@ -468,7 +468,7 @@ ruleTester.run('no-unused-modules', rule, {
         }),
   ],
   invalid: [],
-})
+});
 
 describe('renameDefault', () => {
   ruleTester.run('no-unused-modules', rule, {
@@ -481,7 +481,7 @@ describe('renameDefault', () => {
         filename: testFilePath('./no-unused-modules/renameDefault/Component.js')}),
     ],
     invalid: [],
-  })
+  });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
       test({ options: unusedExportsOptions,
@@ -492,13 +492,13 @@ describe('renameDefault', () => {
         filename: testFilePath('./no-unused-modules/renameDefault-2/ComponentA.js')}),
     ],
     invalid: [],
-  })
-})
+  });
+});
 
 describe('test behaviour for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', {encoding: 'utf8'})
-  })
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', {encoding: 'utf8'});
+  });
 
   // add import in newly created file
   ruleTester.run('no-unused-modules', rule, {
@@ -511,7 +511,7 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-m.js')}),
     ],
     invalid: [],
-  })
+  });
 
   // add export for newly created file
   ruleTester.run('no-unused-modules', rule, {
@@ -522,7 +522,7 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-0.js'),
              errors: [error(`exported declaration 'default' not used within other modules`)]}),
       ],
-  })
+  });
 
   ruleTester.run('no-unused-modules', rule, {
     valid: [
@@ -534,7 +534,7 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-0.js')}),
     ],
     invalid: [],
-  })
+  });
 
   // export * only considers named imports. default imports still need to be reported
   ruleTester.run('no-unused-modules', rule, {
@@ -554,7 +554,7 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-0.js'),
              errors: [error(`exported declaration 'default' not used within other modules`)]}),
     ],
-  })
+  });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
       test({ options: unusedExportsOptions,
@@ -562,7 +562,7 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-0.js')}),
     ],
     invalid: [],
-  })
+  });
 
   // remove export *. all exports need to be reported
   ruleTester.run('no-unused-modules', rule, {
@@ -580,13 +580,13 @@ describe('test behaviour for new file', () => {
                error(`exported declaration 'default' not used within other modules`),
             ]}),
     ],
-  })
+  });
 
 
   describe('test behaviour for new file', () => {
     before(() => {
-      fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', {encoding: 'utf8'})
-    })
+      fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', {encoding: 'utf8'});
+    });
     ruleTester.run('no-unused-modules', rule, {
       valid: [
         test({ options: unusedExportsOptions,
@@ -599,25 +599,25 @@ describe('test behaviour for new file', () => {
                filename: testFilePath('./no-unused-modules/file-added-1.js'),
                errors: [error(`exported declaration 'default' not used within other modules`)]}),
       ],
-    })
+    });
     after(() => {
       if (fs.existsSync(testFilePath('./no-unused-modules/file-added-1.js'))) {
-        fs.unlinkSync(testFilePath('./no-unused-modules/file-added-1.js'))
+        fs.unlinkSync(testFilePath('./no-unused-modules/file-added-1.js'));
       }
-    })
-  })
+    });
+  });
 
   after(() => {
     if (fs.existsSync(testFilePath('./no-unused-modules/file-added-0.js'))) {
-      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-0.js'))
+      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-0.js'));
     }
-  })
-})
+  });
+});
 
 describe('test behaviour for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-2.js'), '', {encoding: 'utf8'})
-  })
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-2.js'), '', {encoding: 'utf8'});
+  });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
       test({ options: unusedExportsOptions,
@@ -628,18 +628,18 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-2.js')}),
     ],
     invalid: [],
-  })
+  });
   after(() => {
     if (fs.existsSync(testFilePath('./no-unused-modules/file-added-2.js'))) {
-      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-2.js'))
+      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-2.js'));
     }
-  })
-})
+  });
+});
 
 describe('test behaviour for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-3.js'), '', {encoding: 'utf8'})
-  })
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-3.js'), '', {encoding: 'utf8'});
+  });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
       test({ options: unusedExportsOptions,
@@ -650,18 +650,18 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-3.js')}),
     ],
     invalid: [],
-  })
+  });
   after(() => {
     if (fs.existsSync(testFilePath('./no-unused-modules/file-added-3.js'))) {
-      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-3.js'))
+      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-3.js'));
     }
-  })
-})
+  });
+});
 
 describe('test behaviour for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-4.js.js'), '', {encoding: 'utf8'})
-  })
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-4.js.js'), '', {encoding: 'utf8'});
+  });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
       test({ options: unusedExportsOptions,
@@ -672,13 +672,13 @@ describe('test behaviour for new file', () => {
              filename: testFilePath('./no-unused-modules/file-added-4.js.js')}),
     ],
     invalid: [],
-  })
+  });
   after(() => {
     if (fs.existsSync(testFilePath('./no-unused-modules/file-added-4.js.js'))) {
-      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-4.js.js'))
+      fs.unlinkSync(testFilePath('./no-unused-modules/file-added-4.js.js'));
     }
-  })
-})
+  });
+});
 
 describe('do not report missing export for ignored file', () => {
   ruleTester.run('no-unused-modules', rule, {
@@ -692,8 +692,8 @@ describe('do not report missing export for ignored file', () => {
              filename: testFilePath('./no-unused-modules/file-ignored-a.js')}),
     ],
     invalid: [],
-  })
-})
+  });
+});
 
 // lint file not available in `src`
 ruleTester.run('no-unused-modules', rule, {
@@ -703,7 +703,7 @@ ruleTester.run('no-unused-modules', rule, {
             filename: testFilePath('../jsx/named.jsx')}),
   ],
   invalid: [],
-})
+});
 
 describe('do not report unused export for files mentioned in package.json', () => {
   ruleTester.run('no-unused-modules', rule, {
@@ -730,8 +730,8 @@ describe('do not report unused export for files mentioned in package.json', () =
              filename: testFilePath('./no-unused-modules/privatePkg/index.js'),
              errors: [error(`exported declaration 'privatePkg' not used within other modules`)]}),
     ],
-  })
-})
+  });
+});
 
 describe('Avoid errors if re-export all from umd compiled library', () => {
   ruleTester.run('no-unused-modules', rule, {
@@ -741,8 +741,8 @@ describe('Avoid errors if re-export all from umd compiled library', () => {
         filename: testFilePath('./no-unused-modules/main/index.js')}),
     ],
     invalid: [],
-  })
-})
+  });
+});
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
@@ -866,9 +866,9 @@ context('TypeScript', function () {
           ],
         }),
       ],
-    })
-  })
-})
+    });
+  });
+});
 
 describe('correctly work with JSX only files', () => {
   jsxRuleTester.run('no-unused-modules', rule, {
@@ -891,8 +891,8 @@ describe('correctly work with JSX only files', () => {
         ],
       }),
     ],
-  })
-})
+  });
+});
 
 describe('ignore flow types', () => {
   ruleTester.run('no-unused-modules', rule, {
@@ -938,6 +938,6 @@ describe('ignore flow types', () => {
       }),
     ],
     invalid: [],
-  })
-})
+  });
+});
 

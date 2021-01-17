@@ -1,15 +1,15 @@
-import { test, getTSParsers, getNonDefaultParsers } from '../utils'
+import { test, getTSParsers, getNonDefaultParsers } from '../utils';
 
-import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
-import flatMap from 'array.prototype.flatmap'
+import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
+import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/order')
+    , rule = require('rules/order');
 
 function withoutAutofixOutput(test) {
-  return Object.assign({}, test, { output: test.code })
+  return Object.assign({}, test, { output: test.code });
 }
 
 ruleTester.run('order', rule, {
@@ -2181,7 +2181,7 @@ ruleTester.run('order', rule, {
       }),
     ],
   ].filter((t) => !!t),
-})
+});
 
 
 context('TypeScript', function () {
@@ -2194,7 +2194,7 @@ context('TypeScript', function () {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
-      }
+      };
 
       ruleTester.run('order', rule, {
         valid: [
@@ -2319,6 +2319,6 @@ context('TypeScript', function () {
             parserConfig,
           ),
         ],
-      })
-    })
-})
+      });
+    });
+});

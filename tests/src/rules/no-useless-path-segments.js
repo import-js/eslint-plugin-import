@@ -1,8 +1,8 @@
-import { test } from '../utils'
-import { RuleTester } from 'eslint'
+import { test } from '../utils';
+import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-const rule = require('rules/no-useless-path-segments')
+const ruleTester = new RuleTester();
+const rule = require('rules/no-useless-path-segments');
 
 function runResolverTests(resolver) {
   ruleTester.run(`no-useless-path-segments (${resolver})`, rule, {
@@ -247,7 +247,7 @@ function runResolverTests(resolver) {
         parser: require.resolve('babel-eslint'),
       }),
     ],
-  })
+  });
 }
 
-['node', 'webpack'].forEach(runResolverTests)
+['node', 'webpack'].forEach(runResolverTests);

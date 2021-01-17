@@ -1,14 +1,14 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
-import rule from 'rules/exports-last'
+import { RuleTester } from 'eslint';
+import rule from 'rules/exports-last';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 const error = type => ({
   message: 'Export statements should appear at the end of the file',
   type,
-})
+});
 
 ruleTester.run('exports-last', rule, {
   valid: [
@@ -120,4 +120,4 @@ ruleTester.run('exports-last', rule, {
       ],
     }),
   ],
-})
+});

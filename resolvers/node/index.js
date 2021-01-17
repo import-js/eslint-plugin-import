@@ -1,28 +1,28 @@
 var resolve = require('resolve')
-  , path = require('path')
+  , path = require('path');
 
-var log = require('debug')('eslint-plugin-import:resolver:node')
+var log = require('debug')('eslint-plugin-import:resolver:node');
 
-exports.interfaceVersion = 2
+exports.interfaceVersion = 2;
 
 exports.resolve = function (source, file, config) {
-  log('Resolving:', source, 'from:', file)
-  var resolvedPath
+  log('Resolving:', source, 'from:', file);
+  var resolvedPath;
 
   if (resolve.isCore(source)) {
-    log('resolved to core')
-    return { found: true, path: null }
+    log('resolved to core');
+    return { found: true, path: null };
   }
 
   try {
-    resolvedPath = resolve.sync(source, opts(file, config))
-    log('Resolved to:', resolvedPath)
-    return { found: true, path: resolvedPath }
+    resolvedPath = resolve.sync(source, opts(file, config));
+    log('Resolved to:', resolvedPath);
+    return { found: true, path: resolvedPath };
   } catch (err) {
-    log('resolve threw error:', err)
-    return { found: false }
+    log('resolve threw error:', err);
+    return { found: false };
   }
-}
+};
 
 function opts(file, config) {
   return Object.assign({
@@ -36,12 +36,12 @@ function opts(file, config) {
       basedir: path.dirname(path.resolve(file)),
       packageFilter: packageFilter,
 
-    })
+    });
 }
 
 function packageFilter(pkg) {
   if (pkg['jsnext:main']) {
-    pkg['main'] = pkg['jsnext:main']
+    pkg['main'] = pkg['jsnext:main'];
   }
-  return pkg
+  return pkg;
 }

@@ -1,9 +1,9 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/max-dependencies')
+    , rule = require('rules/max-dependencies');
 
 ruleTester.run('max-dependencies', rule, {
   valid: [
@@ -75,4 +75,4 @@ ruleTester.run('max-dependencies', rule, {
       ],
     }),
   ],
-})
+});

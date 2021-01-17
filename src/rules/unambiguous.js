@@ -3,8 +3,8 @@
  * @author Ben Mosher
  */
 
-import { isModule } from 'eslint-module-utils/unambiguous'
-import docsUrl from '../docsUrl'
+import { isModule } from 'eslint-module-utils/unambiguous';
+import docsUrl from '../docsUrl';
 
 module.exports = {
   meta: {
@@ -18,7 +18,7 @@ module.exports = {
   create: function (context) {
     // ignore non-modules
     if (context.parserOptions.sourceType !== 'module') {
-      return {}
+      return {};
     }
 
     return {
@@ -27,10 +27,10 @@ module.exports = {
           context.report({
             node: ast,
             message: 'This module could be parsed as a valid script.',
-          })
+          });
         }
       },
-    }
+    };
 
   },
-}
+};

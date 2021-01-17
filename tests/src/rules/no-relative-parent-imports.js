@@ -1,13 +1,13 @@
-import { RuleTester } from 'eslint'
-import rule from 'rules/no-relative-parent-imports'
-import { test as _test, testFilePath } from '../utils'
+import { RuleTester } from 'eslint';
+import rule from 'rules/no-relative-parent-imports';
+import { test as _test, testFilePath } from '../utils';
 
 const test = def => _test(Object.assign(def, {
   filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
   parser: require.resolve('babel-eslint'),
-}))
+}));
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-relative-parent-imports', rule, {
   valid: [
@@ -103,4 +103,4 @@ ruleTester.run('no-relative-parent-imports', rule, {
       }],
     }),
   ],
-})
+});

@@ -1,9 +1,9 @@
-import { test, SYNTAX_CASES } from '../utils'
+import { test, SYNTAX_CASES } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-const rule = require('rules/no-anonymous-default-export')
+const ruleTester = new RuleTester();
+const rule = require('rules/no-anonymous-default-export');
 
 ruleTester.run('no-anonymous-default-export', rule, {
     valid: [
@@ -52,4 +52,4 @@ ruleTester.run('no-anonymous-default-export', rule, {
       // Test failure with non-covering exception
       test({ code: 'export default 123', options: [{ allowObject: true }], errors: [{ message: 'Assign literal to a variable before exporting as module default' }] }),
     ],
-})
+});

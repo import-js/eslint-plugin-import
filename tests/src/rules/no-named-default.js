@@ -1,8 +1,8 @@
-import { test, SYNTAX_CASES } from '../utils'
-import { RuleTester } from 'eslint'
+import { test, SYNTAX_CASES } from '../utils';
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-named-default')
+    , rule = require('rules/no-named-default');
 
 ruleTester.run('no-named-default', rule, {
   valid: [
@@ -36,4 +36,4 @@ ruleTester.run('no-named-default', rule, {
       }],
     }),
   ],
-})
+});

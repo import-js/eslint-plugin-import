@@ -3,8 +3,8 @@
  * @author Duncan Beevers
  */
 
-import docsUrl from '../docsUrl'
-import has from 'has'
+import docsUrl from '../docsUrl';
+import has from 'has';
 
 const defs = {
   ArrayExpression: {
@@ -50,7 +50,7 @@ const defs = {
     description: 'If `false`, will report default export of a literal',
     message: 'Assign literal to a variable before exporting as module default',
   },
-}
+};
 
 const schemaProperties = Object.keys(defs)
   .map((key) => defs[key])
@@ -58,17 +58,17 @@ const schemaProperties = Object.keys(defs)
     acc[def.option] = {
       description: def.description,
       type: 'boolean',
-    }
+    };
 
-    return acc
-  }, {})
+    return acc;
+  }, {});
 
 const defaults = Object.keys(defs)
   .map((key) => defs[key])
   .reduce((acc, def) => {
-    acc[def.option] = has(def, 'default') ? def.default : false
-    return acc
-  }, {})
+    acc[def.option] = has(def, 'default') ? def.default : false;
+    return acc;
+  }, {});
 
 module.exports = {
   meta: {
@@ -87,18 +87,18 @@ module.exports = {
   },
 
   create: function (context) {
-    const options = Object.assign({}, defaults, context.options[0])
+    const options = Object.assign({}, defaults, context.options[0]);
 
     return {
       'ExportDefaultDeclaration': (node) => {
-        const def = defs[node.declaration.type]
+        const def = defs[node.declaration.type];
 
         // Recognized node type and allowed by configuration,
         //   and has no forbid check, or forbid check return value is truthy
         if (def && !options[def.option] && (!def.forbid || def.forbid(node))) {
-          context.report({ node, message: def.message })
+          context.report({ node, message: def.message });
         }
       },
-    }
+    };
   },
-}
+};

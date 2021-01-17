@@ -1,15 +1,15 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils'
-import { RuleTester } from 'eslint'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { RuleTester } from 'eslint';
 
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve'
+import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 
 var ruleTester = new RuleTester()
-  , rule = require('rules/named')
+  , rule = require('rules/named');
 
 function error(name, module) {
   return { message: name + ' not found in \'' + module + '\''
-         , type: 'Identifier' }
+         , type: 'Identifier' };
 }
 
 ruleTester.run('named', rule, {
@@ -248,7 +248,7 @@ ruleTester.run('named', rule, {
       errors: [`default not found in './re-export'`],
     }),
   ],
-})
+});
 
 // #311: import of mismatched case
 if (!CASE_SENSITIVE_FS) {
@@ -264,7 +264,7 @@ if (!CASE_SENSITIVE_FS) {
         errors: [`foo not found in './Named-Exports'`],
       }),
     ],
-  })
+  });
 }
 
 // export-all
@@ -280,7 +280,7 @@ ruleTester.run('named (export *)', rule, {
       errors: [`bar not found in './export-all'`],
     }),
   ],
-})
+});
 
 
 context('TypeScript', function () {
@@ -383,7 +383,7 @@ context('TypeScript', function () {
             }],
           }),
         ],
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

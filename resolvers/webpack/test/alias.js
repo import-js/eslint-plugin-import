@@ -1,22 +1,22 @@
 var chai = require('chai')
   , expect = chai.expect
-  , path = require('path')
+  , path = require('path');
 
-var webpack = require('../index')
+var webpack = require('../index');
 
-var file = path.join(__dirname, 'files', 'dummy.js')
+var file = path.join(__dirname, 'files', 'dummy.js');
 
 describe("resolve.alias", function () {
-  var resolved
-  before(function () { resolved = webpack.resolve('foo', file) })
+  var resolved;
+  before(function () { resolved = webpack.resolve('foo', file); });
 
-  it("is found", function () { expect(resolved).to.have.property('found', true) })
+  it("is found", function () { expect(resolved).to.have.property('found', true); });
 
   it("is correct", function () {
     expect(resolved).to.have.property('path')
-      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'))
-  })
-})
+      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
+  });
+});
 
 // todo: reimplement with resolver function / config
 // describe.skip("webpack alias spec", function () {

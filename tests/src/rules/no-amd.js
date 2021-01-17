@@ -1,8 +1,8 @@
-import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
+import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
-var ruleTester = new RuleTester()
+var ruleTester = new RuleTester();
 
 ruleTester.run('no-amd', require('rules/no-amd'), {
   valid: [
@@ -34,4 +34,4 @@ ruleTester.run('no-amd', require('rules/no-amd'), {
       { code: 'require([], function() {})', errors: [ { message: 'Expected imports instead of AMD require().' }] },
       { code: 'require(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD require().' }] },
 	],
-})
+});

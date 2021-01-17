@@ -1,13 +1,13 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-nodejs-modules')
+    , rule = require('rules/no-nodejs-modules');
 
 const error = message => ({
   message,
-})
+});
 
 ruleTester.run('no-nodejs-modules', rule, {
   valid: [
@@ -81,4 +81,4 @@ ruleTester.run('no-nodejs-modules', rule, {
       errors: [error('Do not import Node.js builtin module "fs"')],
     }),
   ],
-})
+});

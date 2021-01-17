@@ -3,48 +3,48 @@
  * @author Radek Benkel
  */
 
-import isStaticRequire from '../core/staticRequire'
-import docsUrl from '../docsUrl'
+import isStaticRequire from '../core/staticRequire';
+import docsUrl from '../docsUrl';
 
-import debug from 'debug'
-const log = debug('eslint-plugin-import:rules:newline-after-import')
+import debug from 'debug';
+const log = debug('eslint-plugin-import:rules:newline-after-import');
 
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
 function containsNodeOrEqual(outerNode, innerNode) {
-    return outerNode.range[0] <= innerNode.range[0] && outerNode.range[1] >= innerNode.range[1]
+    return outerNode.range[0] <= innerNode.range[0] && outerNode.range[1] >= innerNode.range[1];
 }
 
 function getScopeBody(scope) {
     if (scope.block.type === 'SwitchStatement') {
-      log('SwitchStatement scopes not supported')
-      return null
+      log('SwitchStatement scopes not supported');
+      return null;
     }
 
-    const { body } = scope.block
+    const { body } = scope.block;
     if (body && body.type === 'BlockStatement') {
-        return body.body
+        return body.body;
     }
 
-    return body
+    return body;
 }
 
 function findNodeIndexInScopeBody(body, nodeToFind) {
-    return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind))
+    return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind));
 }
 
 function getLineDifference(node, nextNode) {
-  return nextNode.loc.start.line - node.loc.end.line
+  return nextNode.loc.start.line - node.loc.end.line;
 }
 
 function isClassWithDecorator(node) {
-  return node.type === 'ClassDeclaration' && node.decorators && node.decorators.length
+  return node.type === 'ClassDeclaration' && node.decorators && node.decorators.length;
 }
 
 function isExportDefaultClass(node) {
-  return node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'ClassDeclaration'
+  return node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'ClassDeclaration';
 }
 
 module.exports = {
@@ -68,29 +68,29 @@ module.exports = {
     ],
   },
   create: function (context) {
-    let level = 0
-    const requireCalls = []
+    let level = 0;
+    const requireCalls = [];
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode)) {
-        let classNode = nextNode.declaration
+        let classNode = nextNode.declaration;
 
         if (isClassWithDecorator(classNode)) {
-          nextNode = classNode.decorators[0]
+          nextNode = classNode.decorators[0];
         }
       } else if (isClassWithDecorator(nextNode)) {
-        nextNode = nextNode.decorators[0]
+        nextNode = nextNode.decorators[0];
       }
 
-      const options = context.options[0] || { count: 1 }
-      const lineDifference = getLineDifference(node, nextNode)
-      const EXPECTED_LINE_DIFFERENCE = options.count + 1
+      const options = context.options[0] || { count: 1 };
+      const lineDifference = getLineDifference(node, nextNode);
+      const EXPECTED_LINE_DIFFERENCE = options.count + 1;
 
       if (lineDifference < EXPECTED_LINE_DIFFERENCE) {
-        let column = node.loc.start.column
+        let column = node.loc.start.column;
 
         if (node.loc.start.line !== node.loc.end.line) {
-          column = 0
+          column = 0;
         }
 
         context.report({
@@ -104,29 +104,29 @@ after ${type} statement not followed by another ${type}.`,
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference)
           ),
-        })
+        });
       }
     }
 
     function incrementLevel() {
-      level++
+      level++;
     }
     function decrementLevel() {
-      level--
+      level--;
     }
 
     function checkImport(node) {
-        const { parent } = node
-        const nodePosition = parent.body.indexOf(node)
-        const nextNode = parent.body[nodePosition + 1]
+        const { parent } = node;
+        const nodePosition = parent.body.indexOf(node);
+        const nextNode = parent.body[nodePosition + 1];
         
         // skip "export import"s
         if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
-          return
+          return;
         }
 
         if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
-          checkForNewLine(node, nextNode, 'import')
+          checkForNewLine(node, nextNode, 'import');
         }
     }
 
@@ -135,32 +135,32 @@ after ${type} statement not followed by another ${type}.`,
       TSImportEqualsDeclaration: checkImport,
       CallExpression: function(node) {
         if (isStaticRequire(node) && level === 0) {
-          requireCalls.push(node)
+          requireCalls.push(node);
         }
       },
       'Program:exit': function () {
-        log('exit processing for', context.getFilename())
-        const scopeBody = getScopeBody(context.getScope())
-        log('got scope:', scopeBody)
+        log('exit processing for', context.getFilename());
+        const scopeBody = getScopeBody(context.getScope());
+        log('got scope:', scopeBody);
 
         requireCalls.forEach(function (node, index) {
-          const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
-          log('node position in scope:', nodePosition)
+          const nodePosition = findNodeIndexInScopeBody(scopeBody, node);
+          log('node position in scope:', nodePosition);
 
-          const statementWithRequireCall = scopeBody[nodePosition]
-          const nextStatement = scopeBody[nodePosition + 1]
-          const nextRequireCall = requireCalls[index + 1]
+          const statementWithRequireCall = scopeBody[nodePosition];
+          const nextStatement = scopeBody[nodePosition + 1];
+          const nextRequireCall = requireCalls[index + 1];
 
           if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
-            return
+            return;
           }
 
           if (nextStatement &&
              (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
 
-            checkForNewLine(statementWithRequireCall, nextStatement, 'require')
+            checkForNewLine(statementWithRequireCall, nextStatement, 'require');
           }
-        })
+        });
       },
       FunctionDeclaration: incrementLevel,
       FunctionExpression: incrementLevel,
@@ -174,6 +174,6 @@ after ${type} statement not followed by another ${type}.`,
       'BlockStatement:exit': decrementLevel,
       'ObjectExpression:exit': decrementLevel,
       'Decorator:exit': decrementLevel,
-    }
+    };
   },
-}
+};

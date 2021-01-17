@@ -1,14 +1,14 @@
-'use strict'
-exports.__esModule = true
+'use strict';
+exports.__esModule = true;
 
 exports.default = function declaredScope(context, name) {
   let references = context.getScope().references
-    , i
+    , i;
   for (i = 0; i < references.length; i++) {
     if (references[i].identifier.name === name) {
-      break
+      break;
     }
   }
-  if (!references[i]) return undefined
-  return references[i].resolved.scope.type
-}
+  if (!references[i]) return undefined;
+  return references[i].resolved.scope.type;
+};

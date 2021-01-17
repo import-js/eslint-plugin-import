@@ -1,8 +1,8 @@
-import { test, SYNTAX_CASES } from '../utils'
-import {RuleTester} from 'eslint'
-import rule from 'rules/no-named-as-default-member'
+import { test, SYNTAX_CASES } from '../utils';
+import {RuleTester} from 'eslint';
+import rule from 'rules/no-named-as-default-member';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-named-as-default-member', rule, {
   valid: [
@@ -57,4 +57,4 @@ ruleTester.run('no-named-as-default-member', rule, {
       }],
     }),
   ],
-})
+});

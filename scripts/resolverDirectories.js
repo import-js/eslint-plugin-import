@@ -1,3 +1,3 @@
-import glob from 'glob'
+import glob from 'glob';
 
-export default glob.sync('./resolvers/*/')
+export default glob.sync('./resolvers/*/');

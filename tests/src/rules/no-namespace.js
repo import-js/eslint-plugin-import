@@ -1,11 +1,11 @@
-import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
-import { test } from '../utils'
+import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
+import { test } from '../utils';
 
-const ERROR_MESSAGE = 'Unexpected namespace import.'
+const ERROR_MESSAGE = 'Unexpected namespace import.';
 
-const ruleTester = new RuleTester()
+const ruleTester = new RuleTester();
 
 // --fix functionality requires ESLint 5+
 const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
@@ -70,7 +70,7 @@ const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
       message: ERROR_MESSAGE,
     }],
   }),
-] : []
+] : [];
 
 ruleTester.run('no-namespace', require('rules/no-namespace'), {
   valid: [
@@ -110,4 +110,4 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
     }),
     ...FIX_TESTS,
   ],
-})
+});

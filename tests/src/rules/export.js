@@ -1,11 +1,11 @@
-import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../utils'
+import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../utils';
 
-import { RuleTester } from 'eslint'
-import eslintPkg from 'eslint/package.json'
-import semver from 'semver'
+import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
 var ruleTester = new RuleTester()
-  , rule = require('rules/export')
+  , rule = require('rules/export');
 
 ruleTester.run('export', rule, {
   valid: [].concat(
@@ -123,7 +123,7 @@ ruleTester.run('export', rule, {
       errors: [`No named exports found in module './default-export'.`],
     }),
   ],
-})
+});
 
 
 context('TypeScript', function () {
@@ -134,7 +134,7 @@ context('TypeScript', function () {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
-    }
+    };
 
     ruleTester.run('export', rule, {
       valid: [
@@ -361,6 +361,6 @@ context('TypeScript', function () {
           ],
         }, parserConfig)),
       ],
-    })
-  })
-})
+    });
+  });
+});

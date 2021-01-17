@@ -1,13 +1,13 @@
-import { test } from '../utils'
+import { test } from '../utils';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-dynamic-require')
+    , rule = require('rules/no-dynamic-require');
 
 const error = {
   message: 'Calls to require() should use string literals',
-}
+};
 
 ruleTester.run('no-dynamic-require', rule, {
   valid: [
@@ -45,4 +45,4 @@ ruleTester.run('no-dynamic-require', rule, {
       errors: [error],
     }),
   ],
-})
+});

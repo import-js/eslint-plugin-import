@@ -1,14 +1,14 @@
-import { test } from '../utils'
-import * as path from 'path'
+import { test } from '../utils';
+import * as path from 'path';
 
-import { RuleTester } from 'eslint'
+import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester()
-    , rule = require('rules/no-unassigned-import')
+    , rule = require('rules/no-unassigned-import');
 
 const error = {
   message: 'Imported module should be assigned',
-}
+};
 
 ruleTester.run('no-unassigned-import', rule, {
   valid: [
@@ -105,4 +105,4 @@ ruleTester.run('no-unassigned-import', rule, {
       errors: [error],
     }),
   ],
-})
+});

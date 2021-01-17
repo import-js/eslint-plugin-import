@@ -1,13 +1,13 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils'
-import { RuleTester } from 'eslint'
-import flatMap from 'array.prototype.flatmap'
+import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
 var ruleTester = new RuleTester({ env: { es6: true }})
-  , rule = require('rules/namespace')
+  , rule = require('rules/namespace');
 
 
 function error(name, namespace) {
-  return { message: `'${name}' not found in imported namespace '${namespace}'.` }
+  return { message: `'${name}' not found in imported namespace '${namespace}'.` };
 }
 
 const valid = [
@@ -172,7 +172,7 @@ const valid = [
     export const getExampleColor = () => color.example
     `,
   }),
-]
+];
 
 const invalid = [
   test({ code: "import * as names from './named-exports'; " +
@@ -274,7 +274,7 @@ const invalid = [
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e.f)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }),
-    test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }))
+    test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }));
 
     // deep namespaces should include explicitly exported defaults
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
@@ -309,7 +309,7 @@ const invalid = [
       parser,
       code: `import * as a from "./${folder}/a"; var {b:{c:{ e }}} = a`,
       errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
-    }))
-})
+    }));
+});
 
-ruleTester.run('namespace', rule, { valid, invalid })
+ruleTester.run('namespace', rule, { valid, invalid });
