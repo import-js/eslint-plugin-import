@@ -7,8 +7,8 @@ const fs = require('fs');
 const Module = require('module');
 const path = require('path');
 
-const hashObject = require('./hash').hashObject
-    , ModuleCache = require('./ModuleCache').default;
+const hashObject = require('./hash').hashObject;
+const ModuleCache = require('./ModuleCache').default;
 
 const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname.toUpperCase(), 'reSOLVE.js'));
 exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS;
@@ -59,8 +59,8 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   // null means it resolved to a builtin
   if (filepath === null) return true;
   if (filepath.toLowerCase() === process.cwd().toLowerCase()) return true;
-  const parsedPath = path.parse(filepath)
-      , dir = parsedPath.dir;
+  const parsedPath = path.parse(filepath);
+  const dir = parsedPath.dir;
 
   let result = fileExistsCache.get(filepath, cacheSettings);
   if (result != null) return result;
@@ -89,8 +89,8 @@ function fullResolve(modulePath, sourceFile, settings) {
   const coreSet = new Set(settings['import/core-modules']);
   if (coreSet.has(modulePath)) return { found: true, path: null };
 
-  const sourceDir = path.dirname(sourceFile)
-      , cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath;
+  const sourceDir = path.dirname(sourceFile);
+  const cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath;
 
   const cacheSettings = ModuleCache.getSettings(settings);
 
@@ -118,12 +118,12 @@ function fullResolve(modulePath, sourceFile, settings) {
     }
 
     switch (resolver.interfaceVersion) {
-      case 2:
-        return v2();
+    case 2:
+      return v2();
 
-      default:
-      case 1:
-        return v1();
+    default:
+    case 1:
+      return v1();
     }
   }
 
@@ -133,10 +133,10 @@ function fullResolve(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map());
 
   for (const pair of resolvers) {
-    const name = pair[0]
-      , config = pair[1];
-    const resolver = requireResolver(name, sourceFile)
-        , resolved = withResolver(resolver, config);
+    const name = pair[0];
+    const config = pair[1];
+    const resolver = requireResolver(name, sourceFile);
+    const resolved = withResolver(resolver, config);
 
     if (!resolved.found) continue;
 
@@ -218,9 +218,9 @@ const erroredContexts = new Set();
 function resolve(p, context) {
   try {
     return relative( p
-                   , context.getFilename()
-                   , context.settings
-                   );
+      , context.getFilename()
+      , context.settings
+    );
   } catch (err) {
     if (!erroredContexts.has(context)) {
       // The `err.stack` string starts with `err.name` followed by colon and `err.message`.

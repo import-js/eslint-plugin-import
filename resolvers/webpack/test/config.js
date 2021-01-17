@@ -1,6 +1,6 @@
-const chai =  require('chai')
-  , expect = chai.expect
-  , path = require('path');
+const chai =  require('chai');
+const expect = chai.expect;
+const path = require('path');
 
 const resolve = require('../index').resolve;
 
@@ -14,12 +14,12 @@ const absoluteSettings = {
 describe("config", function () {
   it("finds webpack.config.js in parent directories", function () {
     expect(resolve('main-module', file)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
+      .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
   it("finds absolute webpack.config.js files", function () {
     expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
   it("finds compile-to-js configs", function () {
@@ -44,7 +44,7 @@ describe("config", function () {
     };
 
     expect(resolve('main-module', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
+      .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
   it("finds the config at option config-index", function () {
@@ -54,7 +54,7 @@ describe("config", function () {
     };
 
     expect(resolve('foo', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
   });
 
   it("doesn't swallow config load errors (#435)", function () {
@@ -69,7 +69,7 @@ describe("config", function () {
       config: require(path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js')),
     };
     expect(resolve('foo', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
   it("finds config object when config uses a path relative to working dir", function () {
@@ -77,7 +77,7 @@ describe("config", function () {
       config: './test/files/some/absolute.path.webpack.config.js',
     };
     expect(resolve('foo', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
   it("finds the first config with a resolve section when config is an array of config objects", function () {
@@ -86,7 +86,7 @@ describe("config", function () {
     };
 
     expect(resolve('main-module', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
+      .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
   it("finds the config at option config-index when config is an array of config objects", function () {
@@ -96,7 +96,7 @@ describe("config", function () {
     };
 
     expect(resolve('foo', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
   });
 
   it('finds the config at option env when config is a function', function() {
@@ -108,7 +108,7 @@ describe("config", function () {
     };
 
     expect(resolve('bar', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
   });
 
   it('finds the config at option env when config is an array of functions', function() {
@@ -120,7 +120,7 @@ describe("config", function () {
     };
 
     expect(resolve('bar', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
   });
 
   it('passes argv to config when it is a function', function() {
@@ -132,7 +132,7 @@ describe("config", function () {
     };
 
     expect(resolve('baz', file, settings)).to.have.property('path')
-        .and.equal(path.join(__dirname, 'files', 'some', 'bar', 'bar.js'));
+      .and.equal(path.join(__dirname, 'files', 'some', 'bar', 'bar.js'));
   });
 
   it('passes a default empty argv object to config when it is a function', function() {

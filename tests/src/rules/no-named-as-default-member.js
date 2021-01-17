@@ -1,16 +1,16 @@
 import { test, SYNTAX_CASES } from '../utils';
-import {RuleTester} from 'eslint';
+import { RuleTester } from 'eslint';
 import rule from 'rules/no-named-as-default-member';
 
 const ruleTester = new RuleTester();
 
 ruleTester.run('no-named-as-default-member', rule, {
   valid: [
-    test({code: 'import bar, {foo} from "./bar";'}),
-    test({code: 'import bar from "./bar"; const baz = bar.baz'}),
-    test({code: 'import {foo} from "./bar"; const baz = foo.baz;'}),
-    test({code: 'import * as named from "./named-exports"; const a = named.a'}),
-    test({code: 'import foo from "./default-export-default-property"; const a = foo.default'}),
+    test({ code: 'import bar, {foo} from "./bar";' }),
+    test({ code: 'import bar from "./bar"; const baz = bar.baz' }),
+    test({ code: 'import {foo} from "./bar"; const baz = foo.baz;' }),
+    test({ code: 'import * as named from "./named-exports"; const a = named.a' }),
+    test({ code: 'import foo from "./default-export-default-property"; const a = foo.default' }),
 
     ...SYNTAX_CASES,
   ],

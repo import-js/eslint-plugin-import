@@ -62,9 +62,9 @@ module.exports = {
         return;  // no-self-import territory
       }
 
-      const untraversed = [{mget: () => imported, route:[]}];
+      const untraversed = [{ mget: () => imported, route:[] }];
       const traversed = new Set();
-      function detectCycle({mget, route}) {
+      function detectCycle({ mget, route }) {
         const m = mget();
         if (m == null) return;
         if (traversed.has(m.path)) return;

@@ -56,25 +56,25 @@ module.exports = {
 
           for (const specifier of declaration.specifiers) {
             switch (specifier.type) {
-              case 'ImportNamespaceSpecifier':
-                if (!imports.size) {
-                  context.report(
-                    specifier,
-                    `No exported names found in module '${declaration.source.value}'.`
-                  );
-                }
-                namespaces.set(specifier.local.name, imports);
-                break;
-              case 'ImportDefaultSpecifier':
-              case 'ImportSpecifier': {
-                const meta = imports.get(
-                  // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
-                  specifier.imported ? specifier.imported.name : 'default'
+            case 'ImportNamespaceSpecifier':
+              if (!imports.size) {
+                context.report(
+                  specifier,
+                  `No exported names found in module '${declaration.source.value}'.`
                 );
-                if (!meta || !meta.namespace) { break; }
-                namespaces.set(specifier.local.name, meta.namespace);
-                break;
               }
+              namespaces.set(specifier.local.name, imports);
+              break;
+            case 'ImportDefaultSpecifier':
+            case 'ImportSpecifier': {
+              const meta = imports.get(
+                // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
+                specifier.imported ? specifier.imported.name : 'default'
+              );
+              if (!meta || !meta.namespace) { break; }
+              namespaces.set(specifier.local.name, meta.namespace);
+              break;
+            }
             }
           }
         }
@@ -109,10 +109,10 @@ module.exports = {
         if (declaredScope(context, dereference.object.name) !== 'module') return;
 
         if (dereference.parent.type === 'AssignmentExpression' && dereference.parent.left === dereference) {
-            context.report(
-              dereference.parent,
-              `Assignment to member of namespace '${dereference.object.name}'.`
-            );
+          context.report(
+            dereference.parent,
+            `Assignment to member of namespace '${dereference.object.name}'.`
+          );
         }
 
         // go deep
@@ -202,15 +202,15 @@ module.exports = {
         testKey(id, namespaces.get(init.name));
       },
 
-      JSXMemberExpression({object, property}) {
-         if (!namespaces.has(object.name)) return;
-         const namespace = namespaces.get(object.name);
-         if (!namespace.has(property.name)) {
-           context.report({
-             node: property,
-             message: makeMessage(property, [object.name]),
-           });
-         }
+      JSXMemberExpression({ object, property }) {
+        if (!namespaces.has(object.name)) return;
+        const namespace = namespaces.get(object.name);
+        if (!namespace.has(property.name)) {
+          context.report({
+            node: property,
+            message: makeMessage(property, [object.name]),
+          });
+        }
       },
     };
   },

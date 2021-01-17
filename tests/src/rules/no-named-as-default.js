@@ -1,25 +1,25 @@
 import { test, SYNTAX_CASES } from '../utils';
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-named-as-default');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-named-as-default');
 
 ruleTester.run('no-named-as-default', rule, {
   valid: [
     test({ code: 'import "./malformed.js"' }),
 
-    test({code: 'import bar, { foo } from "./bar";'}),
-    test({code: 'import bar, { foo } from "./empty-folder";'}),
+    test({ code: 'import bar, { foo } from "./bar";' }),
+    test({ code: 'import bar, { foo } from "./empty-folder";' }),
 
     // es7
-    test({ code: 'export bar, { foo } from "./bar";'
-         , parser: require.resolve('babel-eslint') }),
-    test({ code: 'export bar from "./bar";'
-         , parser: require.resolve('babel-eslint') }),
+    test({ code: 'export bar, { foo } from "./bar";',
+      parser: require.resolve('babel-eslint') }),
+    test({ code: 'export bar from "./bar";',
+      parser: require.resolve('babel-eslint') }),
 
     // #566: don't false-positive on `default` itself
-    test({ code: 'export default from "./bar";'
-         , parser: require.resolve('babel-eslint') }),
+    test({ code: 'export default from "./bar";',
+      parser: require.resolve('babel-eslint') }),
 
     ...SYNTAX_CASES,
   ],
@@ -28,27 +28,27 @@ ruleTester.run('no-named-as-default', rule, {
     test({
       code: 'import foo from "./bar";',
       errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] }),
+        message: 'Using exported name \'foo\' as identifier for default export.',
+        type: 'ImportDefaultSpecifier' } ] }),
     test({
       code: 'import foo, { foo as bar } from "./bar";',
       errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ImportDefaultSpecifier' } ] }),
+        message: 'Using exported name \'foo\' as identifier for default export.',
+        type: 'ImportDefaultSpecifier' } ] }),
 
     // es7
     test({
       code: 'export foo from "./bar";',
       parser: require.resolve('babel-eslint'),
       errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.'
-      , type: 'ExportDefaultSpecifier' } ] }),
+        message: 'Using exported name \'foo\' as identifier for default export.',
+        type: 'ExportDefaultSpecifier' } ] }),
     test({
       code: 'export foo, { foo as bar } from "./bar";',
       parser: require.resolve('babel-eslint'),
       errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.'
-    , type: 'ExportDefaultSpecifier' } ] }),
+        message: 'Using exported name \'foo\' as identifier for default export.',
+        type: 'ExportDefaultSpecifier' } ] }),
 
     test({
       code: 'import foo from "./malformed.js"',

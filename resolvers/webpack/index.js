@@ -1,14 +1,14 @@
-const findRoot = require('find-root')
-  , path = require('path')
-  , get = require('lodash/get')
-  , isEqual = require('lodash/isEqual')
-  , find = require('array-find')
-  , interpret = require('interpret')
-  , fs = require('fs')
-  , isCore = require('is-core-module')
-  , resolve = require('resolve')
-  , semver = require('semver')
-  , has = require('has');
+const findRoot = require('find-root');
+const path = require('path');
+const get = require('lodash/get');
+const isEqual = require('lodash/isEqual');
+const find = require('array-find');
+const interpret = require('interpret');
+const fs = require('fs');
+const isCore = require('is-core-module');
+const resolve = require('resolve');
+const semver = require('semver');
+const has = require('has');
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
 
@@ -49,7 +49,7 @@ exports.resolve = function (source, file, settings) {
   let webpackConfig;
 
   const _configPath = get(settings, 'config');
-    /**
+  /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
      */
@@ -68,32 +68,32 @@ exports.resolve = function (source, file, settings) {
   // see if we've got a config path, a config object, an array of config objects or a config function
   if (!configPath || typeof configPath === 'string') {
 
-      // see if we've got an absolute path
-      if (!configPath || !path.isAbsolute(configPath)) {
-        // if not, find ancestral package.json and use its directory as base for the path
-        packageDir = findRoot(path.resolve(file));
-        if (!packageDir) throw new Error('package not found above ' + file);
-      }
+    // see if we've got an absolute path
+    if (!configPath || !path.isAbsolute(configPath)) {
+      // if not, find ancestral package.json and use its directory as base for the path
+      packageDir = findRoot(path.resolve(file));
+      if (!packageDir) throw new Error('package not found above ' + file);
+    }
 
-      configPath = findConfigPath(configPath, packageDir);
+    configPath = findConfigPath(configPath, packageDir);
 
-      log('Config path resolved to:', configPath);
-      if (configPath) {
-        try {
-          webpackConfig = require(configPath);
-        } catch(e) {
-          console.log('Error resolving webpackConfig', e);
-          throw e;
-        }
-      } else {
-        log('No config path found relative to', file, '; using {}');
-        webpackConfig = {};
+    log('Config path resolved to:', configPath);
+    if (configPath) {
+      try {
+        webpackConfig = require(configPath);
+      } catch(e) {
+        console.log('Error resolving webpackConfig', e);
+        throw e;
       }
+    } else {
+      log('No config path found relative to', file, '; using {}');
+      webpackConfig = {};
+    }
 
-      if (webpackConfig && webpackConfig.default) {
-        log('Using ES6 module "default" key instead of module.exports.');
-        webpackConfig = webpackConfig.default;
-      }
+    if (webpackConfig && webpackConfig.default) {
+      log('Using ES6 module "default" key instead of module.exports.');
+      webpackConfig = webpackConfig.default;
+    }
 
   } else {
     webpackConfig = configPath;
@@ -170,8 +170,8 @@ function getResolveSync(configPath, webpackConfig, cwd) {
 }
 
 function createResolveSync(configPath, webpackConfig, cwd) {
-  let webpackRequire
-    , basedir = null;
+  let webpackRequire;
+  let basedir = null;
 
   if (typeof configPath === 'string') {
     // This can be changed via the settings passed in when defining the resolver

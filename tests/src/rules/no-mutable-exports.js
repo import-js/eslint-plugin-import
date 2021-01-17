@@ -1,29 +1,29 @@
-import {test} from '../utils';
-import {RuleTester} from 'eslint';
+import { test } from '../utils';
+import { RuleTester } from 'eslint';
 import rule from 'rules/no-mutable-exports';
 
 const ruleTester = new RuleTester();
 
 ruleTester.run('no-mutable-exports', rule, {
   valid: [
-    test({ code: 'export const count = 1'}),
-    test({ code: 'export function getCount() {}'}),
-    test({ code: 'export class Counter {}'}),
-    test({ code: 'export default count = 1'}),
-    test({ code: 'export default function getCount() {}'}),
-    test({ code: 'export default class Counter {}'}),
-    test({ code: 'const count = 1\nexport { count }'}),
-    test({ code: 'const count = 1\nexport { count as counter }'}),
-    test({ code: 'const count = 1\nexport default count'}),
-    test({ code: 'const count = 1\nexport { count as default }'}),
-    test({ code: 'function getCount() {}\nexport { getCount }'}),
-    test({ code: 'function getCount() {}\nexport { getCount as getCounter }'}),
-    test({ code: 'function getCount() {}\nexport default getCount'}),
-    test({ code: 'function getCount() {}\nexport { getCount as default }'}),
-    test({ code: 'class Counter {}\nexport { Counter }'}),
-    test({ code: 'class Counter {}\nexport { Counter as Count }'}),
-    test({ code: 'class Counter {}\nexport default Counter'}),
-    test({ code: 'class Counter {}\nexport { Counter as default }'}),
+    test({ code: 'export const count = 1' }),
+    test({ code: 'export function getCount() {}' }),
+    test({ code: 'export class Counter {}' }),
+    test({ code: 'export default count = 1' }),
+    test({ code: 'export default function getCount() {}' }),
+    test({ code: 'export default class Counter {}' }),
+    test({ code: 'const count = 1\nexport { count }' }),
+    test({ code: 'const count = 1\nexport { count as counter }' }),
+    test({ code: 'const count = 1\nexport default count' }),
+    test({ code: 'const count = 1\nexport { count as default }' }),
+    test({ code: 'function getCount() {}\nexport { getCount }' }),
+    test({ code: 'function getCount() {}\nexport { getCount as getCounter }' }),
+    test({ code: 'function getCount() {}\nexport default getCount' }),
+    test({ code: 'function getCount() {}\nexport { getCount as default }' }),
+    test({ code: 'class Counter {}\nexport { Counter }' }),
+    test({ code: 'class Counter {}\nexport { Counter as Count }' }),
+    test({ code: 'class Counter {}\nexport default Counter' }),
+    test({ code: 'class Counter {}\nexport { Counter as default }' }),
     test({
       parser: require.resolve('babel-eslint'),
       code: 'export Something from "./something";',

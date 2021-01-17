@@ -1,13 +1,13 @@
 import { test, SYNTAX_CASES } from '../utils';
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-named-default');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-named-default');
 
 ruleTester.run('no-named-default', rule, {
   valid: [
-    test({code: 'import bar from "./bar";'}),
-    test({code: 'import bar, { foo } from "./bar";'}),
+    test({ code: 'import bar from "./bar";' }),
+    test({ code: 'import bar, { foo } from "./bar";' }),
 
     ...SYNTAX_CASES,
   ],

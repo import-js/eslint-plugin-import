@@ -44,7 +44,7 @@ module.exports = {
 
     function storePropertyLookup(objectName, propName, node) {
       const lookups = allPropertyLookups.get(objectName) || [];
-      lookups.push({node, propName});
+      lookups.push({ node, propName });
       allPropertyLookups.set(objectName, lookups);
     }
 
@@ -74,7 +74,7 @@ module.exports = {
         const fileImport = fileImports.get(objectName);
         if (fileImport == null) return;
 
-        for (const {propName, node} of lookups) {
+        for (const { propName, node } of lookups) {
           // the default import can have a "default" property
           if (propName === 'default') continue;
           if (!fileImport.exportMap.namespace.has(propName)) continue;

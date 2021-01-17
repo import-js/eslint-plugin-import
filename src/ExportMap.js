@@ -90,8 +90,8 @@ export default class ExportMap {
     if (this.namespace.has(name)) return { found: true, path: [this] };
 
     if (this.reexports.has(name)) {
-      const reexports = this.reexports.get(name)
-          , imported = reexports.getImport();
+      const reexports = this.reexports.get(name);
+      const imported = reexports.getImport();
 
       // if import is ignored, return explicit 'null'
       if (imported == null) return { found: true, path: [this] };
@@ -134,8 +134,8 @@ export default class ExportMap {
     if (this.namespace.has(name)) return this.namespace.get(name);
 
     if (this.reexports.has(name)) {
-      const reexports = this.reexports.get(name)
-          , imported = reexports.getImport();
+      const reexports = this.reexports.get(name);
+      const imported = reexports.getImport();
 
       // if import is ignored, return explicit 'null'
       if (imported == null) return null;
@@ -191,8 +191,8 @@ export default class ExportMap {
       node: declaration.source,
       message: `Parse errors in imported module '${declaration.source.value}': ` +
                   `${this.errors
-                        .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
-                        .join(', ')}`,
+                    .map(e => `${e.message} (${e.lineNumber}:${e.column})`)
+                    .join(', ')}`,
     });
   }
 }
@@ -462,7 +462,7 @@ ExportMap.parse = function (path, content, context) {
         const jsonText = fs.readFileSync(tsConfigInfo.tsConfigPath).toString();
         if (!parseConfigFileTextToJson) {
           // this is because projects not using TypeScript won't have typescript installed
-          ({parseConfigFileTextToJson} = require('typescript'));
+          ({ parseConfigFileTextToJson } = require('typescript'));
         }
         const tsConfig = parseConfigFileTextToJson(tsConfigInfo.tsConfigPath, jsonText).config;
         return tsConfig.compilerOptions.esModuleInterop;
@@ -502,24 +502,24 @@ ExportMap.parse = function (path, content, context) {
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {
-          case 'FunctionDeclaration':
-          case 'ClassDeclaration':
-          case 'TypeAlias': // flowtype with babel-eslint parser
-          case 'InterfaceDeclaration':
-          case 'DeclareFunction':
-          case 'TSDeclareFunction':
-          case 'TSEnumDeclaration':
-          case 'TSTypeAliasDeclaration':
-          case 'TSInterfaceDeclaration':
-          case 'TSAbstractClassDeclaration':
-          case 'TSModuleDeclaration':
-            m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
-            break;
-          case 'VariableDeclaration':
-            n.declaration.declarations.forEach((d) =>
-              recursivePatternCapture(d.id,
-                id => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n))));
-            break;
+        case 'FunctionDeclaration':
+        case 'ClassDeclaration':
+        case 'TypeAlias': // flowtype with babel-eslint parser
+        case 'InterfaceDeclaration':
+        case 'DeclareFunction':
+        case 'TSDeclareFunction':
+        case 'TSEnumDeclaration':
+        case 'TSTypeAliasDeclaration':
+        case 'TSInterfaceDeclaration':
+        case 'TSAbstractClassDeclaration':
+        case 'TSModuleDeclaration':
+          m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
+          break;
+        case 'VariableDeclaration':
+          n.declaration.declarations.forEach((d) =>
+            recursivePatternCapture(d.id,
+              id => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n))));
+          break;
         }
       }
 
@@ -529,24 +529,24 @@ ExportMap.parse = function (path, content, context) {
         let local;
 
         switch (s.type) {
-          case 'ExportDefaultSpecifier':
-            if (!n.source) return;
-            local = 'default';
-            break;
-          case 'ExportNamespaceSpecifier':
-            m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-              get() { return resolveImport(nsource); },
-            }));
+        case 'ExportDefaultSpecifier':
+          if (!n.source) return;
+          local = 'default';
+          break;
+        case 'ExportNamespaceSpecifier':
+          m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+            get() { return resolveImport(nsource); },
+          }));
+          return;
+        case 'ExportSpecifier':
+          if (!n.source) {
+            m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
             return;
-          case 'ExportSpecifier':
-            if (!n.source) {
-              m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
-              return;
-            }
-            // else falls through
-          default:
-            local = s.local.name;
-            break;
+          }
+          // else falls through
+        default:
+          local = s.local.name;
+          break;
         }
 
         // todo: JSDoc
@@ -645,34 +645,34 @@ function thunkFor(p, context) {
  */
 export function recursivePatternCapture(pattern, callback) {
   switch (pattern.type) {
-    case 'Identifier': // base case
-      callback(pattern);
-      break;
+  case 'Identifier': // base case
+    callback(pattern);
+    break;
 
-    case 'ObjectPattern':
-      pattern.properties.forEach(p => {
-        if (p.type === 'ExperimentalRestProperty' || p.type === 'RestElement') {
-          callback(p.argument);
-          return;
-        }
-        recursivePatternCapture(p.value, callback);
-      });
-      break;
+  case 'ObjectPattern':
+    pattern.properties.forEach(p => {
+      if (p.type === 'ExperimentalRestProperty' || p.type === 'RestElement') {
+        callback(p.argument);
+        return;
+      }
+      recursivePatternCapture(p.value, callback);
+    });
+    break;
 
-    case 'ArrayPattern':
-      pattern.elements.forEach((element) => {
-        if (element == null) return;
-        if (element.type === 'ExperimentalRestProperty' || element.type === 'RestElement') {
-          callback(element.argument);
-          return;
-        }
-        recursivePatternCapture(element, callback);
-      });
-      break;
+  case 'ArrayPattern':
+    pattern.elements.forEach((element) => {
+      if (element == null) return;
+      if (element.type === 'ExperimentalRestProperty' || element.type === 'RestElement') {
+        callback(element.argument);
+        return;
+      }
+      recursivePatternCapture(element, callback);
+    });
+    break;
 
-    case 'AssignmentPattern':
-      callback(pattern.left);
-      break;
+  case 'AssignmentPattern':
+    callback(pattern.left);
+    break;
   }
 }
 

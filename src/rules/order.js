@@ -340,7 +340,7 @@ function isModuleLevelRequire(node) {
   while ( 
     (n.parent.type === 'MemberExpression' && n.parent.object === n) ||
     (n.parent.type === 'CallExpression' && n.parent.callee === n)
-   ) {
+  ) {
     n = n.parent;
   }
   return (
@@ -500,7 +500,7 @@ function getAlphabetizeConfig(options) {
   const order = alphabetize.order || 'ignore';
   const caseInsensitive = alphabetize.caseInsensitive || false;
 
-  return {order, caseInsensitive};
+  return { order, caseInsensitive };
 }
 
 module.exports = {

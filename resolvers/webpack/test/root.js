@@ -1,6 +1,6 @@
-const chai =  require('chai')
-  , expect = chai.expect
-  , path = require('path');
+const chai =  require('chai');
+const expect = chai.expect;
+const path = require('path');
 
 const resolve = require('../index').resolve;
 
@@ -35,10 +35,10 @@ describe("root", function () {
   });
   it("supports passing a different directory to load webpack from", function () {
     // Webpack should still be able to resolve the config here
-    expect(resolve('main-module', file, { config: "webpack.config.js", cwd: webpackDir}))
+    expect(resolve('main-module', file, { config: "webpack.config.js", cwd: webpackDir }))
       .property('path')
       .to.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
-    expect(resolve('typeahead', file, { config: "webpack.config.js", cwd: webpackDir}))
+    expect(resolve('typeahead', file, { config: "webpack.config.js", cwd: webpackDir }))
       .property('path')
       .to.equal(path.join(__dirname, 'files', 'bower_components', 'typeahead.js'));
   });

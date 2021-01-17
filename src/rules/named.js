@@ -20,7 +20,7 @@ module.exports = {
       }
 
       if (!node.specifiers
-            .some(function (im) { return im.type === type; })) {
+        .some(function (im) { return im.type === type; })) {
         return; // no named imports/exports
       }
 
@@ -58,14 +58,14 @@ module.exports = {
 
     return {
       'ImportDeclaration': checkSpecifiers.bind( null
-                                               , 'imported'
-                                               , 'ImportSpecifier'
-                                               ),
+        , 'imported'
+        , 'ImportSpecifier'
+      ),
 
       'ExportNamedDeclaration': checkSpecifiers.bind( null
-                                                    , 'local'
-                                                    , 'ExportSpecifier'
-                                                    ),
+        , 'local'
+        , 'ExportSpecifier'
+      ),
     };
 
   },

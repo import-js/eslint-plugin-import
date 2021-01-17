@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/unambiguous');
+const ruleTester = new RuleTester();
+const rule = require('rules/unambiguous');
 
 ruleTester.run('unambiguous', rule, {
   valid: [

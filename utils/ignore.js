@@ -6,7 +6,7 @@ const extname = require('path').extname;
 const log = require('debug')('eslint-plugin-import:utils:ignore');
 
 // one-shot memoized
-let cachedSet, lastSettings;
+let cachedSet; let lastSettings;
 function validExtensions(context) {
   if (cachedSet && context.settings === lastSettings) {
     return cachedSet;

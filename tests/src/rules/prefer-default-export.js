@@ -2,8 +2,8 @@ import { test, getNonDefaultParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('../../../src/rules/prefer-default-export');
+const ruleTester = new RuleTester();
+const rule = require('../../../src/rules/prefer-default-export');
 
 ruleTester.run('prefer-default-export', rule, {
   valid: [
@@ -11,72 +11,72 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export const foo = 'foo';
         export const bar = 'bar';`,
-      }),
+    }),
     test({
       code: `
         export default function bar() {};`,
-      }),
+    }),
     test({
       code: `
         export const foo = 'foo';
         export function bar() {};`,
-      }),
+    }),
     test({
       code: `
         export const foo = 'foo';
         export default bar;`,
-      }),
+    }),
     test({
       code: `
         let foo, bar;
         export { foo, bar }`,
-      }),
+    }),
     test({
       code: `
         export const { foo, bar } = item;`,
-      }),
+    }),
     test({
       code: `
         export const { foo, bar: baz } = item;`,
-      }),
+    }),
     test({
       code: `
         export const { foo: { bar, baz } } = item;`,
-      }),
+    }),
     test({
       code: `
         export const [a, b] = item;`,
-      }),
+    }),
     test({
       code: `
         let item;
         export const foo = item;
         export { item };`,
-      }),
+    }),
     test({
       code: `
         let foo;
         export { foo as default }`,
-      }),
+    }),
     test({
       code: `
         export * from './foo';`,
-      }),
+    }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
       parser: require.resolve('babel-eslint'),
-      }),
+    }),
 
     // no exports at all
     test({
       code: `
         import * as foo from './foo';`,
-      }),
+    }),
 
     test({
       code: `export type UserId = number;`,
       parser: require.resolve('babel-eslint'),
-      }),
+    }),
 
     // issue #653
     test({
@@ -193,14 +193,14 @@ context('TypeScript', function() {
           },
           parserConfig,
         ),
-        test (
+        test(
           {
             code: 'export interface foo { bar: string; }',
             parser,
           },
           parserConfig,
         ),
-        test (
+        test(
           {
             code: 'export interface foo { bar: string; }; export function goo() {}',
             parser,

@@ -13,8 +13,8 @@ function isImportingSelf(context, node, requireName) {
   // If the input is from stdin, this test can't fail
   if (filePath !== '<text>' && filePath === resolve(requireName, context)) {
     context.report({
-        node,
-        message: 'Module imports itself.',
+      node,
+      message: 'Module imports itself.',
     });
   }
 }

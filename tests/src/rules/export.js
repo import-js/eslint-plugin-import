@@ -4,8 +4,8 @@ import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-const ruleTester = new RuleTester()
-  , rule = require('rules/export');
+const ruleTester = new RuleTester();
+const rule = require('rules/export');
 
 ruleTester.run('export', rule, {
   valid: [].concat(
@@ -13,7 +13,7 @@ ruleTester.run('export', rule, {
 
     // default
     test({ code: 'var foo = "foo"; export default foo;' }),
-    test({ code: 'export var foo = "foo"; export var bar = "bar";'}),
+    test({ code: 'export var foo = "foo"; export var bar = "bar";' }),
     test({ code: 'export var foo = "foo", bar = "bar";' }),
     test({ code: 'export var { foo, bar } = object;' }),
     test({ code: 'export var [ foo, bar ] = array;' }),
@@ -82,7 +82,7 @@ ruleTester.run('export', rule, {
     test({
       code: 'let foo; export { foo }; export * from "./export-all"',
       errors: ['Multiple exports of name \'foo\'.',
-               'Multiple exports of name \'foo\'.'],
+        'Multiple exports of name \'foo\'.'],
     }),
     // test({ code: 'export * from "./default-export"'
     //      , errors: [{ message: 'No named exports found in module ' +

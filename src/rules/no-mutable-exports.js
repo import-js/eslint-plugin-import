@@ -11,13 +11,13 @@ module.exports = {
 
   create: function (context) {
     function checkDeclaration(node) {
-      const {kind} = node;
+      const { kind } = node;
       if (kind === 'var' || kind === 'let') {
         context.report(node, `Exporting mutable '${kind}' binding, use 'const' instead.`);
       }
     }
 
-    function checkDeclarationsInScope({variables}, name) {
+    function checkDeclarationsInScope({ variables }, name) {
       for (const variable of variables) {
         if (variable.name === name) {
           for (const def of variable.defs) {

@@ -5,7 +5,7 @@ import { getTSParsers } from '../utils';
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
-    return `Expected ${count} empty lines after import statement not followed by another import.`;
+  return `Expected ${count} empty lines after import statement not followed by another import.`;
 };
 const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.';
 
@@ -68,7 +68,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           return somethingElse();
       }
     }`,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';\nimport foo from 'foo';\n`,
@@ -281,16 +281,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `import foo from 'foo';\nvar a = 123;\n\nimport { bar } from './bar-lib';\nvar b=456;`,
       output: `import foo from 'foo';\n\nvar a = 123;\n\nimport { bar } from './bar-lib';\n\nvar b=456;`,
       errors: [
-      {
-        line: 1,
-        column: 1,
-        message: IMPORT_ERROR_MESSAGE,
-      },
-      {
-        line: 4,
-        column: 1,
-        message: IMPORT_ERROR_MESSAGE,
-      }],
+        {
+          line: 1,
+          column: 1,
+          message: IMPORT_ERROR_MESSAGE,
+        },
+        {
+          line: 4,
+          column: 1,
+          message: IMPORT_ERROR_MESSAGE,
+        }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {

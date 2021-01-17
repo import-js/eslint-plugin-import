@@ -2,24 +2,24 @@ import { test, getTSParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-webpack-loader-syntax');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-webpack-loader-syntax');
 
 const message = 'Do not use import syntax to configure webpack loaders.';
 
 ruleTester.run('no-webpack-loader-syntax', rule, {
   valid: [
-    test({ code: 'import _ from "lodash"'}),
-    test({ code: 'import find from "lodash.find"'}),
-    test({ code: 'import foo from "./foo.css"'}),
-    test({ code: 'import data from "@scope/my-package/data.json"'}),
-    test({ code: 'var _ = require("lodash")'}),
-    test({ code: 'var find = require("lodash.find")'}),
-    test({ code: 'var foo = require("./foo")'}),
-    test({ code: 'var foo = require("../foo")'}),
-    test({ code: 'var foo = require("foo")'}),
-    test({ code: 'var foo = require("./")'}),
-    test({ code: 'var foo = require("@scope/foo")'}),
+    test({ code: 'import _ from "lodash"' }),
+    test({ code: 'import find from "lodash.find"' }),
+    test({ code: 'import foo from "./foo.css"' }),
+    test({ code: 'import data from "@scope/my-package/data.json"' }),
+    test({ code: 'var _ = require("lodash")' }),
+    test({ code: 'var find = require("lodash.find")' }),
+    test({ code: 'var foo = require("./foo")' }),
+    test({ code: 'var foo = require("../foo")' }),
+    test({ code: 'var foo = require("foo")' }),
+    test({ code: 'var foo = require("./")' }),
+    test({ code: 'var foo = require("@scope/foo")' }),
   ],
   invalid: [
     test({

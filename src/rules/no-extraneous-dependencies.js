@@ -68,7 +68,7 @@ function getDependencies(context, packageDir) {
       Object.assign(
         packageContent,
         extractDepFields(
-          readPkgUp.sync({cwd: context.getFilename(), normalize: false}).pkg
+          readPkgUp.sync({ cwd: context.getFilename(), normalize: false }).pkg
         )
       );
     }
@@ -209,6 +209,6 @@ module.exports = {
 
     return moduleVisitor(node => {
       reportIfMissing(context, deps, depsOptions, node, node.value);
-    }, {commonjs: true});
+    }, { commonjs: true });
   },
 };

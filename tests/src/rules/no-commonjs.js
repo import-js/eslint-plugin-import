@@ -2,8 +2,8 @@ import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-const EXPORT_MESSAGE = 'Expected "export" or "export default"'
-    , IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
+const EXPORT_MESSAGE = 'Expected "export" or "export default"';
+const IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
 
 const ruleTester = new RuleTester();
 
@@ -49,7 +49,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     // commonJS rules should be scoped to commonJS spec. `rootRequire` is not
     // recognized by this commonJS plugin.
     { code: 'rootRequire("x")', options: [{ allowRequire: true }] },
-    { code: 'rootRequire("x")', options: [{ allowRequire: false}] },
+    { code: 'rootRequire("x")', options: [{ allowRequire: false }] },
 
     { code: 'module.exports = function () {}', options: ['allow-primitive-modules'] },
     { code: 'module.exports = function () {}', options: [{ allowPrimitiveModules: true }] },

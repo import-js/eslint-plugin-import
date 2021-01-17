@@ -1,8 +1,8 @@
 import { test } from '../utils';
 import { RuleTester } from 'eslint';
 import rule from 'rules/group-exports';
-import {resolve} from 'path';
-import {default as babelPresetFlow} from 'babel-preset-flow';
+import { resolve } from 'path';
+import { default as babelPresetFlow } from 'babel-preset-flow';
 
 /* eslint-disable max-len */
 const errors = {
@@ -60,7 +60,7 @@ ruleTester.run('group-exports', rule, {
       export { default as module1 } from './module-1'
       export { default as module2 } from './module-2'
     ` }),
-    test({ code: 'module.exports = {} '}),
+    test({ code: 'module.exports = {} ' }),
     test({ code: `
       module.exports = { test: true,
         another: false }

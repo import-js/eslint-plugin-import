@@ -4,17 +4,17 @@ import resolverDirectories from './resolverDirectories';
 
 const npmPath = npmWhich(__dirname).sync('npm');
 const spawnOptions = {
-    stdio: 'inherit',
+  stdio: 'inherit',
 };
 
 spawnSync(
-    npmPath,
-    ['test'],
-    Object.assign({ cwd: __dirname }, spawnOptions));
+  npmPath,
+  ['test'],
+  Object.assign({ cwd: __dirname }, spawnOptions));
 
 for (const resolverDir of resolverDirectories) {
-    spawnSync(
-        npmPath,
-        ['test'],
-        Object.assign({ cwd: resolverDir }, spawnOptions));
+  spawnSync(
+    npmPath,
+    ['test'],
+    Object.assign({ cwd: resolverDir }, spawnOptions));
 }

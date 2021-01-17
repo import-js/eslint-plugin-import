@@ -2,8 +2,8 @@ import { test } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/max-dependencies');
+const ruleTester = new RuleTester();
+const rule = require('rules/max-dependencies');
 
 ruleTester.run('max-dependencies', rule, {
   valid: [
@@ -21,7 +21,7 @@ ruleTester.run('max-dependencies', rule, {
       }],
     }),
 
-    test({ code: 'import {x, y, z} from "./foo"'}),
+    test({ code: 'import {x, y, z} from "./foo"' }),
   ],
   invalid: [
     test({

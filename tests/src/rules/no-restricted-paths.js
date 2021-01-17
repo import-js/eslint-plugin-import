@@ -57,9 +57,9 @@ ruleTester.run('no-restricted-paths', rule, {
     test({
       code: 'notrequire("../server/b.js")',
       filename: testFilePath('./restricted-paths/client/a.js'),
-        options: [ {
-          zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
-        } ] }),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
+      } ] }),
 
     // no config
     test({ code: 'require("../server/b.js")' }),

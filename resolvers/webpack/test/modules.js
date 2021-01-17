@@ -1,6 +1,6 @@
-const chai =  require('chai')
-  , expect = chai.expect
-  , path = require('path');
+const chai =  require('chai');
+const expect = chai.expect;
+const path = require('path');
 
 const resolve = require('../index').resolve;
 

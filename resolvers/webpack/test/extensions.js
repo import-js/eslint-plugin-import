@@ -1,12 +1,12 @@
-const chai =  require('chai')
-  , expect = chai.expect
-  , path = require('path');
+const chai =  require('chai');
+const expect = chai.expect;
+const path = require('path');
 
 const resolve = require('../index').resolve;
 
 
-const file = path.join(__dirname, 'files', 'dummy.js')
-  , extensions = path.join(__dirname, 'custom-extensions', 'dummy.js');
+const file = path.join(__dirname, 'files', 'dummy.js');
+const extensions = path.join(__dirname, 'custom-extensions', 'dummy.js');
 
 describe("extensions", function () {
   it("respects the defaults", function () {

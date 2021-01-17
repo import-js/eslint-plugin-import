@@ -12,7 +12,7 @@ ruleTester.run('no-amd', require('rules/no-amd'), {
 
     'require("x")',
     // 2-args, not an array
-		'require("x", "y")',
+    'require("x", "y")',
     // random other function
     'setTimeout(foo, 100)',
     // non-identifier callee
@@ -25,13 +25,13 @@ ruleTester.run('no-amd', require('rules/no-amd'), {
     // unmatched arg types/number
     'define(0, 1, 2)',
     'define("a")',
-	],
+  ],
 
-	invalid: semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
-      { code: 'define([], function() {})', errors: [ { message: 'Expected imports instead of AMD define().' }] },
-      { code: 'define(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD define().' }] },
+  invalid: semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
+    { code: 'define([], function() {})', errors: [ { message: 'Expected imports instead of AMD define().' }] },
+    { code: 'define(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD define().' }] },
 
-      { code: 'require([], function() {})', errors: [ { message: 'Expected imports instead of AMD require().' }] },
-      { code: 'require(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD require().' }] },
-	],
+    { code: 'require([], function() {})', errors: [ { message: 'Expected imports instead of AMD require().' }] },
+    { code: 'require(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD require().' }] },
+  ],
 });

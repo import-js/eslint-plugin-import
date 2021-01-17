@@ -3,11 +3,11 @@ import { test as testUtil, getNonDefaultParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-duplicates');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-duplicates');
 
 const test = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2'
-  ? t => testUtil(Object.assign({}, t, {output: t.code}))
+  ? t => testUtil(Object.assign({}, t, { output: t.code }))
   : testUtil;
 
 ruleTester.run('no-duplicates', rule, {
@@ -29,12 +29,12 @@ ruleTester.run('no-duplicates', rule, {
     // #1107: Using different query strings that trigger different webpack loaders.
     test({
       code: "import x from './bar?optionX'; import y from './bar?optionY';",
-      options: [{'considerQueryString': true}],
+      options: [{ 'considerQueryString': true }],
       settings: { 'import/resolver': 'webpack' },
     }),
     test({
       code: "import x from './foo'; import y from './bar';",
-      options: [{'considerQueryString': true}],
+      options: [{ 'considerQueryString': true }],
       settings: { 'import/resolver': 'webpack' },
     }),
 
@@ -65,30 +65,30 @@ ruleTester.run('no-duplicates', rule, {
       output: "import { x , y } from './bar'; ",
       settings: { 'import/resolve': {
         paths: [path.join( process.cwd()
-                         , 'tests', 'files',
-                         )] }},
+          , 'tests', 'files',
+        )] } },
       errors: 2, // path ends up hardcoded
-     }),
+    }),
 
     // #1107: Using different query strings that trigger different webpack loaders.
     test({
       code: "import x from './bar.js?optionX'; import y from './bar?optionX';",
       settings: { 'import/resolver': 'webpack' },
       errors: 2, // path ends up hardcoded
-     }),
+    }),
     test({
       code: "import x from './bar?optionX'; import y from './bar?optionY';",
       settings: { 'import/resolver': 'webpack' },
       errors: 2, // path ends up hardcoded
-     }),
+    }),
 
     // #1107: Using same query strings that trigger the same loader.
     test({
       code: "import x from './bar?optionX'; import y from './bar.js?optionX';",
-      options: [{'considerQueryString': true}],
+      options: [{ 'considerQueryString': true }],
       settings: { 'import/resolver': 'webpack' },
       errors: 2, // path ends up hardcoded
-     }),
+    }),
 
     // #86: duplicate unresolved modules should be flagged
     test({
@@ -402,29 +402,29 @@ ruleTester.run('no-duplicates', rule, {
 
 context('TypeScript', function() {
   getNonDefaultParsers()
-  .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
-  .forEach((parser) => {
-    const parserConfig = {
-      parser: parser,
-      settings: {
-        'import/parsers': { [parser]: ['.ts'] },
-        'import/resolver': { 'eslint-import-resolver-typescript': true },
-      },
-    };
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      const parserConfig = {
+        parser: parser,
+        settings: {
+          'import/parsers': { [parser]: ['.ts'] },
+          'import/resolver': { 'eslint-import-resolver-typescript': true },
+        },
+      };
 
-    ruleTester.run('no-duplicates', rule, {
-      valid: [
+      ruleTester.run('no-duplicates', rule, {
+        valid: [
         // #1667: ignore duplicate if is a typescript type import
-        test(
-          {
-            code: "import type { x } from './foo'; import y from './foo'",
-            parser,
-          },
-          parserConfig,
-        ),
-      ],
-      invalid: [],
+          test(
+            {
+              code: "import type { x } from './foo'; import y from './foo'",
+              parser,
+            },
+            parserConfig,
+          ),
+        ],
+        invalid: [],
+      });
     });
-  });
 });
 

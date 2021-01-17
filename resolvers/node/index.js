@@ -1,5 +1,5 @@
-const resolve = require('resolve')
-  , path = require('path');
+const resolve = require('resolve');
+const path = require('path');
 
 const log = require('debug')('eslint-plugin-import:resolver:node');
 
@@ -26,17 +26,17 @@ exports.resolve = function (source, file, config) {
 
 function opts(file, config) {
   return Object.assign({
-      // more closely matches Node (#333)
-      // plus 'mjs' for native modules! (#939)
-      extensions: ['.mjs', '.js', '.json', '.node'],
-    },
-    config,
-    {
-      // path.resolve will handle paths relative to CWD
-      basedir: path.dirname(path.resolve(file)),
-      packageFilter: packageFilter,
+    // more closely matches Node (#333)
+    // plus 'mjs' for native modules! (#939)
+    extensions: ['.mjs', '.js', '.json', '.node'],
+  },
+  config,
+  {
+    // path.resolve will handle paths relative to CWD
+    basedir: path.dirname(path.resolve(file)),
+    packageFilter: packageFilter,
 
-    });
+  });
 }
 
 function packageFilter(pkg) {

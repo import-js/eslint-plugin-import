@@ -69,44 +69,44 @@ module.exports = {
     }
 
     function checkForRestrictedImportPath(importPath, node) {
-        const absoluteImportPath = resolve(importPath, context);
+      const absoluteImportPath = resolve(importPath, context);
 
-        if (!absoluteImportPath) {
+      if (!absoluteImportPath) {
+        return;
+      }
+
+      matchingZones.forEach((zone) => {
+        const exceptionPaths = zone.except || [];
+        const absoluteFrom = path.resolve(basePath, zone.from);
+
+        if (!containsPath(absoluteImportPath, absoluteFrom)) {
           return;
         }
 
-        matchingZones.forEach((zone) => {
-          const exceptionPaths = zone.except || [];
-          const absoluteFrom = path.resolve(basePath, zone.from);
+        const absoluteExceptionPaths = exceptionPaths.map((exceptionPath) =>
+          path.resolve(absoluteFrom, exceptionPath)
+        );
+        const hasValidExceptionPaths = absoluteExceptionPaths
+          .every((absoluteExceptionPath) => isValidExceptionPath(absoluteFrom, absoluteExceptionPath));
 
-          if (!containsPath(absoluteImportPath, absoluteFrom)) {
-            return;
-          }
+        if (!hasValidExceptionPaths) {
+          reportInvalidExceptionPath(node);
+          return;
+        }
 
-          const absoluteExceptionPaths = exceptionPaths.map((exceptionPath) =>
-            path.resolve(absoluteFrom, exceptionPath)
-          );
-          const hasValidExceptionPaths = absoluteExceptionPaths
-            .every((absoluteExceptionPath) => isValidExceptionPath(absoluteFrom, absoluteExceptionPath));
+        const pathIsExcepted = absoluteExceptionPaths
+          .some((absoluteExceptionPath) => containsPath(absoluteImportPath, absoluteExceptionPath));
 
-          if (!hasValidExceptionPaths) {
-            reportInvalidExceptionPath(node);
-            return;
-          }
+        if (pathIsExcepted) {
+          return;
+        }
 
-          const pathIsExcepted = absoluteExceptionPaths
-            .some((absoluteExceptionPath) => containsPath(absoluteImportPath, absoluteExceptionPath));
-
-          if (pathIsExcepted) {
-            return;
-          }
-
-          context.report({
-            node,
-            message: `Unexpected path "{{importPath}}" imported in restricted zone.${zone.message ? ` ${zone.message}` : ''}`,
-            data: { importPath },
-          });
+        context.report({
+          node,
+          message: `Unexpected path "{{importPath}}" imported in restricted zone.${zone.message ? ` ${zone.message}` : ''}`,
+          data: { importPath },
         });
+      });
     }
 
     return {

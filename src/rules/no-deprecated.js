@@ -25,8 +25,8 @@ module.exports = {
   },
 
   create: function (context) {
-    const deprecated = new Map()
-        , namespaces = new Map();
+    const deprecated = new Map();
+    const namespaces = new Map();
 
     function checkSpecifiers(node) {
       if (node.type !== 'ImportDeclaration') return;
@@ -47,27 +47,27 @@ module.exports = {
       }
 
       node.specifiers.forEach(function (im) {
-        let imported, local;
+        let imported; let local;
         switch (im.type) {
 
 
-          case 'ImportNamespaceSpecifier':{
-            if (!imports.size) return;
-            namespaces.set(im.local.name, imports);
-            return;
-          }
+        case 'ImportNamespaceSpecifier':{
+          if (!imports.size) return;
+          namespaces.set(im.local.name, imports);
+          return;
+        }
 
-          case 'ImportDefaultSpecifier':
-            imported = 'default';
-            local = im.local.name;
-            break;
+        case 'ImportDefaultSpecifier':
+          imported = 'default';
+          local = im.local.name;
+          break;
 
-          case 'ImportSpecifier':
-            imported = im.imported.name;
-            local = im.local.name;
-            break;
+        case 'ImportSpecifier':
+          imported = im.imported.name;
+          local = im.local.name;
+          break;
 
-          default: return; // can't handle this one
+        default: return; // can't handle this one
         }
 
         // unknown thing can't be deprecated

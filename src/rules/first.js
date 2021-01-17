@@ -24,11 +24,11 @@ module.exports = {
 
     return {
       'Program': function (n) {
-        const body = n.body
-            , absoluteFirst = context.options[0] === 'absolute-first'
-            , message = 'Import in body of module; reorder to top.'
-            , sourceCode = context.getSourceCode()
-            , originSourceCode = sourceCode.getText();
+        const body = n.body;
+        const absoluteFirst = context.options[0] === 'absolute-first';
+        const message = 'Import in body of module; reorder to top.';
+        const sourceCode = context.getSourceCode();
+        const originSourceCode = sourceCode.getText();
         let nonImportCount = 0;
         let anyExpressions = false;
         let anyRelative = false;
@@ -81,11 +81,11 @@ module.exports = {
         });
         if (!errorInfos.length) return;
         errorInfos.forEach(function (errorInfo, index) {
-          const node = errorInfo.node
-              , infos = {
-                node,
-                message,
-              };
+          const node = errorInfo.node;
+          const infos = {
+            node,
+            message,
+          };
           if (index < lastSortNodesIndex) {
             infos.fix = function (fixer) {
               return fixer.insertTextAfter(node, '');
@@ -94,27 +94,27 @@ module.exports = {
             const sortNodes = errorInfos.slice(0, lastSortNodesIndex + 1);
             infos.fix = function (fixer) {
               const removeFixers = sortNodes.map(function (_errorInfo) {
-                    return fixer.removeRange(_errorInfo.range);
-                  })
-                  , range = [0, removeFixers[removeFixers.length - 1].range[1]];
+                return fixer.removeRange(_errorInfo.range);
+              });
+              const range = [0, removeFixers[removeFixers.length - 1].range[1]];
               let insertSourceCode = sortNodes.map(function (_errorInfo) {
-                    const nodeSourceCode = String.prototype.slice.apply(
-                      originSourceCode, _errorInfo.range
-                    );
-                    if (/\S/.test(nodeSourceCode[0])) {
-                      return '\n' + nodeSourceCode;
-                    }
-                    return nodeSourceCode;
-                  }).join('')
-                , insertFixer = null
-                , replaceSourceCode = '';
+                const nodeSourceCode = String.prototype.slice.apply(
+                  originSourceCode, _errorInfo.range
+                );
+                if (/\S/.test(nodeSourceCode[0])) {
+                  return '\n' + nodeSourceCode;
+                }
+                return nodeSourceCode;
+              }).join('');
+              let insertFixer = null;
+              let replaceSourceCode = '';
               if (!lastLegalImp) {
-                  insertSourceCode =
+                insertSourceCode =
                     insertSourceCode.trim() + insertSourceCode.match(/^(\s+)/)[0];
               }
               insertFixer = lastLegalImp ?
-                            fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
-                            fixer.insertTextBefore(body[0], insertSourceCode);
+                fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
+                fixer.insertTextBefore(body[0], insertSourceCode);
               const fixers = [insertFixer].concat(removeFixers);
               fixers.forEach(function (computedFixer, i) {
                 replaceSourceCode += (originSourceCode.slice(

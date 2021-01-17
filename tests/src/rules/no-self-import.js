@@ -2,8 +2,8 @@ import { test, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-self-import');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-self-import');
 
 const error = {
   message: 'Module imports itself.',

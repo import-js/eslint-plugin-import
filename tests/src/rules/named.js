@@ -4,42 +4,42 @@ import { RuleTester } from 'eslint';
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 
-const ruleTester = new RuleTester()
-  , rule = require('rules/named');
+const ruleTester = new RuleTester();
+const rule = require('rules/named');
 
 function error(name, module) {
-  return { message: name + ' not found in \'' + module + '\''
-         , type: 'Identifier' };
+  return { message: name + ' not found in \'' + module + '\'',
+    type: 'Identifier' };
 }
 
 ruleTester.run('named', rule, {
   valid: [
     test({ code: 'import "./malformed.js"' }),
 
-    test({code: 'import { foo } from "./bar"'}),
-    test({code: 'import { foo } from "./empty-module"'}),
-    test({code: 'import bar from "./bar.js"'}),
-    test({code: 'import bar, { foo } from "./bar.js"'}),
-    test({code: 'import {a, b, d} from "./named-exports"'}),
-    test({code: 'import {ExportedClass} from "./named-exports"'}),
-    test({code: 'import { destructingAssign } from "./named-exports"'}),
-    test({code: 'import { destructingRenamedAssign } from "./named-exports"'}),
-    test({code: 'import { ActionTypes } from "./qc"'}),
-    test({code: 'import {a, b, c, d} from "./re-export"'}),
-    test({code: 'import {a, b, c} from "./re-export-common-star"'}),
-    test({code: 'import {RuleTester} from "./re-export-node_modules"'}),
+    test({ code: 'import { foo } from "./bar"' }),
+    test({ code: 'import { foo } from "./empty-module"' }),
+    test({ code: 'import bar from "./bar.js"' }),
+    test({ code: 'import bar, { foo } from "./bar.js"' }),
+    test({ code: 'import {a, b, d} from "./named-exports"' }),
+    test({ code: 'import {ExportedClass} from "./named-exports"' }),
+    test({ code: 'import { destructingAssign } from "./named-exports"' }),
+    test({ code: 'import { destructingRenamedAssign } from "./named-exports"' }),
+    test({ code: 'import { ActionTypes } from "./qc"' }),
+    test({ code: 'import {a, b, c, d} from "./re-export"' }),
+    test({ code: 'import {a, b, c} from "./re-export-common-star"' }),
+    test({ code: 'import {RuleTester} from "./re-export-node_modules"' }),
 
-    test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"'
-         , settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } } }),
+    test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"',
+      settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } } }),
 
     // validate that eslint-disable-line silences this properly
-    test({code: 'import {a, b, d} from "./common"; ' +
+    test({ code: 'import {a, b, d} from "./common"; ' +
                 '// eslint-disable-line named' }),
 
     test({ code: 'import { foo, bar } from "./re-export-names"' }),
 
-    test({ code: 'import { foo, bar } from "./common"'
-         , settings: { 'import/ignore': ['common'] } }),
+    test({ code: 'import { foo, bar } from "./common"',
+      settings: { 'import/ignore': ['common'] } }),
 
     // ignore core modules by default
     test({ code: 'import { foo } from "crypto"' }),
@@ -63,7 +63,7 @@ ruleTester.run('named', rule, {
     }),
 
     // regression tests
-    test({ code: 'let foo; export { foo as bar }'}),
+    test({ code: 'let foo; export { foo as bar }' }),
 
     // destructured exports
     test({ code: 'import { destructuredProp } from "./named-exports"' }),
@@ -151,27 +151,27 @@ ruleTester.run('named', rule, {
 
   invalid: [
 
-    test({ code: 'import { somethingElse } from "./test-module"'
-         , errors: [ error('somethingElse', './test-module') ] }),
+    test({ code: 'import { somethingElse } from "./test-module"',
+      errors: [ error('somethingElse', './test-module') ] }),
 
-    test({code: 'import { baz } from "./bar"',
-      errors: [error('baz', './bar')]}),
+    test({ code: 'import { baz } from "./bar"',
+      errors: [error('baz', './bar')] }),
 
     // test multiple
-    test({code: 'import { baz, bop } from "./bar"',
-      errors: [error('baz', './bar'), error('bop', './bar')]}),
+    test({ code: 'import { baz, bop } from "./bar"',
+      errors: [error('baz', './bar'), error('bop', './bar')] }),
 
-    test({code: 'import {a, b, c} from "./named-exports"',
-      errors: [error('c', './named-exports')]}),
+    test({ code: 'import {a, b, c} from "./named-exports"',
+      errors: [error('c', './named-exports')] }),
 
-    test({code: 'import { a } from "./default-export"',
-      errors: [error('a', './default-export')]}),
+    test({ code: 'import { a } from "./default-export"',
+      errors: [error('a', './default-export')] }),
 
-    test({code: 'import { ActionTypess } from "./qc"',
-      errors: [error('ActionTypess', './qc')]}),
+    test({ code: 'import { ActionTypess } from "./qc"',
+      errors: [error('ActionTypess', './qc')] }),
 
-    test({code: 'import {a, b, c, d, e} from "./re-export"',
-      errors: [error('e', './re-export')]}),
+    test({ code: 'import {a, b, c, d, e} from "./re-export"',
+      errors: [error('e', './re-export')] }),
 
     test({
       code: 'import { a } from "./re-export-names"',

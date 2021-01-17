@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 
-const path = require('path')
-  , fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 function isJSFile(f) {
   return path.extname(f) === '.js';
@@ -23,7 +23,7 @@ describe('package', function () {
 
     fs.readdir(
       path.join(pkg, 'rules')
-    , function (err, files) {
+      , function (err, files) {
         expect(err).not.to.exist;
 
         files.filter(isJSFile).forEach(function (f) {

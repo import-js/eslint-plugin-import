@@ -77,7 +77,7 @@ ruleTester.run('extensions', rule, {
         import Component from './Component.jsx'
         import express from 'express'
       `,
-      options: [ 'always', {ignorePackages: true} ],
+      options: [ 'always', { ignorePackages: true } ],
     }),
 
     test({
@@ -87,7 +87,7 @@ ruleTester.run('extensions', rule, {
         import Component from './Component'
         import express from 'express'
       `,
-      options: [ 'never', {ignorePackages: true} ],
+      options: [ 'never', { ignorePackages: true } ],
     }),
 
     test({
@@ -198,9 +198,9 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "./bar.js"',
-            line: 1,
-            column: 17,
+          message: 'Unexpected use of file extension "js" for "./bar.js"',
+          line: 1,
+          column: 17,
         },
       ],
     }),
@@ -214,9 +214,9 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "./bar.js"',
-            line: 1,
-            column: 17,
+          message: 'Unexpected use of file extension "js" for "./bar.js"',
+          line: 1,
+          column: 17,
         },
       ],
     }),
@@ -230,9 +230,9 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.jsx', '.json', '.js' ] } },
       errors: [
         {
-            message: 'Unexpected use of file extension "jsx" for "./bar.jsx"',
-            line: 1,
-            column: 23,
+          message: 'Unexpected use of file extension "jsx" for "./bar.jsx"',
+          line: 1,
+          column: 23,
         },
       ],
     }),
@@ -259,9 +259,9 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "./bar.js"',
-            line: 1,
-            column: 19,
+          message: 'Unexpected use of file extension "js" for "./bar.js"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -276,9 +276,9 @@ ruleTester.run('extensions', rule, {
       settings: { 'import/resolve': { 'extensions': [ '.js', '.jsx', '.json' ] } },
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "./bar.js"',
-            line: 1,
-            column: 19,
+          message: 'Unexpected use of file extension "js" for "./bar.js"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -289,9 +289,9 @@ ruleTester.run('extensions', rule, {
       options: [ 'never' ],
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "./fake-file.js"',
-            line: 1,
-            column: 19,
+          message: 'Unexpected use of file extension "js" for "./fake-file.js"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -300,9 +300,9 @@ ruleTester.run('extensions', rule, {
       options: [ 'always' ],
       errors: [
         {
-            message: 'Missing file extension for "non-package/test"',
-            line: 1,
-            column: 19,
+          message: 'Missing file extension for "non-package/test"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -312,9 +312,9 @@ ruleTester.run('extensions', rule, {
       options: [ 'always' ],
       errors: [
         {
-            message: 'Missing file extension for "@name/pkg/test"',
-            line: 1,
-            column: 19,
+          message: 'Missing file extension for "@name/pkg/test"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -324,9 +324,9 @@ ruleTester.run('extensions', rule, {
       options: [ 'never' ],
       errors: [
         {
-            message: 'Unexpected use of file extension "js" for "@name/pkg/test.js"',
-            line: 1,
-            column: 19,
+          message: 'Unexpected use of file extension "js" for "@name/pkg/test.js"',
+          line: 1,
+          column: 19,
         },
       ],
     }),
@@ -341,7 +341,7 @@ ruleTester.run('extensions', rule, {
         import baw from '@scoped/baw/import'
         import express from 'express'
       `,
-      options: [ 'always', {ignorePackages: true} ],
+      options: [ 'always', { ignorePackages: true } ],
       errors: [
         {
           message: 'Missing file extension for "./Component"',
@@ -388,7 +388,7 @@ ruleTester.run('extensions', rule, {
           column: 31,
         },
       ],
-      options: [ 'never', {ignorePackages: true} ],
+      options: [ 'never', { ignorePackages: true } ],
     }),
 
     // export (#964)

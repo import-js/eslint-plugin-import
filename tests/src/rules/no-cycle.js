@@ -2,8 +2,8 @@ import { test as _test, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-cycle');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-cycle');
 
 const error = message => ({ message });
 
@@ -15,7 +15,7 @@ const test = def => _test(Object.assign(def, {
 ruleTester.run('no-cycle', rule, {
   valid: [
     // this rule doesn't care if the cycle length is 0
-    test({ code: 'import foo from "./foo.js"'}),
+    test({ code: 'import foo from "./foo.js"' }),
 
     test({ code: 'import _ from "lodash"' }),
     test({ code: 'import foo from "@scope/foo"' }),

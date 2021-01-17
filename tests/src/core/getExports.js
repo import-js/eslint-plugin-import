@@ -80,8 +80,8 @@ describe('ExportMap', function () {
   });
 
   it('finds exports for an ES7 module with babel-eslint', function () {
-    const path = getFilename('jsx/FooES7.js')
-        , contents = fs.readFileSync(path, { encoding: 'utf8' });
+    const path = getFilename('jsx/FooES7.js');
+    const contents = fs.readFileSync(path, { encoding: 'utf8' });
     const imports = ExportMap.parse(
       path,
       contents,
@@ -100,8 +100,8 @@ describe('ExportMap', function () {
       context('deprecated imports', function () {
         let imports;
         before('parse file', function () {
-          const path = getFilename('deprecated.js')
-              , contents = fs.readFileSync(path, { encoding: 'utf8' }).replace(/[\r]\n/g, lineEnding);
+          const path = getFilename('deprecated.js');
+          const contents = fs.readFileSync(path, { encoding: 'utf8' }).replace(/[\r]\n/g, lineEnding);
           imports = ExportMap.parse(path, contents, parseContext);
 
           // sanity checks
@@ -169,8 +169,8 @@ describe('ExportMap', function () {
       context('full module', function () {
         let imports;
         before('parse file', function () {
-          const path = getFilename('deprecated-file.js')
-              , contents = fs.readFileSync(path, { encoding: 'utf8' });
+          const path = getFilename('deprecated-file.js');
+          const contents = fs.readFileSync(path, { encoding: 'utf8' });
           imports = ExportMap.parse(path, contents, parseContext);
 
           // sanity checks
@@ -231,8 +231,8 @@ describe('ExportMap', function () {
     const babelContext = { parserPath: 'babel-eslint', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, settings: {} };
 
     it('works with espree & traditional namespace exports', function () {
-      const path = getFilename('deep/a.js')
-          , contents = fs.readFileSync(path, { encoding: 'utf8' });
+      const path = getFilename('deep/a.js');
+      const contents = fs.readFileSync(path, { encoding: 'utf8' });
       const a = ExportMap.parse(path, contents, espreeContext);
       expect(a.errors).to.be.empty;
       expect(a.get('b').namespace).to.exist;
@@ -240,8 +240,8 @@ describe('ExportMap', function () {
     });
 
     it('captures namespace exported as default', function () {
-      const path = getFilename('deep/default.js')
-          , contents = fs.readFileSync(path, { encoding: 'utf8' });
+      const path = getFilename('deep/default.js');
+      const contents = fs.readFileSync(path, { encoding: 'utf8' });
       const def = ExportMap.parse(path, contents, espreeContext);
       expect(def.errors).to.be.empty;
       expect(def.get('default').namespace).to.exist;
@@ -249,8 +249,8 @@ describe('ExportMap', function () {
     });
 
     it('works with babel-eslint & ES7 namespace exports', function () {
-      const path = getFilename('deep-es7/a.js')
-          , contents = fs.readFileSync(path, { encoding: 'utf8' });
+      const path = getFilename('deep-es7/a.js');
+      const contents = fs.readFileSync(path, { encoding: 'utf8' });
       const a = ExportMap.parse(path, contents, babelContext);
       expect(a.errors).to.be.empty;
       expect(a.get('b').namespace).to.exist;
@@ -266,8 +266,8 @@ describe('ExportMap', function () {
       fs.writeFileSync(getFilename('deep/cache-2.js'),
         fs.readFileSync(getFilename('deep/cache-2a.js')));
 
-      const path = getFilename('deep/cache-1.js')
-          , contents = fs.readFileSync(path, { encoding: 'utf8' });
+      const path = getFilename('deep/cache-1.js');
+      const contents = fs.readFileSync(path, { encoding: 'utf8' });
       a = ExportMap.parse(path, contents, espreeContext);
       expect(a.errors).to.be.empty;
 

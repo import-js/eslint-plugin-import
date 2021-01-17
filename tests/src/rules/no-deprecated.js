@@ -2,8 +2,8 @@ import { test, SYNTAX_CASES, getTSParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-deprecated');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-deprecated');
 
 ruleTester.run('no-deprecated', rule, {
   valid: [
@@ -220,8 +220,8 @@ describe('TypeScript', function () {
           errors: [
             { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this!' },
             { type: 'Identifier', message: 'Deprecated: don\'t use this!' },
-          ]},
-          parserConfig)),
+          ] },
+        parserConfig)),
       ],
     });
   });

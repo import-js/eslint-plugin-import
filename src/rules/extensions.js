@@ -19,43 +19,43 @@ const properties = {
 
 function buildProperties(context) {
 
-    const result = {
-      defaultConfig: 'never',
-      pattern: {},
-      ignorePackages: false,
-    };
+  const result = {
+    defaultConfig: 'never',
+    pattern: {},
+    ignorePackages: false,
+  };
 
-    context.options.forEach(obj => {
+  context.options.forEach(obj => {
 
-      // If this is a string, set defaultConfig to its value
-      if (typeof obj === 'string') {
-        result.defaultConfig = obj;
-        return;
-      }
-
-      // If this is not the new structure, transfer all props to result.pattern
-      if (obj.pattern === undefined && obj.ignorePackages === undefined) {
-        Object.assign(result.pattern, obj);
-        return;
-      }
-
-      // If pattern is provided, transfer all props
-      if (obj.pattern !== undefined) {
-        Object.assign(result.pattern, obj.pattern);
-      }
-
-      // If ignorePackages is provided, transfer it to result
-      if (obj.ignorePackages !== undefined) {
-        result.ignorePackages = obj.ignorePackages;
-      }
-    });
-
-    if (result.defaultConfig === 'ignorePackages') {
-      result.defaultConfig = 'always';
-      result.ignorePackages = true;
+    // If this is a string, set defaultConfig to its value
+    if (typeof obj === 'string') {
+      result.defaultConfig = obj;
+      return;
     }
 
-    return result;
+    // If this is not the new structure, transfer all props to result.pattern
+    if (obj.pattern === undefined && obj.ignorePackages === undefined) {
+      Object.assign(result.pattern, obj);
+      return;
+    }
+
+    // If pattern is provided, transfer all props
+    if (obj.pattern !== undefined) {
+      Object.assign(result.pattern, obj.pattern);
+    }
+
+    // If ignorePackages is provided, transfer it to result
+    if (obj.ignorePackages !== undefined) {
+      result.ignorePackages = obj.ignorePackages;
+    }
+  });
+
+  if (result.defaultConfig === 'ignorePackages') {
+    result.defaultConfig = 'always';
+    result.ignorePackages = true;
+  }
+
+  return result;
 }
 
 module.exports = {

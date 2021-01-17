@@ -43,8 +43,8 @@ export function test(t) {
 }
 
 export function testContext(settings) {
-  return { getFilename: function () { return FILENAME; }
-         , settings: settings || {} };
+  return { getFilename: function () { return FILENAME; },
+    settings: settings || {} };
 }
 
 export function getFilename(file) {

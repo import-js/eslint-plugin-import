@@ -5,8 +5,8 @@
 
 import docsUrl from '../docsUrl';
 
-const EXPORT_MESSAGE = 'Expected "export" or "export default"'
-    , IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
+const EXPORT_MESSAGE = 'Expected "export" or "export default"';
+const IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
 
 function normalizeLegacyOptions(options) {
   if (options.indexOf('allow-primitive-modules') >= 0) {

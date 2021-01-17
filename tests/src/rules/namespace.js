@@ -2,8 +2,8 @@ import { test, SYNTAX_CASES, getTSParsers } from '../utils';
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
-const ruleTester = new RuleTester({ env: { es6: true }})
-  , rule = require('rules/namespace');
+const ruleTester = new RuleTester({ env: { es6: true } });
+const rule = require('rules/namespace');
 
 
 function error(name, namespace) {
@@ -13,7 +13,7 @@ function error(name, namespace) {
 const valid = [
   test({ code: 'import "./malformed.js"' }),
 
-  test({ code: "import * as foo from './empty-folder';"}),
+  test({ code: "import * as foo from './empty-folder';" }),
   test({ code: 'import * as names from "./named-exports"; ' +
                'console.log((names.b).c); ' }),
 
@@ -56,13 +56,13 @@ const valid = [
   /////////
   // es7 //
   /////////
-  test({ code: 'export * as names from "./named-exports"'
-       , parser: require.resolve('babel-eslint') }),
-  test({ code: 'export defport, * as names from "./named-exports"'
-       , parser: require.resolve('babel-eslint') }),
+  test({ code: 'export * as names from "./named-exports"',
+    parser: require.resolve('babel-eslint') }),
+  test({ code: 'export defport, * as names from "./named-exports"',
+    parser: require.resolve('babel-eslint') }),
   // non-existent is handled by no-unresolved
-  test({ code: 'export * as names from "./does-not-exist"'
-       , parser: require.resolve('babel-eslint') }),
+  test({ code: 'export * as names from "./does-not-exist"',
+    parser: require.resolve('babel-eslint') }),
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Users)',
@@ -80,8 +80,8 @@ const valid = [
   test({ code: "import * as names from './default-export';" }),
   test({ code: "import * as names from './default-export'; console.log(names.default)" }),
   test({
-   code: 'export * as names from "./default-export"',
-   parser: require.resolve('babel-eslint'),
+    code: 'export * as names from "./default-export"',
+    parser: require.resolve('babel-eslint'),
   }),
   test({
     code: 'export defport, * as names from "./default-export"',
@@ -176,18 +176,18 @@ const valid = [
 
 const invalid = [
   test({ code: "import * as names from './named-exports'; " +
-               ' console.log(names.c);'
-       , errors: [error('c', 'names')] }),
+               ' console.log(names.c);',
+  errors: [error('c', 'names')] }),
 
   test({ code: "import * as names from './named-exports';" +
-               " console.log(names['a']);"
-       , errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
+               " console.log(names['a']);",
+  errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
 
   // assignment warning (from no-reassign)
-  test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';'
-       , errors: [{ message: 'Assignment to member of namespace \'foo\'.'}] }),
-  test({ code: 'import * as foo from \'./bar\'; foo.x = \'y\';'
-       , errors: ['Assignment to member of namespace \'foo\'.', "'x' not found in imported namespace 'foo'."] }),
+  test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';',
+    errors: [{ message: 'Assignment to member of namespace \'foo\'.' }] }),
+  test({ code: 'import * as foo from \'./bar\'; foo.x = \'y\';',
+    errors: ['Assignment to member of namespace \'foo\'.', "'x' not found in imported namespace 'foo'."] }),
 
   // invalid destructuring
   test({
@@ -276,8 +276,8 @@ const invalid = [
     test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }),
     test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }));
 
-    // deep namespaces should include explicitly exported defaults
-    test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
+  // deep namespaces should include explicitly exported defaults
+  test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
 
   invalid.push(
     test({

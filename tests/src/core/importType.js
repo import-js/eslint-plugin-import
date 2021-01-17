@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as path from 'path';
 
-import importType, {isExternalModule, isScopedModule} from 'core/importType';
+import importType, { isExternalModule, isScopedModule } from 'core/importType';
 
 import { testContext, testFilePath } from '../utils';
 

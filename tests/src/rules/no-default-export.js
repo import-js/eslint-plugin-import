@@ -2,8 +2,8 @@ import { test } from '../utils';
 
 import { RuleTester } from 'eslint';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/no-default-export');
+const ruleTester = new RuleTester();
+const rule = require('rules/no-default-export');
 
 ruleTester.run('no-default-export', rule, {
   valid: [

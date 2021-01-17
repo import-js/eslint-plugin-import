@@ -28,12 +28,12 @@ function runResolverTests(resolver) {
       test({ code: 'import "./malformed"', options: [{ noUselessIndex: true }] }), // ./malformed directory does not exist
       test({ code: 'import "./importType"', options: [{ noUselessIndex: true }] }), // ./importType.js does not exist
 
-      test({ code: 'import(".")'
-           , parser: require.resolve('babel-eslint') }),
-      test({ code: 'import("..")'
-           , parser: require.resolve('babel-eslint') }),
-      test({ code: 'import("fs").then(function(fs){})'
-           , parser: require.resolve('babel-eslint') }),
+      test({ code: 'import(".")',
+        parser: require.resolve('babel-eslint') }),
+      test({ code: 'import("..")',
+        parser: require.resolve('babel-eslint') }),
+      test({ code: 'import("fs").then(function(fs){})',
+        parser: require.resolve('babel-eslint') }),
     ],
 
     invalid: [

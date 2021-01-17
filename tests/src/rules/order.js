@@ -5,8 +5,8 @@ import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
 
-const ruleTester = new RuleTester()
-    , rule = require('rules/order');
+const ruleTester = new RuleTester();
+const rule = require('rules/order');
 
 function withoutAutofixOutput(test) {
   return Object.assign({}, test, { output: test.code });
@@ -25,7 +25,7 @@ ruleTester.run('order', rule, {
         var relParent4 = require('..');
         var sibling = require('./foo');
         var index = require('./');`,
-      }),
+    }),
     // Default order using import
     test({
       code: `
@@ -36,7 +36,7 @@ ruleTester.run('order', rule, {
         import relParent3 from '../';
         import sibling, {foo3} from './foo';
         import index from './';`,
-      }),
+    }),
     // Multiple module of the same rank next to each other
     test({
       code: `
@@ -45,7 +45,7 @@ ruleTester.run('order', rule, {
         var path = require('path');
         var _ = require('lodash');
         var async = require('async');`,
-      }),
+    }),
     // Overriding order to be the reverse of the default order
     test({
       code: `
@@ -57,7 +57,7 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var fs = require('fs');
       `,
-      options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
+      options: [{ groups: ['index', 'sibling', 'parent', 'external', 'builtin'] }],
     }),
     // Ignore dynamic requires
     test({
@@ -116,21 +116,21 @@ ruleTester.run('order', rule, {
         var unknown7 = require('/unknown7');
         var index = require('./');
         var unknown8 = require('/unknown8');
-    `}),
+    ` }),
     // Ignoring unassigned values by default (require)
     test({
       code: `
         require('./foo');
         require('fs');
         var path = require('path');
-    `}),
+    ` }),
     // Ignoring unassigned values by default (import)
     test({
       code: `
         import './foo';
         import 'fs';
         import path from 'path';
-    `}),
+    ` }),
     // No imports
     test({
       code: `
@@ -138,7 +138,7 @@ ruleTester.run('order', rule, {
           return a + b;
         }
         var foo;
-    `}),
+    ` }),
     // Grouping import types
     test({
       code: `
@@ -151,10 +151,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var relParent1 = require('../foo');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         ['builtin', 'index'],
         ['sibling', 'parent', 'external'],
-      ]}],
+      ] }],
     }),
     // Omitted types should implicitly be considered as the last type
     test({
@@ -162,11 +162,11 @@ ruleTester.run('order', rule, {
         var index = require('./');
         var path = require('path');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', 'external'],
         // missing 'builtin'
-      ]}],
+      ] }],
     }),
     // Mixing require and import should have import up top
     test({
@@ -661,7 +661,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'ignore'},
+        alphabetize: { order: 'ignore' },
       }],
     }),
     // Option alphabetize: {order: 'asc'}
@@ -675,7 +675,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'asc'},
+        alphabetize: { order: 'asc' },
       }],
     }),
     // Option alphabetize: {order: 'desc'}
@@ -689,7 +689,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'desc'},
+        alphabetize: { order: 'desc' },
       }],
     }),
     // Option alphabetize with newlines-between: {order: 'asc', newlines-between: 'always'}
@@ -703,7 +703,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'asc'},
+        alphabetize: { order: 'asc' },
         'newlines-between': 'always',
       }],
     }),
@@ -871,12 +871,10 @@ ruleTester.run('order', rule, {
     test({
       code:
         `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n` +
-        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`
-      ,
+        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`,      
       output:
         `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n` +
-        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`
-      ,
+        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`,      
       errors: [{
         message: '`fs` import should occur before import of `async`',
       }],
@@ -1020,7 +1018,7 @@ ruleTester.run('order', rule, {
           var async = require('async');
           var fs = require('fs');
         `,
-          output: `
+        output: `
           var async = require('async');
           var sibling = require('./sibling');
           var fs = require('fs');
@@ -1064,7 +1062,7 @@ ruleTester.run('order', rule, {
         var index = require('./');
         var fs = require('fs');
       `,
-      options: [{groups: ['index', 'sibling', 'parent', 'external', 'builtin']}],
+      options: [{ groups: ['index', 'sibling', 'parent', 'external', 'builtin'] }],
       errors: [{
         message: '`./` import should occur before import of `fs`',
       }],
@@ -1127,10 +1125,10 @@ ruleTester.run('order', rule, {
         var path = require('path');
         var sibling = require('./foo');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         ['builtin', 'index'],
         ['sibling', 'parent', 'external'],
-      ]}],
+      ] }],
       errors: [{
         message: '`path` import should occur before import of `./foo`',
       }],
@@ -1145,11 +1143,11 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var path = require('path');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', 'external', 'internal'],
         // missing 'builtin'
-      ]}],
+      ] }],
       errors: [{
         message: '`async` import should occur before import of `path`',
       }],
@@ -1161,10 +1159,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var index = require('./');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', 'UNKNOWN', 'internal'],
-      ]}],
+      ] }],
       errors: [{
         message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
       }],
@@ -1175,10 +1173,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var index = require('./');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', ['builtin'], 'internal'],
-      ]}],
+      ] }],
       errors: [{
         message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
       }],
@@ -1189,10 +1187,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var index = require('./');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', 2, 'internal'],
-      ]}],
+      ] }],
       errors: [{
         message: 'Incorrect configuration of the rule: Unknown type `2`',
       }],
@@ -1203,10 +1201,10 @@ ruleTester.run('order', rule, {
         var async = require('async');
         var index = require('./');
       `,
-      options: [{groups: [
+      options: [{ groups: [
         'index',
         ['sibling', 'parent', 'parent', 'internal'],
-      ]}],
+      ] }],
       errors: [{
         message: 'Incorrect configuration of the rule: `parent` is duplicated',
       }],
@@ -1297,7 +1295,7 @@ ruleTester.run('order', rule, {
         `,
         options: [{
           groups: ['external', 'index'],
-          alphabetize: {order: 'asc'},
+          alphabetize: { order: 'asc' },
         }],
         parser,
         errors: [{
@@ -2066,7 +2064,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'asc'},
+        alphabetize: { order: 'asc' },
       }],
       errors: [{
         message: '`Bar` import should occur before import of `bar`',
@@ -2090,7 +2088,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'desc'},
+        alphabetize: { order: 'desc' },
       }],
       errors: [{
         message: '`bar` import should occur before import of `Bar`',
@@ -2112,7 +2110,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'asc', caseInsensitive: true},
+        alphabetize: { order: 'asc', caseInsensitive: true },
       }],
       errors: [{
         message: '`Bar` import should occur before import of `foo`',
@@ -2134,7 +2132,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'desc', caseInsensitive: true},
+        alphabetize: { order: 'desc', caseInsensitive: true },
       }],
       errors: [{
         message: '`foo` import should occur before import of `Bar`',
@@ -2152,7 +2150,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         groups: ['external', 'index'],
-        alphabetize: {order: 'asc'},
+        alphabetize: { order: 'asc' },
       }],
       errors: [{
         message: '`..` import should occur before import of `../a`',

@@ -4,7 +4,7 @@ import docsUrl from '../docsUrl';
 const DEFAULT_MAX = 10;
 
 const countDependencies = (dependencies, lastNode, context) => {
-  const {max} = context.options[0] || { max: DEFAULT_MAX };
+  const { max } = context.options[0] || { max: DEFAULT_MAX };
 
   if (dependencies.size > max) {
     context.report(

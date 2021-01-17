@@ -1,8 +1,8 @@
 'use strict';
 
-const crypto = require('crypto')
-    , moduleRequire = require('eslint-module-utils/module-require').default
-    , hashObject = require('eslint-module-utils/hash').hashObject;
+const crypto = require('crypto');
+const moduleRequire = require('eslint-module-utils/module-require').default;
+const hashObject = require('eslint-module-utils/hash').hashObject;
 
 const cache = new Map();
 

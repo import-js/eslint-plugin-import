@@ -14,25 +14,25 @@ const log = debug('eslint-plugin-import:rules:newline-after-import');
 //------------------------------------------------------------------------------
 
 function containsNodeOrEqual(outerNode, innerNode) {
-    return outerNode.range[0] <= innerNode.range[0] && outerNode.range[1] >= innerNode.range[1];
+  return outerNode.range[0] <= innerNode.range[0] && outerNode.range[1] >= innerNode.range[1];
 }
 
 function getScopeBody(scope) {
-    if (scope.block.type === 'SwitchStatement') {
-      log('SwitchStatement scopes not supported');
-      return null;
-    }
+  if (scope.block.type === 'SwitchStatement') {
+    log('SwitchStatement scopes not supported');
+    return null;
+  }
 
-    const { body } = scope.block;
-    if (body && body.type === 'BlockStatement') {
-        return body.body;
-    }
+  const { body } = scope.block;
+  if (body && body.type === 'BlockStatement') {
+    return body.body;
+  }
 
-    return body;
+  return body;
 }
 
 function findNodeIndexInScopeBody(body, nodeToFind) {
-    return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind));
+  return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind));
 }
 
 function getLineDifference(node, nextNode) {
@@ -116,18 +116,18 @@ after ${type} statement not followed by another ${type}.`,
     }
 
     function checkImport(node) {
-        const { parent } = node;
-        const nodePosition = parent.body.indexOf(node);
-        const nextNode = parent.body[nodePosition + 1];
+      const { parent } = node;
+      const nodePosition = parent.body.indexOf(node);
+      const nextNode = parent.body[nodePosition + 1];
         
-        // skip "export import"s
-        if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
-          return;
-        }
+      // skip "export import"s
+      if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
+        return;
+      }
 
-        if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
-          checkForNewLine(node, nextNode, 'import');
-        }
+      if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
+        checkForNewLine(node, nextNode, 'import');
+      }
     }
 
     return {

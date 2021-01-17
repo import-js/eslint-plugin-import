@@ -44,17 +44,16 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       test({ code: `export { foo } from "${pkg}"` }),
       test({ code: `export * from "${pkg}"` }),
     ]),
-    test({ code: 'import "eslint"'}),
-    test({ code: 'import "eslint/lib/api"'}),
-    test({ code: 'import "fs"'}),
-    test({ code: 'import "./foo"'}),
-    test({ code: 'import "@org/package"'}),
+    test({ code: 'import "eslint"' }),
+    test({ code: 'import "eslint/lib/api"' }),
+    test({ code: 'import "fs"' }),
+    test({ code: 'import "./foo"' }),
+    test({ code: 'import "@org/package"' }),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
-    test({ code: 'import "eslint"' }),
     test({
       code: 'import "eslint"',
-      options: [{peerDependencies: true}],
+      options: [{ peerDependencies: true }],
     }),
 
     // 'project' type
@@ -64,65 +63,65 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.spec.js']}],
+      options: [{ devDependencies: ['*.spec.js'] }],
       filename: 'foo.spec.js',
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.spec.js']}],
+      options: [{ devDependencies: ['*.spec.js'] }],
       filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js', '*.spec.js']}],
+      options: [{ devDependencies: ['*.test.js', '*.spec.js'] }],
       filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({ code: 'require(6)' }),
     test({
       code: 'import "doctrine"',
-      options: [{packageDir: path.join(__dirname, '../../../')}],
+      options: [{ packageDir: path.join(__dirname, '../../../') }],
     }),
     test({
       code: 'import type MyType from "myflowtyped";',
-      options: [{packageDir: packageDirWithFlowTyped}],
+      options: [{ packageDir: packageDirWithFlowTyped }],
       parser: require.resolve('babel-eslint'),
     }),
     test({
       code: 'import react from "react";',
-      options: [{packageDir: packageDirMonoRepoWithNested}],
+      options: [{ packageDir: packageDirMonoRepoWithNested }],
     }),
     test({
       code: 'import leftpad from "left-pad";',
-      options: [{packageDir: [packageDirMonoRepoWithNested, packageDirMonoRepoRoot]}],
+      options: [{ packageDir: [packageDirMonoRepoWithNested, packageDirMonoRepoRoot] }],
     }),
     test({
       code: 'import leftpad from "left-pad";',
-      options: [{packageDir: packageDirMonoRepoRoot}],
+      options: [{ packageDir: packageDirMonoRepoRoot }],
     }),
     test({
       code: 'import react from "react";',
-      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+      options: [{ packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested] }],
     }),
     test({
       code: 'import leftpad from "left-pad";',
-      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+      options: [{ packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested] }],
     }),
     test({
       code: 'import rightpad from "right-pad";',
-      options: [{packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested]}],
+      options: [{ packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested] }],
     }),
-    test({ code: 'import foo from "@generated/foo"'}),
+    test({ code: 'import foo from "@generated/foo"' }),
     test({
       code: 'import foo from "@generated/foo"',
-      options: [{packageDir: packageDirBundleDeps}],
-    }),
-    test({
-      code: 'import foo from "@generated/foo"',
-      options: [{packageDir: packageDirBundledDepsAsObject}],
+      options: [{ packageDir: packageDirBundleDeps }],
     }),
     test({
       code: 'import foo from "@generated/foo"',
-      options: [{packageDir: packageDirBundledDepsRaceCondition}],
+      options: [{ packageDir: packageDirBundledDepsAsObject }],
+    }),
+    test({
+      code: 'import foo from "@generated/foo"',
+      options: [{ packageDir: packageDirBundledDepsRaceCondition }],
     }),
     test({ code: 'export function getToken() {}' }),
     test({ code: 'export class Component extends React.Component {}' }),
@@ -133,7 +132,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "not-a-dependency"',
       filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoRoot }],
+      options: [{ packageDir: packageDirMonoRepoRoot }],
       errors: [{
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
@@ -141,14 +140,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "not-a-dependency"',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoRoot}],
+      options: [{ packageDir: packageDirMonoRepoRoot }],
       errors: [{
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'import "not-a-dependency"',
-      options: [{packageDir: packageDirMonoRepoRoot}],
+      options: [{ packageDir: packageDirMonoRepoRoot }],
       errors: [{
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
@@ -173,14 +172,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import "eslint"',
-      options: [{devDependencies: false, peerDependencies: false}],
+      options: [{ devDependencies: false, peerDependencies: false }],
       errors: [{
         message: '\'eslint\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
     test({
       code: 'import "lodash.isarray"',
-      options: [{optionalDependencies: false}],
+      options: [{ optionalDependencies: false }],
       errors: [{
         message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
@@ -193,14 +192,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'var glob = require("glob")',
-      options: [{devDependencies: false}],
+      options: [{ devDependencies: false }],
       errors: [{
         message: '\'glob\' should be listed in the project\'s dependencies, not devDependencies.',
       }],
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js']}],
+      options: [{ devDependencies: ['*.test.js'] }],
       filename: 'foo.tes.js',
       errors: [{
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
@@ -208,7 +207,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js']}],
+      options: [{ devDependencies: ['*.test.js'] }],
       filename: path.join(process.cwd(), 'foo.tes.js'),
       errors: [{
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
@@ -216,7 +215,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js', '*.spec.js']}],
+      options: [{ devDependencies: ['*.test.js', '*.spec.js'] }],
       filename: 'foo.tes.js',
       errors: [{
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
@@ -224,7 +223,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import chai from "chai"',
-      options: [{devDependencies: ['*.test.js', '*.spec.js']}],
+      options: [{ devDependencies: ['*.test.js', '*.spec.js'] }],
       filename: path.join(process.cwd(), 'foo.tes.js'),
       errors: [{
         message: '\'chai\' should be listed in the project\'s dependencies, not devDependencies.',
@@ -232,28 +231,28 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'var eslint = require("lodash.isarray")',
-      options: [{optionalDependencies: false}],
+      options: [{ optionalDependencies: false }],
       errors: [{
         message: '\'lodash.isarray\' should be listed in the project\'s dependencies, not optionalDependencies.',
       }],
     }),
     test({
       code: 'import "not-a-dependency"',
-      options: [{packageDir: path.join(__dirname, '../../../')}],
+      options: [{ packageDir: path.join(__dirname, '../../../') }],
       errors: [{
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],
     }),
     test({
       code: 'import "bar"',
-      options: [{packageDir: path.join(__dirname, './doesn-exist/')}],
+      options: [{ packageDir: path.join(__dirname, './doesn-exist/') }],
       errors: [{
         message: 'The package.json file could not be found.',
       }],
     }),
     test({
       code: 'import foo from "foo"',
-      options: [{packageDir: packageDirWithSyntaxError}],
+      options: [{ packageDir: packageDirWithSyntaxError }],
       errors: [{
         message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
       }],
@@ -261,7 +260,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import leftpad from "left-pad";',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoWithNested}],
+      options: [{ packageDir: packageDirMonoRepoWithNested }],
       errors: [{
         message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
       }],
@@ -276,7 +275,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import react from "react";',
       filename: path.join(packageDirMonoRepoWithNested, 'foo.js'),
-      options: [{packageDir: packageDirMonoRepoRoot}],
+      options: [{ packageDir: packageDirMonoRepoRoot }],
       errors: [{
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
@@ -284,7 +283,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "react";',
       filename: path.join(packageDirWithEmpty, 'index.js'),
-      options: [{packageDir: packageDirWithEmpty}],
+      options: [{ packageDir: packageDirWithEmpty }],
       errors: [{
         message: "'react' should be listed in the project's dependencies. Run 'npm i -S react' to add it",
       }],
@@ -295,12 +294,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'import foo from "@generated/foo"',
-      options: [{bundledDependencies: false}],
+      options: [{ bundledDependencies: false }],
       errors: ["'@generated/foo' should be listed in the project's dependencies. Run 'npm i -S @generated/foo' to add it"],
     }),
     test({
       code: 'import bar from "@generated/bar"',
-      options: [{packageDir: packageDirBundledDepsRaceCondition}],
+      options: [{ packageDir: packageDirBundledDepsRaceCondition }],
       errors: ["'@generated/bar' should be listed in the project's dependencies. Run 'npm i -S @generated/bar' to add it"],
     }),
     test({
@@ -333,13 +332,13 @@ describe('TypeScript', function () {
         valid: [
           test(Object.assign({
             code: 'import type { JSONSchema7Type } from "@types/json-schema";',
-            options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
           }, parserConfig)),
         ],
         invalid: [
           test(Object.assign({
             code: 'import { JSONSchema7Type } from "@types/json-schema";',
-            options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
               message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
             }],
@@ -352,14 +351,14 @@ describe('TypeScript', function () {
         invalid: [
           test(Object.assign({
             code: 'import { JSONSchema7Type } from "@types/json-schema";',
-            options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
               message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
             }],
           }, parserConfig)),
           test(Object.assign({
             code: 'import type { JSONSchema7Type } from "@types/json-schema";',
-            options: [{packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
               message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
             }],

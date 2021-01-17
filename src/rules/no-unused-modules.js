@@ -324,20 +324,20 @@ const newDefaultImportExists = specifiers =>
   specifiers.some(({ type }) => type === IMPORT_DEFAULT_SPECIFIER);
 
 const fileIsInPkg = file => {
-  const { path, pkg } = readPkgUp.sync({cwd: file, normalize: false});
+  const { path, pkg } = readPkgUp.sync({ cwd: file, normalize: false });
   const basePath = dirname(path);
 
   const checkPkgFieldString = pkgField => {
     if (join(basePath, pkgField) === file) {
-        return true;
-      }
+      return true;
+    }
   };
 
   const checkPkgFieldObject = pkgField => {
-      const pkgFieldFiles = values(pkgField).map(value => join(basePath, value));
-      if (includes(pkgFieldFiles, file)) {
-        return true;
-      }
+    const pkgFieldFiles = values(pkgField).map(value => join(basePath, value));
+    if (includes(pkgFieldFiles, file)) {
+      return true;
+    }
   };
 
   const checkPkgField = pkgField => {
@@ -652,8 +652,8 @@ module.exports = {
         value.forEach(val => {
           if (val !== IMPORT_NAMESPACE_SPECIFIER &&
               val !== IMPORT_DEFAULT_SPECIFIER) {
-               oldImports.set(val, key);
-             }
+            oldImports.set(val, key);
+          }
         });
       });
 
@@ -892,7 +892,7 @@ module.exports = {
       },
       'ExportNamedDeclaration': node => {
         node.specifiers.forEach(specifier => {
-            checkUsage(node, specifier.exported.name);
+          checkUsage(node, specifier.exported.name);
         });
         forEachDeclarationIdentifier(node.declaration, (name) => {
           checkUsage(node, name);
