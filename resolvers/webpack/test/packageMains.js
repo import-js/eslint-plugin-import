@@ -1,10 +1,10 @@
-var chai = require('chai')
+const chai = require('chai')
   , expect = chai.expect
   , path = require('path');
 
-var webpack = require('../');
+const webpack = require('../');
 
-var file = path.join(__dirname, 'package-mains', 'dummy.js');
+const file = path.join(__dirname, 'package-mains', 'dummy.js');
 
 
 describe("packageMains", function () {

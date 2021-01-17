@@ -1,11 +1,11 @@
-var chai =  require('chai')
+const chai =  require('chai')
   , expect = chai.expect
   , path = require('path');
 
-var resolve = require('../index').resolve;
+const resolve = require('../index').resolve;
 
 
-var file = path.join(__dirname, 'files', 'src', 'dummy.js');
+const file = path.join(__dirname, 'files', 'src', 'dummy.js');
 
 describe("fallback", function () {
   it("works", function () {

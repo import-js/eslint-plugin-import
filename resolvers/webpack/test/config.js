@@ -1,13 +1,13 @@
-var chai =  require('chai')
+const chai =  require('chai')
   , expect = chai.expect
   , path = require('path');
 
-var resolve = require('../index').resolve;
+const resolve = require('../index').resolve;
 
-var file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js');
-var extensionFile = path.join(__dirname, 'config-extensions', 'src', 'dummy.js');
+const file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js');
+const extensionFile = path.join(__dirname, 'config-extensions', 'src', 'dummy.js');
 
-var absoluteSettings = {
+const absoluteSettings = {
   config: path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js'),
 };
 
@@ -23,7 +23,7 @@ describe("config", function () {
   });
 
   it("finds compile-to-js configs", function () {
-    var settings = {
+    const settings = {
       config: path.join(__dirname, './files/webpack.config.babel.js'),
     };
 
@@ -39,7 +39,7 @@ describe("config", function () {
   });
 
   it("finds the first config with a resolve section", function () {
-    var settings = {
+    const settings = {
       config: path.join(__dirname, './files/webpack.config.multiple.js'),
     };
 
@@ -48,7 +48,7 @@ describe("config", function () {
   });
 
   it("finds the config at option config-index", function () {
-    var settings = {
+    const settings = {
       config: path.join(__dirname, './files/webpack.config.multiple.js'),
       'config-index': 2,
     };
@@ -58,14 +58,14 @@ describe("config", function () {
   });
 
   it("doesn't swallow config load errors (#435)", function () {
-    var settings = {
+    const settings = {
       config: path.join(__dirname, './files/webpack.config.garbage.js'),
     };
     expect(function () { resolve('foo', file, settings); }).to.throw(Error);
   });
 
   it("finds config object when config is an object", function () {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js')),
     };
     expect(resolve('foo', file, settings)).to.have.property('path')
@@ -73,7 +73,7 @@ describe("config", function () {
   });
 
   it("finds config object when config uses a path relative to working dir", function () {
-    var settings = {
+    const settings = {
       config: './test/files/some/absolute.path.webpack.config.js',
     };
     expect(resolve('foo', file, settings)).to.have.property('path')
@@ -81,7 +81,7 @@ describe("config", function () {
   });
 
   it("finds the first config with a resolve section when config is an array of config objects", function () {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.config.multiple.js')),
     };
 
@@ -90,7 +90,7 @@ describe("config", function () {
   });
 
   it("finds the config at option config-index when config is an array of config objects", function () {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.config.multiple.js')),
       'config-index': 2,
     };
@@ -100,7 +100,7 @@ describe("config", function () {
   });
 
   it('finds the config at option env when config is a function', function() {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       env: {
         dummy: true,
@@ -112,7 +112,7 @@ describe("config", function () {
   });
 
   it('finds the config at option env when config is an array of functions', function() {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.multiple.js')),
       env: {
         dummy: true,
@@ -124,7 +124,7 @@ describe("config", function () {
   });
 
   it('passes argv to config when it is a function', function() {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       argv: {
         mode: 'test',
@@ -136,7 +136,7 @@ describe("config", function () {
   });
 
   it('passes a default empty argv object to config when it is a function', function() {
-    var settings = {
+    const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       argv: undefined,
     };

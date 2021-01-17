@@ -93,7 +93,7 @@ function findRootNode(node) {
 
 function findEndOfLineWithComments(sourceCode, node) {
   const tokensToEndOfLine = takeTokensAfterWhile(sourceCode, node, commentOnSameLineAs(node));
-  let endOfTokens = tokensToEndOfLine.length > 0
+  const endOfTokens = tokensToEndOfLine.length > 0
     ? tokensToEndOfLine[tokensToEndOfLine.length - 1].range[1]
     : node.range[1];
   let result = endOfTokens;
@@ -118,7 +118,7 @@ function commentOnSameLineAs(node) {
 
 function findStartOfLineWithComments(sourceCode, node) {
   const tokensToEndOfLine = takeTokensBeforeWhile(sourceCode, node, commentOnSameLineAs(node));
-  let startOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[0].range[0] : node.range[0];
+  const startOfTokens = tokensToEndOfLine.length > 0 ? tokensToEndOfLine[0].range[0] : node.range[0];
   let result = startOfTokens;
   for (let i = startOfTokens - 1; i > 0; i--) {
     if (sourceCode.text[i] !== ' ' && sourceCode.text[i] !== '\t') {
@@ -168,7 +168,7 @@ function canReorderItems(firstNode, secondNode) {
     parent.body.indexOf(secondNode),
   ].sort();
   const nodesBetween = parent.body.slice(firstIndex, secondIndex + 1);
-  for (var nodeBetween of nodesBetween) {
+  for (const nodeBetween of nodesBetween) {
     if (!canCrossNodeWhileReorder(nodeBetween)) {
       return false;
     }

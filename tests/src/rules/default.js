@@ -4,7 +4,7 @@ import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
-var ruleTester = new RuleTester()
+const ruleTester = new RuleTester()
   , rule = require('rules/default');
 
 ruleTester.run('default', rule, {

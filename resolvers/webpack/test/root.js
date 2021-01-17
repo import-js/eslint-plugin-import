@@ -1,12 +1,12 @@
-var chai =  require('chai')
+const chai =  require('chai')
   , expect = chai.expect
   , path = require('path');
 
-var resolve = require('../index').resolve;
+const resolve = require('../index').resolve;
 
 
-var file = path.join(__dirname, 'files', 'src', 'dummy.js');
-var webpackDir = path.join(__dirname, "different-package-location");
+const file = path.join(__dirname, 'files', 'src', 'dummy.js');
+const webpackDir = path.join(__dirname, "different-package-location");
 
 describe("root", function () {
   it("works", function () {

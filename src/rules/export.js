@@ -112,7 +112,7 @@ module.exports = {
         }
 
         if (node.declaration.declarations != null) {
-          for (let declaration of node.declaration.declarations) {
+          for (const declaration of node.declaration.declarations) {
             recursivePatternCapture(declaration.id, v =>
               addNamed(v.name, v, parent, isTypeVariableDecl));
           }
@@ -150,13 +150,13 @@ module.exports = {
       },
 
       'Program:exit': function () {
-        for (let [, named] of namespace) {
-          for (let [name, nodes] of named) {
+        for (const [, named] of namespace) {
+          for (const [name, nodes] of named) {
             if (nodes.size <= 1) continue;
 
             if (isTypescriptFunctionOverloads(nodes)) continue;
 
-            for (let node of nodes) {
+            for (const node of nodes) {
               if (name === 'default') {
                 context.report(node, 'Multiple default exports.');
               } else {

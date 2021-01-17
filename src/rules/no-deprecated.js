@@ -114,8 +114,8 @@ module.exports = {
         if (declaredScope(context, dereference.object.name) !== 'module') return;
 
         // go deep
-        var namespace = namespaces.get(dereference.object.name);
-        var namepath = [dereference.object.name];
+        let namespace = namespaces.get(dereference.object.name);
+        const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
         while (namespace instanceof Exports &&
                dereference.type === 'MemberExpression') {

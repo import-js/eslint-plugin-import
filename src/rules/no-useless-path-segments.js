@@ -97,7 +97,7 @@ module.exports = {
 
         // Try to find ambiguous imports
         if (parentDirectory !== '.' && parentDirectory !== '..') {
-          for (let fileExtension of fileExtensions) {
+          for (const fileExtension of fileExtensions) {
             if (resolve(`${parentDirectory}${fileExtension}`, context)) {
               return reportWithProposedPath(`${parentDirectory}/`);
             }

@@ -2,7 +2,7 @@ import { test, SYNTAX_CASES, getTSParsers } from '../utils';
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
-var ruleTester = new RuleTester({ env: { es6: true }})
+const ruleTester = new RuleTester({ env: { es6: true }})
   , rule = require('rules/namespace');
 
 

@@ -1,7 +1,7 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var path = require('path');
-var node = require('../index.js');
+const path = require('path');
+const node = require('../index.js');
 
 describe("paths", function () {
   it("handles base path relative to CWD", function () {
@@ -14,7 +14,7 @@ describe("paths", function () {
 
 describe("core", function () {
   it("returns found, but null path, for core Node modules", function () {
-    var resolved = node.resolve('fs', "./test/file.js");
+    const resolved = node.resolve('fs', "./test/file.js");
     expect(resolved).has.property("found", true);
     expect(resolved).has.property("path", null);
   });

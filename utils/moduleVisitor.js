@@ -69,7 +69,7 @@ exports.default = function visitModules(visitor, options) {
     const modules = call.arguments[0];
     if (modules.type !== 'ArrayExpression') return;
 
-    for (let element of modules.elements) {
+    for (const element of modules.elements) {
       if (element.type !== 'Literal') continue;
       if (typeof element.value !== 'string') continue;
 
@@ -124,7 +124,7 @@ function makeOptionsSchema(additionalProperties) {
   };
 
   if (additionalProperties){
-    for (let key in additionalProperties) {
+    for (const key in additionalProperties) {
       base.properties[key] = additionalProperties[key];
     }
   }

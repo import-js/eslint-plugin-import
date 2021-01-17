@@ -83,9 +83,9 @@ module.exports = {
 
       // same as above, but does not add names to local map
       ExportNamespaceSpecifier(namespace) {
-        var declaration = importDeclaration(context);
+        const declaration = importDeclaration(context);
 
-        var imports = Exports.get(declaration.source.value, context);
+        const imports = Exports.get(declaration.source.value, context);
         if (imports == null) return null;
 
         if (imports.errors.length) {
@@ -116,8 +116,8 @@ module.exports = {
         }
 
         // go deep
-        var namespace = namespaces.get(dereference.object.name);
-        var namepath = [dereference.object.name];
+        let namespace = namespaces.get(dereference.object.name);
+        const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
         while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
 
@@ -204,7 +204,7 @@ module.exports = {
 
       JSXMemberExpression({object, property}) {
          if (!namespaces.has(object.name)) return;
-         var namespace = namespaces.get(object.name);
+         const namespace = namespaces.get(object.name);
          if (!namespace.has(property.name)) {
            context.report({
              node: property,

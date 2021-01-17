@@ -68,8 +68,8 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies) {
-        let innerMap = dep();
+      for (const dep of this.dependencies) {
+        const innerMap = dep();
 
         // todo: report as unresolved?
         if (!innerMap) continue;
@@ -110,8 +110,8 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies) {
-        let innerMap = dep();
+      for (const dep of this.dependencies) {
+        const innerMap = dep();
         if (innerMap == null) return { found: true, path: [this] };
         // todo: report as unresolved?
         if (!innerMap) continue;
@@ -119,7 +119,7 @@ export default class ExportMap {
         // safeguard against cycles
         if (innerMap.path === this.path) continue;
 
-        let innerValue = innerMap.hasDeep(name);
+        const innerValue = innerMap.hasDeep(name);
         if (innerValue.found) {
           innerValue.path.unshift(this);
           return innerValue;
@@ -148,15 +148,15 @@ export default class ExportMap {
 
     // default exports must be explicitly re-exported (#328)
     if (name !== 'default') {
-      for (let dep of this.dependencies) {
-        let innerMap = dep();
+      for (const dep of this.dependencies) {
+        const innerMap = dep();
         // todo: report as unresolved?
         if (!innerMap) continue;
 
         // safeguard against cycles
         if (innerMap.path === this.path) continue;
 
-        let innerValue = innerMap.get(name);
+        const innerValue = innerMap.get(name);
         if (innerValue !== undefined) return innerValue;
       }
     }
@@ -218,7 +218,7 @@ function captureDoc(source, docStyleParsers, ...nodes) {
 
       if (!leadingComments || leadingComments.length === 0) return false;
 
-      for (let name in docStyleParsers) {
+      for (const name in docStyleParsers) {
         const doc = docStyleParsers[name](leadingComments);
         if (doc) {
           metadata.doc = doc;
@@ -347,10 +347,11 @@ ExportMap.for = function (context) {
 
 
 ExportMap.parse = function (path, content, context) {
-  var m = new ExportMap(path);
+  const m = new ExportMap(path);
 
+  let ast;
   try {
-    var ast = parse(path, content, context);
+    ast = parse(path, content, context);
   } catch (err) {
     log('parse error:', path, err);
     m.errors.push(err);

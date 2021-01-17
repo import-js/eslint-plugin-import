@@ -29,13 +29,13 @@ module.exports = {
             , message = 'Import in body of module; reorder to top.'
             , sourceCode = context.getSourceCode()
             , originSourceCode = sourceCode.getText();
-        let nonImportCount = 0
-          , anyExpressions = false
-          , anyRelative = false
-          , lastLegalImp = null
-          , errorInfos = []
-          , shouldSort = true
-          , lastSortNodesIndex = 0;
+        let nonImportCount = 0;
+        let anyExpressions = false;
+        let anyRelative = false;
+        let lastLegalImp = null;
+        const errorInfos = [];
+        let shouldSort = true;
+        let lastSortNodesIndex = 0;
         body.forEach(function (node, index){
           if (!anyExpressions && isPossibleDirective(node)) {
             return;
@@ -55,11 +55,11 @@ module.exports = {
               }
             }
             if (nonImportCount > 0) {
-              for (let variable of context.getDeclaredVariables(node)) {
+              for (const variable of context.getDeclaredVariables(node)) {
                 if (!shouldSort) break;
                 const references = variable.references;
                 if (references.length) {
-                  for (let reference of references) {
+                  for (const reference of references) {
                     if (reference.identifier.range[0] < node.range[1]) {
                       shouldSort = false;
                       break;

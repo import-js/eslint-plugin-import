@@ -61,7 +61,7 @@ function create(context) {
 
   return {
     ExportNamedDeclaration(node) {
-      let target = node.exportKind === 'type' ? nodes.types : nodes.modules;
+      const target = node.exportKind === 'type' ? nodes.types : nodes.modules;
       if (!node.source) {
         target.set.add(node);
       } else if (Array.isArray(target.sources[node.source.value])) {

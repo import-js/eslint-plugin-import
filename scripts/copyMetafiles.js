@@ -2,20 +2,20 @@ import path from 'path';
 import copyFileSync from 'fs-copy-file-sync';
 import resolverDirectories from './resolverDirectories';
 
-let files = [
+const files = [
     'LICENSE',
     '.npmrc',
 ];
 
-let directories = [
+const directories = [
     'memo-parser',
     ...resolverDirectories,
     'utils',
 ];
 
-for (let directory of directories) {
-    for (let file of files) {
-        let destination = path.join(directory, file);
+for (const directory of directories) {
+    for (const file of files) {
+        const destination = path.join(directory, file);
         copyFileSync(file, destination);
         console.log(`${file} -> ${destination}`);
     }

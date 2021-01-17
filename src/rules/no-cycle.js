@@ -70,7 +70,7 @@ module.exports = {
         if (traversed.has(m.path)) return;
         traversed.add(m.path);
 
-        for (let [path, { getter, source }] of m.imports) {
+        for (const [path, { getter, source }] of m.imports) {
           if (path === myPath) return true;
           if (traversed.has(path)) continue;
           if (ignoreModule(source.value)) continue;

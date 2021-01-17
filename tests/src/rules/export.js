@@ -4,7 +4,7 @@ import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-var ruleTester = new RuleTester()
+const ruleTester = new RuleTester()
   , rule = require('rules/export');
 
 ruleTester.run('export', rule, {

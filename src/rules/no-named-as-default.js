@@ -16,9 +16,9 @@ module.exports = {
       // #566: default is a valid specifier
       if (defaultSpecifier[nameKey].name === 'default') return;
 
-      var declaration = importDeclaration(context);
+      const declaration = importDeclaration(context);
 
-      var imports = Exports.get(declaration.source.value, context);
+      const imports = Exports.get(declaration.source.value, context);
       if (imports == null) return;
 
       if (imports.errors.length) {

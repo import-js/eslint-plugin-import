@@ -19,7 +19,7 @@ module.exports = {
       );
 
       if (!defaultSpecifier) return;
-      var imports = Exports.get(node.source.value, context);
+      const imports = Exports.get(node.source.value, context);
       if (imports == null) return;
 
       if (imports.errors.length) {

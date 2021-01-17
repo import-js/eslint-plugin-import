@@ -114,7 +114,7 @@ module.exports = {
         if (call.callee.name !== 'require') return;
 
         if (call.arguments.length !== 1) return;
-        var module = call.arguments[0];
+        const module = call.arguments[0];
 
         if (module.type !== 'Literal') return;
         if (typeof module.value !== 'string') return;

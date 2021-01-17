@@ -1,9 +1,9 @@
-var path = require('path');
+const path = require('path');
 
-var resolve = require('../index').resolve;
+const resolve = require('../index').resolve;
 
-var file = path.join(__dirname, 'files', 'src', 'dummy.js');
+const file = path.join(__dirname, 'files', 'src', 'dummy.js');
 
-var webpackDir = path.join(__dirname, "different-package-location");
+const webpackDir = path.join(__dirname, "different-package-location");
 
 console.log(resolve('main-module', file, { config: "webpack.config.js", cwd: webpackDir}));

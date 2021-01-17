@@ -69,7 +69,7 @@ function getParserPath(path, context) {
   const parsers = context.settings['import/parsers'];
   if (parsers != null) {
     const extension = extname(path);
-    for (let parserPath in parsers) {
+    for (const parserPath in parsers) {
       if (parsers[parserPath].indexOf(extension) > -1) {
         // use this alternate parser
         log('using alt parser:', parserPath);

@@ -1,13 +1,13 @@
-var resolve = require('resolve')
+const resolve = require('resolve')
   , path = require('path');
 
-var log = require('debug')('eslint-plugin-import:resolver:node');
+const log = require('debug')('eslint-plugin-import:resolver:node');
 
 exports.interfaceVersion = 2;
 
 exports.resolve = function (source, file, config) {
   log('Resolving:', source, 'from:', file);
-  var resolvedPath;
+  let resolvedPath;
 
   if (resolve.isCore(source)) {
     log('resolved to core');

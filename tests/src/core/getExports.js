@@ -16,7 +16,7 @@ describe('ExportMap', function () {
   };
 
   it('handles ExportAllDeclaration', function () {
-    var imports;
+    let imports;
     expect(function () {
       imports = ExportMap.get('./export-all', fakeContext);
     }).not.to.throw(Error);
@@ -59,7 +59,7 @@ describe('ExportMap', function () {
   });
 
   it('does not throw for a missing file', function () {
-    var imports;
+    let imports;
     expect(function () {
       imports = ExportMap.get('./does-not-exist', fakeContext);
     }).not.to.throw(Error);
@@ -69,7 +69,7 @@ describe('ExportMap', function () {
   });
 
   it('exports explicit names for a missing file in exports', function () {
-    var imports;
+    let imports;
     expect(function () {
       imports = ExportMap.get('./exports-missing', fakeContext);
     }).not.to.throw(Error);
@@ -82,7 +82,7 @@ describe('ExportMap', function () {
   it('finds exports for an ES7 module with babel-eslint', function () {
     const path = getFilename('jsx/FooES7.js')
         , contents = fs.readFileSync(path, { encoding: 'utf8' });
-    var imports = ExportMap.parse(
+    const imports = ExportMap.parse(
       path,
       contents,
       { parserPath: 'babel-eslint', settings: {} },
@@ -403,7 +403,7 @@ describe('ExportMap', function () {
       ['common.js', false],
     ];
 
-    for (let [testFile, expectedRegexResult] of testFiles) {
+    for (const [testFile, expectedRegexResult] of testFiles) {
       it(`works for ${testFile} (${expectedRegexResult})`, function () {
         const content = fs.readFileSync('./tests/files/' + testFile, 'utf8');
         expect(unambiguous.test(content)).to.equal(expectedRegexResult);

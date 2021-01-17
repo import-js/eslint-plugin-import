@@ -73,7 +73,7 @@ module.exports = {
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode)) {
-        let classNode = nextNode.declaration;
+        const classNode = nextNode.declaration;
 
         if (isClassWithDecorator(classNode)) {
           nextNode = classNode.decorators[0];

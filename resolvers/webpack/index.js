@@ -1,4 +1,4 @@
-var findRoot = require('find-root')
+const findRoot = require('find-root')
   , path = require('path')
   , get = require('lodash/get')
   , isEqual = require('lodash/isEqual')
@@ -10,7 +10,7 @@ var findRoot = require('find-root')
   , semver = require('semver')
   , has = require('has');
 
-var log = require('debug')('eslint-plugin-import:resolver:webpack');
+const log = require('debug')('eslint-plugin-import:resolver:webpack');
 
 exports.interfaceVersion = 2;
 
@@ -35,31 +35,31 @@ exports.interfaceVersion = 2;
 exports.resolve = function (source, file, settings) {
 
   // strip loaders
-  var finalBang = source.lastIndexOf('!');
+  const finalBang = source.lastIndexOf('!');
   if (finalBang >= 0) {
     source = source.slice(finalBang + 1);
   }
 
   // strip resource query
-  var finalQuestionMark = source.lastIndexOf('?');
+  const finalQuestionMark = source.lastIndexOf('?');
   if (finalQuestionMark >= 0) {
     source = source.slice(0, finalQuestionMark);
   }
 
-  var webpackConfig;
+  let webpackConfig;
 
-  var _configPath = get(settings, 'config')
+  const _configPath = get(settings, 'config');
     /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
      */
-    , cwd = get(settings, 'cwd')
-    , configIndex = get(settings, 'config-index')
-    , env = get(settings, 'env')
-    , argv = get(settings, 'argv', {})
-    , packageDir;
+  const cwd = get(settings, 'cwd');
+  const configIndex = get(settings, 'config-index');
+  const env = get(settings, 'env');
+  const argv = get(settings, 'argv', {});
+  let packageDir;
 
-  var configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
+  let configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
     ? path.resolve(_configPath)
     : _configPath;
 
@@ -137,7 +137,7 @@ exports.resolve = function (source, file, settings) {
   }
 
   // otherwise, resolve "normally"
-  var resolveSync = getResolveSync(configPath, webpackConfig, cwd);
+  const resolveSync = getResolveSync(configPath, webpackConfig, cwd);
 
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) };
@@ -151,11 +151,11 @@ exports.resolve = function (source, file, settings) {
   }
 };
 
-var MAX_CACHE = 10;
-var _cache = [];
+const MAX_CACHE = 10;
+const _cache = [];
 function getResolveSync(configPath, webpackConfig, cwd) {
-  var cacheKey = { configPath: configPath, webpackConfig: webpackConfig };
-  var cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey); });
+  const cacheKey = { configPath: configPath, webpackConfig: webpackConfig };
+  let cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey); });
   if (!cached) {
     cached = {
       key: cacheKey,
@@ -170,7 +170,7 @@ function getResolveSync(configPath, webpackConfig, cwd) {
 }
 
 function createResolveSync(configPath, webpackConfig, cwd) {
-  var webpackRequire
+  let webpackRequire
     , basedir = null;
 
   if (typeof configPath === 'string') {
@@ -181,8 +181,8 @@ function createResolveSync(configPath, webpackConfig, cwd) {
 
   try {
     // Attempt to resolve webpack from the given `basedir`
-    var webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false });
-    var webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false };
+    const webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false });
+    const webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false };
 
     webpackRequire = function (id) {
       return require(resolve.sync(id, webpackResolveOpts));
@@ -194,11 +194,11 @@ function createResolveSync(configPath, webpackConfig, cwd) {
     webpackRequire = require;
   }
 
-  var enhancedResolvePackage = webpackRequire('enhanced-resolve/package.json');
-  var enhancedResolveVersion = enhancedResolvePackage.version;
+  const enhancedResolvePackage = webpackRequire('enhanced-resolve/package.json');
+  const enhancedResolveVersion = enhancedResolvePackage.version;
   log('enhanced-resolve version:', enhancedResolveVersion);
 
-  var resolveConfig = webpackConfig.resolve || {};
+  const resolveConfig = webpackConfig.resolve || {};
 
   if (semver.major(enhancedResolveVersion) >= 2) {
     return createWebpack2ResolveSync(webpackRequire, resolveConfig);
@@ -207,18 +207,12 @@ function createResolveSync(configPath, webpackConfig, cwd) {
   return createWebpack1ResolveSync(webpackRequire, resolveConfig, webpackConfig.plugins);
 }
 
-function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
-  var EnhancedResolve = webpackRequire('enhanced-resolve');
-
-  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig));
-}
-
 /**
  * webpack 2 defaults:
  * https://github.com/webpack/webpack/blob/v2.1.0-beta.20/lib/WebpackOptionsDefaulter.js#L72-L87
  * @type {Object}
  */
-var webpack2DefaultResolveConfig = {
+const webpack2DefaultResolveConfig = {
   unsafeCache: true, // Probably a no-op, since how can we cache anything at all here?
   modules: ['node_modules'],
   extensions: ['.js', '.json'],
@@ -226,28 +220,42 @@ var webpack2DefaultResolveConfig = {
   mainFields: ['browser', 'module', 'main'],
 };
 
+function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
+  const EnhancedResolve = webpackRequire('enhanced-resolve');
+
+  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig));
+}
+
+/**
+ * webpack 1 defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
+ * @type {Array}
+ */
+const webpack1DefaultMains = [
+  'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
+];
+
 // adapted from tests &
 // https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L322
 function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
-  var Resolver = webpackRequire('enhanced-resolve/lib/Resolver');
-  var SyncNodeJsInputFileSystem = webpackRequire('enhanced-resolve/lib/SyncNodeJsInputFileSystem');
+  const Resolver = webpackRequire('enhanced-resolve/lib/Resolver');
+  const SyncNodeJsInputFileSystem = webpackRequire('enhanced-resolve/lib/SyncNodeJsInputFileSystem');
 
-  var ModuleAliasPlugin = webpackRequire('enhanced-resolve/lib/ModuleAliasPlugin');
-  var ModulesInDirectoriesPlugin =
+  const ModuleAliasPlugin = webpackRequire('enhanced-resolve/lib/ModuleAliasPlugin');
+  const ModulesInDirectoriesPlugin =
     webpackRequire('enhanced-resolve/lib/ModulesInDirectoriesPlugin');
-  var ModulesInRootPlugin = webpackRequire('enhanced-resolve/lib/ModulesInRootPlugin');
-  var ModuleAsFilePlugin = webpackRequire('enhanced-resolve/lib/ModuleAsFilePlugin');
-  var ModuleAsDirectoryPlugin = webpackRequire('enhanced-resolve/lib/ModuleAsDirectoryPlugin');
-  var DirectoryDescriptionFilePlugin =
+  const ModulesInRootPlugin = webpackRequire('enhanced-resolve/lib/ModulesInRootPlugin');
+  const ModuleAsFilePlugin = webpackRequire('enhanced-resolve/lib/ModuleAsFilePlugin');
+  const ModuleAsDirectoryPlugin = webpackRequire('enhanced-resolve/lib/ModuleAsDirectoryPlugin');
+  const DirectoryDescriptionFilePlugin =
     webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFilePlugin');
-  var DirectoryDefaultFilePlugin =
+  const DirectoryDefaultFilePlugin =
     webpackRequire('enhanced-resolve/lib/DirectoryDefaultFilePlugin');
-  var FileAppendPlugin = webpackRequire('enhanced-resolve/lib/FileAppendPlugin');
-  var ResultSymlinkPlugin = webpackRequire('enhanced-resolve/lib/ResultSymlinkPlugin');
-  var DirectoryDescriptionFileFieldAliasPlugin =
+  const FileAppendPlugin = webpackRequire('enhanced-resolve/lib/FileAppendPlugin');
+  const ResultSymlinkPlugin = webpackRequire('enhanced-resolve/lib/ResultSymlinkPlugin');
+  const DirectoryDescriptionFileFieldAliasPlugin =
     webpackRequire('enhanced-resolve/lib/DirectoryDescriptionFileFieldAliasPlugin');
 
-  var resolver = new Resolver(new SyncNodeJsInputFileSystem());
+  const resolver = new Resolver(new SyncNodeJsInputFileSystem());
 
   resolver.apply(
     resolveConfig.packageAlias
@@ -272,7 +280,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
   );
 
 
-  var resolvePlugins = [];
+  const resolvePlugins = [];
 
   // support webpack.ResolverPlugin
   if (plugins) {
@@ -326,7 +334,7 @@ function findExternal(source, externals, context) {
   }
 
   if (typeof externals === 'function') {
-    var functionExternalFound = false;
+    let functionExternalFound = false;
     externals.call(null, context, source, function(err, value) {
       if (err) {
         functionExternalFound = false;
@@ -338,26 +346,18 @@ function findExternal(source, externals, context) {
   }
 
   // else, vanilla object
-  for (var key in externals) {
+  for (const key in externals) {
     if (!has(externals, key)) continue;
     if (source === key) return true;
   }
   return false;
 }
 
-/**
- * webpack 1 defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
- * @type {Array}
- */
-var webpack1DefaultMains = [
-  'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
-];
-
 function findConfigPath(configPath, packageDir) {
-  var extensions = Object.keys(interpret.extensions).sort(function(a, b) {
+  const extensions = Object.keys(interpret.extensions).sort(function(a, b) {
     return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length;
-  })
-    , extension;
+  });
+  let extension;
 
 
   if (configPath) {
@@ -383,7 +383,7 @@ function findConfigPath(configPath, packageDir) {
         return;
       }
 
-      var maybePath = path.resolve(
+      const maybePath = path.resolve(
         path.join(packageDir, 'webpack.config' + maybeExtension)
       );
       if (fs.existsSync(maybePath)) {
@@ -404,7 +404,7 @@ function registerCompiler(moduleDescriptor) {
     } else if(!Array.isArray(moduleDescriptor)) {
       moduleDescriptor.register(require(moduleDescriptor.module));
     } else {
-      for(var i = 0; i < moduleDescriptor.length; i++) {
+      for(let i = 0; i < moduleDescriptor.length; i++) {
         try {
           registerCompiler(moduleDescriptor[i]);
           break;

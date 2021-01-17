@@ -132,8 +132,8 @@ function fullResolve(modulePath, sourceFile, settings) {
 
   const resolvers = resolverReducer(configResolvers, new Map());
 
-  for (let pair of resolvers) {
-    let name = pair[0]
+  for (const pair of resolvers) {
+    const name = pair[0]
       , config = pair[1];
     const resolver = requireResolver(name, sourceFile)
         , resolved = withResolver(resolver, config);
@@ -163,7 +163,7 @@ function resolverReducer(resolvers, map) {
   }
 
   if (typeof resolvers === 'object') {
-    for (let key in resolvers) {
+    for (const key in resolvers) {
       map.set(key, resolvers[key]);
     }
     return map;
@@ -179,7 +179,7 @@ function getBaseDir(sourceFile) {
 }
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
-  let resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
+  const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
     tryRequire(name, sourceFile) ||
     tryRequire(path.resolve(getBaseDir(sourceFile), name));
 

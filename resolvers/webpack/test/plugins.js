@@ -1,13 +1,13 @@
-var chai = require('chai')
+const chai = require('chai')
   , expect = chai.expect
   , path = require('path');
 
-var webpack = require('../index');
+const webpack = require('../index');
 
-var file = path.join(__dirname, 'files', 'dummy.js');
+const file = path.join(__dirname, 'files', 'dummy.js');
 
 describe("plugins", function () {
-  var resolved, aliasResolved;
+  let resolved, aliasResolved;
 
   before(function () {
     resolved = webpack.resolve('./some/bar', file);

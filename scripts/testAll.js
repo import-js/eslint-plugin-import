@@ -2,8 +2,8 @@ import { spawnSync } from 'child_process';
 import npmWhich from 'npm-which';
 import resolverDirectories from './resolverDirectories';
 
-let npmPath = npmWhich(__dirname).sync('npm');
-let spawnOptions = {
+const npmPath = npmWhich(__dirname).sync('npm');
+const spawnOptions = {
     stdio: 'inherit',
 };
 
@@ -12,7 +12,7 @@ spawnSync(
     ['test'],
     Object.assign({ cwd: __dirname }, spawnOptions));
 
-for (let resolverDir of resolverDirectories) {
+for (const resolverDir of resolverDirectories) {
     spawnSync(
         npmPath,
         ['test'],

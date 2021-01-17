@@ -23,7 +23,7 @@ function makeValidExtensionSet(settings) {
 
   // all alternate parser extensions are also valid
   if ('import/parsers' in settings) {
-    for (let parser in settings['import/parsers']) {
+    for (const parser in settings['import/parsers']) {
       const parserSettings = settings['import/parsers'][parser];
       if (!Array.isArray(parserSettings)) {
         throw new TypeError('"settings" for ' + parser + ' must be an array');

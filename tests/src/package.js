@@ -1,6 +1,6 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var path = require('path')
+const path = require('path')
   , fs = require('fs');
 
 function isJSFile(f) {
@@ -8,8 +8,8 @@ function isJSFile(f) {
 }
 
 describe('package', function () {
-  let pkg = path.join(process.cwd(), 'src')
-    , module;
+  const pkg = path.join(process.cwd(), 'src');
+  let module;
 
   before('is importable', function () {
     module = require(pkg);
@@ -47,10 +47,10 @@ describe('package', function () {
   });
 
   it('has configs only for rules that exist', function () {
-    for (let configFile in module.configs) {
-      let preamble = 'import/';
+    for (const configFile in module.configs) {
+      const preamble = 'import/';
 
-      for (let rule in module.configs[configFile].rules) {
+      for (const rule in module.configs[configFile].rules) {
         expect(() => require(getRulePath(rule.slice(preamble.length))))
           .not.to.throw(Error);
       }

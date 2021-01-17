@@ -18,9 +18,9 @@ module.exports = {
     }
 
     function checkDeclarationsInScope({variables}, name) {
-      for (let variable of variables) {
+      for (const variable of variables) {
         if (variable.name === name) {
-          for (let def of variable.defs) {
+          for (const def of variable.defs) {
             if (def.type === 'Variable' && def.parent) {
               checkDeclaration(def.parent);
             }
@@ -43,7 +43,7 @@ module.exports = {
       if (node.declaration)  {
         checkDeclaration(node.declaration);
       } else if (!node.source) {
-        for (let specifier of node.specifiers) {
+        for (const specifier of node.specifiers) {
           checkDeclarationsInScope(scope, specifier.local.name);
         }
       }

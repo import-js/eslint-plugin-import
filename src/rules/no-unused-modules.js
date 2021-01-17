@@ -601,7 +601,7 @@ module.exports = {
       });
 
       // preserve information about namespace imports
-      let exportAll = exports.get(EXPORT_ALL_DECLARATION);
+      const exportAll = exports.get(EXPORT_ALL_DECLARATION);
       let namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER);
 
       if (typeof namespaceImports === 'undefined') {

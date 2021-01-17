@@ -6,7 +6,7 @@ import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 import { RuleTester } from 'eslint';
 
-var ruleTester = new RuleTester()
+const ruleTester = new RuleTester()
   , rule = require('rules/no-unresolved');
 
 function runResolverTests(resolver) {
