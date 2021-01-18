@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 
 const resolve = require('../index').resolve;
