@@ -1,3 +1,5 @@
+'use strict';
+
 const resolve = require('resolve');
 const path = require('path');
 

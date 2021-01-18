@@ -1,3 +1,5 @@
+'use strict';
+
 const findRoot = require('find-root');
 const path = require('path');
 const get = require('lodash/get');
