@@ -9,11 +9,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
 - [`order`]: ignore non-module-level requires ([#1940], thanks [@golopot])
-- [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks @leonardodino)
-- [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks @fa93hws)
-- [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks @ljharb)
+- [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks [@leonardodino])
+- [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks [@fa93hws])
+- [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks [@ljharb])
 - [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
-- [`import/no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
+- [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -72,7 +72,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: Fix re-export not counting as usage when used in combination with import ([#1722], thanks [@Ephem])
 - [`no-duplicates`]: Handle TS import type ([#1676], thanks [@kmui2])
 - [`newline-after-import`]: recognize decorators ([#1139], thanks [@atos1990])
-- [`no-unused-modules`]: Revert "[flow] `no-unused-modules`: add flow type support" ([#1770], thanks [@Hypnosphi])
+- [`no-unused-modules`]: Revert "[flow] [`no-unused-modules`]: add flow type support" ([#1770], thanks [@Hypnosphi])
 - TypeScript: Add nested namespace handling ([#1763], thanks [@julien1619])
 - [`namespace`]/`ExportMap`: Fix interface declarations for TypeScript ([#1764], thanks [@julien1619])
 - [`no-unused-modules`]: avoid order-dependence ([#1744], thanks [@darkartur])
@@ -82,7 +82,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
-- [readme] Remove duplicate no-unused-modules from docs ([#1690], thanks [@arvigeus])
+- [readme] Remove duplicate [`no-unused-modules`] from docs ([#1690], thanks [@arvigeus])
 - [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
 - [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
 - [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
@@ -107,7 +107,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: allow duplicate imports if one is a namespace and the other not ([#1612], thanks [@sveyret])
 - Add some missing rule meta schemas and types ([#1620], thanks [@bmish])
 - [`named`]: for importing from a module which re-exports named exports from a `node_modules` module ([#1569], [#1447], thanks [@redbugz], [@kentcdodds])
-- [`order`]: Fix alphabetize for mixed requires and imports ([#5625], thanks [@wschurman])
+- [`order`]: Fix alphabetize for mixed requires and imports ([#1626], thanks [@wschurman])
 
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
@@ -230,7 +230,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - aliased internal modules that look like core modules ([#1297], thanks [@echenley])
 - [`namespace`]: add check for null ExportMap ([#1235], [#1144], thanks [@ljqx])
 - [ExportMap] fix condition for checking if block comment ([#1234], [#1233], thanks [@ljqx])
-- Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
+- Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-imports`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
 - [`export`]: false positives for TypeScript type + value export ([#1319], thanks [@bradzacher])
 - [`export`]: Support TypeScript namespaces ([#1320], [#1300], thanks [@bradzacher])
 
@@ -731,6 +731,7 @@ for info on changes for earlier releases.
 [`no-named-export`]: ./docs/rules/no-named-export.md
 [`no-namespace`]: ./docs/rules/no-namespace.md
 [`no-nodejs-modules`]: ./docs/rules/no-nodejs-modules.md
+[`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
@@ -797,7 +798,7 @@ for info on changes for earlier releases.
 [#1651]: https://github.com/benmosher/eslint-plugin-import/pull/1651
 [#1635]: https://github.com/benmosher/eslint-plugin-import/issues/1635
 [#1631]: https://github.com/benmosher/eslint-plugin-import/issues/1631
-[#1625]: https://github.com/benmosher/eslint-plugin-import/pull/1625
+[#1626]: https://github.com/benmosher/eslint-plugin-import/pull/1626
 [#1620]: https://github.com/benmosher/eslint-plugin-import/pull/1620
 [#1619]: https://github.com/benmosher/eslint-plugin-import/pull/1619
 [#1616]: https://github.com/benmosher/eslint-plugin-import/issues/1616
@@ -823,6 +824,7 @@ for info on changes for earlier releases.
 [#1495]: https://github.com/benmosher/eslint-plugin-import/pull/1495
 [#1494]: https://github.com/benmosher/eslint-plugin-import/pull/1494
 [#1493]: https://github.com/benmosher/eslint-plugin-import/pull/1493
+[#1491]: https://github.com/benmosher/eslint-plugin-import/pull/1491
 [#1472]: https://github.com/benmosher/eslint-plugin-import/pull/1472
 [#1470]: https://github.com/benmosher/eslint-plugin-import/pull/1470
 [#1447]: https://github.com/benmosher/eslint-plugin-import/pull/1447
@@ -1221,6 +1223,7 @@ for info on changes for earlier releases.
 [@feychenie]: https://github.com/feychenie
 [@kiwka]: https://github.com/kiwka
 [@loganfsmyth]: https://github.com/loganfsmyth
+[@golopot]: https://github.com/golopot
 [@johndevedu]: https://github.com/johndevedu
 [@charlessuh]: https://github.com/charlessuh
 [@kgregory]: https://github.com/kgregory
@@ -1300,3 +1303,8 @@ for info on changes for earlier releases.
 [@andreubotella]: https://github.com/andreubotella
 [@cherryblossom000]: https://github.com/cherryblossom000
 [@Blasz]: https://github.com/Blasz
+[@leonardodino]: https://github.com/leonardodino
+[@fa93hws]: https://github.com/fa93hws
+[@Librazy]: https://github.com/Librazy
+[@swernerx]: https://github.com/swernerx
+[@fsmaia]: https://github.com/fsmaia
