@@ -13,18 +13,18 @@ const absoluteSettings = {
   config: path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js'),
 };
 
-describe("config", function () {
-  it("finds webpack.config.js in parent directories", function () {
+describe('config', function () {
+  it('finds webpack.config.js in parent directories', function () {
     expect(resolve('main-module', file)).to.have.property('path')
       .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
-  it("finds absolute webpack.config.js files", function () {
+  it('finds absolute webpack.config.js files', function () {
     expect(resolve('foo', file, absoluteSettings)).to.have.property('path')
       .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
-  it("finds compile-to-js configs", function () {
+  it('finds compile-to-js configs', function () {
     const settings = {
       config: path.join(__dirname, './files/webpack.config.babel.js'),
     };
@@ -34,13 +34,13 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
-  it("finds compile-to-js config in parent directories", function () {
+  it('finds compile-to-js config in parent directories', function () {
     expect(resolve('main-module', extensionFile))
       .to.have.property('path')
       .and.equal(path.join(__dirname, 'config-extensions', 'src', 'main-module.js'));
   });
 
-  it("finds the first config with a resolve section", function () {
+  it('finds the first config with a resolve section', function () {
     const settings = {
       config: path.join(__dirname, './files/webpack.config.multiple.js'),
     };
@@ -49,7 +49,7 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
-  it("finds the config at option config-index", function () {
+  it('finds the config at option config-index', function () {
     const settings = {
       config: path.join(__dirname, './files/webpack.config.multiple.js'),
       'config-index': 2,
@@ -66,7 +66,7 @@ describe("config", function () {
     expect(function () { resolve('foo', file, settings); }).to.throw(Error);
   });
 
-  it("finds config object when config is an object", function () {
+  it('finds config object when config is an object', function () {
     const settings = {
       config: require(path.join(__dirname, 'files', 'some', 'absolute.path.webpack.config.js')),
     };
@@ -74,7 +74,7 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
-  it("finds config object when config uses a path relative to working dir", function () {
+  it('finds config object when config uses a path relative to working dir', function () {
     const settings = {
       config: './test/files/some/absolute.path.webpack.config.js',
     };
@@ -82,7 +82,7 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'absolutely', 'goofy', 'path', 'foo.js'));
   });
 
-  it("finds the first config with a resolve section when config is an array of config objects", function () {
+  it('finds the first config with a resolve section when config is an array of config objects', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.config.multiple.js')),
     };
@@ -91,7 +91,7 @@ describe("config", function () {
       .and.equal(path.join(__dirname, 'files', 'src', 'main-module.js'));
   });
 
-  it("finds the config at option config-index when config is an array of config objects", function () {
+  it('finds the config at option config-index when config is an array of config objects', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.config.multiple.js')),
       'config-index': 2,

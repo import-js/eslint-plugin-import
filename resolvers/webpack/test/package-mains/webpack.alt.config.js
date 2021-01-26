@@ -1,3 +1,3 @@
 exports.resolve = {
-  packageMains: ["main"], // override
+  packageMains: ['main'], // override
 };

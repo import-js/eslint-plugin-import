@@ -72,5 +72,14 @@
                 "no-console": "off",
             },
         },
+        {
+            "files": [
+                "resolvers/*/test/**/*",
+            ],
+            "env": {
+                "mocha": true,
+                "es6": false
+            },
+        }
     ],
 }

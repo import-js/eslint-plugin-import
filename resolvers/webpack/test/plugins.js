@@ -8,7 +8,7 @@ const webpack = require('../index');
 
 const file = path.join(__dirname, 'files', 'dummy.js');
 
-describe("plugins", function () {
+describe('plugins', function () {
   let resolved; let aliasResolved;
 
   before(function () {
@@ -16,16 +16,16 @@ describe("plugins", function () {
     aliasResolved = webpack.resolve('some-alias/bar', file);
   });
 
-  it("work", function () {
+  it('work', function () {
     expect(resolved).to.have.property('found', true);
   });
 
-  it("is correct", function () {
+  it('is correct', function () {
     expect(resolved).to.have.property('path')
       .and.equal(path.join(__dirname, 'files', 'some', 'bar', 'bar.js'));
   });
 
-  it("work with alias", function () {
+  it('work with alias', function () {
     expect(aliasResolved).to.have.property('found', true);
   });
 });
