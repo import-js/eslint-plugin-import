@@ -1,0 +1,49 @@
+name: 'Tests: packages'
+
+on: [pull_request, push]
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      latest: ${{ steps.set-matrix.outputs.requireds }}
+      minors: ${{ steps.set-matrix.outputs.optionals }}
+    steps:
+      - uses: ljharb/actions/node/matrix@main
+        id: set-matrix
+        with:
+          type: 'majors'
+          preset: '>=4'
+          versionsAsRoot: true
+
+  tests:
+    needs: [matrix]
+    name: 'packages'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
+        package:
+          - resolvers/node
+          - resolvers/webpack
+          # - memo-parser
+          # - utils
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ljharb/actions/node/run@main
+        name: 'npm install && npm run tests-only'
+        with:
+          node-version: ${{ matrix.node-version }}
+          after_install: npm run copy-metafiles && cd ${{ matrix.package }} && npm install
+          command: 'tests-only'
+          after_success: npm run coveralls
+          skip-ls-check: true
+
+  packages:
+    name: 'packages: all tests'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo tests completed'

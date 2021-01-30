@@ -112,16 +112,5 @@
     "read-pkg-up": "^2.0.0",
     "resolve": "^1.17.0",
     "tsconfig-paths": "^3.9.0"
-  },
-  "nyc": {
-    "require": [
-      "babel-register"
-    ],
-    "sourceMap": false,
-    "instrument": false,
-    "include": [
-      "src/",
-      "resolvers/"
-    ]
   }
 }

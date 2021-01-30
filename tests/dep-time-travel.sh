@@ -2,7 +2,9 @@
 
 # expected: ESLINT_VERSION numeric env var
 
-npm install --no-save eslint@$ESLINT_VERSION --ignore-scripts || true
+echo "installing ${ESLINT_VERSION}..."
+
+npm install --no-save "eslint@${ESLINT_VERSION}" --ignore-scripts || true
 
 # completely remove the new TypeScript parser for ESLint < v5
 if [[ "$ESLINT_VERSION" -lt "5" ]]; then
@@ -23,4 +25,9 @@ fi
 if [[ "$TRAVIS_NODE_VERSION" -lt "8" ]]; then
   echo "Downgrading eslint-import-resolver-typescript..."
   npm i --no-save eslint-import-resolver-typescript@1.0.2
+fi
+
+if [[ -n "$TS_PARSER" ]]; then
+  echo "Downgrading @typescript-eslint/parser..."
+  npm i --no-save @typescript-eslint/parser@2
 fi

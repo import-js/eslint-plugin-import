@@ -1,56 +1,8 @@
 language: node_js
-node_js:
-  - '14'
-  - '13'
-  - '12'
-  - '10'
-  - '8'
-  - '6'
-  - '4'
-
-os: linux
-
-env:
-  - ESLINT_VERSION=^7.0.0-0
-  - ESLINT_VERSION=6
-  - ESLINT_VERSION=5
-  - ESLINT_VERSION=4
-  - ESLINT_VERSION=3
-  - ESLINT_VERSION=2
 
 # osx backlog is often deep, so to be polite we can just hit these highlights
 matrix:
   include:
-  - env: LINT=true
-    node_js: lts/*
-  - env: TS_PARSER=2 ESLINT_VERSION=7
-    node_js: lts/*
-    before_script: 'npm install --no-save @typescript-eslint/parser@2'
-  - env: PACKAGE=resolvers/node
-    node_js: 14
-  - env: PACKAGE=resolvers/node
-    node_js: 12
-  - env: PACKAGE=resolvers/node
-    node_js: 10
-  - env: PACKAGE=resolvers/node
-    node_js: 8
-  - env: PACKAGE=resolvers/node
-    node_js: 6
-  - env: PACKAGE=resolvers/node
-    node_js: 4
-  - env: PACKAGE=resolvers/webpack
-    node_js: 14
-  - env: PACKAGE=resolvers/webpack
-    node_js: 12
-  - env: PACKAGE=resolvers/webpack
-    node_js: 10
-  - env: PACKAGE=resolvers/webpack
-    node_js: 8
-  - env: PACKAGE=resolvers/webpack
-    node_js: 6
-  - env: PACKAGE=resolvers/webpack
-    node_js: 4
-
   - os: osx
     env: ESLINT_VERSION=5
     node_js: 14
@@ -70,37 +22,18 @@ matrix:
     env: ESLINT_VERSION=2
     node_js: 4
 
-  exclude:
-  - node_js: '4'
-    env: ESLINT_VERSION=5
-  - node_js: '4'
-    env: ESLINT_VERSION=6
-  - node_js: '4'
-    env: ESLINT_VERSION=^7.0.0-0
-  - node_js: '6'
-    env: ESLINT_VERSION=6
-  - node_js: '6'
-    env: ESLINT_VERSION=^7.0.0-0
-  - node_js: '8'
-    env: ESLINT_VERSION=^7.0.0-0
-
   fast_finish: true
-  allow_failures:
-  # issues with TypeScript deps in this version intersection
-  - node_js: '4'
-    env: ESLINT_VERSION=4
 
 before_install:
   - 'nvm install-latest-npm'
   - 'npm install'
   - 'npm run copy-metafiles'
-  - 'if [ -n "${PACKAGE-}" ]; then cd "${PACKAGE}"; fi'
 install:
   - 'npm install'
   - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
 
 script:
-  - 'if [ -n "${LINT-}" ]; then npm run posttest ; else npm run tests-only ; fi'
+  - npm run tests-only
 
 after_success:
   - npm run coveralls

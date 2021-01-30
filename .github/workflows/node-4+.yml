@@ -1,0 +1,86 @@
+name: 'Tests: node.js'
+
+on: [pull_request, push]
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      latest: ${{ steps.set-matrix.outputs.requireds }}
+      minors: ${{ steps.set-matrix.outputs.optionals }}
+    steps:
+      - uses: ljharb/actions/node/matrix@main
+        id: set-matrix
+        with:
+          versionsAsRoot: true
+          type: majors
+          preset: '>=4'
+
+  latest:
+    needs: [matrix]
+    name: 'latest majors'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
+        eslint:
+          - 7
+          - 6
+          - 5
+          - 4
+          - 3
+          - 2
+        include:
+          - node-version: 'lts/*'
+            eslint: 7
+            ts-parser: 2
+            env:
+              TS_PARSER: 2
+        exclude:
+          - node-version: 9
+            eslint: 7
+          - node-version: 8
+            eslint: 7
+          - node-version: 7
+            eslint: 7
+          - node-version: 7
+            eslint: 6
+          - node-version: 6
+            eslint: 7
+          - node-version: 6
+            eslint: 6
+          - node-version: 5
+            eslint: 7
+          - node-version: 5
+            eslint: 6
+          - node-version: 5
+            eslint: 5
+          - node-version: 4
+            eslint: 7
+          - node-version: 4
+            eslint: 6
+          - node-version: 4
+            eslint: 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ljharb/actions/node/run@main
+        continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
+        name: 'npm install && npm run tests-only'
+        env:
+          ESLINT_VERSION: ${{ matrix.eslint }}
+          TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
+        with:
+          node-version: ${{ matrix.node-version }}
+          after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh
+          command: 'tests-only'
+          after_success: 'npm run coveralls'
+          skip-ls-check: true
+
+  node:
+    name: 'node 4+'
+    needs: [latest]
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo tests completed'
