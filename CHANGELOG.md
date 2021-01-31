@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## [Unreleased]
+- Add [`enforce-import-name`] rule: Enforce default import naming ([#1143], thanks [@mic4ael])
 
 ### Added
 - [`no-commonjs`]: Also detect require calls with expressionless template literals: ``` require(`x`) ``` ([#1958], thanks [@FloEdelmann])
@@ -749,6 +750,7 @@ for info on changes for earlier releases.
 [`order`]: ./docs/rules/order.md
 [`prefer-default-export`]: ./docs/rules/prefer-default-export.md
 [`unambiguous`]: ./docs/rules/unambiguous.md
+[`enforce-import-name`]: ./docs/rules/enforce-import-name.md
 
 [`memo-parser`]: ./memo-parser/README.md
 
