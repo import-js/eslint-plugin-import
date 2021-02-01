@@ -4,6 +4,10 @@ Reports use of a default export as a locally named import.
 
 Rationale: the syntax exists to import default exports expressively, let's use it.
 
+Note that type imports, as used by [Flow], are always ignored.
+
+[Flow]: https://flow.org/
+
 ## Rule Details
 
 Given:

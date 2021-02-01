@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
 - [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
 - [`extensions`]/[`no-cycle`]/[`no-extraneous-dependencies`]: Correct module real path resolution ([#1696], thanks [@paztis])
+- [`no-named-default`]: ignore Flow import type and typeof ([#1983], thanks [@christianvuerings])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -757,6 +758,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1983]: https://github.com/benmosher/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
 [#1958]: https://github.com/benmosher/eslint-plugin-import/pull/1958
 [#1948]: https://github.com/benmosher/eslint-plugin-import/pull/1948
@@ -1335,3 +1337,4 @@ for info on changes for earlier releases.
 [@tapayne88]: https://github.com/tapayne88
 [@panrafal]: https://github.com/panrafal
 [@ttmarek]: https://github.com/ttmarek
+[@christianvuerings]: https://github.com/christianvuerings

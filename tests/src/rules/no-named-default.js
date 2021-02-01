@@ -9,6 +9,16 @@ ruleTester.run('no-named-default', rule, {
     test({ code: 'import bar from "./bar";' }),
     test({ code: 'import bar, { foo } from "./bar";' }),
 
+    // Should ignore imported flow types
+    test({
+      code: 'import { type default as Foo } from "./bar";',
+      parser: require.resolve('babel-eslint'),
+    }),
+    test({
+      code: 'import { typeof default as Foo } from "./bar";',
+      parser: require.resolve('babel-eslint'),
+    }),
+
     ...SYNTAX_CASES,
   ],
 

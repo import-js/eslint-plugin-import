@@ -13,6 +13,10 @@ module.exports = {
     return {
       'ImportDeclaration': function (node) {
         node.specifiers.forEach(function (im) {
+          if (im.importKind === 'type' || im.importKind === 'typeof') {
+            return;
+          }
+
           if (im.type === 'ImportSpecifier' && im.imported.name === 'default') {
             context.report({
               node: im.local,
