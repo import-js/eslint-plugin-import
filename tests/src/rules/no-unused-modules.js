@@ -84,6 +84,10 @@ ruleTester.run('no-unused-modules', rule, {
         }
       `,
     }),
+    test({
+      code: `export foo from 'bar'`,
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
   invalid: [
     test({

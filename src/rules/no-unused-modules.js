@@ -57,6 +57,7 @@ try {
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration';
 const EXPORT_NAMED_DECLARATION = 'ExportNamedDeclaration';
 const EXPORT_ALL_DECLARATION = 'ExportAllDeclaration';
+const EXPORT_DEFAULT_SPECIFIER = 'ExportDefaultSpecifier';
 const IMPORT_DECLARATION = 'ImportDeclaration';
 const IMPORT_NAMESPACE_SPECIFIER = 'ImportNamespaceSpecifier';
 const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier';
@@ -663,8 +664,11 @@ module.exports = {
           if (astNode.source) {
             resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context);
             astNode.specifiers.forEach(specifier => {
-              const name = specifier.local.name;
-              if (specifier.local.name === DEFAULT) {
+              const name = specifier.type === EXPORT_DEFAULT_SPECIFIER
+                ? specifier.exported.name
+                : specifier.local.name;
+
+              if (name === DEFAULT) {
                 newDefaultImports.add(resolvedPath);
               } else {
                 newImports.set(name, resolvedPath);
