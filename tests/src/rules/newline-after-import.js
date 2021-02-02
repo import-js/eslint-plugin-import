@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
-import { getTSParsers } from '../utils';
+import { getTSParsers, testVersion } from '../utils';
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
@@ -234,7 +234,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     ]),
   ],
 
-  invalid: [
+  invalid: [].concat(
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
@@ -429,5 +429,29 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
       parser: require.resolve('babel-eslint'),
     },
-  ],
+    testVersion('>= 6', () => ({
+      code: `
+        // issue 1784
+        import { map } from 'rxjs/operators';
+        @Component({})
+        export class Test {}
+      `,
+      output: `
+        // issue 1784
+        import { map } from 'rxjs/operators';
+
+        @Component({})
+        export class Test {}
+      `,
+      errors: [
+        {
+          line: 3,
+          column: 9,
+          message: IMPORT_ERROR_MESSAGE,
+        },
+      ],
+      parserOptions: { sourceType: 'module' },
+      parser: require.resolve('babel-eslint'),
+    })) || [],
+  ),
 });

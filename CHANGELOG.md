@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/[`no-cycle`]/[`no-extraneous-dependencies`]: Correct module real path resolution ([#1696], thanks [@paztis])
 - [`no-named-default`]: ignore Flow import type and typeof ([#1983], thanks [@christianvuerings])
 - [`no-extraneous-dependencies`]: Exclude flow `typeof` imports ([#1534], thanks [@devongovett])
+- [`newline-after-import`]: respect decorator annotations ([#1985], thanks [@lilling])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -765,6 +766,7 @@ for info on changes for earlier releases.
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
 [#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
 [#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
+[#1985]: https://github.com/benmosher/eslint-plugin-import/pull/1985
 [#1983]: https://github.com/benmosher/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
 [#1958]: https://github.com/benmosher/eslint-plugin-import/pull/1958
@@ -1350,3 +1352,4 @@ for info on changes for earlier releases.
 [@dwardu]: https://github.com/dwardu
 [@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w
 [@grit96]: https://github.com/grit96
+[@lilling]: https://github.com/lilling

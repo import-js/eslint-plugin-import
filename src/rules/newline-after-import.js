@@ -47,6 +47,10 @@ function isExportDefaultClass(node) {
   return node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'ClassDeclaration';
 }
 
+function isExportNameClass(node) {
+  return node.type === 'ExportNamedDeclaration' && node.declaration.type === 'ClassDeclaration';
+}
+
 module.exports = {
   meta: {
     type: 'layout',
@@ -72,7 +76,7 @@ module.exports = {
     const requireCalls = [];
 
     function checkForNewLine(node, nextNode, type) {
-      if (isExportDefaultClass(nextNode)) {
+      if (isExportDefaultClass(nextNode) || isExportNameClass(nextNode)) {
         const classNode = nextNode.declaration;
 
         if (isClassWithDecorator(classNode)) {
