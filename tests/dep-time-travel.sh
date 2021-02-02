@@ -4,7 +4,9 @@
 
 echo "installing ${ESLINT_VERSION}..."
 
-npm install --no-save "eslint@${ESLINT_VERSION}" --ignore-scripts || true
+export NPM_CONFIG_LEGACY_PEER_DEPS=true
+
+npm install --no-save "eslint@${ESLINT_VERSION}" --ignore-scripts
 
 # completely remove the new TypeScript parser for ESLint < v5
 if [[ "$ESLINT_VERSION" -lt "5" ]]; then
