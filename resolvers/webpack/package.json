@@ -54,6 +54,7 @@
     "chai": "^3.5.0",
     "coveralls": "^3.0.0",
     "mocha": "^3.5.3",
-    "nyc": "^11.9.0"
+    "nyc": "^11.9.0",
+    "webpack": "https://gist.github.com/ljharb/9cdb687f3806f8e6cb8a365d0b7840eb"
   }
 }
