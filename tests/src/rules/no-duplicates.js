@@ -2,11 +2,14 @@ import * as path from 'path';
 import { test as testUtil, getNonDefaultParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');
 
-const test = process.env.ESLINT_VERSION === '3' || process.env.ESLINT_VERSION === '2'
+// autofix only possible with eslint 4+
+const test = semver.satisfies(eslintPkg.version, '< 4')
   ? t => testUtil(Object.assign({}, t, { output: t.code }))
   : testUtil;
 

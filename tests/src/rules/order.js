@@ -2257,7 +2257,9 @@ context('TypeScript', function () {
               ],
               errors: [
                 {
-                  message: process.env.ESLINT_VERSION === '2' ? '`bar` import should occur after import of `Bar`' : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
+                  message: semver.satisfies(eslintPkg.version, '< 3')
+                    ? '`bar` import should occur after import of `Bar`'
+                    : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
                 },
               ],
             },
@@ -2293,7 +2295,9 @@ context('TypeScript', function () {
               ],
               errors: [
                 {
-                  message: process.env.ESLINT_VERSION === '2' ? '`bar` import should occur before import of `Bar`' : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
+                  message: semver.satisfies(eslintPkg.version, '< 3')
+                    ? '`bar` import should occur before import of `Bar`'
+                    : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
                 },
               ],
             },
