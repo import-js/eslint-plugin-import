@@ -339,7 +339,7 @@ function isModuleLevelRequire(node) {
   let n = node;
   // Handle cases like `const baz = require('foo').bar.baz`
   // and `const foo = require('foo')()`
-  while ( 
+  while (
     (n.parent.type === 'MemberExpression' && n.parent.object === n) ||
     (n.parent.type === 'CallExpression' && n.parent.callee === n)
   ) {
@@ -348,7 +348,7 @@ function isModuleLevelRequire(node) {
   return (
     n.parent.type === 'VariableDeclarator' &&
     n.parent.parent.type === 'VariableDeclaration' &&
-    n.parent.parent.parent.type === 'Program' 
+    n.parent.parent.parent.type === 'Program'
   );
 }
 
@@ -568,6 +568,10 @@ module.exports = {
             },
             additionalProperties: false,
           },
+          warnOnUnassignedImports: {
+            type: 'boolean',
+            default: false,
+          },
         },
         additionalProperties: false,
       },
@@ -600,7 +604,8 @@ module.exports = {
 
     return {
       ImportDeclaration: function handleImports(node) {
-        if (node.specifiers.length) { // Ignoring unassigned imports
+        // Ignoring unassigned imports unless warnOnUnassignedImports is set
+        if (node.specifiers.length || options.warnOnUnassignedImports) {
           const name = node.source.value;
           registerNode(
             context,

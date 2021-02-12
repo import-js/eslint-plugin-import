@@ -256,6 +256,33 @@ import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
 ```
 
+### `warnOnUnassignedImports: true|false`:
+
+* default: `false`
+
+Warns when unassigned imports are out of order.  These warning will not be fixed
+with `--fix` because unassigned imports are used for side-effects and changing the
+import of order of modules with side effects can not be done automatically in a
+way that is safe.
+
+This will fail the rule check:
+
+```js
+/* eslint import/order: ["error", {"warnOnUnassignedImports": true}] */
+import fs from 'fs';
+import './styles.css';
+import path from 'path';
+```
+
+While this will pass:
+
+```js
+/* eslint import/order: ["error", {"warnOnUnassignedImports": true}] */
+import fs from 'fs';
+import path from 'path';
+import './styles.css';
+```
+
 ## Related
 
 - [`import/external-module-folders`] setting

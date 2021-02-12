@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add [`no-import-module-exports`] rule: report import declarations with CommonJS exports ([#804], thanks [@kentcdodds] and [@ttmarek])
 - [`no-unused-modules`]: Support destructuring assignment for `export`. ([#1997], thanks [@s-h-a-d-o-w])
 - [`order`]: support type imports ([#2021], thanks [@grit96])
+- [`order`]: Add `warnOnUnassignedImports` option to enable warnings for out of order unassigned imports ([#1990], thanks [@hayes])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -773,6 +774,7 @@ for info on changes for earlier releases.
 [#2012]: https://github.com/benmosher/eslint-plugin-import/pull/2012
 [#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
 [#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
+[#1990]: https://github.com/benmosher/eslint-plugin-import/pull/1990
 [#1985]: https://github.com/benmosher/eslint-plugin-import/pull/1985
 [#1983]: https://github.com/benmosher/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
@@ -1363,3 +1365,4 @@ for info on changes for earlier releases.
 [@silviogutierrez]: https://github.com/silviogutierrez
 [@aladdin-add]: https://github.com/aladdin-add
 [@davidbonnet]: https://github.com/davidbonnet
+[@hayes]: https://github.com/hayes
