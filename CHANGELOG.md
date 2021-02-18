@@ -34,6 +34,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
 - [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
 - [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
+- [Docs] `order`: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -1355,3 +1356,4 @@ for info on changes for earlier releases.
 [@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w
 [@grit96]: https://github.com/grit96
 [@lilling]: https://github.com/lilling
+[@silviogutierrez]: https://github.com/silviogutierrez
