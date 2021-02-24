@@ -29,6 +29,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
 - [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
+- [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -759,6 +760,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
 [#1983]: https://github.com/benmosher/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
 [#1958]: https://github.com/benmosher/eslint-plugin-import/pull/1958
@@ -1341,3 +1343,4 @@ for info on changes for earlier releases.
 [@ttmarek]: https://github.com/ttmarek
 [@christianvuerings]: https://github.com/christianvuerings
 [@devongovett]: https://github.com/devongovett
+[@dwardu]: https://github.com/dwardu
