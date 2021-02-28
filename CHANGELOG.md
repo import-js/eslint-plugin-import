@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
 - add [`no-relative-packages`] ([#1860], [#966], thanks [@tapayne88] [@panrafal])
 - add [`no-import-module-exports`] rule: report import declarations with CommonJS exports ([#804], thanks [@kentcdodds] and [@ttmarek])
+- [`no-unused-modules`]: Support destructuring assignment for `export`. ([#1997], thanks [@s-h-a-d-o-w])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -760,6 +761,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
 [#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
 [#1983]: https://github.com/benmosher/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/benmosher/eslint-plugin-import/pull/1974
@@ -1344,3 +1346,4 @@ for info on changes for earlier releases.
 [@christianvuerings]: https://github.com/christianvuerings
 [@devongovett]: https://github.com/devongovett
 [@dwardu]: https://github.com/dwardu
+[@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w

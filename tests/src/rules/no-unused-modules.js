@@ -970,3 +970,23 @@ describe('ignore flow types', () => {
     invalid: [],
   });
 });
+
+describe('support (nested) destructuring assignment', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'import {a, b} from "./destructuring-b";',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/destructuring-a.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: 'const obj = {a: 1, dummy: {b: 2}}; export const {a, dummy: {b}} = obj;',
+        parser: require.resolve('babel-eslint'),
+        filename: testFilePath('./no-unused-modules/destructuring-b.js'),
+      }),
+    ],
+    invalid: [],
+  });
+});

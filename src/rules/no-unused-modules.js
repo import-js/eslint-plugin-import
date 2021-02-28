@@ -4,7 +4,7 @@
  * @author René Fermann
  */
 
-import Exports from '../ExportMap';
+import Exports, { recursivePatternCapture } from '../ExportMap';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
 import docsUrl from '../docsUrl';
@@ -63,6 +63,8 @@ const IMPORT_DEFAULT_SPECIFIER = 'ImportDefaultSpecifier';
 const VARIABLE_DECLARATION = 'VariableDeclaration';
 const FUNCTION_DECLARATION = 'FunctionDeclaration';
 const CLASS_DECLARATION = 'ClassDeclaration';
+const IDENTIFIER = 'Identifier';
+const OBJECT_PATTERN = 'ObjectPattern';
 const TS_INTERFACE_DECLARATION = 'TSInterfaceDeclaration';
 const TS_TYPE_ALIAS_DECLARATION = 'TSTypeAliasDeclaration';
 const TS_ENUM_DECLARATION = 'TSEnumDeclaration';
@@ -80,7 +82,15 @@ function forEachDeclarationIdentifier(declaration, cb) {
       cb(declaration.id.name);
     } else if (declaration.type === VARIABLE_DECLARATION) {
       declaration.declarations.forEach(({ id }) => {
-        cb(id.name);
+        if (id.type === OBJECT_PATTERN) {
+          recursivePatternCapture(id, (pattern) => {
+            if (pattern.type === IDENTIFIER) {
+              cb(pattern.name);
+            }
+          });
+        } else {
+          cb(id.name);
+        }
       });
     }
   }
