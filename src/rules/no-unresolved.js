@@ -7,6 +7,7 @@ import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-modul
 import ModuleCache from 'eslint-module-utils/ModuleCache';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
+import { isBuiltIn } from '../core/importType';
 
 module.exports = {
   meta: {
@@ -25,6 +26,10 @@ module.exports = {
     function checkSourceValue(source) {
       const shouldCheckCase = !CASE_SENSITIVE_FS &&
         (!context.options[0] || context.options[0].caseSensitive !== false);
+
+      if (isBuiltIn(source.value, context.settings)) {
+        return;
+      }
 
       const resolvedPath = resolve(source.value, context);
 

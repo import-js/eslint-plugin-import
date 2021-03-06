@@ -378,6 +378,25 @@ ruleTester.run('no-unresolved electron', rule, {
   ],
 });
 
+ruleTester.run('no-unresolved sub-directory', rule, {
+  valid: [
+    test({
+      code: 'import "@generated/bar/module"',
+      settings: { 'import/core-modules': ['@generated/bar'] },
+    }),
+    test({
+      code: 'import "@generated/bar/and/sub/path"',
+      settings: { 'import/core-modules': ['@generated/bar'] },
+    }),
+  ],
+  invalid:[
+    test({
+      code: 'import "@generated/bar/module"',
+      errors: [`Unable to resolve path to module '@generated/bar/module'.`],
+    }),
+  ],
+});
+
 ruleTester.run('no-unresolved syntax verification', rule, {
   valid: SYNTAX_CASES,
   invalid:[],
