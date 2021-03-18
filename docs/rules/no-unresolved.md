@@ -6,6 +6,9 @@ as defined by standard Node `require.resolve` behavior.
 See [settings](../../README.md#settings) for customization options for the resolution (i.e.
 additional filetypes, `NODE_PATH`, etc.)
 
+
+When used in conjuction with TypeScript: If only a module's types are imported, having just the typings installed without the module itself (typings under `node_modules/@types`) is sufficient to not trigger an error.
+
 This rule can also optionally report on unresolved modules in CommonJS `require('./foo')` calls and AMD `require(['./foo'], function (foo){...})` and `define(['./foo'], function (foo){...})`.
 
 To enable this, send `{ commonjs: true/false, amd: true/false }` as a rule option.

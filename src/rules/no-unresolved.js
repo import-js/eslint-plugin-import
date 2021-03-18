@@ -22,11 +22,15 @@ module.exports = {
 
   create: function (context) {
 
-    function checkSourceValue(source) {
+    function checkSourceValue(source, importer) {
       const shouldCheckCase = !CASE_SENSITIVE_FS &&
         (!context.options[0] || context.options[0].caseSensitive !== false);
 
-      const resolvedPath = resolve(source.value, context);
+      let resolvedPath = resolve(source.value, context);
+
+      if (resolvedPath === undefined && importer.importKind === 'type') {
+        resolvedPath = resolve(`@types/${source.value}`, context);
+      }
 
       if (resolvedPath === undefined) {
         context.report(source,
