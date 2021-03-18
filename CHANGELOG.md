@@ -11,7 +11,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
 - add [`no-relative-packages`] ([#1860], [#966], thanks [@tapayne88] [@panrafal])
 - add [`no-import-module-exports`] rule: report import declarations with CommonJS exports ([#804], thanks [@kentcdodds] and [@ttmarek])
-- [`no-unresolved`]: Don't trigger an error when only types are imported in TypeScript, when the module's typings are installed and the module is not ([#2009], thanks [@EdenGottlieb])
 
 ### Fixed
 - [`export`]/TypeScript: properly detect export specifiers as children of a TS module block ([#1889], thanks [@andreubotella])
@@ -26,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/[`no-cycle`]/[`no-extraneous-dependencies`]: Correct module real path resolution ([#1696], thanks [@paztis])
 - [`no-named-default`]: ignore Flow import type and typeof ([#1983], thanks [@christianvuerings])
 - [`no-extraneous-dependencies`]: Exclude flow `typeof` imports ([#1534], thanks [@devongovett])
+- [`no-unresolved`]: Don't trigger an error when only types are imported in TypeScript, when the module's typings are installed and the module is not ([#2009], thanks [@EdenGottlieb])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
