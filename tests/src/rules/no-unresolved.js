@@ -22,7 +22,7 @@ function runResolverTests(resolver) {
   }
 
   ruleTester.run(`no-unresolved (${resolver})`, rule, {
-    valid: [
+    valid: [].concat(
       test({ code: 'import "./malformed.js"' }),
 
       rest({ code: 'import foo from "./bar";' }),
@@ -31,6 +31,12 @@ function runResolverTests(resolver) {
       rest({ code: "import fs from 'fs';" }),
       rest({ code: "import('fs');",
         parser: require.resolve('babel-eslint') }),
+
+      // check with eslint parser
+      testVersion('>= 7', () => rest({
+        code: "import('fs');",
+        parserOptions: { ecmaVersion: 2021 },
+      })) || [],
 
       rest({ code: 'import * as foo from "a"' }),
 
@@ -83,9 +89,9 @@ function runResolverTests(resolver) {
         options: [{ commonjs: true }] }),
       rest({ code: 'require(foo)',
         options: [{ commonjs: true }] }),
-    ],
+    ),
 
-    invalid: [
+    invalid: [].concat(
       rest({
         code: 'import reallyfake from "./reallyfake/module"',
         settings: { 'import/ignore': ['^\\./fake/'] },
@@ -117,9 +123,9 @@ function runResolverTests(resolver) {
         }] }),
       rest({
         code: "import('in-alternate-root').then(function({DEEP}){});",
-        errors: [{ message: 'Unable to resolve path to ' +
-                          "module 'in-alternate-root'.",
-        type: 'Literal',
+        errors: [{
+          message: 'Unable to resolve path to module \'in-alternate-root\'.',
+          type: 'Literal',
         }],
         parser: require.resolve('babel-eslint') }),
 
@@ -129,6 +135,16 @@ function runResolverTests(resolver) {
         code: 'export * from "./does-not-exist"',
         errors: ["Unable to resolve path to module './does-not-exist'."],
       }),
+
+      // check with eslint parser
+      testVersion('>= 7', () => rest({
+        code: "import('in-alternate-root').then(function({DEEP}){});",
+        errors: [{
+          message: 'Unable to resolve path to module \'in-alternate-root\'.',
+          type: 'Literal',
+        }],
+        parserOptions: { ecmaVersion: 2021 },
+      })) || [],
 
       // export symmetry proposal
       rest({ code: 'export * as bar from "./does-not-exist"',
@@ -186,7 +202,7 @@ function runResolverTests(resolver) {
           type: 'Literal',
         }],
       }),
-    ],
+    ),
   });
 
   ruleTester.run(`issue #333 (${resolver})`, rule, {

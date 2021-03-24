@@ -36,6 +36,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
 - [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
 - [Docs] `order`: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
+- [Tests] `no-unresolved`: add tests for `import()` ([#2012], thanks [@davidbonnet])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -769,6 +770,7 @@ for info on changes for earlier releases.
 [#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
 [#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
+[#2012]: https://github.com/benmosher/eslint-plugin-import/pull/2012
 [#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
 [#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
 [#1985]: https://github.com/benmosher/eslint-plugin-import/pull/1985
@@ -1360,3 +1362,4 @@ for info on changes for earlier releases.
 [@lilling]: https://github.com/lilling
 [@silviogutierrez]: https://github.com/silviogutierrez
 [@aladdin-add]: https://github.com/aladdin-add
+[@davidbonnet]: https://github.com/davidbonnet
