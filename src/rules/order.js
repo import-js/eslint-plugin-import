@@ -265,7 +265,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = [];
     }
-    acc[importedItem.rank].push(importedItem.value);
+    acc[importedItem.rank].push(`${importedItem.value}-${importedItem.node.importKind}`);
     return acc;
   }, {});
 
@@ -290,7 +290,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   // mutate the original group-rank with alphabetized-rank
   imported.forEach(function(importedItem) {
-    importedItem.rank = alphabetizedRanks[importedItem.value];
+    importedItem.rank = alphabetizedRanks[`${importedItem.value}-${importedItem.node.importKind}`];
   });
 }
 
@@ -310,6 +310,8 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
   let rank;
   if (importEntry.type === 'import:object') {
     impType = 'object';
+  } else if (importEntry.node.importKind === 'type') {
+    impType = 'type';
   } else {
     impType = importType(importEntry.value, context);
   }
@@ -350,7 +352,7 @@ function isModuleLevelRequire(node) {
   );
 }
 
-const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object'];
+const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object', 'type'];
 
 // Creates an object with type-rank pairs.
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }

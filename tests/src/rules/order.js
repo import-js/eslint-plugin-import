@@ -2186,12 +2186,13 @@ context('TypeScript', function () {
             {
               code: `
                 import c from 'Bar';
-                import type { C } from 'Bar';
                 import b from 'bar';
                 import a from 'foo';
-                import type { A } from 'foo';
 
                 import index from './';
+
+                import type { C } from 'Bar';
+                import type { A } from 'foo';
               `,
               parser,
               options: [
@@ -2208,12 +2209,13 @@ context('TypeScript', function () {
             {
               code: `
                 import a from 'foo';
-                import type { A } from 'foo';
                 import b from 'bar';
                 import c from 'Bar';
-                import type { C } from 'Bar';
 
                 import index from './';
+
+                import type { A } from 'foo';
+                import type { C } from 'Bar';
               `,
               parser,
               options: [
@@ -2233,20 +2235,22 @@ context('TypeScript', function () {
               code: `
               import b from 'bar';
               import c from 'Bar';
-              import type { C } from 'Bar';
               import a from 'foo';
-              import type { A } from 'foo';
 
               import index from './';
+
+              import type { A } from 'foo';
+              import type { C } from 'Bar';
             `,
               output: `
               import c from 'Bar';
-              import type { C } from 'Bar';
               import b from 'bar';
               import a from 'foo';
-              import type { A } from 'foo';
 
               import index from './';
+
+              import type { C } from 'Bar';
+              import type { A } from 'foo';
             `,
               parser,
               options: [
@@ -2255,12 +2259,12 @@ context('TypeScript', function () {
                   alphabetize: { order: 'asc' },
                 },
               ],
-              errors: [
-                {
-                  message: semver.satisfies(eslintPkg.version, '< 3')
-                    ? '`bar` import should occur after import of `Bar`'
-                    : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
-                },
+              errors: semver.satisfies(eslintPkg.version, '< 3') ? [
+                { message: '`Bar` import should occur before import of `bar`' },
+                { message: '`Bar` import should occur before import of `foo`' },
+              ] : [
+                { message: /(`Bar` import should occur before import of `bar`)|(`bar` import should occur after import of `Bar`)/ },
+                { message: /(`Bar` import should occur before import of `foo`)|(`foo` import should occur after import of `Bar`)/ },
               ],
             },
             parserConfig,
@@ -2270,21 +2274,23 @@ context('TypeScript', function () {
             {
               code: `
               import a from 'foo';
-              import type { A } from 'foo';
               import c from 'Bar';
-              import type { C } from 'Bar';
               import b from 'bar';
 
               import index from './';
+
+              import type { C } from 'Bar';
+              import type { A } from 'foo';
             `,
               output: `
               import a from 'foo';
-              import type { A } from 'foo';
               import b from 'bar';
               import c from 'Bar';
-              import type { C } from 'Bar';
 
               import index from './';
+
+              import type { A } from 'foo';
+              import type { C } from 'Bar';
             `,
               parser,
               options: [
@@ -2293,12 +2299,12 @@ context('TypeScript', function () {
                   alphabetize: { order: 'desc' },
                 },
               ],
-              errors: [
-                {
-                  message: semver.satisfies(eslintPkg.version, '< 3')
-                    ? '`bar` import should occur before import of `Bar`'
-                    : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
-                },
+              errors: semver.satisfies(eslintPkg.version, '< 3') ? [
+                { message: '`bar` import should occur before import of `Bar`' },
+                { message: '`foo` import should occur before import of `Bar`' },
+              ] : [
+                { message: /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/ },
+                { message: /(`foo` import should occur before import of `Bar`)|(`Bar` import should occur after import of `foo`)/ },
               ],
             },
             parserConfig,
