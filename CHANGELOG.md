@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-named-default`]: ignore Flow import type and typeof ([#1983], thanks [@christianvuerings])
 - [`no-extraneous-dependencies`]: Exclude flow `typeof` imports ([#1534], thanks [@devongovett])
 - [`newline-after-import`]: respect decorator annotations ([#1985], thanks [@lilling])
+- [`no-restricted-paths`]: enhance performance for zones with `except` paths ([#2022], thanks [@malykhinvi])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -763,6 +764,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
 [#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
 [#1993]: https://github.com/benmosher/eslint-plugin-import/pull/1993
