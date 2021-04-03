@@ -140,13 +140,14 @@ exports.resolve = function (source, file, settings) {
 
   log('Using config: ', webpackConfig);
 
+  const resolveSync = getResolveSync(configPath, webpackConfig, cwd);
+
   // externals
-  if (findExternal(source, webpackConfig.externals, path.dirname(file))) {
+  if (findExternal(source, webpackConfig.externals, path.dirname(file), resolveSync)) {
     return { found: true, path: null };
   }
 
   // otherwise, resolve "normally"
-  const resolveSync = getResolveSync(configPath, webpackConfig, cwd);
 
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) };
@@ -323,7 +324,7 @@ function makeRootPlugin(ModulesInRootPlugin, name, root) {
 }
 /* eslint-enable */
 
-function findExternal(source, externals, context) {
+function findExternal(source, externals, context, resolveSync) {
   if (!externals) return false;
 
   // string match
@@ -331,7 +332,7 @@ function findExternal(source, externals, context) {
 
   // array: recurse
   if (Array.isArray(externals)) {
-    return externals.some(function (e) { return findExternal(source, e, context); });
+    return externals.some(function (e) { return findExternal(source, e, context, resolveSync); });
   }
 
   if (isRegex(externals)) {
@@ -340,13 +341,45 @@ function findExternal(source, externals, context) {
 
   if (typeof externals === 'function') {
     let functionExternalFound = false;
-    externals.call(null, context, source, function(err, value) {
+    const callback = function (err, value) {
       if (err) {
         functionExternalFound = false;
       } else {
-        functionExternalFound = findExternal(source, value, context);
+        functionExternalFound = findExternal(source, value, context, resolveSync);
       }
-    });
+    };
+    // - for prior webpack 5, 'externals function' uses 3 arguments
+    // - for webpack 5, the count of arguments is less than 3
+    if (externals.length === 3) {
+      externals.call(null, context, source, callback);
+    } else {
+      const ctx = {
+        context,
+        request: source,
+        contextInfo: {
+          issuer: '',
+          issuerLayer: null,
+          compiler: '',
+        },
+        getResolve: () => (resolveContext, requestToResolve, cb) => {
+          if (cb) {
+            try {
+              cb(null, resolveSync(resolveContext, requestToResolve));
+            } catch (e) {
+              cb(e);
+            }
+          } else {
+            log('getResolve without callback not supported');
+            return Promise.reject(new Error('Not supported'));
+          }
+        },
+      };
+      const result = externals.call(null, ctx, callback);
+      // todo handling Promise object (using synchronous-promise package?)
+      if (result && typeof result.then === 'function') {
+        log('Asynchronous functions for externals not supported');
+      }
+    }
     return functionExternalFound;
   }
 

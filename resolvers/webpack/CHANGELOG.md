@@ -5,8 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Added
+- add support for webpack5 'externals function' ([#2023], thanks [@jet2jet])
+
 ### Changed
- - Add warning about async Webpack configs ([#1962], thanks [@ogonkov])
+- Add warning about async Webpack configs ([#1962], thanks [@ogonkov])
 - Replace node-libs-browser with is-core-module ([#1967], thanks [@andersk])
 
 ## 0.13.0 - 2020-09-27
@@ -141,6 +144,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `interpret` configs (such as `.babel.js`).
   Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#2023]: https://github.com/benmosher/eslint-plugin-import/pull/2023
 [#1967]: https://github.com/benmosher/eslint-plugin-import/pull/1967
 [#1962]: https://github.com/benmosher/eslint-plugin-import/pull/1962
 [#1705]: https://github.com/benmosher/eslint-plugin-import/pull/1705
@@ -201,3 +205,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@opichals]: https://github.com/opichals
 [@andersk]: https://github.com/andersk
 [@ogonkov]: https://github.com/ogonkov
+[@jet2jet]: https://github.com/jet2jet

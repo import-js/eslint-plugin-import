@@ -3,4 +3,7 @@
     "import/no-extraneous-dependencies": 1,
     "no-console": 1,
   },
+  "env": {
+    "es6": true,
+  },
 }
