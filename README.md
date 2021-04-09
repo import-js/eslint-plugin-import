@@ -12,12 +12,14 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ## Rules
 
+\* = enabled in recommended config as error, † = enabled in recommended config as warning
+
 ### Static analysis
 
-* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])
-* Ensure named imports correspond to a named export in the remote file. ([`named`])
-* Ensure a default export is present, given a default import. ([`default`])
-* Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])
+* Ensure imports point to a file/module that can be resolved. ([`no-unresolved`])*
+* Ensure named imports correspond to a named export in the remote file. ([`named`])*
+* Ensure a default export is present, given a default import. ([`default`])*
+* Ensure imported namespaces contain dereferenced properties as they are dereferenced. ([`namespace`])*
 * Restrict which files can be imported in a given folder ([`no-restricted-paths`])
 * Forbid import of modules using absolute paths ([`no-absolute-path`])
 * Forbid `require()` calls with expressions ([`no-dynamic-require`])
@@ -45,9 +47,9 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 ### Helpful warnings
 
 
-* Report any invalid exports, i.e. re-export of the same name ([`export`])
-* Report use of exported name as identifier of default export ([`no-named-as-default`])
-* Report use of exported name as property of default export ([`no-named-as-default-member`])
+* Report any invalid exports, i.e. re-export of the same name ([`export`])*
+* Report use of exported name as identifier of default export ([`no-named-as-default`]) †
+* Report use of exported name as property of default export ([`no-named-as-default-member`]) †
 * Report imported names marked with `@deprecated` documentation tag ([`no-deprecated`])
 * Forbid the use of extraneous packages ([`no-extraneous-dependencies`])
 * Forbid the use of mutable exports with `var` or `let`. ([`no-mutable-exports`])
@@ -80,7 +82,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 * Ensure all imports appear before other statements ([`first`])
 * Ensure all exports appear after other statements ([`exports-last`])
-* Report repeated import of the same module in multiple places ([`no-duplicates`])
+* Report repeated import of the same module in multiple places ([`no-duplicates`])†
 * Forbid namespace (a.k.a. "wildcard" `*`) imports ([`no-namespace`])
 * Ensure consistent use of file extension within the import path ([`extensions`])
 * Enforce a convention in module import order ([`order`])
