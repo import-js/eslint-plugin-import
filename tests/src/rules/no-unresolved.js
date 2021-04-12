@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { test, SYNTAX_CASES } from '../utils';
+import { test, SYNTAX_CASES, testVersion } from '../utils';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -92,7 +92,6 @@ function runResolverTests(resolver) {
         errors: [{ message: 'Unable to resolve path to module ' +
                             '\'./reallyfake/module\'.' }],
       }),
-
 
       rest({
         code: "import bar from './baz';",
@@ -381,4 +380,21 @@ ruleTester.run('no-unresolved electron', rule, {
 ruleTester.run('no-unresolved syntax verification', rule, {
   valid: SYNTAX_CASES,
   invalid:[],
+});
+
+// https://github.com/benmosher/eslint-plugin-import/issues/2024
+ruleTester.run('import() with built-in parser', rule, {
+  valid: [].concat(
+    testVersion('>=7', () => ({
+      code: "import('fs');",
+      parserOptions: { ecmaVersion: 2021 },
+    })) || [],
+  ),
+  invalid: [].concat(
+    testVersion('>=7', () => ({
+      code: 'import("./does-not-exist-l0w9ssmcqy9").then(() => {})',
+      parserOptions: { ecmaVersion: 2021 },
+      errors: ["Unable to resolve path to module './does-not-exist-l0w9ssmcqy9'."],
+    })) || [],
+  ),
 });

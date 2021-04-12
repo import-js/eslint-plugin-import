@@ -36,10 +36,17 @@ exports.default = function visitModules(visitor, options) {
 
   // for esmodule dynamic `import()` calls
   function checkImportCall(node) {
-    if (node.callee.type !== 'Import') return;
-    if (node.arguments.length !== 1) return;
+    let modulePath;
+    // refs https://github.com/estree/estree/blob/master/es2020.md#importexpression
+    if (node.type === 'ImportExpression') {
+      modulePath = node.source;
+    } else if (node.type === 'CallExpression') {
+      if (node.callee.type !== 'Import') return;
+      if (node.arguments.length !== 1) return;
 
-    const modulePath = node.arguments[0];
+      modulePath = node.arguments[0];
+    }
+
     if (modulePath.type !== 'Literal') return;
     if (typeof modulePath.value !== 'string') return;
 
@@ -87,6 +94,7 @@ exports.default = function visitModules(visitor, options) {
       'ExportNamedDeclaration': checkSource,
       'ExportAllDeclaration': checkSource,
       'CallExpression': checkImportCall,
+      'ImportExpression': checkImportCall,
     });
   }
 

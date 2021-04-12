@@ -29,6 +29,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`]: Exclude flow `typeof` imports ([#1534], thanks [@devongovett])
 - [`newline-after-import`]: respect decorator annotations ([#1985], thanks [@lilling])
 - [`no-restricted-paths`]: enhance performance for zones with `except` paths ([#2022], thanks [@malykhinvi])
+- [`no-unresolved`]: check import() ([#2026], thanks [@aladdin-add])
 
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
@@ -765,6 +766,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
 [#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
 [#1997]: https://github.com/benmosher/eslint-plugin-import/pull/1997
@@ -1357,3 +1359,4 @@ for info on changes for earlier releases.
 [@grit96]: https://github.com/grit96
 [@lilling]: https://github.com/lilling
 [@silviogutierrez]: https://github.com/silviogutierrez
+[@aladdin-add]: https://github.com/aladdin-add
