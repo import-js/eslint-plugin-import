@@ -150,7 +150,14 @@ function getFix(first, rest, sourceCode) {
 
     // Remove imports whose specifiers have been moved into the first import.
     for (const specifier of specifiers) {
-      fixes.push(fixer.remove(specifier.importNode));
+      const importNode = specifier.importNode;
+      fixes.push(fixer.remove(importNode));
+
+      const charAfterImportRange = [importNode.range[1], importNode.range[1] + 1];
+      const charAfterImport = sourceCode.text.substring(charAfterImportRange[0], charAfterImportRange[1]);
+      if (charAfterImport === '\n') {
+        fixes.push(fixer.removeRange(charAfterImportRange));
+      }
     }
 
     // Remove imports whose default import has been moved to the first import,
@@ -158,6 +165,12 @@ function getFix(first, rest, sourceCode) {
     // import.
     for (const node of unnecessaryImports) {
       fixes.push(fixer.remove(node));
+
+      const charAfterImportRange = [node.range[1], node.range[1] + 1];
+      const charAfterImport = sourceCode.text.substring(charAfterImportRange[0], charAfterImportRange[1]);
+      if (charAfterImport === '\n') {
+        fixes.push(fixer.removeRange(charAfterImportRange));
+      }
     }
 
     return fixes;

@@ -302,32 +302,30 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: `
-        import {x} from './foo'
-        import {y} from './foo'
-        // some-tool-disable-next-line
+import {x} from './foo'
+import {y} from './foo'
+// some-tool-disable-next-line
       `,
       // Not autofix bail.
       output: `
-        import {x,y} from './foo'
-        
-        // some-tool-disable-next-line
+import {x,y} from './foo'
+// some-tool-disable-next-line
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: `
-        import {x} from './foo'
-        // comment
+import {x} from './foo'
+// comment
 
-        import {y} from './foo'
+import {y} from './foo'
       `,
       // Not autofix bail.
       output: `
-        import {x,y} from './foo'
-        // comment
+import {x,y} from './foo'
+// comment
 
-        
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
@@ -398,6 +396,20 @@ ruleTester.run('no-duplicates', rule, {
         './foo'
         import {y} from './foo'
       `,
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    // #2027 long import list generate empty lines
+    test({
+      code: "import { Foo } from './foo';\nimport { Bar } from './foo';\nexport const value = {}",
+      output: "import { Foo , Bar } from './foo';\nexport const value = {}",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    // #2027 long import list generate empty lines
+    test({
+      code: "import { Foo } from './foo';\nimport Bar from './foo';\nexport const value = {}",
+      output: "import Bar, { Foo } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
   ],
@@ -430,4 +442,3 @@ context('TypeScript', function() {
       });
     });
 });
-

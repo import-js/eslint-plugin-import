@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
+
 ## [2.23.4] - 2021-05-29
 
 ### Fixed
@@ -808,6 +811,7 @@ for info on changes for earlier releases.
 [#2075]: https://github.com/benmosher/eslint-plugin-import/pull/2075
 [#2071]: https://github.com/benmosher/eslint-plugin-import/pull/2071
 [#2034]: https://github.com/benmosher/eslint-plugin-import/pull/2034
+[#2028]: https://github.com/benmosher/eslint-plugin-import/pull/2028
 [#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
 [#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
@@ -1273,6 +1277,7 @@ for info on changes for earlier releases.
 [@ephys]: https://github.com/ephys
 [@eps1lon]: https://github.com/eps1lon
 [@ernestostifano]: https://github.com/ernestostifano
+[@ertrzyiks]: https://github.com/ertrzyiks
 [@fa93hws]: https://github.com/fa93hws
 [@fengkfengk]: https://github.com/fengkfengk
 [@fernandopasik]: https://github.com/fernandopasik
