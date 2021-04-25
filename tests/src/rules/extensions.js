@@ -1,6 +1,7 @@
 import { RuleTester } from 'eslint';
+import path from 'path';
 import rule from 'rules/extensions';
-import { test, testFilePath } from '../utils';
+import { getTSParsers, test, testFilePath } from '../utils';
 
 const ruleTester = new RuleTester();
 
@@ -586,4 +587,68 @@ ruleTester.run('extensions', rule, {
       ],
     }),
   ],
+});
+
+
+context('TypeScript', function () {
+  getTSParsers().forEach((parser) => {
+    ruleTester.run(`extensions`, rule, {
+      valid: [
+        test({
+          code: 'import { helloWorld } from "./typescript-import-js-extension/file.js"',
+          parser: parser,
+          options: ['always', { 'extensionMap': { 'ts': 'js' } }],
+          settings: {
+            'import/parsers': { [parser]: ['.ts'] },
+            'typescript': { 'extensions': ['.ts'], 'directory': path.resolve(__dirname, '../../files/typescript-import-js-extension/') },
+          },
+        }),
+        test({
+          code: 'import { helloWorld } from "./typescript-import-js-extension/file.ts"',
+          options: ['always', { 'extensionMap': { 'json': 'jsonx' } }],
+          settings: {
+            'import/resolver': {
+              'typescript': { 'extensions': ['.ts'], 'directory': path.resolve(__dirname, '../../files/typescript-import-js-extension/') },
+            },
+          },
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'import { helloWorld } from "./typescript-import-js-extension/file.ts"',
+          options: ['always', { 'extensionMap': { 'ts': 'js' } }],
+          settings: {
+            'import/resolver': {
+              'typescript': { 'extensions': ['.ts'], 'directory': path.resolve(__dirname, '../../files/typescript-import-js-extension/') },
+            },
+          },
+          errors: [
+            {
+              message: 'Missing file extension "js" for "./typescript-import-js-extension/file.ts"',
+              line: 1,
+              column: 28,
+            },
+          ],
+        }),
+
+        test({
+          code: 'import { helloWorld } from "./typescript-import-js-extension/file"',
+          filename: testFilePath('./any/typescript/file.ts'),
+          options: ['always', { 'extensionMap': { 'ts': 'js' } }],
+          settings: {
+            'import/resolver': {
+              'typescript': { 'extensions': ['.ts'], 'directory': path.resolve(__dirname, '../../files/typescript-import-js-extension/') },
+            },
+          },
+          errors: [
+            {
+              message: 'Missing file extension for "./typescript-import-js-extension/file"',
+              line: 1,
+              column: 28,
+            },
+          ],
+        }),
+      ],
+    });
+  });
 });

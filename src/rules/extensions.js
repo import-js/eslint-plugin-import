@@ -24,6 +24,7 @@ function buildProperties(context) {
     defaultConfig: 'never',
     pattern: {},
     ignorePackages: false,
+    extensionMap: [],
   };
 
   context.options.forEach(obj => {
@@ -31,6 +32,11 @@ function buildProperties(context) {
     // If this is a string, set defaultConfig to its value
     if (typeof obj === 'string') {
       result.defaultConfig = obj;
+      return;
+    }
+
+    if (obj.extensionMap !== undefined) {
+      result.extensionMap = obj.extensionMap;
       return;
     }
 
@@ -49,6 +55,7 @@ function buildProperties(context) {
     if (obj.ignorePackages !== undefined) {
       result.ignorePackages = obj.ignorePackages;
     }
+
   });
 
   if (result.defaultConfig === 'ignorePackages') {
@@ -135,6 +142,10 @@ module.exports = {
       return false;
     }
 
+    function mapExtension(extension, extensionMap) {
+      return extensionMap && extensionMap[extension] ? extensionMap[extension] : extension;
+    }
+
     function checkFileExtension(source) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };"
       if (!source) return;
@@ -154,7 +165,9 @@ module.exports = {
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.
-      const extension = path.extname(resolvedPath || importPath).substring(1);
+      let extension = path.extname(resolvedPath || importPath).substring(1);
+
+      extension = mapExtension(extension, props.extensionMap);
 
       // determine if this is a module
       const isPackage = isExternalModule(
