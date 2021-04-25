@@ -38,6 +38,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
 - [Docs] `order`: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
 - [Tests] `no-unresolved`: add tests for `import()` ([#2012], thanks [@davidbonnet])
+- [Docs] Add import/recommended ruleset to README ([#2034], thanks [@edemaine])
 
 ## [2.22.1] - 2020-09-27
 ### Fixed
@@ -768,6 +769,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2034]: https://github.com/benmosher/eslint-plugin-import/pull/2034
 [#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
 [#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022
 [#2021]: https://github.com/benmosher/eslint-plugin-import/pull/2021
@@ -1366,3 +1368,4 @@ for info on changes for earlier releases.
 [@aladdin-add]: https://github.com/aladdin-add
 [@davidbonnet]: https://github.com/davidbonnet
 [@hayes]: https://github.com/hayes
+[@edemaine]: https://github.com/edemaine

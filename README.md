@@ -138,6 +138,8 @@ in your `.eslintrc.(yml|json|js)`, or extend one of the canned configs:
 ---
 extends:
   - eslint:recommended
+  - plugin:import/recommended
+  # alternatively, 'recommended' is the combination of these two rule sets:
   - plugin:import/errors
   - plugin:import/warnings
 
@@ -163,8 +165,7 @@ Make sure you have installed [`@typescript-eslint/parser`] which is used in the 
 ```yaml
 extends:
   - eslint:recommended
-  - plugin:import/errors
-  - plugin:import/warnings
+  - plugin:import/recommended
   - plugin:import/typescript # this line does the trick
 ```
 
