@@ -500,7 +500,7 @@ describe('renameDefault', () => {
   });
 });
 
-describe('test behaviour for new file', () => {
+describe('test behavior for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', { encoding: 'utf8' });
   });
@@ -588,7 +588,7 @@ describe('test behaviour for new file', () => {
   });
 
 
-  describe('test behaviour for new file', () => {
+  describe('test behavior for new file', () => {
     before(() => {
       fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', { encoding: 'utf8' });
     });
@@ -619,7 +619,7 @@ describe('test behaviour for new file', () => {
   });
 });
 
-describe('test behaviour for new file', () => {
+describe('test behavior for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-2.js'), '', { encoding: 'utf8' });
   });
@@ -641,7 +641,7 @@ describe('test behaviour for new file', () => {
   });
 });
 
-describe('test behaviour for new file', () => {
+describe('test behavior for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-3.js'), '', { encoding: 'utf8' });
   });
@@ -663,7 +663,26 @@ describe('test behaviour for new file', () => {
   });
 });
 
-describe('test behaviour for new file', () => {
+describe('test behavior for destructured exports', () => {
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({ options: unusedExportsOptions,
+        code: `import { destructured } from '${testFilePath('./no-unused-modules/file-destructured-1.js')}'`,
+        filename: testFilePath('./no-unused-modules/file-destructured-2.js') }),
+      test({ options: unusedExportsOptions,
+        code: `export const { destructured } = {};`,
+        filename: testFilePath('./no-unused-modules/file-destructured-1.js') }),
+    ],
+    invalid: [
+      test({ options: unusedExportsOptions,
+        code: `export const { destructured2 } = {};`,
+        filename: testFilePath('./no-unused-modules/file-destructured-1.js'),
+        errors: [`exported declaration 'destructured2' not used within other modules`] }),
+    ],
+  });
+});
+
+describe('test behavior for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-4.js.js'), '', { encoding: 'utf8' });
   });
