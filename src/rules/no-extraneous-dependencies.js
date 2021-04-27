@@ -126,7 +126,7 @@ function getModuleRealName(resolved) {
   return getFilePackageName(resolved);
 }
 
-function reportIfMissing(context, deps, depsOptions, node, name) {
+function reportIfMissing(context, deps, depsOptions, node, name, ignore) {
   // Do not report when importing types
   if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type') || node.importKind === 'typeof') {
     return;
@@ -144,6 +144,10 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   // fallback on original name in case no package.json found
   const packageName = getModuleRealName(resolved) || getModuleOriginalName(name);
 
+  if (packageName.match(ignore)) {
+    return;
+  }
+  
   const isInDeps = deps.dependencies[packageName] !== undefined;
   const isInDevDeps = deps.devDependencies[packageName] !== undefined;
   const isInOptDeps = deps.optionalDependencies[packageName] !== undefined;
@@ -200,6 +204,7 @@ module.exports = {
           'peerDependencies': { 'type': ['boolean', 'array'] },
           'bundledDependencies': { 'type': ['boolean', 'array'] },
           'packageDir': { 'type': ['string', 'array'] },
+          'ignore': { 'type': 'regexp' },
         },
         'additionalProperties': false,
       },
@@ -219,7 +224,7 @@ module.exports = {
     };
 
     return moduleVisitor((source, node) => {
-      reportIfMissing(context, deps, depsOptions, node, source.value);
+      reportIfMissing(context, deps, depsOptions, node, source.value, options.ignore);
     }, { commonjs: true });
   },
 };
