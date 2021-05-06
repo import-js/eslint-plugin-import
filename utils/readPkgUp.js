@@ -35,7 +35,7 @@ function stripBOM(str) {
  * THE SOFTWARE.
  */
 exports.default = function readPkgUp(opts) {
-  const fp = pkgUp(opts.cwd);
+  const fp = pkgUp(opts);
 
   if (!fp) {
     return {};

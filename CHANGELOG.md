@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Changed
+- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], [@mgwalker])
+
 ### Added
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
@@ -915,7 +918,7 @@ for info on changes for earlier releases.
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/import-js/eslint-plugin-import/pull/2156
-[#2149]: https://github.com/benmosher/eslint-plugin-import/pull/2149
+[#2149]: https://github.com/import-js/eslint-plugin-import/pull/2149
 [#2146]: https://github.com/import-js/eslint-plugin-import/pull/2146
 [#2140]: https://github.com/import-js/eslint-plugin-import/pull/2140
 [#2138]: https://github.com/import-js/eslint-plugin-import/pull/2138
@@ -928,6 +931,7 @@ for info on changes for earlier releases.
 [#2083]: https://github.com/import-js/eslint-plugin-import/pull/2083
 [#2075]: https://github.com/import-js/eslint-plugin-import/pull/2075
 [#2071]: https://github.com/import-js/eslint-plugin-import/pull/2071
+[#2047]: https://github.com/import-js/eslint-plugin-import/pull/2047
 [#2034]: https://github.com/import-js/eslint-plugin-import/pull/2034
 [#2028]: https://github.com/import-js/eslint-plugin-import/pull/2028
 [#2026]: https://github.com/import-js/eslint-plugin-import/pull/2026
@@ -1172,8 +1176,8 @@ for info on changes for earlier releases.
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
 [#2118]: https://github.com/import-js/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/import-js/eslint-plugin-import/issues/2067
-[#2056]: https://github.com/import-js/eslint-plugin-import/issues/2056
 [#2063]: https://github.com/import-js/eslint-plugin-import/issues/2063
+[#2056]: https://github.com/import-js/eslint-plugin-import/issues/2056
 [#1998]: https://github.com/import-js/eslint-plugin-import/issues/1998
 [#1965]: https://github.com/import-js/eslint-plugin-import/issues/1965
 [#1924]: https://github.com/import-js/eslint-plugin-import/issues/1924
@@ -1492,6 +1496,7 @@ for info on changes for earlier releases.
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@maxmalov]: https://github.com/maxmalov
+[@mgwalker]: https://github.com/mgwalker
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
 [@nickofthyme]: https://github.com/nickofthyme

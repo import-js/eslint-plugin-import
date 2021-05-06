@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import readPkgUp from 'read-pkg-up';
+import readPkgUp from 'eslint-module-utils/readPkgUp';
 import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
@@ -69,7 +69,7 @@ function getDependencies(context, packageDir) {
       Object.assign(
         packageContent,
         extractDepFields(
-          readPkgUp.sync({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), normalize: false }).pkg
+          readPkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), normalize: false }).pkg
         )
       );
     }

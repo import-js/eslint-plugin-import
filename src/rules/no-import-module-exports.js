@@ -1,9 +1,9 @@
 import minimatch from 'minimatch';
 import path from 'path';
-import pkgUp from 'pkg-up';
+import pkgUp from 'eslint-module-utils/pkgUp';
 
 function getEntryPoint(context) {
-  const pkgPath = pkgUp.sync(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
+  const pkgPath = pkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename() });
   try {
     return require.resolve(path.dirname(pkgPath));
   } catch (error) {
