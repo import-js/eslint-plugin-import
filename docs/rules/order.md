@@ -260,7 +260,7 @@ Sort the order within each group in import string length based on **import path*
 Example setting:
 ```js
 'sort-by-length': {
-  order: 'desc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
+  order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
 }
 ```
 
