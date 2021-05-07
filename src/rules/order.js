@@ -294,6 +294,53 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   });
 }
 
+function mutateRanksByLength(imported, sortByLengthOptions) {
+  const groupedByRanks = imported.reduce(function(acc, importedItem) {
+    if (!Array.isArray(acc[importedItem.rank])) {
+      acc[importedItem.rank] = [];
+    }
+    const value = importedItem.value;
+    const sourceLength = importedItem.source.range[1] - importedItem.source.range[0];
+    let specifiersLength = importedItem.specifiers.reduce((acc, specifier) => {
+      return acc + (specifier.range[1] - specifier.range[0]);
+    }, 0)
+    if (importedItem.specifiers.some((specifier) => specifier.type === 'ImportSpecifier')) {
+      specifiersLength += 4
+    }
+    const len = specifiersLength + sourceLength;
+    acc[importedItem.rank].push({
+      value,
+      len
+    });
+    return acc;
+  }, {});
+
+  const groupRanks = Object.keys(groupedByRanks);
+
+  const sorterFn = getSorter(sortByLengthOptions.order === 'asc');
+  const comparator = (a, b) => sorterFn(a.len, b.len);
+
+   // sort imports locally within their group
+  groupRanks.forEach(function(groupRank) {
+    groupedByRanks[groupRank].sort(comparator);
+  });
+
+  // assign globally unique rank to each import
+  let newRank = 0;
+  const sortedByLengthRanks = groupRanks.sort().reduce(function(acc, groupRank) {
+    groupedByRanks[groupRank].forEach(function(importedItemName) {
+      acc[importedItemName.value] = parseInt(groupRank, 10) + newRank;
+      newRank += 1;
+    });
+    return acc;
+  }, {});
+
+  // mutate the original group-rank with length-rank
+  imported.forEach(function(importedItem) {
+    importedItem.rank = sortedByLengthRanks[importedItem.value];
+  });
+}
+
 // DETECTING
 
 function computePathRank(ranks, pathGroups, path, maxPosition) {
@@ -337,7 +384,7 @@ function isModuleLevelRequire(node) {
   let n = node;
   // Handle cases like `const baz = require('foo').bar.baz`
   // and `const foo = require('foo')()`
-  while ( 
+  while (
     (n.parent.type === 'MemberExpression' && n.parent.object === n) ||
     (n.parent.type === 'CallExpression' && n.parent.callee === n)
   ) {
@@ -346,7 +393,7 @@ function isModuleLevelRequire(node) {
   return (
     n.parent.type === 'VariableDeclarator' &&
     n.parent.parent.type === 'VariableDeclaration' &&
-    n.parent.parent.parent.type === 'Program' 
+    n.parent.parent.parent.type === 'Program'
   );
 }
 
@@ -503,6 +550,13 @@ function getAlphabetizeConfig(options) {
   return { order, caseInsensitive };
 }
 
+function getSortByLengthConfig(options) {
+  const sortByConfig = options['sort-by-length'] || {};
+  const order = sortByConfig.order || 'ignore';
+
+  return { order };
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -566,6 +620,16 @@ module.exports = {
             },
             additionalProperties: false,
           },
+          'sort-by-length': {
+            type: 'object',
+            properties: {
+              order: {
+                enum: ['ignore', 'asc', 'desc'],
+                default: 'ignore',
+              },
+            },
+            additionalProperties: false,
+          },
         },
         additionalProperties: false,
       },
@@ -577,6 +641,7 @@ module.exports = {
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object']);
     const alphabetize = getAlphabetizeConfig(options);
+    const sortByLength = getSortByLengthConfig(options);
     let ranks;
 
     try {
@@ -600,6 +665,8 @@ module.exports = {
       ImportDeclaration: function handleImports(node) {
         if (node.specifiers.length) { // Ignoring unassigned imports
           const name = node.source.value;
+          const specifiers = node.specifiers
+          const source = node.source
           registerNode(
             context,
             {
@@ -607,6 +674,8 @@ module.exports = {
               value: name,
               displayName: name,
               type: 'import',
+              specifiers,
+              source
             },
             ranks,
             imported,
@@ -667,8 +736,16 @@ module.exports = {
           makeNewlinesBetweenReport(context, imported, newlinesBetweenImports);
         }
 
+        if (alphabetize.order !== 'ignore' && sortByLength.order !== 'ignore') {
+          throw new Error('Incorrect configuration of the rule: Can\'t sort by length and alphabet at the same time');
+        }
+
         if (alphabetize.order !== 'ignore') {
           mutateRanksToAlphabetize(imported, alphabetize);
+        }
+
+        if (sortByLength.order !== 'ignore') {
+          mutateRanksByLength(imported, sortByLength);
         }
 
         makeOutOfOrderReport(context, imported);
