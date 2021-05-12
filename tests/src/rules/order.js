@@ -2121,6 +2121,54 @@ ruleTester.run('order', rule, {
         message: '`foo` import should occur before import of `Bar`',
       }],
     }),
+    // Option alphabetize {order: 'asc': caseInsensitive: 'invert'}
+    test({
+      code: `
+        import a from 'bar';
+        import b from 'Foo';
+        import c from 'foo';
+
+        import index from './';
+      `,
+      output: `
+        import a from 'bar';
+        import c from 'foo';
+        import b from 'Foo';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: { order: 'asc', caseInsensitive: 'invert' },
+      }],
+      errors: [{
+        message: '`foo` import should occur before import of `Foo`',
+      }],
+    }),
+    // Option alphabetize {order: 'desc': caseInsensitive: 'invert'}
+    test({
+      code: `
+        import a from 'foo';
+        import b from 'Foo';
+        import c from 'bar';
+
+        import index from './';
+      `,
+      output: `
+        import b from 'Foo';
+        import a from 'foo';
+        import c from 'bar';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        alphabetize: { order: 'desc', caseInsensitive: 'invert' },
+      }],
+      errors: [{
+        message: '`Foo` import should occur before import of `foo`',
+      }],
+    }),
     // Alphabetize with parent paths
     test({
       code: `

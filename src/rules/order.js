@@ -242,10 +242,18 @@ function makeOutOfOrderReport(context, imported) {
   reportOutOfOrder(context, imported, outOfOrder, 'before');
 }
 
-function getSorter(ascending) {
-  const multiplier = ascending ? 1 : -1;
+function getSorter(alphabetizeOptions) {
+  const multiplier = alphabetizeOptions.order === 'asc' ? 1 : -1;
+  let collate;
+  if (alphabetizeOptions.caseInsensitive) {
+    if (alphabetizeOptions.caseFirst === 'lower') {
+      collate = swapCase;
+    } else {
+      collate = (s) => String(s).toLowerCase();
+    }
+  }
 
-  return function importsSorter(importA, importB) {
+  function importsSorter(importA, importB) {
     let result;
 
     if (importA < importB) {
@@ -257,7 +265,18 @@ function getSorter(ascending) {
     }
 
     return result * multiplier;
-  };
+  }
+  return collate ? (a, b) => importsSorter(collate(a), collate(b)) : importsSorter;
+}
+
+function swapCase(input) {
+  input = String(input);
+  let result = '';
+  for (let i = 0; i < input.length; i++) {
+    const lower = input[i].toLowerCase();
+    result += input[i] === lower ? input[i].toUpperCase() : lower;
+  }
+  return result;
 }
 
 function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
@@ -271,11 +290,10 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   const groupRanks = Object.keys(groupedByRanks);
 
-  const sorterFn = getSorter(alphabetizeOptions.order === 'asc');
-  const comparator = alphabetizeOptions.caseInsensitive ? (a, b) => sorterFn(String(a).toLowerCase(), String(b).toLowerCase()) : (a, b) => sorterFn(a, b);
+  const sorterFn = getSorter(alphabetizeOptions);
   // sort imports locally within their group
   groupRanks.forEach(function(groupRank) {
-    groupedByRanks[groupRank].sort(comparator);
+    groupedByRanks[groupRank].sort(sorterFn);
   });
 
   // assign globally unique rank to each import
@@ -558,8 +576,10 @@ module.exports = {
             type: 'object',
             properties: {
               caseInsensitive: {
-                type: 'boolean',
-                default: false,
+                anyOf: [
+                  { type: 'boolean', default: false },
+                  { type: 'string', enum: ['invert'] },
+                ],
               },
               order: {
                 enum: ['ignore', 'asc', 'desc'],
