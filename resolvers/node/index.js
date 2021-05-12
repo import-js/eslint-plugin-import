@@ -30,7 +30,7 @@ function opts(file, config) {
   return Object.assign({
     // more closely matches Node (#333)
     // plus 'mjs' for native modules! (#939)
-    extensions: ['.mjs', '.js', '.json', '.node'],
+    extensions: ['.mjs', '.js', '.json', '.node', '.d.ts'],
   },
   config,
   {

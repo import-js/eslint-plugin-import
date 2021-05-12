@@ -29,6 +29,8 @@ function runResolverTests(resolver) {
       rest({ code: "import bar from './bar.js';" }),
       rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
+      rest({ code: "import type MemoryStream from 'memorystream';",
+        parser: require.resolve('@typescript-eslint/parser') }),
       rest({ code: "import('fs');",
         parser: require.resolve('babel-eslint') }),
 
@@ -106,6 +108,17 @@ function runResolverTests(resolver) {
       rest({
         code: "import bar from './empty-folder';",
         errors: [{ message: "Unable to resolve path to module './empty-folder'.",
+          type: 'Literal',
+        }] }),
+      rest({
+        code: "import MemoryStream from 'memorystream';",
+        errors: [{ message: "Unable to resolve path to module 'memorystream'.",
+          type: 'Literal',
+        }] }),
+      rest({
+        code: "import type Bar from 'this-doesnt-exist';",
+        parser: require.resolve('@typescript-eslint/parser'),
+        errors: [{ message: "Unable to resolve path to module 'this-doesnt-exist'.",
           type: 'Literal',
         }] }),
 
