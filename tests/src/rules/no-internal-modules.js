@@ -230,11 +230,11 @@ ruleTester.run('no-internal-modules', rule, {
       ],
     }),
     test({
-      code: 'import get from "debug/node"',
+      code: 'import get from "jquery/dist/jquery"',
       filename: testFilePath('./internal-modules/plugins/plugin.js'),
       errors: [
         {
-          message: 'Reaching to "debug/node" is not allowed.',
+          message: 'Reaching to "jquery/dist/jquery" is not allowed.',
           line: 1,
           column: 17,
         },

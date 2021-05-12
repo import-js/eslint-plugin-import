@@ -33,7 +33,7 @@
   "homepage": "https://github.com/benmosher/eslint-plugin-import/tree/master/resolvers/webpack",
   "dependencies": {
     "array-find": "^1.0.0",
-    "debug": "^2.6.9",
+    "debug": "^2.6.9 || ^4.1.1",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
     "has": "^1.0.3",
