@@ -77,10 +77,10 @@ function forEachDeclarationIdentifier(declaration, cb) {
       declaration.type === TS_TYPE_ALIAS_DECLARATION ||
       declaration.type === TS_ENUM_DECLARATION
     ) {
-      cb(declaration.id.name);
+      cb(declaration.id.name, declaration.id.loc);
     } else if (declaration.type === VARIABLE_DECLARATION) {
       declaration.declarations.forEach(({ id }) => {
-        cb(id.name);
+        cb(id.name, id.loc);
       });
     }
   }
@@ -479,7 +479,7 @@ module.exports = {
       exportCount.set(IMPORT_NAMESPACE_SPECIFIER, namespaceImports);
     };
 
-    const checkUsage = (node, exportedValue) => {
+    const checkUsage = (node, exportedValue, loc) => {
       if (!unusedExports) {
         return;
       }
@@ -532,16 +532,18 @@ module.exports = {
 
       if (typeof exportStatement !== 'undefined'){
         if (exportStatement.whereUsed.size < 1) {
-          context.report(
+          context.report({
             node,
-            `exported declaration '${value}' not used within other modules`
-          );
+            loc,
+            message: `exported declaration '${value}' not used within other modules`,
+          });
         }
       } else {
-        context.report(
+        context.report({
           node,
-          `exported declaration '${value}' not used within other modules`
-        );
+          loc,
+          message: `exported declaration '${value}' not used within other modules`,
+        });
       }
     };
 
@@ -890,10 +892,10 @@ module.exports = {
       },
       'ExportNamedDeclaration': node => {
         node.specifiers.forEach(specifier => {
-          checkUsage(node, specifier.exported.name);
+          checkUsage(node, specifier.exported.name, specifier.loc);
         });
-        forEachDeclarationIdentifier(node.declaration, (name) => {
-          checkUsage(node, name);
+        forEachDeclarationIdentifier(node.declaration, (name, loc) => {
+          checkUsage(node, name, loc);
         });
       },
     };
