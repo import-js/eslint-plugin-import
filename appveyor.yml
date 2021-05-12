@@ -17,6 +17,8 @@ matrix:
   fast_finish: false
   exclude:
     - configuration: WSL
+      nodejs_version: "10"
+    - configuration: WSL
       nodejs_version: "8"
 
   # allow_failures:
