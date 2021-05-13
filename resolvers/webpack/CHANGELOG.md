@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - Add warning about async Webpack configs ([#1962], thanks [@ogonkov])
 - Replace node-libs-browser with is-core-module ([#1967], thanks [@andersk])
+- [meta] add "engines" field to document existing requirements
 
 ## 0.13.0 - 2020-09-27
 
