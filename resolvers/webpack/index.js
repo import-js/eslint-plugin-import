@@ -11,6 +11,7 @@ const isCore = require('is-core-module');
 const resolve = require('resolve');
 const semver = require('semver');
 const has = require('has');
+const isRegex = require('is-regex');
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
 
@@ -333,7 +334,7 @@ function findExternal(source, externals, context) {
     return externals.some(function (e) { return findExternal(source, e, context); });
   }
 
-  if (externals instanceof RegExp) {
+  if (isRegex(externals)) {
     return externals.test(source);
   }
 
