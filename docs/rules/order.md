@@ -256,6 +256,41 @@ import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
 ```
 
+### `sort-by-length: {order: asc|desc|ignore, caseInsensitive: true|false}`:
+
+Sort the order within each group in import string length based on **import path**:
+
+Example setting:
+```js
+'sort-by-length': {
+  order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
+}
+```
+
+This will fail the rule check:
+
+```js
+/* eslint import/order: ["error", {"sort-by-length": {"order": "desc"}}] */
+import React, { PureComponent } from 'react';
+import aTypes from 'prop-types';
+import { compose, apply } from 'xcompose';
+import * as classnames from 'classnames';
+import blist from 'BList';
+```
+
+While this will pass:
+
+```js
+/* eslint import/order: ["error", {"sort-by-length": {"order": "desc"}}] */
+import React, { PureComponent } from 'react';
+import { compose, apply } from 'xcompose';
+import * as classnames from 'classnames';
+import aTypes from 'prop-types';
+import blist from 'BList';
+```
+
+**NOTE**: Do not use this rule with `alphabetize`
+
 ## Related
 
 - [`import/external-module-folders`] setting

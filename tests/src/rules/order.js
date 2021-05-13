@@ -706,6 +706,63 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // Option sort-by-length: {order: 'ignore'}
+    test({
+      code: `
+        import longModule from 'long-module-name';
+        import short from 'short-module';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        'sort-by-length': { order: 'ignore' },
+      }],
+    }),
+    // Option sort-by-length: {order: 'asc'}
+    test({
+      code: `
+        import short from 'short-module';
+        import longModule from 'long-module-name';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        'sort-by-length': { order: 'asc' },
+      }],
+    }),
+    // Option sort-by-length: {order: 'desc'}
+    test({
+      code: `
+        import longModule from 'long-module-name';
+        import short from 'short-module';
+
+        import index from './';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        'sort-by-length': { order: 'desc' },
+      }],
+    }),
+    // Sort by length with different import types
+    test({
+      code: `
+        import { foo , bar } from 'module-name/path/to/specific/un-exported/file';
+        import { export1 as alias } from 'module-name-1';
+        import { export1, export2 } from 'module-name-2';
+        import defaultExport from 'module-name-3';
+        import { export3 } from 'module-4';
+        import * as name from 'module-5';
+
+        import index from './';
+        import './module';
+      `,
+      options: [{
+        groups: ['external', 'index'],
+        'sort-by-length': { order: 'desc' },
+      }],
+    }),
     ...flatMap(getTSParsers, parser => [
       // Order of the `import ... = require(...)` syntax
       test({
@@ -854,10 +911,10 @@ ruleTester.run('order', rule, {
     test({
       code:
         `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n` +
-        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`,      
+        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`,
       output:
         `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n` +
-        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`,      
+        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`,
       errors: [{
         message: '`fs` import should occur before import of `async`',
       }],
