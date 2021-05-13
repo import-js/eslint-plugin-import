@@ -3,6 +3,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const path = require('path');
+const semver = require('semver');
 
 const webpack = require('../index');
 
@@ -11,9 +12,6 @@ const file = path.join(__dirname, 'files', 'dummy.js');
 describe('externals', function () {
   const settingsWebpack5 = {
     config: require(path.join(__dirname, './files/webpack.config.webpack5.js')),
-  };
-  const settingsWebpack5Async = {
-    config: require(path.join(__dirname, './files/webpack.config.webpack5.async-externals.js')),
   };
 
   it('works on just a string', function () {
@@ -52,13 +50,19 @@ describe('externals', function () {
     expect(resolved).to.have.property('path', null);
   });
 
-  it('prevents using an asynchronous function for webpack 5', function () {
-    const resolved = webpack.resolve('underscore', file, settingsWebpack5Async);
-    expect(resolved).to.have.property('found', false);
-  });
+  (semver.satisfies(process.version, '> 6') ? describe : describe.skip)('async function in webpack 5', function () {
+    const settingsWebpack5Async = () => ({
+      config: require(path.join(__dirname, './files/webpack.config.webpack5.async-externals.js')),
+    });
 
-  it('prevents using a function which uses Promise returned by getResolve for webpack 5', function () {
-    const resolved = webpack.resolve('graphql', file, settingsWebpack5Async);
-    expect(resolved).to.have.property('found', false);
+    it('prevents using an asynchronous function for webpack 5', function () {
+      const resolved = webpack.resolve('underscore', file, settingsWebpack5Async());
+      expect(resolved).to.have.property('found', false);
+    });
+
+    it('prevents using a function which uses Promise returned by getResolve for webpack 5', function () {
+      const resolved = webpack.resolve('graphql', file, settingsWebpack5Async());
+      expect(resolved).to.have.property('found', false);
+    });
   });
 });
