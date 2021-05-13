@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         package:
@@ -32,14 +33,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ljharb/actions/node/run@main
-        name: 'npm install && npm run tests-only'
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install'
+        env:
+          ESLINT_VERSION: ${{ matrix.eslint }}
+          TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
         with:
           node-version: ${{ matrix.node-version }}
-          after_install: npm run copy-metafiles && cd ${{ matrix.package }} && npm install
-          command: 'tests-only'
-          after_success: npm run coveralls
+          after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh && cd ${{ matrix.package }} && npm install
           skip-ls-check: true
+      - run: cd ${{ matrix.package }} && npm run tests-only && npm run coveralls
 
   packages:
     name: 'packages: all tests'

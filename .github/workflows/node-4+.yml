@@ -66,18 +66,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: ljharb/actions/node/run@main
+      - uses: ljharb/actions/node/install@main
         continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
-        name: 'npm install && npm run tests-only'
+        name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
         env:
           ESLINT_VERSION: ${{ matrix.eslint }}
           TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
         with:
           node-version: ${{ matrix.node-version }}
           after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh
-          command: 'tests-only'
-          after_success: 'npm run coveralls'
           skip-ls-check: true
+      - run: npm run tests-only
+      - run: npm run coveralls
 
   node:
     name: 'node 4+'
