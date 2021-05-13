@@ -12,7 +12,7 @@ const stringify = JSON.stringify;
 function hashify(value, hash) {
   if (!hash) hash = createHash('sha256');
 
-  if (value instanceof Array) {
+  if (Array.isArray(value)) {
     hashArray(value, hash);
   } else if (value instanceof Object) {
     hashObject(value, hash);

@@ -329,7 +329,7 @@ function findExternal(source, externals, context) {
   if (typeof externals === 'string') return (source === externals);
 
   // array: recurse
-  if (externals instanceof Array) {
+  if (Array.isArray(externals)) {
     return externals.some(function (e) { return findExternal(source, e, context); });
   }
 

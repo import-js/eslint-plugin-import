@@ -152,7 +152,7 @@ function fullResolve(modulePath, sourceFile, settings) {
 exports.relative = relative;
 
 function resolverReducer(resolvers, map) {
-  if (resolvers instanceof Array) {
+  if (Array.isArray(resolvers)) {
     resolvers.forEach(r => resolverReducer(r, map));
     return map;
   }
