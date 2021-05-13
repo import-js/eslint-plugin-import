@@ -42,7 +42,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh && cd ${{ matrix.package }} && npm install
           skip-ls-check: true
-      - run: cd ${{ matrix.package }} && npm run tests-only && npm run coveralls
+      - run: cd ${{ matrix.package }} && npm run tests-only
 
   packages:
     name: 'packages: all tests'
