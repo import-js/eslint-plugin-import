@@ -231,7 +231,28 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser: parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
+      {
+        code: `
+          import stub from './stub';
+
+          export {
+              stub
+          }
+        `,
+        parser: parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
     ]),
+    {
+      code: `
+        import stub from './stub';
+
+        export {
+            stub
+        }
+      `,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
   ],
 
   invalid: [].concat(

@@ -48,7 +48,8 @@ function isExportDefaultClass(node) {
 }
 
 function isExportNameClass(node) {
-  return node.type === 'ExportNamedDeclaration' && node.declaration.type === 'ClassDeclaration';
+  
+  return node.type === 'ExportNamedDeclaration' && node.declaration && node.declaration.type === 'ClassDeclaration';
 }
 
 module.exports = {
