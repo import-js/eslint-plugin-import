@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`newline-after-import`]: fix crash with `export {}` syntax ([#2063], [#2056], thanks [@ljharb])
 - `ExportMap`: do not crash when tsconfig lacks `.compilerOptions` ([#2067], thanks [@ljharb])
+- [`order`]: fix alphabetical sorting ([#2071], thanks [@grit96])
 
 ## [2.23.0] - 2021-05-13
 
@@ -775,6 +776,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2071]: https://github.com/benmosher/eslint-plugin-import/pull/2071
 [#2034]: https://github.com/benmosher/eslint-plugin-import/pull/2034
 [#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
 [#2022]: https://github.com/benmosher/eslint-plugin-import/pull/2022

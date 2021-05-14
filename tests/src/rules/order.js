@@ -706,6 +706,20 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // Order of imports with similar names
+    test({
+      code: `
+        import React from 'react';
+        import { BrowserRouter } from 'react-router-dom';
+      `,
+      options: [
+        {
+          alphabetize: {
+            order: 'asc',
+          },
+        },
+      ],
+    }),
     ...flatMap(getTSParsers, parser => [
       // Order of the `import ... = require(...)` syntax
       test({
@@ -2269,6 +2283,21 @@ context('TypeScript', function () {
                 {
                   groups: ['external', 'index'],
                   alphabetize: { order: 'desc' },
+                },
+              ],
+            },
+            parserConfig,
+          ),
+          test(
+            {
+              code: `
+                import { Partner } from '@models/partner/partner';
+                import { PartnerId } from '@models/partner/partner-id';
+              `,
+              parser,
+              options: [
+                {
+                  alphabetize: { order: 'asc' },
                 },
               ],
             },

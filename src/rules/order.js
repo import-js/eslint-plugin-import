@@ -265,14 +265,17 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = [];
     }
-    acc[importedItem.rank].push(`${importedItem.value}-${importedItem.node.importKind}`);
+    acc[importedItem.rank].push(importedItem);
     return acc;
   }, {});
 
   const groupRanks = Object.keys(groupedByRanks);
 
   const sorterFn = getSorter(alphabetizeOptions.order === 'asc');
-  const comparator = alphabetizeOptions.caseInsensitive ? (a, b) => sorterFn(String(a).toLowerCase(), String(b).toLowerCase()) : (a, b) => sorterFn(a, b);
+  const comparator = alphabetizeOptions.caseInsensitive
+    ? (a, b) => sorterFn(String(a.value).toLowerCase(), String(b.value).toLowerCase())
+    : (a, b) => sorterFn(a.value, b.value);
+
   // sort imports locally within their group
   groupRanks.forEach(function(groupRank) {
     groupedByRanks[groupRank].sort(comparator);
@@ -281,8 +284,8 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   // assign globally unique rank to each import
   let newRank = 0;
   const alphabetizedRanks = groupRanks.sort().reduce(function(acc, groupRank) {
-    groupedByRanks[groupRank].forEach(function(importedItemName) {
-      acc[importedItemName] = parseInt(groupRank, 10) + newRank;
+    groupedByRanks[groupRank].forEach(function(importedItem) {
+      acc[`${importedItem.value}|${importedItem.node.importKind}`] = parseInt(groupRank, 10) + newRank;
       newRank += 1;
     });
     return acc;
@@ -290,7 +293,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   // mutate the original group-rank with alphabetized-rank
   imported.forEach(function(importedItem) {
-    importedItem.rank = alphabetizedRanks[`${importedItem.value}-${importedItem.node.importKind}`];
+    importedItem.rank = alphabetizedRanks[`${importedItem.value}|${importedItem.node.importKind}`];
   });
 }
 
