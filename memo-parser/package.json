@@ -29,6 +29,6 @@
     "eslint": ">=3.5.0"
   },
   "dependencies": {
-    "eslint-module-utils": "^2.5.0"
+    "eslint-module-utils": "^2.6.1"
   }
 }
