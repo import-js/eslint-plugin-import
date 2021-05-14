@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.23.0] - 2021-05-13
+
 ### Added
 - [`no-commonjs`]: Also detect require calls with expressionless template literals: ``` require(`x`) ``` ([#1958], thanks [@FloEdelmann])
 - [`no-internal-modules`]: Add `forbid` option ([#1846], thanks [@guillaumewuip])
@@ -1104,7 +1106,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.1...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.0...HEAD
+[2.23.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.1...v2.23.0
 [2.22.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.0...v2.22.1
 [2.22.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.22.0
 [2.21.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.21.2
