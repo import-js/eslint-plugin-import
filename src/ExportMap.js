@@ -472,7 +472,7 @@ ExportMap.parse = function (path, content, context) {
       tsConfigCache.set(cacheKey, tsConfig);
     }
 
-    return tsConfig !== null ? tsConfig.compilerOptions.esModuleInterop : false;
+    return tsConfig && tsConfig.compilerOptions ? tsConfig.compilerOptions.esModuleInterop : false;
   }
 
   ast.body.forEach(function (n) {

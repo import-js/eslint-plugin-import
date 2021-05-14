@@ -258,6 +258,26 @@ context('TypeScript', function () {
           },
           errors: ['No default export found in imported module "./typescript-export-as-default-namespace".'],
         }),
+        test({
+          code: `import Foo from "./typescript-export-as-default-namespace"`,
+          parser: parser,
+          settings: {
+            'import/parsers': { [parser]: ['.ts'] },
+            'import/resolver': { 'eslint-import-resolver-typescript': true },
+          },
+          parserOptions: {
+            tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-no-compiler-options/'),
+          },
+          errors: [
+            {
+              message: 'No default export found in imported module "./typescript-export-as-default-namespace".',
+              line: 1,
+              column: 8,
+              endLine: 1,
+              endColumn: 11,
+            },
+          ],
+        }),
       ],
     });
   });
