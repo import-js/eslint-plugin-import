@@ -5,10 +5,20 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.6.1 - 2021-05-13
+
+### Fixed
+- `no-unresolved`: check `import()` ([#2026], thanks [@aladdin-add])
+- Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
+
+### Changed
+- [deps] update `debug`
+- [Refactor] use `Array.isArray` instead of `instanceof Array`
+
 ## v2.6.0 - 2020-03-28
 
 ### Added
-[New] Print more helpful info if parsing fails ([#1671], thanks [@kaiyoma])
+- Print more helpful info if parsing fails ([#1671], thanks [@kaiyoma])
 
 ## v2.5.2 - 2020-01-12
 
@@ -75,6 +85,8 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
+[#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
 [#1671]: https://github.com/benmosher/eslint-plugin-import/pull/1671
 [#1606]: https://github.com/benmosher/eslint-plugin-import/pull/1606
 [#1602]: https://github.com/benmosher/eslint-plugin-import/pull/1602
@@ -101,3 +113,5 @@ Yanked due to critical issue with cache key resulting from #839.
 [@sompylasar]: https://github.com/sompylasar
 [@iamnapo]: https://github.com/iamnapo
 [@kaiyoma]: https://github.com/kaiyoma
+[@manuth]: https://github.com/manuth
+[@aladdin-add]: https://github.com/aladdin-add
