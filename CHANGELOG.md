@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Fixed
-- [`newline-after-import`]: fix crash with `export {}` syntax ([#2063], [#2065], thanks [@ljharb])
+- [`newline-after-import`]: fix crash with `export {}` syntax ([#2063], [#2056], thanks [@ljharb])
 
 ## [2.23.0] - 2021-05-13
 
@@ -1006,7 +1006,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
-[#2065]: https://github.com/benmosher/eslint-plugin-import/issues/2065
+[#2056]: https://github.com/benmosher/eslint-plugin-import/issues/2056
 [#2063]: https://github.com/benmosher/eslint-plugin-import/issues/2063
 [#1965]: https://github.com/benmosher/eslint-plugin-import/issues/1965
 [#1924]: https://github.com/benmosher/eslint-plugin-import/issues/1924
