@@ -30,7 +30,8 @@
     "test": "npm run tests-only",
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
-    "prepublish": "not-in-publish || npm run build",
+    "prepublishOnly": "safe-publish-latest && npm run build",
+    "prepublish": "not-in-publish || npm run prepublishOnly",
     "coveralls": "nyc report --reporter lcovonly && coveralls < ./coverage/lcov.info"
   },
   "repository": {
@@ -88,6 +89,7 @@
     "nyc": "^11.9.0",
     "redux": "^3.7.2",
     "rimraf": "^2.7.1",
+    "safe-publish-latest": "^1.1.4",
     "semver": "^6.3.0",
     "sinon": "^2.4.1",
     "typescript": "^2.8.1 || ~3.9.5",
