@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.23.0] - 2021-05-14
+
 ### Fixed
 - [`newline-after-import`]: fix crash with `export {}` syntax ([#2063], [#2056], thanks [@ljharb])
 - `ExportMap`: do not crash when tsconfig lacks `.compilerOptions` ([#2067], thanks [@ljharb])
@@ -1115,7 +1117,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.0...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.1...HEAD
+[2.23.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.0...v2.23.1
 [2.23.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.1...v2.23.0
 [2.22.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.0...v2.22.1
 [2.22.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.21.1...v2.22.0
