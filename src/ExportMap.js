@@ -495,7 +495,9 @@ ExportMap.parse = function (path, content, context) {
     if (n.type === 'ImportDeclaration') {
       // import type { Foo } (TS and Flow)
       const declarationIsType = n.importKind === 'type';
-      let isOnlyImportingTypes = declarationIsType;
+      // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
+      // shouldn't be considered to be just importing types
+      let specifiersOnlyImportingTypes = n.specifiers.length;
       const importedSpecifiers = new Set();
       n.specifiers.forEach(specifier => {
         if (supportedImportTypes.has(specifier.type)) {
@@ -506,11 +508,10 @@ ExportMap.parse = function (path, content, context) {
         }
 
         // import { type Foo } (Flow)
-        if (!declarationIsType) {
-          isOnlyImportingTypes = specifier.importKind === 'type';
-        }
+        specifiersOnlyImportingTypes =
+          specifiersOnlyImportingTypes && specifier.importKind === 'type';
       });
-      captureDependency(n, isOnlyImportingTypes, importedSpecifiers);
+      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
 
       const ns = n.specifiers.find(s => s.type === 'ImportNamespaceSpecifier');
       if (ns) {

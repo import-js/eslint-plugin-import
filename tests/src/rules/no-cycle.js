@@ -88,6 +88,11 @@ ruleTester.run('no-cycle', rule, {
       errors: [error(`Dependency cycle detected.`)],
     }),
     test({
+      code: 'import { bar } from "./flow-types-some-type-imports"',
+      parser: require.resolve('babel-eslint'),
+      errors: [error(`Dependency cycle detected.`)],
+    }),
+    test({
       code: 'import { foo } from "cycles/external/depth-one"',
       errors: [error(`Dependency cycle detected.`)],
       settings: {
