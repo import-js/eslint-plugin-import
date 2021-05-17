@@ -73,6 +73,14 @@ ruleTester.run('no-cycle', rule, {
       code: 'import { bar } from "./flow-types"',
       parser: require.resolve('babel-eslint'),
     }),
+    test({
+      code: 'import { bar } from "./flow-types-only-importing-type"',
+      parser: require.resolve('babel-eslint'),
+    }),
+    test({
+      code: 'import { bar } from "./flow-types-only-importing-multiple-types"',
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
   invalid: [
     test({

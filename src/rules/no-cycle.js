@@ -84,18 +84,26 @@ module.exports = {
         traversed.add(m.path);
 
         for (const [path, { getter, declarations }] of m.imports) {
-          if (path === myPath) return true;
           if (traversed.has(path)) continue;
-          for (const { source, isOnlyImportingTypes } of declarations) {
-            if (ignoreModule(source.value)) continue;
+          const toTraverse = [...declarations].filter(({ source, isOnlyImportingTypes }) =>
+            !ignoreModule(source.value) &&
             // Ignore only type imports
-            if (isOnlyImportingTypes) continue;
+            !isOnlyImportingTypes
+          );
+          /*
+          Only report as a cycle if there are any import declarations that are considered by
+          the rule. For example:
 
-            if (route.length + 1 < maxDepth) {
-              untraversed.push({
-                mget: getter,
-                route: route.concat(source),
-              });
+          a.ts:
+          import { foo } from './b' // should not be reported as a cycle
+
+          b.ts:
+          import type { Bar } from './a'
+          */
+          if (path === myPath && toTraverse.length > 0) return true;
+          if (route.length + 1 < maxDepth) {
+            for (const { source } of toTraverse) {
+              untraversed.push({ mget: getter, route: route.concat(source) });
             }
           }
         }

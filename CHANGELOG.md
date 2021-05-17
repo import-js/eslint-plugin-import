@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`no-restricted-paths`]: fix false positive matches ([#2090], thanks [@malykhinvi])
+- [`no-cycle`]: ignore imports where imported file only imports types of importing file ([#2083], thanks [@cherryblossom000])
 
 ### Changed
 - [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
@@ -790,6 +791,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090
+[#2083]: https://github.com/benmosher/eslint-plugin-import/pull/2083
 [#2075]: https://github.com/benmosher/eslint-plugin-import/pull/2075
 [#2071]: https://github.com/benmosher/eslint-plugin-import/pull/2071
 [#2034]: https://github.com/benmosher/eslint-plugin-import/pull/2034
