@@ -313,7 +313,7 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
   let rank;
   if (importEntry.type === 'import:object') {
     impType = 'object';
-  } else if (importEntry.node.importKind === 'type') {
+  } else if (importEntry.node.importKind === 'type' && ranks.omittedTypes.indexOf('type') === -1) {
     impType = 'type';
   } else {
     impType = importType(importEntry.value, context);
@@ -382,10 +382,12 @@ function convertGroupsToRanks(groups) {
     return rankObject[type] === undefined;
   });
 
-  return omittedTypes.reduce(function(res, type) {
+  const ranks = omittedTypes.reduce(function(res, type) {
     res[type] = groups.length;
     return res;
   }, rankObject);
+
+  return { groups: ranks, omittedTypes };
 }
 
 function convertPathGroupsForRanks(pathGroups) {
@@ -590,8 +592,10 @@ module.exports = {
 
     try {
       const { pathGroups, maxPosition } = convertPathGroupsForRanks(options.pathGroups || []);
+      const { groups, omittedTypes } = convertGroupsToRanks(options.groups || defaultGroups);
       ranks = {
-        groups: convertGroupsToRanks(options.groups || defaultGroups),
+        groups,
+        omittedTypes,
         pathGroups,
         maxPosition,
       };
