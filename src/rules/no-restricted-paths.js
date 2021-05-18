@@ -1,10 +1,14 @@
-import containsPath from 'contains-path';
 import path from 'path';
 
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 import importType from '../core/importType';
+
+const containsPath = (filepath, target) => {
+  const relative = path.relative(target, filepath);
+  return relative === '' || !relative.startsWith('..');
+};
 
 module.exports = {
   meta: {

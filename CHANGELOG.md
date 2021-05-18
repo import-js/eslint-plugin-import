@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`no-restricted-paths`]: fix false positive matches ([#2090], thanks [@malykhinvi])
+
 ### Changed
 - [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
 
@@ -786,6 +789,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090
 [#2075]: https://github.com/benmosher/eslint-plugin-import/pull/2075
 [#2071]: https://github.com/benmosher/eslint-plugin-import/pull/2071
 [#2034]: https://github.com/benmosher/eslint-plugin-import/pull/2034
@@ -1238,7 +1242,6 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@giodamelio]: https://github.com/giodamelio
-[@ntdb]: https://github.com/ntdb
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@sompylasar]: https://github.com/sompylasar
 [@kevin940726]: https://github.com/kevin940726

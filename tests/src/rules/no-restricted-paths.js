@@ -50,6 +50,17 @@ ruleTester.run('no-restricted-paths', rule, {
         } ],
       } ],
     }),
+    test({
+      code: 'import a from "../one/a.js"',
+      filename: testFilePath('./restricted-paths/server/two-new/a.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/server/two',
+          from: './tests/files/restricted-paths/server',
+          except: [],
+        } ],
+      } ],
+    }),
 
 
     // irrelevant function calls
