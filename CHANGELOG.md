@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.23.3] - 2021-05-21
+
 ### Fixed
 - [`no-restricted-paths`]: fix false positive matches ([#2090], thanks [@malykhinvi])
 - [`no-cycle`]: ignore imports where imported file only imports types of importing file ([#2083], thanks [@cherryblossom000])
@@ -1135,7 +1137,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.2...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.3...HEAD
+[2.23.3]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.2...v2.23.3
 [2.23.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.1...v2.23.2
 [2.23.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.0...v2.23.1
 [2.23.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.22.1...v2.23.0
