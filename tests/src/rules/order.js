@@ -720,6 +720,31 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    test({
+      code: `
+        import { UserInputError } from 'apollo-server-express';
+
+        import { new as assertNewEmail } from '~/Assertions/Email';
+      `,
+      options: [{
+        alphabetize: {
+          caseInsensitive: true,
+          order: 'asc',
+        },
+        pathGroups: [
+          { pattern: '~/*', group: 'internal' },
+        ],
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        'newlines-between': 'always',
+      }],
+    }),
     ...flatMap(getTSParsers, parser => [
       // Order of the `import ... = require(...)` syntax
       test({
