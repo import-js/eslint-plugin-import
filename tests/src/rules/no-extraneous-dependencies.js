@@ -88,7 +88,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: `
-        // @flow                                                                                                                                                                                                   
+        // @flow
         import typeof TypeScriptModule from 'typescript';
       `,
       options: [{ packageDir: packageDirWithFlowTyped }],
@@ -149,6 +149,10 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "@generated/bar/and/sub/path"',
       settings: { 'import/core-modules': ['@generated/bar'] },
+    }),
+    // check if "rxjs" dependency declaration fix the "rxjs/operators subpackage
+    test({
+      code: 'import "rxjs/operators"',
     }),
   ],
   invalid: [

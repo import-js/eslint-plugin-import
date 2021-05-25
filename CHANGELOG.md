@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: fix false negative when file imports a type after importing a value in Flow ([#2083], thanks [@cherryblossom000])
 - [`order`]: restore default behavior unless `type` is in groups ([#2087], thanks [@grit96])
 - [`no-import-module-exports`]: Don't crash if packages have no entrypoint ([#2099], thanks [@eps1lon])
+- [`no-extraneous-dependencies`]: fix package name algorithm ([#2097], thanks [@paztis])
 
 ### Changed
 - [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
@@ -796,6 +797,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
+[#2097]: https://github.com/benmosher/eslint-plugin-import/pull/2097
 [#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090
 [#2087]: https://github.com/benmosher/eslint-plugin-import/pull/2087
 [#2083]: https://github.com/benmosher/eslint-plugin-import/pull/2083
