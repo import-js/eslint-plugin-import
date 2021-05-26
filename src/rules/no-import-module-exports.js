@@ -4,7 +4,13 @@ import pkgUp from 'pkg-up';
 
 function getEntryPoint(context) {
   const pkgPath = pkgUp.sync(context.getFilename());
-  return require.resolve(path.dirname(pkgPath));
+  try {
+    return require.resolve(path.dirname(pkgPath));
+  } catch (error) {
+    // Assume the package has no entrypoint (e.g. CLI packages)
+    // in which case require.resolve would throw.
+    return null;
+  }
 }
 
 module.exports = {

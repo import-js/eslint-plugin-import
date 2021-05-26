@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: ignore imports where imported file only imports types of importing file ([#2083], thanks [@cherryblossom000])
 - [`no-cycle`]: fix false negative when file imports a type after importing a value in Flow ([#2083], thanks [@cherryblossom000])
 - [`order`]: restore default behavior unless `type` is in groups ([#2087], thanks [@grit96])
+- [`no-import-module-exports`]: Don't crash if packages have no entrypoint ([#2099], thanks [@eps1lon])
 
 ### Changed
 - [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
@@ -794,6 +795,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
 [#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090
 [#2087]: https://github.com/benmosher/eslint-plugin-import/pull/2087
 [#2083]: https://github.com/benmosher/eslint-plugin-import/pull/2083
@@ -1262,6 +1264,7 @@ for info on changes for earlier releases.
 [@eelyafi]: https://github.com/eelyafi
 [@Ephem]: https://github.com/Ephem
 [@ephys]: https://github.com/ephys
+[@eps1lon]: https://github.com/eps1lon
 [@ernestostifano]: https://github.com/ernestostifano
 [@fa93hws]: https://github.com/fa93hws
 [@fengkfengk]: https://github.com/fengkfengk

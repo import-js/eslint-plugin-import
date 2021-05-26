@@ -57,6 +57,13 @@ ruleTester.run('no-import-module-exports', rule, {
       filename: path.join(process.cwd(), 'tests/files/some/other/entry-point.js'),
       options: [{ exceptions: ['**/*/other/entry-point.js'] }],
     }),
+    test({
+      code: `
+        import * as process from 'process';
+        console.log(process.env);
+      `,
+      filename: path.join(process.cwd(), 'tests/files/missing-entrypoint/cli.js'),
+    }),
   ],
   invalid: [
     test({
