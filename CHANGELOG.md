@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [`no-import-module-exports`]: Don't crash if packages have no entrypoint ([#2099], thanks [@eps1lon])
+- [`no-extraneous-dependencies`]: fix package name algorithm ([#2097], thanks [@paztis])
+
 ## [2.23.3] - 2021-05-21
 
 ### Fixed
@@ -13,8 +17,6 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-cycle`]: ignore imports where imported file only imports types of importing file ([#2083], thanks [@cherryblossom000])
 - [`no-cycle`]: fix false negative when file imports a type after importing a value in Flow ([#2083], thanks [@cherryblossom000])
 - [`order`]: restore default behavior unless `type` is in groups ([#2087], thanks [@grit96])
-- [`no-import-module-exports`]: Don't crash if packages have no entrypoint ([#2099], thanks [@eps1lon])
-- [`no-extraneous-dependencies`]: fix package name algorithm ([#2097], thanks [@paztis])
 
 ### Changed
 - [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
