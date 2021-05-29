@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.23.4] - 2021-05-29
+
 ### Fixed
 - [`no-import-module-exports`]: Don't crash if packages have no entrypoint ([#2099], thanks [@eps1lon])
 - [`no-extraneous-dependencies`]: fix package name algorithm ([#2097], thanks [@paztis])
@@ -1143,7 +1145,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/benmosher/eslint-plugin-import/issues/119
 [#89]: https://github.com/benmosher/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.3...HEAD
+[Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.4...HEAD
+[2.23.4]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.3...v2.23.4
 [2.23.3]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.2...v2.23.3
 [2.23.2]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.1...v2.23.2
 [2.23.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.23.0...v2.23.1
