@@ -3,6 +3,7 @@
  * @author Radek Benkel
  */
 
+import minimatch from 'minimatch';
 import docsUrl from '../docsUrl';
 
 //------------------------------------------------------------------------------
@@ -17,16 +18,32 @@ module.exports = {
       url: docsUrl('no-namespace'),
     },
     fixable: 'code',
-    schema: [],
+    schema: [{
+      type: 'object',
+      properties: {
+        ignore: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          uniqueItems: true,
+        },
+      },
+    }],
   },
 
   create: function (context) {
+    const firstOption = context.options[0] || {};
+    const ignoreGlobs = firstOption.ignore;
+
     return {
-      'ImportNamespaceSpecifier': function (node) {
+      ImportNamespaceSpecifier(node) {
+        if (ignoreGlobs && ignoreGlobs.find(glob => minimatch(node.parent.source.value, glob, { matchBase: true }))) {
+          return;
+        }
+
         const scopeVariables = context.getScope().variables;
-        const namespaceVariable = scopeVariables.find((variable) =>
-          variable.defs[0].node === node
-        );
+        const namespaceVariable = scopeVariables.find((variable) => variable.defs[0].node === node);
         const namespaceReferences = namespaceVariable.references;
         const namespaceIdentifiers = namespaceReferences.map(reference => reference.identifier);
         const canFix = namespaceIdentifiers.length > 0 && !usesNamespaceAsObject(namespaceIdentifiers);
@@ -63,11 +80,11 @@ module.exports = {
             );
 
             // Replace the ImportNamespaceSpecifier with a list of ImportSpecifiers
-            const namedImportSpecifiers = importNames.map((importName) =>
+            const namedImportSpecifiers = importNames.map((importName) => (
               importName === importLocalNames[importName]
                 ? importName
                 : `${importName} as ${importLocalNames[importName]}`
-            );
+            ));
             fixes.push(fixer.replaceText(node, `{ ${namedImportSpecifiers.join(', ')} }`));
 
             // Pass 2: Replace references to the namespace with references to the named imports

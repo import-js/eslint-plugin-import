@@ -5,6 +5,12 @@ Enforce a convention of not using namespace (a.k.a. "wildcard" `*`) imports.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule, provided that the namespace object is only used for direct member access, e.g. `namespace.a`.
 The `--fix` functionality for this rule requires ESLint 5 or newer.
 
+### Options
+
+This rule supports the following options:
+
+- `ignore`: array of glob strings for modules that should be ignored by the rule.
+
 ## Rule Details
 
 Valid:
@@ -13,6 +19,11 @@ Valid:
 import defaultExport from './foo'
 import { a, b }  from './bar'
 import defaultExport, { a, b }  from './foobar'
+```
+
+```js
+/* eslint import/no-namespace: ["error", {ignore: ['*.ext']] */
+import * as bar from './ignored-module.ext';
 ```
 
 Invalid:

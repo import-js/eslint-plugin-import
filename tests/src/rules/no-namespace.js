@@ -78,6 +78,7 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
     { code: 'import { a, b } from \'./foo\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'import bar from \'./bar\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
+    { code: 'import * as bar from \'./ignored-module.ext\';', parserOptions: { ecmaVersion: 2015, sourceType: 'module' }, options: [{ ignore: ['*.ext'] }] },
   ],
 
   invalid: [

@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Added
 - [`no-dynamic-require`]: add option `esmodule` ([#1223], thanks [@vikr01])
 - [`named`]: add `commonjs` option ([#1222], thanks [@vikr01])
+- [`no-namespace`]: Add `ignore` option ([#2112], thanks [@aberezkin])
 
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
@@ -822,6 +823,7 @@ for info on changes for earlier releases.
 [#2146]: https://github.com/benmosher/eslint-plugin-import/pull/2146
 [#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
+[#2112]: https://github.com/benmosher/eslint-plugin-import/pull/2112
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
 [#2097]: https://github.com/benmosher/eslint-plugin-import/pull/2097
 [#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090
@@ -1252,6 +1254,7 @@ for info on changes for earlier releases.
 [@1pete]: https://github.com/1pete
 [@3nuc]: https://github.com/3nuc
 [@aamulumi]: https://github.com/aamulumi
+[@aberezkin]: https://github.com/aberezkin
 [@adamborowski]: https://github.com/adamborowski
 [@adjerbetian]: https://github.com/adjerbetian
 [@ai]: https://github.com/ai
