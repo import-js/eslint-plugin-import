@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
+- [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
 
 ## [2.23.4] - 2021-05-29
 
@@ -1043,6 +1044,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/benmosher/eslint-plugin-import/pull/211
 [#164]: https://github.com/benmosher/eslint-plugin-import/pull/164
 [#157]: https://github.com/benmosher/eslint-plugin-import/pull/157
+[#2118]: https://github.com/benmosher/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/benmosher/eslint-plugin-import/issues/2067
 [#2056]: https://github.com/benmosher/eslint-plugin-import/issues/2056
 [#2063]: https://github.com/benmosher/eslint-plugin-import/issues/2063
