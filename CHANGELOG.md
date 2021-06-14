@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
+- [`no-extraneous-dependencies`]: add ESM intermediate package.json support] ([#2121], thanks [@paztis])
 
 ## [2.23.4] - 2021-05-29
 
@@ -804,6 +805,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
 [#2097]: https://github.com/benmosher/eslint-plugin-import/pull/2097
 [#2090]: https://github.com/benmosher/eslint-plugin-import/pull/2090

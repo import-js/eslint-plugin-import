@@ -154,6 +154,15 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "rxjs/operators"',
     }),
+
+    test({
+      code: 'import "esm-package/esm-module";',
+    }),
+
+    test({
+      code: 'import "alias/esm-package/esm-module";',
+      settings: { 'import/resolver': 'webpack' },
+    }),
   ],
   invalid: [
     test({
@@ -356,6 +365,13 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{ packageDir: packageDirMonoRepoRoot }],
       errors: [{
         message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+
+    test({
+      code: 'import "esm-package-not-in-pkg-json/esm-module";',
+      errors: [{
+        message: `'esm-package-not-in-pkg-json' should be listed in the project's dependencies. Run 'npm i -S esm-package-not-in-pkg-json' to add it`,
       }],
     }),
   ],

@@ -126,11 +126,19 @@ function getModuleRealName(resolved) {
   return getFilePackageName(resolved);
 }
 
-function checkDependencyDeclaration(deps, packageName) {
+function checkDependencyDeclaration(deps, packageName, declarationStatus) {
+  const newDeclarationStatus = declarationStatus || {
+    isInDeps: false,
+    isInDevDeps: false,
+    isInOptDeps: false,
+    isInPeerDeps: false,
+    isInBundledDeps: false,
+  };
+
   // in case of sub package.json inside a module
   // check the dependencies on all hierarchy
   const packageHierarchy = [];
-  const packageNameParts = packageName.split('/');
+  const packageNameParts = packageName ? packageName.split('/') : [];
   packageNameParts.forEach((namePart, index) => {
     if (!namePart.startsWith('@')) {
       const ancestor = packageNameParts.slice(0, index + 1).join('/');
@@ -147,18 +155,16 @@ function checkDependencyDeclaration(deps, packageName) {
       isInBundledDeps:
         result.isInBundledDeps || deps.bundledDependencies.indexOf(ancestorName) !== -1,
     };
-  }, {
-    isInDeps: false,
-    isInDevDeps: false,
-    isInOptDeps: false,
-    isInPeerDeps: false,
-    isInBundledDeps: false,
-  });
+  }, newDeclarationStatus);
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types
-  if (node.importKind === 'type' || (node.parent && node.parent.importKind === 'type') || node.importKind === 'typeof') {
+  if (
+    node.importKind === 'type' ||
+    (node.parent && node.parent.importKind === 'type') ||
+    node.importKind === 'typeof'
+  ) {
     return;
   }
 
@@ -170,48 +176,46 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   if (!resolved) { return; }
 
   const importPackageName = getModuleOriginalName(name);
-  const importPackageNameDeclaration = checkDependencyDeclaration(deps, importPackageName);
+  let declarationStatus = checkDependencyDeclaration(deps, importPackageName);
 
-  if (importPackageNameDeclaration.isInDeps ||
-    (depsOptions.allowDevDeps && importPackageNameDeclaration.isInDevDeps) ||
-    (depsOptions.allowPeerDeps && importPackageNameDeclaration.isInPeerDeps) ||
-    (depsOptions.allowOptDeps && importPackageNameDeclaration.isInOptDeps) ||
-    (depsOptions.allowBundledDeps && importPackageNameDeclaration.isInBundledDeps)
+  if (
+    declarationStatus.isInDeps ||
+    (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
+    (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
+    (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
+    (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
   ) {
     return;
   }
 
   // test the real name from the resolved package.json
-  // if not aliased imports (alias/react for example), importPackageName can be  misinterpreted
+  // if not aliased imports (alias/react for example), importPackageName can be misinterpreted
   const realPackageName = getModuleRealName(resolved);
-  const realPackageNameDeclaration = checkDependencyDeclaration(deps, realPackageName);
+  if (realPackageName && realPackageName !== importPackageName) {
+    declarationStatus = checkDependencyDeclaration(deps, realPackageName, declarationStatus);
 
-  if (realPackageNameDeclaration.isInDeps ||
-    (depsOptions.allowDevDeps && realPackageNameDeclaration.isInDevDeps) ||
-    (depsOptions.allowPeerDeps && realPackageNameDeclaration.isInPeerDeps) ||
-    (depsOptions.allowOptDeps && realPackageNameDeclaration.isInOptDeps) ||
-    (depsOptions.allowBundledDeps && realPackageNameDeclaration.isInBundledDeps)
-  ) {
+    if (
+      declarationStatus.isInDeps ||
+      (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
+      (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
+      (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
+      (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
+    ) {
+      return;
+    }
+  }
+
+  if (declarationStatus.isInDevDeps && !depsOptions.allowDevDeps) {
+    context.report(node, devDepErrorMessage(realPackageName || importPackageName));
     return;
   }
 
-  if ((
-    importPackageNameDeclaration.isInDevDeps ||
-    realPackageNameDeclaration.isInDevDeps
-  ) && !depsOptions.allowDevDeps) {
-    context.report(node, devDepErrorMessage(realPackageName));
+  if (declarationStatus.isInOptDeps && !depsOptions.allowOptDeps) {
+    context.report(node, optDepErrorMessage(realPackageName || importPackageName));
     return;
   }
 
-  if ((
-    importPackageNameDeclaration.isInOptDeps ||
-    realPackageNameDeclaration.isInOptDeps
-  ) && !depsOptions.allowOptDeps) {
-    context.report(node, optDepErrorMessage(realPackageName));
-    return;
-  }
-
-  context.report(node, missingErrorMessage(realPackageName));
+  context.report(node, missingErrorMessage(realPackageName || importPackageName));
 }
 
 function testConfig(config, filename) {

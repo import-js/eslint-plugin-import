@@ -13,6 +13,10 @@ export function getFilePackagePath(filePath) {
 }
 
 export function getFilePackageName(filePath) {
-  const { pkg } = readPkgUp.sync({ cwd: filePath, normalize: false });
-  return pkg && pkg.name;
+  const { pkg, path } = readPkgUp.sync({ cwd: filePath, normalize: false });
+  if (pkg) {
+    // recursion in case of intermediate esm package.json without name found
+    return pkg.name || getFilePackageName(dirname(dirname(path)));
+  }
+  return null;
 }
