@@ -11,6 +11,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
 - [`no-extraneous-dependencies`]: add ESM intermediate package.json support] ([#2121], thanks [@paztis])
 
+### Changed
+- [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
+
 ## [2.23.4] - 2021-05-29
 
 ### Fixed
@@ -805,6 +808,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
 [#2097]: https://github.com/benmosher/eslint-plugin-import/pull/2097
@@ -1416,6 +1420,7 @@ for info on changes for earlier releases.
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@ttmarek]: https://github.com/ttmarek
 [@vikr01]: https://github.com/vikr01
+[@wenfangdu]: https://github.com/wenfangdu
 [@wKich]: https://github.com/wKich
 [@wschurman]: https://github.com/wschurman
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
