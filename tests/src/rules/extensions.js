@@ -349,6 +349,11 @@ ruleTester.run('extensions', rule, {
           line: 4,
           column: 31,
         },
+        {
+          message: 'Missing file extension for "@/configs/chart"',
+          line: 7,
+          column: 27,
+        },
       ],
     }),
 
@@ -368,6 +373,11 @@ ruleTester.run('extensions', rule, {
           message: 'Missing file extension for "./Component"',
           line: 4,
           column: 31,
+        },
+        {
+          message: 'Missing file extension for "@/configs/chart"',
+          line: 7,
+          column: 27,
         },
       ],
     }),

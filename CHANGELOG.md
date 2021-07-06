@@ -10,7 +10,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
 - [`no-extraneous-dependencies`]: add ESM intermediate package.json support] ([#2121], thanks [@paztis])
- - Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
+- Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
+- [`extensions`]/`importType`: fix isScoped treating @/abc as scoped module ([#2146], thanks [@rperello])
 
 ### Changed
 - [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
@@ -814,6 +815,7 @@ for info on changes for earlier releases.
 [#2160]: https://github.com/benmosher/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/benmosher/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/benmosher/eslint-plugin-import/pull/2156
+[#2146]: https://github.com/benmosher/eslint-plugin-import/pull/2146
 [#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
@@ -1391,6 +1393,7 @@ for info on changes for earlier releases.
 [@richardxia]: https://github.com/richardxia
 [@robertrossmann]: https://github.com/robertrossmann
 [@rosswarren]: https://github.com/rosswarren
+[@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon
 [@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w
 [@saschanaz]: https://github.com/saschanaz

@@ -64,7 +64,7 @@ function isModuleMain(name) {
   return name && moduleMainRegExp.test(name);
 }
 
-const scopedRegExp = /^@[^/]*\/?[^/]+/;
+const scopedRegExp = /^@[^/]+\/?[^/]+/;
 export function isScoped(name) {
   return name && scopedRegExp.test(name);
 }
