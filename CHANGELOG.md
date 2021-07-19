@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Changed
 - [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
+- [Tests] `order`: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
 
 ## [2.23.4] - 2021-05-29
 
@@ -808,6 +809,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2158]: https://github.com/benmosher/eslint-plugin-import/pull/2158
 [#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
@@ -1250,6 +1252,7 @@ for info on changes for earlier releases.
 [@arvigeus]: https://github.com/arvigeus
 [@asapach]: https://github.com/asapach
 [@astorije]: https://github.com/astorije
+[@atav32]: https://github.com/atav32
 [@atikenny]: https://github.com/atikenny
 [@atos1990]: https://github.com/atos1990
 [@barbogast]: https://github.com/barbogast

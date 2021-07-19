@@ -745,6 +745,36 @@ ruleTester.run('order', rule, {
         'newlines-between': 'always',
       }],
     }),
+    test({
+      code: `
+        import { ReactElement, ReactNode } from 'react';
+
+        import { util } from 'Internal/lib';
+
+        import { parent } from '../parent';
+
+        import { sibling } from './sibling';
+      `,
+      options: [{
+        alphabetize: {
+          caseInsensitive: true,
+          order: 'asc',
+        },
+        pathGroups: [
+          { pattern: 'Internal/**/*', group: 'internal' },
+        ],
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        'newlines-between': 'always',
+        pathGroupsExcludedImportTypes: [],
+      }],
+    }),
     ...flatMap(getTSParsers, parser => [
       // Order of the `import ... = require(...)` syntax
       test({
@@ -2329,6 +2359,71 @@ context('TypeScript', function () {
                 {
                   groups: ['external', 'index', 'type'],
                   alphabetize: { order: 'asc' },
+                },
+              ],
+            },
+            parserConfig,
+          ),
+          // Option alphabetize: {order: 'asc'} with type group & path group
+          test(
+            {
+              // only: true,
+              code: `
+                import c from 'Bar';
+                import a from 'foo';
+
+                import b from 'dirA/bar';
+
+                import index from './';
+
+                import type { C } from 'dirA/Bar';
+                import type { A } from 'foo';
+              `,
+              parser,
+              options: [
+                {
+                  alphabetize: { order: 'asc' },
+                  groups: ['external', 'internal', 'index', 'type'],
+                  pathGroups: [
+                    {
+                      pattern: 'dirA/**',
+                      group: 'internal',
+                    },
+                  ],
+                  'newlines-between': 'always',
+                  pathGroupsExcludedImportTypes: ['type'],
+                },
+              ],
+            },
+            parserConfig,
+          ),
+          // Option alphabetize: {order: 'asc'} with path group
+          test(
+            {
+              // only: true,
+              code: `
+                import c from 'Bar';
+                import type { A } from 'foo';
+                import a from 'foo';
+
+                import type { C } from 'dirA/Bar';
+                import b from 'dirA/bar';
+
+                import index from './';
+              `,
+              parser,
+              options: [
+                {
+                  alphabetize: { order: 'asc' },
+                  groups: ['external', 'internal', 'index'],
+                  pathGroups: [
+                    {
+                      pattern: 'dirA/**',
+                      group: 'internal',
+                    },
+                  ],
+                  'newlines-between': 'always',
+                  pathGroupsExcludedImportTypes: [],
                 },
               ],
             },
