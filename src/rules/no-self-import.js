@@ -8,7 +8,7 @@ import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 function isImportingSelf(context, node, requireName) {
-  const filePath = context.getFilename();
+  const filePath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
 
   // If the input is from stdin, this test can't fail
   if (filePath !== '<text>' && filePath === resolve(requireName, context)) {

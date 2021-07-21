@@ -32,7 +32,7 @@ function testIsAllow(globs, filename, source) {
 
 function create(context) {
   const options = context.options[0] || {};
-  const filename = context.getFilename();
+  const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
   const isAllow = source => testIsAllow(options.allow, filename, source);
 
   return {

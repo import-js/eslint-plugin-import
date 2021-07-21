@@ -21,7 +21,7 @@ function checkImportForRelativePackage(context, importPath, node) {
   }
 
   const resolvedImport = resolve(importPath, context);
-  const resolvedContext = context.getFilename();
+  const resolvedContext = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
 
   if (!resolvedImport || !resolvedContext) {
     return;

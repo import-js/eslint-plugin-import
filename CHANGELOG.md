@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
 - [`no-extraneous-dependencies`]: add ESM intermediate package.json support] ([#2121], thanks [@paztis])
+ - Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
 
 ### Changed
 - [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
@@ -809,6 +810,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2160]: https://github.com/benmosher/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/benmosher/eslint-plugin-import/pull/2158
 [#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
@@ -1374,6 +1376,7 @@ for info on changes for earlier releases.
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet
 [@Pessimistress]: https://github.com/Pessimistress
+[@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
 [@pzhine]: https://github.com/pzhine
 [@ramasilveyra]: https://github.com/ramasilveyra

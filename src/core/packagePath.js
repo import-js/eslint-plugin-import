@@ -4,7 +4,7 @@ import readPkgUp from 'read-pkg-up';
 
 
 export function getContextPackagePath(context) {
-  return getFilePackagePath(context.getFilename());
+  return getFilePackagePath(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
 }
 
 export function getFilePackagePath(filePath) {

@@ -1,4 +1,6 @@
 import { expect } from 'chai';
+import eslintPkg from 'eslint/package.json';
+import semver from 'semver';
 
 import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
 import ModuleCache from 'eslint-module-utils/ModuleCache';
@@ -160,6 +162,158 @@ describe('resolve', function () {
     expect(testContextReports[0]).to.be.an('object');
     expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>');
     expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
+  });
+
+  // context.getPhysicalFilename() is available in ESLint 7.28+
+  (semver.satisfies(eslintPkg.version, '>= 7.28') ? describe : describe.skip)('getPhysicalFilename()', () => {
+    function unexpectedCallToGetFilename() {
+      throw new Error('Expected to call to getPhysicalFilename() instead of getFilename()');
+    }
+
+    it('resolves via a custom resolver with interface version 1', function () {
+      const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v1' });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+
+      expect(resolve( '../files/exception'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('exception.js'); } }),
+      )).to.equal(undefined);
+
+      expect(resolve( '../files/not-found'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('not-found.js'); } }),
+      )).to.equal(undefined);
+    });
+
+    it('resolves via a custom resolver with interface version 1 assumed if not specified', function () {
+      const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version' });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+
+      expect(resolve( '../files/exception'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('exception.js'); } }),
+      )).to.equal(undefined);
+
+      expect(resolve( '../files/not-found'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('not-found.js'); } }),
+      )).to.equal(undefined);
+    });
+
+    it('resolves via a custom resolver with interface version 2', function () {
+      const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v2' });
+      const testContextReports = [];
+      testContext.report = function (reportInfo) {
+        testContextReports.push(reportInfo);
+      };
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+
+      testContextReports.length = 0;
+      expect(resolve( '../files/exception'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('exception.js'); } }),
+      )).to.equal(undefined);
+      expect(testContextReports[0]).to.be.an('object');
+      expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: foo-bar-resolver-v2 resolve test exception\n<stack-was-here>');
+      expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
+
+      testContextReports.length = 0;
+      expect(resolve( '../files/not-found'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('not-found.js'); } }),
+      )).to.equal(undefined);
+      expect(testContextReports.length).to.equal(0);
+    });
+
+    it('respects import/resolver as array of strings', function () {
+      const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+    });
+
+    it('respects import/resolver as object', function () {
+      const testContext = utils.testContext({ 'import/resolver': { './foo-bar-resolver-v2': {} } });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+    });
+
+    it('respects import/resolver as array of objects', function () {
+      const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+    });
+
+    it('finds resolvers from the source files rather than eslint-module-utils', function () {
+      const testContext = utils.testContext({ 'import/resolver': { 'foo': {} } });
+
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(utils.testFilePath('./bar.jsx'));
+    });
+
+    it('reports invalid import/resolver config', function () {
+      const testContext = utils.testContext({ 'import/resolver': 123.456 });
+      const testContextReports = [];
+      testContext.report = function (reportInfo) {
+        testContextReports.push(reportInfo);
+      };
+
+      testContextReports.length = 0;
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(undefined);
+      expect(testContextReports[0]).to.be.an('object');
+      expect(testContextReports[0].message).to.equal('Resolve error: invalid resolver config');
+      expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
+    });
+
+    it('reports loaded resolver with invalid interface', function () {
+      const resolverName = './foo-bar-resolver-invalid';
+      const testContext = utils.testContext({ 'import/resolver': resolverName });
+      const testContextReports = [];
+      testContext.report = function (reportInfo) {
+        testContextReports.push(reportInfo);
+      };
+      testContextReports.length = 0;
+      expect(resolve( '../files/foo'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('foo.js'); } }),
+      )).to.equal(undefined);
+      expect(testContextReports[0]).to.be.an('object');
+      expect(testContextReports[0].message).to.equal(`Resolve error: ${resolverName} with invalid interface loaded as resolver`);
+      expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
+    });
+
+    it('respects import/resolve extensions', function () {
+      const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] } });
+
+      expect(resolve( './jsx/MyCoolComponent'
+        , testContext,
+      )).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'));
+    });
+
+    it('reports load exception in a user resolver', function () {
+      const testContext = utils.testContext({ 'import/resolver': './load-error-resolver' });
+      const testContextReports = [];
+      testContext.report = function (reportInfo) {
+        testContextReports.push(reportInfo);
+      };
+
+      expect(resolve( '../files/exception'
+        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename: function () { return utils.getFilename('exception.js'); } }),
+      )).to.equal(undefined);
+      expect(testContextReports[0]).to.be.an('object');
+      expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>');
+      expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
+    });
   });
 
   const caseDescribe = (!CASE_SENSITIVE_FS ? describe : describe.skip);

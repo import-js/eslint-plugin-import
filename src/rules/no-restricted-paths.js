@@ -52,7 +52,7 @@ module.exports = {
     const options = context.options[0] || {};
     const restrictedPaths = options.zones || [];
     const basePath = options.basePath || process.cwd();
-    const currentFilename = context.getFilename();
+    const currentFilename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
     const matchingZones = restrictedPaths.filter((zone) => {
       const targetPath = path.resolve(basePath, zone.target);
 

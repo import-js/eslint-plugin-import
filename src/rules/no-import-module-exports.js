@@ -3,7 +3,7 @@ import path from 'path';
 import pkgUp from 'pkg-up';
 
 function getEntryPoint(context) {
-  const pkgPath = pkgUp.sync(context.getFilename());
+  const pkgPath = pkgUp.sync(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
   try {
     return require.resolve(path.dirname(pkgPath));
   } catch (error) {
@@ -39,7 +39,7 @@ module.exports = {
     let alreadyReported = false;
 
     function report(node) {
-      const fileName = context.getFilename();
+      const fileName = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
       const isEntryPoint = entryPoint === fileName;
       const isIdentifier = node.object.type === 'Identifier';
       const hasKeywords = (/^(module|exports)$/).test(node.object.name);

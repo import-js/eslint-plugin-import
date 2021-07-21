@@ -463,7 +463,7 @@ module.exports = {
       doPreparation(src, ignoreExports, context);
     }
 
-    const file = context.getFilename();
+    const file = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
 
     const checkExportPresence = node => {
       if (!missingExports) {

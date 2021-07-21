@@ -11,11 +11,18 @@ import { getFilename } from '../utils';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
 describe('ExportMap', function () {
-  const fakeContext = {
-    getFilename: getFilename,
-    settings: {},
-    parserPath: 'babel-eslint',
-  };
+  const fakeContext = Object.assign(
+    semver.satisfies(eslintPkg.version, '>= 7.28') ? {
+      getFilename: function () { throw new Error('Should call getPhysicalFilename() instead of getFilename()'); },
+      getPhysicalFilename: getFilename,
+    } : {
+      getFilename,
+    },
+    {
+      settings: {},
+      parserPath: 'babel-eslint',
+    },
+  );
 
   it('handles ExportAllDeclaration', function () {
     let imports;

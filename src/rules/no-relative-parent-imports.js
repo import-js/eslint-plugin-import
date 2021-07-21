@@ -15,7 +15,7 @@ module.exports = {
   },
 
   create: function noRelativePackages(context) {
-    const myPath = context.getFilename();
+    const myPath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
     if (myPath === '<text>') return {}; // can't check a non-file
 
     function checkSourceValue(sourceNode) {

@@ -48,7 +48,7 @@ function isExportDefaultClass(node) {
 }
 
 function isExportNameClass(node) {
-  
+
   return node.type === 'ExportNamedDeclaration' && node.declaration && node.declaration.type === 'ClassDeclaration';
 }
 
@@ -124,7 +124,7 @@ after ${type} statement not followed by another ${type}.`,
       const { parent } = node;
       const nodePosition = parent.body.indexOf(node);
       const nextNode = parent.body[nodePosition + 1];
-        
+
       // skip "export import"s
       if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
         return;
@@ -144,7 +144,7 @@ after ${type} statement not followed by another ${type}.`,
         }
       },
       'Program:exit': function () {
-        log('exit processing for', context.getFilename());
+        log('exit processing for', context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
         const scopeBody = getScopeBody(context.getScope());
         log('got scope:', scopeBody);
 

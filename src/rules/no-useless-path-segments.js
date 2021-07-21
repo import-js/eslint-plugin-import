@@ -58,7 +58,7 @@ module.exports = {
   },
 
   create(context) {
-    const currentDir = path.dirname(context.getFilename());
+    const currentDir = path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
     const options = context.options[0];
 
     function checkSourceValue(source) {
