@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [Docs] `extensions`: removed incorrect cases ([#2138], thanks [@wenfangdu])
 - [Tests] `order`: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
+- [Docs] `order`:  improve the documentation for the `pathGroupsExcludedImportTypes` option ([#2156], thanks [@liby])
 
 ## [2.23.4] - 2021-05-29
 
@@ -812,6 +813,7 @@ for info on changes for earlier releases.
 
 [#2160]: https://github.com/benmosher/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/benmosher/eslint-plugin-import/pull/2158
+[#2156]: https://github.com/benmosher/eslint-plugin-import/pull/2156
 [#2138]: https://github.com/benmosher/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/benmosher/eslint-plugin-import/pull/2121
 [#2099]: https://github.com/benmosher/eslint-plugin-import/pull/2099
@@ -1347,6 +1349,7 @@ for info on changes for earlier releases.
 [@lencioni]: https://github.com/lencioni
 [@leonardodino]: https://github.com/leonardodino
 [@Librazy]: https://github.com/Librazy
+[@liby]: https://github.com/liby
 [@lilling]: https://github.com/lilling
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx

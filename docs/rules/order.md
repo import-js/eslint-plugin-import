@@ -148,6 +148,27 @@ Example:
   }]
 }
 ```
+
+You can also use `patterns`(e.g., `react`, `react-router-dom`, etc).
+
+Example:
+```json
+{
+  "import/order": [
+    "error",
+    {
+      "pathGroups": [
+        {
+          "pattern": "react",
+          "group": "builtin",
+          "position": "before"
+        }
+      ],
+      "pathGroupsExcludedImportTypes": ["react"]
+    }
+  ]
+}
+```
 The default value is `["builtin", "external"]`.
 
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
