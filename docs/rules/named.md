@@ -5,7 +5,7 @@ Verifies that all named imports are part of the set of named exports in the refe
 For `export`, verifies that all named exports exist in the referenced module.
 
 Note: for packages, the plugin will find exported names
-from [`jsnext:main`], if present in `package.json`.
+from [`jsnext:main`] (deprecated) or `module`, if present in `package.json`.
 Redux's npm module includes this key, and thereby is lintable, for example.
 
 A module path that is [ignored] or not [unambiguously an ES module] will not be reported when imported. Note that type imports and exports, as used by [Flow], are always ignored.
@@ -91,8 +91,10 @@ runtime, you will likely see false positives with this rule.
 ## Further Reading
 
 - [`import/ignore`] setting
-- [`jsnext:main`] (Rollup)
+- [`jsnext:main`] deprecation
+- [`pkg.module`] (Rollup)
 
 
-[`jsnext:main`]: https://github.com/rollup/rollup/wiki/jsnext:main
+[`jsnext:main`]: https://github.com/jsforum/jsforum/issues/5
+[`pkg.module`]: https://github.com/rollup/rollup/wiki/pkg.module
 [`import/ignore`]: ../../README.md#importignore
