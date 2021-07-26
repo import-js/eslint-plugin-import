@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Added
+- use "module" in the same spot as "jsnext:main" ([#2166], thanks [@MustafaHaddara])
+
 ## v0.3.4 - 2020-06-16
 ### Added
 - add `.node` extension ([#1663])
@@ -48,6 +51,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - find files with `.json` extensions (#333, thanks for noticing @jfmengels)
 
+[#2166]: https://github.com/benmosher/eslint-plugin-import/pull/2166
 [#438]: https://github.com/benmosher/eslint-plugin-import/pull/438
 
 [#1663]: https://github.com/benmosher/eslint-plugin-import/issues/1663
@@ -61,3 +65,4 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [@SkeLLLa]: https://github.com/SkeLLLa
 [@ljharb]: https://github.com/ljharb
 [@opichals]: https://github.com/opichals
+[@MustafaHaddara]: https://github.com/MustafaHaddara

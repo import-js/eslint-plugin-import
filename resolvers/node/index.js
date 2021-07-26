@@ -42,8 +42,10 @@ function opts(file, config) {
 }
 
 function packageFilter(pkg) {
-  if (pkg['jsnext:main']) {
-    pkg['main'] = pkg['jsnext:main'];
+  if (pkg.module) {
+    pkg.main = pkg.module;
+  } else if (pkg['jsnext:main']) {
+    pkg.main = pkg['jsnext:main'];
   }
   return pkg;
 }
