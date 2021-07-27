@@ -1,0 +1,4 @@
+{
+  "main": "lib/index.js",
+  "jsnext:main": "src/index.js"
+}
