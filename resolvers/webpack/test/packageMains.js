@@ -21,6 +21,11 @@ describe('packageMains', function () {
       .to.equal(path.join(__dirname, 'package-mains', 'jsnext', 'src', 'index.js'));
   });
 
+  it('captures module instead of jsnext', function () {
+    expect(webpack.resolve('./module-and-jsnext', file)).property('path')
+      .to.equal(path.join(__dirname, 'package-mains', 'module-and-jsnext', 'src', 'index.js'));
+  });
+
   it('captures webpack', function () {
     expect(webpack.resolve('./webpack', file)).property('path')
       .to.equal(path.join(__dirname, 'package-mains', 'webpack', 'webpack.js'));
