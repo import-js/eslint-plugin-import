@@ -62,12 +62,18 @@ describe('CLI regression tests', function () {
               },
             ],
             errorCount: 1,
+            ...(semver.satisfies(eslintPkg.version, '>= 7.32') && {
+              fatalErrorCount: 0,
+            }),
             warningCount: 0,
             fixableErrorCount: 0,
             fixableWarningCount: 0,
             source: results.results[0].source, // NewLine-characters might differ depending on git-settings
           },
         ],
+        ...(semver.satisfies(eslintPkg.version, '>= 7.32') && {
+          fatalErrorCount: 0,
+        }),
         errorCount: 1,
         warningCount: 0,
         fixableErrorCount: 0,
