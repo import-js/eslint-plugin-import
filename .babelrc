@@ -1,17 +1,17 @@
 {
-  "presets": [ "es2015-argon" ],
+  "presets": ["airbnb"],
   "sourceMaps": "inline",
   "retainLines": true,
   "env": {
     "test": {
       "plugins": [
         "istanbul",
-        [ "module-resolver", { "root": [ "./src/" ] } ]
+        ["module-resolver", { "root": ["./src/"] }],
       ]
     },
     "testCompiled": {
       "plugins": [
-        [ "module-resolver", { "root": [ "./lib/" ] } ]
+        ["module-resolver", { "root": ["./lib/"] }],
       ]
     }
   }
