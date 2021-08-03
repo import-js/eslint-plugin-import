@@ -15,7 +15,7 @@
     },
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 6,
+        "ecmaVersion": 2020,
     },
     "rules": {
         "comma-dangle": [2, "always-multiline"],

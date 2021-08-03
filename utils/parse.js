@@ -52,11 +52,7 @@ exports.default = function parse(path, content, context) {
       console.warn('Line ' + e.lineNumber + ', column ' + e.column + ': ' + e.message);
     }
     if (!ast || typeof ast !== 'object') {
-      console.warn(
-        '`parseForESLint` from parser `' +
-          parserPath +
-          '` is invalid and will just be ignored'
-      );
+      console.warn('`parseForESLint` from parser `' + parserPath + '` is invalid and will just be ignored');
     } else {
       return ast;
     }
