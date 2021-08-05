@@ -14,18 +14,23 @@ module.exports = {
   create: function (context) {
     function checkSpecifiers(key, type, node) {
       // ignore local exports and type imports/exports
-      if (node.source == null || node.importKind === 'type' ||
-          node.importKind === 'typeof'  || node.exportKind === 'type') {
+      if (
+        node.source == null
+        || node.importKind === 'type'
+        || node.importKind === 'typeof'
+        || node.exportKind === 'type'
+      ) {
         return;
       }
 
-      if (!node.specifiers
-        .some(function (im) { return im.type === type; })) {
+      if (!node.specifiers.some((im) => im.type === type)) {
         return; // no named imports/exports
       }
 
       const imports = Exports.get(node.source.value, context);
-      if (imports == null) return;
+      if (imports == null) {
+        return;
+      }
 
       if (imports.errors.length) {
         imports.reportErrors(context, node);
@@ -33,10 +38,14 @@ module.exports = {
       }
 
       node.specifiers.forEach(function (im) {
-        if (im.type !== type) return;
+        if (im.type !== type) {
+          return;
+        }
 
         // ignore type imports
-        if (im.importKind === 'type' || im.importKind === 'typeof') return;
+        if (im.importKind === 'type' || im.importKind === 'typeof') {
+          return;
+        }
 
         const deepLookup = imports.hasDeep(im[key].name);
 
@@ -46,27 +55,18 @@ module.exports = {
               .map(i => path.relative(path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()), i.path))
               .join(' -> ');
 
-            context.report(im[key],
-              `${im[key].name} not found via ${deepPath}`);
+            context.report(im[key], `${im[key].name} not found via ${deepPath}`);
           } else {
-            context.report(im[key],
-              im[key].name + ' not found in \'' + node.source.value + '\'');
+            context.report(im[key], im[key].name + ' not found in \'' + node.source.value + '\'');
           }
         }
       });
     }
 
     return {
-      'ImportDeclaration': checkSpecifiers.bind( null
-        , 'imported'
-        , 'ImportSpecifier'
-      ),
+      ImportDeclaration: checkSpecifiers.bind(null, 'imported', 'ImportSpecifier'),
 
-      'ExportNamedDeclaration': checkSpecifiers.bind( null
-        , 'local'
-        , 'ExportSpecifier'
-      ),
+      ExportNamedDeclaration: checkSpecifiers.bind(null, 'local', 'ExportSpecifier'),
     };
-
   },
 };
