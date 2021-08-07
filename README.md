@@ -348,6 +348,8 @@ An array of folders. Resolved modules only from those folders will be considered
 
 This option is also useful in a monorepo setup: list here all directories that contain monorepo's packages and they will be treated as external ones no matter which resolver is used.
 
+If you are using `yarn` PnP as your package manager, add the `.yarn` folder and all your installed dependencies will be considered as `external`, instead of `internal`.
+
 Each item in this array is either a folder's name, its subpath, or its absolute prefix path:
 
 - `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.

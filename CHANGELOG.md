@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Tests] [`order`]: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
 - [Docs] [`order`]:  improve the documentation for the `pathGroupsExcludedImportTypes` option ([#2156], thanks [@liby])
 - [Tests] [`no-cycle`]: Restructure test files ([#1517], thanks [@soryy708])
+- [Docs] add description how to use plugin with yarn berry ([#2179], thanks [@KostyaZgara])
 
 ## [2.23.4] - 2021-05-29
 
@@ -819,6 +820,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2179]: https://github.com/import-js/eslint-plugin-import/pull/2179
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/import-js/eslint-plugin-import/pull/2156
@@ -1357,6 +1359,7 @@ for info on changes for earlier releases.
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
 [@kmui2]: https://github.com/kmui2
+[@KostyaZgara]: https://github.com/KostyaZgara
 [@knpwrs]: https://github.com/knpwrs
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
