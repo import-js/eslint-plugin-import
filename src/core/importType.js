@@ -41,11 +41,14 @@ function isExternalPath(name, settings, path, packagePath) {
   if (internalScope && new RegExp(internalScope).test(name)) {
     return false;
   }
-
   if (!path || relative(packagePath, path).startsWith('..')) {
     return true;
   }
 
+  const isPnpEnabled = !!(settings && settings['import/pnp']);
+  if (path && isPnpEnabled && path.startsWith(packagePath + '/.yarn')) {
+    return true;
+  }
   const folders = (settings && settings['import/external-module-folders']) || ['node_modules'];
   return folders.some((folder) => {
     const folderPath = nodeResolve(packagePath, folder);

@@ -433,6 +433,24 @@ settings:
   import/internal-regex: ^@scope/
 ```
 
+#### `import/pnp`
+
+Enable Plug'n'Play resolution. Set `true` if you are using `yarn berry` or `pnpm`.
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/pnp: true
+```
+
+Also, you can provide custom cache folder if you are using non-standard path. Default value is `.yarn/cache`
+
+```yaml
+# .eslintrc.yml
+settings:
+  import/pnp:
+    cacheFolder: .yarn/cache
+```
 
 ## SublimeLinter-eslint
 
