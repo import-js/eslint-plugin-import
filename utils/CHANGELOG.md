@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.6.2 - 2021-08-08
+
+### Fixed
+- Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
+
 ## v2.6.1 - 2021-05-13
 
 ### Fixed
@@ -85,6 +90,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2026]: https://github.com/import-js/eslint-plugin-import/pull/2026
 [#1786]: https://github.com/import-js/eslint-plugin-import/pull/1786
 [#1671]: https://github.com/import-js/eslint-plugin-import/pull/1671
@@ -102,16 +108,17 @@ Yanked due to critical issue with cache key resulting from #839.
 [#1035]: https://github.com/import-js/eslint-plugin-import/issues/1035
 [#599]: https://github.com/import-js/eslint-plugin-import/pull/599
 
-[@hulkish]: https://github.com/hulkish
-[@timkraut]: https://github.com/timkraut
-[@vikr01]: https://github.com/vikr01
-[@bradzacher]: https://github.com/bradzacher
-[@christophercurrie]: https://github.com/christophercurrie
-[@brettz9]: https://github.com/brettz9
-[@JounQin]: https://github.com/JounQin
+[@aladdin-add]: https://github.com/aladdin-add
 [@arcanis]: https://github.com/arcanis
-[@sompylasar]: https://github.com/sompylasar
+[@bradzacher]: https://github.com/bradzacher
+[@brettz9]: https://github.com/brettz9
+[@christophercurrie]: https://github.com/christophercurrie
+[@hulkish]: https://github.com/hulkish
 [@iamnapo]: https://github.com/iamnapo
+[@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
 [@manuth]: https://github.com/manuth
-[@aladdin-add]: https://github.com/aladdin-add
+[@pmcelhaney]: https://github.com/pmcelhaney
+[@sompylasar]: https://github.com/sompylasar
+[@timkraut]: https://github.com/timkraut
+[@vikr01]: https://github.com/vikr01
