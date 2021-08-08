@@ -4,7 +4,7 @@ import { expect } from 'chai';
 const config = require(path.join(__dirname, '..', '..', '..', 'config', 'typescript'));
 
 describe('config typescript', () => {
-  // https://github.com/benmosher/eslint-plugin-import/issues/1525
+  // https://github.com/import-js/eslint-plugin-import/issues/1525
   it('should mark @types paths as external', () => {
     const externalModuleFolders = config.settings['import/external-module-folders'];
     expect(externalModuleFolders).to.exist;

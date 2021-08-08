@@ -67,4 +67,4 @@ enable this rule.
 - Issue [#255]
 
 [`import/order`]: ./order.md
-[#255]: https://github.com/benmosher/eslint-plugin-import/issues/255
+[#255]: https://github.com/import-js/eslint-plugin-import/issues/255

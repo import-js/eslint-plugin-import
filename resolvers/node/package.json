@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/benmosher/eslint-plugin-import"
+    "url": "https://github.com/import-js/eslint-plugin-import"
   },
   "keywords": [
     "eslint",
@@ -26,9 +26,9 @@
   "author": "Ben Mosher (me@benmosher.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+    "url": "https://github.com/import-js/eslint-plugin-import/issues"
   },
-  "homepage": "https://github.com/benmosher/eslint-plugin-import",
+  "homepage": "https://github.com/import-js/eslint-plugin-import",
   "dependencies": {
     "debug": "^3.2.7",
     "resolve": "^1.20.0"

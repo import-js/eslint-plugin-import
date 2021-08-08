@@ -13,16 +13,16 @@
    at last version's tag.
 
    ```markdown
-   [Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...HEAD
-   [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
+   [Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.0.1...HEAD
+   [2.0.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.0.0...v2.0.1
    ```
 
    becomes
 
    ```markdown
-   [Unreleased]: https://github.com/benmosher/eslint-plugin-import/compare/v2.1.0...HEAD
-   [2.1.0]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.1...v2.1.0
-   [2.0.1]: https://github.com/benmosher/eslint-plugin-import/compare/v2.0.0...v2.0.1
+   [Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.1.0...HEAD
+   [2.1.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.0.1...v2.1.0
+   [2.0.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.0.0...v2.0.1
    ```
 
    Generally, don't use `npm version` for this because it creates a tag, which I normally

@@ -85,22 +85,22 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
-[#2026]: https://github.com/benmosher/eslint-plugin-import/pull/2026
-[#1786]: https://github.com/benmosher/eslint-plugin-import/pull/1786
-[#1671]: https://github.com/benmosher/eslint-plugin-import/pull/1671
-[#1606]: https://github.com/benmosher/eslint-plugin-import/pull/1606
-[#1602]: https://github.com/benmosher/eslint-plugin-import/pull/1602
-[#1591]: https://github.com/benmosher/eslint-plugin-import/pull/1591
-[#1551]: https://github.com/benmosher/eslint-plugin-import/pull/1551
-[#1435]: https://github.com/benmosher/eslint-plugin-import/pull/1435
-[#1409]: https://github.com/benmosher/eslint-plugin-import/pull/1409
-[#1356]: https://github.com/benmosher/eslint-plugin-import/pull/1356
-[#1290]: https://github.com/benmosher/eslint-plugin-import/pull/1290
-[#1218]: https://github.com/benmosher/eslint-plugin-import/pull/1218
-[#1166]: https://github.com/benmosher/eslint-plugin-import/issues/1166
-[#1160]: https://github.com/benmosher/eslint-plugin-import/pull/1160
-[#1035]: https://github.com/benmosher/eslint-plugin-import/issues/1035
-[#599]: https://github.com/benmosher/eslint-plugin-import/pull/599
+[#2026]: https://github.com/import-js/eslint-plugin-import/pull/2026
+[#1786]: https://github.com/import-js/eslint-plugin-import/pull/1786
+[#1671]: https://github.com/import-js/eslint-plugin-import/pull/1671
+[#1606]: https://github.com/import-js/eslint-plugin-import/pull/1606
+[#1602]: https://github.com/import-js/eslint-plugin-import/pull/1602
+[#1591]: https://github.com/import-js/eslint-plugin-import/pull/1591
+[#1551]: https://github.com/import-js/eslint-plugin-import/pull/1551
+[#1435]: https://github.com/import-js/eslint-plugin-import/pull/1435
+[#1409]: https://github.com/import-js/eslint-plugin-import/pull/1409
+[#1356]: https://github.com/import-js/eslint-plugin-import/pull/1356
+[#1290]: https://github.com/import-js/eslint-plugin-import/pull/1290
+[#1218]: https://github.com/import-js/eslint-plugin-import/pull/1218
+[#1166]: https://github.com/import-js/eslint-plugin-import/issues/1166
+[#1160]: https://github.com/import-js/eslint-plugin-import/pull/1160
+[#1035]: https://github.com/import-js/eslint-plugin-import/issues/1035
+[#599]: https://github.com/import-js/eslint-plugin-import/pull/599
 
 [@hulkish]: https://github.com/hulkish
 [@timkraut]: https://github.com/timkraut

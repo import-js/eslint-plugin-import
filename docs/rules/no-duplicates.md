@@ -7,7 +7,7 @@ ESLint core has a similar rule ([`no-duplicate-imports`](http://eslint.org/docs/
 is different in two key ways:
 
 1. the paths in the source code don't have to exactly match, they just have to point to the same module on the filesystem. (i.e. `./foo` and `./foo.js`)
-2. this version distinguishes Flow `type` imports from standard imports. ([#334](https://github.com/benmosher/eslint-plugin-import/pull/334))
+2. this version distinguishes Flow `type` imports from standard imports. ([#334](https://github.com/import-js/eslint-plugin-import/pull/334))
 
 ## Rule Details
 

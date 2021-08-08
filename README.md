@@ -1,8 +1,8 @@
 # eslint-plugin-import
 
-[![build status](https://travis-ci.org/benmosher/eslint-plugin-import.svg?branch=master)](https://travis-ci.org/benmosher/eslint-plugin-import)
-[![Coverage Status](https://coveralls.io/repos/github/benmosher/eslint-plugin-import/badge.svg?branch=master)](https://coveralls.io/github/benmosher/eslint-plugin-import?branch=master)
-[![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/benmosher/eslint-plugin-import/branch/master)
+[![build status](https://travis-ci.org/import-js/eslint-plugin-import.svg?branch=master)](https://travis-ci.org/import-js/eslint-plugin-import)
+[![Coverage Status](https://coveralls.io/repos/github/import-js/eslint-plugin-import/badge.svg?branch=master)](https://coveralls.io/github/import-js/eslint-plugin-import?branch=master)
+[![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/import-js/eslint-plugin-import/branch/master)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
 [![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](http://www.npmtrends.com/eslint-plugin-import)
 
@@ -190,7 +190,7 @@ runtime (allowing some modules to be included more traditionally via script tags
 In the interest of supporting both of these, v0.11 introduces resolvers.
 
 Currently [Node] and [webpack] resolution have been implemented, but the
-resolvers are just npm packages, so [third party packages are supported](https://github.com/benmosher/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
+resolvers are just npm packages, so [third party packages are supported](https://github.com/import-js/eslint-plugin-import/wiki/Resolvers) (and encouraged!).
 
 You can reference resolvers in several ways (in order of precedence):
 

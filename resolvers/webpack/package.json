@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benmosher/eslint-plugin-import.git"
+    "url": "git+https://github.com/import-js/eslint-plugin-import.git"
   },
   "keywords": [
     "eslint-plugin-import",
@@ -28,9 +28,9 @@
   "author": "Ben Mosher (me@benmosher.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/benmosher/eslint-plugin-import/issues"
+    "url": "https://github.com/import-js/eslint-plugin-import/issues"
   },
-  "homepage": "https://github.com/benmosher/eslint-plugin-import/tree/master/resolvers/webpack",
+  "homepage": "https://github.com/import-js/eslint-plugin-import/tree/master/resolvers/webpack",
   "dependencies": {
     "array-find": "^1.0.0",
     "debug": "^3.2.7",

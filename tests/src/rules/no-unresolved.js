@@ -398,7 +398,7 @@ ruleTester.run('no-unresolved syntax verification', rule, {
   invalid:[],
 });
 
-// https://github.com/benmosher/eslint-plugin-import/issues/2024
+// https://github.com/import-js/eslint-plugin-import/issues/2024
 ruleTester.run('import() with built-in parser', rule, {
   valid: [].concat(
     testVersion('>=7', () => ({

@@ -35,7 +35,7 @@ exports.default = function parse(path, content, context) {
   // @typescript-eslint/parser will parse the entire project with typechecking if you provide
   // "project" or "projects" in parserOptions. Removing these options means the parser will
   // only parse one file in isolate mode, which is much, much faster.
-  // https://github.com/benmosher/eslint-plugin-import/issues/1408#issuecomment-509298962
+  // https://github.com/import-js/eslint-plugin-import/issues/1408#issuecomment-509298962
   delete parserOptions.project;
   delete parserOptions.projects;
 

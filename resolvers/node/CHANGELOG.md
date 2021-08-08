@@ -51,14 +51,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - find files with `.json` extensions (#333, thanks for noticing @jfmengels)
 
-[#2166]: https://github.com/benmosher/eslint-plugin-import/pull/2166
-[#438]: https://github.com/benmosher/eslint-plugin-import/pull/438
+[#2166]: https://github.com/import-js/eslint-plugin-import/pull/2166
+[#438]: https://github.com/import-js/eslint-plugin-import/pull/438
 
-[#1663]: https://github.com/benmosher/eslint-plugin-import/issues/1663
-[#1595]: https://github.com/benmosher/eslint-plugin-import/pull/1595
-[#939]: https://github.com/benmosher/eslint-plugin-import/issues/939
-[#531]: https://github.com/benmosher/eslint-plugin-import/issues/531
-[#437]: https://github.com/benmosher/eslint-plugin-import/issues/437
+[#1663]: https://github.com/import-js/eslint-plugin-import/issues/1663
+[#1595]: https://github.com/import-js/eslint-plugin-import/pull/1595
+[#939]: https://github.com/import-js/eslint-plugin-import/issues/939
+[#531]: https://github.com/import-js/eslint-plugin-import/issues/531
+[#437]: https://github.com/import-js/eslint-plugin-import/issues/437
 
 [@jasonkarns]: https://github.com/jasonkarns
 [@lukeapage]: https://github.com/lukeapage

@@ -343,7 +343,7 @@ ruleTester.run('order', rule, {
         ],
       }],
     }),
-    // Using pathGroups (a test case for https://github.com/benmosher/eslint-plugin-import/pull/1724)
+    // Using pathGroups (a test case for https://github.com/import-js/eslint-plugin-import/pull/1724)
     test({
       code: `
         import fs from 'fs';

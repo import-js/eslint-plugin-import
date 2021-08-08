@@ -83,7 +83,7 @@ this rule enabled.
 
 ## Further Reading
 
-- [Original inspiring issue](https://github.com/benmosher/eslint-plugin-import/issues/941)
+- [Original inspiring issue](https://github.com/import-js/eslint-plugin-import/issues/941)
 - Rule to detect that module imports itself: [`no-self-import`]
 - [`import/external-module-folders`] setting
 
