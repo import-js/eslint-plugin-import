@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.24.0] - 2021-08-08
+
 ### Added
 - [`no-dynamic-require`]: add option `esmodule` ([#1223], thanks [@vikr01])
 - [`named`]: add `commonjs` option ([#1222], thanks [@vikr01])
@@ -1179,7 +1181,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.4...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.0...HEAD
+[2.24.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.4...v2.24.0
 [2.23.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.3...v2.23.4
 [2.23.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.2...v2.23.3
 [2.23.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.1...v2.23.2

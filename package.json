@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "2.23.4",
+  "version": "2.24.0",
   "description": "Import with sanity.",
   "engines": {
     "node": ">=4"
@@ -104,8 +104,8 @@
     "array.prototype.flat": "^1.2.4",
     "debug": "^2.6.9",
     "doctrine": "^2.1.0",
-    "eslint-import-resolver-node": "^0.3.4",
-    "eslint-module-utils": "^2.6.1",
+    "eslint-import-resolver-node": "^0.3.5",
+    "eslint-module-utils": "^2.6.2",
     "find-up": "^2.0.0",
     "has": "^1.0.3",
     "is-core-module": "^2.4.0",
