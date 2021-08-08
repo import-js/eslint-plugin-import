@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v0.3.5 - 2021-08-08
 ### Added
 - use "module" in the same spot as "jsnext:main" ([#2166], thanks [@MustafaHaddara])
 
