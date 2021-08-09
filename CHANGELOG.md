@@ -25,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]/`importType`: fix isScoped treating @/abc as scoped module ([#2146], thanks [@rperello])
 
 ### Changed
+- [Docs] [`extensions`]: improved cases for using `@/...` ([#2140], thanks [@wenfangdu])
 - [Docs] [`extensions`]: removed incorrect cases ([#2138], thanks [@wenfangdu])
 - [Tests] [`order`]: add tests for `pathGroupsExcludedImportTypes: ['type']` ([#2158], thanks [@atav32])
 - [Docs] [`order`]:  improve the documentation for the `pathGroupsExcludedImportTypes` option ([#2156], thanks [@liby])
@@ -892,6 +893,7 @@ for info on changes for earlier releases.
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/import-js/eslint-plugin-import/pull/2156
 [#2146]: https://github.com/import-js/eslint-plugin-import/pull/2146
+[#2140]: https://github.com/import-js/eslint-plugin-import/pull/2140
 [#2138]: https://github.com/import-js/eslint-plugin-import/pull/2138
 [#2121]: https://github.com/import-js/eslint-plugin-import/pull/2121
 [#2112]: https://github.com/import-js/eslint-plugin-import/pull/2112
