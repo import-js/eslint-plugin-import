@@ -351,6 +351,7 @@ ExportMap.for = function (context) {
 
 ExportMap.parse = function (path, content, context) {
   const m = new ExportMap(path);
+  const isEsModuleInteropTrue = isEsModuleInterop();
 
   let ast;
   try {
@@ -576,8 +577,6 @@ ExportMap.parse = function (path, content, context) {
       });
     }
 
-    const isEsModuleInteropTrue = isEsModuleInterop();
-
     const exports = ['TSExportAssignment'];
     if (isEsModuleInteropTrue) {
       exports.push('TSNamespaceExportDeclaration');
@@ -606,8 +605,11 @@ ExportMap.parse = function (path, content, context) {
         m.namespace.set('default', captureDoc(source, docStyleParsers, n));
         return;
       }
-      if (isEsModuleInteropTrue) {
-        m.namespace.set('default', {});
+      if (
+        isEsModuleInteropTrue // esModuleInterop is on in tsconfig
+        && !m.namespace.has('default') // and default isn't added already
+      ) {
+        m.namespace.set('default', {}); // add default export
       }
       exportedDecls.forEach((decl) => {
         if (decl.type === 'TSModuleDeclaration') {
@@ -627,8 +629,8 @@ ExportMap.parse = function (path, content, context) {
                 namespaceDecl.declarations.forEach((d) =>
                   recursivePatternCapture(d.id, (id) => m.namespace.set(
                     id.name,
-                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode)
-                  ))
+                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode),
+                  )),
                 );
               } else {
                 m.namespace.set(
@@ -644,6 +646,14 @@ ExportMap.parse = function (path, content, context) {
       });
     }
   });
+
+  if (
+    isEsModuleInteropTrue // esModuleInterop is on in tsconfig
+    && m.namespace.size > 0 // anything is exported
+    && !m.namespace.has('default') // and default isn't added already
+  ) {
+    m.namespace.set('default', {}); // add default export
+  }
 
   return m;
 };

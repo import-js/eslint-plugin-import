@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixe
+- `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
+
 ## [2.24.0] - 2021-08-08
 
 ### Added
@@ -822,6 +825,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184
 [#2179]: https://github.com/import-js/eslint-plugin-import/pull/2179
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
