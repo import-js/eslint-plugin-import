@@ -6,7 +6,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
-### Fixe
+### Fixed
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
 
 ## [2.24.0] - 2021-08-08
@@ -97,6 +97,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] Add import/recommended ruleset to README ([#2034], thanks [@edemaine])
 
 ## [2.22.1] - 2020-09-27
+
 ### Fixed
 - [`default`]/TypeScript: avoid crash on `export =` with a MemberExpression ([#1841], thanks [@ljharb])
 - [`extensions`]/importType: Fix @/abc being treated as scoped module ([#1854], thanks [@3nuc])
@@ -107,6 +108,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
 
 ## [2.22.0] - 2020-06-26
+
 ### Added
 - [`no-unused-modules`]: consider exported TypeScript interfaces, types and enums ([#1819], thanks [@nicolashenry])
 - [`no-cycle`]: allow `maxDepth` option to be `"∞"` (thanks [@ljharb])
@@ -127,16 +129,19 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [docs] [`imports-first`]: deprecation info and link to `first` docs ([#1835], thanks [@beatrizrezener])
 
 ## [2.21.2] - 2020-06-09
+
 ### Fixed
 - [`order`]: avoid a crash on TypeScript’s `export import` syntax ([#1808], thanks [@ljharb])
 - [`newline-after-import`]: consider TypeScript `import =` syntax' ([#1811], thanks [@ljharb])
 - [`no-internal-modules`]: avoid a crash on a named export declaration ([#1814], thanks [@ljharb])
 
 ## [2.21.1] - 2020-06-07
+
 ### Fixed
 - TypeScript: [`import/named`]: avoid requiring `typescript` when not using TS ([#1805], thanks [@ljharb])
 
 ## [2.21.0] - 2020-06-07
+
 ### Added
 - [`import/default`]: support default export in TSExportAssignment ([#1528], thanks [@joaovieira])
 - [`no-cycle`]: add `ignoreExternal` option ([#1681], thanks [@sveyret])
@@ -167,6 +172,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [eslint] bump minimum v7 version to v7.2.0
 
 ## [2.20.2] - 2020-03-28
+
 ### Fixed
 - [`order`]: fix `isExternalModule` detect on windows ([#1651], thanks [@fisker])
 - [`order`]: recognize ".." as a "parent" path ([#1658], thanks [@golopot])
@@ -176,6 +182,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] `no-webpack-loader-syntax`: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
 
 ## [2.20.1] - 2020-02-01
+
 ### Fixed
 - [`export`]: Handle function overloading in `*.d.ts` ([#1619], thanks [@IvanGoncharov])
 - [`no-absolute-path`]: fix a crash with invalid import syntax ([#1616], thanks [@ljharb])
@@ -193,6 +200,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Tests] `order`: Add TS import type tests ([#1736], thanks [@kmui2])
 
 ## [2.20.0] - 2020-01-10
+
 ### Added
 - [`order`]: added `caseInsensitive` as an additional option to `alphabetize` ([#1586], thanks [@dbrewer5])
 - [`no-restricted-paths`]: New `except` option per `zone`, allowing exceptions to be defined for a restricted zone ([#1238], thanks [@rsolomon])
@@ -209,10 +217,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: improve `ignorePackages` docs ([#1248], thanks [@ivo-stefchev])
 
 ## [2.19.1] - 2019-12-08
+
 ### Fixed
 - [`no-extraneous-dependencies`]: ensure `node.source` exists
 
 ## [2.19.0] - 2019-12-08
+
 ### Added
 - [`internal-regex` setting]: regex pattern for marking packages "internal"  ([#1491], thanks [@Librazy])
 - [`group-exports`]: make aggregate module exports valid ([#1472], thanks [@atikenny])
@@ -244,10 +254,12 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]/`eslint-module-utils`: Avoid superfluous calls and code ([#1551], thanks [@brettz9])
 
 ## [2.18.2] - 2019-07-19
+
 ### Fixed
 - Skip warning on type interfaces ([#1425], thanks [@lencioni])
 
 ## [2.18.1] - 2019-07-18
+
 ### Fixed
 - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
 - [`prefer-default-export`]: don't warn on TypeAlias & TSTypeAliasDeclaration ([#1377], thanks [@sharmilajesupaul])
@@ -258,6 +270,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-extraneous-dependencies`], `importType`: remove lodash ([#1419], thanks [@ljharb])
 
 ## [2.18.0] - 2019-06-24
+
 ### Added
 - Support eslint v6 ([#1393], thanks [@sheepsteak])
 - [`order`]: Adds support for correctly sorting unknown types into a single group ([#1375], thanks [@swernerx])
@@ -272,6 +285,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-named-as-default-member`]: update broken link ([#1389], thanks [@fooloomanzoo])
 
 ## [2.17.3] - 2019-05-23
+
 ### Fixed
 - [`no-common-js`]: Also throw an error when assigning ([#1354], thanks [@charlessuh])
 - [`no-unused-modules`]: don't crash when lint file outside src-folder ([#1347], thanks [@rfermann])
@@ -287,15 +301,18 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Document `env` option for `eslint-import-resolver-webpack` ([#1363], thanks [@kgregory])
 
 ## [2.17.2] - 2019-04-16
+
 ### Fixed
 - [`no-unused-modules`]: avoid crash when using `ignoreExports`-option ([#1331], [#1323], thanks [@rfermann])
 - [`no-unused-modules`]: make sure that rule with no options will not fail ([#1330], [#1334], thanks [@kiwka])
 
 ## [2.17.1] - 2019-04-13
+
 ### Fixed
 - require v2.4 of `eslint-module-utils` ([#1322])
 
 ## [2.17.0] - 2019-04-13
+
 ### Added
 - [`no-useless-path-segments`]: Add `noUselessIndex` option ([#1290], thanks [@timkraut])
 - [`no-duplicates`]: Add autofix ([#1312], thanks [@lydell])
@@ -321,6 +338,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-commonjs`]: add tests that show corner cases ([#1308], thanks [@TakeScoop])
 
 ## [2.16.0] - 2019-01-29
+
 ### Added
 - `typescript` config ([#1257], thanks [@kirill-konshin])
 
@@ -328,6 +346,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - Memory leak of `SourceCode` objects for all parsed dependencies, resolved. (issue [#1266], thanks [@asapach] and [@sergei-startsev] for digging in)
 
 ## [2.15.0] - 2019-01-22
+
 ### Added
 - new rule: [`no-named-export`] ([#1157], thanks [@fsmaia])
 
@@ -337,6 +356,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`named`]: fix destructuring assignment ([#1232], thanks [@ljqx])
 
 ## [2.14.0] - 2018-08-13
+
 ### Added
 - [`no-useless-path-segments`]: add commonJS (CJS) support ([#1128], thanks [@1pete])
 - [`namespace`]: add JSX check ([#1151], thanks [@jf248])
@@ -352,6 +372,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - add explicit support for RestElement alongside ExperimentalRestProperty (thanks [@ljharb])
 
 ## [2.13.0] - 2018-06-24
+
 ### Added
 - Add ESLint 5 support ([#1122], thanks [@ai] and [@ljharb])
 - Add [`no-relative-parent-imports`] rule: disallow relative imports from parent directories ([#1093], thanks [@chrislloyd])
@@ -360,12 +381,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `namespace` rule: ensure it works in eslint 5/ecmaVersion 2018 (thanks [@ljharb])
 
 ## [2.12.0] - 2018-05-17
+
 ### Added
 - Ignore type imports for [`named`] rule ([#931], thanks [@mattijsbliek])
 - Add documentation for [`no-useless-path-segments`] rule ([#1068], thanks [@manovotny])
 - `packageDir` option for [`no-extraneous-dependencies`] can be array-valued ([#1085], thanks [@hulkish])
 
 ## [2.11.0] - 2018-04-09
+
 ### Added
 - Fixer for [`first`] ([#1046], thanks [@fengkfengk])
 - `allow-require` option for [`no-commonjs`] rule ([#880], thanks [@futpib])
@@ -374,11 +397,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - memory/CPU regression where ASTs were held in memory ([#1058], thanks [@klimashkin]/[@lukeapage])
 
 ## [2.10.0] - 2018-03-29
+
 ### Added
 - Autofixer for [`order`] rule ([#908], thanks [@tihonove])
 - Add [`no-cycle`] rule: reports import cycles.
 
 ## [2.9.0] - 2018-02-21
+
 ### Added
 - Add [`group-exports`] rule: style-guide rule to report use of multiple named exports ([#721], thanks [@robertrossmann])
 - Add [`no-self-import`] rule: forbids a module from importing itself. ([#727], [#449], [#447], thanks [@giodamelio]).
@@ -399,14 +424,17 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - TypeError for missing AST fields from TypeScript ([#842] / [#944], thanks [@alexgorbatchev])
 
 ## [2.7.0] - 2017-07-06
+
 ### Changed
 - [`no-absolute-path`] picks up speed boost, optional AMD support ([#843], thanks [@jseminck])
 
 ## [2.6.1] - 2017-06-29
+
 ### Fixed
 - update bundled node resolver dependency to latest version
 
 ## [2.6.0] - 2017-06-23
+
 ### Changed
 - update tests / peerDeps for ESLint 4.0 compatibility ([#871], thanks [@mastilver])
 - [`memo-parser`] updated to require `filePath` on parser options as it melts
@@ -429,6 +457,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Add `allow` option to [`no-unassigned-import`] to allow for files that match the globs ([#671], [#737], thanks [@kevin940726]).
 
 ## [2.3.0] - 2017-05-18
+
 ### Added
 - [`no-anonymous-default-export`] rule: report anonymous default exports ([#712], thanks [@duncanbeevers]).
 - Add new value to [`order`]'s `newlines-between` option to allow newlines inside import groups ([#627], [#628], thanks [@giodamelio])
@@ -443,8 +472,8 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
 - support scoped modules containing non word characters
 
-
 ## [2.2.0] - 2016-11-07
+
 ### Fixed
 - Corrected a few gaffs in the auto-ignore logic to fix major performance issues
   with projects that did not explicitly ignore `node_modules`. ([#654])
@@ -453,6 +482,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`prefer-default-export`]: fixed crash on export extensions ([#653])
 
 ## [2.1.0] - 2016-11-02
+
 ### Added
 - Add [`no-named-default`] rule: style-guide rule to report use of unnecessarily named default imports ([#596], thanks [@ntdb])
 - [`no-extraneous-dependencies`]: check globs against CWD + absolute path ([#602] + [#630], thanks [@ljharb])
@@ -465,10 +495,12 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Fixed documentation for the default values for the [`order`] rule ([#601])
 
 ## [2.0.1] - 2016-10-06
+
 ### Fixed
 - Fixed code that relied on removed dependencies. ([#604])
 
 ## [2.0.0]! - 2016-09-30
+
 ### Added
 - [`unambiguous`] rule: report modules that are not unambiguously ES modules.
 - `recommended` shared config. Roughly `errors` and `warnings` mixed together,
@@ -494,6 +526,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`no-internal-modules`]: support `@`-scoped packages ([#577]+[#578], thanks [@spalger])
 
 ## [1.16.0] - 2016-09-22
+
 ### Added
 - Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568])
 - Added [`no-internal-modules`] rule: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
@@ -504,6 +537,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`default`]: allow re-export of values from ignored files as default ([#545], thanks [@skyrpex])
 
 ## [1.15.0] - 2016-09-12
+
 ### Added
 - Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
 - Added [`no-absolute-path`] rule ([#530], [#538])
@@ -514,6 +548,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`no-named-as-default-member`] Allow default import to have a property named "default" ([#507], [#508], thanks [@jquense] for both!)
 
 ## [1.14.0] - 2016-08-22
+
 ### Added
 - [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser. ([#503])
 
@@ -521,6 +556,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#499] fixes [#416], thanks [@wKich])
 
 ## [1.13.0] - 2016-08-11
+
 ### Added
 - `allowComputed` option for [`namespace`] rule. If set to `true`, won't report
   computed member references to namespaces. (see [#456])
@@ -533,15 +569,18 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   in an imported file. (fixes [#478], thanks [@rhys-vdw])
 
 ## [1.12.0] - 2016-07-26
+
 ### Added
 - [`import/external-module-folders` setting]: a possibility to configure folders for "external" modules ([#444], thanks [@zloirock])
 
 ## [1.11.1] - 2016-07-20
+
 ### Fixed
 - [`newline-after-import`] exception for `switch` branches with `require`s iff parsed as `sourceType:'module'`.
   (still [#441], thanks again [@ljharb])
 
 ## [1.11.0] - 2016-07-17
+
 ### Added
 - Added an `peerDependencies` option to [`no-extraneous-dependencies`] to allow/forbid peer dependencies ([#423], [#428], thanks [@jfmengels]!).
 
@@ -550,20 +589,24 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   function expression (e.g. `() => require('a') || require('b')`). ([#441], thanks [@ljharb])
 
 ## [1.10.3] - 2016-07-08
+
 ### Fixed
 - removing `Symbol` dependencies (i.e. `for-of` loops) due to Node 0.10 polyfill
   issue (see [#415]). Should not make any discernible semantic difference.
 
 ## [1.10.2] - 2016-07-04
+
 ### Fixed
 - Something horrible happened during `npm prepublish` of 1.10.1.
   Several `rm -rf node_modules && npm i` and `gulp clean && npm prepublish`s later, it is rebuilt and republished as 1.10.2. Thanks [@rhettlivingston] for noticing and reporting!
 
 ## [1.10.1] - 2016-07-02 [YANKED]
+
 ### Added
 - Officially support ESLint 3.x. (peerDependencies updated to `2.x - 3.x`)
 
 ## [1.10.0] - 2016-06-30
+
 ### Added
 - Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - [`import/core-modules` setting]: allow configuration of additional module names,
@@ -574,14 +617,17 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Fixed crash with `newline-after-import` related to the use of switch cases. (fixes [#386], thanks [@ljharb] for reporting) ([#395])
 
 ## [1.9.2] - 2016-06-21
+
 ### Fixed
 - Issues with ignored/CJS files in [`export`] and [`no-deprecated`] rules. ([#348], [#370])
 
 ## [1.9.1] - 2016-06-16
+
 ### Fixed
 - Reordered precedence for loading resolvers. ([#373])
 
 ## [1.9.0] - 2016-06-10
+
 ### Added
 - Added support TomDoc comments to [`no-deprecated`]. ([#321], thanks [@josh])
 - Added support for loading custom resolvers ([#314], thanks [@le0nik])
@@ -590,6 +636,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`prefer-default-export`] handles `export function` and `export const` in same file ([#359], thanks [@scottnonnenberg])
 
 ## [1.8.1] - 2016-05-23
+
 ### Fixed
 - `export * from 'foo'` now properly ignores a `default` export from `foo`, if any. ([#328]/[#332], thanks [@jkimbo])
   This impacts all static analysis of imported names. ([`default`], [`named`], [`namespace`], [`export`])
@@ -599,6 +646,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`prefer-default-export`] properly handles deep destructuring, `export * from ...`, and files with no exports. ([#342]+[#343], thanks [@scottnonnenberg])
 
 ## [1.8.0] - 2016-05-11
+
 ### Added
 - [`prefer-default-export`], new rule. ([#308], thanks [@gavriguy])
 
@@ -607,6 +655,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Make [`no-extraneous-dependencies`] handle scoped packages ([#316], thanks [@jfmengels])
 
 ## [1.7.0] - 2016-05-06
+
 ### Added
 - [`newline-after-import`], new rule. ([#245], thanks [@singles])
 - Added an `optionalDependencies` option to [`no-extraneous-dependencies`] to allow/forbid optional dependencies ([#266], thanks [@jfmengels]).
@@ -621,6 +670,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   module is not resolved. Also, never report for builtins (i.e. `path`). ([#296])
 
 ## [1.6.1] - 2016-04-28
+
 ### Fixed
 - [`no-named-as-default-member`]: don't crash on rest props. ([#281], thanks [@SimenB])
 - support for Node 6: don't pass `null` to `path` functions.
@@ -628,6 +678,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   config ([#288]).
 
 ## [1.6.0] - 2016-04-25
+
 ### Added
 - add [`no-named-as-default-member`] to `warnings` canned config
 - add [`no-extraneous-dependencies`] rule ([#241], thanks [@jfmengels])
@@ -646,6 +697,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - [`no-named-as-default-member`] had a crash on destructuring in loops (thanks for heads up from [@lemonmade])
 
 ## [1.5.0] - 2016-04-18
+
 ### Added
 - report resolver errors at the top of the linted file
 - add [`no-namespace`] rule ([#239], thanks [@singles])
@@ -658,6 +710,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - support for Node 0.10, via `es6-*` ponyfills. Using native Map/Set/Symbol.
 
 ## [1.4.0] - 2016-03-25
+
 ### Added
 - Resolver plugin interface v2: more explicit response format that more clearly covers the found-but-core-module case, where there is no path.
   Still backwards-compatible with the original version of the resolver spec.
@@ -668,6 +721,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - using `es6-*` ponyfills instead of `babel-runtime`
 
 ## [1.3.0] - 2016-03-20
+
 Major perf improvements. Between parsing only once and ignoring gigantic, non-module `node_modules`,
 there is very little added time.
 
@@ -683,6 +737,7 @@ memoizing parser, and takes only 27s with naked `babel-eslint` (thus, reparsing 
   something that looks like an `export` is detected in the module content.
 
 ## [1.2.0] - 2016-03-19
+
 Thanks [@lencioni] for identifying a huge amount of rework in resolve and kicking
 off a bunch of memoization.
 
@@ -693,6 +748,7 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 - added caching to core/resolve via [#214], configured via [`import/cache` setting]
 
 ## [1.1.0] - 2016-03-15
+
 ### Added
 - Added an [`ignore`](./docs/rules/no-unresolved.md#ignore) option to [`no-unresolved`] for those pesky files that no resolver can find. (still prefer enhancing the Webpack and Node resolvers to using it, though). See [#89] for details.
 
@@ -744,6 +800,7 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 - `babylon` as default import parser (see Breaking)
 
 ## [0.13.0] - 2016-02-08
+
 ### Added
 - [`no-commonjs`] rule
 - [`no-amd`] rule
@@ -752,17 +809,21 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 - Removed vestigial `no-require` rule. [`no-commonjs`] is more complete.
 
 ## [0.12.2] - 2016-02-06 [YANKED]
+
 Unpublished from npm and re-released as 0.13.0. See [#170].
 
 ## [0.12.1] - 2015-12-17
+
 ### Changed
 - Broke docs for rules out into individual files.
 
 ## [0.12.0] - 2015-12-14
+
 ### Changed
 - Ignore [`import/ignore` setting] if exports are actually found in the parsed module. Does this to support use of `jsnext:main` in `node_modules` without the pain of managing an allow list or a nuanced deny list.
 
 ## [0.11.0] - 2015-11-27
+
 ### Added
 - Resolver plugins. Now the linter can read Webpack config, properly follow aliases and ignore externals, dismisses inline loaders, etc. etc.!
 
@@ -1366,8 +1427,8 @@ for info on changes for earlier releases.
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
 [@kmui2]: https://github.com/kmui2
-[@KostyaZgara]: https://github.com/KostyaZgara
 [@knpwrs]: https://github.com/knpwrs
+[@KostyaZgara]: https://github.com/KostyaZgara
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@lemonmade]: https://github.com/lemonmade
