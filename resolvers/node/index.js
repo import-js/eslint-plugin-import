@@ -17,7 +17,8 @@ exports.resolve = function (source, file, config) {
   }
 
   try {
-    resolvedPath = resolve.sync(source, opts(file, config));
+    const cachedFilter = function (pkg, dir) { return packageFilter(pkg, dir, config); };
+    resolvedPath = resolve.sync(source, opts(file, config, cachedFilter));
     log('Resolved to:', resolvedPath);
     return { found: true, path: resolvedPath };
   } catch (err) {
@@ -26,7 +27,7 @@ exports.resolve = function (source, file, config) {
   }
 };
 
-function opts(file, config) {
+function opts(file, config, packageFilter) {
   return Object.assign({
     // more closely matches Node (#333)
     // plus 'mjs' for native modules! (#939)
@@ -36,16 +37,32 @@ function opts(file, config) {
   {
     // path.resolve will handle paths relative to CWD
     basedir: path.dirname(path.resolve(file)),
-    packageFilter: packageFilter,
-
+    packageFilter,
   });
 }
 
-function packageFilter(pkg) {
+function identity(x) { return x; }
+
+function packageFilter(pkg, dir, config) {
+  let found = false;
+  const file = path.join(dir, 'dummy.js');
   if (pkg.module) {
-    pkg.main = pkg.module;
-  } else if (pkg['jsnext:main']) {
-    pkg.main = pkg['jsnext:main'];
+    try {
+      resolve.sync(String(pkg.module).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
+      pkg.main = pkg.module;
+      found = true;
+    } catch (err) {
+      log('resolve threw error trying to find pkg.module:', err);
+    }
+  }
+  if (!found && pkg['jsnext:main']) {
+    try {
+      resolve.sync(String(pkg['jsnext:main']).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
+      pkg.main = pkg['jsnext:main'];
+      found = true;
+    } catch (err) {
+      log('resolve threw error trying to find pkg[\'jsnext:main\']:', err);
+    }
   }
   return pkg;
 }
