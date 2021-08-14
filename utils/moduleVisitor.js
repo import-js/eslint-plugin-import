@@ -131,7 +131,7 @@ function makeOptionsSchema(additionalProperties) {
     'additionalProperties': false,
   };
 
-  if (additionalProperties){
+  if (additionalProperties) {
     for (const key in additionalProperties) {
       base.properties[key] = additionalProperties[key];
     }

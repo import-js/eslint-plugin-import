@@ -20,7 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`no-duplicates`]: ensure autofix avoids excessive newlines ([#2028], thanks [@ertrzyiks])
 - [`extensions`]: avoid crashing on partially typed import/export statements ([#2118], thanks [@ljharb])
-- [`no-extraneous-dependencies`]: add ESM intermediate package.json support] ([#2121], thanks [@paztis])
+- [`no-extraneous-dependencies`]: add ESM intermediate package.json support ([#2121], thanks [@paztis])
 - Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
 - [`extensions`]/`importType`: fix isScoped treating @/abc as scoped module ([#2146], thanks [@rperello])
 

@@ -5,12 +5,10 @@ exports.resolve = function (modulePath, sourceFile, config) {
   if (sourceFileName === 'foo.js') {
     return { found: true, path: path.join(__dirname, 'bar.jsx') }
   }
-  else if (sourceFileName === 'exception.js') {
+  if (sourceFileName === 'exception.js') {
     throw new Error('foo-bar-resolver-v2 resolve test exception')
   }
-  else {
-    return { found: false }
-  }
-}
+  return { found: false };
+};
 
-exports.interfaceVersion = 2
+exports.interfaceVersion = 2;

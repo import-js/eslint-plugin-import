@@ -540,7 +540,7 @@ module.exports = {
 
       const value = exportsKey === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportsKey;
 
-      if (typeof exportStatement !== 'undefined'){
+      if (typeof exportStatement !== 'undefined') {
         if (exportStatement.whereUsed.size < 1) {
           context.report(
             node,

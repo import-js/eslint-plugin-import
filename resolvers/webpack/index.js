@@ -118,8 +118,7 @@ exports.resolve = function (source, file, settings) {
 
     if (typeof configIndex !== 'undefined' && webpackConfig.length > configIndex) {
       webpackConfig = webpackConfig[configIndex];
-    }
-    else {
+    } else {
       webpackConfig = find(webpackConfig, function findFirstWithResolve(config) {
         return !!config.resolve;
       });
@@ -311,16 +310,16 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
 /* eslint-disable */
 // from https://github.com/webpack/webpack/blob/v1.13.0/lib/WebpackOptionsApply.js#L365
 function makeRootPlugin(ModulesInRootPlugin, name, root) {
-  if(typeof root === "string")
+  if (typeof root === 'string') {
     return new ModulesInRootPlugin(name, root);
-  else if(Array.isArray(root)) {
+  } else if (Array.isArray(root)) {
     return function() {
-      root.forEach(function(root) {
+      root.forEach(function (root) {
         this.apply(new ModulesInRootPlugin(name, root));
       }, this);
     };
   }
-  return function() {};
+  return function () {};
 }
 /* eslint-enable */
 
@@ -436,17 +435,17 @@ function findConfigPath(configPath, packageDir) {
 }
 
 function registerCompiler(moduleDescriptor) {
-  if(moduleDescriptor) {
-    if(typeof moduleDescriptor === 'string') {
+  if (moduleDescriptor) {
+    if (typeof moduleDescriptor === 'string') {
       require(moduleDescriptor);
-    } else if(!Array.isArray(moduleDescriptor)) {
+    } else if (!Array.isArray(moduleDescriptor)) {
       moduleDescriptor.register(require(moduleDescriptor.module));
     } else {
-      for(let i = 0; i < moduleDescriptor.length; i++) {
+      for (let i = 0; i < moduleDescriptor.length; i++) {
         try {
           registerCompiler(moduleDescriptor[i]);
           break;
-        } catch(e) {
+        } catch (e) {
           log('Failed to register compiler for moduleDescriptor[]:', i, moduleDescriptor);
         }
       }

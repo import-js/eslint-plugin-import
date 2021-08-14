@@ -69,8 +69,7 @@ module.exports = {
           node.declaration.declarations.forEach(function(declaration) {
             captureDeclaration(declaration.id);
           });
-        }
-        else {
+        } else {
           // captures 'export function foo() {}' syntax
           specifierExportCount++;
         }

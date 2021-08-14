@@ -61,7 +61,7 @@ ruleTester.run('no-cycle', rule, {
         options: [{ maxDepth: 1 }],
       }),
       test({
-        code: `import("./${testDialect}/depth-two").then(function({ foo }){})`,
+        code: `import("./${testDialect}/depth-two").then(function({ foo }) {})`,
         options: [{ maxDepth: 1 }],
         parser: require.resolve('babel-eslint'),
       }),

@@ -26,7 +26,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `const x = () => require('baz') && require('bar')`,
       parserOptions: { ecmaVersion: 6 } ,
     },
-    `function x(){ require('baz'); }`,
+    `function x() { require('baz'); }`,
     `a(require('b'), require('c'), require('d'));`,
     `function foo() {
       switch (renderData.modalViewKey) {

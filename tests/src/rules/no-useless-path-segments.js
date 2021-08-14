@@ -32,7 +32,7 @@ function runResolverTests(resolver) {
         parser: require.resolve('babel-eslint') }),
       test({ code: 'import("..")',
         parser: require.resolve('babel-eslint') }),
-      test({ code: 'import("fs").then(function(fs){})',
+      test({ code: 'import("fs").then(function(fs) {})',
         parser: require.resolve('babel-eslint') }),
     ],
 

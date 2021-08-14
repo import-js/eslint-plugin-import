@@ -5,10 +5,8 @@ exports.resolveImport = function (modulePath, sourceFile, config) {
   if (sourceFileName === 'foo.js') {
     return path.join(__dirname, 'bar.jsx')
   }
-  else if (sourceFileName === 'exception.js') {
+  if (sourceFileName === 'exception.js') {
     throw new Error('foo-bar-resolver-v1 resolveImport test exception')
   }
-  else {
-    return undefined
-  }
+  return undefined;
 }

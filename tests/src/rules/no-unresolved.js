@@ -122,7 +122,7 @@ function runResolverTests(resolver) {
         type: 'Literal',
         }] }),
       rest({
-        code: "import('in-alternate-root').then(function({DEEP}){});",
+        code: "import('in-alternate-root').then(function({DEEP}) {});",
         errors: [{
           message: 'Unable to resolve path to module \'in-alternate-root\'.',
           type: 'Literal',
@@ -138,7 +138,7 @@ function runResolverTests(resolver) {
 
       // check with eslint parser
       testVersion('>= 7', () => rest({
-        code: "import('in-alternate-root').then(function({DEEP}){});",
+        code: "import('in-alternate-root').then(function({DEEP}) {});",
         errors: [{
           message: 'Unable to resolve path to module \'in-alternate-root\'.',
           type: 'Literal',

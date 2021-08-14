@@ -47,8 +47,7 @@ function takeTokensAfterWhile(sourceCode, node, condition) {
   for (let i = 0; i < tokens.length; i++) {
     if (condition(tokens[i])) {
       result.push(tokens[i]);
-    }
-    else {
+    } else {
       break;
     }
   }
@@ -61,8 +60,7 @@ function takeTokensBeforeWhile(sourceCode, node, condition) {
   for (let i = tokens.length - 1; i >= 0; i--) {
     if (condition(tokens[i])) {
       result.push(tokens[i]);
-    }
-    else {
+    } else {
       break;
     }
   }

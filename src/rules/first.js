@@ -42,7 +42,7 @@ module.exports = {
         const errorInfos = [];
         let shouldSort = true;
         let lastSortNodesIndex = 0;
-        body.forEach(function (node, index){
+        body.forEach(function (node, index) {
           if (!anyExpressions && isPossibleDirective(node)) {
             return;
           }

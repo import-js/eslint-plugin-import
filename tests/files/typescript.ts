@@ -23,14 +23,14 @@ export function getFoo() : MyType {
 }
 
 export module MyModule {
-  export function ModuleFunction(){}
+  export function ModuleFunction() {}
 }
 
 export namespace MyNamespace {
-  export function NamespaceFunction(){}
+  export function NamespaceFunction() {}
 
   export module NSModule {
-    export function NSModuleFunction(){}
+    export function NSModuleFunction() {}
   }
 }
 
