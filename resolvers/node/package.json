@@ -1,6 +1,6 @@
 {
   "name": "eslint-import-resolver-node",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Node default behavior import resolution plugin for eslint-plugin-import.",
   "main": "index.js",
   "files": [

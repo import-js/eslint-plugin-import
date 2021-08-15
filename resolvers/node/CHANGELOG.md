@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v0.3.6 - 2021-08-15
+### Fixed
+- when "module" does not exist, fall back to "main" ([#2186], thanks [@ljharb])
+
 ## v0.3.5 - 2021-08-08
 ### Added
 - use "module" in the same spot as "jsnext:main" ([#2166], thanks [@MustafaHaddara])
@@ -52,13 +56,13 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - find files with `.json` extensions (#333, thanks for noticing @jfmengels)
 
+[#2186]: https://github.com/import-js/eslint-plugin-import/issues/2186
 [#2166]: https://github.com/import-js/eslint-plugin-import/pull/2166
-[#438]: https://github.com/import-js/eslint-plugin-import/pull/438
-
 [#1663]: https://github.com/import-js/eslint-plugin-import/issues/1663
 [#1595]: https://github.com/import-js/eslint-plugin-import/pull/1595
 [#939]: https://github.com/import-js/eslint-plugin-import/issues/939
 [#531]: https://github.com/import-js/eslint-plugin-import/issues/531
+[#438]: https://github.com/import-js/eslint-plugin-import/pull/438
 [#437]: https://github.com/import-js/eslint-plugin-import/issues/437
 
 [@jasonkarns]: https://github.com/jasonkarns
