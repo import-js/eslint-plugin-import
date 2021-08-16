@@ -13,45 +13,55 @@ import readPkgUp from 'read-pkg-up';
 import values from 'object.values';
 import includes from 'array-includes';
 
-// eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
-// and has been moved to eslint/lib/cli-engine/file-enumerator in version 6
+let FileEnumerator;
 let listFilesToProcess;
+
 try {
-  const FileEnumerator = require('eslint/lib/cli-engine/file-enumerator').FileEnumerator;
+  ({ FileEnumerator } = require('eslint/use-at-your-own-risk'));
+} catch (e) {
+  try {
+    // has been moved to eslint/lib/cli-engine/file-enumerator in version 6
+    ({ FileEnumerator } = require('eslint/lib/cli-engine/file-enumerator'));
+  } catch (e) {
+    try {
+      // eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
+      const { listFilesToProcess: originalListFilesToProcess } = require('eslint/lib/util/glob-utils');
+
+      // Prevent passing invalid options (extensions array) to old versions of the function.
+      // https://github.com/eslint/eslint/blob/v5.16.0/lib/util/glob-utils.js#L178-L280
+      // https://github.com/eslint/eslint/blob/v5.2.0/lib/util/glob-util.js#L174-L269
+      listFilesToProcess = function (src, extensions) {
+        return originalListFilesToProcess(src, {
+          extensions: extensions,
+        });
+      };
+    } catch (e) {
+      const { listFilesToProcess: originalListFilesToProcess } = require('eslint/lib/util/glob-util');
+      
+      listFilesToProcess = function (src, extensions) {
+        const patterns = src.reduce((carry, pattern) => {
+          return carry.concat(extensions.map((extension) => {
+            return /\*\*|\*\./.test(pattern) ? pattern : `${pattern}/**/*${extension}`;
+          }));
+        }, src.slice());
+    
+        return originalListFilesToProcess(patterns);
+      };
+    }
+  }
+}
+
+if (FileEnumerator) {
   listFilesToProcess = function (src, extensions) {
     const e = new FileEnumerator({
       extensions: extensions,
     });
+
     return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({
       ignored,
       filename: filePath,
     }));
   };
-} catch (e1) {
-  // Prevent passing invalid options (extensions array) to old versions of the function.
-  // https://github.com/eslint/eslint/blob/v5.16.0/lib/util/glob-utils.js#L178-L280
-  // https://github.com/eslint/eslint/blob/v5.2.0/lib/util/glob-util.js#L174-L269
-  let originalListFilesToProcess;
-  try {
-    originalListFilesToProcess = require('eslint/lib/util/glob-utils').listFilesToProcess;
-    listFilesToProcess = function (src, extensions) {
-      return originalListFilesToProcess(src, {
-        extensions: extensions,
-      });
-    };
-  } catch (e2) {
-    originalListFilesToProcess = require('eslint/lib/util/glob-util').listFilesToProcess;
-
-    listFilesToProcess = function (src, extensions) {
-      const patterns = src.reduce((carry, pattern) => {
-        return carry.concat(extensions.map((extension) => {
-          return /\*\*|\*\./.test(pattern) ? pattern : `${pattern}/**/*${extension}`;
-        }));
-      }, src.slice());
-
-      return originalListFilesToProcess(patterns);
-    };
-  }
 }
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration';

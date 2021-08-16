@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Added
+- [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
+
 ## [2.24.2] - 2021-08-24
 
 ### Fixed
@@ -901,6 +904,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
+[#2194]: https://github.com/import-js/eslint-plugin-import/pull/2194
 [#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184
 [#2179]: https://github.com/import-js/eslint-plugin-import/pull/2179
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
