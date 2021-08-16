@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Added
+- Support `eslint` v8 ([#2191], thanks [@ota-meshi])
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
@@ -924,6 +925,7 @@ for info on changes for earlier releases.
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
 [#2194]: https://github.com/import-js/eslint-plugin-import/pull/2194
+[#2191]: https://github.com/import-js/eslint-plugin-import/pull/2191
 [#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184
 [#2179]: https://github.com/import-js/eslint-plugin-import/pull/2179
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
@@ -1517,6 +1519,7 @@ for info on changes for earlier releases.
 [@noelebrun]: https://github.com/noelebrun
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512
+[@ota-meshi]: https://github.com/ota-meshi
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet

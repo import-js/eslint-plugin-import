@@ -69,7 +69,8 @@
     "babylon": "^6.18.0",
     "chai": "^4.3.4",
     "cross-env": "^4.0.0",
-    "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0",
+    "escope": "^3.6.0",
+    "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-typescript": "^1.0.2 || ^1.1.1",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",
@@ -95,7 +96,7 @@
     "typescript-eslint-parser": "^15 || ^22.0.0"
   },
   "peerDependencies": {
-    "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0"
+    "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8"
   },
   "dependencies": {
     "array-includes": "^3.1.3",

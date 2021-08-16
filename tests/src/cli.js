@@ -97,7 +97,7 @@ describe('CLI regression tests', function () {
                   },
                 ],
                 errorCount: 1,
-                ...(semver.satisfies(eslintPkg.version, '>= 7.32 || ^8.0.0-0') && {
+                ...(semver.satisfies(eslintPkg.version, '>= 7.32 || ^8.0.0') && {
                   fatalErrorCount: 0,
                 }),
                 warningCount: 0,

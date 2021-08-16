@@ -13,6 +13,7 @@
 		"tests",
 		"resolvers/*/test",
 		"scripts",
-		"memo-parser"
+		"memo-parser",
+		"lib"
 	]
 }
