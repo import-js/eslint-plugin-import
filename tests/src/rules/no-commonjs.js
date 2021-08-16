@@ -5,7 +5,7 @@ import semver from 'semver';
 const EXPORT_MESSAGE = 'Expected "export" or "export default"';
 const IMPORT_MESSAGE = 'Expected "import" instead of "require()"';
 
-const ruleTester = new RuleTester();
+const ruleTester = new RuleTester({ parserOptions: { ecmaVersion: 2015, sourceType: 'module' } });
 
 ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   valid: [
