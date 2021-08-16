@@ -9,6 +9,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
 
+### Changed
+- [Docs] `max-dependencies`: 📖 Document `ignoreTypeImports` option ([#2196], thanks [@himynameisdave])
+
 ## [2.24.0] - 2021-08-08
 
 ### Added
@@ -887,6 +890,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
 [#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184
 [#2179]: https://github.com/import-js/eslint-plugin-import/pull/2179
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
@@ -1401,6 +1405,7 @@ for info on changes for earlier releases.
 [@grit96]: https://github.com/grit96
 [@guillaumewuip]: https://github.com/guillaumewuip
 [@hayes]: https://github.com/hayes
+[@himynameisdave]: https://github.com/himynameisdave
 [@hulkish]: https://github.com/hulkish
 [@Hypnosphi]: https://github.com/Hypnosphi
 [@isiahmeadows]: https://github.com/isiahmeadows
