@@ -276,13 +276,22 @@ module.exports = {
 
     const imported = new Map();
     const nsImported = new Map();
-    const typesImported = new Map();
+    const defaultTypesImported = new Map();
+    const namedTypesImported = new Map();
+
+    function getImportMap(n) {
+      if (n.importKind === 'type') {
+        return n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
+      }
+
+      return hasNamespace(n) ? nsImported : imported;
+    }
+
     return {
-      'ImportDeclaration': function (n) {
+      ImportDeclaration(n) {
         // resolved path will cover aliased duplicates
         const resolvedPath = resolver(n.source.value);
-        const importMap = n.importKind === 'type' ? typesImported :
-          (hasNamespace(n) ? nsImported : imported);
+        const importMap = getImportMap(n);
 
         if (importMap.has(resolvedPath)) {
           importMap.get(resolvedPath).push(n);
@@ -291,10 +300,11 @@ module.exports = {
         }
       },
 
-      'Program:exit': function () {
+      'Program:exit'() {
         checkImports(imported, context);
         checkImports(nsImported, context);
-        checkImports(typesImported, context);
+        checkImports(defaultTypesImported, context);
+        checkImports(namedTypesImported, context);
       },
     };
   },

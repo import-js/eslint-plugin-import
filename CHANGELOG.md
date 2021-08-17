@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
 - [`named`], [`namespace`]: properly set reexports on `export * as … from` ([#1998], [#2161], thanks [@ljharb])
+- [`no-duplicates`]: correctly handle case of mixed default/named type imports ([#2149], thanks [@GoodForOneFare], [@nwalters512])
 
 ### Changed
 - [Docs] `max-dependencies`: 📖 Document `ignoreTypeImports` option ([#2196], thanks [@himynameisdave])
@@ -897,6 +898,7 @@ for info on changes for earlier releases.
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/import-js/eslint-plugin-import/pull/2156
+[#2149]: https://github.com/benmosher/eslint-plugin-import/pull/2149
 [#2146]: https://github.com/import-js/eslint-plugin-import/pull/2146
 [#2140]: https://github.com/import-js/eslint-plugin-import/pull/2140
 [#2138]: https://github.com/import-js/eslint-plugin-import/pull/2138
@@ -1404,6 +1406,7 @@ for info on changes for earlier releases.
 [@gavriguy]: https://github.com/gavriguy
 [@giodamelio]: https://github.com/giodamelio
 [@golopot]: https://github.com/golopot
+[@GoodForOneFare]: https://github.com/GoodForOneFare
 [@graingert]: https://github.com/graingert
 [@grit96]: https://github.com/grit96
 [@guillaumewuip]: https://github.com/guillaumewuip
@@ -1471,6 +1474,7 @@ for info on changes for earlier releases.
 [@nicolashenry]: https://github.com/nicolashenry
 [@noelebrun]: https://github.com/noelebrun
 [@ntdb]: https://github.com/ntdb
+[@nwalters512]: https://github.com/nwalters512
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet
