@@ -7,6 +7,7 @@ import { expect } from 'chai';
 import { CLIEngine } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
+import * as importPlugin from '../../src/index';
 
 describe('CLI regression tests', function () {
   describe('issue #210', function () {
@@ -20,6 +21,7 @@ describe('CLI regression tests', function () {
           'named': 2,
         },
       });
+      cli.addPlugin('eslint-plugin-import', importPlugin);
     });
     it("doesn't throw an error on gratuitous, erroneous self-reference", function () {
       expect(() => cli.executeOnFiles(['./tests/files/issue210.js'])).not.to.throw();
@@ -38,6 +40,7 @@ describe('CLI regression tests', function () {
           rulePaths: ['./src/rules'],
           ignore: false,
         });
+        cli.addPlugin('eslint-plugin-import', importPlugin);
       }
     });
 
