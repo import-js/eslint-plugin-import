@@ -32,6 +32,9 @@ export function testVersion(specifier, t) {
 }
 
 export function test(t) {
+  if (arguments.length !== 1) {
+    throw new SyntaxError('`test` requires exactly one object argument');
+  }
   return Object.assign({
     filename: FILENAME,
   }, t, {

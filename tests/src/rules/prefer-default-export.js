@@ -151,7 +151,7 @@ ruleTester.run('prefer-default-export', rule, {
 context('TypeScript', function() {
   getNonDefaultParsers().forEach((parser) => {
     const parserConfig = {
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -161,52 +161,34 @@ context('TypeScript', function() {
     ruleTester.run('prefer-default-export', rule, {
       valid: [
         // Exporting types
-        test(
-          {
-            code: `
-        export type foo = string;
-        export type bar = number;`,
-            parser,
-          },
-          parserConfig,
-        ),
-        test(
-          {
-            code: `
-        export type foo = string;
-        export type bar = number;`,
-            parser,
-          },
-          parserConfig,
-        ),
-        test(
-          {
-            code: 'export type foo = string',
-            parser,
-          },
-          parserConfig,
-        ),
-        test(
-          {
-            code: 'export type foo = string',
-            parser,
-          },
-          parserConfig,
-        ),
-        test(
-          {
-            code: 'export interface foo { bar: string; }',
-            parser,
-          },
-          parserConfig,
-        ),
-        test(
-          {
-            code: 'export interface foo { bar: string; }; export function goo() {}',
-            parser,
-          },
-          parserConfig,
-        ),
+        test({
+          code: `
+          export type foo = string;
+          export type bar = number;`,
+          ...parserConfig,
+        }),
+        test({
+          code: `
+          export type foo = string;
+          export type bar = number;`,
+          ...parserConfig,
+        }),
+        test({
+          code: 'export type foo = string',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export type foo = string',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export interface foo { bar: string; }',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export interface foo { bar: string; }; export function goo() {}',
+          ...parserConfig,
+        }),
       ],
       invalid: [],
     });

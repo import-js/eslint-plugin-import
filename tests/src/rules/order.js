@@ -2286,7 +2286,7 @@ context('TypeScript', function () {
     .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
     .forEach((parser) => {
       const parserConfig = {
-        parser: parser,
+        parser,
         settings: {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -2298,352 +2298,316 @@ context('TypeScript', function () {
           // #1667: typescript type import support
 
           // Option alphabetize: {order: 'asc'}
-          test(
-            {
-              code: `
-                import c from 'Bar';
-                import type { C } from 'Bar';
-                import b from 'bar';
-                import a from 'foo';
-                import type { A } from 'foo';
+          test({
+            code: `
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import b from 'bar';
+              import a from 'foo';
+              import type { A } from 'foo';
 
-                import index from './';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index'],
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index'],
+                alphabetize: { order: 'asc' },
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'desc'}
-          test(
-            {
-              code: `
-                import a from 'foo';
-                import type { A } from 'foo';
-                import b from 'bar';
-                import c from 'Bar';
-                import type { C } from 'Bar';
+          test({
+            code: `
+              import a from 'foo';
+              import type { A } from 'foo';
+              import b from 'bar';
+              import c from 'Bar';
+              import type { C } from 'Bar';
 
-                import index from './';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index'],
-                  alphabetize: { order: 'desc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index'],
+                alphabetize: { order: 'desc' },
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'asc'} with type group
-          test(
-            {
-              code: `
-                import c from 'Bar';
-                import b from 'bar';
-                import a from 'foo';
+          test({
+            code: `
+              import c from 'Bar';
+              import b from 'bar';
+              import a from 'foo';
 
-                import index from './';
+              import index from './';
 
-                import type { C } from 'Bar';
-                import type { A } from 'foo';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index', 'type'],
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import type { C } from 'Bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index', 'type'],
+                alphabetize: { order: 'asc' },
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'asc'} with type group & path group
-          test(
-            {
-              // only: true,
-              code: `
-                import c from 'Bar';
-                import a from 'foo';
+          test({
+            // only: true,
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
 
-                import b from 'dirA/bar';
+              import b from 'dirA/bar';
 
-                import index from './';
+              import index from './';
 
-                import type { C } from 'dirA/Bar';
-                import type { A } from 'foo';
-              `,
-              parser,
-              options: [
-                {
-                  alphabetize: { order: 'asc' },
-                  groups: ['external', 'internal', 'index', 'type'],
-                  pathGroups: [
-                    {
-                      pattern: 'dirA/**',
-                      group: 'internal',
-                    },
-                  ],
-                  'newlines-between': 'always',
-                  pathGroupsExcludedImportTypes: ['type'],
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import type { C } from 'dirA/Bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: ['type'],
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'asc'} with path group
-          test(
-            {
-              // only: true,
-              code: `
-                import c from 'Bar';
-                import type { A } from 'foo';
-                import a from 'foo';
+          test({
+            // only: true,
+            code: `
+              import c from 'Bar';
+              import type { A } from 'foo';
+              import a from 'foo';
 
-                import type { C } from 'dirA/Bar';
-                import b from 'dirA/bar';
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
 
-                import index from './';
-              `,
-              parser,
-              options: [
-                {
-                  alphabetize: { order: 'asc' },
-                  groups: ['external', 'internal', 'index'],
-                  pathGroups: [
-                    {
-                      pattern: 'dirA/**',
-                      group: 'internal',
-                    },
-                  ],
-                  'newlines-between': 'always',
-                  pathGroupsExcludedImportTypes: [],
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'desc'} with type group
-          test(
-            {
-              code: `
-                import a from 'foo';
-                import b from 'bar';
-                import c from 'Bar';
+          test({
+            code: `
+              import a from 'foo';
+              import b from 'bar';
+              import c from 'Bar';
 
-                import index from './';
+              import index from './';
 
-                import type { A } from 'foo';
-                import type { C } from 'Bar';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index', 'type'],
-                  alphabetize: { order: 'desc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
-          test(
-            {
-              code: `
-                import { Partner } from '@models/partner/partner';
-                import { PartnerId } from '@models/partner/partner-id';
-              `,
-              parser,
-              options: [
-                {
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
-          test(
-            {
-              code: `
-                import { serialize, parse, mapFieldErrors } from '@vtaits/form-schema';
-                import type { GetFieldSchema } from '@vtaits/form-schema';
-                import { useMemo, useCallback } from 'react';
-                import type { ReactElement, ReactNode } from 'react';
-                import { Form } from 'react-final-form';
-                import type { FormProps as FinalFormProps } from 'react-final-form';
-              `,
-              parser,
-              options: [
-                {
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import type { A } from 'foo';
+              import type { C } from 'Bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index', 'type'],
+                alphabetize: { order: 'desc' },
+              },
+            ],
+          }),
+          test({
+            code: `
+              import { Partner } from '@models/partner/partner';
+              import { PartnerId } from '@models/partner/partner-id';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+              },
+            ],
+          }),
+          test({
+            code: `
+              import { serialize, parse, mapFieldErrors } from '@vtaits/form-schema';
+              import type { GetFieldSchema } from '@vtaits/form-schema';
+              import { useMemo, useCallback } from 'react';
+              import type { ReactElement, ReactNode } from 'react';
+              import { Form } from 'react-final-form';
+              import type { FormProps as FinalFormProps } from 'react-final-form';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+              },
+            ],
+          }),
         ],
         invalid: [
           // Option alphabetize: {order: 'asc'}
-          test(
-            {
-              code: `
-                import b from 'bar';
-                import c from 'Bar';
-                import type { C } from 'Bar';
-                import a from 'foo';
-                import type { A } from 'foo';
+          test({
+            code: `
+              import b from 'bar';
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import a from 'foo';
+              import type { A } from 'foo';
 
-                import index from './';
-              `,
-              output: `
-                import c from 'Bar';
-                import type { C } from 'Bar';
-                import b from 'bar';
-                import a from 'foo';
-                import type { A } from 'foo';
+              import index from './';
+            `,
+            output: `
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import b from 'bar';
+              import a from 'foo';
+              import type { A } from 'foo';
 
-                import index from './';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index'],
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-              errors: [
-                {
-                  message: semver.satisfies(eslintPkg.version, '< 3')
-                    ? '`bar` import should occur after import of `Bar`'
-                    : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index'],
+                alphabetize: { order: 'asc' },
+              },
+            ],
+            errors: [
+              {
+                message: semver.satisfies(eslintPkg.version, '< 3')
+                  ? '`bar` import should occur after import of `Bar`'
+                  : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'desc'}
-          test(
-            {
-              code: `
-                import a from 'foo';
-                import type { A } from 'foo';
-                import c from 'Bar';
-                import type { C } from 'Bar';
-                import b from 'bar';
+          test({
+            code: `
+              import a from 'foo';
+              import type { A } from 'foo';
+              import c from 'Bar';
+              import type { C } from 'Bar';
+              import b from 'bar';
 
-                import index from './';
-              `,
-              output: `
-                import a from 'foo';
-                import type { A } from 'foo';
-                import b from 'bar';
-                import c from 'Bar';
-                import type { C } from 'Bar';
+              import index from './';
+            `,
+            output: `
+              import a from 'foo';
+              import type { A } from 'foo';
+              import b from 'bar';
+              import c from 'Bar';
+              import type { C } from 'Bar';
 
-                import index from './';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index'],
-                  alphabetize: { order: 'desc' },
-                },
-              ],
-              errors: [
-                {
-                  message: semver.satisfies(eslintPkg.version, '< 3')
-                    ? '`bar` import should occur before import of `Bar`'
-                    : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
-                },
-              ],
-            },
-            parserConfig,
-          ),
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index'],
+                alphabetize: { order: 'desc' },
+              },
+            ],
+            errors: [
+              {
+                message: semver.satisfies(eslintPkg.version, '< 3')
+                  ? '`bar` import should occur before import of `Bar`'
+                  : /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/,
+              },
+            ],
+          }),
           // Option alphabetize: {order: 'asc'} with type group
-          test(
-            {
-              code: `
-                import b from 'bar';
-                import c from 'Bar';
-                import a from 'foo';
+          test({
+            code: `
+              import b from 'bar';
+              import c from 'Bar';
+              import a from 'foo';
 
-                import index from './';
+              import index from './';
 
-                import type { A } from 'foo';
-                import type { C } from 'Bar';
-              `,
-              output: `
-                import c from 'Bar';
-                import b from 'bar';
-                import a from 'foo';
+              import type { A } from 'foo';
+              import type { C } from 'Bar';
+            `,
+            output: `
+              import c from 'Bar';
+              import b from 'bar';
+              import a from 'foo';
 
-                import index from './';
+              import index from './';
 
-                import type { C } from 'Bar';
-                import type { A } from 'foo';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index', 'type'],
-                  alphabetize: { order: 'asc' },
-                },
-              ],
-              errors: semver.satisfies(eslintPkg.version, '< 3') ? [
-                { message: '`Bar` import should occur before import of `bar`' },
-                { message: '`Bar` import should occur before import of `foo`' },
-              ] : [
-                { message: /(`Bar` import should occur before import of `bar`)|(`bar` import should occur after import of `Bar`)/ },
-                { message: /(`Bar` import should occur before import of `foo`)|(`foo` import should occur after import of `Bar`)/ },
-              ],
-            },
-            parserConfig,
-          ),
+              import type { C } from 'Bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index', 'type'],
+                alphabetize: { order: 'asc' },
+              },
+            ],
+            errors: semver.satisfies(eslintPkg.version, '< 3') ? [
+              { message: '`Bar` import should occur before import of `bar`' },
+              { message: '`Bar` import should occur before import of `foo`' },
+            ] : [
+              { message: /(`Bar` import should occur before import of `bar`)|(`bar` import should occur after import of `Bar`)/ },
+              { message: /(`Bar` import should occur before import of `foo`)|(`foo` import should occur after import of `Bar`)/ },
+            ],
+          }),
           // Option alphabetize: {order: 'desc'} with type group
-          test(
-            {
-              code: `
-                import a from 'foo';
-                import c from 'Bar';
-                import b from 'bar';
+          test({
+            code: `
+              import a from 'foo';
+              import c from 'Bar';
+              import b from 'bar';
 
-                import index from './';
+              import index from './';
 
-                import type { C } from 'Bar';
-                import type { A } from 'foo';
-              `,
-              output: `
-                import a from 'foo';
-                import b from 'bar';
-                import c from 'Bar';
+              import type { C } from 'Bar';
+              import type { A } from 'foo';
+            `,
+            output: `
+              import a from 'foo';
+              import b from 'bar';
+              import c from 'Bar';
 
-                import index from './';
+              import index from './';
 
-                import type { A } from 'foo';
-                import type { C } from 'Bar';
-              `,
-              parser,
-              options: [
-                {
-                  groups: ['external', 'index', 'type'],
-                  alphabetize: { order: 'desc' },
-                },
-              ],
-              errors: semver.satisfies(eslintPkg.version, '< 3') ? [
-                { message: '`bar` import should occur before import of `Bar`' },
-                { message: '`foo` import should occur before import of `Bar`' },
-              ] : [
-                { message: /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/ },
-                { message: /(`foo` import should occur before import of `Bar`)|(`Bar` import should occur after import of `foo`)/ },
-              ],
-            },
-            parserConfig,
-          ),
+              import type { A } from 'foo';
+              import type { C } from 'Bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['external', 'index', 'type'],
+                alphabetize: { order: 'desc' },
+              },
+            ],
+            errors: semver.satisfies(eslintPkg.version, '< 3') ? [
+              { message: '`bar` import should occur before import of `Bar`' },
+              { message: '`foo` import should occur before import of `Bar`' },
+            ] : [
+              { message: /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/ },
+              { message: /(`foo` import should occur before import of `Bar`)|(`Bar` import should occur after import of `foo`)/ },
+            ],
+          }),
           // warns for out of order unassigned imports (warnOnUnassignedImports enabled)
           test({
             code: `
