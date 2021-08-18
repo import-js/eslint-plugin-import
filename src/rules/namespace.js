@@ -60,7 +60,7 @@ module.exports = {
               if (!imports.size) {
                 context.report(
                   specifier,
-                  `No exported names found in module '${declaration.source.value}'.`
+                  `No exported names found in module '${declaration.source.value}'.`,
                 );
               }
               namespaces.set(specifier.local.name, imports);
@@ -69,7 +69,7 @@ module.exports = {
             case 'ImportSpecifier': {
               const meta = imports.get(
                 // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
-                specifier.imported ? specifier.imported.name : 'default'
+                specifier.imported ? specifier.imported.name : 'default',
               );
               if (!meta || !meta.namespace) { break; }
               namespaces.set(specifier.local.name, meta.namespace);
@@ -96,7 +96,7 @@ module.exports = {
         if (!imports.size) {
           context.report(
             namespace,
-            `No exported names found in module '${declaration.source.value}'.`
+            `No exported names found in module '${declaration.source.value}'.`,
           );
         }
       },
@@ -111,7 +111,7 @@ module.exports = {
         if (dereference.parent.type === 'AssignmentExpression' && dereference.parent.left === dereference) {
           context.report(
             dereference.parent,
-            `Assignment to member of namespace '${dereference.object.name}'.`
+            `Assignment to member of namespace '${dereference.object.name}'.`,
           );
         }
 
@@ -125,7 +125,7 @@ module.exports = {
             if (!allowComputed) {
               context.report(
                 dereference.property,
-                `Unable to validate computed reference to imported namespace '${dereference.object.name}'.`
+                `Unable to validate computed reference to imported namespace '${dereference.object.name}'.`,
               );
             }
             return;
@@ -134,7 +134,7 @@ module.exports = {
           if (!namespace.has(dereference.property.name)) {
             context.report(
               dereference.property,
-              makeMessage(dereference.property, namepath)
+              makeMessage(dereference.property, namepath),
             );
             break;
           }

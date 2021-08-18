@@ -414,6 +414,39 @@ ExportMap.parse = function (path, content, context) {
     return object;
   }
 
+  function processSpecifier(s, n, m) {
+    const nsource = n.source && n.source.value;
+    const exportMeta = {};
+    let local;
+
+    switch (s.type) {
+    case 'ExportDefaultSpecifier':
+      if (!n.source) return;
+      local = 'default';
+      break;
+    case 'ExportNamespaceSpecifier':
+      m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+        get() { return resolveImport(nsource); },
+      }));
+      return;
+    case 'ExportAllDeclaration':
+      local = s.exported ? s.exported.name : s.local.name;
+      break;
+    case 'ExportSpecifier':
+      if (!n.source) {
+        m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
+        return;
+      }
+      // else falls through
+    default:
+      local = s.local.name;
+      break;
+    }
+
+    // todo: JSDoc
+    m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) });
+  }
+
   function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
     if (source == null) return null;
 
@@ -489,6 +522,9 @@ ExportMap.parse = function (path, content, context) {
     if (n.type === 'ExportAllDeclaration') {
       const getter = captureDependency(n, n.exportKind === 'type');
       if (getter) m.dependencies.add(getter);
+      if (n.exported) {
+        processSpecifier(n, n.exported, m);
+      }
       return;
     }
 
@@ -546,35 +582,7 @@ ExportMap.parse = function (path, content, context) {
         }
       }
 
-      const nsource = n.source && n.source.value;
-      n.specifiers.forEach((s) => {
-        const exportMeta = {};
-        let local;
-
-        switch (s.type) {
-        case 'ExportDefaultSpecifier':
-          if (!n.source) return;
-          local = 'default';
-          break;
-        case 'ExportNamespaceSpecifier':
-          m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-            get() { return resolveImport(nsource); },
-          }));
-          return;
-        case 'ExportSpecifier':
-          if (!n.source) {
-            m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
-            return;
-          }
-          // else falls through
-        default:
-          local = s.local.name;
-          break;
-        }
-
-        // todo: JSDoc
-        m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) });
-      });
+      n.specifiers.forEach((s) => processSpecifier(s, n, m));
     }
 
     const exports = ['TSExportAssignment'];

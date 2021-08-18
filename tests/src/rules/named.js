@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -182,10 +182,18 @@ ruleTester.run('named', rule, {
     }),
 
     ...SYNTAX_CASES,
+
+    ...[].concat(testVersion('>= 6', () => ({
+      code: `import { ExtfieldModel, Extfield2Model } from './models';`,
+      filename: testFilePath('./export-star/downstream.js'),
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 2020,
+      },
+    })) || []),
   ],
 
   invalid: [
-
     test({ code: 'import { somethingElse } from "./test-module"',
       errors: [ error('somethingElse', './test-module') ] }),
 

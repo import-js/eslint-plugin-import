@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
+- [`named`], [`namespace`]: properly set reexports on `export * as … from` ([#1998], [#2161], thanks [@ljharb])
 
 ### Changed
 - [Docs] `max-dependencies`: 📖 Document `ignoreTypeImports` option ([#2196], thanks [@himynameisdave])
@@ -1145,10 +1146,12 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
 [#2118]: https://github.com/import-js/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/import-js/eslint-plugin-import/issues/2067
 [#2056]: https://github.com/import-js/eslint-plugin-import/issues/2056
 [#2063]: https://github.com/import-js/eslint-plugin-import/issues/2063
+[#1998]: https://github.com/import-js/eslint-plugin-import/issues/1998
 [#1965]: https://github.com/import-js/eslint-plugin-import/issues/1965
 [#1924]: https://github.com/import-js/eslint-plugin-import/issues/1924
 [#1854]: https://github.com/import-js/eslint-plugin-import/issues/1854

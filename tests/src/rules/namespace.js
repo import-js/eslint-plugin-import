@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath } from '../utils';
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
@@ -172,6 +172,18 @@ const valid = [
     export const getExampleColor = () => color.example
     `,
   }),
+
+  ...[].concat(testVersion('>= 6', () => ({
+    code: `
+      import * as middle from './middle';
+
+      console.log(middle.myName);
+    `,
+    filename: testFilePath('export-star-2/downstream.js'),
+    parserOptions: {
+      ecmaVersion: 2020,
+    },
+  })) || []),
 ];
 
 const invalid = [
