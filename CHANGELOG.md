@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.24.1] - 2021-08-19
+
 ### Fixed
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
 - [`named`], [`namespace`]: properly set reexports on `export * as … from` ([#1998], [#2161], thanks [@ljharb])
@@ -1257,7 +1259,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.1...HEAD
+[2.24.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.0...v2.24.1
 [2.24.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.4...v2.24.0
 [2.23.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.3...v2.23.4
 [2.23.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.2...v2.23.3
