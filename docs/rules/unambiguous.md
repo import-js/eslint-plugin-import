@@ -51,4 +51,4 @@ a `module`.
 - [node-eps#13](https://github.com/nodejs/node-eps/issues/13)
 
 [`parserOptions.sourceType`]: http://eslint.org/docs/user-guide/configuring#specifying-parser-options
-[Unambiguous JavaScript Grammar]: https://github.com/nodejs/node-eps/blob/master/002-es-modules.md#32-determining-if-source-is-an-es-module
+[Unambiguous JavaScript Grammar]: https://github.com/nodejs/node-eps/blob/HEAD/002-es-modules.md#32-determining-if-source-is-an-es-module

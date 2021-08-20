@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/import-js/eslint-plugin-import/issues"
   },
-  "homepage": "https://github.com/import-js/eslint-plugin-import/tree/master/resolvers/webpack",
+  "homepage": "https://github.com/import-js/eslint-plugin-import/tree/HEAD/resolvers/webpack",
   "dependencies": {
     "array-find": "^1.0.0",
     "debug": "^3.2.7",

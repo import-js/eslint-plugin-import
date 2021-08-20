@@ -1,8 +1,9 @@
 # eslint-plugin-import
 
-[![build status](https://travis-ci.org/import-js/eslint-plugin-import.svg?branch=master)](https://travis-ci.org/import-js/eslint-plugin-import)
-[![Coverage Status](https://coveralls.io/repos/github/import-js/eslint-plugin-import/badge.svg?branch=master)](https://coveralls.io/github/import-js/eslint-plugin-import?branch=master)
-[![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/master?svg=true)](https://ci.appveyor.com/project/import-js/eslint-plugin-import/branch/master)
+[![github actions][actions-image]][actions-url]
+[![travis-ci](https://travis-ci.org/import-js/eslint-plugin-import.svg?branch=main)](https://travis-ci.org/import-js/eslint-plugin-import)
+[![coverage][codecov-image]][codecov-url]
+[![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/main?svg=true)](https://ci.appveyor.com/project/import-js/eslint-plugin-import/branch/main)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
 [![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](http://www.npmtrends.com/eslint-plugin-import)
 
@@ -171,7 +172,7 @@ extends:
   - plugin:import/typescript # this line does the trick
 ```
 
-[`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser
+[`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 
 # Resolvers
 
@@ -510,3 +511,8 @@ In Package Settings / SublimeLinter / User Settings:
 
 I believe this defaults to `3`, so you may not need to alter it depending on your
 project folder max depth.
+
+[codecov-image]: https://codecov.io/gh/import-js/eslint-plugin-import/branch/main/graphs/badge.svg
+[codecov-url]: https://app.codecov.io/gh/import-js/eslint-plugin-import/
+[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/import-js/eslint-plugin-import
+[actions-url]: https://github.com/import-js/eslint-plugin-import

@@ -1,9 +1,9 @@
 # Release steps
 
-1. create a `release-[x.y.z]` branch from tip of `master` (or whatever release commit)
+1. create a `release-[x.y.z]` branch from tip of `main` (or whatever release commit)
 
    ```bash
-   git checkout master && git pull && git checkout -b release-2.1.0
+   git checkout main && git pull && git checkout -b release-2.1.0
    ```
 
 2. bump `package.json` + update CHANGELOG version links for all releasing packages (i.e., root + any resolvers)
@@ -49,6 +49,6 @@
 7. merge `release-[x.y.z]` into `release` (
    - ideally fast-forward, probably with Git CLI instead of Github
 
-8. merge `release` into `master`
+8. merge `release` into `main`
 
 Done!

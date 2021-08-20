@@ -37,7 +37,7 @@ exports.default = function visitModules(visitor, options) {
   // for esmodule dynamic `import()` calls
   function checkImportCall(node) {
     let modulePath;
-    // refs https://github.com/estree/estree/blob/master/es2020.md#importexpression
+    // refs https://github.com/estree/estree/blob/HEAD/es2020.md#importexpression
     if (node.type === 'ImportExpression') {
       modulePath = node.source;
     } else if (node.type === 'CallExpression') {

@@ -33,7 +33,7 @@ function validateScope(scope) {
   return scope.variableScope.type === 'module';
 }
 
-// https://github.com/estree/estree/blob/master/es5.md
+// https://github.com/estree/estree/blob/HEAD/es5.md
 function isConditional(node) {
   if (
     node.type === 'IfStatement'
