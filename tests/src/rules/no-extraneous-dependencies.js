@@ -160,7 +160,10 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
 
     test({
-      code: 'import "alias/esm-package/esm-module";',
+      code: `
+        import "alias/esm-package/esm-module";
+        import 'expose-loader?exposes[]=$&exposes[]=jQuery!jquery';
+      `,
       settings: { 'import/resolver': 'webpack' },
     }),
   ],
