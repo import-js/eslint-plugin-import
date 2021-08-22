@@ -281,7 +281,7 @@ module.exports = {
 
     function getImportMap(n) {
       if (n.importKind === 'type') {
-        return n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
+        return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
       }
 
       return hasNamespace(n) ? nsImported : imported;

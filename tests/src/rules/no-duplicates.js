@@ -446,6 +446,13 @@ context('TypeScript', function() {
             code: "import type x from './foo'; import type {y} from './foo'",
             ...parserConfig,
           }),
+          test({
+            code: `
+              import type {} from './module';
+              import {} from './module2';
+            `,
+            ...parserConfig,
+          }),
         ],
         invalid: [
           test({

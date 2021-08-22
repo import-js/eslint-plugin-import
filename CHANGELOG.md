@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - `ExportMap`: Add default export when esModuleInterop is true and anything is exported ([#2184], thanks [@Maxim-Mazurok])
 - [`named`], [`namespace`]: properly set reexports on `export * as … from` ([#1998], [#2161], thanks [@ljharb])
 - [`no-duplicates`]: correctly handle case of mixed default/named type imports ([#2149], thanks [@GoodForOneFare], [@nwalters512])
+- [`no-duplicates`]: avoid crash with empty `import type {}` ([#2201], thanks [@ljharb])
 
 ### Changed
 - [Docs] `max-dependencies`: 📖 Document `ignoreTypeImports` option ([#2196], thanks [@himynameisdave])
@@ -1150,6 +1151,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2201]: https://github.com/import-js/eslint-plugin-import/issues/2201
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
 [#2118]: https://github.com/import-js/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/import-js/eslint-plugin-import/issues/2067
