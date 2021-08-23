@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Added
+- [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
 
@@ -1053,6 +1054,7 @@ for info on changes for earlier releases.
 [#1294]: https://github.com/import-js/eslint-plugin-import/pull/1294
 [#1290]: https://github.com/import-js/eslint-plugin-import/pull/1290
 [#1277]: https://github.com/import-js/eslint-plugin-import/pull/1277
+[#1262]: https://github.com/import-js/eslint-plugin-import/pull/1262
 [#1257]: https://github.com/import-js/eslint-plugin-import/pull/1257
 [#1253]: https://github.com/import-js/eslint-plugin-import/pull/1253
 [#1248]: https://github.com/import-js/eslint-plugin-import/pull/1248
