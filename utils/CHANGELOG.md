@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Added
+- `fileExistsWithCaseSync`: add `strict` argument ([#1262], thanks [@sergei-startsev])
+
 ## v2.6.2 - 2021-08-08
 
 ### Fixed
@@ -102,6 +105,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [#1409]: https://github.com/import-js/eslint-plugin-import/pull/1409
 [#1356]: https://github.com/import-js/eslint-plugin-import/pull/1356
 [#1290]: https://github.com/import-js/eslint-plugin-import/pull/1290
+[#1262]: https://github.com/import-js/eslint-plugin-import/pull/1262
 [#1218]: https://github.com/import-js/eslint-plugin-import/pull/1218
 [#1166]: https://github.com/import-js/eslint-plugin-import/issues/1166
 [#1160]: https://github.com/import-js/eslint-plugin-import/pull/1160
@@ -119,6 +123,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@kaiyoma]: https://github.com/kaiyoma
 [@manuth]: https://github.com/manuth
 [@pmcelhaney]: https://github.com/pmcelhaney
+[@sergei-startsev]: https://github.com/sergei-startsev
 [@sompylasar]: https://github.com/sompylasar
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01
