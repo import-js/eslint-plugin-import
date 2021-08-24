@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixes
+- [`named`], [`namespace`]: properly handle ExportAllDeclarations ([#2199], thanks [@ljharb])
+
 ## [2.24.1] - 2021-08-19
 
 ### Fixed
@@ -1152,6 +1155,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
 [#2201]: https://github.com/import-js/eslint-plugin-import/issues/2201
+[#2199]: https://github.com/import-js/eslint-plugin-import/issues/2199
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
 [#2118]: https://github.com/import-js/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/import-js/eslint-plugin-import/issues/2067

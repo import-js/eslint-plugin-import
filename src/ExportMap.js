@@ -421,7 +421,7 @@ ExportMap.parse = function (path, content, context) {
 
     switch (s.type) {
     case 'ExportDefaultSpecifier':
-      if (!n.source) return;
+      if (!nsource) return;
       local = 'default';
       break;
     case 'ExportNamespaceSpecifier':
@@ -430,8 +430,8 @@ ExportMap.parse = function (path, content, context) {
       }));
       return;
     case 'ExportAllDeclaration':
-      local = s.exported ? s.exported.name : s.local.name;
-      break;
+      m.namespace.set(s.exported.name, addNamespace(exportMeta, s.source.value));
+      return;
     case 'ExportSpecifier':
       if (!n.source) {
         m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
