@@ -24,7 +24,7 @@ module.exports = {
     }],
   },
 
-  create: function (context) {
+  create(context) {
     const config = context.options[0];
     const { importFunctions = [] } = config || {};
     const { webpackChunknameFormat = '[0-9a-zA-Z-_/.]+' } = config || {};

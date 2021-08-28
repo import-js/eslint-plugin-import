@@ -13,7 +13,7 @@ import * as unambiguous from 'eslint-module-utils/unambiguous';
 describe('ExportMap', function () {
   const fakeContext = Object.assign(
     semver.satisfies(eslintPkg.version, '>= 7.28') ? {
-      getFilename: function () { throw new Error('Should call getPhysicalFilename() instead of getFilename()'); },
+      getFilename() { throw new Error('Should call getPhysicalFilename() instead of getFilename()'); },
       getPhysicalFilename: getFilename,
     } : {
       getFilename,

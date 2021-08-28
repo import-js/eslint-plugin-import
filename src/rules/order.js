@@ -196,7 +196,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
   if (order === 'before') {
     context.report({
       node: secondNode.node,
-      message: message,
+      message,
       fix: canFix && (fixer =>
         fixer.replaceTextRange(
           [firstRootStart, secondRootEnd],
@@ -206,7 +206,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
   } else if (order === 'after') {
     context.report({
       node: secondNode.node,
-      message: message,
+      message,
       fix: canFix && (fixer =>
         fixer.replaceTextRange(
           [secondRootStart, firstRootEnd],
@@ -259,7 +259,7 @@ function getSorter(ascending) {
 }
 
 function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
-  const groupedByRanks = imported.reduce(function(acc, importedItem) {
+  const groupedByRanks = imported.reduce(function (acc, importedItem) {
     if (!Array.isArray(acc[importedItem.rank])) {
       acc[importedItem.rank] = [];
     }
@@ -275,14 +275,14 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     : (a, b) => sorterFn(a.value, b.value);
 
   // sort imports locally within their group
-  groupRanks.forEach(function(groupRank) {
+  groupRanks.forEach(function (groupRank) {
     groupedByRanks[groupRank].sort(comparator);
   });
 
   // assign globally unique rank to each import
   let newRank = 0;
-  const alphabetizedRanks = groupRanks.sort().reduce(function(acc, groupRank) {
-    groupedByRanks[groupRank].forEach(function(importedItem) {
+  const alphabetizedRanks = groupRanks.sort().reduce(function (acc, groupRank) {
+    groupedByRanks[groupRank].forEach(function (importedItem) {
       acc[`${importedItem.value}|${importedItem.node.importKind}`] = parseInt(groupRank, 10) + newRank;
       newRank += 1;
     });
@@ -290,7 +290,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
   }, {});
 
   // mutate the original group-rank with alphabetized-rank
-  imported.forEach(function(importedItem) {
+  imported.forEach(function (importedItem) {
     importedItem.rank = alphabetizedRanks[`${importedItem.value}|${importedItem.node.importKind}`];
   });
 }
@@ -359,11 +359,11 @@ const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling'
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
 // Will throw an error if it contains a type that does not exist, or has a duplicate
 function convertGroupsToRanks(groups) {
-  const rankObject = groups.reduce(function(res, group, index) {
+  const rankObject = groups.reduce(function (res, group, index) {
     if (typeof group === 'string') {
       group = [group];
     }
-    group.forEach(function(groupItem) {
+    group.forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
         throw new Error('Incorrect configuration of the rule: Unknown type `' +
           JSON.stringify(groupItem) + '`');
@@ -376,11 +376,11 @@ function convertGroupsToRanks(groups) {
     return res;
   }, {});
 
-  const omittedTypes = types.filter(function(type) {
+  const omittedTypes = types.filter(function (type) {
     return rankObject[type] === undefined;
   });
 
-  const ranks = omittedTypes.reduce(function(res, type) {
+  const ranks = omittedTypes.reduce(function (res, type) {
     res[type] = groups.length;
     return res;
   }, rankObject);
@@ -457,7 +457,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
   return undefined;
 }
 
-function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
+function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = context.getSourceCode().lines.slice(
       previousImport.node.loc.end.line,
@@ -468,7 +468,7 @@ function makeNewlinesBetweenReport (context, imported, newlinesBetweenImports) {
   };
   let previousImport = imported[0];
 
-  imported.slice(1).forEach(function(currentImport) {
+  imported.slice(1).forEach(function (currentImport) {
     const emptyLinesBetween = getNumberOfEmptyLinesBetween(currentImport, previousImport);
 
     if (newlinesBetweenImports === 'always'
@@ -581,7 +581,7 @@ module.exports = {
     ],
   },
 
-  create: function importOrderRule (context) {
+  create: function importOrderRule(context) {
     const options = context.options[0] || {};
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object']);
@@ -600,7 +600,7 @@ module.exports = {
     } catch (error) {
       // Malformed configuration
       return {
-        Program: function(node) {
+        Program(node) {
           context.report(node, error.message);
         },
       };

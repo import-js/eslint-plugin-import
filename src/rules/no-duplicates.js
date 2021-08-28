@@ -261,7 +261,7 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     // Prepare the resolver from options.
     const considerQueryStringOption = context.options[0] &&
       context.options[0]['considerQueryString'];
@@ -300,7 +300,7 @@ module.exports = {
         }
       },
 
-      'Program:exit'() {
+      'Program:exit': function () {
         checkImports(imported, context);
         checkImports(nsImported, context);
         checkImports(defaultTypesImported, context);

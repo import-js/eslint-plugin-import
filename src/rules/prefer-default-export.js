@@ -11,7 +11,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function(context) {
+  create(context) {
     let specifierExportCount = 0;
     let hasDefaultExport = false;
     let hasStarExport = false;
@@ -22,7 +22,7 @@ module.exports = {
       if (identifierOrPattern && identifierOrPattern.type === 'ObjectPattern') {
         // recursively capture
         identifierOrPattern.properties
-          .forEach(function(property) {
+          .forEach(function (property) {
             captureDeclaration(property.value);
           });
       } else if (identifierOrPattern && identifierOrPattern.type === 'ArrayPattern') {
@@ -35,11 +35,11 @@ module.exports = {
     }
 
     return {
-      'ExportDefaultSpecifier': function() {
+      'ExportDefaultSpecifier': function () {
         hasDefaultExport = true;
       },
 
-      'ExportSpecifier': function(node) {
+      'ExportSpecifier': function (node) {
         if (node.exported.name === 'default') {
           hasDefaultExport = true;
         } else {
@@ -48,7 +48,7 @@ module.exports = {
         }
       },
 
-      'ExportNamedDeclaration': function(node) {
+      'ExportNamedDeclaration': function (node) {
         // if there are specifiers, node.declaration should be null
         if (!node.declaration) return;
 
@@ -66,7 +66,7 @@ module.exports = {
         }
 
         if (node.declaration.declarations) {
-          node.declaration.declarations.forEach(function(declaration) {
+          node.declaration.declarations.forEach(function (declaration) {
             captureDeclaration(declaration.id);
           });
         } else {
@@ -77,15 +77,15 @@ module.exports = {
         namedExportNode = node;
       },
 
-      'ExportDefaultDeclaration': function() {
+      'ExportDefaultDeclaration': function () {
         hasDefaultExport = true;
       },
 
-      'ExportAllDeclaration': function() {
+      'ExportAllDeclaration': function () {
         hasStarExport = true;
       },
 
-      'Program:exit': function() {
+      'Program:exit': function () {
         if (specifierExportCount === 1 && !hasDefaultExport && !hasStarExport && !hasTypeExport) {
           context.report(namedExportNode, 'Prefer default export.');
         }

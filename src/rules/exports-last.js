@@ -15,9 +15,9 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     return {
-      Program: function ({ body }) {
+      Program({ body }) {
         const lastNonExportStatementIndex = body.reduce(function findLastIndex(acc, item, index) {
           if (isNonExportStatement(item)) {
             return index;

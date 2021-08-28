@@ -15,14 +15,14 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     // ignore non-modules
     if (context.parserOptions.sourceType !== 'module') {
       return {};
     }
 
     return {
-      Program: function (ast) {
+      Program(ast) {
         if (!isModule(ast)) {
           context.report({
             node: ast,

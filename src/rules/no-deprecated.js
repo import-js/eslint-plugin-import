@@ -21,7 +21,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     const deprecated = new Map();
     const namespaces = new Map();
 

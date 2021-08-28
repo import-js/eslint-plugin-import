@@ -963,31 +963,31 @@ context('TypeScript', function () {
           const a2: c = {};
           const a3: d = {};
           `,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export const b = 2;`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-b.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export interface c {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-c.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export type d = {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-d.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export enum e { f };`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-e.ts'),
         }),
         test({
@@ -1003,31 +1003,31 @@ context('TypeScript', function () {
           const a3: d = {};
           const a4: typeof e = undefined;
           `,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-a-import-type.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export const b = 2;`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-b-used-as-type.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export interface c {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-c-used-as-type.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export type d = {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-d-used-as-type.ts'),
         }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `export enum e { f };`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-e-used-as-type.ts'),
         }),
         // Should also be valid when the exporting files are linted before the importing ones
@@ -1060,7 +1060,7 @@ context('TypeScript', function () {
         test({
           options: unusedExportsTypescriptOptions,
           code: `export const b = 2;`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-b-unused.ts'),
           errors: [
             error(`exported declaration 'b' not used within other modules`),
@@ -1069,7 +1069,7 @@ context('TypeScript', function () {
         test({
           options: unusedExportsTypescriptOptions,
           code: `export interface c {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-c-unused.ts'),
           errors: [
             error(`exported declaration 'c' not used within other modules`),
@@ -1078,7 +1078,7 @@ context('TypeScript', function () {
         test({
           options: unusedExportsTypescriptOptions,
           code: `export type d = {};`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-d-unused.ts'),
           errors: [
             error(`exported declaration 'd' not used within other modules`),
@@ -1087,7 +1087,7 @@ context('TypeScript', function () {
         test({
           options: unusedExportsTypescriptOptions,
           code: `export enum e { f };`,
-          parser: parser,
+          parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-e-unused.ts'),
           errors: [
             error(`exported declaration 'e' not used within other modules`),

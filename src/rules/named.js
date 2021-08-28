@@ -21,7 +21,7 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     const options = context.options[0] || {};
 
     function checkSpecifiers(key, type, node) {

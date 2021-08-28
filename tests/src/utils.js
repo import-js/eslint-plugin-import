@@ -46,7 +46,7 @@ export function test(t) {
 }
 
 export function testContext(settings) {
-  return { getFilename: function () { return FILENAME; },
+  return { getFilename() { return FILENAME; },
     settings: settings || {} };
 }
 

@@ -362,8 +362,8 @@ context('TypeScript', function () {
       test({
         code: `import {a} from './export-star-3/b';`,
         filename: testFilePath('./export-star-3/a.js'),
-        parser: parser,
-        settings: settings,
+        parser,
+        settings,
       }),
     ];
 
@@ -376,52 +376,52 @@ context('TypeScript', function () {
       valid.push(
         test({
           code: `import { MyType } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `import { Foo } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `import { Bar } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `import { getFoo } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `import { MyEnum } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `
               import { MyModule } from "./${source}"
               MyModule.ModuleFunction()
             `,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
         test({
           code: `
               import { MyNamespace } from "./${source}"
               MyNamespace.NSModule.NSModuleFunction()
             `,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
         }),
       );
 
       invalid.push(
         test({
           code: `import { MissingType } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
           errors: [{
             message: `MissingType not found in './${source}'`,
             type: 'Identifier',
@@ -429,8 +429,8 @@ context('TypeScript', function () {
         }),
         test({
           code: `import { NotExported } from "./${source}"`,
-          parser: parser,
-          settings: settings,
+          parser,
+          settings,
           errors: [{
             message: `NotExported not found in './${source}'`,
             type: 'Identifier',

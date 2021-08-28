@@ -30,7 +30,7 @@ module.exports = {
 
     schema: [],
   },
-  create: function (context) {
+  create(context) {
     return moduleVisitor((source, node) => {
       isImportingSelf(context, node, source.value);
     }, { commonjs: true });

@@ -18,7 +18,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     return moduleVisitor((source, node) => {
       reportIfNonStandard(context, node, source.value);
     }, { commonjs: true });

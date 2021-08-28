@@ -54,7 +54,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     const namespace = new Map([[rootProgram, new Map()]]);
 
     function addNamed(name, node, parent, isType) {

@@ -201,7 +201,7 @@ ruleTester.run('no-deprecated: hoisting', rule, {
 describe('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },

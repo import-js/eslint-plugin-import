@@ -415,7 +415,7 @@ import {x,y} from './foo'
   ],
 });
 
-context('TypeScript', function() {
+context('TypeScript', function () {
   getNonDefaultParsers()
     .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
     .forEach((parser) => {

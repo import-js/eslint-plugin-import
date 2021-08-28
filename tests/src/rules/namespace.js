@@ -128,7 +128,7 @@ const valid = [
         import * as foo from "./typescript-declare-nested"
         foo.bar.MyFunction()
       `,
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -137,7 +137,7 @@ const valid = [
 
     test({
       code: `import { foobar } from "./typescript-declare-interface"`,
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -146,7 +146,7 @@ const valid = [
 
     test({
       code: 'export * from "typescript/lib/typescript.d"',
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -155,7 +155,7 @@ const valid = [
 
     test({
       code: 'export = function name() {}',
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },

@@ -101,7 +101,7 @@ describe('config', function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'foo.js'));
   });
 
-  it('finds the config at option env when config is a function', function() {
+  it('finds the config at option env when config is a function', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       env: {
@@ -113,7 +113,7 @@ describe('config', function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
   });
 
-  it('finds the config at option env when config is an array of functions', function() {
+  it('finds the config at option env when config is an array of functions', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.multiple.js')),
       env: {
@@ -125,7 +125,7 @@ describe('config', function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'goofy', 'path', 'bar.js'));
   });
 
-  it('passes argv to config when it is a function', function() {
+  it('passes argv to config when it is a function', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       argv: {
@@ -137,7 +137,7 @@ describe('config', function () {
       .and.equal(path.join(__dirname, 'files', 'some', 'bar', 'bar.js'));
   });
 
-  it('passes a default empty argv object to config when it is a function', function() {
+  it('passes a default empty argv object to config when it is a function', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),
       argv: undefined,
@@ -146,7 +146,7 @@ describe('config', function () {
     expect(function () { resolve('baz', file, settings); }).to.not.throw(Error);
   });
 
-  it('prevents async config using', function() {
+  it('prevents async config using', function () {
     const settings = {
       config: require(path.join(__dirname, './files/webpack.config.async.js')),
     };

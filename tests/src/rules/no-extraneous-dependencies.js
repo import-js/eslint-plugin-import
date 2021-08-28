@@ -384,7 +384,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
 describe('TypeScript', { skip: semver.satisfies(eslintPkg.version, '^4') }, function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },

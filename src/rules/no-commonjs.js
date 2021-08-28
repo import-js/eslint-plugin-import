@@ -88,7 +88,7 @@ module.exports = {
     },
   },
 
-  create: function (context) {
+  create(context) {
     const options = normalizeLegacyOptions(context.options);
 
     return {

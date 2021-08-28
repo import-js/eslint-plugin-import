@@ -76,7 +76,7 @@ ruleTester.run('no-webpack-loader-syntax', rule, {
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },

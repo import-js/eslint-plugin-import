@@ -139,7 +139,7 @@ ruleTester.run('no-internal-modules', rule, {
             }
           }
         `,
-        parser: parser,
+        parser,
       }),
     ]),
     test({

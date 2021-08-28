@@ -32,7 +32,7 @@ module.exports = {
     }],
   },
 
-  create: function (context) {
+  create(context) {
     const firstOption = context.options[0] || {};
     const ignoreGlobs = firstOption.ignore;
 

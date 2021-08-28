@@ -9,7 +9,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     function checkDeclaration(node) {
       const { kind } = node;
       if (kind === 'var' || kind === 'let') {

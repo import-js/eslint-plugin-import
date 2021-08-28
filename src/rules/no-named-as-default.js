@@ -11,7 +11,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     function checkDefault(nameKey, defaultSpecifier) {
       // #566: default is a valid specifier
       if (defaultSpecifier[nameKey].name === 'default') return;

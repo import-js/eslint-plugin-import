@@ -36,7 +36,7 @@ module.exports = {
     })],
   },
 
-  create: function (context) {
+  create(context) {
     const myPath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
     if (myPath === '<text>') return {}; // can't cycle-check a non-file
 

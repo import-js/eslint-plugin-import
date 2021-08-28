@@ -32,7 +32,7 @@ try {
       // https://github.com/eslint/eslint/blob/v5.2.0/lib/util/glob-util.js#L174-L269
       listFilesToProcess = function (src, extensions) {
         return originalListFilesToProcess(src, {
-          extensions: extensions,
+          extensions,
         });
       };
     } catch (e) {
@@ -54,7 +54,7 @@ try {
 if (FileEnumerator) {
   listFilesToProcess = function (src, extensions) {
     const e = new FileEnumerator({
-      extensions: extensions,
+      extensions,
     });
 
     return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({

@@ -97,7 +97,7 @@ context('TypeScript', { skip: semver.satisfies(eslintPkg.version, '>5.0.0') }, (
       valid: [    
         test({
           code: 'import type { x } from \'./foo\'; import { y } from \'./bar\';',
-          parser: parser,
+          parser,
           options: [{
             max: 1,
             ignoreTypeImports: true,
@@ -107,7 +107,7 @@ context('TypeScript', { skip: semver.satisfies(eslintPkg.version, '>5.0.0') }, (
       invalid: [    
         test({
           code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-          parser: parser,
+          parser,
           options: [{
             max: 1,
           }],
@@ -118,7 +118,7 @@ context('TypeScript', { skip: semver.satisfies(eslintPkg.version, '>5.0.0') }, (
     
         test({
           code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
-          parser: parser,
+          parser,
           options: [{
             max: 2,
             ignoreTypeImports: false,

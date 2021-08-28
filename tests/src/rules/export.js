@@ -129,7 +129,7 @@ ruleTester.run('export', rule, {
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
-      parser: parser,
+      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -218,7 +218,7 @@ context('TypeScript', function () {
               export * as A from './named-export-collision/a';
               export * as B from './named-export-collision/b';
             `,
-            parser: parser,
+            parser,
           }),
         ]),
 

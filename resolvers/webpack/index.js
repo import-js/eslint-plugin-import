@@ -163,7 +163,7 @@ exports.resolve = function (source, file, settings) {
 const MAX_CACHE = 10;
 const _cache = [];
 function getResolveSync(configPath, webpackConfig, cwd) {
-  const cacheKey = { configPath: configPath, webpackConfig: webpackConfig };
+  const cacheKey = { configPath, webpackConfig };
   let cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey); });
   if (!cached) {
     cached = {
@@ -265,7 +265,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
   resolver.apply(
     resolveConfig.packageAlias
       ? new DirectoryDescriptionFileFieldAliasPlugin('package.json', resolveConfig.packageAlias)
-      : function() {},
+      : function () {},
     new ModuleAliasPlugin(resolveConfig.alias || {}),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
     new ModulesInDirectoriesPlugin(
@@ -302,7 +302,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
 
   resolver.apply.apply(resolver, resolvePlugins);
 
-  return function() {
+  return function () {
     return resolver.resolveSync.apply(resolver, arguments);
   };
 }
@@ -391,7 +391,7 @@ function findExternal(source, externals, context, resolveSync) {
 }
 
 function findConfigPath(configPath, packageDir) {
-  const extensions = Object.keys(interpret.extensions).sort(function(a, b) {
+  const extensions = Object.keys(interpret.extensions).sort(function (a, b) {
     return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length;
   });
   let extension;

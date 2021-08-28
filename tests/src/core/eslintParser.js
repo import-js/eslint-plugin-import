@@ -1,5 +1,5 @@
 module.exports = {
-  parseForESLint: function() {
+  parseForESLint() {
     return {
       ast: {},
     };

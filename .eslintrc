@@ -31,6 +31,10 @@
         "no-shadow": 1,
         "no-var": 2,
         "object-curly-spacing": [2, "always"],
+        "object-shorthand": ["error", "always", {
+            "ignoreConstructors": false,
+            "avoidQuotes": true,
+        }],
         "one-var": [2, "never"],
         "prefer-const": 2,
         "quotes": [2, "single", {
@@ -38,6 +42,12 @@
             "avoidEscape": true,
         }],
         "semi": [2, "always"],
+        "space-before-function-paren": ["error", {
+            "anonymous": "always",
+            "named": "never",
+            "asyncArrow": "always",
+        }],
+  
         "eslint-plugin/consistent-output": [
             "error",
             "always",

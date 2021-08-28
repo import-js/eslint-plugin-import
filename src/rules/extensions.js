@@ -103,7 +103,7 @@ module.exports = {
     },
   },
 
-  create: function (context) {
+  create(context) {
 
     const props = buildProperties(context);
 

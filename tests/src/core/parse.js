@@ -30,7 +30,7 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     const parseSpy = sinon.spy();
     const parserOptions = { ecmaFeatures: { jsx: true } };
     parseStubParser.parse = parseSpy;
-    parse(path, content, { settings: {}, parserPath: parseStubParserPath, parserOptions: parserOptions });
+    parse(path, content, { settings: {}, parserPath: parseStubParserPath, parserOptions });
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1);
     expect(parseSpy.args[0][0], 'custom parser to get content as its first argument').to.equal(content);
     expect(parseSpy.args[0][1], 'custom parser to get an object as its second argument').to.be.an('object');
@@ -66,7 +66,7 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     const parseSpy = sinon.spy();
     const parserOptions = { ecmaFeatures: { jsx: true } };
     parseStubParser.parse = parseSpy;
-    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, parserOptions: parserOptions })).not.to.throw(Error);
+    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, parserOptions })).not.to.throw(Error);
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1);
   });
 

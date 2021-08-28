@@ -21,8 +21,8 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
-    function isPossibleDirective (node) {
+  create(context) {
+    function isPossibleDirective(node) {
       return node.type === 'ExpressionStatement' &&
         node.expression.type === 'Literal' &&
         typeof node.expression.value === 'string';

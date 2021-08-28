@@ -252,7 +252,7 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     const options = context.options[0] || {};
     const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
     const deps = getDependencies(context, options.packageDir) || extractDepFields({});

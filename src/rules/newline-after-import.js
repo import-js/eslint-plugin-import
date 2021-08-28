@@ -72,7 +72,7 @@ module.exports = {
       },
     ],
   },
-  create: function (context) {
+  create(context) {
     let level = 0;
     const requireCalls = [];
 
@@ -138,7 +138,7 @@ after ${type} statement not followed by another ${type}.`,
     return {
       ImportDeclaration: checkImport,
       TSImportEqualsDeclaration: checkImport,
-      CallExpression: function(node) {
+      CallExpression(node) {
         if (isStaticRequire(node) && level === 0) {
           requireCalls.push(node);
         }

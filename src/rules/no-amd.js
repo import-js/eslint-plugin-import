@@ -18,7 +18,7 @@ module.exports = {
     schema: [],
   },
 
-  create: function (context) {
+  create(context) {
     return {
       'CallExpression': function (node) {
         if (context.getScope().type !== 'module') return;

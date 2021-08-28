@@ -22,7 +22,7 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     function checkSourceValue(source) {
       const shouldCheckCase = !CASE_SENSITIVE_FS
         && (!context.options[0] || context.options[0].caseSensitive !== false);

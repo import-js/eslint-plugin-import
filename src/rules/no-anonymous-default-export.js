@@ -86,7 +86,7 @@ module.exports = {
     ],
   },
 
-  create: function (context) {
+  create(context) {
     const options = Object.assign({}, defaults, context.options[0]);
 
     return {
