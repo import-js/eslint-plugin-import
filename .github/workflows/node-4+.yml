@@ -81,6 +81,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh
           skip-ls-check: true
+      - run: npm run pretest
       - run: npm run tests-only
       - run: npm run coveralls
 
