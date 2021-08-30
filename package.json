@@ -25,14 +25,13 @@
     "watch": "npm run tests-only -- -- --watch",
     "pretest": "linklocal",
     "posttest": "eslint .",
-    "mocha": "cross-env BABEL_ENV=test nyc -s mocha",
+    "mocha": "cross-env BABEL_ENV=test nyc mocha",
     "tests-only": "npm run mocha tests/src",
     "test": "npm run tests-only",
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
     "prepublishOnly": "safe-publish-latest && npm run build",
-    "prepublish": "not-in-publish || npm run prepublishOnly",
-    "coveralls": "nyc report --reporter lcovonly && coveralls < ./coverage/lcov.info"
+    "prepublish": "not-in-publish || npm run prepublishOnly"
   },
   "repository": {
     "type": "git",
@@ -69,7 +68,6 @@
     "babel-register": "^6.26.0",
     "babylon": "^6.18.0",
     "chai": "^4.3.4",
-    "coveralls": "^3.1.1",
     "cross-env": "^4.0.0",
     "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0",
     "eslint-import-resolver-node": "file:./resolvers/node",

@@ -83,7 +83,7 @@ jobs:
           skip-ls-check: true
       - run: npm run pretest
       - run: npm run tests-only
-      - run: npm run coveralls
+      - uses: codecov/codecov-action@v1
 
   node:
     name: 'node 4+'

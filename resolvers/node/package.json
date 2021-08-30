@@ -9,8 +9,7 @@
   "scripts": {
     "prepublishOnly": "cp ../../{LICENSE,.npmrc} ./",
     "tests-only": "nyc mocha",
-    "test": "npm run tests-only",
-    "coveralls": "nyc report --reporter lcovonly && cd ../.. && coveralls < ./resolvers/node/coverage/lcov.info"
+    "test": "npm run tests-only"
   },
   "repository": {
     "type": "git",
@@ -35,7 +34,6 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "coveralls": "^3.1.0",
     "mocha": "^3.5.3",
     "nyc": "^11.9.0"
   }

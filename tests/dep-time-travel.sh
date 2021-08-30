@@ -2,7 +2,7 @@
 
 # expected: ESLINT_VERSION numeric env var
 
-echo "installing ${ESLINT_VERSION}..."
+echo "installing ${ESLINT_VERSION} in node ${TRAVIS_NODE_VERSION} with TS parser ${TS_PARSER:-default}..."
 
 export NPM_CONFIG_LEGACY_PEER_DEPS=true
 

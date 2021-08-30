@@ -1,7 +1,7 @@
 {
 	"all": true,
 	"check-coverage": false,
-	"reporter": ["text-summary", "text", "html", "json"],
+	"reporter": ["text-summary", "lcov", "text", "html", "json"],
 	"require": [
 		"babel-register"
 	],
