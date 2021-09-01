@@ -31,6 +31,7 @@ before_install:
 install:
   - 'npm install'
   - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
+  - 'npm run pretest'
 
 script:
   - npm run tests-only
