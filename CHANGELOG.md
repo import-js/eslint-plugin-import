@@ -7,7 +7,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Changed
-- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], [@mgwalker])
+- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
+- [patch] TypeScript config: remove `.d.ts` from [`import/parsers` setting] and [`import/extensions` setting] ([#2220], thanks [@jablko])
 
 ### Added
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
@@ -230,7 +231,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
 
 ### Fixed
-- [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
+- [`no-unused-modules`]: fix usage of [`import/extensions` setting] ([#1560], thanks [@stekycz])
 - [`extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
 - TypeScript config: lookup for external modules in @types folder ([#1526], thanks [@joaovieira])
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
@@ -909,6 +910,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2220]: https://github.com/import-js/eslint-plugin-import/pull/2220
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
@@ -1444,6 +1446,7 @@ for info on changes for earlier releases.
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@ivo-stefchev]: https://github.com/ivo-stefchev
+[@jablko]: https://github.com/jablko
 [@jakubsta]: https://github.com/jakubsta
 [@jeffshaver]: https://github.com/jeffshaver
 [@jf248]: https://github.com/jf248
