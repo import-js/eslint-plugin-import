@@ -42,7 +42,7 @@ function tryRequire(target, sourceFile) {
     } else {
       resolved = require.resolve(target);
     }
-  } catch(e) {
+  } catch (e) {
     // If the target does not exist then just return undefined
     return undefined;
   }

@@ -84,7 +84,7 @@ exports.resolve = function (source, file, settings) {
     if (configPath) {
       try {
         webpackConfig = require(configPath);
-      } catch(e) {
+      } catch (e) {
         console.log('Error resolving webpackConfig', e);
         throw e;
       }

@@ -18,12 +18,12 @@ exports.default = function moduleRequire(p) {
     const eslintPath = require.resolve('eslint');
     const eslintModule = createModule(eslintPath);
     return require(Module._resolveFilename(p, eslintModule));
-  } catch(err) { /* ignore */ }
+  } catch (err) { /* ignore */ }
 
   try {
     // try relative to entry point
     return require.main.require(p);
-  } catch(err) { /* ignore */ }
+  } catch (err) { /* ignore */ }
 
   // finally, try from here
   return require(p);

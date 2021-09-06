@@ -25,6 +25,15 @@
         "eqeqeq": [2, "allow-null"],
         "func-call-spacing": 2,
         "indent": [2, 2],
+        "keyword-spacing": ["error", {
+          before: true,
+          after: true,
+          overrides: {
+            return: { after: true },
+            throw: { after: true },
+            case: { after: true }
+          }
+        }],
         "max-len": [1, 99, 2],
         "no-cond-assign": [2, "always"],
         "no-return-assign": [2, "always"],
@@ -47,7 +56,7 @@
             "named": "never",
             "asyncArrow": "always",
         }],
-  
+
         "eslint-plugin/consistent-output": [
             "error",
             "always",
