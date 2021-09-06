@@ -107,6 +107,7 @@
     "find-up": "^2.0.0",
     "has": "^1.0.3",
     "is-core-module": "^2.6.0",
+    "is-glob": "^4.0.1",
     "minimatch": "^3.0.4",
     "object.values": "^1.1.4",
     "pkg-up": "^2.0.0",

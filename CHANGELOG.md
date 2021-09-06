@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Added
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
+- [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
 
 ## [2.24.2] - 2021-08-24
 
@@ -903,6 +904,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
 [#2194]: https://github.com/import-js/eslint-plugin-import/pull/2194
 [#2184]: https://github.com/import-js/eslint-plugin-import/pull/2184

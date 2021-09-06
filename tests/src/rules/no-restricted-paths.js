@@ -15,6 +15,23 @@ ruleTester.run('no-restricted-paths', rule, {
       } ],
     }),
     test({
+      code: 'import a from "../client/a.js"',
+      filename: testFilePath('./restricted-paths/server/b.js'),
+      options: [ {
+        zones: [ { target: '**/*', from: './tests/files/restricted-paths/other' } ],
+      } ],
+    }),
+    test({
+      code: 'import a from "../client/a.js"',
+      filename: testFilePath('./restricted-paths/client/b.js'),
+      options: [ {
+        zones: [ {
+          target: './tests/files/restricted-paths/!(client)/**/*',
+          from: './tests/files/restricted-paths/client/**/*',
+        } ],
+      } ],
+    }),
+    test({
       code: 'const a = require("../client/a.js")',
       filename: testFilePath('./restricted-paths/server/b.js'),
       options: [ {
@@ -61,7 +78,17 @@ ruleTester.run('no-restricted-paths', rule, {
         } ],
       } ],
     }),
-
+    test({
+      code: 'import A from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: '**/*',
+          from: './tests/files/restricted-paths/server/**/*',
+          except: ['**/a.js'],
+        } ],
+      } ],
+    }),
 
     // irrelevant function calls
     test({ code: 'notrequire("../server/b.js")' }),
@@ -86,6 +113,18 @@ ruleTester.run('no-restricted-paths', rule, {
       filename: testFilePath('./restricted-paths/client/a.js'),
       options: [ {
         zones: [ { target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import b from "../server/b.js"',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client/**/*', from: './tests/files/restricted-paths/server' } ],
       } ],
       errors: [ {
         message: 'Unexpected path "../server/b.js" imported in restricted zone.',
@@ -186,6 +225,37 @@ ruleTester.run('no-restricted-paths', rule, {
       errors: [ {
         message: 'Restricted path exceptions must be descendants of the configured ' +
           '`from` path for that zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import A from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: '**/*',
+          from: './tests/files/restricted-paths/server/**/*',
+        } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../two/a.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
+      code: 'import A from "../two/a.js"',
+      filename: testFilePath('./restricted-paths/server/one/a.js'),
+      options: [ {
+        zones: [ {
+          target: '**/*',
+          from: './tests/files/restricted-paths/server/**/*',
+          except: ['a.js'],
+        } ],
+      } ],
+      errors: [ {
+        message: 'Restricted path exceptions must be glob patterns when`from` is a glob pattern',
         line: 1,
         column: 15,
       } ],
