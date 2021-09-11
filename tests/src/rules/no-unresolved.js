@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import { test, SYNTAX_CASES, testVersion } from '../utils';
+import { getTSParsers, test, SYNTAX_CASES, testVersion } from '../utils';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -440,4 +440,24 @@ ruleTester.run('import() with built-in parser', rule, {
       errors: ["Unable to resolve path to module './does-not-exist-l0w9ssmcqy9'."],
     })) || [],
   ),
+});
+
+context('TypeScript', () => {
+  getTSParsers().filter(x => x !== require.resolve('typescript-eslint-parser')).forEach((parser) => {
+    ruleTester.run(`${parser}: no-unresolved ignore type-only`, rule, {
+      valid: [
+        test({
+          code: 'import type { JSONSchema7Type } from "@types/json-schema";',
+          parser,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'import { JSONSchema7Type } from "@types/json-schema";',
+          errors: [ "Unable to resolve path to module '@types/json-schema'." ],
+          parser,
+        }),
+      ],
+    });
+  });
 });

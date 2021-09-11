@@ -27,6 +27,11 @@ module.exports = {
     const options = context.options[0] || {};
 
     function checkSourceValue(source) {
+      // ignore type-only imports
+      if (source.parent && source.parent.importKind === 'type') {
+        return;
+      }
+
       const caseSensitive = !CASE_SENSITIVE_FS && options.caseSensitive !== false;
       const caseSensitiveStrict = !CASE_SENSITIVE_FS && options.caseSensitiveStrict;
 

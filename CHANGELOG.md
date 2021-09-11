@@ -6,15 +6,18 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
-### Changed
-- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
-- [patch] TypeScript config: remove `.d.ts` from [`import/parsers` setting] and [`import/extensions` setting] ([#2220], thanks [@jablko])
-
 ### Added
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
 - [`no-unused-modules`]: support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
+
+### Fixed
+- [`no-unresolved`]: ignore type-only imports ([#2220], thanks [@jablko])
+
+### Changed
+- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
+- [patch] TypeScript config: remove `.d.ts` from [`import/parsers` setting] and [`import/extensions` setting] ([#2220], thanks [@jablko])
 
 ## [2.24.2] - 2021-08-24
 
