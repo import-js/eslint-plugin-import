@@ -412,6 +412,51 @@ import {x,y} from './foo'
       output: "import Bar, { Foo } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
+
+    // #2229 add option to de-duplicate flow type imports
+    test({
+      code: "import { x } from './foo'; import type { y } from './foo'",
+      output: "import { x ,type y} from './foo'; ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      options: [{ 'combineTypeImports': 'flow' }],
+      parser: require.resolve('babel-eslint'),
+    }),
+
+    // #2229 add option to de-duplicate flow type imports
+    test({
+      code: "import { x } from './foo'; import type {y} from './foo'",
+      output: "import { x ,type y} from './foo'; ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      options: [{ 'combineTypeImports': 'flow' }],
+      parser: require.resolve('babel-eslint'),
+    }),
+
+    // #2229 add option to de-duplicate flow type imports
+    test({
+      code: "import { type x } from './foo'; import { y } from './foo'",
+      output: "import { type x , y } from './foo'; ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      options: [{ 'combineTypeImports': 'flow' }],
+      parser: require.resolve('babel-eslint'),
+    }),
+
+    // #2229 add option to de-duplicate flow type imports
+    test({
+      code: "import { type x } from './foo'; import type { y } from './foo'",
+      output: "import { type x ,type y} from './foo'; ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      options: [{ 'combineTypeImports': 'flow' }],
+      parser: require.resolve('babel-eslint'),
+    }),
+
+    // #2229 add option to de-duplicate flow type imports
+    test({
+      code: "import { type x } from './foo'; import type { y } from './foo'; import type { z } from './foo'",
+      output: "import { type x ,type y,type z} from './foo';  ",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+      options: [{ 'combineTypeImports': 'flow' }],
+      parser: require.resolve('babel-eslint'),
+    }),
   ],
 });
 
@@ -429,7 +474,7 @@ context('TypeScript', function () {
 
       ruleTester.run('no-duplicates', rule, {
         valid: [
-        // #1667: ignore duplicate if is a typescript type import
+          // #1667: ignore duplicate if is a typescript type import
           test({
             code: "import type { x } from './foo'; import y from './foo'",
             ...parserConfig,

@@ -14,12 +14,11 @@ is different in two key ways:
 Valid:
 ```js
 import SomeDefaultClass, * as names from './mod'
-// Flow `type` import from same module is fine
+// By default the flow `type` import from same module is fine (see combineTypeImports)
 import type SomeType from './mod'
 ```
 
-...whereas here, both `./mod` imports will be reported:
-
+Invalid:
 ```js
 import SomeDefaultClass from './mod'
 
@@ -36,7 +35,8 @@ The motivation is that this is likely a result of two developers importing diffe
 names from the same module at different times (and potentially largely different
 locations in the file.) This rule brings both (or n-many) to attention.
 
-### Query Strings
+## Options
+### considerQueryString
 
 By default, this rule ignores query strings (i.e. paths followed by a question mark), and thus imports from `./mod?a` and `./mod?b` will be considered as duplicates. However you can use the option `considerQueryString` to handle them as different (primarily because browsers will resolve those imports differently).
 
@@ -59,6 +59,25 @@ import SomeDefaultClass from './mod?minify'
 
 // This is invalid, assuming `./mod` and `./mod.js` are the same target:
 import * from './mod.js?minify'
+```
+
+### combineTypeImports
+
+By default, this rule ignores flow & typescript type imports. However you can use the option `combineTypeImports` to combine type imports with regular imports.
+
+Currently only `flow` is supported.
+
+Valid:
+```js
+/*eslint import/no-unresolved: [2, { combineTypeImports: "flow" }]*/
+import x, { type y } from './foo'
+```
+
+Invalid:
+```js
+/*eslint import/no-unresolved: [2, { combineTypeImports: "flow" }]*/
+import { type y } from './foo' // reported since './foo' is imported twice
+import { x } from './foo'
 ```
 
 ## When Not To Use It

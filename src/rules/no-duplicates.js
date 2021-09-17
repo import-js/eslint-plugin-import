@@ -1,13 +1,13 @@
 import resolve from 'eslint-module-utils/resolve';
 import docsUrl from '../docsUrl';
 
-function checkImports(imported, context) {
+function checkImports(imported, context, combineTypeImports) {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = context.getSourceCode();
-      const fix = getFix(first, rest, sourceCode);
+      const fix = getFix(first, rest, sourceCode, combineTypeImports);
 
       context.report({
         node: first.source,
@@ -25,7 +25,7 @@ function checkImports(imported, context) {
   }
 }
 
-function getFix(first, rest, sourceCode) {
+function getFix(first, rest, sourceCode, combineTypeImports) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
   // update the first one, and remove the rest. Support for multiple
@@ -107,15 +107,15 @@ function getFix(first, rest, sourceCode) {
     const firstIsEmpty = !hasSpecifiers(first);
 
     const [specifiersText] = specifiers.reduce(
-      ([result, needsComma], specifier) => {
-        return [
-          needsComma && !specifier.isEmpty
-            ? `${result},${specifier.text}`
-            : `${result}${specifier.text}`,
-          specifier.isEmpty ? needsComma : true,
-        ];
-      },
-      ['', !firstHasTrailingComma && !firstIsEmpty]
+      ([result, needsComma], specifier) => [
+        `${result}${needsComma && !specifier.isEmpty ? ',' : ''}${
+          combineTypeImports === 'flow' && specifier.importNode.importKind === 'type'
+            ? `type ${specifier.text.trim()}`
+            : specifier.text
+        }`,
+        specifier.isEmpty ? needsComma : true,
+      ],
+      ['', !firstHasTrailingComma && !firstIsEmpty],
     );
 
     const fixes = [];
@@ -255,6 +255,10 @@ module.exports = {
           considerQueryString: {
             type: 'boolean',
           },
+          combineTypeImports: {
+            enum: ['flow', 'disabled'],
+            default: 'disabled',
+          },
         },
         additionalProperties: false,
       },
@@ -262,11 +266,13 @@ module.exports = {
   },
 
   create(context) {
+    const {
+      considerQueryString = false,
+      combineTypeImports = 'disabled',
+    } = context.options[0] || {};
     // Prepare the resolver from options.
-    const considerQueryStringOption = context.options[0] &&
-      context.options[0]['considerQueryString'];
     const defaultResolver = sourcePath => resolve(sourcePath, context) || sourcePath;
-    const resolver = considerQueryStringOption ? (sourcePath => {
+    const resolver = considerQueryString ? (sourcePath => {
       const parts = sourcePath.match(/^([^?]*)\?(.*)$/);
       if (!parts) {
         return defaultResolver(sourcePath);
@@ -280,7 +286,7 @@ module.exports = {
     const namedTypesImported = new Map();
 
     function getImportMap(n) {
-      if (n.importKind === 'type') {
+      if (n.importKind === 'type' && combineTypeImports === 'disabled') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
       }
 
@@ -301,10 +307,10 @@ module.exports = {
       },
 
       'Program:exit': function () {
-        checkImports(imported, context);
-        checkImports(nsImported, context);
-        checkImports(defaultTypesImported, context);
-        checkImports(namedTypesImported, context);
+        checkImports(imported, context, combineTypeImports);
+        checkImports(nsImported, context, combineTypeImports);
+        checkImports(defaultTypesImported, context, combineTypeImports);
+        checkImports(namedTypesImported, context, combineTypeImports);
       },
     };
   },
