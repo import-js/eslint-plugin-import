@@ -395,16 +395,16 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [
           test(Object.assign({
-            code: 'import type { JSONSchema7Type } from "@types/json-schema";',
+            code: 'import type T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
           }, parserConfig)),
         ],
         invalid: [
           test(Object.assign({
-            code: 'import { JSONSchema7Type } from "@types/json-schema";',
+            code: 'import T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
-              message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              message: "'a' should be listed in the project's dependencies, not devDependencies.",
             }],
           }, parserConfig)),
         ],
@@ -414,17 +414,17 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [],
         invalid: [
           test(Object.assign({
-            code: 'import { JSONSchema7Type } from "@types/json-schema"; /* typescript-eslint-parser */',
+            code: 'import T from "a"; /* typescript-eslint-parser */',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
-              message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              message: "'a' should be listed in the project's dependencies, not devDependencies.",
             }],
           }, parserConfig)),
           test(Object.assign({
-            code: 'import type { JSONSchema7Type } from "@types/json-schema"; /* typescript-eslint-parser */',
+            code: 'import type T from "a"; /* typescript-eslint-parser */',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
-              message: "'@types/json-schema' should be listed in the project's dependencies, not devDependencies.",
+              message: "'a' should be listed in the project's dependencies, not devDependencies.",
             }],
           }, parserConfig)),
         ],
