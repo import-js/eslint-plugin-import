@@ -91,7 +91,7 @@ ruleTester.run('max-dependencies', rule, {
   ],
 });
 
-context('TypeScript', { skip: semver.satisfies(eslintPkg.version, '>5.0.0') }, () => {
+(semver.satisfies(eslintPkg.version, '>5.0.0') ? describe.skip : describe)('TypeScript', () => {
   getTSParsers().forEach((parser) => {
     ruleTester.run(`max-dependencies (${parser.replace(process.cwd(), '.')})`, rule, {
       valid: [    

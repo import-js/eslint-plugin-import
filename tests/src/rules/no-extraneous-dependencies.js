@@ -381,7 +381,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
 });
 
 // TODO: figure out why these tests fail in eslint 4
-describe('TypeScript', { skip: semver.satisfies(eslintPkg.version, '^4') }, function () {
+(semver.satisfies(eslintPkg.version, '^4') ? describe.skip : describe)('TypeScript', () => {
   getTSParsers().forEach((parser) => {
     const parserConfig = {
       parser,
