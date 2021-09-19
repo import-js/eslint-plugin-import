@@ -245,6 +245,18 @@ context('TypeScript', function () {
             export {Bar as default};
           `,
         }, parserConfig)),
+
+        test({
+          ...parserConfig,
+          code: `
+            export * from './module';
+          `,
+          filename: testFilePath('export-star-4/index.js'),
+          settings: {
+            ...parserConfig.settings,
+            'import/extensions': ['.js', '.ts', '.jsx'],
+          },
+        }),
       ],
       invalid: [
         // type/value name clash
