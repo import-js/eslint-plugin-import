@@ -246,7 +246,7 @@ context('TypeScript', function () {
           `,
         }, parserConfig)),
 
-        test({
+        ...(semver.satisfies(process.version, '< 8') && semver.satisfies(eslintPkg.version, '< 6') ? [] : test({
           ...parserConfig,
           code: `
             export * from './module';
@@ -256,7 +256,7 @@ context('TypeScript', function () {
             ...parserConfig.settings,
             'import/extensions': ['.js', '.ts', '.jsx'],
           },
-        }),
+        })),
       ],
       invalid: [
         // type/value name clash
