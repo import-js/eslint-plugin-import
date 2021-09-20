@@ -91,6 +91,16 @@ ruleTester.run('extensions', rule, {
     }),
 
     test({
+      code: `
+        import foo from './foo'
+        import bar from './bar'
+        import Component from './Component'
+        import express from 'lit/directives/if-defined.js'
+      `,
+      options: [ 'never', { ignorePackages: true } ],
+    }),
+
+    test({
       code: 'import exceljs from "exceljs"',
       options: [ 'always', { js: 'never', jsx: 'never' } ],
       filename: testFilePath('./internal-modules/plugins/plugin.js'),
