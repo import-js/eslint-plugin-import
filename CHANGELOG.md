@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
 - [`no-unused-modules`]: support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
+- [`import/extensions`]: revert `ignorePackages` with `never` ([#2231], thanks [@Drafter500])
 
 ## [2.24.2] - 2021-08-24
 
@@ -906,6 +907,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2231]: https://github.com/import-js/eslint-plugin-import/pull/2231
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
@@ -1402,6 +1404,7 @@ for info on changes for earlier releases.
 [@dbrewer5]: https://github.com/dbrewer5
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
+[@Drafter500]: https://github.com/Drafter500
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley
