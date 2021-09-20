@@ -80,7 +80,6 @@ ruleTester.run('first', rule, {
 
 context('TypeScript', function () {
   getTSParsers()
-    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
     .forEach((parser) => {
       const parserConfig = {
         parser,

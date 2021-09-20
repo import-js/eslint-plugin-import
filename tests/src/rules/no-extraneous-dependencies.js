@@ -2,8 +2,6 @@ import { getTSParsers, test, testFilePath } from '../utils';
 import typescriptConfig from '../../../config/typescript';
 import path from 'path';
 import fs from 'fs';
-import semver from 'semver';
-import eslintPkg from 'eslint/package.json';
 
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
@@ -380,18 +378,19 @@ ruleTester.run('no-extraneous-dependencies', rule, {
   ],
 });
 
-// TODO: figure out why these tests fail in eslint 4
-(semver.satisfies(eslintPkg.version, '^4') ? describe.skip : describe)('TypeScript', () => {
-  getTSParsers().forEach((parser) => {
-    const parserConfig = {
-      parser,
-      settings: {
-        'import/parsers': { [parser]: ['.ts'] },
-        'import/resolver': { 'eslint-import-resolver-typescript': true },
-      },
-    };
+describe('TypeScript', () => {
+  getTSParsers()
+    // Type-only imports were added in TypeScript ESTree 2.23.0
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      const parserConfig = {
+        parser,
+        settings: {
+          'import/parsers': { [parser]: ['.ts'] },
+          'import/resolver': { 'eslint-import-resolver-typescript': true },
+        },
+      };
 
-    if (parser !== require.resolve('typescript-eslint-parser')) {
       ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [
           test(Object.assign({
@@ -409,45 +408,22 @@ ruleTester.run('no-extraneous-dependencies', rule, {
           }, parserConfig)),
         ],
       });
-    } else {
-      ruleTester.run('no-extraneous-dependencies', rule, {
-        valid: [],
-        invalid: [
-          test(Object.assign({
-            code: 'import T from "a"; /* typescript-eslint-parser */',
-            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
-          test(Object.assign({
-            code: 'import type T from "a"; /* typescript-eslint-parser */',
-            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
-        ],
-      });
-    }
-  });
+    });
 });
 
-if (semver.satisfies(eslintPkg.version, '>5.0.0')) {
-  typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', rule, {
-    valid: [
-      test({
-        code: 'import type MyType from "not-a-dependency";',
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-        parser: require.resolve('babel-eslint'),
-      }),
-      test({
-        code: 'import type { MyType } from "not-a-dependency";',
-        filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-        parser: require.resolve('babel-eslint'),
-      }),
-    ],
-    invalid: [
-    ],
-  });
-}
+typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', rule, {
+  valid: [
+    test({
+      code: 'import type MyType from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: require.resolve('babel-eslint'),
+    }),
+    test({
+      code: 'import type { MyType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: require.resolve('babel-eslint'),
+    }),
+  ],
+  invalid: [
+  ],
+});

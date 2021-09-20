@@ -443,6 +443,7 @@ ruleTester.run('import() with built-in parser', rule, {
 });
 
 context('TypeScript', () => {
+  // Type-only imports were added in TypeScript ESTree 2.23.0
   getTSParsers().filter(x => x !== require.resolve('typescript-eslint-parser')).forEach((parser) => {
     ruleTester.run(`${parser}: no-unresolved ignore type-only`, rule, {
       valid: [

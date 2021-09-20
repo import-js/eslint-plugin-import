@@ -417,6 +417,7 @@ import {x,y} from './foo'
 
 context('TypeScript', function () {
   getNonDefaultParsers()
+    // Type-only imports were added in TypeScript ESTree 2.23.0
     .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
     .forEach((parser) => {
       const parserConfig = {

@@ -1,8 +1,6 @@
 import { test, getTSParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
-import eslintPkg from 'eslint/package.json';
-import semver from 'semver';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/max-dependencies');
@@ -91,43 +89,46 @@ ruleTester.run('max-dependencies', rule, {
   ],
 });
 
-(semver.satisfies(eslintPkg.version, '>5.0.0') ? describe.skip : describe)('TypeScript', () => {
-  getTSParsers().forEach((parser) => {
-    ruleTester.run(`max-dependencies (${parser.replace(process.cwd(), '.')})`, rule, {
-      valid: [    
-        test({
-          code: 'import type { x } from \'./foo\'; import { y } from \'./bar\';',
-          parser,
-          options: [{
-            max: 1,
-            ignoreTypeImports: true,
-          }],
-        }),
-      ],
-      invalid: [    
-        test({
-          code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-          parser,
-          options: [{
-            max: 1,
-          }],
-          errors: [
-            'Maximum number of dependencies (1) exceeded.',
-          ],
-        }),
-    
-        test({
-          code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
-          parser,
-          options: [{
-            max: 2,
-            ignoreTypeImports: false,
-          }],
-          errors: [
-            'Maximum number of dependencies (2) exceeded.',
-          ],
-        }),
-      ],
+describe('TypeScript', () => {
+  getTSParsers()
+    // Type-only imports were added in TypeScript ESTree 2.23.0
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      ruleTester.run(`max-dependencies (${parser.replace(process.cwd(), '.')})`, rule, {
+        valid: [
+          test({
+            code: 'import type { x } from \'./foo\'; import { y } from \'./bar\';',
+            parser,
+            options: [{
+              max: 1,
+              ignoreTypeImports: true,
+            }],
+          }),
+        ],
+        invalid: [
+          test({
+            code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
+            parser,
+            options: [{
+              max: 1,
+            }],
+            errors: [
+              'Maximum number of dependencies (1) exceeded.',
+            ],
+          }),
+
+          test({
+            code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
+            parser,
+            options: [{
+              max: 2,
+              ignoreTypeImports: false,
+            }],
+            errors: [
+              'Maximum number of dependencies (2) exceeded.',
+            ],
+          }),
+        ],
+      });
     });
-  });
 });
