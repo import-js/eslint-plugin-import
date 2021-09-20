@@ -194,7 +194,7 @@ import Component from './Component';
 
 import baz from 'package/module-one';
 
-import express from 'package/module-two.js';
+import bizz from 'package/module-two.js';
 ```
 
 ## When Not To Use It
