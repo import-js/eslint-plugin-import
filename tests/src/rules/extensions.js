@@ -76,6 +76,7 @@ ruleTester.run('extensions', rule, {
         import bar from './bar.json'
         import Component from './Component.jsx'
         import express from 'express'
+        import { ifDefined } from 'lit/directives/if-defined.js'
       `,
       options: [ 'always', { ignorePackages: true } ],
     }),
@@ -86,18 +87,18 @@ ruleTester.run('extensions', rule, {
         import bar from './bar'
         import Component from './Component'
         import express from 'express'
+        import { ifDefined } from 'lit/directives/if-defined.js'
       `,
       options: [ 'never', { ignorePackages: true } ],
     }),
 
     test({
-      code: `
-        import foo from './foo'
-        import bar from './bar'
-        import Component from './Component'
-        import express from 'lit/directives/if-defined.js'
-      `,
-      options: [ 'never', { ignorePackages: true } ],
+      code: [
+        'import bar from "./bar"',
+        'import pack from "./package.json"',
+        'import { ifDefined } from "lit/directives/if-defined.js"',
+      ].join('\n'),
+      options: [ 'ignorePackages', { js: 'never' } ],
     }),
 
     test({
@@ -388,6 +389,27 @@ ruleTester.run('extensions', rule, {
           message: 'Missing file extension for "@/configs/chart"',
           line: 7,
           column: 27,
+        },
+      ],
+    }),
+
+    test({
+      code: [
+        'import bar from "./bar.js"',
+        'import pack from "./package"',
+        'import { ifDefined } from "lit/directives/if-defined.js"',
+      ].join('\n'),
+      options: [ 'ignorePackages', { js: 'never' } ],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "./bar.js"',
+          line: 1,
+          column: 17,
+        },
+        {
+          message: 'Missing file extension "json" for "./package"',
+          line: 2,
+          column: 18,
         },
       ],
     }),
