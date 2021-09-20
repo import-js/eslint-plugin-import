@@ -12,7 +12,7 @@
     "esm-package": "^1.0.0",
     "jquery": "^3.1.0",
     "lodash.cond": "^4.3.0",
-    "pkg-up": "^1.0.0",
+    "find-up": "^1.0.0",
     "rxjs": "^1.0.0"
   },
   "optionalDependencies": {

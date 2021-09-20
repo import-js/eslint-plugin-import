@@ -2462,6 +2462,24 @@ context('TypeScript', function () {
               },
             ],
           }),
+          // Imports inside module declaration
+          test({
+            code: `
+              import type { CopyOptions } from 'fs';
+              import type { ParsedPath } from 'path';
+
+              declare module 'my-module' {
+                import type { CopyOptions } from 'fs';
+                import type { ParsedPath } from 'path';
+              }
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+              },
+            ],
+          }),
         ],
         invalid: [
           // Option alphabetize: {order: 'asc'}
@@ -2654,6 +2672,38 @@ context('TypeScript', function () {
               message: '`./local` import should occur after import of `global3`',
             }],
             options: [{ warnOnUnassignedImports: true }],
+          }),
+          // Imports inside module declaration
+          test({
+            code: `
+              import type { ParsedPath } from 'path';
+              import type { CopyOptions } from 'fs';
+
+              declare module 'my-module' {
+                import type { ParsedPath } from 'path';
+                import type { CopyOptions } from 'fs';
+              }
+            `,
+            output: `
+              import type { CopyOptions } from 'fs';
+              import type { ParsedPath } from 'path';
+
+              declare module 'my-module' {
+                import type { CopyOptions } from 'fs';
+                import type { ParsedPath } from 'path';
+              }
+            `,
+            errors: [{
+              message: '`fs` import should occur before import of `path`',
+            },{
+              message: '`fs` import should occur before import of `path`',
+            }],
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+              },
+            ],
           }),
         ],
       });

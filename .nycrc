@@ -10,6 +10,9 @@
 	"exclude": [
 		"coverage",
 		"test",
-		"tests"
+		"tests",
+		"resolvers/*/test",
+		"scripts",
+		"memo-parser"
 	]
 }

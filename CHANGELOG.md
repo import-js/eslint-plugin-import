@@ -13,6 +13,14 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
 - [`import/extensions`]: revert `ignorePackages` with `never` ([#2231], thanks [@Drafter500])
 
+### Fixed
+- [`no-unresolved`]: ignore type-only imports ([#2220], thanks [@jablko])
+- [`order`]: fix sorting imports inside TypeScript module declarations ([#2226], thanks [@remcohaszing])
+
+### Changed
+- [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
+- [patch] TypeScript config: remove `.d.ts` from [`import/parsers` setting] and [`import/extensions` setting] ([#2220], thanks [@jablko])
+
 ## [2.24.2] - 2021-08-24
 
 ### Fixed
@@ -228,7 +236,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`order`]: add option pathGroupsExcludedImportTypes to allow ordering of external import types ([#1565], thanks [@Mairu])
 
 ### Fixed
-- [`no-unused-modules`]: fix usage of `import/extensions` settings ([#1560], thanks [@stekycz])
+- [`no-unused-modules`]: fix usage of [`import/extensions` setting] ([#1560], thanks [@stekycz])
 - [`extensions`]: ignore non-main modules ([#1563], thanks [@saschanaz])
 - TypeScript config: lookup for external modules in @types folder ([#1526], thanks [@joaovieira])
 - [`no-extraneous-dependencies`]: ensure `node.source` is truthy ([#1589], thanks [@ljharb])
@@ -908,6 +916,8 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2231]: https://github.com/import-js/eslint-plugin-import/pull/2231
+[#2226]: https://github.com/import-js/eslint-plugin-import/pull/2226
+[#2220]: https://github.com/import-js/eslint-plugin-import/pull/2220
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2196]: https://github.com/import-js/eslint-plugin-import/pull/2196
@@ -917,7 +927,7 @@ for info on changes for earlier releases.
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2158]: https://github.com/import-js/eslint-plugin-import/pull/2158
 [#2156]: https://github.com/import-js/eslint-plugin-import/pull/2156
-[#2149]: https://github.com/benmosher/eslint-plugin-import/pull/2149
+[#2149]: https://github.com/import-js/eslint-plugin-import/pull/2149
 [#2146]: https://github.com/import-js/eslint-plugin-import/pull/2146
 [#2140]: https://github.com/import-js/eslint-plugin-import/pull/2140
 [#2138]: https://github.com/import-js/eslint-plugin-import/pull/2138
@@ -930,6 +940,7 @@ for info on changes for earlier releases.
 [#2083]: https://github.com/import-js/eslint-plugin-import/pull/2083
 [#2075]: https://github.com/import-js/eslint-plugin-import/pull/2075
 [#2071]: https://github.com/import-js/eslint-plugin-import/pull/2071
+[#2047]: https://github.com/import-js/eslint-plugin-import/pull/2047
 [#2034]: https://github.com/import-js/eslint-plugin-import/pull/2034
 [#2028]: https://github.com/import-js/eslint-plugin-import/pull/2028
 [#2026]: https://github.com/import-js/eslint-plugin-import/pull/2026
@@ -1174,8 +1185,8 @@ for info on changes for earlier releases.
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
 [#2118]: https://github.com/import-js/eslint-plugin-import/issues/2118
 [#2067]: https://github.com/import-js/eslint-plugin-import/issues/2067
-[#2056]: https://github.com/import-js/eslint-plugin-import/issues/2056
 [#2063]: https://github.com/import-js/eslint-plugin-import/issues/2063
+[#2056]: https://github.com/import-js/eslint-plugin-import/issues/2056
 [#1998]: https://github.com/import-js/eslint-plugin-import/issues/1998
 [#1965]: https://github.com/import-js/eslint-plugin-import/issues/1965
 [#1924]: https://github.com/import-js/eslint-plugin-import/issues/1924
@@ -1443,6 +1454,7 @@ for info on changes for earlier releases.
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@ivo-stefchev]: https://github.com/ivo-stefchev
+[@jablko]: https://github.com/jablko
 [@jakubsta]: https://github.com/jakubsta
 [@jeffshaver]: https://github.com/jeffshaver
 [@jf248]: https://github.com/jf248
@@ -1495,6 +1507,7 @@ for info on changes for earlier releases.
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@maxmalov]: https://github.com/maxmalov
+[@mgwalker]: https://github.com/mgwalker
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
 [@nickofthyme]: https://github.com/nickofthyme
@@ -1512,6 +1525,7 @@ for info on changes for earlier releases.
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr
 [@redbugz]: https://github.com/redbugz
+[@remcohaszing]: https://github.com/remcohaszing
 [@rfermann]: https://github.com/rfermann
 [@rhettlivingston]: https://github.com/rhettlivingston
 [@rhys-vdw]: https://github.com/rhys-vdw

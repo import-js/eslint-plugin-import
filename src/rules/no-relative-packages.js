@@ -1,5 +1,5 @@
 import path from 'path';
-import readPkgUp from 'read-pkg-up';
+import readPkgUp from 'eslint-module-utils/readPkgUp';
 
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
@@ -7,7 +7,7 @@ import importType from '../core/importType';
 import docsUrl from '../docsUrl';
 
 function findNamedPackage(filePath) {
-  const found = readPkgUp.sync({ cwd: filePath, normalize: false });
+  const found = readPkgUp({ cwd: filePath });
   if (found.pkg && !found.pkg.name) {
     return findNamedPackage(path.join(found.path, '../..'));
   }

@@ -336,7 +336,7 @@ function registerNode(context, importEntry, ranks, imported, excludedImportTypes
   }
 }
 
-function isModuleLevelRequire(node) {
+function getRequireBlock(node) {
   let n = node;
   // Handle cases like `const baz = require('foo').bar.baz`
   // and `const foo = require('foo')()`
@@ -346,11 +346,13 @@ function isModuleLevelRequire(node) {
   ) {
     n = n.parent;
   }
-  return (
+  if (
     n.parent.type === 'VariableDeclarator' &&
     n.parent.parent.type === 'VariableDeclaration' &&
     n.parent.parent.parent.type === 'Program'
-  );
+  ) {
+    return n.parent.parent.parent;
+  }
 }
 
 const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object', 'type'];
@@ -605,7 +607,14 @@ module.exports = {
         },
       };
     }
-    let imported = [];
+    const importMap = new Map();
+
+    function getBlockImports(node) {
+      if (!importMap.has(node)) {
+        importMap.set(node, []);
+      }
+      return importMap.get(node);
+    }
 
     return {
       ImportDeclaration: function handleImports(node) {
@@ -621,7 +630,7 @@ module.exports = {
               type: 'import',
             },
             ranks,
-            imported,
+            getBlockImports(node.parent),
             pathGroupsExcludedImportTypes
           );
         }
@@ -652,12 +661,16 @@ module.exports = {
             type,
           },
           ranks,
-          imported,
+          getBlockImports(node.parent),
           pathGroupsExcludedImportTypes
         );
       },
       CallExpression: function handleRequires(node) {
-        if (!isStaticRequire(node) || !isModuleLevelRequire(node)) {
+        if (!isStaticRequire(node)) {
+          return;
+        }
+        const block = getRequireBlock(node);
+        if (!block) {
           return;
         }
         const name = node.arguments[0].value;
@@ -670,22 +683,24 @@ module.exports = {
             type: 'require',
           },
           ranks,
-          imported,
+          getBlockImports(block),
           pathGroupsExcludedImportTypes
         );
       },
       'Program:exit': function reportAndReset() {
-        if (newlinesBetweenImports !== 'ignore') {
-          makeNewlinesBetweenReport(context, imported, newlinesBetweenImports);
-        }
+        importMap.forEach((imported) => {
+          if (newlinesBetweenImports !== 'ignore') {
+            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports);
+          }
 
-        if (alphabetize.order !== 'ignore') {
-          mutateRanksToAlphabetize(imported, alphabetize);
-        }
+          if (alphabetize.order !== 'ignore') {
+            mutateRanksToAlphabetize(imported, alphabetize);
+          }
 
-        makeOutOfOrderReport(context, imported);
+          makeOutOfOrderReport(context, imported);
+        });
 
-        imported = [];
+        importMap.clear();
       },
     };
   },
