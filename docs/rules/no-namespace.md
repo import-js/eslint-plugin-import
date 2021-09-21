@@ -22,7 +22,7 @@ import defaultExport, { a, b }  from './foobar'
 ```
 
 ```js
-/* eslint import/no-namespace: ["error", {ignore: ['*.ext']] */
+/* eslint import/no-namespace: ["error", {ignore: ['*.ext']}] */
 import * as bar from './ignored-module.ext';
 ```
 
