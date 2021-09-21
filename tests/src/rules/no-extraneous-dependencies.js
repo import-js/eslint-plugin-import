@@ -1,7 +1,9 @@
 import { getTSParsers, test, testFilePath } from '../utils';
 import typescriptConfig from '../../../config/typescript';
 import path from 'path';
+import typescriptResolverPkg from 'eslint-import-resolver-typescript/package.json';
 import fs from 'fs';
+import semver from 'semver';
 
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
@@ -378,7 +380,9 @@ ruleTester.run('no-extraneous-dependencies', rule, {
   ],
 });
 
-describe('TypeScript', () => {
+(semver.satisfies(typescriptResolverPkg.version, '>=2.1.0')
+  ? describe
+  : describe.skip)('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
     .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
@@ -392,18 +396,20 @@ describe('TypeScript', () => {
       };
 
       ruleTester.run('no-extraneous-dependencies', rule, {
-        valid: [
-          test(Object.assign({
-            code: 'import type T from "a";',
-            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-          }, parserConfig)),
-        ],
+        valid: [],
         invalid: [
           test(Object.assign({
             code: 'import T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             errors: [{
               message: "'a' should be listed in the project's dependencies, not devDependencies.",
+            }],
+          }, parserConfig)),
+          test(Object.assign({
+            code: 'import type T from "a";',
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            errors: [{
+              message: "'@types/a' should be listed in the project's dependencies. Run 'npm i -S @types/a' to add it",
             }],
           }, parserConfig)),
         ],

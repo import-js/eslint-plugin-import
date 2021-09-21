@@ -2,7 +2,10 @@ import path from 'path';
 import fs from 'fs';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
 import minimatch from 'minimatch';
-import resolve from 'eslint-module-utils/resolve';
+import resolve, {
+  requireResolver,
+  resolverReducer,
+} from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
 import { getFilePackageName } from '../core/packagePath';
@@ -117,6 +120,27 @@ function optDepErrorMessage(packageName) {
     `not optionalDependencies.`;
 }
 
+function resolveTypeOnly(modulePath, context) {
+  const sourceFile = context.getPhysicalFilename
+    ? context.getPhysicalFilename()
+    : context.getFilename();
+  const configResolvers = context.settings['import/resolver'];
+  if (!configResolvers) return;
+  const resolvers = resolverReducer(configResolvers, new Map());
+  for (const [name, config] of resolvers) {
+    switch (name) {
+    case 'typescript':
+    case 'eslint-import-resolver-typescript': {
+      const resolver = requireResolver(name, sourceFile);
+      const resolved = resolver.resolve(modulePath, sourceFile, config);
+      if (resolved.found) {
+        return resolved.path;
+      }
+    }
+    }
+  }
+}
+
 function getModuleOriginalName(name) {
   const [first, second] = name.split('/');
   return first.startsWith('@') ? `${first}/${second}` : first;
@@ -160,10 +184,7 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types
-  if (
-    node.importKind === 'type' ||
-    node.importKind === 'typeof'
-  ) {
+  if (node.importKind === 'typeof') {
     return;
   }
 
@@ -171,11 +192,17 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     return;
   }
 
-  const resolved = resolve(name, context);
+  const isTypeOnly = node.importKind === 'type';
+  const resolved = (isTypeOnly ? resolveTypeOnly : resolve)(name, context);
   if (!resolved) { return; }
 
-  const importPackageName = getModuleOriginalName(name);
-  let declarationStatus = checkDependencyDeclaration(deps, importPackageName);
+  // If this is type-only, only check realPackageName, because if you
+  // e.g. import type { JSONSchema7Type } from 'json-schema',
+  // realPackageName could be @types/json-schema but importPackageName
+  // will be json-schema and that package could be untyped.
+  const importPackageName = !isTypeOnly && getModuleOriginalName(name);
+  let declarationStatus =
+    !isTypeOnly && checkDependencyDeclaration(deps, importPackageName);
 
   if (
     declarationStatus.isInDeps ||
@@ -195,7 +222,8 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
 
     if (
       declarationStatus.isInDeps ||
-      (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
+      ((depsOptions.allowDevDeps || isTypeOnly) &&
+        declarationStatus.isInDevDeps) ||
       (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
       (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
       (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
