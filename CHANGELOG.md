@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`no-unused-modules`]: add eslint v8 support ([#2194], thanks [@coderaiser])
 - [`no-restricted-paths`]: add/restore glob pattern support ([#2219], thanks [@stropho])
 - [`no-unused-modules`]: support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
+- [`import/extensions`]: revert `ignorePackages` with `never` ([#2231], thanks [@Drafter500])
 
 ### Fixed
 - [`no-unresolved`]: ignore type-only imports ([#2220], thanks [@jablko])
@@ -914,6 +915,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2231]: https://github.com/import-js/eslint-plugin-import/pull/2231
 [#2226]: https://github.com/import-js/eslint-plugin-import/pull/2226
 [#2220]: https://github.com/import-js/eslint-plugin-import/pull/2220
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
@@ -1413,6 +1415,7 @@ for info on changes for earlier releases.
 [@dbrewer5]: https://github.com/dbrewer5
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
+[@Drafter500]: https://github.com/Drafter500
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley

@@ -115,8 +115,8 @@ module.exports = {
       return getModifier(extension) === 'always' && (!props.ignorePackages || !isPackage);
     }
 
-    function isUseOfExtensionForbidden(extension) {
-      return getModifier(extension) === 'never';
+    function isUseOfExtensionForbidden(extension, isPackage) {
+      return getModifier(extension) === 'never' && (!props.ignorePackages || !isPackage);
     }
 
     function isResolvableWithoutExtension(file) {
@@ -138,7 +138,7 @@ module.exports = {
     function checkFileExtension(source) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) return;
-      
+
       const importPathWithQueryString = source.value;
 
       // don't enforce anything on builtins
@@ -166,7 +166,7 @@ module.exports = {
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
-        const extensionForbidden = isUseOfExtensionForbidden(extension);
+        const extensionForbidden = isUseOfExtensionForbidden(extension, isPackage);
         if (extensionRequired && !extensionForbidden) {
           context.report({
             node: source,
@@ -175,7 +175,7 @@ module.exports = {
           });
         }
       } else if (extension) {
-        if (isUseOfExtensionForbidden(extension) && isResolvableWithoutExtension(importPath)) {
+        if (isUseOfExtensionForbidden(extension, isPackage) && isResolvableWithoutExtension(importPath)) {
           context.report({
             node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPathWithQueryString}"`,
