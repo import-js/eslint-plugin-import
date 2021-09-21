@@ -387,7 +387,7 @@ describe('TypeScript', () => {
         parser,
         settings: {
           'import/parsers': { [parser]: ['.ts'] },
-          'import/resolver': { 'eslint-import-resolver-typescript': true },
+          'import/resolver': ['node', 'typescript'],
         },
       };
 
