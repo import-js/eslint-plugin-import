@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
 - [patch] TypeScript config: remove `.d.ts` from [`import/parsers` setting] and [`import/extensions` setting] ([#2220], thanks [@jablko])
+- [Refactor] [`no-unresolved`], [`no-extraneous-dependencies`]: moduleVisitor usage ([#2233], thanks [@jablko])
 
 ## [2.24.2] - 2021-08-24
 
@@ -914,6 +915,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2233]: https://github.com/import-js/eslint-plugin-import/pull/2233
 [#2226]: https://github.com/import-js/eslint-plugin-import/pull/2226
 [#2220]: https://github.com/import-js/eslint-plugin-import/pull/2220
 [#2219]: https://github.com/import-js/eslint-plugin-import/pull/2219
