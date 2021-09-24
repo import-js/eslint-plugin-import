@@ -81,7 +81,12 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
 };
 
 function relative(modulePath, sourceFile, context) {
-  return fullResolve(modulePath, sourceFile, context).path;
+  return fullResolve(
+    modulePath,
+    sourceFile,
+    // Accept context or settings, for backward compatibility
+    !('settings' in context) ? { settings: context } : context,
+  ).path;
 }
 
 function fullResolve(modulePath, sourceFile, context) {
