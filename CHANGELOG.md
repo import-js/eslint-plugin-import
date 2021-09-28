@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`no-unresolved`]: ignore type-only imports ([#2220], thanks [@jablko])
 - [`order`]: fix sorting imports inside TypeScript module declarations ([#2226], thanks [@remcohaszing])
+- [`default`], `ExportMap`: Resolve extended TypeScript configuration files ([#2240], thanks [@mrmckeb])
 
 ### Changed
 - [Refactor] switch to an internal replacement for `pkg-up` and `read-pkg-up` ([#2047], thanks [@mgwalker])
@@ -915,6 +916,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2240]: https://github.com/import-js/eslint-plugin-import/pull/2240
 [#2233]: https://github.com/import-js/eslint-plugin-import/pull/2233
 [#2226]: https://github.com/import-js/eslint-plugin-import/pull/2226
 [#2220]: https://github.com/import-js/eslint-plugin-import/pull/2220
@@ -1509,6 +1511,7 @@ for info on changes for earlier releases.
 [@mgwalker]: https://github.com/mgwalker
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
+[@mrmckeb]: https://github.com/mrmckeb
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
 [@noelebrun]: https://github.com/noelebrun

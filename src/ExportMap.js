@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { dirname } from 'path';
 
 import doctrine from 'doctrine';
 
@@ -18,7 +19,7 @@ import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
 
 import includes from 'array-includes';
 
-let parseConfigFileTextToJson;
+let ts;
 
 const log = debug('eslint-plugin-import:ExportMap');
 
@@ -525,12 +526,15 @@ ExportMap.parse = function (path, content, context) {
     });
     try {
       if (tsConfigInfo.tsConfigPath !== undefined) {
-        const jsonText = fs.readFileSync(tsConfigInfo.tsConfigPath).toString();
-        if (!parseConfigFileTextToJson) {
-          // this is because projects not using TypeScript won't have typescript installed
-          ({ parseConfigFileTextToJson } = require('typescript'));
-        }
-        return parseConfigFileTextToJson(tsConfigInfo.tsConfigPath, jsonText).config;
+        // Projects not using TypeScript won't have `typescript` installed.
+        if (!ts) { ts = require('typescript'); }
+  
+        const configFile = ts.readConfigFile(tsConfigInfo.tsConfigPath, ts.sys.readFile);
+        return ts.parseJsonConfigFileContent(
+          configFile.config,
+          ts.sys,
+          dirname(tsConfigInfo.tsConfigPath),
+        );
       }
     } catch (e) {
       // Catch any errors
@@ -545,11 +549,11 @@ ExportMap.parse = function (path, content, context) {
     }).digest('hex');
     let tsConfig = tsConfigCache.get(cacheKey);
     if (typeof tsConfig === 'undefined') {
-      tsConfig = readTsConfig();
+      tsConfig = readTsConfig(context);
       tsConfigCache.set(cacheKey, tsConfig);
     }
 
-    return tsConfig && tsConfig.compilerOptions ? tsConfig.compilerOptions.esModuleInterop : false;
+    return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
   }
 
   ast.body.forEach(function (n) {

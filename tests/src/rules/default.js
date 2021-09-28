@@ -232,6 +232,17 @@ context('TypeScript', function () {
           },
         }),
         test({
+          code: `import Foo from "./typescript-extended-config"`,
+          parser,
+          settings: {
+            'import/parsers': { [parser]: ['.ts'] },
+            'import/resolver': { 'eslint-import-resolver-typescript': true },
+          },
+          parserOptions: {
+            tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-extended-config/'),
+          },
+        }),
+        test({
           code: `import foobar from "./typescript-export-assign-property"`,
           parser,
           settings: {
