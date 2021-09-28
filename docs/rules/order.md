@@ -131,7 +131,7 @@ Properties of the objects
 ### `pathGroupsExcludedImportTypes: [array]`:
 
 This defines import types that are not handled by configured pathGroups.
-This is mostly needed when you want to handle path groups that look like external imports.
+If you have added path groups with patterns that look like `"builtin"` or `"external"` imports, you have to remove this group (`"builtin"` and/or `"external"`) from the default exclusion list (e.g., `["builtin", "external"]`, etc) to sort these path groups correctly.
 
 Example:
 ```json
@@ -149,27 +149,7 @@ Example:
 }
 ```
 
-You can also use `patterns`(e.g., `react`, `react-router-dom`, etc).
-
-Example:
-```json
-{
-  "import/order": [
-    "error",
-    {
-      "pathGroups": [
-        {
-          "pattern": "react",
-          "group": "builtin",
-          "position": "before"
-        }
-      ],
-      "pathGroupsExcludedImportTypes": ["react"]
-    }
-  ]
-}
-```
-The default value is `["builtin", "external"]`.
+[Import Type](https://github.com/import-js/eslint-plugin-import/blob/HEAD/src/core/importType.js#L90) is resolved as a fixed string in predefined set, it can't be a `patterns`(e.g., `react`, `react-router-dom`, etc). See [#2156] for details.
 
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 
