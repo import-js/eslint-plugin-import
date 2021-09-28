@@ -26,6 +26,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
 - [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
 - [Refactor] `ExportMap`: extract "builder" logic to separate files ([#2991], thanks [@soryy708])
+- [Docs] [`order`]: update the description of the `pathGroupsExcludedImportTypes` option ([#3036], thanks [@liby])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1122,6 +1123,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
 [#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
