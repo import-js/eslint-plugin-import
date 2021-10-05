@@ -164,6 +164,12 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       `,
       settings: { 'import/resolver': 'webpack' },
     }),
+    test({
+      code: 'import "not-a-dependency"',
+      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
+      options: [{ packageDir: packageDirMonoRepoRoot }],
+      settings: { 'import/ignore': ['not-a-dependency'] },
+    }),
   ],
   invalid: [
     test({

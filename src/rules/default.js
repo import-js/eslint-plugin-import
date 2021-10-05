@@ -1,5 +1,6 @@
 import Exports from '../ExportMap';
 import docsUrl from '../docsUrl';
+import isIgnored from '../../utils/ignore';
 
 module.exports = {
   meta: {
@@ -13,6 +14,9 @@ module.exports = {
   create(context) {
 
     function checkDefault(specifierType, node) {
+      if (node.source && isIgnored(node.source.value, context)) {
+        return;
+      }
 
       const defaultSpecifier = node.specifiers.find(
         specifier => specifier.type === specifierType

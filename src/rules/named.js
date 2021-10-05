@@ -1,6 +1,7 @@
 import * as path from 'path';
 import Exports from '../ExportMap';
 import docsUrl from '../docsUrl';
+import isIgnored from '../../utils/ignore';
 
 module.exports = {
   meta: {
@@ -25,6 +26,10 @@ module.exports = {
     const options = context.options[0] || {};
 
     function checkSpecifiers(key, type, node) {
+      if (node.source && isIgnored(node.source.value, context)) {
+        return;
+      }
+
       // ignore local exports and type imports/exports
       if (
         node.source == null

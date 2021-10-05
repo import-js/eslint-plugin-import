@@ -7,6 +7,7 @@ import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
 import { getFilePackageName } from '../core/packagePath';
 import docsUrl from '../docsUrl';
+import isIgnored from '../../utils/ignore';
 
 const depFieldCache = new Map();
 
@@ -264,6 +265,8 @@ module.exports = {
     };
 
     return moduleVisitor((source, node) => {
+      if (isIgnored(source.value, context)) return;
+
       reportIfMissing(context, deps, depsOptions, node, source.value);
     }, { commonjs: true });
   },

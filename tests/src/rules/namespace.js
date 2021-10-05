@@ -161,6 +161,12 @@ const valid = [
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     }),
+
+    test({
+      code: "import * as names from './named-exports'; " +
+        ' console.log(names.c);',
+      settings: { 'import/ignore': ['named-exports'] },
+    }),
   ]),
 
   ...SYNTAX_CASES,

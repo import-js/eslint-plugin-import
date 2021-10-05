@@ -82,6 +82,10 @@ ruleTester.run('default', rule, {
       parser: require.resolve('babel-eslint'),
     }),
     test({
+      code: "import bar from './ignored/thing.js';",
+      settings: { 'import/ignore': ['/ignored/'] },
+    }),
+    test({
       code: "import bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
       parser: require.resolve('babel-eslint'),

@@ -2,6 +2,7 @@ import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisi
 import docsUrl from '../docsUrl';
 import { basename, dirname, relative } from 'path';
 import resolve from 'eslint-module-utils/resolve';
+import isIgnored from '../../utils/ignore';
 
 import importType from '../core/importType';
 
@@ -20,6 +21,10 @@ module.exports = {
 
     function checkSourceValue(sourceNode) {
       const depPath = sourceNode.value;
+
+      if (isIgnored(depPath, context)) {
+        return;
+      }
 
       if (importType(depPath, context) === 'external') { // ignore packages
         return;

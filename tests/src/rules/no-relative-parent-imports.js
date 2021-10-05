@@ -50,6 +50,12 @@ ruleTester.run('no-relative-parent-imports', rule, {
     test({
       code: 'import("@scope/package")',
     }),
+    test({
+      code: 'import foo from "../ignored/index.js"',
+      settings: {
+        'import/ignore': ['/ignored/'],
+      },
+    }),
   ],
 
   invalid: [

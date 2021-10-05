@@ -2,6 +2,7 @@ import declaredScope from 'eslint-module-utils/declaredScope';
 import Exports from '../ExportMap';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
+import isIgnored from '../../utils/ignore';
 
 module.exports = {
   meta: {
@@ -45,6 +46,8 @@ module.exports = {
           if (declaration.type !== 'ImportDeclaration') return;
 
           if (declaration.specifiers.length === 0) return;
+
+          if (isIgnored(declaration.source.value, context)) return;
 
           const imports = Exports.get(declaration.source.value, context);
           if (imports == null) return null;

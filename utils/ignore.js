@@ -36,17 +36,29 @@ function makeValidExtensionSet(settings) {
 }
 exports.getFileExtensions = makeValidExtensionSet;
 
+let cachedRegexps;
+function getIgnoreRegexps(context) {
+  if (cachedRegexps && context.settings === lastSettings) {
+    return cachedRegexps;
+  }
+
+  lastSettings = context.settings;
+  cachedRegexps = context.settings['import/ignore'].map(p => new RegExp(p));
+
+  return cachedRegexps;
+}
+
 exports.default = function ignore(path, context) {
   // check extension whitelist first (cheap)
   if (!hasValidExtension(path, context)) return true;
 
   if (!('import/ignore' in context.settings)) return false;
-  const ignoreStrings = context.settings['import/ignore'];
 
-  for (let i = 0; i < ignoreStrings.length; i++) {
-    const regex = new RegExp(ignoreStrings[i]);
-    if (regex.test(path)) {
-      log(`ignoring ${path}, matched pattern /${ignoreStrings[i]}/`);
+  const ignores = getIgnoreRegexps(context);
+
+  for (let i = 0; i < ignores.length; i++) {
+    if (ignores[i].test(path)) {
+      log(`ignoring ${path}, matched pattern /${ignores[i].source}/`);
       return true;
     }
   }
@@ -55,6 +67,7 @@ exports.default = function ignore(path, context) {
 };
 
 function hasValidExtension(path, context) {
-  return validExtensions(context).has(extname(path));
+  const ext = extname(path);
+  return !ext || validExtensions(context).has(ext);
 }
 exports.hasValidExtension = hasValidExtension;
