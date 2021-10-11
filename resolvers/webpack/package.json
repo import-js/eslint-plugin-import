@@ -36,7 +36,7 @@
     "find-root": "^1.1.0",
     "has": "^1.0.3",
     "interpret": "^1.4.0",
-    "is-core-module": "^2.6.0",
+    "is-core-module": "^2.7.0",
     "is-regex": "^1.1.4",
     "lodash": "^4.17.21",
     "resolve": "^1.20.0",
