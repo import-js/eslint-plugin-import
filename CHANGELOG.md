@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.25.0] - 2021-10-11
+
 ### Added
 - Support `eslint` v8 ([#2191], thanks [@ota-meshi])
 - [`no-unresolved`]: add `caseSensitiveStrict` option ([#1262], thanks [@sergei-startsev])
@@ -1295,7 +1297,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.2...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.0...HEAD
+[2.25.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.2...v2.25.0
 [2.24.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.1...v2.24.2
 [2.24.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.0...v2.24.1
 [2.24.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.23.4...v2.24.0
