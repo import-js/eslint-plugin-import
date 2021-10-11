@@ -48,7 +48,6 @@
   },
   "devDependencies": {
     "babel-plugin-istanbul": "^4.1.6",
-    "babel-preset-es2015-argon": "latest",
     "babel-register": "^6.26.0",
     "chai": "^3.5.0",
     "mocha": "^3.5.3",
