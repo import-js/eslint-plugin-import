@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.7.0 - 2021-10-11
+
 ### Added
 - `fileExistsWithCaseSync`: add `strict` argument ([#1262], thanks [@sergei-startsev])
 - add `visit`, to support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
