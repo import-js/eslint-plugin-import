@@ -6,6 +6,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+## [2.25.2] - 2021-10-12
+
+### Fixed
+- [Deps] update `eslint-module-utils` for real this time ([#2255])
+
 ## [2.25.1] - 2021-10-11
 
 ### Fixed
@@ -1191,6 +1196,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2255]: https://github.com/import-js/eslint-plugin-import/issues/2255
 [#2201]: https://github.com/import-js/eslint-plugin-import/issues/2201
 [#2199]: https://github.com/import-js/eslint-plugin-import/issues/2199
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
@@ -1302,7 +1308,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.1...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...HEAD
+[2.25.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.0...v2.25.1
 [2.25.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.2...v2.25.0
 [2.24.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.1...v2.24.2
