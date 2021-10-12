@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## [Unreleased]
 
+### Fixed
+- [Deps] update `eslint-module-utils`
+
 ## [2.25.0] - 2021-10-11
 
 ### Added
