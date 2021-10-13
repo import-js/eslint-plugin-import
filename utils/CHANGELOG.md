@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## v2.7.1 - 2021-10-13
+
 ### Fixed
  - fixed SyntaxError in node <= 6: Unexpected token ) in parse.js ([#2261], thanks [@VitusFW])
 
