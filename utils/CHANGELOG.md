@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+### Fixed
+ - fixed SyntaxError in node <= 6: Unexpected token ) in parse.js ([#2261], thanks [@VitusFW])
+
 ## v2.7.0 - 2021-10-11
 
 ### Added
@@ -97,6 +100,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2261]: https://github.com/import-js/eslint-plugin-import/pull/2261
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
 [#2047]: https://github.com/import-js/eslint-plugin-import/pull/2047
@@ -137,3 +141,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@sompylasar]: https://github.com/sompylasar
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01
+[@VitusFW]: https://github.com/VitusFW
