@@ -37,4 +37,4 @@ script:
   - npm run tests-only
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -Os https://uploader.codecov.io/latest/linux/codecov)

@@ -142,8 +142,11 @@ for:
           $env:RESOLVERS = [string]::Join(";", $resolvers);
       - IF DEFINED RESOLVERS FOR %%G in ("%RESOLVERS:;=";"%") do ( pushd %%~G & ci npm install --no-save nyc@%WINDOWS_NYC_VERSION% & popd )
     # TODO: enable codecov for native windows builds
-    # on_success:
-      # - codecov
+    #on_success:
+    #- ci $ProgressPreference = 'SilentlyContinue'
+    #- ci Invoke-WebRequest -Uri https://uploader.codecov.io/latest/windows/codecov.exe
+    #- ci -Outfile codecov.exe
+    #- ci .\codecov.exe
   - matrix:
       only:
         - configuration: WSL
@@ -154,6 +157,8 @@ for:
       - ps: wsl curl -sL 'https://deb.nodesource.com/setup_${nodejs_version}.x' `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -
       - wsl sudo DEBIAN_FRONTEND=noninteractive apt install -y nodejs
     on_success:
-      - ci bash <(curl -s https://codecov.io/bash)
+      - ci curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - ci chmod +x codecov
+      - ci ./codecov
 
 build: on
