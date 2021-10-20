@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ## Unreleased
 
+## 0.13.2 - 2021-10-20
+
+### Changed
+ - [meta] expand `engines.node` to include node 17 ([#2268], thanks [@ljharb])
+
 ## 0.13.1 - 2021-05-13
 
 ### Added
@@ -176,6 +181,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 [#181]: https://github.com/import-js/eslint-plugin-import/pull/181
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 
+[#2268]: https://github.com/import-js/eslint-plugin-import/issues/2268
 [#1219]: https://github.com/import-js/eslint-plugin-import/issues/1219
 [#788]: https://github.com/import-js/eslint-plugin-import/issues/788
 [#767]: https://github.com/import-js/eslint-plugin-import/issues/767
