@@ -1,5 +1,134 @@
 import resolve from 'eslint-module-utils/resolve';
 import docsUrl from '../docsUrl';
+import { arrayFlat } from '../core/utils/array';
+
+/**
+ * returns either `import` or `type` token, as in
+ *
+ * import { useState } from 'react'
+ * or
+ * import type { FC } from 'react'
+ */
+function getFirstStaticToken(tokens) {
+  const firstToken = tokens[0];
+  const secondToken = tokens[1];
+
+  if (secondToken && secondToken.value === 'type') {
+    return secondToken;
+  }
+
+  return firstToken;
+}
+
+/**
+ * return the import path token, e.g. 'react' as in
+ *
+ * import { useState } from 'react'
+ * or
+ * import { useState } from 'react';
+ */
+function getLastStaticToken(tokens) {
+  const lastToken = tokens[tokens.length - 1];
+
+  if (isPunctuator(lastToken, ';')) {
+    return tokens[tokens.length - 2];
+  }
+
+  return lastToken;
+}
+
+/**
+ * Merges specifiers together to one statement and sorts them alphabetically
+ *
+ * @returns e.g. `{ useState, useEffect, FC }`
+ */
+function getNamedSpecifiersText(specifiers) {
+  const specifierInfos = specifiers
+    .filter(info => info && !info.isEmpty);
+
+  const setOfSpecifiers = new Set(
+    arrayFlat(
+      specifierInfos
+        .map(info => info.text)
+        .map(text => text.split(',')),
+    )
+      .map(specifier => specifier.trim())
+      .filter(Boolean),
+  );
+
+  let specifiersText = Array.from(setOfSpecifiers.values())
+    .sort()
+    .join(', ');
+
+
+  if (specifiersText.length > 0) {
+    specifiersText = `{ ${specifiersText} }`;
+  }
+
+  return specifiersText;
+}
+
+/**
+ * Generates fix commands to create a new import statement including
+ * all import specifiers if any, plus the default import specifier if any.
+ *
+ * This is extra useful for users that want to resolve a merge conflict
+ * of imports. Now they can use `Accept both` and let this rule merge all
+ * these imports for them thanks to auto-fix.
+ *
+ * Does not support mixing specifiers and comments
+ *
+ * e.g. import {
+ *    useState, // I like this hook
+ *    useEffect,
+ * } from 'react'
+ *
+ * Lines like this will not get an auto-fix
+ */
+function generateFixCommandsToMergeImportsIntoTheFirstOne(args) {
+  const {
+    specifiers,
+    defaultImportName,
+    fixer,
+    firstStaticToken,
+    lastStaticToken,
+  } = args;
+
+  /**
+   * e.g. `React, { useState }`
+   */
+  const specifiersText = [defaultImportName, getNamedSpecifiersText(specifiers)]
+    .filter(item => item && item.length > 0)
+    .join(', ');
+
+  if (specifiersText.length === 0) {
+    // no fixes
+    return [];
+  }
+
+  /**
+   * e.g. ` React, { useState } from `
+   */
+  const fixText = ` ${specifiersText} from `;
+
+  /**
+   * This is the range of the specifiers text of the first import line
+   * e.g. if the first import line is
+   *
+   * import { xxx } from 'hello'
+   *
+   * Then this range is the range of this text: ` { xxx } `
+   */
+  const specifiersTextRangeOfFirstImportStatement = [
+    firstStaticToken.range[1],
+    lastStaticToken.range[0],
+  ];
+
+  return [
+    fixer.removeRange(specifiersTextRangeOfFirstImportStatement),
+    fixer.insertTextAfter(firstStaticToken, fixText),
+  ];
+}
 
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
@@ -25,6 +154,10 @@ function checkImports(imported, context) {
   }
 }
 
+function hasInlineComment(info) {
+  return info ? info.text.includes('/') : false;
+}
+
 function getFix(first, rest, sourceCode) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
@@ -45,7 +178,7 @@ function getFix(first, rest, sourceCode) {
   }
 
   const defaultImportNames = new Set(
-    [first, ...rest].map(getDefaultImportName).filter(Boolean)
+    [first, ...rest].map(getDefaultImportName).filter(Boolean),
   );
 
   // Bail if there are multiple different default import names – it's up to the
@@ -61,29 +194,31 @@ function getFix(first, rest, sourceCode) {
     hasNamespace(node)
   ));
 
+  function getSpecifierInfo(node) {
+    const tokens = sourceCode.getTokens(node);
+    const openBrace = tokens.find(token => isPunctuator(token, '{'));
+    const closeBrace = tokens.find(token => isPunctuator(token, '}'));
+
+    if (openBrace == null || closeBrace == null) {
+      return undefined;
+    }
+
+    return {
+      importNode: node,
+      text: sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]),
+      hasTrailingComma: isPunctuator(sourceCode.getTokenBefore(closeBrace), ','),
+      isEmpty: !hasSpecifiers(node),
+    };
+  }
+
   const specifiers = restWithoutComments
-    .map(node => {
-      const tokens = sourceCode.getTokens(node);
-      const openBrace = tokens.find(token => isPunctuator(token, '{'));
-      const closeBrace = tokens.find(token => isPunctuator(token, '}'));
-
-      if (openBrace == null || closeBrace == null) {
-        return undefined;
-      }
-
-      return {
-        importNode: node,
-        text: sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]),
-        hasTrailingComma: isPunctuator(sourceCode.getTokenBefore(closeBrace), ','),
-        isEmpty: !hasSpecifiers(node),
-      };
-    })
+    .map(getSpecifierInfo)
     .filter(Boolean);
 
   const unnecessaryImports = restWithoutComments.filter(node =>
     !hasSpecifiers(node) &&
     !hasNamespace(node) &&
-    !specifiers.some(specifier => specifier.importNode === node)
+    !specifiers.some(specifier => specifier.importNode === node),
   );
 
   const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1;
@@ -96,65 +231,42 @@ function getFix(first, rest, sourceCode) {
 
   return fixer => {
     const tokens = sourceCode.getTokens(first);
-    const openBrace = tokens.find(token => isPunctuator(token, '{'));
-    const closeBrace = tokens.find(token => isPunctuator(token, '}'));
-    const firstToken = sourceCode.getFirstToken(first);
+    const firstStaticToken = getFirstStaticToken(tokens);
+    const lastStaticToken = getLastStaticToken(tokens);
+
     const [defaultImportName] = defaultImportNames;
+    const firstSpecifier = getSpecifierInfo(first);
 
-    const firstHasTrailingComma =
-      closeBrace != null &&
-      isPunctuator(sourceCode.getTokenBefore(closeBrace), ',');
-    const firstIsEmpty = !hasSpecifiers(first);
+    if (hasInlineComment(firstSpecifier)) {
+      return [];
+    }
 
-    const [specifiersText] = specifiers.reduce(
-      ([result, needsComma], specifier) => {
-        return [
-          needsComma && !specifier.isEmpty
-            ? `${result},${specifier.text}`
-            : `${result}${specifier.text}`,
-          specifier.isEmpty ? needsComma : true,
-        ];
-      },
-      ['', !firstHasTrailingComma && !firstIsEmpty]
-    );
+    const specifiersWithoutInlineComments = specifiers
+      .filter(info => !hasInlineComment(info));
 
     const fixes = [];
 
-    if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
-      // `import './foo'` → `import def, {...} from './foo'`
-      fixes.push(
-        fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
-      );
-    } else if (shouldAddDefault && openBrace == null && !shouldAddSpecifiers) {
-      // `import './foo'` → `import def from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName} from`));
-    } else if (shouldAddDefault && openBrace != null && closeBrace != null) {
-      // `import {...} from './foo'` → `import def, {...} from './foo'`
-      fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName},`));
-      if (shouldAddSpecifiers) {
-        // `import def, {...} from './foo'` → `import def, {..., ...} from './foo'`
-        fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
-      }
-    } else if (!shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
-      if (first.specifiers.length === 0) {
-        // `import './foo'` → `import {...} from './foo'`
-        fixes.push(fixer.insertTextAfter(firstToken, ` {${specifiersText}} from`));
-      } else {
-        // `import def from './foo'` → `import def, {...} from './foo'`
-        fixes.push(fixer.insertTextAfter(first.specifiers[0], `, {${specifiersText}}`));
-      }
-    } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
-      // `import {...} './foo'` → `import {..., ...} from './foo'`
-      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
+    if (shouldAddDefault || shouldAddSpecifiers) {
+      generateFixCommandsToMergeImportsIntoTheFirstOne({
+        specifiers: [...specifiersWithoutInlineComments, firstSpecifier],
+        defaultImportName,
+        fixer,
+        firstStaticToken,
+        lastStaticToken,
+      }).forEach(fix => fixes.push(fix));
     }
 
     // Remove imports whose specifiers have been moved into the first import.
-    for (const specifier of specifiers) {
+    for (const specifier of specifiersWithoutInlineComments) {
       const importNode = specifier.importNode;
       fixes.push(fixer.remove(importNode));
 
       const charAfterImportRange = [importNode.range[1], importNode.range[1] + 1];
-      const charAfterImport = sourceCode.text.substring(charAfterImportRange[0], charAfterImportRange[1]);
+      const charAfterImport = sourceCode.text.substring(
+        charAfterImportRange[0],
+        charAfterImportRange[1],
+      );
+
       if (charAfterImport === '\n') {
         fixes.push(fixer.removeRange(charAfterImportRange));
       }
@@ -167,7 +279,11 @@ function getFix(first, rest, sourceCode) {
       fixes.push(fixer.remove(node));
 
       const charAfterImportRange = [node.range[1], node.range[1] + 1];
-      const charAfterImport = sourceCode.text.substring(charAfterImportRange[0], charAfterImportRange[1]);
+      const charAfterImport = sourceCode.text.substring(
+        charAfterImportRange[0],
+        charAfterImportRange[1],
+      );
+
       if (charAfterImport === '\n') {
         fixes.push(fixer.removeRange(charAfterImportRange));
       }
@@ -281,7 +397,10 @@ module.exports = {
 
     function getImportMap(n) {
       if (n.importKind === 'type') {
-        return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
+        return (
+          n.specifiers.length > 0
+          && n.specifiers[0].type === 'ImportDefaultSpecifier'
+        ) ? defaultTypesImported : namedTypesImported;
       }
 
       return hasNamespace(n) ? nsImported : imported;
