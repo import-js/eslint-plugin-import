@@ -1,6 +1,6 @@
 import { RuleTester } from 'eslint';
 import rule from 'rules/extensions';
-import { test, testFilePath } from '../utils';
+import { getTSParsers, test, testFilePath } from '../utils';
 
 const ruleTester = new RuleTester();
 
@@ -596,4 +596,35 @@ ruleTester.run('extensions', rule, {
       ],
     }),
   ],
+});
+
+describe('TypeScript', () => {
+  getTSParsers()
+    // Type-only imports were added in TypeScript ESTree 2.23.0
+    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .forEach((parser) => {
+      ruleTester.run(`${parser}: extensions ignore type-only`, rule, {
+        valid: [
+          test({
+            code: 'import type { T } from "./typescript-declare";',
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
+            ],
+            parser,
+          }),
+        ],
+        invalid: [
+          test({
+            code: 'import { T } from "./typescript-declare";',
+            errors: ['Missing file extension for "./typescript-declare"'],
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
+            ],
+            parser,
+          }),
+        ],
+      });
+    });
 });

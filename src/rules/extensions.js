@@ -135,7 +135,12 @@ module.exports = {
       return false;
     }
 
-    function checkFileExtension(source) {
+    function checkFileExtension(source, node) {
+      // ignore type-only imports
+      if (node.importKind === 'type') {
+        return;
+      }
+
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) return;
       
