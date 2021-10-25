@@ -606,7 +606,7 @@ describe('TypeScript', () => {
       ruleTester.run(`${parser}: extensions ignore type-only`, rule, {
         valid: [
           test({
-            code: 'import type { T } from "./typescript-declare";',
+            code: 'import type T from "./typescript-declare";',
             options: [
               'always',
               { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
@@ -616,7 +616,7 @@ describe('TypeScript', () => {
         ],
         invalid: [
           test({
-            code: 'import { T } from "./typescript-declare";',
+            code: 'import T from "./typescript-declare";',
             errors: ['Missing file extension for "./typescript-declare"'],
             options: [
               'always',

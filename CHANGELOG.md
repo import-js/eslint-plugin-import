@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ## [Unreleased]
 
 ### Fixed
-- [`extensions`]: ignore type-only imports ([#2270], [@jablko])
+- [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
 
 ## [2.25.2] - 2021-10-12
 
@@ -932,6 +932,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2271]: https://github.com/import-js/eslint-plugin-import/pull/2271
 [#2270]: https://github.com/import-js/eslint-plugin-import/pull/2270
 [#2240]: https://github.com/import-js/eslint-plugin-import/pull/2240
 [#2233]: https://github.com/import-js/eslint-plugin-import/pull/2233
