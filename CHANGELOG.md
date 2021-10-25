@@ -9,6 +9,9 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Fixed
 - [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
 
+### Changed
+- [Docs] order: add type to the default groups ([#2272], [@charpeni])
+
 ## [2.25.2] - 2021-10-12
 
 ### Fixed
@@ -932,6 +935,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2272]: https://github.com/import-js/eslint-plugin-import/pull/2272
 [#2271]: https://github.com/import-js/eslint-plugin-import/pull/2271
 [#2270]: https://github.com/import-js/eslint-plugin-import/pull/2270
 [#2240]: https://github.com/import-js/eslint-plugin-import/pull/2240
@@ -1430,6 +1434,7 @@ for info on changes for earlier releases.
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
 [@charlessuh]: https://github.com/charlessuh
+[@charpeni]: https://github.com/charpeni
 [@cherryblossom000]: https://github.com/cherryblossom000
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
