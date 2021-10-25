@@ -1,6 +1,9 @@
 import path from 'path';
 
-import resolve from 'eslint-module-utils/resolve';
+import resolve, {
+  requireResolver,
+  resolverReducer,
+} from 'eslint-module-utils/resolve';
 import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
@@ -57,6 +60,27 @@ function buildProperties(context) {
   }
 
   return result;
+}
+
+function resolveTypeOnly(modulePath, context) {
+  const sourceFile = context.getPhysicalFilename
+    ? context.getPhysicalFilename()
+    : context.getFilename();
+  const configResolvers = context.settings['import/resolver'];
+  if (!configResolvers) return;
+  const resolvers = resolverReducer(configResolvers, new Map());
+  for (const [name, config] of resolvers) {
+    switch (name) {
+    case 'typescript':
+    case 'eslint-import-resolver-typescript': {
+      const resolver = requireResolver(name, sourceFile);
+      const resolved = resolver.resolve(modulePath, sourceFile, config);
+      if (resolved.found) {
+        return resolved.path;
+      }
+    }
+    }
+  }
 }
 
 module.exports = {
@@ -150,7 +174,11 @@ module.exports = {
       // Like `import Decimal from decimal.js`)
       if (isExternalRootModule(importPath)) return;
 
-      const resolvedPath = resolve(importPath, context);
+      const isTypeOnly = node.importKind === 'type';
+      const resolvedPath = (isTypeOnly ? resolveTypeOnly : resolve)(
+        importPath,
+        context,
+      );
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.
@@ -166,7 +194,7 @@ module.exports = {
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports
-        if (node.importKind === 'type') return;
+        if (isTypeOnly) return;
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {
