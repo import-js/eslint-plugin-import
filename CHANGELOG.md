@@ -10,7 +10,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - `importType`: avoid crashing on a non-string' ([#2305], thanks [@ljharb])
 
 ### Changed
-- [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], [@pmcelhaney])
+- [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], thanks [@pmcelhaney])
+- [Docs] [`order`]: Remove duplicate mention of default ([#2280], thanks [@johnthagen])
 
 ## [2.25.3] - 2021-11-09
 
@@ -948,14 +949,12 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-<<<<<<< HEAD
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
-=======
 [#2299]: https://github.com/import-js/eslint-plugin-import/pull/2299
->>>>>>> 374ce41e... [Fix] `no-default-import`: report on the token "default" instead of the entire node
 [#2297]: https://github.com/import-js/eslint-plugin-import/pull/2297
 [#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
 [#2282]: https://github.com/import-js/eslint-plugin-import/pull/2282
+[#2280]: https://github.com/import-js/eslint-plugin-import/pull/2280
 [#2279]: https://github.com/import-js/eslint-plugin-import/pull/2279
 [#2272]: https://github.com/import-js/eslint-plugin-import/pull/2272
 [#2271]: https://github.com/import-js/eslint-plugin-import/pull/2271

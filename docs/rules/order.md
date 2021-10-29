@@ -175,10 +175,12 @@ The default value is `["builtin", "external"]`.
 
 Enforces or forbids new lines between import groups:
 
-- If set to `ignore`, no errors related to new lines between import groups will be reported (default).
+- If set to `ignore`, no errors related to new lines between import groups will be reported.
 - If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
 - If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
 - If set to `never`, no new lines are allowed in the entire import section.
+
+The default value is `"ignore"`.
 
 With the default group setting, the following will be invalid:
 
