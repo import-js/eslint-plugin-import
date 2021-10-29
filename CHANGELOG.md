@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 
 ### Fixed
 - [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
+- `importType`: fix `isExternalModule` calculation ([#2282], [@mx-bernhard])
 
 ### Changed
 - [Docs] [`order`]: add type to the default groups ([#2272], [@charpeni])
@@ -937,6 +938,8 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2282]: https://github.com/import-js/eslint-plugin-import/pull/2282
+[#2279]: https://github.com/import-js/eslint-plugin-import/pull/2279
 [#2272]: https://github.com/import-js/eslint-plugin-import/pull/2272
 [#2271]: https://github.com/import-js/eslint-plugin-import/pull/2271
 [#2270]: https://github.com/import-js/eslint-plugin-import/pull/2270
@@ -1543,6 +1546,7 @@ for info on changes for earlier releases.
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
+[@mx-bernhard]: https://github.com/mx-bernhard
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
 [@noelebrun]: https://github.com/noelebrun

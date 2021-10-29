@@ -234,9 +234,19 @@ describe('importType(name)', function () {
   it('`isExternalModule` works with windows directory separator', function () {
     const context = testContext();
     expect(isExternalModule('foo', {}, 'E:\\path\\to\\node_modules\\foo', context)).to.equal(true);
+    expect(isExternalModule('@foo/bar', {}, 'E:\\path\\to\\node_modules\\@foo\\bar', context)).to.equal(true);
     expect(isExternalModule('foo', {
       'import/external-module-folders': ['E:\\path\\to\\node_modules'],
     }, 'E:\\path\\to\\node_modules\\foo', context)).to.equal(true);
+  });
+
+  it('`isExternalModule` works with unix directory separator', function () {
+    const context = testContext();
+    expect(isExternalModule('foo', {}, '/path/to/node_modules/foo', context)).to.equal(true);
+    expect(isExternalModule('@foo/bar', {}, '/path/to/node_modules/@foo/bar', context)).to.equal(true);
+    expect(isExternalModule('foo', {
+      'import/external-module-folders': ['/path/to/node_modules'],
+    }, '/path/to/node_modules/foo', context)).to.equal(true);
   });
 
   it('correctly identifies scoped modules with `isScoped`', () => {

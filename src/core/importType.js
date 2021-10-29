@@ -29,7 +29,7 @@ export function isExternalModule(name, settings, path, context) {
   if (arguments.length < 4) {
     throw new TypeError('isExternalModule: name, settings, path, and context are all required');
   }
-  return isModule(name) && isExternalPath(name, settings, path, getContextPackagePath(context));
+  return (isModule(name) || isScoped(name)) && isExternalPath(name, settings, path, getContextPackagePath(context));
 }
 
 export function isExternalModuleMain(name, settings, path, context) {
