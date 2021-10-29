@@ -174,6 +174,9 @@ extends:
 
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 
+You will also need to install and configure the TypeScript resolver:
+[`eslint-import-resolver-typescript`](https://github.com/alexgorbatchev/eslint-import-resolver-typescript).
+
 # Resolvers
 
 With the advent of module bundlers and the current state of modules and module

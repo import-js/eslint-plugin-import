@@ -10,7 +10,8 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
 
 ### Changed
-- [Docs] order: add type to the default groups ([#2272], [@charpeni])
+- [Docs] [`order`]: add type to the default groups ([#2272], [@charpeni])
+- [readme] Add note to TypeScript docs to install appropriate resolver ([#2279], [@johnthagen])
 
 ## [2.25.2] - 2021-10-12
 
@@ -1492,6 +1493,7 @@ for info on changes for earlier releases.
 [@jkimbo]: https://github.com/jkimbo
 [@joaovieira]: https://github.com/joaovieira
 [@johndevedu]: https://github.com/johndevedu
+[@johnthagen]: https://github.com/johnthagen
 [@jonboiser]: https://github.com/jonboiser
 [@josh]: https://github.com/josh
 [@JounQin]: https://github.com/JounQin
