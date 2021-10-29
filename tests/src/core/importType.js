@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as path from 'path';
 
-import importType, { isExternalModule, isScopedModule, isScoped } from 'core/importType';
+import importType, { isExternalModule, isScoped } from 'core/importType';
 
 import { testContext, testFilePath } from '../utils';
 
@@ -237,13 +237,6 @@ describe('importType(name)', function () {
     expect(isExternalModule('foo', {
       'import/external-module-folders': ['E:\\path\\to\\node_modules'],
     }, 'E:\\path\\to\\node_modules\\foo', context)).to.equal(true);
-  });
-
-  it('correctly identifies scoped modules with `isScopedModule`', () => {
-    expect(isScopedModule('@/abc')).to.equal(false);
-    expect(isScopedModule('@/abc/def')).to.equal(false);
-    expect(isScopedModule('@a/abc')).to.equal(true);
-    expect(isScopedModule('@a/abc/def')).to.equal(true);
   });
 
   it('correctly identifies scoped modules with `isScoped`', () => {

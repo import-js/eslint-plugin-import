@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 ### Changed
 - [Docs] [`order`]: add type to the default groups ([#2272], [@charpeni])
 - [readme] Add note to TypeScript docs to install appropriate resolver ([#2279], [@johnthagen])
+- [Refactor] `importType`: combine redundant `isScoped` and `isScopedModule` ([@ljharb])
 
 ## [2.25.2] - 2021-10-12
 

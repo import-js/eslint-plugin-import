@@ -1,7 +1,7 @@
 import path from 'path';
 
 import resolve from 'eslint-module-utils/resolve';
-import { isBuiltIn, isExternalModule, isScoped, isScopedModule } from '../core/importType';
+import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
@@ -131,7 +131,7 @@ module.exports = {
       const slashCount = file.split('/').length - 1;
 
       if (slashCount === 0)  return true;
-      if (isScopedModule(file) && slashCount <= 1) return true;
+      if (isScoped(file) && slashCount <= 1) return true;
       return false;
     }
 
@@ -161,7 +161,7 @@ module.exports = {
         importPath,
         context.settings,
         resolve(importPath, context),
-        context
+        context,
       ) || isScoped(importPath);
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
