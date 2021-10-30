@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
 
 ## Unreleased
+- add missing optional peer dependencies ([#2283], thanks [@jdanil])
 
 ## v2.7.1 - 2021-10-13
 

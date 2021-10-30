@@ -25,6 +25,14 @@
     "url": "https://github.com/import-js/eslint-plugin-import/issues"
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import#readme",
+  "peerDependenciesMeta": {
+    "@typescript-eslint/parser": {
+      "optional": true
+    },
+    "eslint-import-resolver-node": {
+      "optional": true
+    }
+  },
   "dependencies": {
     "debug": "^3.2.7",
     "find-up": "^2.1.0",
