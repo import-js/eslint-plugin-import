@@ -51,7 +51,7 @@ function tryRequire(target, sourceFile) {
   return require(resolved);
 }
 
-// http://stackoverflow.com/a/27382838
+// https://stackoverflow.com/a/27382838
 exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cacheSettings, strict) {
   // don't care if the FS is case-sensitive
   if (CASE_SENSITIVE_FS) return true;

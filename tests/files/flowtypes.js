@@ -1,6 +1,6 @@
 // @flow
 // requires babel-eslint parser or flow plugin
-// http://flowtype.org/blog/2015/02/18/Import-Types.html
+// https://flowtype.org/blog/2015/02/18/Import-Types.html
 export type MyType = {
   id: number,
   firstName: string,

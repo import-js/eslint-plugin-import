@@ -3,7 +3,7 @@
 Reports if a resolved path is imported more than once.
 +(fixable) The `--fix` option on the [command line] automatically fixes some problems reported by this rule.
 
-ESLint core has a similar rule ([`no-duplicate-imports`](http://eslint.org/docs/rules/no-duplicate-imports)), but this version
+ESLint core has a similar rule ([`no-duplicate-imports`](https://eslint.org/docs/rules/no-duplicate-imports)), but this version
 is different in two key ways:
 
 1. the paths in the source code don't have to exactly match, they just have to point to the same module on the filesystem. (i.e. `./foo` and `./foo.js`)

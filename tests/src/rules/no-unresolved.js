@@ -67,7 +67,7 @@ function runResolverTests(resolver) {
         options: [{ amd: true }] }),
       rest({ code: 'require(["./does-not-exist"], function (bar) {})',
         options: [{ amd: false }] }),
-      // magic modules: http://git.io/vByan
+      // magic modules: https://git.io/vByan
       rest({ code: 'define(["require", "exports", "module"], function (r, e, m) { })',
         options: [{ amd: true }] }),
 

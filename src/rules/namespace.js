@@ -68,7 +68,7 @@ module.exports = {
             case 'ImportDefaultSpecifier':
             case 'ImportSpecifier': {
               const meta = imports.get(
-                // default to 'default' for default http://i.imgur.com/nj6qAWy.jpg
+                // default to 'default' for default https://i.imgur.com/nj6qAWy.jpg
                 specifier.imported ? specifier.imported.name : 'default',
               );
               if (!meta || !meta.namespace) { break; }

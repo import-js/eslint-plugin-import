@@ -110,7 +110,7 @@ If we can all get together behind the common goal of embracing empathy, everythi
 
 #### Attribution
 
-Thanks for help from http://mozillascience.github.io/working-open-workshop/contributing/
+Thanks for help from https://mozillascience.github.io/working-open-workshop/contributing/
 for inspiration before I wrote this. --ben
 
 [README.md]: ./README.md

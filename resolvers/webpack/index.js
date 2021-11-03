@@ -236,7 +236,7 @@ function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
 }
 
 /**
- * webpack 1 defaults: http://webpack.github.io/docs/configuration.html#resolve-packagemains
+ * webpack 1 defaults: https://webpack.github.io/docs/configuration.html#resolve-packagemains
  * @type {Array}
  */
 const webpack1DefaultMains = [

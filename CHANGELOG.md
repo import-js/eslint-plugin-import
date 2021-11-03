@@ -1,8 +1,8 @@
 # Change Log
 
 All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
-This change log adheres to standards from [Keep a CHANGELOG](http://keepachangelog.com).
+This project adheres to [Semantic Versioning](https://semver.org/).
+This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## [Unreleased]
 
@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](http://keepachangel
 - [Docs] [`order`]: add type to the default groups ([#2272], [@charpeni])
 - [readme] Add note to TypeScript docs to install appropriate resolver ([#2279], [@johnthagen])
 - [Refactor] `importType`: combine redundant `isScoped` and `isScopedModule` ([@ljharb])
+- [Docs] HTTP => HTTPS ([#2287], [@Schweinepriester])
 
 ## [2.25.2] - 2021-10-12
 
@@ -938,6 +939,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
 [#2282]: https://github.com/import-js/eslint-plugin-import/pull/2282
 [#2279]: https://github.com/import-js/eslint-plugin-import/pull/2279
 [#2272]: https://github.com/import-js/eslint-plugin-import/pull/2272
@@ -1576,6 +1578,7 @@ for info on changes for earlier releases.
 [@saschanaz]: https://github.com/saschanaz
 [@schmidsi]: https://github.com/schmidsi
 [@schmod]: https://github.com/schmod
+[@Schweinepriester]: https://github.com/Schweinepriester
 [@scottnonnenberg]: https://github.com/scottnonnenberg
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul

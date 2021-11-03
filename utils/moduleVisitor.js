@@ -54,7 +54,7 @@ exports.default = function visitModules(visitor, options) {
   }
 
   // for CommonJS `require` calls
-  // adapted from @mctep: http://git.io/v4rAu
+  // adapted from @mctep: https://git.io/v4rAu
   function checkCommon(call) {
     if (call.callee.type !== 'Identifier') return;
     if (call.callee.name !== 'require') return;
@@ -81,7 +81,7 @@ exports.default = function visitModules(visitor, options) {
       if (typeof element.value !== 'string') continue;
 
       if (element.value === 'require' ||
-          element.value === 'exports') continue; // magic modules: http://git.io/vByan
+          element.value === 'exports') continue; // magic modules: https://git.io/vByan
 
       checkSourceValue(element, element);
     }

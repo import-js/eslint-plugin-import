@@ -5,7 +5,7 @@
 [![coverage][codecov-image]][codecov-url]
 [![win32 build status](https://ci.appveyor.com/api/projects/status/3mw2fifalmjlqf56/branch/main?svg=true)](https://ci.appveyor.com/project/import-js/eslint-plugin-import/branch/main)
 [![npm](https://img.shields.io/npm/v/eslint-plugin-import.svg)](https://www.npmjs.com/package/eslint-plugin-import)
-[![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](http://www.npmtrends.com/eslint-plugin-import)
+[![npm downloads](https://img.shields.io/npm/dt/eslint-plugin-import.svg?maxAge=2592000)](https://www.npmtrends.com/eslint-plugin-import)
 
 This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES2015+ static module syntax intends to provide, marked up in your editor.
 
@@ -256,7 +256,7 @@ the process's current working directory if no `package.json` is found.
 If you are interesting in writing a resolver, see the [spec](./resolvers/README.md) for more details.
 
 [`resolve`]: https://www.npmjs.com/package/resolve
-[`externals`]: http://webpack.github.io/docs/library-and-externals.html
+[`externals`]: https://webpack.github.io/docs/library-and-externals.html
 
 [Node]: https://www.npmjs.com/package/eslint-import-resolver-node
 [webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
@@ -483,7 +483,7 @@ The purpose of the `chdir` setting, in this case, is to set the working director
 from which ESLint is executed to be the same as the directory on which SublimeLinter-eslint
 bases the relative path it provides.
 
-See the SublimeLinter docs on [`chdir`](http://www.sublimelinter.com/en/latest/linter_settings.html#chdir)
+See the SublimeLinter docs on [`chdir`](https://www.sublimelinter.com/en/latest/linter_settings.html#chdir)
 for more information, in case this does not work with your project.
 
 If you are not using `.eslintignore`, or don't have a Sublime project file, you can also

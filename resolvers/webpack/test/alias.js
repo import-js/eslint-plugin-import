@@ -22,7 +22,7 @@ describe('resolve.alias', function () {
 
 // todo: reimplement with resolver function / config
 // describe.skip('webpack alias spec', function () {
-//   // from table: http://webpack.github.io/docs/configuration.html#resolve-alias
+//   // from table: https://webpack.github.io/docs/configuration.html#resolve-alias
 //   function tableLine(alias, xyz, xyzFile) {
 //     describe(JSON.stringify(alias), function () {
 //       it('xyz: ' + xyz, function () {
@@ -82,7 +82,7 @@ describe('resolve.alias', function () {
 // });
 
 // describe.skip('nested module names', function () {
-//   // from table: http://webpack.github.io/docs/configuration.html#resolve-alias
+//   // from table: https://webpack.github.io/docs/configuration.html#resolve-alias
 //   function nestedName(alias, xyz, xyzFile) {
 //     describe(JSON.stringify(alias), function () {
 //       it('top/xyz: ' + xyz, function () {
