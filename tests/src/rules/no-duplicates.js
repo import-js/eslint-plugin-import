@@ -52,20 +52,20 @@ ruleTester.run('no-duplicates', rule, {
   invalid: [
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
-      output: "import { x , y } from './foo'; ",
+      output: "import { x, y } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import {y} from './foo'; import { z } from './foo'",
-      output: "import {x,y, z } from './foo';  ",
+      output: "import { x, y, z } from './foo';  ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     // ensure resolved path results in warnings
     test({
       code: "import { x } from './bar'; import { y } from 'bar';",
-      output: "import { x , y } from './bar'; ",
+      output: "import { x, y } from './bar'; ",
       settings: { 'import/resolve': {
         paths: [path.join( process.cwd()
           , 'tests', 'files',
@@ -106,7 +106,7 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
-      output: "import type { x , y } from './foo'; ",
+      output: "import type { x, y } from './foo'; ",
       parser: require.resolve('babel-eslint'),
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
@@ -119,49 +119,48 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import { x, /* x */ } from './foo'; import {//y\ny//y2\n} from './foo'",
-      output: "import { x, /* x */ //y\ny//y2\n} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import {} from './foo'",
-      output: "import {x} from './foo'; ",
+      output: "import { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import {} from './foo'; import {/*c*/} from './foo'; import {y} from './foo'",
-      output: "import {x/*c*/,y} from './foo';   ",
+      output: "import { x, y } from './foo';  import {/*c*/} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import { } from './foo'; import {x} from './foo'",
-      output: "import { x} from './foo'; ",
+      output: "import { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import './foo'; import {x} from './foo'",
-      output: "import {x} from './foo'; ",
+      output: "import { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import'./foo'; import {x} from './foo'",
-      output: "import {x} from'./foo'; ",
+      output: "import { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import './foo'; import { /*x*/} from './foo'; import {//y\n} from './foo'; import {z} from './foo'",
-      output: "import { /*x*///y\nz} from './foo';   ",
+      output: "import { z } from './foo'; import { /*x*/} from './foo'; import {//y\n} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import './foo'; import def, {x} from './foo'",
-      output: "import def, {x} from './foo'; ",
+      output: "import def, { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -173,25 +172,25 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import def from './foo'; import {x} from './foo'",
-      output: "import def, {x} from './foo'; ",
+      output: "import def, { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import def from './foo'",
-      output: "import def, {x} from './foo'; ",
+      output: "import def, { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import{x} from './foo'; import def from './foo'",
-      output: "import def,{x} from './foo'; ",
+      output: "import def, { x } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import def, {y} from './foo'",
-      output: "import def, {x,y} from './foo'; ",
+      output: "import def, { x, y } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -205,14 +204,14 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import * as ns from './foo'; import {x} from './foo'; import {y} from './foo'",
       // Autofix could merge some imports, but not the namespace import.
-      output: "import * as ns from './foo'; import {x,y} from './foo'; ",
+      output: "import * as ns from './foo'; import { x, y } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import * as ns from './foo'; import {y} from './foo'; import './foo'",
       // Autofix could merge some imports, but not the namespace import.
-      output: "import {x,y} from './foo'; import * as ns from './foo';  ",
+      output: "import { x, y } from './foo'; import * as ns from './foo';  ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -308,7 +307,7 @@ import {y} from './foo'
       `,
       // Not autofix bail.
       output: `
-import {x,y} from './foo'
+import { x, y } from './foo'
 // some-tool-disable-next-line
       `,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
@@ -323,7 +322,7 @@ import {y} from './foo'
       `,
       // Not autofix bail.
       output: `
-import {x,y} from './foo'
+import { x, y } from './foo'
 // comment
 
       `,
@@ -402,7 +401,7 @@ import {x,y} from './foo'
     // #2027 long import list generate empty lines
     test({
       code: "import { Foo } from './foo';\nimport { Bar } from './foo';\nexport const value = {}",
-      output: "import { Foo , Bar } from './foo';\nexport const value = {}",
+      output: "import { Bar, Foo } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -412,6 +411,20 @@ import {x,y} from './foo'
       output: "import Bar, { Foo } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
+
+    /**
+     * Sadly I cannot run this test because I am getting a fatal parsing error:
+     *
+     * `AssertionError [ERR_ASSERTION] [ERR_ASSERTION]: A fatal parsing error occurred: Parsing error: Identifier 'Foo' has already been declared`
+     *
+     * If there is some option to disable this check, we could uncomment this test again.
+     */
+    // #1812 merged imports should not have duplicate import specifiers
+    // test({
+    //   code: "import { Foo, Foo1 } from './foo';\nimport { Foo, Bar } from './foo';",
+    //   output: "import { Bar, Foo, Foo1 } from './foo';",
+    //   errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    // }),
   ],
 });
 
@@ -492,7 +505,7 @@ context('TypeScript', function () {
           test({
             code: "import type {x} from './foo'; import type {y} from './foo'",
             ...parserConfig,
-            output: `import type {x,y} from './foo'; `,
+            output: `import type { x, y } from './foo'; `,
             errors: [
               {
                 line: 1,
