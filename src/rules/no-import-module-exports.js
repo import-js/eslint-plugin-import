@@ -13,6 +13,12 @@ function getEntryPoint(context) {
   }
 }
 
+function findScope(context, identifier) {
+  const scopeManager = context.getSourceCode().scopeManager;
+
+  return scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some(variable => variable.identifiers.some((node) => node.name === identifier)));
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -43,10 +49,11 @@ module.exports = {
       const isEntryPoint = entryPoint === fileName;
       const isIdentifier = node.object.type === 'Identifier';
       const hasKeywords = (/^(module|exports)$/).test(node.object.name);
-      const isException = options.exceptions &&
-        options.exceptions.some(glob => minimatch(fileName, glob));
+      const objectScope = hasKeywords && findScope(context, node.object.name);
+      const hasCJSExportReference = hasKeywords && (!objectScope || objectScope.type === 'module');
+      const isException = !!options.exceptions && options.exceptions.some(glob => minimatch(fileName, glob));
 
-      if (isIdentifier && hasKeywords && !isEntryPoint && !isException) {
+      if (isIdentifier && hasCJSExportReference && !isEntryPoint && !isException) {
         importDeclarations.forEach(importDeclaration => {
           context.report({
             node: importDeclaration,
