@@ -40,14 +40,14 @@ module.exports = {
       if (resolvedPath === undefined) {
         context.report(
           source,
-          `Unable to resolve path to module '${source.value}'.`
+          `Unable to resolve path to module '${source.value}'.`,
         );
       } else if (caseSensitive || caseSensitiveStrict) {
         const cacheSettings = ModuleCache.getSettings(context.settings);
         if (!fileExistsWithCaseSync(resolvedPath, cacheSettings, caseSensitiveStrict)) {
           context.report(
             source,
-            `Casing of ${source.value} does not match the underlying filesystem.`
+            `Casing of ${source.value} does not match the underlying filesystem.`,
           );
         }
       }

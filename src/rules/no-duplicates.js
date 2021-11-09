@@ -45,7 +45,7 @@ function getFix(first, rest, sourceCode) {
   }
 
   const defaultImportNames = new Set(
-    [first, ...rest].map(getDefaultImportName).filter(Boolean)
+    [first, ...rest].map(getDefaultImportName).filter(Boolean),
   );
 
   // Bail if there are multiple different default import names – it's up to the
@@ -83,7 +83,7 @@ function getFix(first, rest, sourceCode) {
   const unnecessaryImports = restWithoutComments.filter(node =>
     !hasSpecifiers(node) &&
     !hasNamespace(node) &&
-    !specifiers.some(specifier => specifier.importNode === node)
+    !specifiers.some(specifier => specifier.importNode === node),
   );
 
   const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1;
@@ -115,7 +115,7 @@ function getFix(first, rest, sourceCode) {
           specifier.isEmpty ? needsComma : true,
         ];
       },
-      ['', !firstHasTrailingComma && !firstIsEmpty]
+      ['', !firstHasTrailingComma && !firstIsEmpty],
     );
 
     const fixes = [];
@@ -123,7 +123,7 @@ function getFix(first, rest, sourceCode) {
     if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import def, {...} from './foo'`
       fixes.push(
-        fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`)
+        fixer.insertTextAfter(firstToken, ` ${defaultImportName}, {${specifiersText}} from`),
       );
     } else if (shouldAddDefault && openBrace == null && !shouldAddSpecifiers) {
       // `import './foo'` → `import def from './foo'`

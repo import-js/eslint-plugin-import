@@ -37,7 +37,7 @@ function checkImportForRelativePackage(context, importPath, node) {
     const properImport = path.join(
       importPkg.pkg.name,
       path.dirname(properPath),
-      importBaseName === path.basename(importRoot) ? '' : importBaseName
+      importBaseName === path.basename(importRoot) ? '' : importBaseName,
     );
     context.report({
       node,

@@ -105,7 +105,7 @@ module.exports = {
               const range = [0, removeFixers[removeFixers.length - 1].range[1]];
               let insertSourceCode = sortNodes.map(function (_errorInfo) {
                 const nodeSourceCode = String.prototype.slice.apply(
-                  originSourceCode, _errorInfo.range
+                  originSourceCode, _errorInfo.range,
                 );
                 if (/\S/.test(nodeSourceCode[0])) {
                   return '\n' + nodeSourceCode;
@@ -124,7 +124,7 @@ module.exports = {
               const fixers = [insertFixer].concat(removeFixers);
               fixers.forEach(function (computedFixer, i) {
                 replaceSourceCode += (originSourceCode.slice(
-                  fixers[i - 1] ? fixers[i - 1].range[1] : 0, computedFixer.range[0]
+                  fixers[i - 1] ? fixers[i - 1].range[1] : 0, computedFixer.range[0],
                 ) + computedFixer.text);
               });
               return fixer.replaceTextRange(range, replaceSourceCode);

@@ -46,7 +46,7 @@ module.exports = {
       name,
       context.settings,
       resolve(name, context),
-      context
+      context,
     );
 
     function checkSourceValue(sourceNode, importer) {
@@ -88,7 +88,7 @@ module.exports = {
           const toTraverse = [...declarations].filter(({ source, isOnlyImportingTypes }) =>
             !ignoreModule(source.value) &&
             // Ignore only type imports
-            !isOnlyImportingTypes
+            !isOnlyImportingTypes,
           );
           /*
           Only report as a cycle if there are any import declarations that are considered by

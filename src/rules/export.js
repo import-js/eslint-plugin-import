@@ -90,7 +90,7 @@ module.exports = {
       'ExportSpecifier': (node) => addNamed(
         node.exported.name,
         node.exported,
-        getParent(node.parent)
+        getParent(node.parent),
       ),
 
       'ExportNamedDeclaration': function (node) {
@@ -146,7 +146,7 @@ module.exports = {
         if (!any) {
           context.report(
             node.source,
-            `No named exports found in module '${node.source.value}'.`
+            `No named exports found in module '${node.source.value}'.`,
           );
         }
       },
@@ -164,7 +164,7 @@ module.exports = {
               } else {
                 context.report(
                   node,
-                  `Multiple exports of name '${name.replace(tsTypePrefix, '')}'.`
+                  `Multiple exports of name '${name.replace(tsTypePrefix, '')}'.`,
                 );
               }
             }

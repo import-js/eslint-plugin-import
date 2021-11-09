@@ -4,7 +4,7 @@ import docsUrl from '../docsUrl';
 function reportIfNonStandard(context, node, name) {
   if (name && name.indexOf('!') !== -1) {
     context.report(node, `Unexpected '!' in '${name}'. ` +
-      'Do not use import syntax to configure webpack loaders.'
+      'Do not use import syntax to configure webpack loaders.',
     );
   }
 }

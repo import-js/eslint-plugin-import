@@ -107,7 +107,7 @@ module.exports = {
 after ${type} statement not followed by another ${type}.`,
           fix: fixer => fixer.insertTextAfter(
             node,
-            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference)
+            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
           ),
         });
       }

@@ -248,7 +248,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
         }
         const localImport = imports.get(key) || new Set();
         value.declarations.forEach(({ importedSpecifiers }) =>
-          importedSpecifiers.forEach(specifier => localImport.add(specifier))
+          importedSpecifiers.forEach(specifier => localImport.add(specifier)),
         );
         imports.set(key, localImport);
       });
@@ -564,13 +564,13 @@ module.exports = {
         if (exportStatement.whereUsed.size < 1) {
           context.report(
             node,
-            `exported declaration '${value}' not used within other modules`
+            `exported declaration '${value}' not used within other modules`,
           );
         }
       } else {
         context.report(
           node,
-          `exported declaration '${value}' not used within other modules`
+          `exported declaration '${value}' not used within other modules`,
         );
       }
     };

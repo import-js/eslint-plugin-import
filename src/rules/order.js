@@ -200,7 +200,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
       fix: canFix && (fixer =>
         fixer.replaceTextRange(
           [firstRootStart, secondRootEnd],
-          newCode + sourceCode.text.substring(firstRootStart, secondRootStart)
+          newCode + sourceCode.text.substring(firstRootStart, secondRootStart),
         )),
     });
   } else if (order === 'after') {
@@ -210,7 +210,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
       fix: canFix && (fixer =>
         fixer.replaceTextRange(
           [secondRootStart, firstRootEnd],
-          sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode
+          sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode,
         )),
     });
   }
@@ -463,7 +463,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = context.getSourceCode().lines.slice(
       previousImport.node.loc.end.line,
-      currentImport.node.loc.start.line - 1
+      currentImport.node.loc.start.line - 1,
     );
 
     return linesBetweenImports.filter((line) => !line.trim().length).length;
@@ -631,7 +631,7 @@ module.exports = {
             },
             ranks,
             getBlockImports(node.parent),
-            pathGroupsExcludedImportTypes
+            pathGroupsExcludedImportTypes,
           );
         }
       },
@@ -662,7 +662,7 @@ module.exports = {
           },
           ranks,
           getBlockImports(node.parent),
-          pathGroupsExcludedImportTypes
+          pathGroupsExcludedImportTypes,
         );
       },
       CallExpression: function handleRequires(node) {
@@ -684,7 +684,7 @@ module.exports = {
           },
           ranks,
           getBlockImports(block),
-          pathGroupsExcludedImportTypes
+          pathGroupsExcludedImportTypes,
         );
       },
       'Program:exit': function reportAndReset() {

@@ -88,7 +88,7 @@ module.exports = {
 
       const fileExtensions = getFileExtensions(context.settings);
       const regexUnnecessaryIndex = new RegExp(
-        `.*\\/index(\\${Array.from(fileExtensions).join('|\\')})?$`
+        `.*\\/index(\\${Array.from(fileExtensions).join('|\\')})?$`,
       );
 
       // Check if path contains unnecessary index (including a configured extension)
@@ -135,8 +135,8 @@ module.exports = {
           importPathSplit
             .slice(0, countExpectedRelativeParents)
             .concat(importPathSplit.slice(countImportPathRelativeParents + diff))
-            .join('/')
-        )
+            .join('/'),
+        ),
       );
     }
 

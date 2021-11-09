@@ -1,3 +1,0 @@
----
-rules:
-  comma-dangle: [1, "always-multiline"]

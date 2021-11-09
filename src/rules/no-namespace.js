@@ -76,7 +76,7 @@ module.exports = {
             const importLocalNames = generateLocalNames(
               importNames,
               importNameConflicts,
-              namespaceVariable.name
+              namespaceVariable.name,
             );
 
             // Replace the ImportNamespaceSpecifier with a list of ImportSpecifiers

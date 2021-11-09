@@ -55,13 +55,13 @@ function getDependencies(context, packageDir) {
         const packageJsonPath = path.join(dir, 'package.json');
         if (!depFieldCache.has(packageJsonPath)) {
           const depFields = extractDepFields(
-            JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+            JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')),
           );
           depFieldCache.set(packageJsonPath, depFields);
         }
         const _packageContent = depFieldCache.get(packageJsonPath);
         Object.keys(packageContent).forEach(depsKey =>
-          Object.assign(packageContent[depsKey], _packageContent[depsKey])
+          Object.assign(packageContent[depsKey], _packageContent[depsKey]),
         );
       });
     } else {
@@ -69,8 +69,8 @@ function getDependencies(context, packageDir) {
       Object.assign(
         packageContent,
         extractDepFields(
-          readPkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), normalize: false }).pkg
-        )
+          readPkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), normalize: false }).pkg,
+        ),
       );
     }
 

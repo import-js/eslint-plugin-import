@@ -15,7 +15,7 @@ module.exports = {
     function checkDefault(specifierType, node) {
 
       const defaultSpecifier = node.specifiers.find(
-        specifier => specifier.type === specifierType
+        specifier => specifier.type === specifierType,
       );
 
       if (!defaultSpecifier) return;
