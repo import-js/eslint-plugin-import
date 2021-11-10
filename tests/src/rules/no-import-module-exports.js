@@ -1,7 +1,7 @@
 import path from 'path';
 import { RuleTester } from 'eslint';
 
-import { test } from '../utils';
+import { test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 6, sourceType: 'module' },
@@ -15,7 +15,7 @@ const error = {
 };
 
 ruleTester.run('no-import-module-exports', rule, {
-  valid: [
+  valid: [].concat(
     test({
       code: `
         const thing = require('thing')
@@ -64,7 +64,7 @@ ruleTester.run('no-import-module-exports', rule, {
       `,
       filename: path.join(process.cwd(), 'tests/files/missing-entrypoint/cli.js'),
     }),
-    test({
+    testVersion('>= 6', () => ({
       code: `
         import fs from 'fs/promises';
 
@@ -113,8 +113,8 @@ ruleTester.run('no-import-module-exports', rule, {
       parserOptions: {
         ecmaVersion: 2020,
       },
-    }),
-  ],
+    })) || [],
+  ),
   invalid: [
     test({
       code: `
