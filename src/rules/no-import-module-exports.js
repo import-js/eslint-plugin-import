@@ -14,9 +14,9 @@ function getEntryPoint(context) {
 }
 
 function findScope(context, identifier) {
-  const scopeManager = context.getSourceCode().scopeManager;
+  const { scopeManager } = context.getSourceCode();
 
-  return scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some(variable => variable.identifiers.some((node) => node.name === identifier)));
+  return scopeManager && scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some(variable => variable.identifiers.some((node) => node.name === identifier)));
 }
 
 module.exports = {
