@@ -28,7 +28,7 @@ export function getNonDefaultParsers() {
 export const FILENAME = testFilePath('foo.js');
 
 export function testVersion(specifier, t) {
-  return semver.satisfies(eslintPkg.version, specifier) && test(t());
+  return semver.satisfies(eslintPkg.version, specifier) ? test(t()) : [];
 }
 
 export function test(t) {

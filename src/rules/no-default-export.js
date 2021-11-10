@@ -20,15 +20,17 @@ module.exports = {
 
     return {
       ExportDefaultDeclaration(node) {
-        context.report({ node, message: preferNamed });
+        const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
+        context.report({ node, message: preferNamed, loc });
       },
 
       ExportNamedDeclaration(node) {
         node.specifiers.filter(specifier => specifier.exported.name === 'default').forEach(specifier => {
+          const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
           if (specifier.type === 'ExportDefaultSpecifier') {
-            context.report({ node, message: preferNamed });
+            context.report({ node, message: preferNamed, loc });
           } else if (specifier.type === 'ExportSpecifier') {
-            context.report({ node, message: noAliasDefault(specifier) });
+            context.report({ node, message: noAliasDefault(specifier), loc  });
           }
         });
       },
