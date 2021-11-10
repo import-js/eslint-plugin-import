@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.25.3] - 2021-11-09
+
 ### Fixed
 - [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
 - `importType`: fix `isExternalModule` calculation ([#2282], [@mx-bernhard])
@@ -1326,7 +1328,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...HEAD
+[2.25.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.0...v2.25.1
 [2.25.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.24.2...v2.25.0
