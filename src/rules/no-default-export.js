@@ -16,9 +16,7 @@ module.exports = {
     }
 
     const preferNamed = 'Prefer named exports.';
-    const noAliasDefault = ({ local }) =>
-      `Do not alias \`${local.name}\` as \`default\`. Just export ` +
-      `\`${local.name}\` itself instead.`;
+    const noAliasDefault = ({ local }) => `Do not alias \`${local.name}\` as \`default\`. Just export \`${local.name}\` itself instead.`;
 
     return {
       ExportDefaultDeclaration(node) {
@@ -26,12 +24,10 @@ module.exports = {
       },
 
       ExportNamedDeclaration(node) {
-        node.specifiers.forEach(specifier => {
-          if (specifier.type === 'ExportDefaultSpecifier' &&
-              specifier.exported.name === 'default') {
+        node.specifiers.filter(specifier => specifier.exported.name === 'default').forEach(specifier => {
+          if (specifier.type === 'ExportDefaultSpecifier') {
             context.report({ node, message: preferNamed });
-          } else if (specifier.type === 'ExportSpecifier' &&
-              specifier.exported.name === 'default') {
+          } else if (specifier.type === 'ExportSpecifier') {
             context.report({ node, message: noAliasDefault(specifier) });
           }
         });
