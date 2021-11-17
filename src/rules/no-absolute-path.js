@@ -13,7 +13,7 @@ module.exports = {
 
   create(context) {
     function reportIfAbsolute(source) {
-      if (typeof source.value === 'string' && isAbsolute(source.value)) {
+      if (isAbsolute(source.value)) {
         context.report(source, 'Do not import modules using an absolute path');
       }
     }

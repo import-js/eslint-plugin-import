@@ -6,23 +6,26 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- `importType`: avoid crashing on a non-string' ([#2305], thanks [@ljharb])
+
 ## [2.25.3] - 2021-11-09
 
 ### Fixed
-- [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], [@jablko])
-- `importType`: fix `isExternalModule` calculation ([#2282], [@mx-bernhard])
-- [`no-import-module-exports`]: avoid false positives with a shadowed `module` or `exports` ([#2297], [@ljharb])
+- [`extensions`]: ignore unresolveable type-only imports ([#2270], [#2271], thanks [@jablko])
+- `importType`: fix `isExternalModule` calculation ([#2282], thanks [@mx-bernhard])
+- [`no-import-module-exports`]: avoid false positives with a shadowed `module` or `exports` ([#2297], thanks [@ljharb])
 
 ### Changed
-- [Docs] [`order`]: add type to the default groups ([#2272], [@charpeni])
-- [readme] Add note to TypeScript docs to install appropriate resolver ([#2279], [@johnthagen])
-- [Refactor] `importType`: combine redundant `isScoped` and `isScopedModule` ([@ljharb])
-- [Docs] HTTP => HTTPS ([#2287], [@Schweinepriester])
+- [Docs] [`order`]: add type to the default groups ([#2272], thanks [@charpeni])
+- [readme] Add note to TypeScript docs to install appropriate resolver ([#2279], thanks [@johnthagen])
+- [Refactor] `importType`: combine redundant `isScoped` and `isScopedModule` (thanks [@ljharb])
+- [Docs] HTTP => HTTPS ([#2287], thanks [@Schweinepriester])
 
 ## [2.25.2] - 2021-10-12
 
 ### Fixed
-- [Deps] update `eslint-module-utils` for real this time ([#2255])
+- [Deps] update `eslint-module-utils` for real this time ([#2255], thanks [@ljharb])
 
 ## [2.25.1] - 2021-10-11
 
@@ -942,6 +945,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
 [#2297]: https://github.com/import-js/eslint-plugin-import/pull/2297
 [#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
 [#2282]: https://github.com/import-js/eslint-plugin-import/pull/2282

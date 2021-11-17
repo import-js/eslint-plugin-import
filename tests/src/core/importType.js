@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as path from 'path';
 
-import importType, { isExternalModule, isScoped } from 'core/importType';
+import importType, { isExternalModule, isScoped, isAbsolute } from 'core/importType';
 
 import { testContext, testFilePath } from '../utils';
 
@@ -254,5 +254,16 @@ describe('importType(name)', function () {
     expect(isScoped('@/abc/def')).to.equal(false);
     expect(isScoped('@a/abc')).to.equal(true);
     expect(isScoped('@a/abc/def')).to.equal(true);
+  });
+});
+
+describe('isAbsolute', () => {
+  it('does not throw on a non-string', () => {
+    expect(() => isAbsolute()).not.to.throw();
+    expect(() => isAbsolute(null)).not.to.throw();
+    expect(() => isAbsolute(true)).not.to.throw();
+    expect(() => isAbsolute(false)).not.to.throw();
+    expect(() => isAbsolute(0)).not.to.throw();
+    expect(() => isAbsolute(NaN)).not.to.throw();
   });
 });

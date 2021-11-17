@@ -14,7 +14,7 @@ function baseModule(name) {
 }
 
 export function isAbsolute(name) {
-  return nodeIsAbsolute(name);
+  return typeof name === 'string' && nodeIsAbsolute(name);
 }
 
 // path is defined only when a resolver resolves to a non-standard path
