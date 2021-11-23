@@ -25,6 +25,9 @@ jobs:
       fail-fast: false
       matrix:
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
+        eslint:
+          - 8
+          - 7
         package:
           - resolvers/node
           - resolvers/webpack
