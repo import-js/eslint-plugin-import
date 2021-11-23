@@ -6,9 +6,12 @@ echo "installing ${ESLINT_VERSION} in node ${TRAVIS_NODE_VERSION} with TS parser
 
 export NPM_CONFIG_LEGACY_PEER_DEPS=true
 
+if [[ "$ESLINT_VERSION" -lt "7" ]]; then
+  echo "Removing @angular-eslint/template-parser..."
+  npm uninstall --no-save @angular-eslint/template-parser
+fi
+
 npm install --no-save "eslint@${ESLINT_VERSION}" --ignore-scripts
-
-
 
 if [[ -n "$TS_PARSER" ]]; then # if TS parser is manually set, always use it
   echo "Downgrading @typescript-eslint/parser..."

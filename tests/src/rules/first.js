@@ -1,4 +1,6 @@
-import { test, getTSParsers } from '../utils';
+import { test, getTSParsers, testVersion } from '../utils';
+import fs from 'fs';
+import path from 'path';
 
 import { RuleTester } from 'eslint';
 
@@ -6,7 +8,7 @@ const ruleTester = new RuleTester();
 const rule = require('rules/first');
 
 ruleTester.run('first', rule, {
-  valid: [
+  valid: [].concat(
     test({
       code: "import { x } from './foo'; import { y } from './bar';\
             export { x, y }",
@@ -21,7 +23,12 @@ ruleTester.run('first', rule, {
       code: "'use directive';\
             import { x } from 'foo';",
     }),
-  ],
+    testVersion('>= 7', () => ({
+      // issue #2210
+      code: String(fs.readFileSync(path.join(__dirname, '../../files/component.html'))),
+      parser: require.resolve('@angular-eslint/template-parser'),
+    })),
+  ),
   invalid: [
     test({
       code: "import { x } from './foo';\

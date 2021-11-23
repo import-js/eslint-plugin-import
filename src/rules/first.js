@@ -31,6 +31,9 @@ module.exports = {
     return {
       'Program': function (n) {
         const body = n.body;
+        if (!body) {
+          return;
+        }
         const absoluteFirst = context.options[0] === 'absolute-first';
         const message = 'Import in body of module; reorder to top.';
         const sourceCode = context.getSourceCode();

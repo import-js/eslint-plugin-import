@@ -18,7 +18,7 @@ jobs:
 
   latest:
     needs: [matrix]
-    name: 'latest majors'
+    name: 'majors'
     runs-on: ubuntu-latest
 
     strategy:
@@ -96,6 +96,7 @@ jobs:
         continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
         name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
         env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: ${{ matrix.node-version == 11 && false || true }}
           ESLINT_VERSION: ${{ matrix.eslint }}
           TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
         with:

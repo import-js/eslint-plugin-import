@@ -39,6 +39,7 @@ jobs:
       - uses: ljharb/actions/node/install@main
         name: 'nvm install ${{ matrix.node-version }} && npm install'
         env:
+          NPM_CONFIG_LEGACY_PEER_DEPS: ${{ matrix.node-version == 11 && false || true }}
           ESLINT_VERSION: ${{ matrix.eslint }}
           TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
         with:

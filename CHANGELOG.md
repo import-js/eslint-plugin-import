@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - `importType`: avoid crashing on a non-string' ([#2305], thanks [@ljharb])
+- [`first`]: prevent crash when parsing angular templates ([#2210], thanks [@ljharb])
 
 ### Changed
 - [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], thanks [@pmcelhaney])
@@ -1227,6 +1228,7 @@ for info on changes for earlier releases.
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
 [#2255]: https://github.com/import-js/eslint-plugin-import/issues/2255
+[#2210]: https://github.com/import-js/eslint-plugin-import/issues/2210
 [#2201]: https://github.com/import-js/eslint-plugin-import/issues/2201
 [#2199]: https://github.com/import-js/eslint-plugin-import/issues/2199
 [#2161]: https://github.com/import-js/eslint-plugin-import/issues/2161
