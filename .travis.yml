@@ -26,10 +26,10 @@ matrix:
 
 before_install:
   - 'nvm install-latest-npm'
-  - 'npm install'
+  - 'NPM_CONFIG_LEGACY_PEER_DEPS=true npm install'
   - 'npm run copy-metafiles'
 install:
-  - 'npm install'
+  - 'NPM_CONFIG_LEGACY_PEER_DEPS=true npm install'
   - 'if [ -n "${ESLINT_VERSION}" ]; then ./tests/dep-time-travel.sh; fi'
   - 'npm run pretest'
 
