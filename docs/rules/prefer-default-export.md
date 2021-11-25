@@ -22,7 +22,7 @@ The following patterns are not warnings:
 // There is a default export.
 export const foo = 'foo';
 const bar = 'bar';
-export default 'bar';
+export default bar;
 ```
 
 ```javascript
