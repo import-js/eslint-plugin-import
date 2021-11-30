@@ -19,6 +19,11 @@ function findScope(context, identifier) {
   return scopeManager && scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some(variable => variable.identifiers.some((node) => node.name === identifier)));
 }
 
+function findDefinition(objectScope, identifier) {
+  const variable = objectScope.variables.find(variable => variable.name === identifier);
+  return variable.defs.find(def => def.name.name === identifier);
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -50,10 +55,12 @@ module.exports = {
       const isIdentifier = node.object.type === 'Identifier';
       const hasKeywords = (/^(module|exports)$/).test(node.object.name);
       const objectScope = hasKeywords && findScope(context, node.object.name);
+      const variableDefinition = objectScope && findDefinition(objectScope, node.object.name);
+      const isImportBinding = variableDefinition && variableDefinition.type === 'ImportBinding';
       const hasCJSExportReference = hasKeywords && (!objectScope || objectScope.type === 'module');
       const isException = !!options.exceptions && options.exceptions.some(glob => minimatch(fileName, glob));
 
-      if (isIdentifier && hasCJSExportReference && !isEntryPoint && !isException) {
+      if (isIdentifier && hasCJSExportReference && !isEntryPoint && !isException && !isImportBinding) {
         importDeclarations.forEach(importDeclaration => {
           context.report({
             node: importDeclaration,

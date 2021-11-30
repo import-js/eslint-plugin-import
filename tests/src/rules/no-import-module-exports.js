@@ -1,7 +1,7 @@
 import path from 'path';
 import { RuleTester } from 'eslint';
 
-import { test, testVersion } from '../utils';
+import { eslintVersionSatisfies, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 6, sourceType: 'module' },
@@ -40,6 +40,12 @@ ruleTester.run('no-import-module-exports', rule, {
         exports.foo = bar
       `,
     }),
+    eslintVersionSatisfies('>= 4') ? test({
+      code: `
+        import { module } from 'qunit'
+        module.skip('A test', function () {})
+      `,
+    }) : [],
     test({
       code: `
         import foo from 'path';

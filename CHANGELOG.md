@@ -34,6 +34,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
 - [`no-unused-modules`]: `checkPkgFieldObject` filters boolean fields from checks ([#2598], thanks [@mpint])
 - [`no-cycle`]: accept Flow `typeof` imports, just like `type` ([#2608], thanks [@gnprice])
+- [`no-import-module-exports`]: avoid a false positive for import variables ([#2315], thanks [@BarryThePenguin])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1074,6 +1075,7 @@ for info on changes for earlier releases.
 [#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2330]: https://github.com/import-js/eslint-plugin-import/pull/2330
+[#2315]: https://github.com/import-js/eslint-plugin-import/pull/2315
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
 [#2299]: https://github.com/import-js/eslint-plugin-import/pull/2299
 [#2297]: https://github.com/import-js/eslint-plugin-import/pull/2297
@@ -1578,6 +1580,7 @@ for info on changes for earlier releases.
 [@atos1990]: https://github.com/atos1990
 [@azyzz228]: https://github.com/azyzz228
 [@barbogast]: https://github.com/barbogast
+[@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
 [@benmosher]: https://github.com/benmosher
