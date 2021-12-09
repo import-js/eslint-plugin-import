@@ -1,8 +1,7 @@
+import fs from 'fs';
 import path from 'path';
 
-import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers } from '../utils';
-
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
+import { getTSParsers, test, SYNTAX_CASES, testFilePath, testVersion, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -226,7 +225,8 @@ function runResolverTests(resolver) {
     ],
   });
 
-  if (!CASE_SENSITIVE_FS) {
+  const caseInsensitive = fs.existsSync(testFilePath('./MyUncoolComponent.jsx'));
+  if (caseInsensitive) {
     const relativePath = './tests/files/jsx/MyUnCoolComponent.jsx';
     const cwd = process.cwd();
     const mismatchedPath = path.join(cwd.toUpperCase(), relativePath).replace(/\\/g, '/');

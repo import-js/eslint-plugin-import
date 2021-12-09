@@ -1,8 +1,7 @@
+import fs from 'fs';
+
 import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
 import { RuleTester } from 'eslint';
-
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
-
 
 const ruleTester = new RuleTester();
 const rule = require('rules/named');
@@ -349,7 +348,7 @@ ruleTester.run('named', rule, {
 });
 
 // #311: import of mismatched case
-if (!CASE_SENSITIVE_FS) {
+if (fs.existsSync(testFilePath('./Named-Exports.js'))) {
   ruleTester.run('named (path case-insensitivity)', rule, {
     valid: [
       test({
