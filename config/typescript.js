@@ -27,5 +27,8 @@ module.exports = {
 
     // TypeScript compilation already ensures that named imports exist in the referenced module
     'import/named': 'off',
+
+    // TypeScript compilation already ensures that imports can be resolved
+    'import/no-unresolved': 'off',
   },
 };
