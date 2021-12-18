@@ -53,10 +53,6 @@ ruleTester.run('dynamic-import-chunkname', rule, {
         'someModule'
       )`,
       options: pickyCommentOptions,
-      errors: [{
-        message: pickyCommentFormatError,
-        type: 'CallExpression',
-      }],
     },
     {
       code: `import(
@@ -147,10 +143,6 @@ ruleTester.run('dynamic-import-chunkname', rule, {
       )`,
       options: pickyCommentOptions,
       parser,
-      errors: [{
-        message: pickyCommentFormatError,
-        type: 'CallExpression',
-      }],
     },
     ...SYNTAX_CASES,
   ],
