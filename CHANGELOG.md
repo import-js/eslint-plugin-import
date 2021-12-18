@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: require with member expression could not be fixed if alphabetize.order was used ([#2490], thanks [@msvab])
 - [`order`]: leave more space in rankings for consecutive path groups ([#2506], thanks [@Pearce-Ropion])
 - [`no-cycle`]: add ExportNamedDeclaration statements to dependencies ([#2511], thanks [@BenoitZugmeyer])
+- [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1027,6 +1028,7 @@ for info on changes for earlier releases.
 [#2358]: https://github.com/import-js/eslint-plugin-import/pull/2358
 [#2341]: https://github.com/import-js/eslint-plugin-import/pull/2341
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
+[#2330]: https://github.com/import-js/eslint-plugin-import/pull/2330
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
 [#2299]: https://github.com/import-js/eslint-plugin-import/pull/2299
 [#2297]: https://github.com/import-js/eslint-plugin-import/pull/2297
@@ -1652,6 +1654,7 @@ for info on changes for earlier releases.
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@maxmalov]: https://github.com/maxmalov
 [@mgwalker]: https://github.com/mgwalker
+[@mhmadhamster]: https://github.com/MhMadHamster
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
