@@ -60,7 +60,7 @@ This rule has its own ignore list, separate from [`import/ignore`]. This is beca
 To suppress errors from files that may not be properly resolved by your [resolver settings](../../README.md#resolver-plugins), you may add an `ignore` key with an array of `RegExp` pattern strings:
 
 ```js
-/*eslint import/no-unresolved: [2, { ignore: ['\.img$'] }]*/
+/*eslint import/no-unresolved: [2, { ignore: ['\\.img$'] }]*/
 
 import { x } from './mod' // may be reported, if not resolved to a module
 
