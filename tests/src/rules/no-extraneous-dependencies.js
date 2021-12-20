@@ -164,6 +164,23 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       `,
       settings: { 'import/resolver': 'webpack' },
     }),
+
+    test({
+      code: 'import "@custom-internal-alias/api/service";',
+      settings: {
+        'import/resolver': {
+          webpack: {
+            config: {
+              resolve: {
+                alias: {
+                  '@custom-internal-alias': testFilePath('internal-modules'),
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
   ],
   invalid: [
     test({

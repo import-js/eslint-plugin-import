@@ -1,4 +1,4 @@
-import { test, getTSParsers, getNonDefaultParsers } from '../utils';
+import { test, getTSParsers, getNonDefaultParsers, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -847,6 +847,43 @@ ruleTester.run('order', rule, {
         ],
       }),
     ]),
+    // Using `@/*` to alias internal modules
+    test({
+      code: `
+        import fs from 'fs';
+
+        import express from 'express';
+
+        import service from '@/api/service';
+        
+        import fooParent from '../foo';
+        
+        import fooSibling from './foo';
+        
+        import index from './';
+        
+        import internalDoesNotExistSoIsUnknown from '@/does-not-exist';
+      `,
+      options: [
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'unknown'],
+          'newlines-between': 'always',
+        },
+      ],
+      settings: {
+        'import/resolver': {
+          webpack: {
+            config: {
+              resolve: {
+                alias: {
+                  '@': testFilePath('internal-modules'),
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
   ],
   invalid: [
     // builtin before external module (require)

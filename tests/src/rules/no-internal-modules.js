@@ -304,6 +304,30 @@ ruleTester.run('no-internal-modules', rule, {
         column: 8,
       } ],
     }),
+    test({
+      code: 'import "@/api/service";',
+      options: [ {
+        forbid: [ '**/api/*' ],
+      } ],
+      errors: [ {
+        message: 'Reaching to "@/api/service" is not allowed.',
+        line: 1,
+        column: 8,
+      } ],
+      settings: {
+        'import/resolver': {
+          webpack: {
+            config: {
+              resolve: {
+                alias: {
+                  '@': testFilePath('internal-modules'),
+                },
+              },
+            },
+          },
+        },
+      },
+    }),
     // exports
     test({
       code: 'export * from "./plugin2/index.js";\nexport * from "./plugin2/app/index"',

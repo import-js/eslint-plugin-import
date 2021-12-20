@@ -159,7 +159,6 @@ module.exports = {
       // determine if this is a module
       const isPackage = isExternalModule(
         importPath,
-        context.settings,
         resolve(importPath, context),
         context,
       ) || isScoped(importPath);

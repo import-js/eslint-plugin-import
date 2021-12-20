@@ -44,7 +44,6 @@ module.exports = {
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity;
     const ignoreModule = (name) => options.ignoreExternal && isExternalModule(
       name,
-      context.settings,
       resolve(name, context),
       context,
     );

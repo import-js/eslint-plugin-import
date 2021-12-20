@@ -13,6 +13,11 @@ function baseModule(name) {
   return pkg;
 }
 
+function isInternalRegexMatch(name, settings) {
+  const internalScope = (settings && settings['import/internal-regex']);
+  return internalScope && new RegExp(internalScope).test(name);
+}
+
 export function isAbsolute(name) {
   return typeof name === 'string' && nodeIsAbsolute(name);
 }
@@ -25,33 +30,18 @@ export function isBuiltIn(name, settings, path) {
   return isCoreModule(base) || extras.indexOf(base) > -1;
 }
 
-export function isExternalModule(name, settings, path, context) {
-  if (arguments.length < 4) {
-    throw new TypeError('isExternalModule: name, settings, path, and context are all required');
+export function isExternalModule(name, path, context) {
+  if (arguments.length < 3) {                                                                                                                                                                              
+    throw new TypeError('isExternalModule: name, path, and context are all required');
   }
-  return (isModule(name) || isScoped(name)) && isExternalPath(name, settings, path, getContextPackagePath(context));
+  return (isModule(name) || isScoped(name)) && typeTest(name, context, path) === 'external';
 }
 
-export function isExternalModuleMain(name, settings, path, context) {
-  return isModuleMain(name) && isExternalPath(name, settings, path, getContextPackagePath(context));
-}
-
-function isExternalPath(name, settings, path, packagePath) {
-  const internalScope = (settings && settings['import/internal-regex']);
-  if (internalScope && new RegExp(internalScope).test(name)) {
-    return false;
+export function isExternalModuleMain(name, path, context) {
+  if (arguments.length < 3) {                                                                                                                                                                              
+    throw new TypeError('isExternalModule: name, path, and context are all required');
   }
-
-  if (!path || relative(packagePath, path).startsWith('..')) {
-    return true;
-  }
-
-  const folders = (settings && settings['import/external-module-folders']) || ['node_modules'];
-  return folders.some((folder) => {
-    const folderPath = nodeResolve(packagePath, folder);
-    const relativePath = relative(folderPath, path);
-    return !relativePath.startsWith('..');
-  });
+  return isModuleMain(name) && typeTest(name, context, path) === 'external';
 }
 
 const moduleRegExp = /^\w/;
@@ -87,17 +77,49 @@ function isRelativeToSibling(name) {
   return /^\.[\\/]/.test(name);
 }
 
-function typeTest(name, context, path) {
+function isExternalPath(path, context) {
+  if (!path) {
+    return false;
+  }
+
   const { settings } = context;
+  const packagePath = getContextPackagePath(context);
+
+  if (relative(packagePath, path).startsWith('..')) {
+    return true;
+  }
+
+  const folders = (settings && settings['import/external-module-folders']) || ['node_modules'];
+  return folders.some((folder) => {
+    const folderPath = nodeResolve(packagePath, folder);
+    const relativePath = relative(folderPath, path);
+    return !relativePath.startsWith('..');
+  });
+}
+
+function isInternalPath(path, context) {
+  if (!path) {
+    return false;
+  }
+  const packagePath = getContextPackagePath(context);
+  return !relative(packagePath, path).startsWith('../');
+}
+
+function isExternalLookingName(name) {
+  return isModule(name) || isScoped(name);
+}
+
+function typeTest(name, context, path ) {
+  const { settings } = context;
+  if (isInternalRegexMatch(name, settings)) { return 'internal'; }
   if (isAbsolute(name, settings, path)) { return 'absolute'; }
   if (isBuiltIn(name, settings, path)) { return 'builtin'; }
-  if (isModule(name, settings, path) || isScoped(name, settings, path)) {
-    const packagePath = getContextPackagePath(context);
-    return isExternalPath(name, settings, path, packagePath) ? 'external' : 'internal';
-  }
   if (isRelativeToParent(name, settings, path)) { return 'parent'; }
   if (isIndex(name, settings, path)) { return 'index'; }
   if (isRelativeToSibling(name, settings, path)) { return 'sibling'; }
+  if (isExternalPath(path, context)) { return 'external'; }
+  if (isInternalPath(path, context)) { return 'internal'; }
+  if (isExternalLookingName(name)) { return 'external'; }
   return 'unknown';
 }
 
