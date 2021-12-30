@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], thanks [@pmcelhaney])
 - [Docs] [`order`]: Remove duplicate mention of default ([#2280], thanks [@johnthagen])
+- [`no-extraneous-dependencies`]: add npm workspaces support ([#2342], thank [@acdibble])
 
 ## [2.25.3] - 2021-11-09
 
