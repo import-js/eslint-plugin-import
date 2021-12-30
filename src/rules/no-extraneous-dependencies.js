@@ -27,6 +27,7 @@ function extractDepFields(pkg) {
     // BundledDeps should be in the form of an array, but object notation is also supported by
     // `npm`, so we convert it to an array if it is an object
     bundledDependencies: arrayOrKeys(pkg.bundleDependencies || pkg.bundledDependencies || []),
+    workspaces: pkg.workspaces || [],
   };
 }
 
@@ -39,6 +40,7 @@ function getDependencies(context, packageDir) {
       optionalDependencies: {},
       peerDependencies: {},
       bundledDependencies: [],
+      workspaces: [],
     };
 
     if (packageDir && packageDir.length > 0) {
@@ -80,6 +82,7 @@ function getDependencies(context, packageDir) {
       packageContent.optionalDependencies,
       packageContent.peerDependencies,
       packageContent.bundledDependencies,
+      packageContent.workspaces,
     ].some(hasKeys)) {
       return null;
     }
@@ -133,6 +136,7 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
     isInOptDeps: false,
     isInPeerDeps: false,
     isInBundledDeps: false,
+    isInWorkspaces: false,
   };
 
   // in case of sub package.json inside a module
@@ -154,6 +158,8 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
       isInPeerDeps: result.isInPeerDeps || deps.peerDependencies[ancestorName] !== undefined,
       isInBundledDeps:
         result.isInBundledDeps || deps.bundledDependencies.indexOf(ancestorName) !== -1,
+      isInWorkspaces: result.isInWorkspaces ||
+        deps.workspaces.findIndex((ws) => ws === ancestorName || ws.endsWith(`/${ancestorName}`)) !== -1,
     };
   }, newDeclarationStatus);
 }
@@ -182,7 +188,8 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
     (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
     (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
-    (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
+    (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps) ||
+    (depsOptions.allowWorkspaces && declarationStatus.isInWorkspaces)
   ) {
     return;
   }
@@ -198,7 +205,8 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
       (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
       (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
       (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
-      (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
+      (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps) ||
+      (depsOptions.allowWorkspaces && declarationStatus.isInWorkspaces)
     ) {
       return;
     }
@@ -261,6 +269,7 @@ module.exports = {
       allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
+      allowWorkspaces: testConfig(options.workspaces, filename) !== false,
     };
 
     return moduleVisitor((source, node) => {
