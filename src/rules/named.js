@@ -40,7 +40,7 @@ module.exports = {
       }
 
       const imports = Exports.get(node.source.value, context);
-      if (imports == null) {
+      if (imports == null || imports.parseGoal === 'ambiguous') {
         return;
       }
 
@@ -97,6 +97,7 @@ module.exports = {
         // return if it's not a string source
         || source.type !== 'Literal'
         || variableExports == null
+        || variableExports.parseGoal === 'ambiguous'
       ) {
         return;
       }

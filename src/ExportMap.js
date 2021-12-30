@@ -43,6 +43,10 @@ export default class ExportMap {
      */
     this.imports = new Map();
     this.errors = [];
+    /**
+     * type {'ambiguous' | 'Module' | 'Script'}
+     */
+    this.parseGoal = 'ambiguous';
   }
 
   get hasDefault() { return this.get('default') != null; } // stronger than this.has
@@ -406,7 +410,8 @@ ExportMap.parse = function (path, content, context) {
     },
   });
 
-  if (!unambiguous.isModule(ast) && !hasDynamicImports) return null;
+  const unambiguouslyESM = unambiguous.isModule(ast);
+  if (!unambiguouslyESM && !hasDynamicImports) return null;
 
   const docstyle = (context.settings && context.settings['import/docstyle']) || ['jsdoc'];
   const docStyleParsers = {};
@@ -710,6 +715,9 @@ ExportMap.parse = function (path, content, context) {
     m.namespace.set('default', {}); // add default export
   }
 
+  if (unambiguouslyESM) {
+    m.parseGoal = 'Module';
+  }
   return m;
 };
 

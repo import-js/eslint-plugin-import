@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - `importType`: avoid crashing on a non-string' ([#2305], thanks [@ljharb])
 - [`first`]: prevent crash when parsing angular templates ([#2210], thanks [@ljharb])
 - `importType`: properly resolve `@/*`-aliased imports as internal ([#2334], thanks [@ombene])
+- [`named`]/`ExportMap`: handle named imports from CJS modules that use dynamic import ([#2341], thanks [@ludofischer])
 
 ### Changed
 - [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], thanks [@pmcelhaney])
@@ -951,6 +952,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2341]: https://github.com/import-js/eslint-plugin-import/pull/2341
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
 [#2299]: https://github.com/import-js/eslint-plugin-import/pull/2299
@@ -1549,6 +1551,7 @@ for info on changes for earlier releases.
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
+[@ludofischer]: https://github.com/ludofischer
 [@lukeapage]: https://github.com/lukeapage
 [@lydell]: https://github.com/lydell
 [@Mairu]: https://github.com/Mairu

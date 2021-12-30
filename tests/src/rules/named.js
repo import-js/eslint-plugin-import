@@ -190,7 +190,16 @@ ruleTester.run('named', rule, {
         sourceType: 'module',
         ecmaVersion: 2020,
       },
-    })) || []),
+    })),
+
+    testVersion('>=7.8.0', () =>({ code: 'const { something } = require("./dynamic-import-in-commonjs")',
+      parserOptions: { ecmaVersion: 2021 },
+      options: [{ commonjs: true }],
+    })),
+
+    testVersion('>=7.8.0', () => ({ code: 'import { something } from "./dynamic-import-in-commonjs"',
+      parserOptions: { ecmaVersion: 2021 } })),
+    ),
   ],
 
   invalid: [
