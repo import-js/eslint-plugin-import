@@ -7,34 +7,27 @@ const fs = require('fs');
 
 const log = require('debug')('eslint-plugin-import:parse');
 
-function getBabelVisitorKeys(parserPath) {
+function getBabelEslintVisitorKeys(parserPath) {
   if (parserPath.endsWith('index.js')) {
     const hypotheticalLocation = parserPath.replace('index.js', 'visitor-keys.js');
     if (fs.existsSync(hypotheticalLocation)) {
       const keys = moduleRequire(hypotheticalLocation);
       return keys.default || keys;
     }
-  } else if (parserPath.endsWith('index.cjs')) {
-    const hypotheticalLocation = parserPath.replace('index.cjs', 'worker/ast-info.cjs');
-    if (fs.existsSync(hypotheticalLocation)) {
-      const astInfo = moduleRequire(hypotheticalLocation);
-      return astInfo.getVisitorKeys();
-    }
   }
   return null;
 }
 
 function keysFromParser(parserPath, parserInstance, parsedResult) {
+  // Exposed by @typescript-eslint/parser and @babel/eslint-parser
+  if (parsedResult && parsedResult.visitorKeys) {
+    return parsedResult.visitorKeys;
+  }
   if (/.*espree.*/.test(parserPath)) {
     return parserInstance.VisitorKeys;
   }
-  if (/.*(babel-eslint|@babel\/eslint-parser).*/.test(parserPath)) {
-    return getBabelVisitorKeys(parserPath);
-  }
-  if (/.*@typescript-eslint\/parser/.test(parserPath)) {
-    if (parsedResult) {
-      return parsedResult.visitorKeys;
-    }
+  if (/.*babel-eslint.*/.test(parserPath)) {
+    return getBabelEslintVisitorKeys(parserPath);
   }
   return null;
 }

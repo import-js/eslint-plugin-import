@@ -5,10 +5,13 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+- [patch] Fix `@babel/eslint-parser` 8 compatibility ([#2343], thanks [@nicolo-ribaudo])
+
 ## v2.7.1 - 2021-10-13
 
 ### Fixed
- - fixed SyntaxError in node <= 6: Unexpected token ) in parse.js ([#2261], thanks [@VitusFW])
+- fixed SyntaxError in node <= 6: Unexpected token ) in parse.js ([#2261], thanks [@VitusFW])
 
 ## v2.7.0 - 2021-10-11
 
@@ -102,6 +105,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2343]: https://github.com/import-js/eslint-plugin-import/pull/2343
 [#2261]: https://github.com/import-js/eslint-plugin-import/pull/2261
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212
 [#2160]: https://github.com/import-js/eslint-plugin-import/pull/2160
@@ -138,6 +142,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@mgwalker]: https://github.com/mgwalker
+[@nicolo-ribaudo]: https://github.com/nicolo-ribaudo
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@sompylasar]: https://github.com/sompylasar
