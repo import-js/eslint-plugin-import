@@ -27,7 +27,7 @@ function extractDepFields(pkg) {
     // BundledDeps should be in the form of an array, but object notation is also supported by
     // `npm`, so we convert it to an array if it is an object
     bundledDependencies: arrayOrKeys(pkg.bundleDependencies || pkg.bundledDependencies || []),
-    workspaces: pkg.workspaces || [],
+    workspaces: (pkg.workspaces || []).map((ws) => ws.split('/').slice(-1)[0]),
   };
 }
 
@@ -158,8 +158,8 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
       isInPeerDeps: result.isInPeerDeps || deps.peerDependencies[ancestorName] !== undefined,
       isInBundledDeps:
         result.isInBundledDeps || deps.bundledDependencies.indexOf(ancestorName) !== -1,
-      isInWorkspaces: result.isInWorkspaces ||
-        deps.workspaces.findIndex((ws) => ws === ancestorName || ws.endsWith(`/${ancestorName}`)) !== -1,
+      isInWorkspaces:
+        result.isInWorkspaces || deps.workspaces.indexOf(ancestorName) !== -1,
     };
   }, newDeclarationStatus);
 }
@@ -252,6 +252,7 @@ module.exports = {
           'optionalDependencies': { 'type': ['boolean', 'array'] },
           'peerDependencies': { 'type': ['boolean', 'array'] },
           'bundledDependencies': { 'type': ['boolean', 'array'] },
+          'workspaces': { 'type': ['boolean', 'array'] },
           'packageDir': { 'type': ['string', 'array'] },
         },
         'additionalProperties': false,
@@ -269,7 +270,7 @@ module.exports = {
       allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
-      allowWorkspaces: testConfig(options.workspaces, filename) !== false,
+      allowWorkspaces: testConfig(options.workspaces, filename) === true,
     };
 
     return moduleVisitor((source, node) => {
