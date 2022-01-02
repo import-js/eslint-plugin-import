@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.7.2 - 2022-01-01
+
 ### Fixed
 - [patch] Fix `@babel/eslint-parser` 8 compatibility ([#2343], thanks [@nicolo-ribaudo])
 
