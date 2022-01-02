@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.25.4] - 2022-01-02
+
 ### Fixed
 - `importType`: avoid crashing on a non-string' ([#2305], thanks [@ljharb])
 - [`first`]: prevent crash when parsing angular templates ([#2210], thanks [@ljharb])
@@ -15,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [`no-default-import`]: report on the token "default" instead of the entire node ([#2299], thanks [@pmcelhaney])
 - [Docs] [`order`]: Remove duplicate mention of default ([#2280], thanks [@johnthagen])
+- [Deps] update `eslint-module-utils`
 
 ## [2.25.3] - 2021-11-09
 
@@ -1344,7 +1347,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.4...HEAD
+[2.25.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...v2.25.4
 [2.25.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.0...v2.25.1
