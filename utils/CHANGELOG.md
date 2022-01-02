@@ -8,6 +8,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [patch] Fix `@babel/eslint-parser` 8 compatibility ([#2343], thanks [@nicolo-ribaudo])
 
+### Changed
+- [Refactor] inline `pkgDir` implementation; remove `pkg-dir`
+
 ## v2.7.1 - 2021-10-13
 
 ### Fixed

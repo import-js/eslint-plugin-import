@@ -1,14 +1,13 @@
 'use strict';
 exports.__esModule = true;
 
-const pkgDir = require('pkg-dir');
-
 const fs = require('fs');
 const Module = require('module');
 const path = require('path');
 
 const hashObject = require('./hash').hashObject;
 const ModuleCache = require('./ModuleCache').default;
+const pkgDir = require('./pkgDir').default;
 
 const CASE_SENSITIVE_FS = !fs.existsSync(path.join(__dirname.toUpperCase(), 'reSOLVE.js'));
 exports.CASE_SENSITIVE_FS = CASE_SENSITIVE_FS;
@@ -175,7 +174,7 @@ function resolverReducer(resolvers, map) {
 }
 
 function getBaseDir(sourceFile) {
-  return pkgDir.sync(sourceFile) || process.cwd();
+  return pkgDir(sourceFile) || process.cwd();
 }
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
