@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+- [Fix] `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
+
 ## v2.7.2 - 2022-01-01
 
 ### Fixed
@@ -110,6 +113,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2350]: https://github.com/import-js/eslint-plugin-import/issues/2350
 [#2343]: https://github.com/import-js/eslint-plugin-import/pull/2343
 [#2261]: https://github.com/import-js/eslint-plugin-import/pull/2261
 [#2212]: https://github.com/import-js/eslint-plugin-import/pull/2212

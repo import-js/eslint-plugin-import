@@ -32,6 +32,16 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
   return null;
 }
 
+// this exists to smooth over the unintentional breaking change in v2.7.
+// TODO, semver-major: avoid mutating `ast` and return a plain object instead.
+function makeParseReturn(ast, visitorKeys) {
+  if (ast) {
+    ast.visitorKeys = visitorKeys;
+    ast.ast = ast;
+  }
+  return ast;
+}
+
 exports.default = function parse(path, content, context) {
 
   if (context == null) throw new Error('need context to parse properly');
@@ -73,10 +83,7 @@ exports.default = function parse(path, content, context) {
     try {
       const parserRaw = parser.parseForESLint(content, parserOptions);
       ast = parserRaw.ast;
-      return {
-        ast,
-        visitorKeys: keysFromParser(parserPath, parser, parserRaw),
-      };
+      return makeParseReturn(ast, keysFromParser(parserPath, parser, parserRaw));
     } catch (e) {
       console.warn();
       console.warn('Error while parsing ' + parserOptions.filePath);
@@ -89,18 +96,12 @@ exports.default = function parse(path, content, context) {
           '` is invalid and will just be ignored'
       );
     } else {
-      return {
-        ast,
-        visitorKeys: keysFromParser(parserPath, parser, undefined),
-      };
+      return makeParseReturn(ast, keysFromParser(parserPath, parser, undefined));
     }
   }
 
-  const keys = keysFromParser(parserPath, parser, undefined);
-  return {
-    ast: parser.parse(content, parserOptions),
-    visitorKeys: keys,
-  };
+  const ast = parser.parse(content, parserOptions);
+  return makeParseReturn(ast, keysFromParser(parserPath, parser, undefined));
 };
 
 function getParserPath(path, context) {
