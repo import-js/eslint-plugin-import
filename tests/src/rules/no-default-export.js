@@ -162,5 +162,16 @@ ruleTester.run('no-default-export', rule, {
         },
       ],
     }),
+    // es2022: Arbitrary module namespae identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'let foo; export { foo as "default" }',
+      errors: [
+        {
+          type: 'ExportNamedDeclaration',
+          message: 'Do not alias `foo` as `default`. Just export `foo` itself instead.',
+        },
+      ],
+      parserOptions: { ecmaVersion: 2022 },
+    })),
   ),
 });
