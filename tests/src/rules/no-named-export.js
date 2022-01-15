@@ -1,11 +1,11 @@
 import { RuleTester } from 'eslint';
-import { test } from '../utils';
+import { test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-named-export');
 
 ruleTester.run('no-named-export', rule, {
-  valid: [
+  valid: [].concat(
     test({
       code: 'export default function bar() {};',
     }),
@@ -27,7 +27,13 @@ ruleTester.run('no-named-export', rule, {
     test({
       code: `import {default as foo} from './foo';`,
     }),
-  ],
+
+    // es2022: Arbitrary module namespae identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'let foo; export { foo as "default" }',
+      parserOptions: { ecmaVersion: 2022 },
+    })),
+  ),
   invalid: [
     test({
       code: `
