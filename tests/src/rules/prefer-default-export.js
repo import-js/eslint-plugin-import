@@ -1,4 +1,4 @@
-import { test, getNonDefaultParsers } from '../utils';
+import { test, testVersion, getNonDefaultParsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -6,7 +6,7 @@ const ruleTester = new RuleTester();
 const rule = require('../../../src/rules/prefer-default-export');
 
 ruleTester.run('prefer-default-export', rule, {
-  valid: [
+  valid: [].concat(
     test({
       code: `
         export const foo = 'foo';
@@ -94,7 +94,12 @@ ruleTester.run('prefer-default-export', rule, {
       `,
       parser: require.resolve('babel-eslint'),
     }),
-  ],
+    // es2022: Arbitrary module namespae identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'let foo; export { foo as "default" };',
+      parserOptions: { ecmaVersion: 2022 },
+    })),
+  ),
   invalid: [
     test({
       code: `

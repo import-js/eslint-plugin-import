@@ -40,7 +40,7 @@ module.exports = {
       },
 
       'ExportSpecifier': function (node) {
-        if (node.exported.name === 'default') {
+        if ((node.exported.name || node.exported.value) === 'default') {
           hasDefaultExport = true;
         } else {
           specifierExportCount++;
