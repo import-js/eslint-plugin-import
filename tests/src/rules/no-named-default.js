@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES } from '../utils';
+import { test, testVersion, SYNTAX_CASES } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -22,7 +22,7 @@ ruleTester.run('no-named-default', rule, {
     ...SYNTAX_CASES,
   ],
 
-  invalid: [
+  invalid: [].concat(
     /*test({
       code: 'import { default } from "./bar";',
       errors: [{
@@ -45,5 +45,17 @@ ruleTester.run('no-named-default', rule, {
         type: 'Identifier',
       }],
     }),
-  ],
+
+    // es2022: Arbitrary module namespae identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'import { "default" as bar } from "./bar";',
+      errors: [{
+        message: 'Use default import syntax to import \'bar\'.',
+        type: 'Identifier',
+      }],
+      parserOptions: {
+        ecmaVersion: 2022,
+      },
+    })) || [],
+  ),
 });
