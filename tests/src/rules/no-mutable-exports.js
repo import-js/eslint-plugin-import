@@ -1,11 +1,11 @@
-import { test } from '../utils';
+import { test, testVersion } from '../utils';
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-mutable-exports';
 
 const ruleTester = new RuleTester();
 
 ruleTester.run('no-mutable-exports', rule, {
-  valid: [
+  valid: [].concat(
     test({ code: 'export const count = 1' }),
     test({ code: 'export function getCount() {}' }),
     test({ code: 'export class Counter {}' }),
@@ -32,8 +32,12 @@ ruleTester.run('no-mutable-exports', rule, {
       parser: require.resolve('babel-eslint'),
       code: 'type Foo = {}\nexport type {Foo}',
     }),
-  ],
-  invalid: [
+    // es2022: Arbitrary module namespace identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'const count = 1\nexport { count as "counter" }', parserOptions: { ecmaVersion: 2022 },
+    })),
+  ),
+  invalid: [].concat(
     test({
       code: 'export let count = 1',
       errors: ['Exporting mutable \'let\' binding, use \'const\' instead.'],
@@ -66,6 +70,12 @@ ruleTester.run('no-mutable-exports', rule, {
       code: 'var count = 1\nexport default count',
       errors: ['Exporting mutable \'var\' binding, use \'const\' instead.'],
     }),
+    // es2022: Arbitrary module namespace identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'let count = 1\nexport { count as "counter" }',
+      errors: ['Exporting mutable \'let\' binding, use \'const\' instead.'],
+      parserOptions: { ecmaVersion: 2022 },
+    })),
 
     // todo: undeclared globals
     // test({
@@ -76,5 +86,5 @@ ruleTester.run('no-mutable-exports', rule, {
     //   code: 'count = 1\nexport default count',
     //   errors: ['Exporting mutable global binding, use \'const\' instead.'],
     // }),
-  ],
+  ),
 });

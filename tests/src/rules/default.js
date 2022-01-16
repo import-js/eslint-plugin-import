@@ -1,5 +1,5 @@
 import path from 'path';
-import { test, SYNTAX_CASES, getTSParsers } from '../utils';
+import { test, testVersion, SYNTAX_CASES, getTSParsers } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -8,7 +8,7 @@ const ruleTester = new RuleTester();
 const rule = require('rules/default');
 
 ruleTester.run('default', rule, {
-  valid: [
+  valid: [].concat(
     test({ code: 'import "./malformed.js"' }),
 
     test({ code: 'import foo from "./empty-folder";' }),
@@ -92,8 +92,16 @@ ruleTester.run('default', rule, {
       parser: require.resolve('babel-eslint'),
     }),
 
+    // es2022: Arbitrary module namespace identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'export { "default" as bar } from "./bar"',
+      parserOptions: {
+        ecmaVersion: 2022,
+      },
+    })),
+
     ...SYNTAX_CASES,
-  ],
+  ),
 
   invalid: [
     test({

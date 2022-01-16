@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
+- [Tests] `default`, `no-anonymous-default-export`, `no-mutable-exports`, `no-named-as-default-member`, `no-named-as-default`: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 
 ## [2.25.4] - 2022-01-02
 
@@ -959,6 +960,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
+[#2358]: https://github.com/import-js/eslint-plugin-import/pull/2358
 [#2341]: https://github.com/import-js/eslint-plugin-import/pull/2341
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
