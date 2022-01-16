@@ -88,7 +88,7 @@ module.exports = {
       'ExportDefaultDeclaration': (node) => addNamed('default', node, getParent(node)),
 
       'ExportSpecifier': (node) => addNamed(
-        node.exported.name,
+        node.exported.name || node.exported.value,
         node.exported,
         getParent(node.parent),
       ),

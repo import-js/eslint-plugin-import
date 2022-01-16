@@ -46,7 +46,7 @@ ruleTester.run('export', rule, {
     })) || [],
   ),
 
-  invalid: [
+  invalid: [].concat(
     // multiple defaults
     // test({
     //   code: 'export default foo; export default bar',
@@ -122,7 +122,19 @@ ruleTester.run('export', rule, {
       code: 'export * from "./default-export"',
       errors: [`No named exports found in module './default-export'.`],
     }),
-  ],
+
+    // es2022: Arbitrary module namespace identifier names
+    testVersion('>= 8.7', () => ({
+      code: 'let foo; export { foo as "foo" }; export * from "./export-all"',
+      errors: [
+        'Multiple exports of name \'foo\'.',
+        'Multiple exports of name \'foo\'.',
+      ],
+      parserOptions: {
+        ecmaVersion: 2022,
+      },
+    })),
+  ),
 });
 
 

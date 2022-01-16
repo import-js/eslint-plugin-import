@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
-- [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 
 ### Changed
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
