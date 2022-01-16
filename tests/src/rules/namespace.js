@@ -183,10 +183,35 @@ const valid = [
     parserOptions: {
       ecmaVersion: 2020,
     },
-  })) || []),
+  })),
+  // es2022: Arbitrary module namespace identifier names
+  testVersion('>= 8.7', () => ({
+    code: "import * as names from './default-export-string';",
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: "import * as names from './default-export-string'; console.log(names.default)",
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: "import * as names from './default-export-namespace-string';",
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: "import * as names from './default-export-namespace-string'; console.log(names.default)",
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: `import { "b" as b } from "./deep/a"; console.log(b.c.d.e)`,
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: `import { "b" as b } from "./deep/a"; var {c:{d:{e}}} = b`,
+    parserOptions: { ecmaVersion: 2022 },
+  }))),
 ];
 
-const invalid = [
+const invalid = [].concat(
   test({ code: "import * as names from './named-exports'; " +
                ' console.log(names.c);',
   errors: [error('c', 'names')] }),
@@ -275,7 +300,18 @@ const invalid = [
     },
   }),
 
-]
+  // es2022: Arbitrary module namespace identifier names
+  testVersion('>= 8.7', () => ({
+    code: `import { "b" as b } from "./deep/a"; console.log(b.e)`,
+    errors: [ "'e' not found in imported namespace 'b'." ],
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+  testVersion('>= 8.7', () => ({
+    code: `import { "b" as b } from "./deep/a"; console.log(b.c.e)`,
+    errors: [ "'e' not found in deeply imported namespace 'b.c'." ],
+    parserOptions: { ecmaVersion: 2022 },
+  })),
+)
 
 ///////////////////////
 // deep dereferences //

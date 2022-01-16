@@ -479,11 +479,11 @@ ExportMap.parse = function (path, content, context) {
       }));
       return;
     case 'ExportAllDeclaration':
-      m.namespace.set(s.exported.name, addNamespace(exportMeta, s.source.value));
+      m.namespace.set(s.exported.name || s.exported.value, addNamespace(exportMeta, s.source.value));
       return;
     case 'ExportSpecifier':
       if (!n.source) {
-        m.namespace.set(s.exported.name, addNamespace(exportMeta, s.local));
+        m.namespace.set(s.exported.name || s.exported.value, addNamespace(exportMeta, s.local));
         return;
       }
       // else falls through
