@@ -58,7 +58,9 @@ module.exports = {
           return;
         }
 
-        const deepLookup = imports.hasDeep(im[key].name);
+        const name = im[key].name || im[key].value;
+
+        const deepLookup = imports.hasDeep(name);
 
         if (!deepLookup.found) {
           if (deepLookup.path.length > 1) {
@@ -66,9 +68,9 @@ module.exports = {
               .map(i => path.relative(path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()), i.path))
               .join(' -> ');
 
-            context.report(im[key], `${im[key].name} not found via ${deepPath}`);
+            context.report(im[key], `${name} not found via ${deepPath}`);
           } else {
-            context.report(im[key], im[key].name + ' not found in \'' + node.source.value + '\'');
+            context.report(im[key], name + ' not found in \'' + node.source.value + '\'');
           }
         }
       });
