@@ -1,4 +1,4 @@
-import { test, testFilePath, getTSParsers } from '../utils';
+import { test, testVersion, testFilePath, getTSParsers } from '../utils';
 import jsxConfig from '../../../config/react';
 import typescriptConfig from '../../../config/typescript';
 
@@ -1259,5 +1259,35 @@ describe('support (nested) destructuring assignment', () => {
       }),
     ],
     invalid: [],
+  });
+});
+
+describe('support ES2022 Arbitrary module namespace identifier names', () => {
+  ruleTester.run('no-unused-module', rule, {
+    valid: [].concat(
+      testVersion('>= 8.7', () => ({
+        options: unusedExportsOptions,
+        code: `import { "foo" as foo } from "./arbitrary-module-namespace-identifier-name-a"`,
+        parserOptions: { ecmaVersion: 2022 },
+        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-b.js'),
+      })),
+      testVersion('>= 8.7', () => ({
+        options: unusedExportsOptions,
+        code: 'const foo = 333;\nexport { foo as "foo" }',
+        parserOptions: { ecmaVersion: 2022 },
+        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-a.js'),
+      })),
+    ),
+    invalid: [].concat(
+      testVersion('>= 8.7', () => ({
+        options: unusedExportsOptions,
+        code: 'const foo = 333\nexport { foo as "foo" }',
+        parserOptions: { ecmaVersion: 2022 },
+        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-c.js'),
+        errors: [
+          error(`exported declaration 'foo' not used within other modules`),
+        ],
+      })),
+    ),
   });
 });

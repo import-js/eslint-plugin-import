@@ -593,7 +593,7 @@ ExportMap.parse = function (path, content, context) {
           importedSpecifiers.add(specifier.type);
         }
         if (specifier.type === 'ImportSpecifier') {
-          importedSpecifiers.add(specifier.imported.name);
+          importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
         }
 
         // import { type Foo } (Flow)

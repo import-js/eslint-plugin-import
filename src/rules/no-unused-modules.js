@@ -604,7 +604,7 @@ module.exports = {
           if (specifiers.length > 0) {
             specifiers.forEach(specifier => {
               if (specifier.exported) {
-                newExportIdentifiers.add(specifier.exported.name);
+                newExportIdentifiers.add(specifier.exported.name || specifier.exported.value);
               }
             });
           }
@@ -715,8 +715,8 @@ module.exports = {
           if (astNode.source) {
             resolvedPath = resolve(astNode.source.raw.replace(/('|")/g, ''), context);
             astNode.specifiers.forEach(specifier => {
-              const name = specifier.local.name;
-              if (specifier.local.name === DEFAULT) {
+              const name = specifier.local.name || specifier.local.value;
+              if (name === DEFAULT) {
                 newDefaultImports.add(resolvedPath);
               } else {
                 newImports.set(name, resolvedPath);
@@ -753,7 +753,7 @@ module.exports = {
                 specifier.type === IMPORT_NAMESPACE_SPECIFIER) {
               return;
             }
-            newImports.set(specifier.imported.name, resolvedPath);
+            newImports.set(specifier.imported.name || specifier.imported.value, resolvedPath);
           });
         }
       });
@@ -942,7 +942,7 @@ module.exports = {
       },
       'ExportNamedDeclaration': node => {
         node.specifiers.forEach(specifier => {
-          checkUsage(node, specifier.exported.name);
+          checkUsage(node, specifier.exported.name || specifier.exported.value);
         });
         forEachDeclarationIdentifier(node.declaration, (name) => {
           checkUsage(node, name);
