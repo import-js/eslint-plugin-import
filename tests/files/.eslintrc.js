@@ -1,4 +1,9 @@
-{
+const eslintPkg = require('eslint/package.json');
+const semver = require('semver');
+
+const supportsArbitraryModuleNamespaceIdentifierNames = semver.satisfies(eslintPkg.version, '>= 8.7');
+
+const config = {
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
@@ -281,5 +286,36 @@
     "import/no-duplicates": 0,
     "import/no-extraneous-dependencies": 0,
     "import/unambiguous": 0
-  }
+  },
+  ignorePatterns: [
+    "default-export-namespace-string.js",
+    "default-export-string.js",
+    "export-default-string-and-named.js",
+    "no-unused-modules/arbitrary-module-namespace-identifier-name-a.js",
+    "no-unused-modules/arbitrary-module-namespace-identifier-name-b.js",
+    "no-unused-modules/arbitrary-module-namespace-identifier-name-c.js"
+  ],
 }
+
+if (supportsArbitraryModuleNamespaceIdentifierNames) {
+  config.ignorePatterns = [];
+  config.overrides = [
+    // For parsing arbitrary module namespace names
+    {
+      "files": [
+        "default-export-namespace-string.js",
+        "default-export-string.js",
+        "export-default-string-and-named.js",
+        "no-unused-modules/arbitrary-module-namespace-identifier-name-a.js",
+        "no-unused-modules/arbitrary-module-namespace-identifier-name-b.js",
+        "no-unused-modules/arbitrary-module-namespace-identifier-name-c.js"
+      ],
+      "parser": "espree",
+      "parserOptions": {
+        "ecmaVersion": 2022
+      }
+    }
+  ];
+}
+
+module.exports = config;
