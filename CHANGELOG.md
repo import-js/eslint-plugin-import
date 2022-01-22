@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
+
 ## [2.25.4] - 2022-01-02
 
 ### Fixed
@@ -955,6 +958,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
 [#2341]: https://github.com/import-js/eslint-plugin-import/pull/2341
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
@@ -1618,6 +1622,7 @@ for info on changes for earlier releases.
 [@skyrpex]: https://github.com/skyrpex
 [@sompylasar]: https://github.com/sompylasar
 [@soryy708]: https://github.com/soryy708
+[@sosukesuzuki]: https://github.com/sosukesuzuki
 [@spalger]: https://github.com/spalger
 [@st-sloth]: https://github.com/st-sloth
 [@stekycz]: https://github.com/stekycz
