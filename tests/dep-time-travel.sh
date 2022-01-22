@@ -21,6 +21,8 @@ elif [[ "$ESLINT_VERSION" -lt "5" ]]; then # completely remove the new TypeScrip
   npm uninstall --no-save @typescript-eslint/parser
 elif [[ "$TRAVIS_NODE_VERSION" -lt "10" ]]; then # TS parser 3 requires node 10+
   npm i --no-save "@typescript-eslint/parser@3"
+elif [[ "$TRAVIS_NODE_VERSION" -lt "12" ]]; then # TS parser 4 requires node 12+
+  npm i --no-save "@typescript-eslint/parser@4"
 fi
 
 # use these alternate TypeScript dependencies for ESLint < v4

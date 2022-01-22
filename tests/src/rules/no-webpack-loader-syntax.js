@@ -1,6 +1,7 @@
-import { test, getTSParsers } from '../utils';
+import { test, getTSParsers, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
+import semver from 'semver';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-webpack-loader-syntax');
@@ -82,16 +83,20 @@ context('TypeScript', function () {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     };
-    ruleTester.run('no-webpack-loader-syntax', rule, {
-      valid: [
-        test(Object.assign({
-          code: 'import { foo } from\nalert()',
-        }, parserConfig)),
-        test(Object.assign({
-          code: 'import foo from\nalert()',
-        }, parserConfig)),
-      ],
-      invalid: [],
-    });
+    // @typescript-eslint/parser@5+ throw error for invalid module specifiers at parsing time.
+    // https://github.com/typescript-eslint/typescript-eslint/releases/tag/v5.0.0
+    if (!(parser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '>= 5'))) {
+      ruleTester.run('no-webpack-loader-syntax', rule, {
+        valid: [
+          test(Object.assign({
+            code: 'import { foo } from\nalert()',
+          }, parserConfig)),
+          test(Object.assign({
+            code: 'import foo from\nalert()',
+          }, parserConfig)),
+        ],
+        invalid: [],
+      });
+    }
   });
 });

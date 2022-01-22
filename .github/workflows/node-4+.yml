@@ -36,6 +36,11 @@ jobs:
         include:
           - node-version: 'lts/*'
             eslint: 7
+            ts-parser: 4
+            env:
+              TS_PARSER: 4
+          - node-version: 'lts/*'
+            eslint: 7
             ts-parser: 3
             env:
               TS_PARSER: 3
