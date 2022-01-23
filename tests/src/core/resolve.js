@@ -2,7 +2,12 @@ import { expect } from 'chai';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
+import resolve, {
+  CASE_SENSITIVE_FS,
+  fileExistsWithCaseSync,
+  requireResolver,
+  resolverReducer,
+} from 'eslint-module-utils/resolve';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -432,4 +437,40 @@ describe('resolve', function () {
     });
   });
 
+});
+
+describe('resolverReducer', () => {
+  it('accepts a string', () => {
+    expect([...resolverReducer('node', new Map())]).to.deep.equal([
+      ['node', null],
+    ]);
+  });
+
+  it('accepts an array', () => {
+    expect([
+      ...resolverReducer(['node', 'typescript'], new Map()),
+    ]).to.deep.equal([
+      ['node', null],
+      ['typescript', null],
+    ]);
+  });
+
+  it('accepts an object', () => {
+    expect([
+      ...resolverReducer({ node: null, typescript: null }, new Map()),
+    ]).to.deep.equal([
+      ['node', null],
+      ['typescript', null],
+    ]);
+  });
+});
+
+describe('requireResolver', () => {
+  it('accepts a conventional resolver name', () => {
+    requireResolver('node');
+  });
+
+  it('accepts a full package name', () => {
+    requireResolver('eslint-import-resolver-node');
+  });
 });

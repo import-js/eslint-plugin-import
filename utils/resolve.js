@@ -172,6 +172,7 @@ function resolverReducer(resolvers, map) {
   err.name = ERROR_NAME;
   throw err;
 }
+exports.resolverReducer = resolverReducer;
 
 function getBaseDir(sourceFile) {
   return pkgDir(sourceFile) || process.cwd();
@@ -195,6 +196,7 @@ function requireResolver(name, sourceFile) {
 
   return resolver;
 }
+exports.requireResolver = requireResolver;
 
 function isResolverValid(resolver) {
   if (resolver.interfaceVersion === 2) {
