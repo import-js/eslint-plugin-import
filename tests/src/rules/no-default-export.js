@@ -1,4 +1,4 @@
-import { test, testVersion } from '../utils';
+import { parsers, test, testVersion } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -58,7 +58,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export { a, b } from "foo.js"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // no exports at all
@@ -74,15 +74,15 @@ ruleTester.run('no-default-export', rule, {
 
     test({
       code: `export type UserId = number;`,
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'export foo from "foo.js"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
   ],
   invalid: [].concat(
@@ -154,7 +154,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export default from "foo.js"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: [
         {
           type: 'ExportNamedDeclaration',

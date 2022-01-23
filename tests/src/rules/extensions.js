@@ -1,6 +1,6 @@
 import { RuleTester } from 'eslint';
 import rule from 'rules/extensions';
-import { getTSParsers, test, testFilePath } from '../utils';
+import { getTSParsers, test, testFilePath, parsers } from '../utils';
 
 const ruleTester = new RuleTester();
 
@@ -601,7 +601,7 @@ ruleTester.run('extensions', rule, {
 describe('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       ruleTester.run(`${parser}: extensions ignore type-only`, rule, {
         valid: [

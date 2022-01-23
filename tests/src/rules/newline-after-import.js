@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
-import { getTSParsers, testVersion } from '../utils';
+import { getTSParsers, parsers, testVersion } from '../utils';
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
@@ -161,22 +161,22 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         class App {}
       `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     ...flatMap(getTSParsers(), (parser) => [
       {
@@ -415,7 +415,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
@@ -426,7 +426,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
@@ -437,7 +437,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
@@ -448,7 +448,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE,
       } ],
       parserOptions: { sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     },
     testVersion('>= 6', () => ({
       code: `
@@ -472,7 +472,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         },
       ],
       parserOptions: { sourceType: 'module' },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     })) || [],
   ),
 });

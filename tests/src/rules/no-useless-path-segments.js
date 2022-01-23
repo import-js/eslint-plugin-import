@@ -1,4 +1,4 @@
-import { test } from '../utils';
+import { parsers, test } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -29,11 +29,11 @@ function runResolverTests(resolver) {
       test({ code: 'import "./importType"', options: [{ noUselessIndex: true }] }), // ./importType.js does not exist
 
       test({ code: 'import(".")',
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
       test({ code: 'import("..")',
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
       test({ code: 'import("fs").then(function(fs) {})',
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
     ],
 
     invalid: [
@@ -232,19 +232,19 @@ function runResolverTests(resolver) {
         code: 'import("./")',
         output: 'import(".")',
         errors: [ 'Useless path segments for "./", should be "."'],
-        parser: require.resolve('babel-eslint'),
+        parser: parsers.BABEL_OLD,
       }),
       test({
         code: 'import("../")',
         output: 'import("..")',
         errors: [ 'Useless path segments for "../", should be ".."'],
-        parser: require.resolve('babel-eslint'),
+        parser: parsers.BABEL_OLD,
       }),
       test({
         code: 'import("./deep//a")',
         output: 'import("./deep/a")',
         errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
-        parser: require.resolve('babel-eslint'),
+        parser: parsers.BABEL_OLD,
       }),
     ],
   });

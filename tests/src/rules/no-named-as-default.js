@@ -1,4 +1,4 @@
-import { test, testVersion, SYNTAX_CASES } from '../utils';
+import { test, testVersion, SYNTAX_CASES, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -13,13 +13,13 @@ ruleTester.run('no-named-as-default', rule, {
 
     // es7
     test({ code: 'export bar, { foo } from "./bar";',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
     test({ code: 'export bar from "./bar";',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
 
     // #566: don't false-positive on `default` itself
     test({ code: 'export default from "./bar";',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
 
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({
@@ -45,13 +45,13 @@ ruleTester.run('no-named-as-default', rule, {
     // es7
     test({
       code: 'export foo from "./bar";',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.',
         type: 'ExportDefaultSpecifier' } ] }),
     test({
       code: 'export foo, { foo as bar } from "./bar";',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.',
         type: 'ExportDefaultSpecifier' } ] }),

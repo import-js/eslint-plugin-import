@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { test as testUtil, getNonDefaultParsers } from '../utils';
+import { test as testUtil, getNonDefaultParsers, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -26,7 +26,7 @@ ruleTester.run('no-duplicates', rule, {
     // #225: ignore duplicate if is a flow type import
     test({
       code: "import { x } from './foo'; import type { y } from './foo'",
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // #1107: Using different query strings that trigger different webpack loaders.
@@ -107,7 +107,7 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
       output: "import type { x , y } from './foo'; ",
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -418,7 +418,7 @@ import {x,y} from './foo'
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
         parser,

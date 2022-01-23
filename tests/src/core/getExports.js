@@ -343,7 +343,6 @@ describe('ExportMap', function () {
   });
 
   context('alternate parsers', function () {
-
     const configs = [
       // ['string form', { 'typescript-eslint-parser': '.ts' }],
     ];

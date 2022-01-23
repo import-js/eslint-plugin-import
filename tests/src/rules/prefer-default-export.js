@@ -1,4 +1,4 @@
-import { test, testVersion, getNonDefaultParsers } from '../utils';
+import { test, testVersion, getNonDefaultParsers, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -64,7 +64,7 @@ ruleTester.run('prefer-default-export', rule, {
     }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // no exports at all
@@ -75,24 +75,24 @@ ruleTester.run('prefer-default-export', rule, {
 
     test({
       code: `export type UserId = number;`,
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // issue #653
     test({
       code: 'export default from "foo.js"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'export { a, b } from "foo.js"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     // ...SYNTAX_CASES,
     test({
       code: `
         export const [CounterProvider,, withCounter] = func();;
       `,
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({

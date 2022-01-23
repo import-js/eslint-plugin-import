@@ -1,4 +1,4 @@
-import { getTSParsers, test, testFilePath } from '../utils';
+import { getTSParsers, parsers, test, testFilePath } from '../utils';
 import typescriptConfig from '../../../config/typescript';
 import path from 'path';
 import fs from 'fs';
@@ -82,7 +82,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import type MyType from "myflowtyped";',
       options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: `
@@ -90,7 +90,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         import typeof TypeScriptModule from 'typescript';
       `,
       options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'import react from "react";',
@@ -398,7 +398,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
 describe('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
         parser,
@@ -433,12 +433,12 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
     test({
       code: 'import type MyType from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'import type { MyType } from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
   ],
   invalid: [

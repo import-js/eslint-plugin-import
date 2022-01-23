@@ -1,4 +1,4 @@
-import { test } from '../utils';
+import { parsers, test } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -30,54 +30,54 @@ ruleTester.run('no-dynamic-require', rule, {
     //dynamic import
     test({
       code: 'import("foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import(`foo`)',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import("./foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import("@scope/foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'var foo = import("foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'var foo = import(`foo`)',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'var foo = import("./foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'var foo = import("@scope/foo")',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import("../" + name)',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: false }],
     }),
     test({
       code: 'import(`../${name}`)',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
   ],
   invalid: [
@@ -107,25 +107,25 @@ ruleTester.run('no-dynamic-require', rule, {
     test({
       code: 'import("../" + name)',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import(`../${name}`)',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import(name)',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({
       code: 'import(name())',
       errors: [dynamicImportError],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       options: [{ esmodule: true }],
     }),
     test({

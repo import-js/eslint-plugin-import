@@ -1,10 +1,10 @@
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-relative-parent-imports';
-import { test as _test, testFilePath } from '../utils';
+import { parsers, test as _test, testFilePath } from '../utils';
 
 const test = def => _test(Object.assign(def, {
   filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
-  parser: require.resolve('babel-eslint'),
+  parser: parsers.BABEL_OLD,
 }));
 
 const ruleTester = new RuleTester();

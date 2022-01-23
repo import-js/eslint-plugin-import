@@ -1,4 +1,5 @@
 import { RuleTester } from 'eslint';
+import { parsers } from '../utils';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/unambiguous');
@@ -38,7 +39,7 @@ ruleTester.run('unambiguous', rule, {
     },
     {
       code: 'function x() {}; export * as y from "z"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {

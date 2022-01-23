@@ -1,4 +1,4 @@
-import { test, testVersion } from '../utils';
+import { parsers, test, testVersion } from '../utils';
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-mutable-exports';
 
@@ -25,11 +25,11 @@ ruleTester.run('no-mutable-exports', rule, {
     test({ code: 'class Counter {}\nexport default Counter' }),
     test({ code: 'class Counter {}\nexport { Counter as default }' }),
     test({
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       code: 'export Something from "./something";',
     }),
     test({
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       code: 'type Foo = {}\nexport type {Foo}',
     }),
     // es2022: Arbitrary module namespace identifier names

@@ -1,4 +1,4 @@
-import { test, getTSParsers, getNonDefaultParsers, testFilePath } from '../utils';
+import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -2321,7 +2321,7 @@ ruleTester.run('order', rule, {
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== require.resolve('typescript-eslint-parser'))
+    .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
         parser,

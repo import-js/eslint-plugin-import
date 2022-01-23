@@ -1,5 +1,5 @@
 import path from 'path';
-import { test, testVersion, SYNTAX_CASES, getTSParsers } from '../utils';
+import { test, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -29,19 +29,19 @@ ruleTester.run('default', rule, {
 
     // es7 export syntax
     test({ code: 'export bar from "./bar"',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
     test({ code: 'export { default as bar } from "./bar"' }),
     test({ code: 'export bar, { foo } from "./bar"',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
     test({ code: 'export { default as bar, foo } from "./bar"' }),
     test({ code: 'export bar, * as names from "./bar"',
-      parser: require.resolve('babel-eslint') }),
+      parser: parsers.BABEL_OLD }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
     test({
       code: 'import twofer from "./trampoline"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // jsx
@@ -69,27 +69,27 @@ ruleTester.run('default', rule, {
     // from no-errors
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // #545: more ES7 cases
     test({
       code: "import bar from './default-export-from.js';",
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: "import bar from './default-export-from-named.js';",
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: "import bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: "export bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     // es2022: Arbitrary module namespace identifier names
@@ -117,23 +117,23 @@ ruleTester.run('default', rule, {
     // es7 export syntax
     test({
       code: 'export baz from "./named-exports"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, { bar } from "./named-exports"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, * as names from "./named-exports"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     // exports default from a module with no default
     test({
       code: 'import twofer from "./broken-trampoline"',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
       errors: ['No default export found in imported module "./broken-trampoline".'],
     }),
 

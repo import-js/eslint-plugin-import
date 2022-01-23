@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath } from '../utils';
+import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
@@ -57,16 +57,16 @@ const valid = [
   // es7 //
   /////////
   test({ code: 'export * as names from "./named-exports"',
-    parser: require.resolve('babel-eslint') }),
+    parser: parsers.BABEL_OLD }),
   test({ code: 'export defport, * as names from "./named-exports"',
-    parser: require.resolve('babel-eslint') }),
+    parser: parsers.BABEL_OLD }),
   // non-existent is handled by no-unresolved
   test({ code: 'export * as names from "./does-not-exist"',
-    parser: require.resolve('babel-eslint') }),
+    parser: parsers.BABEL_OLD }),
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Users)',
-    parser: require.resolve('babel-eslint'),
+    parser: parsers.BABEL_OLD,
   }),
 
   // respect hoisting
@@ -81,11 +81,11 @@ const valid = [
   test({ code: "import * as names from './default-export'; console.log(names.default)" }),
   test({
     code: 'export * as names from "./default-export"',
-    parser: require.resolve('babel-eslint'),
+    parser: parsers.BABEL_OLD,
   }),
   test({
     code: 'export defport, * as names from "./default-export"',
-    parser: require.resolve('babel-eslint'),
+    parser: parsers.BABEL_OLD,
   }),
 
   // #456: optionally ignore computed references
@@ -103,7 +103,7 @@ const valid = [
   }),
   test({
     code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
-    parser: require.resolve('babel-eslint'),
+    parser: parsers.BABEL_OLD,
   }),
 
   // #1144: should handle re-export CommonJS as namespace
@@ -251,7 +251,7 @@ const invalid = [].concat(
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Foo)',
-    parser: require.resolve('babel-eslint'),
+    parser: parsers.BABEL_OLD,
     errors: ["'Foo' not found in imported namespace 'Endpoints'."],
   }),
 
@@ -316,7 +316,7 @@ const invalid = [].concat(
 ///////////////////////
 // deep dereferences //
 //////////////////////
-;[['deep', require.resolve('espree')], ['deep-es7', require.resolve('babel-eslint')]].forEach(function ([folder, parser]) { // close over params
+;[['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),

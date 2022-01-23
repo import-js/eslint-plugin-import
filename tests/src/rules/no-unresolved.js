@@ -1,6 +1,6 @@
-import * as path from 'path';
+import path from 'path';
 
-import { getTSParsers, test, SYNTAX_CASES, testVersion } from '../utils';
+import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers } from '../utils';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -30,7 +30,7 @@ function runResolverTests(resolver) {
       rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
       rest({ code: "import('fs');",
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
 
       // check with eslint parser
       testVersion('>= 7', () => rest({
@@ -46,9 +46,9 @@ function runResolverTests(resolver) {
 
       // stage 1 proposal for export symmetry,
       rest({ code: 'export * as bar from "./bar"',
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
       rest({ code: 'export bar from "./bar"',
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
       rest({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
 
       // commonjs setting
@@ -127,7 +127,7 @@ function runResolverTests(resolver) {
           message: 'Unable to resolve path to module \'in-alternate-root\'.',
           type: 'Literal',
         }],
-        parser: require.resolve('babel-eslint') }),
+        parser: parsers.BABEL_OLD }),
 
       rest({ code: 'export { foo } from "./does-not-exist"',
         errors: ["Unable to resolve path to module './does-not-exist'."] }),
@@ -148,11 +148,11 @@ function runResolverTests(resolver) {
 
       // export symmetry proposal
       rest({ code: 'export * as bar from "./does-not-exist"',
-        parser: require.resolve('babel-eslint'),
+        parser: parsers.BABEL_OLD,
         errors: ["Unable to resolve path to module './does-not-exist'."],
       }),
       rest({ code: 'export bar from "./does-not-exist"',
-        parser: require.resolve('babel-eslint'),
+        parser: parsers.BABEL_OLD,
         errors: ["Unable to resolve path to module './does-not-exist'."],
       }),
 
@@ -444,7 +444,7 @@ ruleTester.run('import() with built-in parser', rule, {
 
 context('TypeScript', () => {
   // Type-only imports were added in TypeScript ESTree 2.23.0
-  getTSParsers().filter(x => x !== require.resolve('typescript-eslint-parser')).forEach((parser) => {
+  getTSParsers().filter(x => x !== parsers.TS_OLD).forEach((parser) => {
     ruleTester.run(`${parser}: no-unresolved ignore type-only`, rule, {
       valid: [
         test({

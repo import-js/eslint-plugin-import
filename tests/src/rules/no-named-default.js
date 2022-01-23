@@ -1,4 +1,4 @@
-import { test, testVersion, SYNTAX_CASES } from '../utils';
+import { test, testVersion, SYNTAX_CASES, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -12,11 +12,11 @@ ruleTester.run('no-named-default', rule, {
     // Should ignore imported flow types
     test({
       code: 'import { type default as Foo } from "./bar";',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'import { typeof default as Foo } from "./bar";',
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),
 
     ...SYNTAX_CASES,
@@ -29,7 +29,7 @@ ruleTester.run('no-named-default', rule, {
         message: 'Use default import syntax to import \'default\'.',
         type: 'Identifier',
       }],
-      parser: require.resolve('babel-eslint'),
+      parser: parsers.BABEL_OLD,
     }),*/
     test({
       code: 'import { default as bar } from "./bar";',
