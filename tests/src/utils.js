@@ -24,8 +24,15 @@ export function getTSParsers() {
   ].filter(Boolean);
 }
 
+export function getBabelParsers() {
+  return [
+    parsers.BABEL_OLD,
+    parsers.BABEL_NEW,
+  ].filter(Boolean);
+}
+
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(parsers.BABEL_OLD, parsers.BABEL_NEW).filter(Boolean);
+  return getTSParsers().concat(...getBabelParsers()).filter(Boolean);
 }
 
 export const FILENAME = testFilePath('foo.js');
