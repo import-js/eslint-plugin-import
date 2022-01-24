@@ -4,6 +4,7 @@ import { test as testUtil, getNonDefaultParsers, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
+import babelPluginSyntaxTypeScript from '@babel/plugin-syntax-typescript';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');
@@ -427,6 +428,16 @@ context('TypeScript', function () {
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       };
+      if (parser === parsers.BABEL_NEW) {
+        parserConfig.parserOptions =  {
+          configFile: false,
+          babelrc: false,
+          requireConfigFile: false,
+          babelOptions: {
+            plugins: [babelPluginSyntaxTypeScript],
+          },
+        };
+      }
 
       ruleTester.run('no-duplicates', rule, {
         valid: [
@@ -455,7 +466,7 @@ context('TypeScript', function () {
             ...parserConfig,
           }),
         ],
-        invalid: [
+        invalid: [].concat(
           test({
             code: "import type x from './foo'; import type y from './foo'",
             ...parserConfig,
@@ -472,7 +483,8 @@ context('TypeScript', function () {
               },
             ],
           }),
-          test({
+          // @babel/eslint-parser throws syntax error for duplicated identifier at parsing time.
+          parser !== parsers.BABEL_NEW ? test({
             code: "import type x from './foo'; import type x from './foo'",
             output: "import type x from './foo'; ",
             ...parserConfig,
@@ -488,7 +500,7 @@ context('TypeScript', function () {
                 message: "'./foo' imported multiple times.",
               },
             ],
-          }),
+          }) : [],
           test({
             code: "import type {x} from './foo'; import type {y} from './foo'",
             ...parserConfig,
@@ -506,7 +518,7 @@ context('TypeScript', function () {
               },
             ],
           }),
-        ],
+        ),
       });
     });
 });

@@ -4,6 +4,7 @@ import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
+import babelPluginSyntaxTypeScript from '@babel/plugin-syntax-typescript';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/order');
@@ -2330,6 +2331,14 @@ context('TypeScript', function () {
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
       };
+      if (parser === parsers.BABEL_NEW) {
+        parserConfig.parserOptions =  {
+          requireConfigFile: false,
+          babelOptions: {
+            plugins: [babelPluginSyntaxTypeScript],
+          },
+        };
+      }
 
       ruleTester.run('order', rule, {
         valid: [

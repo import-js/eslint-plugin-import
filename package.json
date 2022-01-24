@@ -54,6 +54,9 @@
   "homepage": "https://github.com/import-js/eslint-plugin-import",
   "devDependencies": {
     "@angular-eslint/template-parser": "^13.0.1",
+    "@babel/core": "^7.16.12",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/plugin-syntax-typescript": "^7.16.7",
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
     "@typescript-eslint/parser": "^2.23.0 || ^3.3.0 || ^4.29.3 || ^5.10.0",

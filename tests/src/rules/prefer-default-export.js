@@ -1,6 +1,7 @@
 import { test, testVersion, getNonDefaultParsers, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
+import babelPluginSyntaxTypeScript from '@babel/plugin-syntax-typescript';
 
 const ruleTester = new RuleTester();
 const rule = require('../../../src/rules/prefer-default-export');
@@ -162,6 +163,14 @@ context('TypeScript', function () {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     };
+    if (parser === parsers.BABEL_NEW) {
+      parserConfig.parserOptions =  {
+        requireConfigFile: false,
+        babelOptions: {
+          plugins: [babelPluginSyntaxTypeScript],
+        },
+      };
+    }
 
     ruleTester.run('prefer-default-export', rule, {
       valid: [

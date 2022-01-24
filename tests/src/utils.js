@@ -10,6 +10,7 @@ export const parsers = {
   TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && require.resolve('typescript-eslint-parser'),
   TS_NEW: semver.satisfies(eslintPkg.version, '>5.0.0') && require.resolve('@typescript-eslint/parser'),
   BABEL_OLD: require.resolve('babel-eslint'),
+  BABEL_NEW: semver.satisfies(eslintPkg.version, '^7.5.0 || ^8.0.0') && require.resolve('@babel/eslint-parser'),
 };
 
 export function testFilePath(relativePath) {
@@ -24,7 +25,7 @@ export function getTSParsers() {
 }
 
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(parsers.BABEL_OLD).filter(Boolean);
+  return getTSParsers().concat(parsers.BABEL_OLD, parsers.BABEL_NEW).filter(Boolean);
 }
 
 export const FILENAME = testFilePath('foo.js');
