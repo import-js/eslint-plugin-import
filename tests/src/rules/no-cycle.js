@@ -1,4 +1,4 @@
-import { parsers, test as _test, testFilePath } from '../utils';
+import { babelSyntaxPlugins, getBabelParserConfig, getBabelParsers, test as _test, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
@@ -60,41 +60,10 @@ ruleTester.run('no-cycle', rule, {
         code: `import { foo, bar } from "./${testDialect}/depth-two"`,
         options: [{ maxDepth: 1 }],
       }),
-      test({
-        code: `import("./${testDialect}/depth-two").then(function({ foo }) {})`,
-        options: [{ maxDepth: 1 }],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: `import type { FooType } from "./${testDialect}/depth-one"`,
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: `import type { FooType, BarType } from "./${testDialect}/depth-one"`,
-        parser: parsers.BABEL_OLD,
-      }),
     ]),
-
-    test({
-      code: 'import { bar } from "./flow-types"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import { bar } from "./flow-types-only-importing-type"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import { bar } from "./flow-types-only-importing-multiple-types"',
-      parser: parsers.BABEL_OLD,
-    }),
   ),
 
   invalid: [].concat(
-    test({
-      code: 'import { bar } from "./flow-types-some-type-imports"',
-      parser: parsers.BABEL_OLD,
-      errors: [error(`Dependency cycle detected.`)],
-    }),
     test({
       code: 'import { foo } from "cycles/external/depth-one"',
       errors: [error(`Dependency cycle detected.`)],
@@ -164,21 +133,6 @@ ruleTester.run('no-cycle', rule, {
         errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
       }),
       test({
-        code: `import { bar } from "./${testDialect}/depth-three-indirect"`,
-        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: `import("./${testDialect}/depth-three-star")`,
-        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: `import("./${testDialect}/depth-three-indirect")`,
-        errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
         code: `import { foo } from "./${testDialect}/depth-two"`,
         options: [{ maxDepth: Infinity }],
         errors: [error(`Dependency cycle via ./depth-one:1`)],
@@ -189,11 +143,71 @@ ruleTester.run('no-cycle', rule, {
         errors: [error(`Dependency cycle via ./depth-one:1`)],
       }),
     ]),
-
-    test({
-      code: 'import { bar } from "./flow-types-depth-one"',
-      parser: parsers.BABEL_OLD,
-      errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./es6/depth-one:1`)],
-    }),
   ),
+});
+
+context('Babel parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.flow] });
+    ruleTester.run('no-cycle', rule, {
+      valid: [
+        test({
+          code: 'import { bar } from "./flow-types"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { bar } from "./flow-types-only-importing-type"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { bar } from "./flow-types-only-importing-multiple-types"',
+          ...parserConfig,
+        }),
+        ...flatMap(testDialects, (testDialect) => [
+          test({
+            code: `import("./${testDialect}/depth-two").then(function({ foo }) {})`,
+            options: [{ maxDepth: 1 }],
+            ...parserConfig,
+          }),
+          test({
+            code: `import type { FooType } from "./${testDialect}/depth-one"`,
+            ...parserConfig,
+          }),
+          test({
+            code: `import type { FooType, BarType } from "./${testDialect}/depth-one"`,
+            ...parserConfig,
+          }),
+        ]),
+      ],
+      invalid: [
+        test({
+          code: 'import { bar } from "./flow-types-some-type-imports"',
+          errors: [error(`Dependency cycle detected.`)],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { bar } from "./flow-types-depth-one"',
+          errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./es6/depth-one:1`)],
+          ...parserConfig,
+        }),
+        ...flatMap(testDialects, (testDialect) => [
+          test({
+            code: `import { bar } from "./${testDialect}/depth-three-indirect"`,
+            errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+            ...parserConfig,
+          }),
+          test({
+            code: `import("./${testDialect}/depth-three-star")`,
+            errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+            ...parserConfig,
+          }),
+          test({
+            code: `import("./${testDialect}/depth-three-indirect")`,
+            errors: [error(`Dependency cycle via ./depth-two:1=>./depth-one:1`)],
+            ...parserConfig,
+          }),
+        ]),
+      ],
+    });
+  });
 });
