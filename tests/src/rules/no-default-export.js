@@ -1,4 +1,4 @@
-import { parsers, test, testVersion } from '../utils';
+import { babelSyntaxPlugins, getBabelParserConfig, getBabelParsers, test, testVersion } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -56,10 +56,6 @@ ruleTester.run('no-default-export', rule, {
     test({
       code: `export const { foo: { bar } } = { foo: { bar: "baz" } };`,
     }),
-    test({
-      code: 'export { a, b } from "foo.js"',
-      parser: parsers.BABEL_OLD,
-    }),
 
     // no exports at all
     test({
@@ -70,19 +66,6 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: `import {default as foo} from './foo';`,
-    }),
-
-    test({
-      code: `export type UserId = number;`,
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'export foo from "foo.js"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: parsers.BABEL_OLD,
     }),
   ],
   invalid: [].concat(
@@ -152,16 +135,6 @@ ruleTester.run('no-default-export', rule, {
         },
       ],
     }),
-    test({
-      code: 'export default from "foo.js"',
-      parser: parsers.BABEL_OLD,
-      errors: [
-        {
-          type: 'ExportNamedDeclaration',
-          message: 'Prefer named exports.',
-        },
-      ],
-    }),
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({
       code: 'let foo; export { foo as "default" }',
@@ -174,4 +147,44 @@ ruleTester.run('no-default-export', rule, {
       parserOptions: { ecmaVersion: 2022 },
     })),
   ),
+});
+
+context('Babel Parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.flow, babelSyntaxPlugins.exportDefaultFrom] },
+    );
+    ruleTester.run('no-default-export', rule, {
+      valid: [
+        test({
+          code: 'export { a, b } from "foo.js"',
+          ...parserConfig,
+        }),
+        test({
+          code: `export type UserId = number;`,
+          ...parserConfig,
+        }),
+        test({
+          code: 'export foo from "foo.js"',
+          ...parserConfig,
+        }),
+        test({
+          code: `export Memory, { MemoryValue } from './Memory'`,
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'export default from "foo.js"',
+          errors: [
+            {
+              type: 'ExportNamedDeclaration',
+              message: 'Prefer named exports.',
+            },
+          ],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
 });
