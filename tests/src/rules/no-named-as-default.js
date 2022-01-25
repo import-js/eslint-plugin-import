@@ -1,4 +1,4 @@
-import { test, testVersion, SYNTAX_CASES, parsers } from '../utils';
+import { test, testVersion, SYNTAX_CASES, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -10,16 +10,6 @@ ruleTester.run('no-named-as-default', rule, {
 
     test({ code: 'import bar, { foo } from "./bar";' }),
     test({ code: 'import bar, { foo } from "./empty-folder";' }),
-
-    // es7
-    test({ code: 'export bar, { foo } from "./bar";',
-      parser: parsers.BABEL_OLD }),
-    test({ code: 'export bar from "./bar";',
-      parser: parsers.BABEL_OLD }),
-
-    // #566: don't false-positive on `default` itself
-    test({ code: 'export default from "./bar";',
-      parser: parsers.BABEL_OLD }),
 
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({
@@ -41,20 +31,6 @@ ruleTester.run('no-named-as-default', rule, {
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.',
         type: 'ImportDefaultSpecifier' } ] }),
-
-    // es7
-    test({
-      code: 'export foo from "./bar";',
-      parser: parsers.BABEL_OLD,
-      errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ExportDefaultSpecifier' } ] }),
-    test({
-      code: 'export foo, { foo as bar } from "./bar";',
-      parser: parsers.BABEL_OLD,
-      errors: [ {
-        message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ExportDefaultSpecifier' } ] }),
 
     test({
       code: 'import foo from "./malformed.js"',
@@ -82,4 +58,40 @@ ruleTester.run('no-named-as-default', rule, {
       parserOptions: { ecmaVersion: 2022 },
     })),
   ),
+});
+
+context('Babel Parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.exportDefaultFrom] });
+    ruleTester.run('no-named-as-default', rule, {
+      valid: [
+        // es7
+        test({ code: 'export bar, { foo } from "./bar";',
+          ...parserConfig }),
+        test({ code: 'export bar from "./bar";',
+          ...parserConfig }),
+
+        // #566: don't false-positive on `default` itself
+        test({ code: 'export default from "./bar";',
+          ...parserConfig }),
+      ],
+      invalid: [
+        // es7
+        test({
+          code: 'export foo from "./bar";',
+          errors: [ {
+            message: 'Using exported name \'foo\' as identifier for default export.',
+            type: 'ExportDefaultSpecifier' } ],
+          ...parserConfig,
+        }),
+        test({
+          code: 'export foo, { foo as bar } from "./bar";',
+          errors: [ {
+            message: 'Using exported name \'foo\' as identifier for default export.',
+            type: 'ExportDefaultSpecifier' } ],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
 });
