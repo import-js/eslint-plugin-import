@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 
 ### Changed
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
@@ -963,6 +964,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2371]: https://github.com/import-js/eslint-plugin-import/pull/2371
 [#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
 [#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
 [#2358]: https://github.com/import-js/eslint-plugin-import/pull/2358

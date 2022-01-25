@@ -1,6 +1,7 @@
-import { parsers, test } from '../utils';
+import { parsers, test, testVersion } from '../utils';
 
 import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-dynamic-require');
@@ -28,56 +29,93 @@ ruleTester.run('no-dynamic-require', rule, {
     test({ code: 'var foo = require("@scope/foo")' }),
 
     //dynamic import
-    test({
-      code: 'import("foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import(`foo`)',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import("./foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import("@scope/foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'var foo = import("foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'var foo = import(`foo`)',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'var foo = import("./foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'var foo = import("@scope/foo")',
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import("../" + name)',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: false }],
-    }),
-    test({
-      code: 'import(`../${name}`)',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
+    ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
+      const _test =
+        parser === parsers.ESPREE
+          ? (testObj) => testVersion('>= 6.2.0', () => testObj)
+          : (testObj) => test(testObj);
+      return [].concat(
+        _test({
+          code: 'import("foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import(`foo`)',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import("./foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import("@scope/foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'var foo = import("foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'var foo = import(`foo`)',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'var foo = import("./foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'var foo = import("@scope/foo")',
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import("../" + name)',
+          errors: [dynamicImportError],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import(`../${name}`)',
+          errors: [dynamicImportError],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+      );
     }),
   ],
   invalid: [
@@ -104,29 +142,49 @@ ruleTester.run('no-dynamic-require', rule, {
     }),
 
     // dynamic import
-    test({
-      code: 'import("../" + name)',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import(`../${name}`)',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import(name)',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
-    }),
-    test({
-      code: 'import(name())',
-      errors: [dynamicImportError],
-      parser: parsers.BABEL_OLD,
-      options: [{ esmodule: true }],
+    ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
+      const _test =
+        parser === parsers.ESPREE
+          ? (testObj) => testVersion('>= 6.2.0', () => testObj)
+          : (testObj) => test(testObj);
+      return [].concat(
+        _test({
+          code: 'import("../" + name)',
+          errors: [dynamicImportError],
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import(`../${name}`)',
+          errors: [dynamicImportError],
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import(name)',
+          errors: [dynamicImportError],
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+        _test({
+          code: 'import(name())',
+          errors: [dynamicImportError],
+          options: [{ esmodule: true }],
+          parser,
+          parserOptions: {
+            ecmaVersion: 2020,
+          },
+        }),
+      );
     }),
     test({
       code: 'require(`foo${x}`)',
