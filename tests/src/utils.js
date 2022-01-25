@@ -31,6 +31,19 @@ export function getBabelParsers() {
   ].filter(Boolean);
 }
 
+export function getBabelParserConfig(parser, babelOptions = {}) {
+  const parserConfig = { parser: parser || null };
+  if (parser === parsers.BABEL_NEW) {
+    parserConfig.parserOptions =  {
+      configFile: false,
+      babelrc: false,
+      requireConfigFile: false,
+      babelOptions,
+    };
+  }
+  return parserConfig;
+}
+
 export function getNonDefaultParsers() {
   return getTSParsers().concat(...getBabelParsers()).filter(Boolean);
 }

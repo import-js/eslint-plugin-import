@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { test as testUtil, getNonDefaultParsers, parsers } from '../utils';
+import { test as testUtil, getNonDefaultParsers, parsers, getBabelParserConfig } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -422,22 +422,12 @@ context('TypeScript', function () {
     .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
-        parser,
         settings: {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
+        ...getBabelParserConfig(parser, { plugins: [babelPluginSyntaxTypeScript] }),
       };
-      if (parser === parsers.BABEL_NEW) {
-        parserConfig.parserOptions =  {
-          configFile: false,
-          babelrc: false,
-          requireConfigFile: false,
-          babelOptions: {
-            plugins: [babelPluginSyntaxTypeScript],
-          },
-        };
-      }
 
       ruleTester.run('no-duplicates', rule, {
         valid: [
