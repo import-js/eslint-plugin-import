@@ -1,6 +1,7 @@
-import { test, getTSParsers, parsers } from '../utils';
+import { test, parsers, getNonDefaultParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { RuleTester } from 'eslint';
+import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/max-dependencies');
@@ -63,72 +64,60 @@ ruleTester.run('max-dependencies', rule, {
         'Maximum number of dependencies (2) exceeded.',
       ],
     }),
-
-    test({
-      code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-      parser: parsers.BABEL_OLD,
-      options: [{
-        max: 1,
-      }],
-      errors: [
-        'Maximum number of dependencies (1) exceeded.',
-      ],
-    }),
-
-    test({
-      code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
-      parser: parsers.BABEL_OLD,
-      options: [{
-        max: 2,
-        ignoreTypeImports: false,
-      }],
-      errors: [
-        'Maximum number of dependencies (2) exceeded.',
-      ],
-    }),
   ],
 });
 
-describe('TypeScript', () => {
-  getTSParsers()
-    // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
-    .forEach((parser) => {
-      ruleTester.run(`max-dependencies (${parser.replace(process.cwd(), '.')})`, rule, {
-        valid: [
-          test({
-            code: 'import type { x } from \'./foo\'; import { y } from \'./bar\';',
-            parser,
-            options: [{
-              max: 1,
-              ignoreTypeImports: true,
-            }],
-          }),
-        ],
-        invalid: [
-          test({
-            code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-            parser,
-            options: [{
-              max: 1,
-            }],
-            errors: [
-              'Maximum number of dependencies (1) exceeded.',
-            ],
-          }),
-
-          test({
-            code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
-            parser,
-            options: [{
-              max: 2,
-              ignoreTypeImports: false,
-            }],
-            errors: [
-              'Maximum number of dependencies (2) exceeded.',
-            ],
-          }),
-        ],
-      });
+describe('Non Default Parsers', () => {
+  flatMap(
+    getNonDefaultParsers()
+      // Type-only imports were added in TypeScript ESTree 2.23.0
+      .filter((parser) => parser !== parsers.TS_OLD),
+    (parser) => {
+      const configs = [];
+      if (parser === parsers.BABEL_NEW) {
+        configs.push(
+          getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.typescript] }),
+          getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.flow] }),
+        );
+      } else {
+        configs.push({ parser });
+      }
+      return configs;
+    }).forEach((parserConfig) => {
+    ruleTester.run('max-dependencies', rule, {
+      valid: [
+        test({
+          code: 'import type { x } from \'./foo\'; import { y } from \'./bar\';',
+          options: [{
+            max: 1,
+            ignoreTypeImports: true,
+          }],
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
+          options: [{
+            max: 1,
+          }],
+          errors: [
+            'Maximum number of dependencies (1) exceeded.',
+          ],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
+          options: [{
+            max: 2,
+            ignoreTypeImports: false,
+          }],
+          errors: [
+            'Maximum number of dependencies (2) exceeded.',
+          ],
+          ...parserConfig,
+        }),
+      ],
     });
+  });
 });
