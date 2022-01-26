@@ -6,6 +6,7 @@ import semver from 'semver';
 import 'babel-eslint';
 
 export const parsers = {
+  ESPREE: require.resolve('espree'),
   TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && require.resolve('typescript-eslint-parser'),
   TS_NEW: semver.satisfies(eslintPkg.version, '>5.0.0') && require.resolve('@typescript-eslint/parser'),
   BABEL_OLD: require.resolve('babel-eslint'),
