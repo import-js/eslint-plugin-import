@@ -36,13 +36,59 @@ const tsTypePrefix = 'type:';
  */
 function isTypescriptFunctionOverloads(nodes) {
   const types = new Set(Array.from(nodes, node => node.parent.type));
-  return (
-    types.has('TSDeclareFunction') &&
-    (
-      types.size === 1 ||
-      (types.size === 2 && types.has('FunctionDeclaration'))
-    )
-  );
+  return types.has('TSDeclareFunction')
+    && (
+      types.size === 1
+      || (types.size === 2 && types.has('FunctionDeclaration'))
+    );
+}
+
+/**
+ * Detect merging Namespaces with Classes, Functions, or Enums like:
+ * ```ts
+ * export class Foo { }
+ * export namespace Foo { }
+ * ```
+ * @param {Set<Object>} nodes
+ * @returns {boolean}
+ */
+function isTypescriptNamespaceMerging(nodes) {
+  const types = new Set(Array.from(nodes, node => node.parent.type));
+  const noNamespaceNodes = Array.from(nodes).filter((node) => node.parent.type !== 'TSModuleDeclaration');
+
+  return types.has('TSModuleDeclaration')
+    && (
+      types.size === 1
+      // Merging with functions
+      || (types.size === 2 && (types.has('FunctionDeclaration') || types.has('TSDeclareFunction')))
+      || (types.size === 3 && types.has('FunctionDeclaration') && types.has('TSDeclareFunction'))
+      // Merging with classes or enums
+      || (types.size === 2 && (types.has('ClassDeclaration') || types.has('TSEnumDeclaration')) && noNamespaceNodes.length === 1)
+    );
+}
+
+/**
+ * Detect if a typescript namespace node should be reported as multiple export:
+ * ```ts
+ * export class Foo { }
+ * export function Foo();
+ * export namespace Foo { }
+ * ```
+ * @param {Object} node
+ * @param {Set<Object>} nodes
+ * @returns {boolean}
+ */
+function shouldSkipTypescriptNamespace(node, nodes) {
+  const types = new Set(Array.from(nodes, node => node.parent.type));
+
+  return !isTypescriptNamespaceMerging(nodes)
+    && node.parent.type === 'TSModuleDeclaration'
+    && (
+      types.has('TSEnumDeclaration')
+      || types.has('ClassDeclaration')
+      || types.has('FunctionDeclaration')
+      || types.has('TSDeclareFunction')
+    );
 }
 
 module.exports = {
@@ -156,9 +202,11 @@ module.exports = {
           for (const [name, nodes] of named) {
             if (nodes.size <= 1) continue;
 
-            if (isTypescriptFunctionOverloads(nodes)) continue;
+            if (isTypescriptFunctionOverloads(nodes) || isTypescriptNamespaceMerging(nodes)) continue;
 
             for (const node of nodes) {
+              if (shouldSkipTypescriptNamespace(node, nodes)) continue;
+
               if (name === 'default') {
                 context.report(node, 'Multiple default exports.');
               } else {

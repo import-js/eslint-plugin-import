@@ -10,9 +10,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 
-
 ### Fixed
 - [`default`]: `typescript-eslint-parser`: avoid a crash on exporting as namespace (thanks [@ljharb])
+- [`export`]/TypeScript: false positive for typescript namespace merging ([#1964], thanks [@magarcia])
 
 ### Changed
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
@@ -1575,6 +1575,7 @@ for info on changes for earlier releases.
 [@ludofischer]: https://github.com/ludofischer
 [@lukeapage]: https://github.com/lukeapage
 [@lydell]: https://github.com/lydell
+[@magarcia]: https://github.com/magarcia
 [@Mairu]: https://github.com/Mairu
 [@malykhinvi]: https://github.com/malykhinvi
 [@manovotny]: https://github.com/manovotny

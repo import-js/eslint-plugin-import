@@ -220,12 +220,50 @@ context('TypeScript', function () {
             }
           `,
         }, parserConfig)),
+
+        semver.satisfies(eslintPkg.version, '>= 6') ? [
+          test(Object.assign({
+            code: `
+              export class Foo { }
+              export namespace Foo { }
+              export namespace Foo {
+                export class Bar {}
+              }
+            `,
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export function Foo();
+              export namespace Foo { }
+            `,
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export function Foo(a: string);
+              export namespace Foo { }
+            `,
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export function Foo(a: string);
+              export function Foo(a: number);
+              export namespace Foo { }
+            `,
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export enum Foo { }
+              export namespace Foo { }
+            `,
+          }, parserConfig)),
+        ] : [],
+
         test(Object.assign({
           code: 'export * from "./file1.ts"',
           filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
 
-        (semver.satisfies(eslintPkg.version, '< 6') ? [] : [
+        semver.satisfies(eslintPkg.version, '>= 6') ? [
           test({
             code: `
               export * as A from './named-export-collision/a';
@@ -233,7 +271,7 @@ context('TypeScript', function () {
             `,
             parser,
           }),
-        ]),
+        ] : [],
 
         // Exports in ambient modules
         test(Object.assign({
@@ -271,7 +309,7 @@ context('TypeScript', function () {
           },
         })),
       ),
-      invalid: [
+      invalid: [].concat(
         // type/value name clash
         test(Object.assign({
           code: `
@@ -361,6 +399,126 @@ context('TypeScript', function () {
             },
           ],
         }, parserConfig)),
+        semver.satisfies(eslintPkg.version, '< 6') ? [] : [
+          test(Object.assign({
+            code: `
+              export class Foo { }
+              export class Foo { }
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export enum Foo { }
+              export enum Foo { }
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export enum Foo { }
+              export class Foo { }
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export const Foo = 'bar';
+              export class Foo { }
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export function Foo();
+              export class Foo { }
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export const Foo = 'bar';
+              export function Foo();
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+          test(Object.assign({
+            code: `
+              export const Foo = 'bar';
+              export namespace Foo { }
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 3,
+              },
+            ],
+          }, parserConfig)),
+        ],
 
         // Exports in ambient modules
         test(Object.assign({
@@ -385,7 +543,7 @@ context('TypeScript', function () {
             },
           ],
         }, parserConfig)),
-      ],
+      ),
     });
   });
 });
