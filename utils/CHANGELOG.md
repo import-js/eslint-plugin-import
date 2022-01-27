@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.7.3 - 2022-01-26
+
 ### Fixed
 - [Fix] `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
 
