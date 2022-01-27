@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import readPkgUp from 'eslint-module-utils/readPkgUp';
+import pkgUp from 'eslint-module-utils/pkgUp';
 import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
@@ -18,6 +18,16 @@ function arrayOrKeys(arrayOrObject) {
   return Array.isArray(arrayOrObject) ? arrayOrObject : Object.keys(arrayOrObject);
 }
 
+function readJSON(jsonPath, throwException) {
+  try {
+    return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+  } catch (err) {
+    if (throwException) {
+      throw err;
+    }
+  }
+}
+
 function extractDepFields(pkg) {
   return {
     dependencies: pkg.dependencies || {},
@@ -28,6 +38,15 @@ function extractDepFields(pkg) {
     // `npm`, so we convert it to an array if it is an object
     bundledDependencies: arrayOrKeys(pkg.bundleDependencies || pkg.bundledDependencies || []),
   };
+}
+
+function getPackageDepFields(packageJsonPath, throwAtRead) {
+  if (!depFieldCache.has(packageJsonPath)) {
+    const depFields = extractDepFields(readJSON(packageJsonPath, throwAtRead));
+    depFieldCache.set(packageJsonPath, depFields);
+  }
+
+  return depFieldCache.get(packageJsonPath);
 }
 
 function getDependencies(context, packageDir) {
@@ -53,24 +72,21 @@ function getDependencies(context, packageDir) {
       // use rule config to find package.json
       paths.forEach(dir => {
         const packageJsonPath = path.join(dir, 'package.json');
-        if (!depFieldCache.has(packageJsonPath)) {
-          const depFields = extractDepFields(
-            JSON.parse(fs.readFileSync(packageJsonPath, 'utf8')),
-          );
-          depFieldCache.set(packageJsonPath, depFields);
-        }
-        const _packageContent = depFieldCache.get(packageJsonPath);
+        const _packageContent = getPackageDepFields(packageJsonPath, true);
         Object.keys(packageContent).forEach(depsKey =>
           Object.assign(packageContent[depsKey], _packageContent[depsKey]),
         );
       });
     } else {
+      const packageJsonPath = pkgUp({
+        cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(),
+        normalize: false,
+      });
+
       // use closest package.json
       Object.assign(
         packageContent,
-        extractDepFields(
-          readPkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), normalize: false }).pkg,
-        ),
+        getPackageDepFields(packageJsonPath, false),
       );
     }
 
@@ -266,5 +282,9 @@ module.exports = {
     return moduleVisitor((source, node) => {
       reportIfMissing(context, deps, depsOptions, node, source.value);
     }, { commonjs: true });
+  },
+
+  'Program:exit': () => {
+    depFieldCache.clear();
   },
 };

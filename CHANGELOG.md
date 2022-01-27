@@ -35,6 +35,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Performance] `ExportMap`: add caching after parsing for an ambiguous module ([#2531], thanks [@stenin-nikita])
 - [Docs] [`no-useless-path-segments`]: fix paths ([#2424], thanks [@s-h-a-d-o-w])
 - [Tests] [`no-cycle`]: add passing test cases ([#2438], thanks [@georeith])
+- [Refactor] [`no-extraneous-dependencies`] improve performance using cache ([#2374], thanks [@meowtec])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1029,6 +1030,7 @@ for info on changes for earlier releases.
 [#2387]: https://github.com/import-js/eslint-plugin-import/pull/2387
 [#2381]: https://github.com/import-js/eslint-plugin-import/pull/2381
 [#2378]: https://github.com/import-js/eslint-plugin-import/pull/2378
+[#2374]: https://github.com/import-js/eslint-plugin-import/pull/2374
 [#2371]: https://github.com/import-js/eslint-plugin-import/pull/2371
 [#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
 [#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
@@ -1663,6 +1665,7 @@ for info on changes for earlier releases.
 [@Maxim-Mazurok]: https://github.com/Maxim-Mazurok
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@maxmalov]: https://github.com/maxmalov
+[@meowtec]: https://github.com/meowtec
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
 [@MikeyBeLike]: https://github.com/MikeyBeLike
