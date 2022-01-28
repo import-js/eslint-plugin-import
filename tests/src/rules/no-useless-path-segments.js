@@ -1,4 +1,4 @@
-import { parsers, test } from '../utils';
+import { getBabelParserConfig, getBabelParsers, test } from '../utils';
 import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
@@ -27,13 +27,6 @@ function runResolverTests(resolver) {
       test({ code: 'import "./malformed.js"', options: [{ noUselessIndex: true }] }), // ./malformed directory does not exist
       test({ code: 'import "./malformed"', options: [{ noUselessIndex: true }] }), // ./malformed directory does not exist
       test({ code: 'import "./importType"', options: [{ noUselessIndex: true }] }), // ./importType.js does not exist
-
-      test({ code: 'import(".")',
-        parser: parsers.BABEL_OLD }),
-      test({ code: 'import("..")',
-        parser: parsers.BABEL_OLD }),
-      test({ code: 'import("fs").then(function(fs) {})',
-        parser: parsers.BABEL_OLD }),
     ],
 
     invalid: [
@@ -228,25 +221,47 @@ function runResolverTests(resolver) {
         options: [{ noUselessIndex: true }],
         errors: ['Useless path segments for "../index.js", should be ".."'],
       }),
-      test({
-        code: 'import("./")',
-        output: 'import(".")',
-        errors: [ 'Useless path segments for "./", should be "."'],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: 'import("../")',
-        output: 'import("..")',
-        errors: [ 'Useless path segments for "../", should be ".."'],
-        parser: parsers.BABEL_OLD,
-      }),
-      test({
-        code: 'import("./deep//a")',
-        output: 'import("./deep/a")',
-        errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
-        parser: parsers.BABEL_OLD,
-      }),
     ],
+  });
+
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    ruleTester.run(`no-useless-path-segments ${parser} ${resolver}`, rule, {
+      valid: [
+        test({
+          code: 'import(".")',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import("..")',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import("fs").then(function(fs) {})',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'import("./")',
+          output: 'import(".")',
+          errors: [ 'Useless path segments for "./", should be "."'],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import("../")',
+          output: 'import("..")',
+          errors: [ 'Useless path segments for "../", should be ".."'],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import("./deep//a")',
+          output: 'import("./deep/a")',
+          errors: [ 'Useless path segments for "./deep//a", should be "./deep/a"'],
+          ...parserConfig,
+        }),
+      ],
+    });
   });
 }
 
