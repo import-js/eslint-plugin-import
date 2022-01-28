@@ -1,4 +1,4 @@
-import { parsers, test, testVersion } from '../utils';
+import { babelSyntaxPlugins, getBabelParserConfig, getBabelParsers, test, testVersion } from '../utils';
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-mutable-exports';
 
@@ -24,14 +24,6 @@ ruleTester.run('no-mutable-exports', rule, {
     test({ code: 'class Counter {}\nexport { Counter as Count }' }),
     test({ code: 'class Counter {}\nexport default Counter' }),
     test({ code: 'class Counter {}\nexport { Counter as default }' }),
-    test({
-      parser: parsers.BABEL_OLD,
-      code: 'export Something from "./something";',
-    }),
-    test({
-      parser: parsers.BABEL_OLD,
-      code: 'type Foo = {}\nexport type {Foo}',
-    }),
     // es2022: Arbitrary module namespace identifier names
     testVersion('>= 8.7', () => ({
       code: 'const count = 1\nexport { count as "counter" }', parserOptions: { ecmaVersion: 2022 },
@@ -87,4 +79,25 @@ ruleTester.run('no-mutable-exports', rule, {
     //   errors: ['Exporting mutable global binding, use \'const\' instead.'],
     // }),
   ),
+});
+
+context('Babel Parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.flow, babelSyntaxPlugins.exportDefaultFrom] },
+    );
+    ruleTester.run('no-mutable-exports', rule, {
+      valid: [
+        test({
+          code: 'export Something from "./something";',
+          ...parserConfig,
+        }),
+        test({
+          code: 'type Foo = {}\nexport type {Foo}',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
 });

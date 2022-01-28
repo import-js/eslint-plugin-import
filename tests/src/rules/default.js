@@ -1,5 +1,5 @@
 import path from 'path';
-import { test, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
+import { test, testVersion, SYNTAX_CASES, getTSParsers, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -28,21 +28,11 @@ ruleTester.run('default', rule, {
     test({ code: 'import common from "./common";' }),
 
     // es7 export syntax
-    test({ code: 'export bar from "./bar"',
-      parser: parsers.BABEL_OLD }),
     test({ code: 'export { default as bar } from "./bar"' }),
-    test({ code: 'export bar, { foo } from "./bar"',
-      parser: parsers.BABEL_OLD }),
     test({ code: 'export { default as bar, foo } from "./bar"' }),
-    test({ code: 'export bar, * as names from "./bar"',
-      parser: parsers.BABEL_OLD }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
-    test({
-      code: 'import twofer from "./trampoline"',
-      parser: parsers.BABEL_OLD,
-    }),
 
     // jsx
     test({
@@ -66,32 +56,6 @@ ruleTester.run('default', rule, {
       },
     }),
 
-    // from no-errors
-    test({
-      code: "import Foo from './jsx/FooES7.js';",
-      parser: parsers.BABEL_OLD,
-    }),
-
-    // #545: more ES7 cases
-    test({
-      code: "import bar from './default-export-from.js';",
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: "import bar from './default-export-from-named.js';",
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: "import bar from './default-export-from-ignored.js';",
-      settings: { 'import/ignore': ['common'] },
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: "export bar from './default-export-from-ignored.js';",
-      settings: { 'import/ignore': ['common'] },
-      parser: parsers.BABEL_OLD,
-    }),
-
     // es2022: Arbitrary module namespace identifier names
     testVersion('>= 8.7', () => ({
       code: 'export { "default" as bar } from "./bar"',
@@ -113,29 +77,6 @@ ruleTester.run('default', rule, {
       code: 'import baz from "./named-exports";',
       errors: [{ message: 'No default export found in imported module "./named-exports".',
         type: 'ImportDefaultSpecifier' }] }),
-
-    // es7 export syntax
-    test({
-      code: 'export baz from "./named-exports"',
-      parser: parsers.BABEL_OLD,
-      errors: ['No default export found in imported module "./named-exports".'],
-    }),
-    test({
-      code: 'export baz, { bar } from "./named-exports"',
-      parser: parsers.BABEL_OLD,
-      errors: ['No default export found in imported module "./named-exports".'],
-    }),
-    test({
-      code: 'export baz, * as names from "./named-exports"',
-      parser: parsers.BABEL_OLD,
-      errors: ['No default export found in imported module "./named-exports".'],
-    }),
-    // exports default from a module with no default
-    test({
-      code: 'import twofer from "./broken-trampoline"',
-      parser: parsers.BABEL_OLD,
-      errors: ['No default export found in imported module "./broken-trampoline".'],
-    }),
 
     // #328: * exports do not include default
     test({
@@ -161,6 +102,86 @@ if (!CASE_SENSITIVE_FS) {
     ],
   });
 }
+
+context('Babel Parsers', function () {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.exportDefaultFrom] },
+    );
+    ruleTester.run('default', rule, {
+      valid: [
+        // es7 export syntax
+        test({ code: 'export bar from "./bar"', parser, ...parserConfig }),
+        test({ code: 'export bar, { foo } from "./bar"', parser, ...parserConfig }),
+        test({ code: 'export bar, * as names from "./bar"', parser, ...parserConfig }),
+        // sanity check
+        test({
+          code: 'import twofer from "./trampoline"',
+          parser,
+          ...parserConfig,
+        }),
+        // from no-errors
+        test({
+          code: "import Foo from './jsx/FooES7.js';",
+          parser,
+          ...parserConfig,
+        }),
+
+        // #545: more ES7 cases
+        test({
+          code: "import bar from './default-export-from.js';",
+          parser,
+          ...parserConfig,
+        }),
+        test({
+          code: "import bar from './default-export-from-named.js';",
+          parser,
+          ...parserConfig,
+        }),
+        test({
+          code: "import bar from './default-export-from-ignored.js';",
+          settings: { 'import/ignore': ['common'] },
+          parser,
+          ...parserConfig,
+        }),
+        test({
+          code: "export bar from './default-export-from-ignored.js';",
+          settings: { 'import/ignore': ['common'] },
+          parser,
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        // es7 export syntax
+        test({
+          code: 'export baz from "./named-exports"',
+          parser,
+          errors: ['No default export found in imported module "./named-exports".'],
+          ...parserConfig,
+        }),
+        test({
+          code: 'export baz, { bar } from "./named-exports"',
+          parser,
+          errors: ['No default export found in imported module "./named-exports".'],
+          ...parserConfig,
+        }),
+        test({
+          code: 'export baz, * as names from "./named-exports"',
+          parser,
+          errors: ['No default export found in imported module "./named-exports".'],
+          ...parserConfig,
+        }),
+        // exports default from a module with no default
+        test({
+          code: 'import twofer from "./broken-trampoline"',
+          parser,
+          errors: ['No default export found in imported module "./broken-trampoline".'],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
+});
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {

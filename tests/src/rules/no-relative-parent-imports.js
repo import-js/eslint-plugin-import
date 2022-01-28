@@ -1,16 +1,21 @@
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-relative-parent-imports';
-import { parsers, test as _test, testFilePath } from '../utils';
+import { getBabelParserConfig, getBabelParsers, test as _test, testFilePath } from '../utils';
 
-const test = def => _test(Object.assign(def, {
-  filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
-  parser: parsers.BABEL_OLD,
-}));
+const babelParsers = getBabelParsers();
+const test = def =>
+  babelParsers.map((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    return _test(Object.assign(def, {
+      filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
+      ...parserConfig,
+    }));
+  });
 
 const ruleTester = new RuleTester();
 
 ruleTester.run('no-relative-parent-imports', rule, {
-  valid: [
+  valid: [].concat(
     test({
       code: 'import foo from "./internal.js"',
     }),
@@ -50,9 +55,9 @@ ruleTester.run('no-relative-parent-imports', rule, {
     test({
       code: 'import("@scope/package")',
     }),
-  ],
+  ),
 
-  invalid: [
+  invalid: [].concat(
     test({
       code: 'import foo from "../plugin.js"',
       errors: [ {
@@ -102,5 +107,5 @@ ruleTester.run('no-relative-parent-imports', rule, {
         column: 8,
       }],
     }),
-  ],
+  ),
 });

@@ -1,4 +1,4 @@
-import { test, testVersion, getNonDefaultParsers, parsers } from '../utils';
+import { test, testVersion, getNonDefaultParsers, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { RuleTester } from 'eslint';
 
@@ -62,10 +62,6 @@ ruleTester.run('prefer-default-export', rule, {
       code: `
         export * from './foo';`,
     }),
-    test({
-      code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: parsers.BABEL_OLD,
-    }),
 
     // no exports at all
     test({
@@ -73,27 +69,8 @@ ruleTester.run('prefer-default-export', rule, {
         import * as foo from './foo';`,
     }),
 
-    test({
-      code: `export type UserId = number;`,
-      parser: parsers.BABEL_OLD,
-    }),
-
-    // issue #653
-    test({
-      code: 'export default from "foo.js"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'export { a, b } from "foo.js"',
-      parser: parsers.BABEL_OLD,
-    }),
     // ...SYNTAX_CASES,
-    test({
-      code: `
-        export const [CounterProvider,, withCounter] = func();;
-      `,
-      parser: parsers.BABEL_OLD,
-    }),
+
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({
       code: 'let foo; export { foo as "default" };',
@@ -153,14 +130,52 @@ ruleTester.run('prefer-default-export', rule, {
   ],
 });
 
+context('Babel Parsers', function () {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.exportDefaultFrom, babelSyntaxPlugins.flow] },
+    );
+    ruleTester.run('prefer-default-export', rule, {
+      valid: [
+        test({
+          code: `export Memory, { MemoryValue } from './Memory'`,
+          ...parserConfig,
+        }),
+
+        test({
+          code: `export type UserId = number;`,
+          ...parserConfig,
+        }),
+
+        // issue #653
+        test({
+          code: 'export default from "foo.js"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export { a, b } from "foo.js"',
+          ...parserConfig,
+        }),
+        test({
+          code: `
+            export const [CounterProvider,, withCounter] = func();;
+          `,
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
+});
+
 context('TypeScript', function () {
   getNonDefaultParsers().forEach((parser) => {
     const parserConfig = {
-      parser,
       settings: {
         'import/parsers': { [parser]: ['.ts'] },
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
+      ...getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.typescript] }),
     };
 
     ruleTester.run('prefer-default-export', rule, {

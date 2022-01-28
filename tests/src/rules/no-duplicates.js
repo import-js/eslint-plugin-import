@@ -1,6 +1,5 @@
 import * as path from 'path';
-import { test as testUtil, getNonDefaultParsers, parsers } from '../utils';
-
+import { test as testUtil, getNonDefaultParsers, parsers, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
@@ -22,12 +21,6 @@ ruleTester.run('no-duplicates', rule, {
     // #86: every unresolved module should not show up as 'null' and duplicate
     test({ code: 'import foo from "234artaf";' +
                  'import { shoop } from "234q25ad"' }),
-
-    // #225: ignore duplicate if is a flow type import
-    test({
-      code: "import { x } from './foo'; import type { y } from './foo'",
-      parser: parsers.BABEL_OLD,
-    }),
 
     // #1107: Using different query strings that trigger different webpack loaders.
     test({
@@ -102,13 +95,6 @@ ruleTester.run('no-duplicates', rule, {
         "'non-existent' imported multiple times.",
         "'non-existent' imported multiple times.",
       ],
-    }),
-
-    test({
-      code: "import type { x } from './foo'; import type { y } from './foo'",
-      output: "import type { x , y } from './foo'; ",
-      parser: parsers.BABEL_OLD,
-      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
@@ -415,17 +401,40 @@ import {x,y} from './foo'
   ],
 });
 
+context('Babel Parsers', function () {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.flow] });
+    ruleTester.run('no-duplicates', rule, {
+      valid: [
+        // #225: ignore duplicate if is a flow type import
+        test({
+          code: "import { x } from './foo'; import type { y } from './foo'",
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: "import type { x } from './foo'; import type { y } from './foo'",
+          output: "import type { x , y } from './foo'; ",
+          errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
+});
+
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
     .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
-        parser,
         settings: {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
+        ...getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.typescript] }),
       };
 
       ruleTester.run('no-duplicates', rule, {
@@ -455,7 +464,7 @@ context('TypeScript', function () {
             ...parserConfig,
           }),
         ],
-        invalid: [
+        invalid: [].concat(
           test({
             code: "import type x from './foo'; import type y from './foo'",
             ...parserConfig,
@@ -472,7 +481,8 @@ context('TypeScript', function () {
               },
             ],
           }),
-          test({
+          // @babel/eslint-parser throws syntax error for duplicated identifier at parsing time.
+          parser !== parsers.BABEL_NEW ? test({
             code: "import type x from './foo'; import type x from './foo'",
             output: "import type x from './foo'; ",
             ...parserConfig,
@@ -488,7 +498,7 @@ context('TypeScript', function () {
                 message: "'./foo' imported multiple times.",
               },
             ],
-          }),
+          }) : [],
           test({
             code: "import type {x} from './foo'; import type {y} from './foo'",
             ...parserConfig,
@@ -506,7 +516,7 @@ context('TypeScript', function () {
               },
             ],
           }),
-        ],
+        ),
       });
     });
 });

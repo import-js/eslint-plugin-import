@@ -1,5 +1,5 @@
 import { RuleTester } from 'eslint';
-import { parsers } from '../utils';
+import { getBabelParserConfig, getBabelParsers, test } from '../utils';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/unambiguous');
@@ -38,11 +38,6 @@ ruleTester.run('unambiguous', rule, {
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
-      code: 'function x() {}; export * as y from "z"',
-      parser: parsers.BABEL_OLD,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
       code: 'export function x() {}',
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
@@ -55,4 +50,20 @@ ruleTester.run('unambiguous', rule, {
       errors: ['This module could be parsed as a valid script.'],
     },
   ],
+});
+
+context('Babel Parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    parserConfig.parserOptions = { ...parserConfig.parserOptions, ecmaVersion: 2015, sourceType: 'module' };
+    ruleTester.run('unambiguous', rule, {
+      valid: [
+        test({
+          code: 'function x() {}; export * as y from "z"',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
 });

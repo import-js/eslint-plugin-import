@@ -1,5 +1,5 @@
 import { RuleTester } from 'eslint';
-import { parsers, test, testVersion } from '../utils';
+import { babelSyntaxPlugins, getBabelParserConfig, getBabelParsers, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-named-export');
@@ -11,10 +11,6 @@ ruleTester.run('no-named-export', rule, {
     }),
     test({
       code: 'let foo; export { foo as default }',
-    }),
-    test({
-      code: 'export default from "foo.js"',
-      parser: parsers.BABEL_OLD,
     }),
 
     // no exports at all
@@ -150,37 +146,55 @@ ruleTester.run('no-named-export', rule, {
         message: 'Named exports are not allowed.',
       }],
     }),
-    test({
-      code: 'export { a, b } from "foo.js"',
-      parser: parsers.BABEL_OLD,
-      errors: [{
-        type: 'ExportNamedDeclaration',
-        message: 'Named exports are not allowed.',
-      }],
-    }),
-    test({
-      code: `export type UserId = number;`,
-      parser: parsers.BABEL_OLD,
-      errors: [{
-        type: 'ExportNamedDeclaration',
-        message: 'Named exports are not allowed.',
-      }],
-    }),
-    test({
-      code: 'export foo from "foo.js"',
-      parser: parsers.BABEL_OLD,
-      errors: [{
-        type: 'ExportNamedDeclaration',
-        message: 'Named exports are not allowed.',
-      }],
-    }),
-    test({
-      code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: parsers.BABEL_OLD,
-      errors: [{
-        type: 'ExportNamedDeclaration',
-        message: 'Named exports are not allowed.',
-      }],
-    }),
   ],
+});
+
+context('Babel Parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.flow, babelSyntaxPlugins.exportDefaultFrom] },
+    );
+    ruleTester.run('no-named-export', rule, {
+      valid: [
+        test({
+          code: 'export default from "foo.js"',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'export { a, b } from "foo.js"',
+          errors: [{
+            type: 'ExportNamedDeclaration',
+            message: 'Named exports are not allowed.',
+          }],
+          ...parserConfig,
+        }),
+        test({
+          code: `export type UserId = number;`,
+          errors: [{
+            type: 'ExportNamedDeclaration',
+            message: 'Named exports are not allowed.',
+          }],
+          ...parserConfig,
+        }),
+        test({
+          code: 'export foo from "foo.js"',
+          errors: [{
+            type: 'ExportNamedDeclaration',
+            message: 'Named exports are not allowed.',
+          }],
+          ...parserConfig,
+        }),
+        test({
+          code: `export Memory, { MemoryValue } from './Memory'`,
+          errors: [{
+            type: 'ExportNamedDeclaration',
+            message: 'Named exports are not allowed.',
+          }],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
 });

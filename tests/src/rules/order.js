@@ -1,4 +1,4 @@
-import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers } from '../utils';
+import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -2324,11 +2324,13 @@ context('TypeScript', function () {
     .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
       const parserConfig = {
-        parser,
         settings: {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
+        ...getBabelParserConfig(
+          parser, { plugins: [babelSyntaxPlugins.typescript] },
+        ),
       };
 
       ruleTester.run('order', rule, {

@@ -1,7 +1,9 @@
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
 
-import { getTSParsers, parsers, testVersion } from '../utils';
+import { getBabelParsers, getTSParsers, testVersion, test, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
+
+const rule = require('rules/newline-after-import');
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
@@ -11,7 +13,7 @@ const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not
 
 const ruleTester = new RuleTester();
 
-ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
+ruleTester.run('newline-after-import', rule, {
   valid: [
     `var path = require('path');\nvar foo = require('foo');\n`,
     `require('foo');`,
@@ -153,30 +155,6 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         }
       `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
-      code: `//issue 592
-        export default
-        @SomeDecorator(require('./some-file'))
-        class App {}
-      `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
     },
     ...flatMap(getTSParsers(), (parser) => [
       {
@@ -406,73 +384,102 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-    {
-      code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
-      output: `import foo from 'foo';\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
-        line: 1,
-        column: 1,
-        message: IMPORT_ERROR_MESSAGE,
-      } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
-      output: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
-        line: 1,
-        column: 1,
-        message: REQUIRE_ERROR_MESSAGE,
-      } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
-      output: `// issue 10042\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
-        line: 2,
-        column: 1,
-        message: IMPORT_ERROR_MESSAGE,
-      } ],
-      parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    {
-      code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
-      output: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
-        line: 2,
-        column: 1,
-        message: REQUIRE_ERROR_MESSAGE,
-      } ],
-      parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    },
-    testVersion('>= 6', () => ({
-      code: `
-        // issue 1784
-        import { map } from 'rxjs/operators';
-        @Component({})
-        export class Test {}
-      `,
-      output: `
-        // issue 1784
-        import { map } from 'rxjs/operators';
-
-        @Component({})
-        export class Test {}
-      `,
-      errors: [
-        {
-          line: 3,
-          column: 9,
-          message: IMPORT_ERROR_MESSAGE,
-        },
-      ],
-      parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
-    })) || [],
   ),
+});
+
+context('Babel parsers', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [(api) => babelSyntaxPlugins.decorators(api, { legacy: true })] },
+    );
+    ruleTester.run('newline-after-import', rule, {
+      valid: [
+        test({
+          code: `//issue 592
+            export default
+            @SomeDecorator(require('./some-file'))
+            class App {}
+          `,
+          ...parserConfig,
+        }),
+        test({
+          code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
+          ...parserConfig,
+        }),
+        test({
+          code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+          ...parserConfig,
+        }),
+        test({
+          code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+          ...parserConfig,
+        }),
+      ],
+      invalid: [].concat(
+        test({
+          code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
+          output: `import foo from 'foo';\n\n@SomeDecorator(foo)\nclass Foo {}`,
+          errors: [ {
+            line: 1,
+            column: 1,
+            message: IMPORT_ERROR_MESSAGE,
+          } ],
+          ...parserConfig,
+        }),
+        test({
+          code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
+          output: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
+          errors: [ {
+            line: 1,
+            column: 1,
+            message: REQUIRE_ERROR_MESSAGE,
+          } ],
+          ...parserConfig,
+        }),
+        test({
+          code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
+          output: `// issue 10042\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+          errors: [ {
+            line: 2,
+            column: 1,
+            message: IMPORT_ERROR_MESSAGE,
+          } ],
+          ...parserConfig,
+        }),
+        test({
+          code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
+          output: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+          errors: [ {
+            line: 2,
+            column: 1,
+            message: REQUIRE_ERROR_MESSAGE,
+          } ],
+          ...parserConfig,
+        }),
+        testVersion('>= 6', () => ({
+          code: `
+            // issue 1784
+            import { map } from 'rxjs/operators';
+            @Component({})
+            export class Test {}
+          `,
+          output: `
+            // issue 1784
+            import { map } from 'rxjs/operators';
+
+            @Component({})
+            export class Test {}
+          `,
+          errors: [
+            {
+              line: 3,
+              column: 13,
+              message: IMPORT_ERROR_MESSAGE,
+            },
+          ],
+          ...parserConfig,
+        })),
+      ),
+    });
+  });
 });

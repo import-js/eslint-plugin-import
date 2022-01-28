@@ -1,4 +1,4 @@
-import { getTSParsers, parsers, test, testFilePath } from '../utils';
+import { babelSyntaxPlugins, getBabelParserConfig, getBabelParsers, getTSParsers, parsers, test, testFilePath } from '../utils';
 import typescriptConfig from '../../../config/typescript';
 import path from 'path';
 import fs from 'fs';
@@ -78,19 +78,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "doctrine"',
       options: [{ packageDir: path.join(__dirname, '../../../') }],
-    }),
-    test({
-      code: 'import type MyType from "myflowtyped";',
-      options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: `
-        // @flow
-        import typeof TypeScriptModule from 'typescript';
-      `,
-      options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: parsers.BABEL_OLD,
     }),
     test({
       code: 'import react from "react";',
@@ -428,19 +415,47 @@ describe('TypeScript', () => {
     });
 });
 
-typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', rule, {
-  valid: [
-    test({
-      code: 'import type MyType from "not-a-dependency";',
-      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import type { MyType } from "not-a-dependency";',
-      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: parsers.BABEL_OLD,
-    }),
-  ],
-  invalid: [
-  ],
+describe('Flow', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.flow] });
+    ruleTester.run('no-extraneous-dependencies', rule, {
+      valid: [
+        test({
+          code: 'import type MyType from "myflowtyped";',
+          options: [{ packageDir: packageDirWithFlowTyped }],
+          ...parserConfig,
+        }),
+        test({
+          code: `
+            // @flow
+            import typeof TypeScriptModule from 'typescript';
+          `,
+          options: [{ packageDir: packageDirWithFlowTyped }],
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
+});
+
+describe('TypeScript Babel', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.typescript] });
+    typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', rule, {
+      valid: [
+        test({
+          code: 'import type MyType from "not-a-dependency";',
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+          ...parserConfig,
+        }),
+        test({
+          code: 'import type { MyType } from "not-a-dependency";',
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
 });

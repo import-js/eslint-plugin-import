@@ -1,8 +1,7 @@
-import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
+import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 import { RuleTester } from 'eslint';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
-
 
 const ruleTester = new RuleTester();
 const rule = require('rules/named');
@@ -51,16 +50,6 @@ ruleTester.run('named', rule, {
     test({ code: 'export { foo as bar } from "./bar"' }),
     test({ code: 'export { foo } from "./does-not-exist"' }),
 
-    // es7
-    test({
-      code: 'export bar, { foo } from "./bar"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import { foo, bar } from "./named-trampoline"',
-      parser: parsers.BABEL_OLD,
-    }),
-
     // regression tests
     test({ code: 'let foo; export { foo as bar }' }),
 
@@ -69,48 +58,6 @@ ruleTester.run('named', rule, {
     test({ code: 'import { arrayKeyProp } from "./named-exports"' }),
     test({ code: 'import { deepProp } from "./named-exports"' }),
     test({ code: 'import { deepSparseElement } from "./named-exports"' }),
-
-    // should ignore imported/exported flow types, even if they don’t exist
-    test({
-      code: 'import type { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import typeof { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import type { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import typeof { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import { type MyOpaqueType, MyClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import { typeof MyOpaqueType, MyClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import typeof MissingType from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'import typeof * as MissingType from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'export type { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      code: 'export type { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-    }),
 
     // jsnext
     test({
@@ -240,23 +187,7 @@ ruleTester.run('named', rule, {
       code: 'export { bar } from "./bar"',
       errors: ["bar not found in './bar'"],
     }),
-
-    // es7
-    test({
-      code: 'export bar2, { bar } from "./bar"',
-      parser: parsers.BABEL_OLD,
-      errors: ["bar not found in './bar'"],
-    }),
-    test({
-      code: 'import { foo, bar, baz } from "./named-trampoline"',
-      parser: parsers.BABEL_OLD,
-      errors: ["baz not found in './named-trampoline'"],
-    }),
-    test({
-      code: 'import { baz } from "./broken-trampoline"',
-      parser: parsers.BABEL_OLD,
-      errors: ['baz not found via broken-trampoline.js -> named-exports.js'],
-    }),
+    
 
     test({
       code: 'const { baz } = require("./bar")',
@@ -291,12 +222,6 @@ ruleTester.run('named', rule, {
     //     type: 'Literal',
     //   }],
     // }),
-
-    test({
-      code: 'import  { type MyOpaqueType, MyMissingClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
-      errors: ["MyMissingClass not found in './flowtypes'"],
-    }),
 
     // jsnext
     test({
@@ -380,6 +305,104 @@ ruleTester.run('named (export *)', rule, {
   ],
 });
 
+context('Babel Parsers', function () {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.exportDefaultFrom] },
+    );
+    ruleTester.run('named', rule, {
+      valid: [
+        // es7
+        test({
+          code: 'export bar, { foo } from "./bar"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { foo, bar } from "./named-trampoline"',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        // es7
+        test({
+          code: 'export bar2, { bar } from "./bar"',
+          errors: ["bar not found in './bar'"],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { foo, bar, baz } from "./named-trampoline"',
+          errors: ["baz not found in './named-trampoline'"],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { baz } from "./broken-trampoline"',
+          errors: ['baz not found via broken-trampoline.js -> named-exports.js'],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
+});
+
+context('Flow', function () {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(
+      parser, { plugins: [babelSyntaxPlugins.flow] },
+    );
+    ruleTester.run('named', rule, {
+      valid: [
+        // should ignore imported/exported flow types, even if they don’t exist
+        test({
+          code: 'import type { MissingType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import typeof { MissingType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import type { MyOpaqueType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import typeof { MyOpaqueType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { type MyOpaqueType, MyClass } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { typeof MyOpaqueType, MyClass } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import typeof MissingType from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'import typeof * as MissingType from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export type { MissingType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+        test({
+          code: 'export type { MyOpaqueType } from "./flowtypes"',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          code: 'import  { type MyOpaqueType, MyMissingClass } from "./flowtypes"',
+          errors: ["MyMissingClass not found in './flowtypes'"],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
+});
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {

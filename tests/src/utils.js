@@ -10,6 +10,7 @@ export const parsers = {
   TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && require.resolve('typescript-eslint-parser'),
   TS_NEW: semver.satisfies(eslintPkg.version, '>5.0.0') && require.resolve('@typescript-eslint/parser'),
   BABEL_OLD: require.resolve('babel-eslint'),
+  BABEL_NEW: semver.satisfies(eslintPkg.version, '^7.5.0 || ^8.0.0') && require.resolve('@babel/eslint-parser'),
 };
 
 export function testFilePath(relativePath) {
@@ -23,8 +24,46 @@ export function getTSParsers() {
   ].filter(Boolean);
 }
 
+export function getBabelParsers() {
+  return [
+    parsers.BABEL_OLD,
+    parsers.BABEL_NEW,
+  ].filter(Boolean);
+}
+
+export function getBabelParserConfig(parser, babelOptions = {}) {
+  const parserConfig = { parser: parser || null };
+  if (parser === parsers.BABEL_NEW) {
+    parserConfig.parserOptions =  {
+      configFile: false,
+      babelrc: false,
+      requireConfigFile: false,
+      babelOptions,
+    };
+  }
+  return parserConfig;
+}
+
+export const babelSyntaxPlugins = {
+  get typescript() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-typescript').default : null;
+  },
+  get flow() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-flow').default : null;
+  },
+  get jsx() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-jsx').default : null;
+  },
+  get exportDefaultFrom() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-export-default-from').default : null;
+  },
+  get decorators() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-decorators').default : null;
+  },
+};
+
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(parsers.BABEL_OLD).filter(Boolean);
+  return getTSParsers().concat(...getBabelParsers()).filter(Boolean);
 }
 
 export const FILENAME = testFilePath('foo.js');
