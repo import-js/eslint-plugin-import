@@ -1,4 +1,4 @@
-import { test, testVersion, testFilePath, getTSParsers, parsers } from '../utils';
+import { test, testVersion, testFilePath, getTSParsers, parsers, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 import jsxConfig from '../../../config/react';
 import typescriptConfig from '../../../config/typescript';
 
@@ -105,74 +105,83 @@ ruleTester.run('no-unused-modules', rule, {
 });
 
 
-// tests for  exports
+// tests for exports
+describe('for exports (Babel Parsers)', () => {
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    ruleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsOptions,
+          code: 'import { o2 } from "./file-o";export default () => 12',
+          filename: testFilePath('./no-unused-modules/file-a.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'export const b = 2',
+          filename: testFilePath('./no-unused-modules/file-b.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'const c1 = 3; function c2() { return 3 }; export { c1, c2 }',
+          filename: testFilePath('./no-unused-modules/file-c.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'export function d() { return 4 }',
+          filename: testFilePath('./no-unused-modules/file-d.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'export class q { q0() {} }',
+          filename: testFilePath('./no-unused-modules/file-q.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'const e0 = 5; export { e0 as e }',
+          filename: testFilePath('./no-unused-modules/file-e.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'const l0 = 5; const l = 10; export { l0 as l1, l }; export default () => {}',
+          filename: testFilePath('./no-unused-modules/file-l.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'const o0 = 0; const o1 = 1; export { o0, o1 as o2 }; export default () => {}',
+          filename: testFilePath('./no-unused-modules/file-o.js'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
+  });
+});
 ruleTester.run('no-unused-modules', rule, {
-  valid: [
-    test({
-      options: unusedExportsOptions,
-      code: 'import { o2 } from "./file-o";export default () => 12',
-      filename: testFilePath('./no-unused-modules/file-a.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'export const b = 2',
-      filename: testFilePath('./no-unused-modules/file-b.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'const c1 = 3; function c2() { return 3 }; export { c1, c2 }',
-      filename: testFilePath('./no-unused-modules/file-c.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'export function d() { return 4 }',
-      filename: testFilePath('./no-unused-modules/file-d.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'export class q { q0() {} }',
-      filename: testFilePath('./no-unused-modules/file-q.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'const e0 = 5; export { e0 as e }',
-      filename: testFilePath('./no-unused-modules/file-e.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'const l0 = 5; const l = 10; export { l0 as l1, l }; export default () => {}',
-      filename: testFilePath('./no-unused-modules/file-l.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-    test({
-      options: unusedExportsOptions,
-      code: 'const o0 = 0; const o1 = 1; export { o0, o1 as o2 }; export default () => {}',
-      filename: testFilePath('./no-unused-modules/file-o.js'),
-      parser: parsers.BABEL_OLD,
-    }),
-  ],
+  valid: [],
   invalid: [
     test({
       options: unusedExportsOptions,
       code: `import eslint from 'eslint'
-           import fileA from './file-a'
-           import { b } from './file-b'
-           import { c1, c2 } from './file-c'
-           import { d } from './file-d'
-           import { e } from './file-e'
-           import { e2 } from './file-e'
-           import { h2 } from './file-h'
-           import * as l from './file-l'
-           export * from './file-n'
-           export { default, o0, o3 } from './file-o'
-           export { p } from './file-p'
-           import s from './file-s'`,
+         import fileA from './file-a'
+         import { b } from './file-b'
+         import { c1, c2 } from './file-c'
+         import { d } from './file-d'
+         import { e } from './file-e'
+         import { e2 } from './file-e'
+         import { h2 } from './file-h'
+         import * as l from './file-l'
+         export * from './file-n'
+         export { default, o0, o3 } from './file-o'
+         export { p } from './file-p'
+         import s from './file-s'`,
       filename: testFilePath('./no-unused-modules/file-0.js'),
       errors: [
         error(`exported declaration 'default' not used within other modules`),
@@ -251,41 +260,45 @@ describe('dynamic imports', () => {
     return;
   }
 
-  // test for unused exports with `import()`
-  ruleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
-        options: unusedExportsOptions,
-        code: `
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    // test for unused exports with `import()`
+    ruleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsOptions,
+          code: `
             export const a = 10
             export const b = 20
             export const c = 30
             const d = 40
             export default d
-            `,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/exports-for-dynamic-js.js'),
-      }),
-    ],
-    invalid: [
-      test({
-        options: unusedExportsOptions,
-        code: `
-        export const a = 10
-        export const b = 20
-        export const c = 30
-        const d = 40
-        export default d
-        `,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/exports-for-dynamic-js-2.js'),
-        errors: [
-          error(`exported declaration 'a' not used within other modules`),
-          error(`exported declaration 'b' not used within other modules`),
-          error(`exported declaration 'c' not used within other modules`),
-          error(`exported declaration 'default' not used within other modules`),
-        ] }),
-    ],
+          `,
+          filename: testFilePath('./no-unused-modules/exports-for-dynamic-js.js'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          options: unusedExportsOptions,
+          code: `
+            export const a = 10
+            export const b = 20
+            export const c = 30
+            const d = 40
+            export default d
+          `,
+          filename: testFilePath('./no-unused-modules/exports-for-dynamic-js-2.js'),
+          errors: [
+            error(`exported declaration 'a' not used within other modules`),
+            error(`exported declaration 'b' not used within other modules`),
+            error(`exported declaration 'c' not used within other modules`),
+            error(`exported declaration 'default' not used within other modules`),
+          ],
+          ...parserConfig,
+        }),
+      ],
+    });
   });
   typescriptRuleTester.run('no-unused-modules', rule, {
     valid: [
@@ -1172,93 +1185,102 @@ context('TypeScript', function () {
 });
 
 describe('correctly work with JSX only files', () => {
-  jsxRuleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
-        options: unusedExportsJsxOptions,
-        code: 'import a from "file-jsx-a";',
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/jsx/file-jsx-a.jsx'),
-      }),
-    ],
-    invalid: [
-      test({
-        options: unusedExportsJsxOptions,
-        code: `export const b = 2;`,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/jsx/file-jsx-b.jsx'),
-        errors: [
-          error(`exported declaration 'b' not used within other modules`),
-        ],
-      }),
-    ],
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.jsx] });
+    jsxRuleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsJsxOptions,
+          code: 'import a from "file-jsx-a";',
+          filename: testFilePath('./no-unused-modules/jsx/file-jsx-a.jsx'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        test({
+          options: unusedExportsJsxOptions,
+          code: `export const b = 2;`,
+          filename: testFilePath('./no-unused-modules/jsx/file-jsx-b.jsx'),
+          errors: [
+            error(`exported declaration 'b' not used within other modules`),
+          ],
+          ...parserConfig,
+        }),
+      ],
+    });
   });
 });
 
 describe('ignore flow types', () => {
-  ruleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
-        options: unusedExportsOptions,
-        code: 'import { type FooType, type FooInterface } from "./flow-2";',
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/flow/flow-0.js'),
-      }),
-      test({
-        options: unusedExportsOptions,
-        code: `// @flow strict
-               export type FooType = string;
-               export interface FooInterface {};
-               `,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/flow/flow-2.js'),
-      }),
-      test({
-        options: unusedExportsOptions,
-        code: 'import type { FooType, FooInterface } from "./flow-4";',
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/flow/flow-3.js'),
-      }),
-      test({
-        options: unusedExportsOptions,
-        code: `// @flow strict
-               export type FooType = string;
-               export interface FooInterface {};
-               `,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/flow/flow-4.js'),
-      }),
-      test({
-        options: unusedExportsOptions,
-        code: `// @flow strict
-               export type Bar = number;
-               export interface BarInterface {};
-               `,
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/flow/flow-1.js'),
-      }),
-    ],
-    invalid: [],
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.flow] });
+    ruleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsOptions,
+          code: 'import { type FooType, type FooInterface } from "./flow-2";',
+          filename: testFilePath('./no-unused-modules/flow/flow-0.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: `// @flow strict
+                 export type FooType = string;
+                 export interface FooInterface {};
+                 `,
+          filename: testFilePath('./no-unused-modules/flow/flow-2.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'import type { FooType, FooInterface } from "./flow-4";',
+          filename: testFilePath('./no-unused-modules/flow/flow-3.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: `// @flow strict
+                 export type FooType = string;
+                 export interface FooInterface {};
+                 `,
+          filename: testFilePath('./no-unused-modules/flow/flow-4.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: `// @flow strict
+                 export type Bar = number;
+                 export interface BarInterface {};
+                 `,
+          filename: testFilePath('./no-unused-modules/flow/flow-1.js'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
   });
 });
 
 describe('support (nested) destructuring assignment', () => {
-  ruleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
-        options: unusedExportsOptions,
-        code: 'import {a, b} from "./destructuring-b";',
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/destructuring-a.js'),
-      }),
-      test({
-        options: unusedExportsOptions,
-        code: 'const obj = {a: 1, dummy: {b: 2}}; export const {a, dummy: {b}} = obj;',
-        parser: parsers.BABEL_OLD,
-        filename: testFilePath('./no-unused-modules/destructuring-b.js'),
-      }),
-    ],
-    invalid: [],
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser);
+    ruleTester.run('no-unused-modules', rule, {
+      valid: [
+        test({
+          options: unusedExportsOptions,
+          code: 'import {a, b} from "./destructuring-b";',
+          filename: testFilePath('./no-unused-modules/destructuring-a.js'),
+          ...parserConfig,
+        }),
+        test({
+          options: unusedExportsOptions,
+          code: 'const obj = {a: 1, dummy: {b: 2}}; export const {a, dummy: {b}} = obj;',
+          filename: testFilePath('./no-unused-modules/destructuring-b.js'),
+          ...parserConfig,
+        }),
+      ],
+      invalid: [],
+    });
   });
 });
 

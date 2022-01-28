@@ -5,7 +5,6 @@ import flatMap from 'array.prototype.flatmap';
 const ruleTester = new RuleTester({ env: { es6: true } });
 const rule = require('rules/namespace');
 
-
 function error(name, namespace) {
   return { message: `'${name}' not found in imported namespace '${namespace}'.` };
 }

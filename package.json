@@ -59,6 +59,7 @@
     "@babel/plugin-syntax-decorators": "^7.16.7",
     "@babel/plugin-syntax-export-default-from": "^7.16.7",
     "@babel/plugin-syntax-flow": "^7.16.7",
+    "@babel/plugin-syntax-jsx": "^7.16.7",
     "@babel/plugin-syntax-typescript": "^7.16.7",
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
