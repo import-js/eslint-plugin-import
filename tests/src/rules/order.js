@@ -1,10 +1,9 @@
-import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers, getBabelParserConfig } from '../utils';
+import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
-import babelPluginSyntaxTypeScript from '@babel/plugin-syntax-typescript';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/order');
@@ -2329,7 +2328,9 @@ context('TypeScript', function () {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
-        ...getBabelParserConfig(parser, { plugins: [babelPluginSyntaxTypeScript] }),
+        ...getBabelParserConfig(
+          parser, { plugins: [babelSyntaxPlugins.typescript] },
+        ),
       };
 
       ruleTester.run('order', rule, {

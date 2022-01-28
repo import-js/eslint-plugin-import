@@ -44,6 +44,24 @@ export function getBabelParserConfig(parser, babelOptions = {}) {
   return parserConfig;
 }
 
+export const babelSyntaxPlugins = {
+  get typescript() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-typescript').default : null;
+  },
+  get flow() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-flow').default : null;
+  },
+  get jsx() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-jsx').default : null;
+  },
+  get exportDefaultFrom() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-export-default-from').default : null;
+  },
+  get decorators() {
+    return parsers.BABEL_NEW ? require('@babel/plugin-syntax-decorators').default : null;
+  },
+};
+
 export function getNonDefaultParsers() {
   return getTSParsers().concat(...getBabelParsers()).filter(Boolean);
 }

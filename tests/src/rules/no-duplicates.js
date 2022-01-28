@@ -1,10 +1,9 @@
 import * as path from 'path';
-import { test as testUtil, getNonDefaultParsers, parsers, getBabelParserConfig } from '../utils';
+import { test as testUtil, getNonDefaultParsers, parsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
-import babelPluginSyntaxTypeScript from '@babel/plugin-syntax-typescript';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');
@@ -426,7 +425,7 @@ context('TypeScript', function () {
           'import/parsers': { [parser]: ['.ts'] },
           'import/resolver': { 'eslint-import-resolver-typescript': true },
         },
-        ...getBabelParserConfig(parser, { plugins: [babelPluginSyntaxTypeScript] }),
+        ...getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.typescript] }),
       };
 
       ruleTester.run('no-duplicates', rule, {
