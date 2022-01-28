@@ -1,5 +1,7 @@
 import { RuleTester } from 'eslint';
 import flatMap from 'array.prototype.flatmap';
+import semver from 'semver';
+import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
 import { getTSParsers, parsers, testVersion } from '../utils';
 
@@ -12,7 +14,7 @@ const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not
 const ruleTester = new RuleTester();
 
 ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
-  valid: [
+  valid: [].concat(
     `var path = require('path');\nvar foo = require('foo');\n`,
     `require('foo');`,
     `switch ('foo') { case 'bar': require('baz'); }`,
@@ -178,7 +180,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
-    ...flatMap(getTSParsers(), (parser) => [
+    flatMap(getTSParsers(), (parser) => [].concat(
       {
         code: `
           import { ExecaReturnValue } from 'execa';
@@ -213,14 +215,14 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
-      {
+      parser !== parsers.TS_OLD || semver.satisfies(tsEslintVersion, '>= 22') ? {
         code: `
           export import a = obj;\nf(a);
         `,
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      },
-      {
+      } : [],
+      parser !== parsers.TS_OLD || semver.satisfies(tsEslintVersion, '>= 22') ? {
         code: `
           import { a } from "./a";
 
@@ -230,7 +232,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
           }`,
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      },
+      } : [],
       {
         code: `
           import stub from './stub';
@@ -242,7 +244,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
-    ]),
+    )),
     {
       code: `
         import stub from './stub';
@@ -253,7 +255,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-  ],
+  ),
 
   invalid: [].concat(
     {

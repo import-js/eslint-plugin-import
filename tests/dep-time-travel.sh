@@ -32,6 +32,9 @@ if [[ "$ESLINT_VERSION" -lt "4" ]]; then
 
   echo "Downgrading TypeScript dependencies..."
   npm i --no-save typescript-eslint-parser@15 typescript@2.8.1
+elif [[ "$ESLINT_VERSION" -lt "7" ]]; then
+  echo "Downgrading TypeScript dependencies..."
+  npm i --no-save typescript-eslint-parser@20
 fi
 
 # typescript-eslint-parser 1.1.1+ is not compatible with node 6

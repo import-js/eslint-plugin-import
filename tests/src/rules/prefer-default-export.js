@@ -1,6 +1,8 @@
 import { test, testVersion, getNonDefaultParsers, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
+import semver from 'semver';
+import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
 const ruleTester = new RuleTester();
 const rule = require('../../../src/rules/prefer-default-export');
@@ -164,28 +166,24 @@ context('TypeScript', function () {
     };
 
     ruleTester.run('prefer-default-export', rule, {
-      valid: [
+      valid: [].concat(
         // Exporting types
+        semver.satisfies(tsEslintVersion, '>= 22') ? test({
+          code: `
+          export type foo = string;
+          export type bar = number;`,
+          ...parserConfig,
+        }) : [],
         test({
           code: `
           export type foo = string;
           export type bar = number;`,
           ...parserConfig,
         }),
-        test({
-          code: `
-          export type foo = string;
-          export type bar = number;`,
-          ...parserConfig,
-        }),
-        test({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test({
           code: 'export type foo = string',
           ...parserConfig,
-        }),
-        test({
-          code: 'export type foo = string',
-          ...parserConfig,
-        }),
+        }) : [],
         test({
           code: 'export interface foo { bar: string; }',
           ...parserConfig,
@@ -194,7 +192,7 @@ context('TypeScript', function () {
           code: 'export interface foo { bar: string; }; export function goo() {}',
           ...parserConfig,
         }),
-      ],
+      ),
       invalid: [],
     });
   });

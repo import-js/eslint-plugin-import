@@ -1,6 +1,8 @@
 import path from 'path';
 import { test, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
 import { RuleTester } from 'eslint';
+import semver from 'semver';
+import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -165,7 +167,7 @@ if (!CASE_SENSITIVE_FS) {
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     ruleTester.run(`default`, rule, {
-      valid: [
+      valid: [].concat(
         test({
           code: `import foobar from "./typescript-default"`,
           parser,
@@ -190,14 +192,14 @@ context('TypeScript', function () {
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
         }),
-        test({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test({
           code: `import foobar from "./typescript-export-assign-mixed"`,
           parser,
           settings: {
             'import/parsers': { [parser]: ['.ts'] },
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
-        }),
+        }) : [],
         test({
           code: `import foobar from "./typescript-export-assign-default-reexport"`,
           parser,
@@ -258,7 +260,7 @@ context('TypeScript', function () {
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
         }),
-      ],
+      ),
 
       invalid: [
         test({

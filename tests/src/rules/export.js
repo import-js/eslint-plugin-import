@@ -3,6 +3,7 @@ import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
+import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/export');
@@ -149,7 +150,7 @@ context('TypeScript', function () {
     };
 
     ruleTester.run('export', rule, {
-      valid: [
+      valid: [].concat(
         // type/value name clash
         test(Object.assign({
           code: `
@@ -164,20 +165,20 @@ context('TypeScript', function () {
           `,
         }, parserConfig)),
 
-        test(Object.assign({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test(Object.assign({
           code: `
             export function fff(a: string);
             export function fff(a: number);
           `,
-        }, parserConfig)),
+        }, parserConfig)) : [],
 
-        test(Object.assign({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test(Object.assign({
           code: `
             export function fff(a: string);
             export function fff(a: number);
             export function fff(a: string|number) {};
           `,
-        }, parserConfig)),
+        }, parserConfig)) : [],
 
         // namespace
         test(Object.assign({
@@ -224,7 +225,7 @@ context('TypeScript', function () {
           filename: testFilePath('typescript-d-ts/file-2.ts'),
         }, parserConfig)),
 
-        ...(semver.satisfies(eslintPkg.version, '< 6') ? [] : [
+        (semver.satisfies(eslintPkg.version, '< 6') ? [] : [
           test({
             code: `
               export * as A from './named-export-collision/a';
@@ -258,7 +259,7 @@ context('TypeScript', function () {
           `,
         }, parserConfig)),
 
-        ...(semver.satisfies(process.version, '< 8') && semver.satisfies(eslintPkg.version, '< 6') ? [] : test({
+        (semver.satisfies(process.version, '< 8') && semver.satisfies(eslintPkg.version, '< 6') ? [] : test({
           ...parserConfig,
           code: `
             export * from './module';
@@ -269,7 +270,7 @@ context('TypeScript', function () {
             'import/extensions': ['.js', '.ts', '.jsx'],
           },
         })),
-      ],
+      ),
       invalid: [
         // type/value name clash
         test(Object.assign({
