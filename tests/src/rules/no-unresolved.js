@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers } from '../utils';
+import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers, getBabelParsers, getBabelParserConfig, babelSyntaxPlugins } from '../utils';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -29,8 +29,6 @@ function runResolverTests(resolver) {
       rest({ code: "import bar from './bar.js';" }),
       rest({ code: "import {someThing} from './test-module';" }),
       rest({ code: "import fs from 'fs';" }),
-      rest({ code: "import('fs');",
-        parser: parsers.BABEL_OLD }),
 
       // check with eslint parser
       testVersion('>= 7', () => rest({
@@ -43,13 +41,6 @@ function runResolverTests(resolver) {
       rest({ code: 'export { foo } from "./bar"' }),
       rest({ code: 'export * from "./bar"' }),
       rest({ code: 'let foo; export { foo }' }),
-
-      // stage 1 proposal for export symmetry,
-      rest({ code: 'export * as bar from "./bar"',
-        parser: parsers.BABEL_OLD }),
-      rest({ code: 'export bar from "./bar"',
-        parser: parsers.BABEL_OLD }),
-      rest({ code: 'import foo from "./jsx/MyUnCoolComponent.jsx"' }),
 
       // commonjs setting
       rest({ code: 'var foo = require("./bar")',
@@ -121,13 +112,6 @@ function runResolverTests(resolver) {
                             "module 'in-alternate-root'.",
         type: 'Literal',
         }] }),
-      rest({
-        code: "import('in-alternate-root').then(function({DEEP}) {});",
-        errors: [{
-          message: 'Unable to resolve path to module \'in-alternate-root\'.',
-          type: 'Literal',
-        }],
-        parser: parsers.BABEL_OLD }),
 
       rest({ code: 'export { foo } from "./does-not-exist"',
         errors: ["Unable to resolve path to module './does-not-exist'."] }),
@@ -145,16 +129,6 @@ function runResolverTests(resolver) {
         }],
         parserOptions: { ecmaVersion: 2021 },
       })) || [],
-
-      // export symmetry proposal
-      rest({ code: 'export * as bar from "./does-not-exist"',
-        parser: parsers.BABEL_OLD,
-        errors: ["Unable to resolve path to module './does-not-exist'."],
-      }),
-      rest({ code: 'export bar from "./does-not-exist"',
-        parser: parsers.BABEL_OLD,
-        errors: ["Unable to resolve path to module './does-not-exist'."],
-      }),
 
       // commonjs setting
       rest({
@@ -275,6 +249,48 @@ function runResolverTests(resolver) {
       ],
     });
   }
+
+  getBabelParsers().forEach((parser) => {
+    const parserConfig = getBabelParserConfig(parser, { plugins: [babelSyntaxPlugins.exportDefaultFrom] });
+    ruleTester.run('no-unresolved', rule, {
+      valid: [
+        rest({
+          code: "import('fs');",
+          ...parserConfig,
+        }),
+        // stage 1 proposal for export symmetry,
+        rest({
+          code: 'export * as bar from "./bar"',
+          ...parserConfig,
+        }),
+        rest({
+          code: 'export bar from "./bar"',
+          ...parserConfig,
+        }),
+      ],
+      invalid: [
+        rest({
+          code: "import('in-alternate-root').then(function({DEEP}) {});",
+          errors: [{
+            message: 'Unable to resolve path to module \'in-alternate-root\'.',
+            type: 'Literal',
+          }],
+          ...parserConfig,
+        }),
+        // export symmetry proposal
+        rest({
+          code: 'export * as bar from "./does-not-exist"',
+          errors: ["Unable to resolve path to module './does-not-exist'."],
+          ...parserConfig,
+        }),
+        rest({
+          code: 'export bar from "./does-not-exist"',
+          errors: ["Unable to resolve path to module './does-not-exist'."],
+          ...parserConfig,
+        }),
+      ],
+    });
+  });
 
 }
 
