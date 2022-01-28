@@ -104,6 +104,9 @@ describe('CLI regression tests', function () {
                 fixableErrorCount: 0,
                 fixableWarningCount: 0,
                 source: results[0].source, // NewLine-characters might differ depending on git-settings
+                ...(semver.satisfies(eslintPkg.version, '>= 8.8') && {
+                  suppressedMessages: [],
+                }),
                 usedDeprecatedRules: results[0].usedDeprecatedRules, // we don't care about this one
               },
             ],
