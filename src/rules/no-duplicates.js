@@ -274,17 +274,23 @@ module.exports = {
       return defaultResolver(parts[1]) + '?' + parts[2];
     }) : defaultResolver;
 
-    const imported = new Map();
-    const nsImported = new Map();
-    const defaultTypesImported = new Map();
-    const namedTypesImported = new Map();
+    const moduleMaps = new Map();
 
     function getImportMap(n) {
+      if (!moduleMaps.has(n.parent)) {
+        moduleMaps.set(n.parent, {
+          imported: new Map(),
+          nsImported: new Map(),
+          defaultTypesImported: new Map(),
+          namedTypesImported: new Map(),
+        });
+      }
+      const map = moduleMaps.get(n.parent);
       if (n.importKind === 'type') {
-        return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? defaultTypesImported : namedTypesImported;
+        return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
       }
 
-      return hasNamespace(n) ? nsImported : imported;
+      return hasNamespace(n) ? map.nsImported : map.imported;
     }
 
     return {
@@ -301,10 +307,12 @@ module.exports = {
       },
 
       'Program:exit': function () {
-        checkImports(imported, context);
-        checkImports(nsImported, context);
-        checkImports(defaultTypesImported, context);
-        checkImports(namedTypesImported, context);
+        for (const map of moduleMaps.values()) {
+          checkImports(map.imported, context);
+          checkImports(map.nsImported, context);
+          checkImports(map.defaultTypesImported, context);
+          checkImports(map.namedTypesImported, context);
+        }
       },
     };
   },

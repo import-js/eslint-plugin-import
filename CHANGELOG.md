@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [`default`]: `typescript-eslint-parser`: avoid a crash on exporting as namespace (thanks [@ljharb])
 - [`export`]/TypeScript: false positive for typescript namespace merging ([#1964], thanks [@magarcia])
+- [`no-duplicates`]: ignore duplicate modules in different TypeScript module declarations ([#2378], thanks [@remcohaszing])
 
 ### Changed
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
@@ -968,6 +969,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2378]: https://github.com/import-js/eslint-plugin-import/pull/2378
 [#2371]: https://github.com/import-js/eslint-plugin-import/pull/2371
 [#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
 [#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332

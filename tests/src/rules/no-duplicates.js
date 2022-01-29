@@ -454,6 +454,20 @@ context('TypeScript', function () {
             `,
             ...parserConfig,
           }),
+          test({
+            code: `
+              import type { Identifier } from 'module';
+
+              declare module 'module2' {
+                import type { Identifier } from 'module';
+              }
+
+              declare module 'module3' {
+                import type { Identifier } from 'module';
+              }
+            `,
+            ...parserConfig,
+          }),
         ],
         invalid: [
           test({
