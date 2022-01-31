@@ -103,6 +103,16 @@
             },
         },
         {
+            "files": "resolvers/webpack/**",
+            "rules": {
+                "import/no-extraneous-dependencies": 1,
+                "no-console": 1,
+            },
+            "env": {
+                "es6": true,
+            },
+        },
+        {
             "files": [
                 "resolvers/*/test/**/*",
             ],
@@ -125,6 +135,16 @@
                     "functions": "never"
                 }],
                 "no-console": 1,
+            },
+        },
+        {
+            "files": "tests/**",
+            "env": {
+                "mocha": true,
+            },
+            "rules": {
+                "max-len": 0,
+                "import/default": 0,
             },
         },
     ],
