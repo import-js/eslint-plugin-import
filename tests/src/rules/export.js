@@ -26,7 +26,7 @@ ruleTester.run('export', rule, {
     // #328: "export * from" does not export a default
     test({ code: 'export default foo; export * from "./bar"' }),
 
-    ...SYNTAX_CASES,
+    SYNTAX_CASES,
 
     test({
       code: `
@@ -82,22 +82,31 @@ ruleTester.run('export', rule, {
     // }),
     test({
       code: 'let foo; export { foo }; export * from "./export-all"',
-      errors: ['Multiple exports of name \'foo\'.',
-        'Multiple exports of name \'foo\'.'],
+      errors: [
+        'Multiple exports of name \'foo\'.',
+        'Multiple exports of name \'foo\'.',
+      ],
     }),
-    // test({ code: 'export * from "./default-export"'
-    //      , errors: [{ message: 'No named exports found in module ' +
-    //                            '\'./default-export\'.'
-    //                 , type: 'Literal' }] }),
+    // test({
+    //   code: 'export * from "./default-export"',
+    //   errors: [
+    //     {
+    //       message: 'No named exports found in module \'./default-export\'.',
+    //       type: 'Literal',
+    //     },
+    //   ],
+    // }),
 
     // note: Espree bump to Acorn 4+ changed this test's error message.
     //       `npm up` first if it's failing.
     test({
       code: 'export * from "./malformed.js"',
-      errors: [{
-        message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
-        type: 'Literal',
-      }],
+      errors: [
+        {
+          message: "Parse errors in imported module './malformed.js': 'return' outside of function (1:1)",
+          type: 'Literal',
+        },
+      ],
     }),
 
     // test({
@@ -152,52 +161,58 @@ context('TypeScript', function () {
     ruleTester.run('export', rule, {
       valid: [].concat(
         // type/value name clash
-        test(Object.assign({
+        test({
           code: `
             export const Foo = 1;
             export type Foo = number;
           `,
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             export const Foo = 1;
             export interface Foo {}
           `,
-        }, parserConfig)),
+          ...parserConfig,
+        }),
 
-        semver.satisfies(tsEslintVersion, '>= 22') ? test(Object.assign({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test({
           code: `
             export function fff(a: string);
             export function fff(a: number);
           `,
-        }, parserConfig)) : [],
+          ...parserConfig,
+        }) : [],
 
-        semver.satisfies(tsEslintVersion, '>= 22') ? test(Object.assign({
+        semver.satisfies(tsEslintVersion, '>= 22') ? test({
           code: `
             export function fff(a: string);
             export function fff(a: number);
             export function fff(a: string|number) {};
           `,
-        }, parserConfig)) : [],
+          ...parserConfig,
+        }) : [],
 
         // namespace
-        test(Object.assign({
+        test({
           code: `
             export const Bar = 1;
             export namespace Foo {
               export const Bar = 1;
             }
           `,
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             export type Bar = string;
             export namespace Foo {
               export type Bar = string;
             }
           `,
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             export const Bar = 1;
             export type Bar = string;
@@ -206,8 +221,9 @@ context('TypeScript', function () {
               export type Bar = string;
             }
           `,
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             export namespace Foo {
               export const Foo = 1;
@@ -219,10 +235,10 @@ context('TypeScript', function () {
               }
             }
           `,
-        }, parserConfig)),
-
+          ...parserConfig,
+        }),
         semver.satisfies(eslintPkg.version, '>= 6') ? [
-          test(Object.assign({
+          test({
             code: `
               export class Foo { }
               export namespace Foo { }
@@ -230,38 +246,43 @@ context('TypeScript', function () {
                 export class Bar {}
               }
             `,
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export function Foo();
               export namespace Foo { }
             `,
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export function Foo(a: string);
               export namespace Foo { }
             `,
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export function Foo(a: string);
               export function Foo(a: number);
               export namespace Foo { }
             `,
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export enum Foo { }
               export namespace Foo { }
             `,
-          }, parserConfig)),
+            ...parserConfig,
+          }),
         ] : [],
-
-        test(Object.assign({
+        test({
           code: 'export * from "./file1.ts"',
           filename: testFilePath('typescript-d-ts/file-2.ts'),
-        }, parserConfig)),
+          ...parserConfig,
+        }),
 
         semver.satisfies(eslintPkg.version, '>= 6') ? [
           test({
@@ -274,7 +295,7 @@ context('TypeScript', function () {
         ] : [],
 
         // Exports in ambient modules
-        test(Object.assign({
+        test({
           code: `
             declare module "a" {
               const Foo = 1;
@@ -285,8 +306,9 @@ context('TypeScript', function () {
               export {Bar as default};
             }
           `,
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             declare module "a" {
               const Foo = 1;
@@ -295,9 +317,10 @@ context('TypeScript', function () {
             const Bar = 2;
             export {Bar as default};
           `,
-        }, parserConfig)),
+          ...parserConfig,
+        }),
 
-        (semver.satisfies(process.version, '< 8') && semver.satisfies(eslintPkg.version, '< 6') ? [] : test({
+        semver.satisfies(process.version, '< 8') && semver.satisfies(eslintPkg.version, '< 6') ? [] : test({
           ...parserConfig,
           code: `
             export * from './module';
@@ -307,11 +330,11 @@ context('TypeScript', function () {
             ...parserConfig.settings,
             'import/extensions': ['.js', '.ts', '.jsx'],
           },
-        })),
+        }),
       ),
       invalid: [].concat(
         // type/value name clash
-        test(Object.assign({
+        test({
           code: `
             export type Foo = string;
             export type Foo = number;
@@ -326,10 +349,11 @@ context('TypeScript', function () {
               line: 3,
             },
           ],
-        }, parserConfig)),
+          ...parserConfig,
+        }),
 
         // namespace
-        test(Object.assign({
+        test({
           code: `
             export const a = 1
             export namespace Foo {
@@ -347,8 +371,9 @@ context('TypeScript', function () {
               line: 5,
             },
           ],
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             declare module 'foo' {
               const Foo = 1;
@@ -366,8 +391,9 @@ context('TypeScript', function () {
               line: 5,
             },
           ],
-        }, parserConfig)),
-        test(Object.assign({
+          ...parserConfig,
+        }),
+        test({
           code: `
             export namespace Foo {
               export namespace Bar {
@@ -398,9 +424,10 @@ context('TypeScript', function () {
               line: 9,
             },
           ],
-        }, parserConfig)),
+          ...parserConfig,
+        }),
         semver.satisfies(eslintPkg.version, '< 6') ? [] : [
-          test(Object.assign({
+          test({
             code: `
               export class Foo { }
               export class Foo { }
@@ -416,8 +443,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export enum Foo { }
               export enum Foo { }
@@ -433,8 +461,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export enum Foo { }
               export class Foo { }
@@ -450,8 +479,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export const Foo = 'bar';
               export class Foo { }
@@ -467,8 +497,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export function Foo();
               export class Foo { }
@@ -484,8 +515,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export const Foo = 'bar';
               export function Foo();
@@ -501,8 +533,9 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
-          test(Object.assign({
+            ...parserConfig,
+          }),
+          test({
             code: `
               export const Foo = 'bar';
               export namespace Foo { }
@@ -517,11 +550,12 @@ context('TypeScript', function () {
                 line: 3,
               },
             ],
-          }, parserConfig)),
+            ...parserConfig,
+          }),
         ],
 
         // Exports in ambient modules
-        test(Object.assign({
+        test({
           code: `
             declare module "a" {
               const Foo = 1;
@@ -542,7 +576,8 @@ context('TypeScript', function () {
               line: 9,
             },
           ],
-        }, parserConfig)),
+          ...parserConfig,
+        }),
       ),
     });
   });

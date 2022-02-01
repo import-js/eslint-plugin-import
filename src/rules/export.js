@@ -131,15 +131,19 @@ module.exports = {
     }
 
     return {
-      'ExportDefaultDeclaration': (node) => addNamed('default', node, getParent(node)),
+      ExportDefaultDeclaration(node) {
+        addNamed('default', node, getParent(node));
+      },
 
-      'ExportSpecifier': (node) => addNamed(
-        node.exported.name || node.exported.value,
-        node.exported,
-        getParent(node.parent),
-      ),
+      ExportSpecifier(node) {
+        addNamed(
+          node.exported.name || node.exported.value,
+          node.exported,
+          getParent(node.parent),
+        );
+      },
 
-      'ExportNamedDeclaration': function (node) {
+      ExportNamedDeclaration(node) {
         if (node.declaration == null) return;
 
         const parent = getParent(node);
@@ -165,7 +169,7 @@ module.exports = {
         }
       },
 
-      'ExportAllDeclaration': function (node) {
+      ExportAllDeclaration(node) {
         if (node.source == null) return; // not sure if this is ever true
 
         // `export * as X from 'path'` does not conflict
