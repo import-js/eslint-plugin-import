@@ -6,6 +6,11 @@ import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisi
 import importType from '../core/importType';
 import docsUrl from '../docsUrl';
 
+/** @param {string} filePath */
+function toPosixPath(filePath) {
+  return filePath.replace(/\\/g, '/');
+}
+
 function findNamedPackage(filePath) {
   const found = readPkgUp({ cwd: filePath });
   if (found.pkg && !found.pkg.name) {
@@ -42,6 +47,8 @@ function checkImportForRelativePackage(context, importPath, node) {
     context.report({
       node,
       message: `Relative import from another package is not allowed. Use \`${properImport}\` instead of \`${importPath}\``,
+      fix: fixer => fixer.replaceText(node, JSON.stringify(toPosixPath(properImport)))
+      ,
     });
   }
 }
@@ -52,6 +59,7 @@ module.exports = {
     docs: {
       url: docsUrl('no-relative-packages'),
     },
+    fixable: 'code',
     schema: [makeOptionsSchema()],
   },
 

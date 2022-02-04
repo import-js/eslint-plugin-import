@@ -47,6 +47,7 @@ ruleTester.run('no-relative-packages', rule, {
         line: 1,
         column: 17,
       } ],
+      output: 'import foo from "package-named"',
     }),
     test({
       code: 'import foo from "../package-named"',
@@ -56,6 +57,7 @@ ruleTester.run('no-relative-packages', rule, {
         line: 1,
         column: 17,
       } ],
+      output: 'import foo from "package-named"',
     }),
     test({
       code: 'import foo from "../package-scoped"',
@@ -65,6 +67,7 @@ ruleTester.run('no-relative-packages', rule, {
         line: 1,
         column: 17,
       } ],
+      output: `import foo from "@scope/package-named"`,
     }),
     test({
       code: 'import bar from "../bar"',
@@ -74,6 +77,7 @@ ruleTester.run('no-relative-packages', rule, {
         line: 1,
         column: 17,
       } ],
+      output: `import bar from "eslint-plugin-import/tests/files/bar"`,
     }),
   ],
 });

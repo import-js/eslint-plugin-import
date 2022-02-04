@@ -5,6 +5,7 @@ Use this rule to prevent importing packages through relative paths.
 It's useful in Yarn/Lerna workspaces, were it's possible to import a sibling
 package using `../package` relative path, while direct `package` is the correct one.
 
++(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 ### Examples
 
