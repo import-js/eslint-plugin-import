@@ -78,7 +78,7 @@ module.exports = {
             }
           }
         }
-        body.forEach(processBodyStatement);
+        if (body) body.forEach(processBodyStatement);
       },
 
       // same as above, but does not add names to local map
