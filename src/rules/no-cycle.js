@@ -33,6 +33,11 @@ module.exports = {
         type: 'boolean',
         default: false,
       },
+      allowUnsafeDynamicCyclicDependency: {
+        description: 'Allow cyclic dependency if there is at least one dynamic import in the chain',
+        type: 'boolean',
+        default: false,
+      },
     })],
   },
 
@@ -51,6 +56,13 @@ module.exports = {
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {
         return; // ignore external modules
+      }
+      if (options.allowUnsafeDynamicCyclicDependency && (
+        // Ignore `import()`
+        importer.type === 'ImportExpression' ||
+        // `require()` calls are always checked (if possible)
+        (importer.type === 'CallExpression' && importer.callee.name !== 'require'))) {
+        return; // cycle via dynamic import allowed by config
       }
 
       if (
@@ -89,6 +101,12 @@ module.exports = {
             // Ignore only type imports
             !isOnlyImportingTypes,
           );
+          
+          /*
+          If cyclic dependency is allowed via dynamic import, skip checking if any module is imported dynamically
+          */
+          if (options.allowUnsafeDynamicCyclicDependency && toTraverse.some(d => d.dynamic)) return;
+
           /*
           Only report as a cycle if there are any import declarations that are considered by
           the rule. For example:

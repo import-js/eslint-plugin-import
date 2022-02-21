@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 - [`no-relative-packages`]: add fixer ([#2381], thanks [@forivall])
+- [`no-cycle`]: add `allowUnsafeDynamicCyclicDependency` option ([#2387], thanks [@GerkinDev])
 
 ### Fixed
 - [`default`]: `typescript-eslint-parser`: avoid a crash on exporting as namespace (thanks [@ljharb])

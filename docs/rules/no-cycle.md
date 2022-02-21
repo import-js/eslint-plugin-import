@@ -75,6 +75,22 @@ import { a } from './dep-a.js' // not reported as this module is external
 
 Its value is `false` by default, but can be set to `true` for reducing total project lint time, if needed.
 
+#### `allowUnsafeDynamicCyclicDependency`
+
+This option disable reporting of errors if a cycle is detected with at least one dynamic import.
+
+```js
+// bar.js
+import { foo } from './foo';
+export const bar = foo;
+
+// foo.js
+export const foo = 'Foo';
+export function getBar() { return import('./bar'); }
+```
+
+> Cyclic dependency are **always** a dangerous anti-pattern as discussed extensively in [#2265](https://github.com/import-js/eslint-plugin-import/issues/2265). Please be extra careful about using this option.
+
 ## When Not To Use It
 
 This rule is comparatively computationally expensive. If you are pressed for lint

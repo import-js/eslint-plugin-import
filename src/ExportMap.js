@@ -395,6 +395,7 @@ ExportMap.parse = function (path, content, context) {
           loc: source.loc,
         },
         importedSpecifiers,
+        dynamic: true,
       }]),
     });
   }
