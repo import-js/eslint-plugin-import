@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
 - [Tests] `default`, `no-anonymous-default-export`, `no-mutable-exports`, `no-named-as-default-member`, `no-named-as-default`: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [Docs] [`no-unresolved`]: Fix RegExp escaping in readme ([#2332], thanks [@stephtr])
+- [Refactor] `namespace`: try to improve performance ([#2340], thanks [@ljharb])
 
 ## [2.25.4] - 2022-01-02
 
@@ -1255,6 +1256,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2340]: https://github.com/import-js/eslint-plugin-import/issues/2340
 [#2255]: https://github.com/import-js/eslint-plugin-import/issues/2255
 [#2210]: https://github.com/import-js/eslint-plugin-import/issues/2210
 [#2201]: https://github.com/import-js/eslint-plugin-import/issues/2201

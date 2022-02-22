@@ -3,6 +3,44 @@ import Exports from '../ExportMap';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
+function processBodyStatement(context, namespaces, declaration) {
+  if (declaration.type !== 'ImportDeclaration') return;
+
+  if (declaration.specifiers.length === 0) return;
+
+  const imports = Exports.get(declaration.source.value, context);
+  if (imports == null) return null;
+
+  if (imports.errors.length > 0) {
+    imports.reportErrors(context, declaration);
+    return;
+  }
+
+  declaration.specifiers.forEach((specifier) => {
+    switch (specifier.type) {
+    case 'ImportNamespaceSpecifier':
+      if (!imports.size) {
+        context.report(
+          specifier,
+          `No exported names found in module '${declaration.source.value}'.`,
+        );
+      }
+      namespaces.set(specifier.local.name, imports);
+      break;
+    case 'ImportDefaultSpecifier':
+    case 'ImportSpecifier': {
+      const meta = imports.get(
+        // default to 'default' for default https://i.imgur.com/nj6qAWy.jpg
+        specifier.imported ? (specifier.imported.name || specifier.imported.value) : 'default',
+      );
+      if (!meta || !meta.namespace) { break; }
+      namespaces.set(specifier.local.name, meta.namespace);
+      break;
+    }
+    }
+  });
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -41,44 +79,7 @@ module.exports = {
     return {
       // pick up all imports at body entry time, to properly respect hoisting
       Program({ body }) {
-        function processBodyStatement(declaration) {
-          if (declaration.type !== 'ImportDeclaration') return;
-
-          if (declaration.specifiers.length === 0) return;
-
-          const imports = Exports.get(declaration.source.value, context);
-          if (imports == null) return null;
-
-          if (imports.errors.length) {
-            imports.reportErrors(context, declaration);
-            return;
-          }
-
-          for (const specifier of declaration.specifiers) {
-            switch (specifier.type) {
-            case 'ImportNamespaceSpecifier':
-              if (!imports.size) {
-                context.report(
-                  specifier,
-                  `No exported names found in module '${declaration.source.value}'.`,
-                );
-              }
-              namespaces.set(specifier.local.name, imports);
-              break;
-            case 'ImportDefaultSpecifier':
-            case 'ImportSpecifier': {
-              const meta = imports.get(
-                // default to 'default' for default https://i.imgur.com/nj6qAWy.jpg
-                specifier.imported ? (specifier.imported.name || specifier.imported.value) : 'default',
-              );
-              if (!meta || !meta.namespace) { break; }
-              namespaces.set(specifier.local.name, meta.namespace);
-              break;
-            }
-            }
-          }
-        }
-        body.forEach(processBodyStatement);
+        body.forEach(x => processBodyStatement(context, namespaces, x));
       },
 
       // same as above, but does not add names to local map
@@ -120,7 +121,6 @@ module.exports = {
         const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
         while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
-
           if (dereference.computed) {
             if (!allowComputed) {
               context.report(
@@ -147,7 +147,6 @@ module.exports = {
           namespace = exported.namespace;
           dereference = dereference.parent;
         }
-
       },
 
       VariableDeclarator({ id, init }) {
