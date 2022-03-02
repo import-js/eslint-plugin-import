@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] `default`, `no-anonymous-default-export`, `no-mutable-exports`, `no-named-as-default-member`, `no-named-as-default`: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [Docs] [`no-unresolved`]: Fix RegExp escaping in readme ([#2332], thanks [@stephtr])
 - [Refactor] `namespace`: try to improve performance ([#2340], thanks [@ljharb])
+- [Docs] make rule doc titles consistent ([#2393], thanks [@TheJaredWilcurt])
 
 ## [2.25.4] - 2022-01-02
 
@@ -971,6 +972,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2381]: https://github.com/import-js/eslint-plugin-import/pull/2381
 [#2378]: https://github.com/import-js/eslint-plugin-import/pull/2378
 [#2371]: https://github.com/import-js/eslint-plugin-import/pull/2371
@@ -1659,6 +1661,7 @@ for info on changes for earlier releases.
 [@Taranys]: https://github.com/Taranys
 [@taye]: https://github.com/taye
 [@TheCrueltySage]: https://github.com/TheCrueltySage
+[@TheJaredWilcurt]: https://github.com/TheJaredWilcurt
 [@tihonove]: https://github.com/tihonove
 [@timkraut]: https://github.com/timkraut
 [@tizmagik]: https://github.com/tizmagik

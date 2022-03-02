@@ -1,4 +1,4 @@
-# no-import-module-exports
+# import/no-import-module-exports
 
 Reports the use of import declarations with CommonJS exports in any module
 except for the [main module](https://docs.npmjs.com/files/package.json#main).

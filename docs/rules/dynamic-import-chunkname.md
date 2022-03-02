@@ -1,4 +1,4 @@
-# dynamic imports require a leading comment with a webpackChunkName (dynamic-import-chunkname)
+# import/dynamic-import-chunkname
 
 This rule reports any dynamic imports without a webpackChunkName specified in a leading block comment in the proper format.
 
