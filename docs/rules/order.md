@@ -169,7 +169,7 @@ Example:
   ]
 }
 ```
-The default value is `["builtin", "external"]`.
+The default value is `["builtin", "external", "object"]`.
 
 ### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
 
