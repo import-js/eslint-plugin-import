@@ -9,6 +9,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
 - [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
 
+### Fixed
+- [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
+
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
 
@@ -987,6 +990,7 @@ for info on changes for earlier releases.
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
+[#2396]: https://github.com/import-js/eslint-plugin-import/pull/2396
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2388]: https://github.com/import-js/eslint-plugin-import/pull/2388
 [#2381]: https://github.com/import-js/eslint-plugin-import/pull/2381
