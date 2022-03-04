@@ -187,6 +187,16 @@ function canReorderItems(firstNode, secondNode) {
   return true;
 }
 
+function makeImportDescription(node) {
+  if (node.node.importKind === 'type') {
+    return 'type import';
+  }
+  if (node.node.importKind === 'typeof') {
+    return 'typeof import';
+  }
+  return 'import';
+}
+
 function fixOutOfOrder(context, firstNode, secondNode, order) {
   const sourceCode = context.getSourceCode();
 
@@ -204,7 +214,9 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
     newCode = newCode + '\n';
   }
 
-  const message = `\`${secondNode.displayName}\` import should occur ${order} import of \`${firstNode.displayName}\``;
+  const firstImport = `${makeImportDescription(firstNode)} of \`${firstNode.displayName}\``;
+  const secondImport = `\`${secondNode.displayName}\` ${makeImportDescription(secondNode)}`;
+  const message = `${secondImport} should occur ${order} ${firstImport}`;
 
   if (order === 'before') {
     context.report({
@@ -253,20 +265,36 @@ function makeOutOfOrderReport(context, imported) {
   reportOutOfOrder(context, imported, outOfOrder, 'before');
 }
 
-function getSorter(ascending) {
-  const multiplier = ascending ? 1 : -1;
+const compareString = (a, b) => {
+  if (a < b) {
+    return -1;
+  }
+  if (a > b) {
+    return 1;
+  }
+  return 0;
+};
 
-  return function importsSorter(importA, importB) {
+/** Some parsers (languages without types) don't provide ImportKind */
+const DEAFULT_IMPORT_KIND = 'value';
+const getNormalizedValue = (node, toLowerCase) => {
+  const value = node.value;
+  return toLowerCase ? String(value).toLowerCase() : value;
+};
+
+function getSorter(alphabetizeOptions) {
+  const multiplier = alphabetizeOptions.order === 'asc' ? 1 : -1;
+  const orderImportKind = alphabetizeOptions.orderImportKind;
+  const multiplierImportKind = orderImportKind !== 'ignore' &&
+    (alphabetizeOptions.orderImportKind === 'asc' ? 1 : -1);
+
+  return function importsSorter(nodeA, nodeB) {
+    const importA = getNormalizedValue(nodeA, alphabetizeOptions.caseInsensitive);
+    const importB = getNormalizedValue(nodeB, alphabetizeOptions.caseInsensitive);
     let result = 0;
 
     if (!includes(importA, '/') && !includes(importB, '/')) {
-      if (importA < importB) {
-        result = -1;
-      } else if (importA > importB) {
-        result = 1;
-      } else {
-        result = 0;
-      }
+      result = compareString(importA, importB);
     } else {
       const A = importA.split('/');
       const B = importB.split('/');
@@ -274,13 +302,8 @@ function getSorter(ascending) {
       const b = B.length;
 
       for (let i = 0; i < Math.min(a, b); i++) {
-        if (A[i] < B[i]) {
-          result = -1;
-          break;
-        } else if (A[i] > B[i]) {
-          result = 1;
-          break;
-        }
+        result = compareString(A[i], B[i]);
+        if (result) break;
       }
 
       if (!result && a !== b) {
@@ -288,7 +311,17 @@ function getSorter(ascending) {
       }
     }
 
-    return result * multiplier;
+    result = result * multiplier;
+
+    // In case the paths are equal (result === 0), sort them by importKind
+    if (!result && multiplierImportKind) {
+      result = multiplierImportKind * compareString(
+        nodeA.node.importKind || DEAFULT_IMPORT_KIND,
+        nodeB.node.importKind || DEAFULT_IMPORT_KIND,
+      );
+    }
+
+    return result;
   };
 }
 
@@ -303,14 +336,11 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   const groupRanks = Object.keys(groupedByRanks);
 
-  const sorterFn = getSorter(alphabetizeOptions.order === 'asc');
-  const comparator = alphabetizeOptions.caseInsensitive
-    ? (a, b) => sorterFn(String(a.value).toLowerCase(), String(b.value).toLowerCase())
-    : (a, b) => sorterFn(a.value, b.value);
+  const sorterFn = getSorter(alphabetizeOptions);
 
   // sort imports locally within their group
   groupRanks.forEach(function (groupRank) {
-    groupedByRanks[groupRank].sort(comparator);
+    groupedByRanks[groupRank].sort(sorterFn);
   });
 
   // assign globally unique rank to each import
@@ -546,9 +576,10 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
 function getAlphabetizeConfig(options) {
   const alphabetize = options.alphabetize || {};
   const order = alphabetize.order || 'ignore';
+  const orderImportKind = alphabetize.orderImportKind || 'ignore';
   const caseInsensitive = alphabetize.caseInsensitive || false;
 
-  return { order, caseInsensitive };
+  return { order, orderImportKind, caseInsensitive };
 }
 
 // TODO, semver-major: Change the default of "distinctGroup" from true to false
@@ -616,6 +647,10 @@ module.exports = {
                 default: false,
               },
               order: {
+                enum: ['ignore', 'asc', 'desc'],
+                default: 'ignore',
+              },
+              orderImportKind: {
                 enum: ['ignore', 'asc', 'desc'],
                 default: 'ignore',
               },

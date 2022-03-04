@@ -267,11 +267,12 @@ import index from './';
 import sibling from './foo';
 ```
 
-### `alphabetize: {order: asc|desc|ignore, caseInsensitive: true|false}`:
+### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`:
 
 Sort the order within each group in alphabetical manner based on **import path**:
 
 - `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
+- `orderImportKind`: use `asc` to sort in ascending order various import kinds, e.g. imports prefixed with `type` or `typeof`, with same import path. Use `desc` to sort in descending order (default: `ignore`).
 - `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
 
 Example setting:

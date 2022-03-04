@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: Add `distinctGroup` option ([#2395], thanks [@hyperupcall])
 - [`no-extraneous-dependencies`]: Add `includeInternal` option ([#2541], thanks [@bdwain])
 - [`no-extraneous-dependencies`]: Add `includeTypes` option ([#2543], thanks [@bdwain])
+- [`order`]: new `alphabetize.orderImportKind` option to sort imports with same path based on their kind (`type`, `typeof`) ([#2544], thanks [@stropho])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])

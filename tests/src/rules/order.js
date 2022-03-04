@@ -4,8 +4,21 @@ import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
+import { resolve } from 'path';
+import { default as babelPresetFlow } from 'babel-preset-flow';
+
 
 const ruleTester = new RuleTester();
+const flowRuleTester = new RuleTester({
+  parser: resolve(__dirname, '../../../node_modules/babel-eslint'),
+  parserOptions: {
+    babelOptions: {
+      configFile: false,
+      babelrc: false,
+      presets: [babelPresetFlow],
+    },
+  },
+});
 const rule = require('rules/order');
 
 function withoutAutofixOutput(test) {
@@ -1080,6 +1093,19 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    // orderImportKind option that is not used
+    test({
+      code: `
+            import B from './B';
+            import b from './b';
+          `,
+      options: [
+        {
+          'alphabetize': { order: 'asc', orderImportKind: 'asc', 'caseInsensitive': true },
+        },
+      ],
+    }),
+
   ],
   invalid: [
     // builtin before external module (require)
@@ -2931,8 +2957,8 @@ context('TypeScript', function () {
             errors: [
               {
                 message: semver.satisfies(eslintPkg.version, '< 3')
-                  ? '`bar` import should occur after import of `Bar`'
-                  : /(`bar` import should occur after import of `Bar`)|(`Bar` import should occur before import of `bar`)/,
+                  ? '`bar` import should occur after type import of `Bar`'
+                  : /(`bar` import should occur after type import of `Bar`)|(`Bar` type import should occur before import of `bar`)/,
               },
             ],
           }),
@@ -3002,10 +3028,10 @@ context('TypeScript', function () {
             ],
             errors: semver.satisfies(eslintPkg.version, '< 3') ? [
               { message: '`Bar` import should occur before import of `bar`' },
-              { message: '`Bar` import should occur before import of `foo`' },
+              { message: '`Bar` type import should occur before type import of `foo`' },
             ] : [
               { message: /(`Bar` import should occur before import of `bar`)|(`bar` import should occur after import of `Bar`)/ },
-              { message: /(`Bar` import should occur before import of `foo`)|(`foo` import should occur after import of `Bar`)/ },
+              { message: /(`Bar` type import should occur before type import of `foo`)|(`foo` type import should occur after type import of `Bar`)/ },
             ],
           }),
           // Option alphabetize: {order: 'desc'} with type group
@@ -3039,10 +3065,10 @@ context('TypeScript', function () {
             ],
             errors: semver.satisfies(eslintPkg.version, '< 3') ? [
               { message: '`bar` import should occur before import of `Bar`' },
-              { message: '`foo` import should occur before import of `Bar`' },
+              { message: '`foo` type import should occur before type import of `Bar`' },
             ] : [
               { message: /(`bar` import should occur before import of `Bar`)|(`Bar` import should occur after import of `bar`)/ },
-              { message: /(`foo` import should occur before import of `Bar`)|(`Bar` import should occur after import of `foo`)/ },
+              { message: /(`foo` type import should occur before type import of `Bar`)|(`Bar` type import should occur after import of type `foo`)/ },
             ],
           }),
           // warns for out of order unassigned imports (warnOnUnassignedImports enabled)
@@ -3113,9 +3139,9 @@ context('TypeScript', function () {
               }
             `,
             errors: [{
-              message: '`fs` import should occur before import of `path`',
+              message: '`fs` type import should occur before type import of `path`',
             },{
-              message: '`fs` import should occur before import of `path`',
+              message: '`fs` type import should occur before type import of `path`',
             }],
             ...parserConfig,
             options: [
@@ -3127,4 +3153,84 @@ context('TypeScript', function () {
         ],
       });
     });
+});
+
+flowRuleTester.run('order', rule, {
+  valid: [
+    test({
+      options: [
+        {
+          alphabetize: { order: 'asc', orderImportKind: 'asc' },
+        },
+      ],
+      code: `
+        import type {Bar} from 'common';
+        import typeof {foo} from 'common';
+        import {bar} from 'common';
+      `,
+    })],
+  invalid: [
+    test({
+      options: [
+        {
+          alphabetize: { order: 'asc', orderImportKind: 'asc' },
+        },
+      ],
+      code: `
+        import type {Bar} from 'common';
+        import {bar} from 'common';
+        import typeof {foo} from 'common';
+      `,
+      output: `
+        import type {Bar} from 'common';
+        import typeof {foo} from 'common';
+        import {bar} from 'common';
+      `,
+      errors: [{
+        message: '`common` typeof import should occur before import of `common`',
+      }],
+    }),
+    test({
+      options: [
+        {
+          alphabetize: { order: 'asc', orderImportKind: 'desc' },
+        },
+      ],
+      code: `
+        import type {Bar} from 'common';
+        import {bar} from 'common';
+        import typeof {foo} from 'common';
+      `,
+      output: `
+        import {bar} from 'common';
+        import typeof {foo} from 'common';
+        import type {Bar} from 'common';
+      `,
+      errors: [{
+        message: '`common` type import should occur after typeof import of `common`',
+      }],
+    }),
+    test({
+      options: [
+        {
+          alphabetize: { order: 'asc', orderImportKind: 'asc' },
+        },
+      ],
+      code: `
+        import type {Bar} from './local/sub';
+        import {bar} from './local/sub';
+        import {baz} from './local-sub';
+        import typeof {foo} from './local/sub';
+      `,
+      output: `
+        import type {Bar} from './local/sub';
+        import typeof {foo} from './local/sub';
+        import {bar} from './local/sub';
+        import {baz} from './local-sub';
+      `,
+      errors: [{
+        message: '`./local/sub` typeof import should occur before import of `./local/sub`',
+      }],
+    }),
+  ],
 });
