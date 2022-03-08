@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+- [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
+
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
 
@@ -983,6 +986,7 @@ for info on changes for earlier releases.
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
+[#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2388]: https://github.com/import-js/eslint-plugin-import/pull/2388
 [#2381]: https://github.com/import-js/eslint-plugin-import/pull/2381
@@ -1628,6 +1632,7 @@ for info on changes for earlier releases.
 [@Pessimistress]: https://github.com/Pessimistress
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
+[@pri1311]: https://github.com/pri1311
 [@ProdigySim]: https://github.com/ProdigySim
 [@pzhine]: https://github.com/pzhine
 [@ramasilveyra]: https://github.com/ramasilveyra

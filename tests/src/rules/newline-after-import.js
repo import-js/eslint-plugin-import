@@ -25,7 +25,38 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { ecmaVersion: 6 } ,
     },
     {
+      code: `
+        const x = () => require('baz')
+            , y = () => require('bar')
+            
+        // some comment here
+      `,
+      parserOptions: { ecmaVersion: 6 } ,
+      options: [{ considerComments: true }],
+    },
+    {
       code: `const x = () => require('baz') && require('bar')`,
+      parserOptions: { ecmaVersion: 6 } ,
+    },
+    {
+      code: `
+        const x = () => require('baz') && require('bar')
+
+        // Some random single line comment
+        var bar = 42;
+      `,
+      parserOptions: { ecmaVersion: 6 } ,
+      options: [{ 'considerComments': true }],
+    },
+    {
+      code: `
+        const x = () => require('baz') && require('bar')
+        /**
+         * some multiline comment here
+         * another line of comment
+        **/
+        var bar = 42;
+      `,
       parserOptions: { ecmaVersion: 6 } ,
     },
     `function x() { require('baz'); }`,
@@ -255,9 +286,114 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
+    {
+      code: `
+        import path from 'path';
+        import foo from 'foo';
+        /**
+         * some multiline comment here
+         * another line of comment
+        **/
+        var bar = 42;
+      `,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+    },
+    {
+      code: `
+        import path from 'path';import foo from 'foo';
+        
+        /**
+         * some multiline comment here
+         * another line of comment
+        **/
+        var bar = 42;
+      `,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      options: [{ 'considerComments': true }],
+    },
+    {
+      code: `
+        import path from 'path';
+        import foo from 'foo';
+        
+        // Some random single line comment
+        var bar = 42;
+      `,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+    },
   ),
 
   invalid: [].concat(
+    {
+      code: `
+        import { A, B, C, D } from
+        '../path/to/my/module/in/very/far/directory'
+        // some comment
+        var foo = 'bar';
+      `,
+      output: `
+        import { A, B, C, D } from
+        '../path/to/my/module/in/very/far/directory'
+
+        // some comment
+        var foo = 'bar';
+      `,
+      errors: [ {
+        line: 3,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ 'considerComments': true }],
+    },
+    {
+      code: `
+        import path from 'path';
+        import foo from 'foo';
+        /**
+         * some multiline comment here
+         * another line of comment
+        **/
+        var bar = 42;
+      `,
+      output: `
+        import path from 'path';
+        import foo from 'foo';\n
+        /**
+         * some multiline comment here
+         * another line of comment
+        **/
+        var bar = 42;
+      `,
+      errors: [ {
+        line: 3,
+        column: 9,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      options: [{ 'considerComments': true }],
+    },
+    {
+      code: `
+        import path from 'path';
+        import foo from 'foo';
+        // Some random single line comment
+        var bar = 42;
+      `,
+      output: `
+        import path from 'path';
+        import foo from 'foo';\n
+        // Some random single line comment
+        var bar = 42;
+      `,
+      errors: [ {
+        line: 3,
+        column: 9,
+        message: IMPORT_ERROR_MESSAGE,
+      } ],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      options: [{ 'considerComments': true, 'count': 1 }],
+    },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,

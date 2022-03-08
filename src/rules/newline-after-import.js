@@ -67,6 +67,7 @@ module.exports = {
             'type': 'integer',
             'minimum': 1,
           },
+          'considerComments': { 'type': 'boolean' },
         },
         'additionalProperties': false,
       },
@@ -75,6 +76,7 @@ module.exports = {
   create(context) {
     let level = 0;
     const requireCalls = [];
+    const options = Object.assign({ count: 1, considerComments: false }, context.options[0]);
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode) || isExportNameClass(nextNode)) {
@@ -87,7 +89,6 @@ module.exports = {
         nextNode = nextNode.decorators[0];
       }
 
-      const options = context.options[0] || { count: 1 };
       const lineDifference = getLineDifference(node, nextNode);
       const EXPECTED_LINE_DIFFERENCE = options.count + 1;
 
@@ -103,8 +104,32 @@ module.exports = {
             line: node.loc.end.line,
             column,
           },
-          message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} \
-after ${type} statement not followed by another ${type}.`,
+          message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after ${type} statement not followed by another ${type}.`,
+          fix: fixer => fixer.insertTextAfter(
+            node,
+            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
+          ),
+        });
+      }
+    }
+
+    function commentAfterImport(node, nextComment) {
+      const lineDifference = getLineDifference(node, nextComment);
+      const EXPECTED_LINE_DIFFERENCE = options.count + 1;
+
+      if (lineDifference < EXPECTED_LINE_DIFFERENCE) {
+        let column = node.loc.start.column;
+
+        if (node.loc.start.line !== node.loc.end.line) {
+          column = 0;
+        }
+
+        context.report({
+          loc: {
+            line: node.loc.end.line,
+            column,
+          },
+          message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after import statement not followed by another import.`,
           fix: fixer => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
@@ -124,13 +149,22 @@ after ${type} statement not followed by another ${type}.`,
       const { parent } = node;
       const nodePosition = parent.body.indexOf(node);
       const nextNode = parent.body[nodePosition + 1];
+      const endLine = node.loc.end.line;
+      let nextComment;
+
+      if (typeof parent.comments !== 'undefined' && options.considerComments) {
+        nextComment = parent.comments.find(o => o.loc.start.line === endLine + 1);
+      }
+
 
       // skip "export import"s
       if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
         return;
       }
 
-      if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
+      if (nextComment && typeof nextComment !== 'undefined') {
+        commentAfterImport(node, nextComment);
+      } else if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
         checkForNewLine(node, nextNode, 'import');
       }
     }
