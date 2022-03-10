@@ -178,7 +178,7 @@ const resolveFiles = (src, ignoreExports, context) => {
   // prepare list of ignored files
   let ignoredFilesList = [];
   try {
-    listFilesToProcess(ignoreExports, extensions);
+    ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
   } catch (e) {
     // pattern for ignored files is allowed to have zero matches
     if (e.constructor.name !== 'NoFilesFoundError') {
