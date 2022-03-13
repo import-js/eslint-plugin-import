@@ -273,8 +273,10 @@ const prepareImportsAndExports = (srcFiles, context) => {
   exportAll.forEach((value, key) => {
     value.forEach(val => {
       const currentExports = exportList.get(val);
-      const currentExport = currentExports.get(EXPORT_ALL_DECLARATION);
-      currentExport.whereUsed.add(key);
+      if (currentExports) {
+        const currentExport = currentExports.get(EXPORT_ALL_DECLARATION);
+        currentExport.whereUsed.add(key);
+      }
     });
   });
 };

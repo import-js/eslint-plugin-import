@@ -105,7 +105,7 @@ ruleTester.run('no-unused-modules', rule, {
 });
 
 
-// tests for  exports
+// tests for exports
 ruleTester.run('no-unused-modules', rule, {
   valid: [
     test({
@@ -300,6 +300,17 @@ describe('dynamic imports', () => {
             `,
         parser: parsers.TS_NEW,
         filename: testFilePath('./no-unused-modules/typescript/exports-for-dynamic-ts.ts'),
+      }),
+      test({
+        code: `
+        import App from './App';
+      `,
+        filename: testFilePath('./unused-modules-reexport-crash/src/index.tsx'),
+        parser: parsers.TS_NEW,
+        options: [{        
+          unusedExports: true,
+          ignoreExports: ['**/magic/**'],
+        }],
       }),
     ],
     invalid: [
