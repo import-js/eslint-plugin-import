@@ -124,12 +124,6 @@ The maintainers of `eslint-plugin-import` and thousands of other packages are wo
 ## Installation
 
 ```sh
-npm install eslint-plugin-import -g
-```
-
-or if you manage ESLint as a dev dependency:
-
-```sh
 # inside your project's working tree
 npm install eslint-plugin-import --save-dev
 ```
