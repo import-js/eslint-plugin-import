@@ -497,17 +497,14 @@ module.exports = {
       }
 
       const exportCount = exportList.get(file);
-      const exportAll = exportCount.get(EXPORT_ALL_DECLARATION);
       const namespaceImports = exportCount.get(IMPORT_NAMESPACE_SPECIFIER);
 
-      exportCount.delete(EXPORT_ALL_DECLARATION);
       exportCount.delete(IMPORT_NAMESPACE_SPECIFIER);
       if (exportCount.size < 1) {
         // node.body[0] === 'undefined' only happens, if everything is commented out in the file
         // being linted
         context.report(node.body[0] ? node.body[0] : node, 'No exports found');
       }
-      exportCount.set(EXPORT_ALL_DECLARATION, exportAll);
       exportCount.set(IMPORT_NAMESPACE_SPECIFIER, namespaceImports);
     };
 
@@ -614,6 +611,9 @@ module.exports = {
             newExportIdentifiers.add(name);
           });
         }
+        if (type === EXPORT_ALL_DECLARATION) {
+          newExportIdentifiers.add(EXPORT_ALL_DECLARATION);
+        }
       });
 
       // old exports exist within list of new exports identifiers: add to map of new exports
@@ -631,14 +631,12 @@ module.exports = {
       });
 
       // preserve information about namespace imports
-      const exportAll = exports.get(EXPORT_ALL_DECLARATION);
       let namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER);
 
       if (typeof namespaceImports === 'undefined') {
         namespaceImports = { whereUsed: new Set() };
       }
 
-      newExports.set(EXPORT_ALL_DECLARATION, exportAll);
       newExports.set(IMPORT_NAMESPACE_SPECIFIER, namespaceImports);
       exportList.set(file, newExports);
     };
