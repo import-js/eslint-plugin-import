@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [readme] note use of typescript in readme `import/extensions` section ([#2440], thanks [@OutdatedVersion])
 - [Docs] `order`: use correct default value ([#2392], thanks [@hyperupcall])
 - [meta] replace git.io link in comments with the original URL ([#2444], thanks [@liby])
+- [Tests] `no-unused-modules`: add tests for star export ([#2415], thanks [@robin-hartmann])
 
 ## [2.26.0] - 2022-04-05
 
@@ -993,6 +994,7 @@ for info on changes for earlier releases.
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
+[#2415]: https://github.com/import-js/eslint-plugin-import/pull/2415
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
 [#2396]: https://github.com/import-js/eslint-plugin-import/pull/2396
@@ -1658,6 +1660,7 @@ for info on changes for earlier releases.
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@richardxia]: https://github.com/richardxia
 [@robertrossmann]: https://github.com/robertrossmann
+[@robin-hartmann]: https://github.com/robin-hartmann
 [@rosswarren]: https://github.com/rosswarren
 [@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon

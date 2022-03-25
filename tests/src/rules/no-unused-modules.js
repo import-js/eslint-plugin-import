@@ -21,6 +21,12 @@ const missingExportsOptions = [{
   missingExports: true,
 }];
 
+const missingExportsTypescriptOptions = [{
+  missingExports: true,
+  src: [testFilePath('./no-unused-modules/typescript')],
+  ignoreExports: undefined,
+}];
+
 const unusedExportsOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/**/*.js')],
@@ -48,6 +54,10 @@ ruleTester.run('no-unused-modules', rule, {
     test({
       options: missingExportsOptions,
       code: 'export default () => 1',
+    }),
+    test({
+      options: missingExportsOptions,
+      code: "export * from 'a'",
     }),
     test({
       options: missingExportsOptions,
@@ -1035,6 +1045,22 @@ context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     typescriptRuleTester.run('no-unused-modules', rule, {
       valid: [].concat(
+        test({
+          options: missingExportsTypescriptOptions,
+          code: `
+          export * as b from './file-ts-b';
+          `,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a-export-namespace.ts'),
+        }),
+        test({
+          options: missingExportsTypescriptOptions,
+          code: `
+          export * from './file-ts-b';
+          `,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-a-export-all.ts'),
+        }),
         test({
           options: unusedExportsTypescriptOptions,
           code: `
