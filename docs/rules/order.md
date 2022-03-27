@@ -5,7 +5,7 @@ Enforce a convention in the order of `require()` / `import` statements.
 
 With the [`groups`](#groups-array) option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
 
-```js
+```ts
 // 1. node "builtin" modules
 import fs from 'fs';
 import path from 'path';
@@ -36,7 +36,7 @@ Statements using the ES6 `import` syntax must appear before any `require()` stat
 
 ## Fail
 
-```js
+```ts
 import _ from 'lodash';
 import path from 'path'; // `path` import should occur before import of `lodash`
 
@@ -54,7 +54,7 @@ import foo from './foo'; // `import` statements must be before `require` stateme
 
 ## Pass
 
-```js
+```ts
 import path from 'path';
 import _ from 'lodash';
 
@@ -85,7 +85,7 @@ This rule supports the following options:
 How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are:
 `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, `"type"`.
 The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
-```js
+```ts
 [
   'builtin', // Built-in types are first
   ['sibling', 'parent'], // Then sibling and parent types. They can be mingled together
@@ -98,7 +98,7 @@ The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 
 You can set the options like this:
 
-```js
+```ts
 "import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin", "object", "type"]}]
 ```
 
@@ -184,7 +184,7 @@ The default value is `"ignore"`.
 
 With the default group setting, the following will be invalid:
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "always"}] */
 import fs from 'fs';
 import path from 'path';
@@ -192,7 +192,7 @@ import index from './';
 import sibling from './foo';
 ```
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "always-and-inside-groups"}] */
 import fs from 'fs';
 
@@ -201,7 +201,7 @@ import index from './';
 import sibling from './foo';
 ```
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "never"}] */
 import fs from 'fs';
 import path from 'path';
@@ -213,7 +213,7 @@ import sibling from './foo';
 
 while those will be valid:
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "always"}] */
 import fs from 'fs';
 import path from 'path';
@@ -223,7 +223,7 @@ import index from './';
 import sibling from './foo';
 ```
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "always-and-inside-groups"}] */
 import fs from 'fs';
 
@@ -234,7 +234,7 @@ import index from './';
 import sibling from './foo';
 ```
 
-```js
+```ts
 /* eslint import/order: ["error", {"newlines-between": "never"}] */
 import fs from 'fs';
 import path from 'path';
@@ -250,7 +250,7 @@ Sort the order within each group in alphabetical manner based on **import path**
 - `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
 
 Example setting:
-```js
+```ts
 alphabetize: {
   order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
   caseInsensitive: true /* ignore case. Options: [true, false] */
@@ -259,7 +259,7 @@ alphabetize: {
 
 This will fail the rule check:
 
-```js
+```ts
 /* eslint import/order: ["error", {"alphabetize": {"order": "asc", "caseInsensitive": true}}] */
 import React, { PureComponent } from 'react';
 import aTypes from 'prop-types';
@@ -270,7 +270,7 @@ import blist from 'BList';
 
 While this will pass:
 
-```js
+```ts
 /* eslint import/order: ["error", {"alphabetize": {"order": "asc", "caseInsensitive": true}}] */
 import blist from 'BList';
 import * as classnames from 'classnames';
@@ -290,7 +290,7 @@ way that is safe.
 
 This will fail the rule check:
 
-```js
+```ts
 /* eslint import/order: ["error", {"warnOnUnassignedImports": true}] */
 import fs from 'fs';
 import './styles.css';
@@ -299,7 +299,7 @@ import path from 'path';
 
 While this will pass:
 
-```js
+```ts
 /* eslint import/order: ["error", {"warnOnUnassignedImports": true}] */
 import fs from 'fs';
 import path from 'path';
