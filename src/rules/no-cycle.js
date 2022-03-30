@@ -9,7 +9,8 @@ import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
-// todo: cache cycles / deep relationships for faster repeat evaluation
+const traversed = new Set();
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -87,7 +88,6 @@ module.exports = {
       }
 
       const untraversed = [{ mget: () => imported, route:[] }];
-      const traversed = new Set();
       function detectCycle({ mget, route }) {
         const m = mget();
         if (m == null) return;
@@ -101,7 +101,7 @@ module.exports = {
             // Ignore only type imports
             !isOnlyImportingTypes,
           );
-          
+
           /*
           If cyclic dependency is allowed via dynamic import, skip checking if any module is imported dynamically
           */
@@ -138,7 +138,11 @@ module.exports = {
       }
     }
 
-    return moduleVisitor(checkSourceValue, context.options[0]);
+    return Object.assign(moduleVisitor(checkSourceValue, context.options[0]), {
+      'Program:exit': () => {
+        traversed.clear();
+      },
+    });
   },
 };
 

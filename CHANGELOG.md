@@ -26,6 +26,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [meta] replace git.io link in comments with the original URL ([#2444], thanks [@liby])
 - [Docs] remove global install in readme ([#2412], thanks [@aladdin-add])
 - [readme] clarify `eslint-import-resolver-typescript` usage ([#2503], thanks [@JounQin])
+- [Refactor] `no-cycle`: Add per-run caching of traversed paths ([#2419], thanks [@nokel81])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1004,6 +1005,7 @@ for info on changes for earlier releases.
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
+[#2419]: https://github.com/import-js/eslint-plugin-import/pull/2419
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
