@@ -29,6 +29,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Prevent unnecessary path segments in import and require statements ([`no-useless-path-segments`])
 * Forbid importing modules from parent directories ([`no-relative-parent-imports`])
 * Prevent importing packages through relative paths ([`no-relative-packages`])
+* Prevent the use of shallow (barrel) imports ([`no-shallow-imports`])
 
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
 [`named`]: ./docs/rules/named.md
@@ -44,6 +45,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-useless-path-segments`]: ./docs/rules/no-useless-path-segments.md
 [`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
 [`no-relative-packages`]: ./docs/rules/no-relative-packages.md
+[`no-shallow-imports`]: ./docs/rules/no-shallow-imports.md
 
 ### Helpful warnings
 
