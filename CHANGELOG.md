@@ -25,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Refactor] `namespace`: try to improve performance ([#2340], thanks [@ljharb])
 - [Docs] make rule doc titles consistent ([#2393], thanks [@TheJaredWilcurt])
 - [Docs] `order`: TS code examples should use TS code blocks ([#2411], thanks [@MM25Zamanian])
+- [Docs] `no-unresolved`: fix link ([#2417], thanks [@kylemh])
 
 ## [2.25.4] - 2022-01-02
 
@@ -975,6 +976,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2388]: https://github.com/import-js/eslint-plugin-import/pull/2388
@@ -1572,6 +1574,7 @@ for info on changes for earlier releases.
 [@kmui2]: https://github.com/kmui2
 [@knpwrs]: https://github.com/knpwrs
 [@KostyaZgara]: https://github.com/KostyaZgara
+[@kylemh]: https://github.com/kylemh
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@lemonmade]: https://github.com/lemonmade

@@ -98,7 +98,7 @@ If you're using a module bundler other than Node or Webpack, you may end up with
 
 ## Further Reading
 
-- [Resolver plugins](../../README.md#resolver-plugins)
+- [Resolver plugins](../../README.md#resolvers)
 - [Node resolver](https://npmjs.com/package/eslint-import-resolver-node) (default)
 - [Webpack resolver](https://npmjs.com/package/eslint-import-resolver-webpack)
 - [`import/ignore`] global setting
