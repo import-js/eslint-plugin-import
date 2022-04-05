@@ -14,6 +14,7 @@ my-project
 └── helpers.js
 └── helpers
     └── index.js
+├── index.js
 └── pages
     ├── about.js
     ├── contact.js
@@ -27,10 +28,10 @@ The following patterns are considered problems:
  *  in my-project/app.js
  */
 
-import "./../pages/about.js"; // should be "./pages/about.js"
-import "./../pages/about"; // should be "./pages/about"
-import "../pages/about.js"; // should be "./pages/about.js"
-import "../pages/about"; // should be "./pages/about"
+import "./../my-project/pages/about.js"; // should be "./pages/about.js"
+import "./../my-project/pages/about"; // should be "./pages/about"
+import "../my-project/pages/about.js"; // should be "./pages/about.js"
+import "../my-project/pages/about"; // should be "./pages/about"
 import "./pages//about"; // should be "./pages/about"
 import "./pages/"; // should be "./pages"
 import "./pages/index"; // should be "./pages" (except if there is a ./pages.js file)

@@ -31,6 +31,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [readme] clarify `eslint-import-resolver-typescript` usage ([#2503], thanks [@JounQin])
 - [Refactor] `no-cycle`: Add per-run caching of traversed paths ([#2419], thanks [@nokel81])
 - [Performance] `ExportMap`: add caching after parsing for an ambiguous module ([#2531], thanks [@stenin-nikita])
+- [Docs] `no-useless-path-segments`: fix paths ([#2424] thanks [@s-h-a-d-o-w])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1011,6 +1012,7 @@ for info on changes for earlier releases.
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
+[#2424]: https://github.com/import-js/eslint-plugin-import/pull/2424
 [#2419]: https://github.com/import-js/eslint-plugin-import/pull/2419
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
