@@ -111,6 +111,6 @@
     "minimatch": "^3.1.2",
     "object.values": "^1.1.5",
     "resolve": "^1.22.0",
-    "tsconfig-paths": "^3.13.0"
+    "tsconfig-paths": "^3.14.1"
   }
 }
