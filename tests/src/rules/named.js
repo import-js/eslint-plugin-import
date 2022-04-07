@@ -388,7 +388,13 @@ context('TypeScript', function () {
       'import/resolver': { 'eslint-import-resolver-typescript': true },
     };
 
-    let valid = [];
+    let valid = [
+      test({
+        code: `import { FooBar } from './typescript-export-assign-object'`,
+        parser,
+        settings,
+      }),
+    ];
     const invalid = [
       // TODO: uncomment this test
       // test({
@@ -400,8 +406,17 @@ context('TypeScript', function () {
       //     { message: 'a not found in ./export-star-3/b' },
       //   ],
       // }),
+      test({
+        code: `import { NotExported } from './typescript-export-assign-object'`,
+        parser,
+        settings,
+        errors: [{
+          message: `NotExported not found in './typescript-export-assign-object'`,
+          type: 'Identifier',
+        }],
+      }),
     ];
-
+    
     [
       'typescript',
       'typescript-declare',
