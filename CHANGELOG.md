@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
+
 ## [2.26.0] - 2022-04-05
 
 ### Added
@@ -977,6 +980,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
@@ -1624,6 +1628,7 @@ for info on changes for earlier releases.
 [@Pessimistress]: https://github.com/Pessimistress
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
+[@ProdigySim]: https://github.com/ProdigySim
 [@pzhine]: https://github.com/pzhine
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr
