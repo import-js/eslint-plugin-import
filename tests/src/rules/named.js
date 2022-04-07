@@ -1,5 +1,6 @@
 import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
 import { RuleTester } from 'eslint';
+import path from 'path';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
@@ -388,7 +389,16 @@ context('TypeScript', function () {
       'import/resolver': { 'eslint-import-resolver-typescript': true },
     };
 
-    let valid = [];
+    let valid = [
+      test({
+        code: `import x from './typescript-export-assign-object'`,
+        parser,
+        parserOptions: {
+          tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-assign-object/'),
+        },
+        settings,
+      }),
+    ];
     const invalid = [
       // TODO: uncomment this test
       // test({
@@ -400,6 +410,31 @@ context('TypeScript', function () {
       //     { message: 'a not found in ./export-star-3/b' },
       //   ],
       // }),
+      test({
+        code: `import { NotExported } from './typescript-export-assign-object'`,
+        parser,
+        parserOptions: {
+          tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-assign-object/'),
+        },
+        settings,
+        errors: [{
+          message: `NotExported not found in './typescript-export-assign-object'`,
+          type: 'Identifier',
+        }],
+      }),
+      test({
+        // `export =` syntax creates a default export only
+        code: `import { FooBar } from './typescript-export-assign-object'`,
+        parser,
+        parserOptions: {
+          tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-assign-object/'),
+        },
+        settings,
+        errors: [{
+          message: `FooBar not found in './typescript-export-assign-object'`,
+          type: 'Identifier',
+        }],
+      }),
     ];
 
     [
