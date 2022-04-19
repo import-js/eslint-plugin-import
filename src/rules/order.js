@@ -1,6 +1,8 @@
 'use strict';
 
 import minimatch from 'minimatch';
+import includes from 'array-includes';
+
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
 import docsUrl from '../docsUrl';
@@ -244,16 +246,37 @@ function getSorter(ascending) {
   const multiplier = ascending ? 1 : -1;
 
   return function importsSorter(importA, importB) {
-    let result;
+    let result = 0;
 
-    if (importA < importB) {
-      result = -1;
-    } else if (importA > importB) {
-      result = 1;
+    if (!includes(importA, '/') && !includes(importB, '/')) {
+      if (importA < importB) {
+        result = -1;
+      } else if (importA > importB) {
+        result = 1;
+      } else {
+        result = 0;
+      }
     } else {
-      result = 0;
-    }
+      const A = importA.split('/');
+      const B = importB.split('/');
+      const a = A.length;
+      const b = B.length;
 
+      for (let i = 0; i < Math.min(a, b); i++) {
+        if (A[i] < B[i]) {
+          result = -1;
+          break;
+        } else if (A[i] > B[i]) {
+          result = 1;
+          break;
+        }
+      }
+
+      if (!result && a !== b) {
+        result = a < b ? -1 : 1;
+      }
+    }
+    
     return result * multiplier;
   };
 }

@@ -7,6 +7,17 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
+
+### Fixed
+- [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
+
+### Changed
+- [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
+
+## [2.26.0] - 2022-04-05
+
+### Added
 - [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 - [`no-relative-packages`]: add fixer ([#2381], thanks [@forivall])
@@ -976,8 +987,11 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
+[#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
+[#2396]: https://github.com/import-js/eslint-plugin-import/pull/2396
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2388]: https://github.com/import-js/eslint-plugin-import/pull/2388
 [#2381]: https://github.com/import-js/eslint-plugin-import/pull/2381
@@ -1379,7 +1393,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.4...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...HEAD
+[2.26.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.4...v2.26.0
 [2.25.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...v2.25.4
 [2.25.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.1...v2.25.2
@@ -1622,6 +1637,8 @@ for info on changes for earlier releases.
 [@Pessimistress]: https://github.com/Pessimistress
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
+[@pri1311]: https://github.com/pri1311
+[@ProdigySim]: https://github.com/ProdigySim
 [@pzhine]: https://github.com/pzhine
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr

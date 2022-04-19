@@ -675,6 +675,47 @@ ruleTester.run('order', rule, {
         alphabetize: { order: 'desc' },
       }],
     }),
+    // Option alphabetize: {order: 'asc'} and move nested import entries closer to the main import entry
+    test({
+      code: `
+        import a from "foo";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+        import b from "foo-bar";
+      `,
+      options: [{ alphabetize: { order: 'asc' } }],
+    }),
+    // Option alphabetize: {order: 'asc'} and move nested import entries closer to the main import entry
+    test({
+      code: `
+        import a from "foo";
+        import c from "foo/foobar/bar";
+        import d from "foo/foobar/barfoo";
+        import b from "foo-bar";
+      `,
+      options: [{ alphabetize: { order: 'asc' } }],
+    }),
+    // Option alphabetize: {order: 'desc'} and move nested import entries closer to the main import entry
+    test({
+      code: `
+        import b from "foo-bar";
+        import d from "foo/barfoo";
+        import c from "foo/bar";
+        import a from "foo";
+      `,
+      options: [{ alphabetize: { order: 'desc' } }],
+    }),
+    // Option alphabetize: {order: 'desc'} and move nested import entries closer to the main import entry with file names having non-alphanumeric characters.
+    test({
+      code: `
+        import b from "foo-bar";
+        import c from "foo,bar";
+        import d from "foo/barfoo";
+        import a from "foo";`,
+      options: [{
+        alphabetize: { order: 'desc' },
+      }],
+    }),
     // Option alphabetize with newlines-between: {order: 'asc', newlines-between: 'always'}
     test({
       code: `
@@ -2228,6 +2269,27 @@ ruleTester.run('order', rule, {
       }],
       errors: [{
         message: '`bar` import should occur before import of `Bar`',
+      }],
+    }),
+    // Option alphabetize: {order: 'asc'} and move nested import entries closer to the main import entry
+    test({
+      code: `
+        import a from "foo";
+        import b from "foo-bar";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+      `,
+      options: [{
+        alphabetize: { order: 'asc' },
+      }],
+      output: `
+        import a from "foo";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+        import b from "foo-bar";
+      `,
+      errors: [{
+        message: '`foo-bar` import should occur after import of `foo/barfoo`', 
       }],
     }),
     // Option alphabetize {order: 'asc': caseInsensitive: true}

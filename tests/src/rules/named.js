@@ -388,14 +388,18 @@ context('TypeScript', function () {
       'import/resolver': { 'eslint-import-resolver-typescript': true },
     };
 
-    const valid = [];
+    let valid = [];
     const invalid = [
-      test({
-        code: `import {a} from './export-star-3/b';`,
-        filename: testFilePath('./export-star-3/a.js'),
-        parser,
-        settings,
-      }),
+      // TODO: uncomment this test
+      // test({
+      //   code: `import {a} from './export-star-3/b';`,
+      //   filename: testFilePath('./export-star-3/a.js'),
+      //   parser,
+      //   settings,
+      //   errors: [
+      //     { message: 'a not found in ./export-star-3/b' },
+      //   ],
+      // }),
     ];
 
     [
@@ -404,7 +408,7 @@ context('TypeScript', function () {
       'typescript-export-assign-namespace',
       'typescript-export-assign-namespace-merged',
     ].forEach((source) => {
-      valid.push(
+      valid = valid.concat(
         test({
           code: `import { MyType } from "./${source}"`,
           parser,
@@ -420,11 +424,18 @@ context('TypeScript', function () {
           parser,
           settings,
         }),
-        test({
-          code: `import { getFoo } from "./${source}"`,
-          parser,
-          settings,
-        }),
+        (source === 'typescript-declare'
+          ? testVersion('> 5', () => ({
+            code: `import { getFoo } from "./${source}"`,
+            parser,
+            settings,
+          }))
+          : test({
+            code: `import { getFoo } from "./${source}"`,
+            parser,
+            settings,
+          })
+        ),
         test({
           code: `import { MyEnum } from "./${source}"`,
           parser,
@@ -468,6 +479,11 @@ context('TypeScript', function () {
           }],
         }),
       );
+    });
+
+    ruleTester.run(`named [TypeScript]`, rule, {
+      valid,
+      invalid,
     });
   });
 });

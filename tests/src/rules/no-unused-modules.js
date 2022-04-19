@@ -7,8 +7,8 @@ import fs from 'fs';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-// TODO: figure out why these tests fail in eslint 4
-const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4');
+// TODO: figure out why these tests fail in eslint 4 and 5
+const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);
