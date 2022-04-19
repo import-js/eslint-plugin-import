@@ -27,8 +27,8 @@ module.exports = {
     const options = context.options[0] || {};
 
     function checkSourceValue(source, node) {
-      // ignore type-only imports
-      if (node.importKind === 'type') {
+      // ignore type-only imports and exports
+      if (node.importKind === 'type' || node.exportKind === 'type') {
         return;
       }
 

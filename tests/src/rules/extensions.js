@@ -613,10 +613,27 @@ describe('TypeScript', () => {
             ],
             parser,
           }),
+          test({
+            code: 'export type { MyType } from "./typescript-declare";',
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
+            ],
+            parser,
+          }),
         ],
         invalid: [
           test({
             code: 'import T from "./typescript-declare";',
+            errors: ['Missing file extension for "./typescript-declare"'],
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
+            ],
+            parser,
+          }),
+          test({
+            code: 'export { MyType } from "./typescript-declare";',
             errors: ['Missing file extension for "./typescript-declare"'],
             options: [
               'always',

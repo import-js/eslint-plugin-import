@@ -138,7 +138,7 @@ module.exports = {
     function checkFileExtension(source, node) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) return;
-      
+
       const importPathWithQueryString = source.value;
 
       // don't enforce anything on builtins
@@ -164,8 +164,8 @@ module.exports = {
       ) || isScoped(importPath);
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
-        // ignore type-only imports
-        if (node.importKind === 'type') return;
+        // ignore type-only imports and exports
+        if (node.importKind === 'type' || node.exportKind === 'type') return;
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {

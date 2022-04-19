@@ -22,6 +22,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-cycle`]: add ExportNamedDeclaration statements to dependencies ([#2511], thanks [@BenoitZugmeyer])
 - [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
 - [`export`]: do not error on TS export overloads ([#1590], thanks [@ljharb])
+- [`no-unresolved`], [`extensions`]: ignore type only exports ([#2436], thanks [@Lukas-Kullmann])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1014,6 +1015,7 @@ for info on changes for earlier releases.
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2438]: https://github.com/import-js/eslint-plugin-import/pull/2438
+[#2436]: https://github.com/import-js/eslint-plugin-import/pull/2436
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2424]: https://github.com/import-js/eslint-plugin-import/pull/2424
 [#2419]: https://github.com/import-js/eslint-plugin-import/pull/2419
@@ -1645,6 +1647,7 @@ for info on changes for earlier releases.
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
 [@ludofischer]: https://github.com/ludofischer
+[@Lukas-Kullmann]: https://github.com/Lukas-Kullmann
 [@lukeapage]: https://github.com/lukeapage
 [@lydell]: https://github.com/lydell
 [@magarcia]: https://github.com/magarcia
