@@ -23,15 +23,16 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
 
 ### Changed
-- [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
+- [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
 - [readme] note use of typescript in readme `import/extensions` section ([#2440], thanks [@OutdatedVersion])
-- [Docs] `order`: use correct default value ([#2392], thanks [@hyperupcall])
+- [Docs] [`order`]: use correct default value ([#2392], thanks [@hyperupcall])
 - [meta] replace git.io link in comments with the original URL ([#2444], thanks [@liby])
 - [Docs] remove global install in readme ([#2412], thanks [@aladdin-add])
 - [readme] clarify `eslint-import-resolver-typescript` usage ([#2503], thanks [@JounQin])
-- [Refactor] `no-cycle`: Add per-run caching of traversed paths ([#2419], thanks [@nokel81])
+- [Refactor] [`no-cycle`]: Add per-run caching of traversed paths ([#2419], thanks [@nokel81])
 - [Performance] `ExportMap`: add caching after parsing for an ambiguous module ([#2531], thanks [@stenin-nikita])
-- [Docs] `no-useless-path-segments`: fix paths ([#2424] thanks [@s-h-a-d-o-w])
+- [Docs] [`no-useless-path-segments`]: fix paths ([#2424], thanks [@s-h-a-d-o-w])
+- [Tests] [`no-cycle`]: add passing test cases ([#2438], thanks [@georeith])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1011,6 +1012,7 @@ for info on changes for earlier releases.
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
+[#2438]: https://github.com/import-js/eslint-plugin-import/pull/2438
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2424]: https://github.com/import-js/eslint-plugin-import/pull/2424
 [#2419]: https://github.com/import-js/eslint-plugin-import/pull/2419
@@ -1583,6 +1585,7 @@ for info on changes for earlier releases.
 [@futpib]: https://github.com/futpib
 [@gajus]: https://github.com/gajus
 [@gausie]: https://github.com/gausie
+[@georeith]: https://github.com/georeith
 [@gavriguy]: https://github.com/gavriguy
 [@giodamelio]: https://github.com/giodamelio
 [@golopot]: https://github.com/golopot

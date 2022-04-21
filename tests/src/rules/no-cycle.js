@@ -267,5 +267,23 @@ ruleTester.run('no-cycle', rule, {
       parser: parsers.BABEL_OLD,
       errors: [error(`Dependency cycle via ./flow-types-depth-two:4=>./es6/depth-one:1`)],
     }),
+    test({
+      code: 'import { foo } from "./intermediate-ignore"',
+      errors: [
+        {
+          message: 'Dependency cycle via ./ignore:1',
+          line: 1,
+        },
+      ],
+    }),
+    test({
+      code: 'import { foo } from "./ignore"',
+      errors: [
+        {
+          message: 'Dependency cycle detected.',
+          line: 1,
+        },
+      ],
+    }),
   ),
 });
