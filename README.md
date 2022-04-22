@@ -271,7 +271,10 @@ A list of file extensions that will be parsed as modules and inspected for
 `export`s.
 
 This defaults to `['.js']`, unless you are using the `react` shared config,
-in which case it is specified as `['.js', '.jsx']`.
+in which case it is specified as `['.js', '.jsx']`. Despite the default,
+if you are using TypeScript (without the `plugin:import/typescript` config
+described above) you must specify the new extensions (`.ts`, and also `.tsx`
+if using React).
 
 ```js
 "settings": {

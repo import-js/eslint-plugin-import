@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
+- [readme] note use of typescript in readme `import/extensions` section ([#2440], thanks [@OutdatedVersion])
 
 ## [2.26.0] - 2022-04-05
 
@@ -986,6 +987,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
@@ -1629,6 +1631,7 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512
 [@ombene]: https://github.com/ombene
+[@OutdatedVersion]: https://github.com/OutdatedVersion
 [@ota-meshi]: https://github.com/ota-meshi
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
