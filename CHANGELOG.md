@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
 - [readme] note use of typescript in readme `import/extensions` section ([#2440], thanks [@OutdatedVersion])
 - [Docs] `order`: use correct default value ([#2392], thanks [@hyperupcall])
+- [meta] replace git.io link in comments with the original URL ([#2444], thanks [@liby])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1281,6 +1282,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
 [#2392]: https://github.com/import-js/eslint-plugin-import/issues/2392
 [#2340]: https://github.com/import-js/eslint-plugin-import/issues/2340
 [#2255]: https://github.com/import-js/eslint-plugin-import/issues/2255

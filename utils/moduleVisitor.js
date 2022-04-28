@@ -81,7 +81,7 @@ exports.default = function visitModules(visitor, options) {
       if (typeof element.value !== 'string') continue;
 
       if (element.value === 'require' ||
-          element.value === 'exports') continue; // magic modules: https://git.io/vByan
+          element.value === 'exports') continue; // magic modules: https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic-modules
 
       checkSourceValue(element, element);
     }

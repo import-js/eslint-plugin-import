@@ -67,7 +67,7 @@ function runResolverTests(resolver) {
         options: [{ amd: true }] }),
       rest({ code: 'require(["./does-not-exist"], function (bar) {})',
         options: [{ amd: false }] }),
-      // magic modules: https://git.io/vByan
+      // magic modules: https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic-modules
       rest({ code: 'define(["require", "exports", "module"], function (r, e, m) { })',
         options: [{ amd: true }] }),
 
