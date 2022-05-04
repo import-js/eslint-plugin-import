@@ -3,7 +3,7 @@
   "version": "2.26.0",
   "description": "Import with sanity.",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "main": "lib/index.js",
   "directories": {
@@ -111,6 +111,6 @@
     "minimatch": "^3.1.2",
     "object.values": "^1.1.5",
     "resolve": "^1.22.0",
-    "tsconfig-paths": "^3.14.1"
+    "tsconfig-paths": "^4.0.0"
   }
 }
