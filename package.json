@@ -53,11 +53,11 @@
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import",
   "devDependencies": {
-    "@angular-eslint/template-parser": "^13.1.0",
+    "@angular-eslint/template-parser": "^13.2.1",
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
     "@typescript-eslint/parser": "^2.23.0 || ^3.3.0 || ^4.29.3 || ^5.10.0",
-    "array.prototype.flatmap": "^1.2.5",
+    "array.prototype.flatmap": "^1.3.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "=8.0.3 || ^8.2.6",
