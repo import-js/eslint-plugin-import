@@ -1,7 +1,7 @@
 import { RuleTester } from 'eslint';
 import rule from 'rules/no-restricted-paths';
 
-import { test, testFilePath } from '../utils';
+import { getTSParsers, test, testFilePath } from '../utils';
 
 const ruleTester = new RuleTester();
 
@@ -474,8 +474,7 @@ ruleTester.run('no-restricted-paths', rule, {
       ],
       errors: [
         {
-          message: 'Restricted path exceptions must be descendants of the configured ' +
-          '`from` path for that zone.',
+          message: 'Restricted path exceptions must be descendants of the configured `from` path for that zone.',
           line: 1,
           column: 15,
         },
@@ -711,4 +710,273 @@ ruleTester.run('no-restricted-paths', rule, {
       ],
     }),
   ),
+});
+
+context('Typescript', function () {
+  getTSParsers().forEach(parser => {
+    const settings = {
+      'import/parsers': { [parser]: ['.ts'] },
+      'import/resolver': { 'eslint-import-resolver-typescript': true },
+    };
+    ruleTester.run('no-restricted-paths', rule, {
+      valid: [
+        test({
+          code: 'import type a from "../client/a.ts"',
+          filename: testFilePath('./restricted-paths/server/b.ts'),
+          options: [{
+            zones: [{ target: './tests/files/restricted-paths/server', from: './tests/files/restricted-paths/other' }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "../client/a.ts"',
+          filename: testFilePath('./restricted-paths/server/b.ts'),
+          options: [{
+            zones: [{ target: '**/*', from: './tests/files/restricted-paths/other' }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "../client/a.ts"',
+          filename: testFilePath('./restricted-paths/client/b.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/!(client)/**/*',
+              from: './tests/files/restricted-paths/client/**/*',
+            }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../server/b.ts"',
+          filename: testFilePath('./restricted-paths/client/a.ts'),
+          options: [{
+            zones: [{ target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/other' }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "./a.ts"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/one',
+              from: './tests/files/restricted-paths/server',
+              except: ['./one'],
+            }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "../two/a.ts"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/one',
+              from: './tests/files/restricted-paths/server',
+              except: ['./two'],
+            }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "../one/a.ts"',
+          filename: testFilePath('./restricted-paths/server/two-new/a.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/two',
+              from: './tests/files/restricted-paths/server',
+              except: [],
+            }],
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type A from "../two/a.ts"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: '**/*',
+              from: './tests/files/restricted-paths/server/**/*',
+              except: ['**/a.js'],
+            }],
+          }],
+          parser,
+          settings,
+        }),
+        // no config
+        test({ code: 'import type b from "../server/b.js"', parser, settings }),
+        test({ code: 'import type * as b from "../server/b.js"', parser, settings }),
+      ],
+      invalid: [
+        test({
+          code: 'import type b from "../server/b"',
+          filename: testFilePath('./restricted-paths/client/a.ts'),
+          options: [{
+            zones: [{ target: './tests/files/restricted-paths/client', from: './tests/files/restricted-paths/server' }],
+          }],
+          errors: [{
+            message: 'Unexpected path "../server/b" imported in restricted zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../server/b"',
+          filename: testFilePath('./restricted-paths/client/a.ts'),
+          options: [{
+            zones: [{ target: './tests/files/restricted-paths/client/**/*', from: './tests/files/restricted-paths/server' }],
+          }],
+          errors: [{
+            message: 'Unexpected path "../server/b" imported in restricted zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type a from "../client/a"\nimport type c from "./c.ts"',
+          filename: testFilePath('./restricted-paths/server/b.ts'),
+          options: [{
+            zones: [
+              {
+                target: './tests/files/restricted-paths/server',
+                from: ['./tests/files/restricted-paths/client', './tests/files/restricted-paths/server/c.ts'],
+              },
+            ],
+          }],
+          errors: [
+            {
+              message: 'Unexpected path "../client/a" imported in restricted zone.',
+              line: 1,
+              column: 20,
+            },
+            {
+              message: 'Unexpected path "./c.ts" imported in restricted zone.',
+              line: 2,
+              column: 20,
+            },
+          ],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../server/b"',
+          filename: testFilePath('./restricted-paths/client/a'),
+          options: [{
+            zones: [{ target: './client', from: './server' }],
+            basePath: testFilePath('./restricted-paths'),
+          }],
+          errors: [{
+            message: 'Unexpected path "../server/b" imported in restricted zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../two/a"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/one',
+              from: './tests/files/restricted-paths/server',
+              except: ['./one'],
+            }],
+          }],
+          errors: [{
+            message: 'Unexpected path "../two/a" imported in restricted zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../two/a"',
+          filename: testFilePath('./restricted-paths/server/one/a'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/one',
+              from: './tests/files/restricted-paths/server',
+              except: ['./one'],
+              message: 'Custom message',
+            }],
+          }],
+          errors: [{
+            message: 'Unexpected path "../two/a" imported in restricted zone. Custom message',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type b from "../two/a"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: './tests/files/restricted-paths/server/one',
+              from: './tests/files/restricted-paths/server',
+              except: ['../client/a'],
+            }],
+          }],
+          errors: [{
+            message: 'Restricted path exceptions must be descendants of the configured ' +
+              '`from` path for that zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type A from "../two/a"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: '**/*',
+              from: './tests/files/restricted-paths/server/**/*',
+            }],
+          }],
+          errors: [{
+            message: 'Unexpected path "../two/a" imported in restricted zone.',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+        test({
+          code: 'import type A from "../two/a"',
+          filename: testFilePath('./restricted-paths/server/one/a.ts'),
+          options: [{
+            zones: [{
+              target: '**/*',
+              from: './tests/files/restricted-paths/server/**/*',
+              except: ['a.ts'],
+            }],
+          }],
+          errors: [{
+            message: 'Restricted path exceptions must be glob patterns when `from` contains glob patterns',
+            line: 1,
+            column: 20,
+          }],
+          parser,
+          settings,
+        }),
+      ],
+    });
+  });
 });

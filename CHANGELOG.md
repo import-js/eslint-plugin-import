@@ -43,6 +43,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Refactor] [`no-extraneous-dependencies`] improve performance using cache ([#2374], thanks [@meowtec])
 - [meta] `CONTRIBUTING.md`: mention inactive PRs ([#2546], thanks [@stropho])
 - [readme] make json for setting groups multiline ([#2570], thanks [@bertyhell])
+- [Tests] [`no-restricted-paths`]: Tests for `import type` statements ([#2459], thanks [@golergka])
+- [Tests] [`no-restricted-paths`]: fix one failing `import type` test case, submitted by [@golergka], thanks [@azyzz228]
 
 ## [2.26.0] - 2022-04-05
 
@@ -1028,6 +1030,7 @@ for info on changes for earlier releases.
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
 [#2473]: https://github.com/import-js/eslint-plugin-import/pull/2473
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
+[#2459]: https://github.com/import-js/eslint-plugin-import/pull/2459
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2438]: https://github.com/import-js/eslint-plugin-import/pull/2438
 [#2436]: https://github.com/import-js/eslint-plugin-import/pull/2436
@@ -1554,6 +1557,7 @@ for info on changes for earlier releases.
 [@atav32]: https://github.com/atav32
 [@atikenny]: https://github.com/atikenny
 [@atos1990]: https://github.com/atos1990
+[@azyzz228]: https://github.com/azyzz228
 [@barbogast]: https://github.com/barbogast
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
@@ -1609,6 +1613,7 @@ for info on changes for earlier releases.
 [@gavriguy]: https://github.com/gavriguy
 [@georeith]: https://github.com/georeith
 [@giodamelio]: https://github.com/giodamelio
+[@golergka]: https://github.com/golergka
 [@golopot]: https://github.com/golopot
 [@GoodForOneFare]: https://github.com/GoodForOneFare
 [@graingert]: https://github.com/graingert
