@@ -255,7 +255,7 @@ ruleTester.run('no-restricted-paths', rule, {
         } ],
       } ],
       errors: [ {
-        message: 'Restricted path exceptions must be glob patterns when`from` is a glob pattern',
+        message: 'Restricted path exceptions must be glob patterns when `from` is a glob pattern',
         line: 1,
         column: 15,
       } ],

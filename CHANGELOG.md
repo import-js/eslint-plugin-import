@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
+- [`no-restricted-paths`]: fix an error message ([#2466], thanks [@AdriAt360])
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -990,6 +991,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
 [#2417]: https://github.com/import-js/eslint-plugin-import/pull/2417
@@ -1493,6 +1495,7 @@ for info on changes for earlier releases.
 [@aberezkin]: https://github.com/aberezkin
 [@adamborowski]: https://github.com/adamborowski
 [@adjerbetian]: https://github.com/adjerbetian
+[@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page

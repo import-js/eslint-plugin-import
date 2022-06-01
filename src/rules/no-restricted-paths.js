@@ -81,7 +81,7 @@ module.exports = {
     function reportInvalidExceptionGlob(node) {
       context.report({
         node,
-        message: 'Restricted path exceptions must be glob patterns when`from` is a glob pattern',
+        message: 'Restricted path exceptions must be glob patterns when `from` is a glob pattern',
       });
     }
 
