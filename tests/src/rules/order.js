@@ -896,13 +896,13 @@ ruleTester.run('order', rule, {
         import express from 'express';
 
         import service from '@/api/service';
-        
+
         import fooParent from '../foo';
-        
+
         import fooSibling from './foo';
-        
+
         import index from './';
-        
+
         import internalDoesNotExistSoIsUnknown from '@/does-not-exist';
       `,
       options: [
@@ -2289,7 +2289,7 @@ ruleTester.run('order', rule, {
         import b from "foo-bar";
       `,
       errors: [{
-        message: '`foo-bar` import should occur after import of `foo/barfoo`', 
+        message: '`foo-bar` import should occur after import of `foo/barfoo`',
       }],
     }),
     // Option alphabetize {order: 'asc': caseInsensitive: true}
@@ -2804,6 +2804,20 @@ context('TypeScript', function () {
                 alphabetize: { order: 'asc' },
               },
             ],
+          }),
+          // groups in groups
+          test({
+            code: `
+              import sibling from './foo';
+              import fs from 'fs';
+              import parent from '../foo/bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            errors: [{
+              message: '`./foo` import should occur after import of `../foo/bar`',
+            }],
+            options: [{ groups: [['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'unknown'], 'type'] }],
           }),
         ],
       });
