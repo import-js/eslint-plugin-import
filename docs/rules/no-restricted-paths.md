@@ -10,16 +10,19 @@ In order to prevent such scenarios this rule allows you to define restricted zon
 This rule has one option. The option is an object containing the definition of all restricted `zones` and the optional `basePath` which is used to resolve relative paths within.
 The default value for `basePath` is the current working directory.
 
-Each zone consists of the `target` path, a `from` path, and an optional `except` and `message` attribute.
-- `target` is the path where the restricted imports should be applied. It can be expressed by
+Each zone consists of the `target` paths, a `from` paths, and an optional `except` and `message` attribute.
+- `target` contains the paths where the restricted imports should be applied. It can be expressed by
     - directory string path that matches all its containing files
     - glob pattern matching all the targeted files
-- `from` path defines the folder that is not allowed to be used in an import.  It can be expressed by
+    - an array of multiple of the two types above
+- `from` paths define the folders that are not allowed to be used in an import. It can be expressed by
     - directory string path that matches all its containing files
     - glob pattern matching all the files restricted to be imported
+    - an array of multiple directory string path
+    - an array of multiple glob patterns
 - `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that it does not alter the behaviour of `target` in any way.
-    - in case `from` is a glob pattern, `except` must be an array of glob patterns as well
-    - in case `from` is a directory path, `except` is relative to `from` and cannot backtrack to a parent directory.
+    - in case `from` contains only glob patterns, `except` must be an array of glob patterns as well
+    - in case `from` contains only directory path, `except` is relative to `from` and cannot backtrack to a parent directory
 - `message` - will be displayed in case of the rule violation.
 
 ### Examples
@@ -124,3 +127,70 @@ The following import is not considered a problem in `my-project/client/sub-modul
 ```js
 import b from './baz'
 ```
+
+---------------
+
+Given the following folder structure:
+
+```
+my-project
+└── one
+   └── a.js
+   └── b.js
+└── two
+   └── a.js
+   └── b.js
+└── three
+   └── a.js
+   └── b.js
+```
+
+and the current configuration is set to:
+
+```
+{
+  "zones": [
+    {
+      "target": ["./tests/files/restricted-paths/two/*", "./tests/files/restricted-paths/three/*"],
+      "from": ["./tests/files/restricted-paths/one", "./tests/files/restricted-paths/three"],
+    }
+  ]
+}
+```
+
+The following patterns are not considered a problem in `my-project/one/b.js`:
+
+```js
+import a from '../three/a'
+```
+
+```js
+import a from './a'
+```
+
+The following pattern is not considered a problem in `my-project/two/b.js`:
+
+```js
+import a from './a'
+```
+
+The following patterns are considered a problem in `my-project/two/a.js`:
+
+```js
+import a from '../one/a'
+```
+
+```js
+import a from '../three/a'
+```
+
+The following patterns are considered a problem in `my-project/three/b.js`:
+
+```js
+import a from '../one/a'
+```
+
+```js
+import a from './a'
+```
+
