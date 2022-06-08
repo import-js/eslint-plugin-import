@@ -3,7 +3,7 @@ import path from 'path';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import isGlob from 'is-glob';
-import { Minimatch, default as minimatch } from 'minimatch';
+import { Minimatch } from 'minimatch';
 import docsUrl from '../docsUrl';
 import importType from '../core/importType';
 
@@ -83,7 +83,8 @@ module.exports = {
 
     function isMatchingTargetPath(filename, targetPath) {
       if (isGlob(targetPath)) {
-        return minimatch(filename, targetPath);
+        const mm = new Minimatch(targetPath);
+        return mm.match(filename);
       }
 
       return containsPath(filename, targetPath);
