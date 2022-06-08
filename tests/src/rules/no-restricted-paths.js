@@ -133,6 +133,18 @@ ruleTester.run('no-restricted-paths', rule, {
       } ],
     }),
     test({
+      code: 'import b from "../server/b.js" // test',
+      filename: testFilePath('./restricted-paths/client/a.js'),
+      options: [ {
+        zones: [ { target: './tests/files/restricted-paths/client/*', from: './tests/files/restricted-paths/server' } ],
+      } ],
+      errors: [ {
+        message: 'Unexpected path "../server/b.js" imported in restricted zone.',
+        line: 1,
+        column: 15,
+      } ],
+    }),
+    test({
       code: 'import a from "../client/a"\nimport c from "./c"',
       filename: testFilePath('./restricted-paths/server/b.js'),
       options: [ {
