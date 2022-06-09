@@ -12,6 +12,7 @@ export const rules = {
   'group-exports': require('./rules/group-exports'),
   'no-relative-packages': require('./rules/no-relative-packages'),
   'no-relative-parent-imports': require('./rules/no-relative-parent-imports'),
+  'consistent-type-specifier-style': require('./rules/consistent-type-specifier-style'),
 
   'no-self-import': require('./rules/no-self-import'),
   'no-cycle': require('./rules/no-cycle'),

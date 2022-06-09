@@ -2,6 +2,7 @@ import { expect } from  'chai';
 import semver from 'semver';
 import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
+import typescriptPkg from 'typescript/package.json';
 import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
 import ExportMap from '../../../src/ExportMap';
 
@@ -351,7 +352,7 @@ describe('ExportMap', function () {
       configs.push(['array form', { '@typescript-eslint/parser': ['.ts', '.tsx'] }]);
     }
 
-    if (semver.satisfies(eslintPkg.version, '<6')) {
+    if (semver.satisfies(eslintPkg.version, '<6') && semver.satisfies(typescriptPkg.version, '<4')) {
       configs.push(['array form', { 'typescript-eslint-parser': ['.ts', '.tsx'] }]);
     }
 

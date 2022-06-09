@@ -1,16 +1,25 @@
 import path from 'path';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
+import typescriptPkg from 'typescript/package.json';
 
 // warms up the module cache. this import takes a while (>500ms)
 import 'babel-eslint';
 
 export const parsers = {
   ESPREE: require.resolve('espree'),
-  TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && require.resolve('typescript-eslint-parser'),
+  TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && semver.satisfies(typescriptPkg.version, '<4') && require.resolve('typescript-eslint-parser'),
   TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && require.resolve('@typescript-eslint/parser'),
   BABEL_OLD: require.resolve('babel-eslint'),
 };
+
+export function tsVersionSatisfies(specifier) {
+  return semver.satisfies(typescriptPkg.version, specifier);
+}
+
+export function typescriptEslintParserSatisfies(specifier) {
+  return parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, specifier);
+}
 
 export function testFilePath(relativePath) {
   return path.join(process.cwd(), './tests/files', relativePath);
@@ -29,8 +38,12 @@ export function getNonDefaultParsers() {
 
 export const FILENAME = testFilePath('foo.js');
 
+export function eslintVersionSatisfies(specifier) {
+  return semver.satisfies(eslintPkg.version, specifier);
+}
+
 export function testVersion(specifier, t) {
-  return semver.satisfies(eslintPkg.version, specifier) ? test(t()) : [];
+  return eslintVersionSatisfies(specifier) ? test(t()) : [];
 }
 
 export function test(t) {

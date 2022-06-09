@@ -97,6 +97,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 * Forbid anonymous values as default exports ([`no-anonymous-default-export`])
 * Prefer named exports to be grouped together in a single export declaration ([`group-exports`])
 * Enforce a leading comment with the webpackChunkName for dynamic imports ([`dynamic-import-chunkname`])
+* Enforce or ban the use of inline type-only markers for named imports ([`consistent-type-specifier-style`])
 
 [`first`]: ./docs/rules/first.md
 [`exports-last`]: ./docs/rules/exports-last.md
@@ -114,6 +115,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 [`no-default-export`]: ./docs/rules/no-default-export.md
 [`no-named-export`]: ./docs/rules/no-named-export.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
+[`consistent-type-specifier-style`]: ./docs/rules/consistent-type-specifier-style.md
 
 ## `eslint-plugin-import` for enterprise
 

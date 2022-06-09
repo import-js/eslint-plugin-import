@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: Add `includeInternal` option ([#2541], thanks [@bdwain])
 - [`no-extraneous-dependencies`]: Add `includeTypes` option ([#2543], thanks [@bdwain])
 - [`order`]: new `alphabetize.orderImportKind` option to sort imports with same path based on their kind (`type`, `typeof`) ([#2544], thanks [@stropho])
+- [`consistent-type-specifier-style`]: add rule ([#2473], thanks [@bradzacher])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -965,6 +966,7 @@ for info on changes for earlier releases.
 [`import/external-module-folders` setting]: ./README.md#importexternal-module-folders
 [`internal-regex` setting]: ./README.md#importinternal-regex
 
+[`consistent-type-specifier-style`]: ./docs/rules/consistent-type-specifier-style.md
 [`default`]: ./docs/rules/default.md
 [`dynamic-import-chunkname`]: ./docs/rules/dynamic-import-chunkname.md
 [`export`]: ./docs/rules/export.md
@@ -1017,6 +1019,7 @@ for info on changes for earlier releases.
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
+[#2473]: https://github.com/import-js/eslint-plugin-import/pull/2473
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2438]: https://github.com/import-js/eslint-plugin-import/pull/2438
