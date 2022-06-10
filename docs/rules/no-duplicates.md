@@ -67,6 +67,33 @@ import SomeDefaultClass from './mod?minify'
 import * from './mod.js?minify'
 ```
 
+### Inline Type imports
+
+TypeScript 4.5 introduced a new [feature](https://devblogs.microsoft.com/typescript/announcing-typescript-4-5/#type-on-import-names) that allows mixing of named value and type imports. In order to support fixing to an inline type import when duplicate imports are detected, `prefer-inline` can be set to true.
+
+Config:
+
+```json
+"import/no-duplicates": ["error", {"prefer-inline": true}]
+```
+
+<!--tabs-->
+
+❌ Invalid `["error", "prefer-inline"]`
+
+```js
+import { AValue, type AType } from './mama-mia'
+import type { BType } from './mama-mia'
+```
+
+✅ Valid with `["error", "prefer-inline"]`
+
+```js
+import { AValue, type AType, type BType } from './mama-mia'
+```
+
+<!--tabs-->
+
 ## When Not To Use It
 
 If the core ESLint version is good enough (i.e. you're _not_ using Flow and you _are_ using [`import/extensions`](./extensions.md)), keep it and don't use this.

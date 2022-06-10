@@ -1,5 +1,7 @@
 import resolve from 'eslint-module-utils/resolve';
 import docsUrl from '../docsUrl';
+import semver from 'semver';
+import typescriptPkg from 'typescript/package.json';
 
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
@@ -7,7 +9,7 @@ function checkImports(imported, context) {
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = context.getSourceCode();
-      const fix = getFix(first, rest, sourceCode);
+      const fix = getFix(first, rest, sourceCode, context);
 
       context.report({
         node: first.source,
@@ -25,7 +27,7 @@ function checkImports(imported, context) {
   }
 }
 
-function getFix(first, rest, sourceCode) {
+function getFix(first, rest, sourceCode, context) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
   // update the first one, and remove the rest. Support for multiple
@@ -108,10 +110,19 @@ function getFix(first, rest, sourceCode) {
 
     const [specifiersText] = specifiers.reduce(
       ([result, needsComma], specifier) => {
+        const isTypeSpecifier = specifier.importNode.importKind === 'type';
+
+        const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+        // a user might set prefer-inline but not have a supporting TypeScript version.  Flow does not support inline types so this should fail in that case as well.
+        if (preferInline && !semver.satisfies(typescriptPkg.version, '>= 4.5')) {
+          throw new Error('Your version of TypeScript does not support inline type imports.');
+        }
+
+        const insertText = `${preferInline && isTypeSpecifier ? 'type ' : ''}${specifier.text}`;
         return [
           needsComma && !specifier.isEmpty
-            ? `${result},${specifier.text}`
-            : `${result}${specifier.text}`,
+            ? `${result},${insertText}`
+            : `${result}${insertText}`,
           specifier.isEmpty ? needsComma : true,
         ];
       },
@@ -257,6 +268,9 @@ module.exports = {
           considerQueryString: {
             type: 'boolean',
           },
+          'prefer-inline': {
+            type: 'boolean',
+          },
         },
         additionalProperties: false,
       },
@@ -290,6 +304,9 @@ module.exports = {
       const map = moduleMaps.get(n.parent);
       if (n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
+      }
+      if (n.specifiers.some((spec) => spec.importKind === 'type')) {
+        return map.namedTypesImported;
       }
 
       return hasNamespace(n) ? map.nsImported : map.imported;

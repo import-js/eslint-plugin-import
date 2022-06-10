@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - Add [`no-empty-named-blocks`] rule ([#2568], thanks [@guilhermelimak])
 - [`prefer-default-export`]: add "target" option ([#2602], thanks [@azyzz228])
 - [`no-absolute-path`]: add fixer ([#2613], thanks [@adipascu])
+- [`no-duplicates`]: support inline type import with `inlineTypeImport` option ([#2475], thanks [@snewcomer])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1045,6 +1046,7 @@ for info on changes for earlier releases.
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
+[#2475]: https://github.com/import-js/eslint-plugin-import/pull/2475
 [#2473]: https://github.com/import-js/eslint-plugin-import/pull/2473
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2459]: https://github.com/import-js/eslint-plugin-import/pull/2459
@@ -1760,6 +1762,7 @@ for info on changes for earlier releases.
 [@singles]: https://github.com/singles
 [@skozin]: https://github.com/skozin
 [@skyrpex]: https://github.com/skyrpex
+[@snewcomer]: https://github.com/snewcomer
 [@sompylasar]: https://github.com/sompylasar
 [@soryy708]: https://github.com/soryy708
 [@sosukesuzuki]: https://github.com/sosukesuzuki
