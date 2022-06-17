@@ -127,10 +127,31 @@ module.exports = {
       return resolvedFileWithoutExtension === resolve(file, context);
     }
 
-    function isExternalRootModule(file) {
+    function isExternalRootModule(file, context) {
       const slashCount = file.split('/').length - 1;
 
       if (slashCount === 0)  return true;
+
+      /**
+       * treat custom aliases as internal modules
+       * Like `import sum from '@src/sum'`
+       * @link https://www.npmjs.com/package/eslint-import-resolver-alias
+       * @link https://github.com/import-js/eslint-plugin-import/issues/2365
+       */
+      if (context.settings && context.settings['import/resolver'] && context.settings['import/resolver'].alias) {
+        let aliases;
+
+        if (Array.isArray(context.settings['import/resolver'].alias)) {
+          aliases = context.settings['import/resolver'].alias;
+        } else if (Array.isArray(context.settings['import/resolver'].alias.map)) {
+          aliases = context.settings['import/resolver'].alias.map.map(([alias]) => alias);
+        } else {
+          aliases = [];
+        }
+
+        if (aliases.some((alias) => file.startsWith(`${alias}/`))) return false;
+      }
+
       if (isScoped(file) && slashCount <= 1) return true;
       return false;
     }
@@ -148,7 +169,7 @@ module.exports = {
 
       // don't enforce in root external packages as they may have names with `.js`.
       // Like `import Decimal from decimal.js`)
-      if (isExternalRootModule(importPath)) return;
+      if (isExternalRootModule(importPath, context)) return;
 
       const resolvedPath = resolve(importPath, context);
 
