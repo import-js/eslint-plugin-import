@@ -17,6 +17,7 @@ module.exports = {
 
     schema: [
       makeOptionsSchema({
+        ts: { type: 'boolean', default: false },
         caseSensitive: { type: 'boolean', default: true },
         caseSensitiveStrict: { type: 'boolean', default: false },
       }),
@@ -34,8 +35,15 @@ module.exports = {
 
       const caseSensitive = !CASE_SENSITIVE_FS && options.caseSensitive !== false;
       const caseSensitiveStrict = !CASE_SENSITIVE_FS && options.caseSensitiveStrict;
+      const useTS = options.ts;
 
-      const resolvedPath = resolve(source.value, context);
+      let resolvedPath = resolve(source.value, context);
+      if (useTS) {
+        resolvedPath = resolvedPath ||
+          resolve(source.value.replace(/\.js$/, '.ts'), context) ||
+          resolve(source.value.replace(/\.jsx$/, '.tsx'), context);
+      }
+
 
       if (resolvedPath === undefined) {
         context.report(

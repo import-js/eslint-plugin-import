@@ -451,12 +451,40 @@ context('TypeScript', () => {
           code: 'import type { JSONSchema7Type } from "@types/json-schema";',
           parser,
         }),
+        test({
+          code: 'import * as foo from "./typescript.js";',
+          parser,
+          options: [{ ts: true }],
+        }),
+        test({
+          code: 'import * as foo from "./app.jsx";',
+          parser,
+          options: [{ ts: true }],
+        }),
       ],
       invalid: [
         test({
           code: 'import { JSONSchema7Type } from "@types/json-schema";',
           errors: [ "Unable to resolve path to module '@types/json-schema'." ],
           parser,
+        }),
+        test({
+          code: 'import * as foo from "./typescript.js";',
+          errors: [ "Unable to resolve path to module './typescript.js'." ],
+          parser,
+          options: [{ ts: false }],
+        }),
+        test({
+          code: 'import * as foo from "./app.jsx";',
+          errors: [ "Unable to resolve path to module './app.jsx'." ],
+          parser,
+          options: [{ ts: false }],
+        }),
+        test({
+          code: 'import * as foo from "./typescript.jsx";',
+          errors: [ "Unable to resolve path to module './typescript.jsx'." ],
+          parser,
+          options: [{ ts: true }],
         }),
       ],
     });
