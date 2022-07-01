@@ -26,7 +26,7 @@ ruleTester.run('no-duplicates', rule, {
     // #225: ignore duplicate if is a flow type import
     test({
       code: "import { x } from './foo'; import type { y } from './foo'",
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // #1107: Using different query strings that trigger different webpack loaders.
@@ -107,7 +107,7 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
       output: "import type { x , y } from './foo'; ",
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -418,7 +418,7 @@ import {x,y} from './foo'
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TYPESCRIPT_ESLINT)
     .forEach((parser) => {
       const parserConfig = {
         parser,

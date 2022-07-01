@@ -66,7 +66,7 @@ ruleTester.run('prefer-default-export', rule, {
     }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // no exports at all
@@ -77,24 +77,24 @@ ruleTester.run('prefer-default-export', rule, {
 
     test({
       code: `export type UserId = number;`,
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // issue #653
     test({
       code: 'export default from "foo.js"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'export { a, b } from "foo.js"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     // ...SYNTAX_CASES,
     test({
       code: `
         export const [CounterProvider,, withCounter] = func();;
       `,
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({

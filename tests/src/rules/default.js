@@ -31,19 +31,19 @@ ruleTester.run('default', rule, {
 
     // es7 export syntax
     test({ code: 'export bar from "./bar"',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
     test({ code: 'export { default as bar } from "./bar"' }),
     test({ code: 'export bar, { foo } from "./bar"',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
     test({ code: 'export { default as bar, foo } from "./bar"' }),
     test({ code: 'export bar, * as names from "./bar"',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
     test({
       code: 'import twofer from "./trampoline"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // jsx
@@ -71,27 +71,27 @@ ruleTester.run('default', rule, {
     // from no-errors
     test({
       code: "import Foo from './jsx/FooES7.js';",
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // #545: more ES7 cases
     test({
       code: "import bar from './default-export-from.js';",
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: "import bar from './default-export-from-named.js';",
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: "import bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: "export bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // es2022: Arbitrary module namespace identifier names
@@ -119,23 +119,23 @@ ruleTester.run('default', rule, {
     // es7 export syntax
     test({
       code: 'export baz from "./named-exports"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, { bar } from "./named-exports"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     test({
       code: 'export baz, * as names from "./named-exports"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['No default export found in imported module "./named-exports".'],
     }),
     // exports default from a module with no default
     test({
       code: 'import twofer from "./broken-trampoline"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['No default export found in imported module "./broken-trampoline".'],
     }),
 

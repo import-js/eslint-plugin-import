@@ -39,7 +39,7 @@ ruleTester.run('unambiguous', rule, {
     },
     {
       code: 'function x() {}; export * as y from "z"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {

@@ -58,7 +58,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export { a, b } from "foo.js"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // no exports at all
@@ -74,15 +74,15 @@ ruleTester.run('no-default-export', rule, {
 
     test({
       code: `export type UserId = number;`,
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'export foo from "foo.js"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: `export Memory, { MemoryValue } from './Memory'`,
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
   ],
   invalid: [].concat(
@@ -154,7 +154,7 @@ ruleTester.run('no-default-export', rule, {
     }),
     test({
       code: 'export default from "foo.js"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: [
         {
           type: 'ExportNamedDeclaration',

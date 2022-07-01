@@ -66,7 +66,7 @@ ruleTester.run('max-dependencies', rule, {
 
     test({
       code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       options: [{
         max: 1,
       }],
@@ -77,7 +77,7 @@ ruleTester.run('max-dependencies', rule, {
 
     test({
       code: 'import type { x } from \'./foo\'; import type { y } from \'./bar\'; import type { z } from \'./baz\'',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       options: [{
         max: 2,
         ignoreTypeImports: false,
@@ -92,7 +92,7 @@ ruleTester.run('max-dependencies', rule, {
 describe('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TYPESCRIPT_ESLINT)
     .forEach((parser) => {
       ruleTester.run(`max-dependencies (${parser.replace(process.cwd(), '.')})`, rule, {
         valid: [
