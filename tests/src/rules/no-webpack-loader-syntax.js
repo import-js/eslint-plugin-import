@@ -85,7 +85,7 @@ context('TypeScript', function () {
     };
     // @typescript-eslint/parser@5+ throw error for invalid module specifiers at parsing time.
     // https://github.com/typescript-eslint/typescript-eslint/releases/tag/v5.0.0
-    if (!(parser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '>= 5'))) {
+    if (!(parser === parsers['@TYPESCRIPT_ESLINT'] && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '>= 5'))) {
       ruleTester.run('no-webpack-loader-syntax', rule, {
         valid: [
           test(Object.assign({

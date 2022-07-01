@@ -57,16 +57,16 @@ const valid = [
   // es7 //
   /////////
   test({ code: 'export * as names from "./named-exports"',
-    parser: parsers.BABEL_OLD }),
+    parser: parsers.BABEL_ESLINT }),
   test({ code: 'export defport, * as names from "./named-exports"',
-    parser: parsers.BABEL_OLD }),
+    parser: parsers.BABEL_ESLINT }),
   // non-existent is handled by no-unresolved
   test({ code: 'export * as names from "./does-not-exist"',
-    parser: parsers.BABEL_OLD }),
+    parser: parsers.BABEL_ESLINT }),
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Users)',
-    parser: parsers.BABEL_OLD,
+    parser: parsers.BABEL_ESLINT,
   }),
 
   // respect hoisting
@@ -81,11 +81,11 @@ const valid = [
   test({ code: "import * as names from './default-export'; console.log(names.default)" }),
   test({
     code: 'export * as names from "./default-export"',
-    parser: parsers.BABEL_OLD,
+    parser: parsers.BABEL_ESLINT,
   }),
   test({
     code: 'export defport, * as names from "./default-export"',
-    parser: parsers.BABEL_OLD,
+    parser: parsers.BABEL_ESLINT,
   }),
 
   // #456: optionally ignore computed references
@@ -103,7 +103,7 @@ const valid = [
   }),
   test({
     code: `import * as names from './named-exports'; const {a, b, ...rest} = names;`,
-    parser: parsers.BABEL_OLD,
+    parser: parsers.BABEL_ESLINT,
   }),
 
   // #1144: should handle re-export CommonJS as namespace
@@ -251,7 +251,7 @@ const invalid = [].concat(
 
   test({
     code: 'import * as Endpoints from "./issue-195/Endpoints"; console.log(Endpoints.Foo)',
-    parser: parsers.BABEL_OLD,
+    parser: parsers.BABEL_ESLINT,
     errors: ["'Foo' not found in imported namespace 'Endpoints'."],
   }),
 
@@ -316,7 +316,7 @@ const invalid = [].concat(
 ///////////////////////
 // deep dereferences //
 //////////////////////
-;[['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
+;[['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_ESLINT]].forEach(function ([folder, parser]) { // close over params
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),

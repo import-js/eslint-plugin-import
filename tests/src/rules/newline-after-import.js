@@ -194,22 +194,22 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         class App {}
       `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     flatMap(getTSParsers(), (parser) => [].concat(
       {
@@ -246,14 +246,14 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
-      parser !== parsers.TS_OLD || semver.satisfies(tsEslintVersion, '>= 22') ? {
+      parser !== parsers.TYPESCRIPT_ESLINT || semver.satisfies(tsEslintVersion, '>= 22') ? {
         code: `
           export import a = obj;\nf(a);
         `,
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       } : [],
-      parser !== parsers.TS_OLD || semver.satisfies(tsEslintVersion, '>= 22') ? {
+      parser !== parsers.TYPESCRIPT_ESLINT || semver.satisfies(tsEslintVersion, '>= 22') ? {
         code: `
           import { a } from "./a";
 
@@ -553,7 +553,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
@@ -564,7 +564,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
@@ -575,7 +575,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     {
       code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
@@ -586,7 +586,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE,
       } ],
       parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     },
     testVersion('>= 6', () => ({
       code: `
@@ -610,7 +610,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         },
       ],
       parserOptions: { sourceType: 'module' },
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     })) || [],
   ),
 });

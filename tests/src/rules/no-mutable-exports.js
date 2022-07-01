@@ -25,11 +25,11 @@ ruleTester.run('no-mutable-exports', rule, {
     test({ code: 'class Counter {}\nexport default Counter' }),
     test({ code: 'class Counter {}\nexport { Counter as default }' }),
     test({
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       code: 'export Something from "./something";',
     }),
     test({
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       code: 'type Foo = {}\nexport type {Foo}',
     }),
     // es2022: Arbitrary module namespace identifier names

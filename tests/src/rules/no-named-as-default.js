@@ -13,13 +13,13 @@ ruleTester.run('no-named-as-default', rule, {
 
     // es7
     test({ code: 'export bar, { foo } from "./bar";',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
     test({ code: 'export bar from "./bar";',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
 
     // #566: don't false-positive on `default` itself
     test({ code: 'export default from "./bar";',
-      parser: parsers.BABEL_OLD }),
+      parser: parsers.BABEL_ESLINT }),
 
     // es2022: Arbitrary module namespae identifier names
     testVersion('>= 8.7', () => ({
@@ -45,13 +45,13 @@ ruleTester.run('no-named-as-default', rule, {
     // es7
     test({
       code: 'export foo from "./bar";',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.',
         type: 'ExportDefaultSpecifier' } ] }),
     test({
       code: 'export foo, { foo as bar } from "./bar";',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: [ {
         message: 'Using exported name \'foo\' as identifier for default export.',
         type: 'ExportDefaultSpecifier' } ] }),

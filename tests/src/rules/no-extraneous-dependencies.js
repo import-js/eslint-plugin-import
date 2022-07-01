@@ -82,7 +82,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import type MyType from "myflowtyped";',
       options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: `
@@ -90,7 +90,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         import typeof TypeScriptModule from 'typescript';
       `,
       options: [{ packageDir: packageDirWithFlowTyped }],
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import react from "react";',
@@ -398,7 +398,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
 describe('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TYPESCRIPT_ESLINT)
     .forEach((parser) => {
       const parserConfig = {
         parser,
@@ -433,12 +433,12 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
     test({
       code: 'import type MyType from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import type { MyType } from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
   ],
   invalid: [
