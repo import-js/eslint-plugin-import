@@ -4,7 +4,7 @@ import { parsers, test as _test, testFilePath } from '../utils';
 
 const test = def => _test(Object.assign(def, {
   filename: testFilePath('./internal-modules/plugins/plugin2/index.js'),
-  parser: parsers.BABEL_OLD,
+  parser: parsers.BABEL_ESLINT,
 }));
 
 const ruleTester = new RuleTester();

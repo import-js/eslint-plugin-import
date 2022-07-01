@@ -2383,7 +2383,7 @@ ruleTester.run('order', rule, {
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TYPESCRIPT_ESLINT)
     .forEach((parser) => {
       const parserConfig = {
         parser,

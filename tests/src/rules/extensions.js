@@ -601,7 +601,7 @@ ruleTester.run('extensions', rule, {
 describe('TypeScript', () => {
   getTSParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TYPESCRIPT_ESLINT)
     .forEach((parser) => {
       ruleTester.run(`${parser}: extensions ignore type-only`, rule, {
         valid: [

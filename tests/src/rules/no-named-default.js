@@ -12,11 +12,11 @@ ruleTester.run('no-named-default', rule, {
     // Should ignore imported flow types
     test({
       code: 'import { type default as Foo } from "./bar";',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import { typeof default as Foo } from "./bar";',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     ...SYNTAX_CASES,
@@ -29,7 +29,7 @@ ruleTester.run('no-named-default', rule, {
         message: 'Use default import syntax to import \'default\'.',
         type: 'Identifier',
       }],
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),*/
     test({
       code: 'import { default as bar } from "./bar";',

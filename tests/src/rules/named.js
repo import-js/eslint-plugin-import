@@ -54,11 +54,11 @@ ruleTester.run('named', rule, {
     // es7
     test({
       code: 'export bar, { foo } from "./bar"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import { foo, bar } from "./named-trampoline"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // regression tests
@@ -73,43 +73,43 @@ ruleTester.run('named', rule, {
     // should ignore imported/exported flow types, even if they don’t exist
     test({
       code: 'import type { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import typeof { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import type { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import typeof { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import { type MyOpaqueType, MyClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import { typeof MyOpaqueType, MyClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import typeof MissingType from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'import typeof * as MissingType from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'export type { MissingType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
     test({
       code: 'export type { MyOpaqueType } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
     }),
 
     // jsnext
@@ -244,17 +244,17 @@ ruleTester.run('named', rule, {
     // es7
     test({
       code: 'export bar2, { bar } from "./bar"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ["bar not found in './bar'"],
     }),
     test({
       code: 'import { foo, bar, baz } from "./named-trampoline"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ["baz not found in './named-trampoline'"],
     }),
     test({
       code: 'import { baz } from "./broken-trampoline"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ['baz not found via broken-trampoline.js -> named-exports.js'],
     }),
 
@@ -294,7 +294,7 @@ ruleTester.run('named', rule, {
 
     test({
       code: 'import  { type MyOpaqueType, MyMissingClass } from "./flowtypes"',
-      parser: parsers.BABEL_OLD,
+      parser: parsers.BABEL_ESLINT,
       errors: ["MyMissingClass not found in './flowtypes'"],
     }),
 

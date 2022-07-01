@@ -5,11 +5,13 @@ import semver from 'semver';
 // warms up the module cache. this import takes a while (>500ms)
 import 'babel-eslint';
 
+const NODE_MODULES = '../../node_modules';
+
 export const parsers = {
   ESPREE: require.resolve('espree'),
-  TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && require.resolve('typescript-eslint-parser'),
-  TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && require.resolve('@typescript-eslint/parser'),
-  BABEL_OLD: require.resolve('babel-eslint'),
+  TYPESCRIPT_ESLINT: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && path.join(__dirname, NODE_MODULES, 'typescript-eslint-parser'),
+  '@TYPESCRIPT_ESLINT': semver.satisfies(eslintPkg.version, '> 5') && path.join(__dirname, NODE_MODULES, '@typescript-eslint/parser'),
+  BABEL_ESLINT: path.join(__dirname, NODE_MODULES, 'babel-eslint'),
 };
 
 export function testFilePath(relativePath) {
@@ -18,13 +20,13 @@ export function testFilePath(relativePath) {
 
 export function getTSParsers() {
   return [
-    parsers.TS_OLD,
-    parsers.TS_NEW,
+    parsers.TYPESCRIPT_ESLINT,
+    parsers['@TYPESCRIPT_ESLINT'],
   ].filter(Boolean);
 }
 
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(parsers.BABEL_OLD).filter(Boolean);
+  return getTSParsers().concat(parsers.BABEL_ESLINT).filter(Boolean);
 }
 
 export const FILENAME = testFilePath('foo.js');
@@ -67,7 +69,7 @@ export const SYNTAX_CASES = [
   test({ code: 'for (let [ foo, bar ] of baz) {}' }),
 
   test({ code: 'const { x, y } = bar' }),
-  test({ code: 'const { x, y, ...z } = bar', parser: parsers.BABEL_OLD }),
+  test({ code: 'const { x, y, ...z } = bar', parser: parsers.BABEL_ESLINT }),
 
   // all the exports
   test({ code: 'let x; export { x }' }),
@@ -75,7 +77,7 @@ export const SYNTAX_CASES = [
 
   // not sure about these since they reference a file
   // test({ code: 'export { x } from "./y.js"'}),
-  // test({ code: 'export * as y from "./y.js"', parser: parsers.BABEL_OLD}),
+  // test({ code: 'export * as y from "./y.js"', parser: parsers.BABEL_ESLINT}),
 
   test({ code: 'export const x = null' }),
   test({ code: 'export var x = null' }),

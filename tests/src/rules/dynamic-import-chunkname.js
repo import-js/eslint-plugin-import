@@ -15,7 +15,7 @@ const pickyCommentOptions = [{
 const multipleImportFunctionOptions = [{
   importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
 }];
-const parser = parsers.BABEL_OLD;
+const parser = parsers.BABEL_ESLINT;
 
 const noLeadingCommentError = 'dynamic imports require a leading comment with the webpack chunkname';
 const nonBlockCommentError = 'dynamic imports require a /* foo */ style comment, not a // foo comment';
@@ -495,7 +495,7 @@ ruleTester.run('dynamic-import-chunkname', rule, {
 
 context('TypeScript', () => {
   getTSParsers().forEach((typescriptParser) => {
-    const nodeType = typescriptParser === parsers.TS_OLD || (typescriptParser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '^2'))
+    const nodeType = typescriptParser === parsers.TYPESCRIPT_ESLINT || (typescriptParser === parsers['@TYPESCRIPT_ESLINT'] && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '^2'))
       ? 'CallExpression'
       : 'ImportExpression';
 
