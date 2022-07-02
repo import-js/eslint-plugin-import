@@ -239,7 +239,8 @@ ruleTester.run('no-cycle', rule, {
         parser: parsers.BABEL_ESLINT,
       }),
     ]).concat(
-      testVersion('> 3', () => ({ // Dynamic import is not properly caracterized with eslint < 4
+      // TODO: enable for eslint 8+, just not for the old babel parser
+      testVersion('> 3 && < 8', () => ({ // Dynamic import is not properly characterized with eslint < 4
         code: `import { foo } from "./${testDialect}/depth-one-dynamic"; // #2265 6`,
         errors: [error(`Dependency cycle detected.`)],
         parser: parsers.BABEL_ESLINT,
