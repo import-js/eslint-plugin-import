@@ -603,26 +603,41 @@ describe('TypeScript', () => {
     // Type-only imports were added in TypeScript ESTree 2.23.0
     .filter((parser) => parser !== parsers.TS_OLD)
     .forEach((parser) => {
-      ruleTester.run(`${parser}: extensions ignore type-only`, rule, {
+      ruleTester.run(`${parser}: extensions ignore unresolvable type-only`, rule, {
         valid: [
           test({
-            code: 'import type T from "./typescript-declare";',
-            options: [
-              'always',
-              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
-            ],
+            code: 'import type T from "./typescript-type-only";',
+            options: ['always', { ts: 'never', tsx: 'never' }],
             parser,
           }),
         ],
         invalid: [
           test({
-            code: 'import T from "./typescript-declare";',
-            errors: ['Missing file extension for "./typescript-declare"'],
-            options: [
-              'always',
-              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
-            ],
+            code: 'import T from "./typescript-type-only";',
+            errors: ['Missing file extension for "./typescript-type-only"'],
+            options: ['always', { ts: 'never', tsx: 'never' }],
             parser,
+          }),
+        ],
+      });
+      ruleTester.run(`${parser}: extensions resolve type-only with TypeScript resolver`, rule, {
+        valid: [
+          test({
+            code: 'import type T from "./typescript-declaration";',
+            options: ['always', { ts: 'never', tsx: 'never' }],
+            parser,
+            settings: { 'import/resolver': ['node', { typescript: true }] },
+          }),
+        ],
+        invalid: [
+          test({
+            code: 'import T from "./typescript-declaration";',
+            errors: [
+              'Missing file extension "js" for "./typescript-declaration"',
+            ],
+            options: ['always', { ts: 'never', tsx: 'never' }],
+            parser,
+            settings: { 'import/resolver': ['node', { typescript: true }] },
           }),
         ],
       });
