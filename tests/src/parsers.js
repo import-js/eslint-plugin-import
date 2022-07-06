@@ -13,8 +13,10 @@ const disableNewTS = semver.satisfies(tsParserVersion, '>= 4.1') // this rule is
 
 function minEcmaVersion(features, parserOptions) {
   const minEcmaVersionForFeatures = {
+    'export-default-from': 2018,
     'class fields': 2022,
     'optional chaining': 2020,
+    'arbitrary-export-names': 2022,
   };
   const result = Math.max.apply(
     Math,
@@ -102,7 +104,8 @@ const parsers = {
           && typeof testObject.errors !== 'number'
           && {
             errors: testObject.errors.map(
-              (errorObject) => {
+              (error) => {
+                const errorObject = typeof error === 'string' ? { message: error } : error;
                 const nextSuggestions = errorObject.suggestions && {
                   suggestions: errorObject.suggestions.map((suggestion) => Object.assign({}, suggestion, {
                     output: suggestion.output + extraComment,
@@ -125,6 +128,7 @@ const parsers = {
 
       const skipBase = (features.has('class fields') && semver.satisfies(version, '< 8'))
         || (es >= 2020 && semver.satisfies(version, '< 6'))
+        || (features.has('arbitrary-export-names') && semver.satisfies(version, '< 8.7'))
         || features.has('no-default')
         || features.has('bind operator')
         || features.has('do expressions')
@@ -132,13 +136,16 @@ const parsers = {
         || features.has('flow')
         || features.has('ts')
         || features.has('types')
-        || (features.has('fragment') && semver.satisfies(version, '< 5'));
+      //if it has fragments use version 5 and higher // create features for export from
+        || (features.has('fragment') && semver.satisfies(version, '< 5'))
+        || features.has('export-default-from');
 
       const skipBabel = features.has('no-babel');
       const skipOldBabel = skipBabel || features.has('no-babel-old') || semver.satisfies(version, '>= 8');
       const skipNewBabel = skipBabel
         || features.has('no-babel-new')
         || !semver.satisfies(version, '^7.5.0') // require('@babel/eslint-parser/package.json').peerDependencies.eslint
+        || features.has('export-default-from') // TODO: figure out how to configure babel for this
         || features.has('flow')
         || features.has('types')
         || features.has('ts');
@@ -147,7 +154,9 @@ const parsers = {
         || features.has('flow')
         || features.has('jsx namespace')
         || features.has('bind operator')
-        || features.has('do expressions');
+        || features.has('do expressions')
+        || features.has('arbitrary-export-names') // TODO: figure out which TS version starts supporting this
+        || features.has('export-default-from'); // TODO: figure out which TS version starts supporting this
       const tsOld = !skipTS && !features.has('no-ts-old');
       const tsNew = !skipTS && !features.has('no-ts-new');
 
