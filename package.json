@@ -88,6 +88,7 @@
     "npm-which": "^3.0.1",
     "nyc": "^11.9.0",
     "object.entries": "^1.1.5",
+    "object.fromentries": "^2.0.5",
     "redux": "^3.7.2",
     "rimraf": "^2.7.1",
     "safe-publish-latest": "^2.0.0",
