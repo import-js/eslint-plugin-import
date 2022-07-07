@@ -129,7 +129,17 @@ function findStartOfLineWithComments(sourceCode, node) {
   return result;
 }
 
-function isPlainRequireModule(node) {
+function isRequireExpression(expr) {
+  return expr != null &&
+    expr.type === 'CallExpression' &&
+    expr.callee != null &&
+    expr.callee.name === 'require' &&
+    expr.arguments != null &&
+    expr.arguments.length === 1 &&
+    expr.arguments[0].type === 'Literal';
+}
+
+function isSupportedRequireModule(node) {
   if (node.type !== 'VariableDeclaration') {
     return false;
   }
@@ -137,16 +147,17 @@ function isPlainRequireModule(node) {
     return false;
   }
   const decl = node.declarations[0];
-  const result = decl.id &&
+  const isPlainRequire = decl.id &&
+    (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern') &&
+    isRequireExpression(decl.init);
+  const isRequireWithMemberExpression = decl.id &&
     (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern') &&
     decl.init != null &&
     decl.init.type === 'CallExpression' &&
     decl.init.callee != null &&
-    decl.init.callee.name === 'require' &&
-    decl.init.arguments != null &&
-    decl.init.arguments.length === 1 &&
-    decl.init.arguments[0].type === 'Literal';
-  return result;
+    decl.init.callee.type === 'MemberExpression' &&
+    isRequireExpression(decl.init.callee.object);
+  return isPlainRequire || isRequireWithMemberExpression;
 }
 
 function isPlainImportModule(node) {
@@ -158,7 +169,7 @@ function isPlainImportEquals(node) {
 }
 
 function canCrossNodeWhileReorder(node) {
-  return isPlainRequireModule(node) || isPlainImportModule(node) || isPlainImportEquals(node);
+  return isSupportedRequireModule(node) || isPlainImportModule(node) || isPlainImportEquals(node);
 }
 
 function canReorderItems(firstNode, secondNode) {
@@ -276,7 +287,7 @@ function getSorter(ascending) {
         result = a < b ? -1 : 1;
       }
     }
-    
+
     return result * multiplier;
   };
 }

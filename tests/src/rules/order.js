@@ -896,13 +896,13 @@ ruleTester.run('order', rule, {
         import express from 'express';
 
         import service from '@/api/service';
-        
+
         import fooParent from '../foo';
-        
+
         import fooSibling from './foo';
-        
+
         import index from './';
-        
+
         import internalDoesNotExistSoIsUnknown from '@/does-not-exist';
       `,
       options: [
@@ -2289,7 +2289,7 @@ ruleTester.run('order', rule, {
         import b from "foo-bar";
       `,
       errors: [{
-        message: '`foo-bar` import should occur after import of `foo/barfoo`', 
+        message: '`foo-bar` import should occur after import of `foo/barfoo`',
       }],
     }),
     // Option alphabetize {order: 'asc': caseInsensitive: true}
@@ -2334,6 +2334,23 @@ ruleTester.run('order', rule, {
       }],
       errors: [{
         message: '`foo` import should occur before import of `Bar`',
+      }],
+    }),
+    // Option alphabetize {order: 'asc'} and require with member expression
+    test({
+      code: `
+        const b = require('./b').get();
+        const a = require('./a');
+      `,
+      output: `
+        const a = require('./a');
+        const b = require('./b').get();
+      `,
+      options: [{
+        alphabetize: { order: 'asc' },
+      }],
+      errors: [{
+        message: '`./a` import should occur before import of `./b`',
       }],
     }),
     // Alphabetize with parent paths
