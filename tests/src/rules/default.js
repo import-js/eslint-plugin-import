@@ -6,8 +6,6 @@ import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 import fromEntries from "object.fromentries"
 
- 
-
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 
