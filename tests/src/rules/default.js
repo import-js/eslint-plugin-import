@@ -27,7 +27,7 @@ const parserOptions = {
 const ruleTester = new RuleTester({ parserOptions });
 
 ruleTester.run('default', rule, {
-  valid: parsers.all([
+  valid: parsers.all([].concat(
     test({ code: 'import "./malformed.js"' }),
 
     test({ code: 'import foo from "./empty-folder";' }),
