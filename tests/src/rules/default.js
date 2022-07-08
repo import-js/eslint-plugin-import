@@ -11,8 +11,6 @@ import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 const rule = require('rules/default');
 
-
-
 const parserOptions = {
   ecmaVersion: 2018,
   sourceType: 'module',
