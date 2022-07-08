@@ -150,8 +150,8 @@ ruleTester.run('default', rule, {
       },
     })),
 
-    ...SYNTAX_CASES,
-   ]),
+     SYNTAX_CASES,
+   )),
 
   invalid: parsers.all([
     test({
