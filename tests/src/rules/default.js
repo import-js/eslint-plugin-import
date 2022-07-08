@@ -153,7 +153,7 @@ ruleTester.run('default', rule, {
      SYNTAX_CASES,
    )),
 
-  invalid: parsers.all([
+  invalid: parsers.all([].concat(
     test({
       code: "import Foo from './jsx/FooES7.js';",
       errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
