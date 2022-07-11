@@ -193,7 +193,7 @@ ruleTester.run('default', rule, {
     //typescript context
     test({
           code: `import foobar from "./typescript"`,
-          
+          features: ['ts'],
           settings: {
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
