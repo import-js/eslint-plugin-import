@@ -1,10 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import path from 'path';
+// eslint-disable-next-line no-unused-vars
 import { test, testVersion, SYNTAX_CASES, parsers as utilsParsers, getTSParsers } from '../utils';
 import  parsers  from '../parsers';
 import { RuleTester } from 'eslint';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
-import fromEntries from "object.fromentries"
+import fromEntries from 'object.fromentries';
 
  
 
@@ -23,15 +25,15 @@ const parserOptions = {
   },
 
   settings: {
-    "import/parsers": fromEntries(getTSParsers().map((parser)=>[parser, [".ts"]] ))
+    'import/parsers': fromEntries(getTSParsers().map((parser)=>[parser, ['.ts']] )),
      
-  }
+  },
 };
 
 const ruleTester = new RuleTester({ parserOptions });
 
 ruleTester.run('default', rule, {
-  valid: parsers.all([
+  valid: parsers.all([].concat(
     test({ code: 'import "./malformed.js"' }),
 
     test({ code: 'import foo from "./empty-folder";' }),
@@ -50,13 +52,13 @@ ruleTester.run('default', rule, {
     // es7 export syntax
     test({ code: 'export bar from "./bar"' }),
     test({ code: 'export { default as bar } from "./bar"' }),
-    test({ code: 'export bar, { foo } from "./bar"'}),
-    test({ code: 'export { default as bar, foo } from "./bar"'}),
-    test({ code: 'export bar, * as names from "./bar"'}),
+    test({ code: 'export bar, { foo } from "./bar"' }),
+    test({ code: 'export { default as bar, foo } from "./bar"' }),
+    test({ code: 'export bar, * as names from "./bar"' }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
-    test({ code: 'import twofer from "./trampoline"',}),
+    test({ code: 'import twofer from "./trampoline"' }),
 
     // jsx
     test({ code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"' }),
@@ -66,85 +68,86 @@ ruleTester.run('default', rule, {
 
     // #94: redux export of execution result,
     test({ code: 'import connectedApp from "./redux"' }),
-    test({ code: 'import App from "./jsx/App"'}),
+    test({ code: 'import App from "./jsx/App"' }),
 
     // from no-errors
-    test({ code: "import Foo from './jsx/FooES7.js';"}),
+    test({ code: "import Foo from './jsx/FooES7.js';" }),
 
     // #545: more ES7 cases
     test({ code: "import bar from './default-export-from.js';" }),
-    test({ code: "import bar from './default-export-from-named.js';"}),
+    test({ code: "import bar from './default-export-from-named.js';" }),
     test({
       code: "import bar from './default-export-from-ignored.js';",
-      settings: { 'import/ignore': ['common'] }
+      settings: { 'import/ignore': ['common'] },
     }),
     test({
       code: "export bar from './default-export-from-ignored.js';",
-      settings: { 'import/ignore': ['common'] }
+      settings: { 'import/ignore': ['common'] },
     }),
 
     //typescript context
     test({
-          code: `import foobar from "./typescript-default"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          features: ["ts"]
-        }),
-        test({
-          code: `import foobar from "./typescript-export-assign-default"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import foobar from "./typescript-export-assign-function"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        semver.satisfies(tsEslintVersion, '>= 22') ? test({
-          code: `import foobar from "./typescript-export-assign-mixed"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }) : [],
-        test({
-          code: `import foobar from "./typescript-export-assign-default-reexport"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import React from "./typescript-export-assign-default-namespace"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import Foo from "./typescript-export-as-default-namespace"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import Foo from "./typescript-export-react-test-renderer"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import Foo from "./typescript-extended-config"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
-        test({
-          code: `import foobar from "./typescript-export-assign-property"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-        }),
+      code: `import foobar from "./typescript-default"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      //feature
+      features: ['ts'],
+    }),
+    test({
+      code: `import foobar from "./typescript-export-assign-default"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import foobar from "./typescript-export-assign-function"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    semver.satisfies(tsEslintVersion, '>= 22') ? test({
+      code: `import foobar from "./typescript-export-assign-mixed"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }) : [],
+    test({
+      code: `import foobar from "./typescript-export-assign-default-reexport"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import React from "./typescript-export-assign-default-namespace"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import Foo from "./typescript-export-as-default-namespace"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import Foo from "./typescript-export-react-test-renderer"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import Foo from "./typescript-extended-config"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+    test({
+      code: `import foobar from "./typescript-export-assign-property"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
 
     // es2022: Arbitrary module namespace identifier names
     testVersion('>= 8.7', () => ({
@@ -154,10 +157,16 @@ ruleTester.run('default', rule, {
       },
     })),
 
-    ...SYNTAX_CASES,
-   ]),
 
-  invalid: parsers.all([
+    // #311: import of mismatched case
+    CASE_SENSITIVE_FS ? [] : test({
+      code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
+    }),
+
+    SYNTAX_CASES,
+  )),
+
+  invalid: parsers.all([].concat(
     test({
       code: "import Foo from './jsx/FooES7.js';",
       errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
@@ -197,62 +206,51 @@ ruleTester.run('default', rule, {
     //typescript context
     //context('TypeScript', function () 
     test({
-          code: `import foobar from "./typescript"`,
+      code: `import foobar from "./typescript"`,
           
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: ['No default export found in imported module "./typescript".'],
-        }),
-        test({
-          code: `import React from "./typescript-export-assign-default-namespace"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      errors: ['No default export found in imported module "./typescript".'],
+    }),
+    test({
+      code: `import React from "./typescript-export-assign-default-namespace"`,
           
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: ['No default export found in imported module "./typescript-export-assign-default-namespace".'],
-        }),
-        test({
-          code: `import FooBar from "./typescript-export-as-default-namespace"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: ['No default export found in imported module "./typescript-export-as-default-namespace".'],
-        }),
-        test({
-          code: `import Foo from "./typescript-export-as-default-namespace"`,
-          settings: {
-            'import/resolver': { 'eslint-import-resolver-typescript': true },
-          },
-          errors: [
-            {
-              message: 'No default export found in imported module "./typescript-export-as-default-namespace".',
-              line: 1,
-              column: 8,
-              endLine: 1,
-              endColumn: 11,
-            },
-          ],
-        }),
-   ]),
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      errors: ['No default export found in imported module "./typescript-export-assign-default-namespace".'],
+    }),
+    test({
+      code: `import FooBar from "./typescript-export-as-default-namespace"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      errors: ['No default export found in imported module "./typescript-export-as-default-namespace".'],
+    }),
+    test({
+      code: `import Foo from "./typescript-export-as-default-namespace"`,
+      settings: {
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      errors: [
+        {
+          message: 'No default export found in imported module "./typescript-export-as-default-namespace".',
+          line: 1,
+          column: 8,
+          endLine: 1,
+          endColumn: 11,
+        },
+      ],
+    }),
 
-   
+    // #311: import of mismatched case
+    CASE_SENSITIVE_FS ? [] : test({
+      code: 'import bar from "./Named-Exports"',
+      errors: ['No default export found in imported module "./Named-Exports".'],
+    }),
+  )),
+
+
 
 });
-
-// #311: import of mismatched case
-if (!CASE_SENSITIVE_FS) {
-  ruleTester.run('default (path case-insensitivity)', rule, {
-    valid: parsers.all([
-      test({
-        code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
-      }),
-     ]),
-    invalid:parsers.all([ 
-      test({
-        code: 'import bar from "./Named-Exports"',
-        errors: ['No default export found in imported module "./Named-Exports".'],
-      }),
-    ]),
-  });
-}
