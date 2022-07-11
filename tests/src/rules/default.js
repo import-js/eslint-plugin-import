@@ -191,7 +191,6 @@ ruleTester.run('default', rule, {
 
 
     //typescript context
-    //context('TypeScript', function () 
     test({
           code: `import foobar from "./typescript"`,
           
