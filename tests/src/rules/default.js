@@ -228,9 +228,6 @@ ruleTester.run('default', rule, {
           ],
         }),
    ]),
-
-   
-
 });
 
 // #311: import of mismatched case
