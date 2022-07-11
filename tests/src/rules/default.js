@@ -17,10 +17,8 @@ const parserOptions = {
   ecmaFeatures: {
     jsx: true,
   },
-
   settings: {
-    "import/parsers": fromEntries(getTSParsers().map((parser)=>[parser, [".ts"]] ))
-     
+    'import/parsers': fromEntries(getTSParsers().map((parser) => [parser, ['.ts']]))
   }
 };
 
