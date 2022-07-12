@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import#readme",
   "dependencies": {
-    "debug": "^3.2.7",
-    "find-up": "^2.1.0"
+    "debug": "^3.2.7"
   }
 }
