@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+- add missing optional peer dependencies ([#2283], thanks [@jdanil])
 
 ### Fixed
 - [Fix] Ignore hashbang and BOM while parsing ([#2431], thanks [@silverwind])
