@@ -111,7 +111,9 @@ const parsers = {
         || features.has('flow')
         || features.has('ts')
         || features.has('types')
-        || (features.has('fragment') && semver.satisfies(version, '< 5'));
+      //if it has fragments use version 5 and higher // create features for export from
+        || (features.has('fragment') && semver.satisfies(version, '< 5'))
+        || features.has('');
 
       const skipBabel = features.has('no-babel');
       const skipOldBabel = skipBabel || features.has('no-babel-old') || semver.satisfies(version, '>= 8');

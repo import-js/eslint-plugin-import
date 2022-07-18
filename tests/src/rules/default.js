@@ -50,25 +50,57 @@ ruleTester.run('default', rule, {
     test({ code: 'import common from "./common";' }),
 
     // es7 export syntax
-    test({ code: 'export bar from "./bar"' }),
+    test({ 
+      code: 'export bar from "./bar"',
+      parserOptions: { 
+        ecmaVersion: 2018, 
+        ecmaFeatures: {
+          modules: true,
+        }, 
+      },
+    }),
     test({ code: 'export { default as bar } from "./bar"' }),
     test({ code: 'export bar, { foo } from "./bar"' }),
     test({ code: 'export { default as bar, foo } from "./bar"' }),
-    test({ code: 'export bar, * as names from "./bar"' }),
+    test({ code: 'export bar, * as names from "./bar"',
+      parserOptions: { 
+        ecmaVersion: 2018, 
+        ecmaFeatures: {
+          modules: true,
+        }, 
+      } }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
-    test({ code: 'import twofer from "./trampoline"' }),
+    test({ 
+      code: 'import twofer from "./trampoline"',
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 2015,
+      },
+    }),
 
     // jsx
-    test({ code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"' }),
+    test({
+      code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"',
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 6,
+        ecmaFeatures: { jsx: true },
+      },
+    }),
 
     // #54: import of named export default
     test({ code: 'import foo from "./named-default-export"' }),
 
     // #94: redux export of execution result,
     test({ code: 'import connectedApp from "./redux"' }),
-    test({ code: 'import App from "./jsx/App"' }),
+    test({
+      code: 'import App from "./jsx/App"',
+      parserOptions: {
+        ecmaFeatures: { jsx: true, modules: true },
+      },
+    }),
 
     // from no-errors
     test({ code: "import Foo from './jsx/FooES7.js';" }),
@@ -92,7 +124,7 @@ ruleTester.run('default', rule, {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
       //feature
-      features: ['ts'],
+      //features: ['ts'],
     }),
     test({
       code: `import foobar from "./typescript-export-assign-default"`,
@@ -118,22 +150,34 @@ ruleTester.run('default', rule, {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     }),
+
     test({
       code: `import React from "./typescript-export-assign-default-namespace"`,
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
+      parserOptions: {
+        tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-assign-default-namespace/'),
+      },
     }),
+    
     test({
       code: `import Foo from "./typescript-export-as-default-namespace"`,
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
+      parserOptions: {
+        tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-assign-default-namespace/'),
+      },
     }),
+
     test({
       code: `import Foo from "./typescript-export-react-test-renderer"`,
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      parserOptions: {
+        tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-export-react-test-renderer/'),
       },
     }),
     test({
@@ -141,8 +185,12 @@ ruleTester.run('default', rule, {
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
+      parserOptions: {
+        tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-extended-config/'),
+      },
     }),
     test({
+      
       code: `import foobar from "./typescript-export-assign-property"`,
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -232,6 +280,9 @@ ruleTester.run('default', rule, {
       code: `import Foo from "./typescript-export-as-default-namespace"`,
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+      parserOptions: {
+        tsconfigRootDir: path.resolve(__dirname, '../../files/typescript-no-compiler-options/'),
       },
       errors: [
         {
