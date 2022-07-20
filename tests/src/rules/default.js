@@ -8,14 +8,10 @@ import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 import fromEntries from 'object.fromentries';
 
- 
-
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 
 const rule = require('rules/default');
-
-
 
 const parserOptions = {
   ecmaVersion: 2018,
@@ -52,32 +48,27 @@ ruleTester.run('default', rule, {
     // es7 export syntax
     test({ 
       code: 'export bar from "./bar"',
-      parserOptions: { 
-        ecmaVersion: 2018, 
-        ecmaFeatures: {
-          modules: true,
-        }, 
-      },
+      features: ['export'],
     }),
-    test({ code: 'export { default as bar } from "./bar"' }),
-    test({ code: 'export bar, { foo } from "./bar"' }),
-    test({ code: 'export { default as bar, foo } from "./bar"' }),
+    test({ 
+      code: 'export { default as bar } from "./bar"',
+      features: ['export'],
+    }),
+    test({ 
+      code: 'export bar, { foo } from "./bar"',
+      features: ['export'],
+    }),
+    test({ code: 'export { default as bar, foo } from "./bar"',
+      features: ['export'], 
+    }),
     test({ code: 'export bar, * as names from "./bar"',
-      parserOptions: { 
-        ecmaVersion: 2018, 
-        ecmaFeatures: {
-          modules: true,
-        }, 
-      } }),
+      features: ['export'] }),
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
     test({ 
       code: 'import twofer from "./trampoline"',
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 2015,
-      },
+      features: ['import'],
     }),
 
     // jsx
@@ -204,12 +195,6 @@ ruleTester.run('default', rule, {
         ecmaVersion: 2022,
       },
     })),
-
-
-    // #311: import of mismatched case
-    CASE_SENSITIVE_FS ? [] : test({
-      code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
-    }),
 
     SYNTAX_CASES,
   )),
