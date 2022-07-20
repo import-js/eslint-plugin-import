@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
 - [`no-cycle`]: add `allowUnsafeDynamicCyclicDependency` option ([#2387], thanks [@GerkinDev])
 - [`no-restricted-paths`]: support arrays for `from` and `target` options ([#2466], thanks [@AdriAt360])
+- [`no-anonymous-default-export`]: add `allowNew` option ([#2505], thanks [@DamienCassou])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1534,6 +1535,7 @@ for info on changes for earlier releases.
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
 [@christophercurrie]: https://github.com/christophercurrie
+[@DamienCassou]: https://github.com/DamienCassou
 [@danny-andrews]: https://github.com/dany-andrews
 [@darkartur]: https://github.com/darkartur
 [@davidbonnet]: https://github.com/davidbonnet

@@ -50,6 +50,11 @@ const defs = {
     description: 'If `false`, will report default export of a literal',
     message: 'Assign literal to a variable before exporting as module default',
   },
+  NewExpression: {
+    option: 'allowNew',
+    description: 'If `false`, will report default export of a class instantiation',
+    message: 'Assign instance to a variable before exporting as module default',
+  },
 };
 
 const schemaProperties = Object.keys(defs)
