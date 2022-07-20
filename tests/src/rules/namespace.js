@@ -1,6 +1,7 @@
 import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } from '../utils';
 import { RuleTester } from 'eslint';
-import flatMap from 'array.prototype.flatmap';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester({ env: { es6: true } });
 const rule = require('rules/namespace');

@@ -1,12 +1,18 @@
 'use strict';
 
 import minimatch from 'minimatch';
-import includes from 'array-includes';
-import groupBy from 'object.groupby';
 
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
 import docsUrl from '../docsUrl';
+
+const includes = Function.bind.bind(Function.prototype.call)(Array.prototype.includes);
+// This is a **non-spec compliant** but works in practice replacement of `object.groupby` package.
+const groupBy = (array, grouper) => array.reduce((acc, curr, index) => {
+  const key = grouper(curr, index);
+  (acc[key] = acc[key] || []).push(curr);
+  return acc;
+}, {});
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index'];
 

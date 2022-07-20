@@ -4,7 +4,8 @@ import path from 'path';
 import fs from 'fs';
 
 import { RuleTester } from 'eslint';
-import flatMap from 'array.prototype.flatmap';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);

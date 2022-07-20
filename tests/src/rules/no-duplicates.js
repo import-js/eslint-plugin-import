@@ -5,7 +5,8 @@ import jsxConfig from '../../../config/react';
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
-import flatMap from 'array.prototype.flatmap';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');

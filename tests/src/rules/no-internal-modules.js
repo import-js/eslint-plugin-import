@@ -1,8 +1,9 @@
 import { RuleTester } from 'eslint';
-import flatMap from 'array.prototype.flatmap';
 import rule from 'rules/no-internal-modules';
 
 import { test, testFilePath, getTSParsers } from '../utils';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester();
 
@@ -230,11 +231,11 @@ ruleTester.run('no-internal-modules', rule, {
       ],
     }),
     test({
-      code: 'import get from "debug/node"',
+      code: 'import get from "debug/src/node"',
       filename: testFilePath('./internal-modules/plugins/plugin.js'),
       errors: [
         {
-          message: 'Reaching to "debug/node" is not allowed.',
+          message: 'Reaching to "debug/src/node" is not allowed.',
           line: 1,
           column: 17,
         },
@@ -385,11 +386,11 @@ ruleTester.run('no-internal-modules', rule, {
       ],
     }),
     test({
-      code: 'export {get} from "debug/node"',
+      code: 'export {get} from "debug/src/node"',
       filename: testFilePath('./internal-modules/plugins/plugin.js'),
       errors: [
         {
-          message: 'Reaching to "debug/node" is not allowed.',
+          message: 'Reaching to "debug/src/node" is not allowed.',
           line: 1,
           column: 19,
         },

@@ -1,7 +1,8 @@
 import { parsers, test as _test, testFilePath, testVersion as _testVersion } from '../utils';
 
 import { RuleTester } from 'eslint';
-import flatMap from 'array.prototype.flatmap';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-cycle');

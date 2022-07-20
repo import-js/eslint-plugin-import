@@ -1,6 +1,15 @@
-import findLastIndex from 'array.prototype.findlastindex';
-
 import docsUrl from '../docsUrl';
+
+const findLastIndex = (array, predicate) => {
+  let i = array.length - 1;
+  while (i >= 0) {
+    if (predicate(array[i])) {
+      return i;
+    }
+    i--;
+  }
+  return -1;
+};
 
 function isNonExportStatement({ type }) {
   return type !== 'ExportDefaultDeclaration'

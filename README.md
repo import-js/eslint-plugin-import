@@ -1,3 +1,24 @@
+# eslint-plugin-i
+
+A fork of [`eslint-plugin-import`] using [`get-tsconfig`] to replace [`tsconfig-paths`](https://github.com/dividab/tsconfig-paths) and heavy [`typescript`](https://github.com/microsoft/TypeScript) under the hood.
+
+It will rebase and try to release in order to sync with the upstream every day, see [.github/workflows/rebase-upstream.yml](.github/workflows/rebase-upstream.yml) for details.
+
+And also you can take https://github.com/import-js/eslint-plugin-import/pull/2447 and https://github.com/import-js/eslint-plugin-import/pull/2504 to understand why this forked project exists.
+
+Issues related to `get-tsconfig` should be posted here or [`get-tsconfig`] instead, and other issues should be posted to [`eslint-plugin-import`] instead.
+
+[`eslint-plugin-import`]: https://github.com/import-js/eslint-plugin-import
+[`get-tsconfig`]: https://github.com/privatenumber/get-tsconfig
+
+## Installation
+
+```bash
+$ npm install -D eslint-plugin-import@npm:eslint-plugin-i@latest
+```
+
+---
+
 # eslint-plugin-import
 
 [![github actions][actions-image]][actions-url]

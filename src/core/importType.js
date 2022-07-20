@@ -1,8 +1,14 @@
 import { isAbsolute as nodeIsAbsolute, relative, resolve as nodeResolve } from 'path';
-import isCoreModule from 'is-core-module';
 
 import resolve from 'eslint-module-utils/resolve';
 import { getContextPackagePath } from './packagePath';
+import { Module } from 'module';
+
+const isCoreModule = (pkg) => Module.builtinModules.includes(
+  pkg.startsWith('node:')
+    ? pkg.slice(5)
+    : pkg,
+);
 
 function baseModule(name) {
   if (isScoped(name)) {

@@ -17,7 +17,9 @@ jobs:
         with:
           versionsAsRoot: true
           type: majors
-          preset: '>= 6' # preset: '>=4' # see https://github.com/import-js/eslint-plugin-import/issues/2053
+          # preset: '>= 6' # preset: '>=4' # see https://github.com/import-js/eslint-plugin-import/issues/2053
+          # target Node.js 12 now, see https://github.com/un-es/eslint-plugin-i/issues/10 & https://github.com/un-es/eslint-plugin-i/pull/11
+          preset: '>= 12'
 
   latest:
     needs: [matrix]
@@ -31,11 +33,6 @@ jobs:
         eslint:
           - 8
           - 7
-          - 6
-          - 5
-          - 4
-          - 3
-          - 2
         include:
           - node-version: 'lts/*'
             eslint: 7

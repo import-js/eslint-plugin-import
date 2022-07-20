@@ -3,10 +3,11 @@ import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers } from 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
-import flatMap from 'array.prototype.flatmap';
 import { resolve } from 'path';
 import isCoreModule from 'is-core-module';
 import { default as babelPresetFlow } from 'babel-preset-flow';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const ruleTester = new RuleTester();
 const flowRuleTester = new RuleTester({

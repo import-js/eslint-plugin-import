@@ -3,11 +3,10 @@
  * @author Duncan Beevers
  */
 
-import hasOwn from 'hasown';
-import values from 'object.values';
-import fromEntries from 'object.fromentries';
-
 import docsUrl from '../docsUrl';
+
+const hasOwn = Function.bind.bind(Function.prototype.call)(Object.prototype.hasOwnProperty);
+const { fromEntries, values } = Object;
 
 const defs = {
   ArrayExpression: {

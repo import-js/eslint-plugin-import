@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { dirname } from 'path';
+import { resolve as pathResolve } from 'path';
 
 import doctrine from 'doctrine';
 
@@ -15,11 +15,9 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 import { hashObject } from 'eslint-module-utils/hash';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
-import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
+import { getTsconfig } from 'get-tsconfig';
 
-import includes from 'array-includes';
-
-let ts;
+const includes = Function.bind.bind(Function.prototype.call)(Array.prototype.includes);
 
 const log = debug('eslint-plugin-import:ExportMap');
 
@@ -548,41 +546,34 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast);
 
-  function readTsConfig(context) {
-    const tsconfigInfo = tsConfigLoader({
-      cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
-      getEnv: (key) => process.env[key],
-    });
-    try {
-      if (tsconfigInfo.tsConfigPath !== undefined) {
-        // Projects not using TypeScript won't have `typescript` installed.
-        if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
-
-        const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
-        return ts.parseJsonConfigFileContent(
-          configFile.config,
-          ts.sys,
-          dirname(tsconfigInfo.tsConfigPath),
-        );
-      }
-    } catch (e) {
-      // Catch any errors
-    }
-
-    return null;
-  }
-
   function isEsModuleInterop() {
+    const parserOptions = context.parserOptions || {};
+    let tsconfigRootDir = parserOptions.tsconfigRootDir;
+    const project = parserOptions.project;
     const cacheKey = hashObject({
-      tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+      tsconfigRootDir,
+      project,
     }).digest('hex');
     let tsConfig = tsconfigCache.get(cacheKey);
     if (typeof tsConfig === 'undefined') {
-      tsConfig = readTsConfig(context);
+      tsconfigRootDir = tsconfigRootDir || process.cwd();
+      let tsconfigResult;
+      if (project) {
+        const projects = Array.isArray(project) ? project : [project];
+        for (const project of projects) {
+          tsconfigResult = getTsconfig(pathResolve(tsconfigRootDir, project));
+          if (tsconfigResult) {
+            break;
+          }
+        }
+      } else {
+        tsconfigResult = getTsconfig(tsconfigRootDir);
+      }
+      tsConfig = tsconfigResult && tsconfigResult.config || null;
       tsconfigCache.set(cacheKey, tsConfig);
     }
 
-    return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
+    return tsConfig && tsConfig.compilerOptions ? tsConfig.compilerOptions.esModuleInterop : false;
   }
 
   ast.body.forEach(function (n) {

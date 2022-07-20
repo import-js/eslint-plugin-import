@@ -1,0 +1,9 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config/schema.json",
+  "commit": false,
+  "linked": [],
+  "access": "public",
+  "baseBranch": "fork-release",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

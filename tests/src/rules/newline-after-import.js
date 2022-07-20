@@ -1,9 +1,10 @@
 import { RuleTester } from 'eslint';
-import flatMap from 'array.prototype.flatmap';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
 import { getTSParsers, parsers, testVersion } from '../utils';
+
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
 const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => `Expected ${count} empty lines after import statement not followed by another import.`;

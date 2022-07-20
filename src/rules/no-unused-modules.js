@@ -9,9 +9,10 @@ import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
 import { dirname, join } from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
-import values from 'object.values';
-import includes from 'array-includes';
-import flatMap from 'array.prototype.flatmap';
+
+const { values } = Object;
+const includes = Function.bind.bind(Function.prototype.call)(Array.prototype.includes);
+const flatMap = Function.bind.bind(Function.prototype.call)(Array.prototype.flatMap);
 
 import Exports, { recursivePatternCapture } from '../ExportMap';
 import docsUrl from '../docsUrl';
