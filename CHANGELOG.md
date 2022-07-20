@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
 - [`no-restricted-paths`]: fix an error message ([#2466], thanks [@AdriAt360])
 - [`no-restricted-paths`]: use `Minimatch.match` instead of `minimatch` to comply with Windows Native paths ([#2466], thanks [@AdriAt360])
+- [`order`]: require with member expression could not be fixed if alphabetize.order was used ([#2490], thanks [@msvab])
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -994,6 +995,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440
 [#2427]: https://github.com/import-js/eslint-plugin-import/pull/2427
@@ -1638,6 +1640,7 @@ for info on changes for earlier releases.
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
+[@msvab]: https://github.com/msvab
 [@mx-bernhard]: https://github.com/mx-bernhard
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
@@ -1645,8 +1648,8 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512
 [@ombene]: https://github.com/ombene
-[@OutdatedVersion]: https://github.com/OutdatedVersion
 [@ota-meshi]: https://github.com/ota-meshi
+[@OutdatedVersion]: https://github.com/OutdatedVersion
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet

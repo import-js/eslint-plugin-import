@@ -2,6 +2,10 @@
 
 // const path = require('path');
 const semver = require('semver');
+<<<<<<< HEAD
+=======
+const entries = require('object.entries');
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 const version = require('eslint/package.json').version;
 const flatMap = require('array.prototype.flatmap');
 const tsParserVersion = require('@typescript-eslint/parser/package.json').version;
@@ -10,6 +14,28 @@ const disableNewTS = semver.satisfies(tsParserVersion, '>= 4.1') // this rule is
   ? (x) => Object.assign({}, x, { features: [].concat(x.features, 'no-ts-new') })
   : (x) => x;
 
+<<<<<<< HEAD
+=======
+function minEcmaVersion(features, parserOptions) {
+  const minEcmaVersionForFeatures = {
+    'class fields': 2022,
+    'optional chaining': 2020,
+  };
+  const result = Math.max.apply(
+    Math,
+    [].concat(
+      (parserOptions && parserOptions.ecmaVersion) || [],
+      flatMap(entries(minEcmaVersionForFeatures), (entry) => {
+        const f = entry[0];
+        const y = entry[1];
+        return features.has(f) ? y : [];
+      }),
+    ).map((y) => (y > 5 && y < 2015 ? y + 2009 : y)), // normalize editions to years
+  );
+  return Number.isFinite(result) ? result : undefined;
+}
+
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 // const NODE_MODULES = '../../node_modules';
 
 // TODO: consolidate
@@ -57,7 +83,12 @@ const parsers = {
       }
       const features = new Set([].concat(test.features || []));
       delete test.features;
+<<<<<<< HEAD
       const es = test.parserOptions && test.parserOptions.ecmaVersion;
+=======
+
+      const es = minEcmaVersion(features, test.parserOptions);
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 
       function addComment(testObject, parser) {
         const extras = [].concat(
@@ -113,8 +144,12 @@ const parsers = {
         || features.has('types')
       //if it has fragments use version 5 and higher // create features for export from
         || (features.has('fragment') && semver.satisfies(version, '< 5'))
+<<<<<<< HEAD
         || features.has('export')
         || features.has('import');
+=======
+        || features.has('');
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 
       const skipBabel = features.has('no-babel');
       const skipOldBabel = skipBabel || features.has('no-babel-old') || semver.satisfies(version, '>= 8');
@@ -135,10 +170,15 @@ const parsers = {
 
       return [].concat(
         skipBase ? [] : addComment(
+<<<<<<< HEAD
           Object.assign({}, test, features.has('class fields') && {
             parserOptions: Object.assign({}, test.parserOptions, {
               ecmaVersion: Math.max((test.parserOptions && test.parserOptions.ecmaVersion) || 0, 2022),
             }),
+=======
+          Object.assign({}, test, typeof es === 'number' && {
+            parserOptions: Object.assign({}, test.parserOptions, { ecmaVersion: es }),
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
           }),
           'default',
         ),

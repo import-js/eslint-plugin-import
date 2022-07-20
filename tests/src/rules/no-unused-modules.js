@@ -254,7 +254,12 @@ describe('dynamic imports', () => {
   // test for unused exports with `import()`
   ruleTester.run('no-unused-modules', rule, {
     valid: [].concat(
+<<<<<<< HEAD
       semver.satisfies(eslintPkg.version, '< 8') ? test({
+=======
+      // TODO: fix this in eslint 6 and 7?
+      semver.satisfies(eslintPkg.version, '< 6') ? test({
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
         options: unusedExportsOptions,
         code: `
             export const a = 10
@@ -267,7 +272,11 @@ describe('dynamic imports', () => {
         filename: testFilePath('./no-unused-modules/exports-for-dynamic-js.js'),
       }) : [],
     ),
+<<<<<<< HEAD
     invalid: [
+=======
+    invalid: [].concat(
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
       test({
         options: unusedExportsOptions,
         code: `
@@ -284,8 +293,9 @@ describe('dynamic imports', () => {
           error(`exported declaration 'b' not used within other modules`),
           error(`exported declaration 'c' not used within other modules`),
           error(`exported declaration 'default' not used within other modules`),
-        ] }),
-    ],
+        ],
+      }),
+    ),
   });
   typescriptRuleTester.run('no-unused-modules', rule, {
     valid: [
@@ -1300,5 +1310,72 @@ describe('support ES2022 Arbitrary module namespace identifier names', () => {
         ],
       })),
     ),
+  });
+});
+
+describe('parser ignores prefixes like BOM and hashbang', () => {
+  // bom, hashbang
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'export const foo = 1;\n',
+        filename: testFilePath('./no-unused-modules/prefix-child.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `\uFEFF#!/usr/bin/env node\nimport {foo} from './prefix-child.js';\n`,
+        filename: testFilePath('./no-unused-modules/prefix-parent-bom.js'),
+      }),
+    ],
+    invalid: [],
+  });
+  // no bom, hashbang
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'export const foo = 1;\n',
+        filename: testFilePath('./no-unused-modules/prefix-child.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `#!/usr/bin/env node\nimport {foo} from './prefix-child.js';\n`,
+        filename: testFilePath('./no-unused-modules/prefix-parent-hashbang.js'),
+      }),
+    ],
+    invalid: [],
+  });
+  // bom, no hashbang
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'export const foo = 1;\n',
+        filename: testFilePath('./no-unused-modules/prefix-child.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `\uFEFF#!/usr/bin/env node\nimport {foo} from './prefix-child.js';\n`,
+        filename: testFilePath('./no-unused-modules/prefix-parent-bomhashbang.js'),
+      }),
+    ],
+    invalid: [],
+  });
+  // no bom, no hashbang
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: unusedExportsOptions,
+        code: 'export const foo = 1;\n',
+        filename: testFilePath('./no-unused-modules/prefix-child.js'),
+      }),
+      test({
+        options: unusedExportsOptions,
+        code: `import {foo} from './prefix-child.js';\n`,
+        filename: testFilePath('./no-unused-modules/prefix-parent.js'),
+      }),
+    ],
+    invalid: [],
   });
 });

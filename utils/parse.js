@@ -42,6 +42,14 @@ function makeParseReturn(ast, visitorKeys) {
   return ast;
 }
 
+function stripUnicodeBOM(text) {
+  return text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
+}
+
+function transformHashbang(text) {
+  return text.replace(/^#!([^\r\n]+)/u, (_, captured) => `//${captured}`);
+}
+
 exports.default = function parse(path, content, context) {
 
   if (context == null) throw new Error('need context to parse properly');
@@ -77,6 +85,10 @@ exports.default = function parse(path, content, context) {
 
   // require the parser relative to the main module (i.e., ESLint)
   const parser = moduleRequire(parserPath);
+
+  // replicate bom strip and hashbang transform of ESLint
+  // https://github.com/eslint/eslint/blob/b93af98b3c417225a027cabc964c38e779adb945/lib/linter/linter.js#L779
+  content = transformHashbang(stripUnicodeBOM(String(content)));
 
   if (typeof parser.parseForESLint === 'function') {
     let ast;

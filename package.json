@@ -87,6 +87,10 @@
     "mocha": "^3.5.3",
     "npm-which": "^3.0.1",
     "nyc": "^11.9.0",
+<<<<<<< HEAD
+=======
+    "object.entries": "^1.1.5",
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
     "object.fromentries": "^2.0.5",
     "redux": "^3.7.2",
     "rimraf": "^2.7.1",
