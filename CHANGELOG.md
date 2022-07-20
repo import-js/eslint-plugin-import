@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] `order`: use correct default value ([#2392], thanks [@hyperupcall])
 - [meta] replace git.io link in comments with the original URL ([#2444], thanks [@liby])
 - [Docs] remove global install in readme ([#2412], thanks [@aladdin-add])
+- [readme] clarify `eslint-import-resolver-typescript` usage ([#2503], thanks [@JounQin])
 
 ## [2.26.0] - 2022-04-05
 
@@ -996,6 +997,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2440]: https://github.com/import-js/eslint-plugin-import/pull/2440

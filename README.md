@@ -157,19 +157,24 @@ rules:
 
 You may use the following shortcut or assemble your own config using the granular settings described below.
 
-Make sure you have installed [`@typescript-eslint/parser`] which is used in the following configuration. Unfortunately NPM does not allow to list optional peer dependencies.
+Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-resolver-typescript`] which are used in the following configuration.
 
 ```yaml
 extends:
   - eslint:recommended
   - plugin:import/recommended
-  - plugin:import/typescript # this line does the trick
+# the following lines do the trick
+  - plugin:import/typescript
+settings:
+  import/resolver:
+    # You will also need to install and configure the TypeScript resolver
+    # See also https://github.com/import-js/eslint-import-resolver-typescript#configuration
+    typescript: true
+    node: true
 ```
 
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
-
-You will also need to install and configure the TypeScript resolver:
-[`eslint-import-resolver-typescript`](https://github.com/alexgorbatchev/eslint-import-resolver-typescript).
+[`eslint-import-resolver-typescript`]: https://github.com/import-js/eslint-import-resolver-typescript
 
 # Resolvers
 
