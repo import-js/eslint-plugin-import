@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { dirname } from 'path';
+import { resolve as pathResolve } from 'path';
 
 import doctrine from 'doctrine';
 
@@ -15,11 +15,9 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 import { hashObject } from 'eslint-module-utils/hash';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
-import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
+import { getTsconfig } from '../vendors/get-tsconfig';
 
 import includes from 'array-includes';
-
-let ts;
 
 const log = debug('eslint-plugin-import:ExportMap');
 
@@ -523,43 +521,23 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast);
 
-  function readTsConfig() {
-    const tsConfigInfo = tsConfigLoader({
-      cwd:
-        (context.parserOptions && context.parserOptions.tsconfigRootDir) ||
-        process.cwd(),
-      getEnv: (key) => process.env[key],
-    });
-    try {
-      if (tsConfigInfo.tsConfigPath !== undefined) {
-        // Projects not using TypeScript won't have `typescript` installed.
-        if (!ts) { ts = require('typescript'); }
-  
-        const configFile = ts.readConfigFile(tsConfigInfo.tsConfigPath, ts.sys.readFile);
-        return ts.parseJsonConfigFileContent(
-          configFile.config,
-          ts.sys,
-          dirname(tsConfigInfo.tsConfigPath),
-        );
-      }
-    } catch (e) {
-      // Catch any errors
-    }
-
-    return null;
-  }
-
   function isEsModuleInterop() {
+    const parserOptions = context.parserOptions || {};
+    let tsconfigRootDir = parserOptions.tsconfigRootDir;
+    const project = parserOptions.project;
     const cacheKey = hashObject({
-      tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+      tsconfigRootDir,
+      project,
     }).digest('hex');
     let tsConfig = tsConfigCache.get(cacheKey);
     if (typeof tsConfig === 'undefined') {
-      tsConfig = readTsConfig(context);
+      tsconfigRootDir = tsconfigRootDir || process.cwd();
+      const tsconfigResult = getTsconfig(project ? pathResolve(tsconfigRootDir, project) : tsconfigRootDir);
+      tsConfig = tsconfigResult && tsconfigResult.config || null;
       tsConfigCache.set(cacheKey, tsConfig);
     }
 
-    return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
+    return tsConfig && tsConfig.compilerOptions ? tsConfig.compilerOptions.esModuleInterop : false;
   }
 
   ast.body.forEach(function (n) {

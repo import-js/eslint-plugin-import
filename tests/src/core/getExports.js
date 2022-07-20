@@ -2,7 +2,7 @@ import { expect } from  'chai';
 import semver from 'semver';
 import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
-import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
+import * as getTsconfig from '../../../vendors/get-tsconfig';
 import ExportMap from '../../../src/ExportMap';
 
 import * as fs from 'fs';
@@ -367,11 +367,11 @@ describe('ExportMap', function () {
         let imports;
         before('load imports', function () {
           this.timeout(20000);  // takes a long time :shrug:
-          sinon.spy(tsConfigLoader, 'tsConfigLoader');
+          sinon.spy(getTsconfig, 'getTsconfig');
           imports = ExportMap.get('./typescript.ts', context);
         });
         after('clear spies', function () {
-          tsConfigLoader.tsConfigLoader.restore();
+          getTsconfig.getTsconfig.restore();
         });
 
         it('returns something for a TypeScript file', function () {
@@ -412,11 +412,11 @@ describe('ExportMap', function () {
               },
             },
           );
-          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(0);
+          expect(getTsconfig.getTsconfig.callCount).to.equal(0);
           ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
-          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
+          expect(getTsconfig.getTsconfig.callCount).to.equal(1);
           ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
-          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
+          expect(getTsconfig.getTsconfig.callCount).to.equal(1);
 
           const differentContext = Object.assign(
             {},
@@ -429,7 +429,7 @@ describe('ExportMap', function () {
           );
 
           ExportMap.parse('./baz.ts', 'export const baz = 5', differentContext);
-          expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
+          expect(getTsconfig.getTsconfig.callCount).to.equal(2);
         });
       });
     });
