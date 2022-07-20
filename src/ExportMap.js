@@ -15,7 +15,7 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 import { hashObject } from 'eslint-module-utils/hash';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
-import { getTsconfig } from '../vendors/get-tsconfig';
+import { getTsconfig } from './get-tsconfig';
 
 import includes from 'array-includes';
 

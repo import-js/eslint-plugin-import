@@ -18,7 +18,8 @@
     "memo-parser/{*.js,LICENSE,*.md}"
   ],
   "scripts": {
-    "prebuild": "rimraf lib",
+    "downlevel-get-tsconfig": "sed 's/catch{/catch(_){/g; s/Object.getOwnPropertyDescriptors/Object.getOwnPropertyDescriptors||require(\"object.getownpropertydescriptors\")/g; s/Object.getOwnPropertySymbols/Object.getOwnPropertySymbols||require(\"get-own-property-symbols\")/g' node_modules/get-tsconfig/dist/index.js > src/get-tsconfig.js",
+    "prebuild": "rimraf lib && npm run downlevel-get-tsconfig",
     "build": "babel --quiet --out-dir lib src",
     "postbuild": "npm run copy-metafiles",
     "copy-metafiles": "node --require babel-register ./scripts/copyMetafiles",
@@ -106,6 +107,7 @@
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-module-utils": "^2.7.4",
     "get-own-property-symbols": "^0.9.5",
+    "get-tsconfig": "^4.2.0",
     "has": "^1.0.3",
     "is-core-module": "^2.10.0",
     "is-glob": "^4.0.3",

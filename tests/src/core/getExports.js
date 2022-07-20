@@ -2,7 +2,7 @@ import { expect } from  'chai';
 import semver from 'semver';
 import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
-import * as getTsconfig from '../../../vendors/get-tsconfig';
+import * as getTsconfig from '../../../src/get-tsconfig';
 import ExportMap from '../../../src/ExportMap';
 
 import * as fs from 'fs';
