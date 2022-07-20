@@ -10,10 +10,7 @@ import fromEntries from 'object.fromentries';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 const rule = require('rules/default');
 
 const parserOptions = {
@@ -22,15 +19,8 @@ const parserOptions = {
   ecmaFeatures: {
     jsx: true,
   },
-<<<<<<< HEAD
-
-  settings: {
-    'import/parsers': fromEntries(getTSParsers().map((parser)=>[parser, ['.ts']] )),
-     
-=======
   settings: {
     'import/parsers': fromEntries(getTSParsers().map((parser) => [parser, ['.ts']])), 
->>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
   },
 };
 
@@ -56,7 +46,6 @@ ruleTester.run('default', rule, {
     // es7 export syntax
     test({ 
       code: 'export bar from "./bar"',
-<<<<<<< HEAD
       features: ['export'],
     }),
     test({ 
@@ -72,38 +61,12 @@ ruleTester.run('default', rule, {
     }),
     test({ code: 'export bar, * as names from "./bar"',
       features: ['export'] }),
-=======
-      parserOptions: { 
-        ecmaVersion: 2018, 
-        ecmaFeatures: {
-          modules: true,
-        }, 
-      },
-    }),
-    test({ code: 'export { default as bar } from "./bar"' }),
-    test({ code: 'export bar, { foo } from "./bar"' }),
-    test({ code: 'export { default as bar, foo } from "./bar"' }),
-    test({ code: 'export bar, * as names from "./bar"',
-      parserOptions: { 
-        ecmaVersion: 2018, 
-        ecmaFeatures: {
-          modules: true,
-        }, 
-      } }),
->>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
 
     // sanity check
     test({ code: 'export {a} from "./named-exports"' }),
     test({ 
       code: 'import twofer from "./trampoline"',
-<<<<<<< HEAD
       features: ['import'],
-=======
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 2015,
-      },
->>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
     }),
 
     // jsx
@@ -231,11 +194,6 @@ ruleTester.run('default', rule, {
       },
     })),
 
-<<<<<<< HEAD
-    SYNTAX_CASES,
-  )),
-
-=======
 
     // #311: import of mismatched case
     CASE_SENSITIVE_FS ? [] : test({
@@ -245,7 +203,6 @@ ruleTester.run('default', rule, {
     SYNTAX_CASES,
   )),
 
->>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
   invalid: parsers.all([].concat(
     test({
       code: "import Foo from './jsx/FooES7.js';",
