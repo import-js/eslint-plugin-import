@@ -2099,6 +2099,74 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+    test({
+      code: `
+        import path from 'path';
+        import { namespace } from '@namespace';
+        import { a } from 'a';
+        import { b } from 'b';
+        import { c } from 'c';
+        import { d } from 'd';
+        import { e } from 'e';
+        import { f } from 'f';
+        import { g } from 'g';
+        import { h } from 'h';
+        import { i } from 'i';
+        import { j } from 'j';
+        import { k } from 'k';`,
+      output: `
+        import path from 'path';
+
+        import { namespace } from '@namespace';
+
+        import { a } from 'a';
+
+        import { b } from 'b';
+
+        import { c } from 'c';
+
+        import { d } from 'd';
+
+        import { e } from 'e';
+
+        import { f } from 'f';
+
+        import { g } from 'g';
+
+        import { h } from 'h';
+
+        import { i } from 'i';
+
+        import { j } from 'j';
+        import { k } from 'k';`,
+      options: [
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+          ],
+          pathGroups: [
+            { pattern: '@namespace', group: 'external', position: 'after' },
+            { pattern: 'a', group: 'internal', position: 'before' },
+            { pattern: 'b', group: 'internal', position: 'before' },
+            { pattern: 'c', group: 'internal', position: 'before' },
+            { pattern: 'd', group: 'internal', position: 'before' },
+            { pattern: 'e', group: 'internal', position: 'before' },
+            { pattern: 'f', group: 'internal', position: 'before' },
+            { pattern: 'g', group: 'internal', position: 'before' },
+            { pattern: 'h', group: 'internal', position: 'before' },
+            { pattern: 'i', group: 'internal', position: 'before' },
+          ],
+          'newlines-between': 'always',
+          pathGroupsExcludedImportTypes: ['builtin'],
+        },
+      ],
+      settings: {
+        'import/internal-regex': '^(a|b|c|d|e|f|g|h|i|j|k)(\\/|$)',
+      },
+      errors: Array.from({ length: 11 }, () => 'There should be at least one empty line between import groups'),
+    }),
 
     // reorder fix cannot cross non import or require
     test(withoutAutofixOutput({

@@ -407,7 +407,7 @@ function convertGroupsToRanks(groups) {
       if (res[groupItem] !== undefined) {
         throw new Error('Incorrect configuration of the rule: `' + groupItem + '` is duplicated');
       }
-      res[groupItem] = index;
+      res[groupItem] = index * 2;
     });
     return res;
   }, {});
@@ -417,7 +417,7 @@ function convertGroupsToRanks(groups) {
   });
 
   const ranks = omittedTypes.reduce(function (res, type) {
-    res[type] = groups.length;
+    res[type] = groups.length * 2;
     return res;
   }, rankObject);
 

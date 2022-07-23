@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-restricted-paths`]: fix an error message ([#2466], thanks [@AdriAt360])
 - [`no-restricted-paths`]: use `Minimatch.match` instead of `minimatch` to comply with Windows Native paths ([#2466], thanks [@AdriAt360])
 - [`order`]: require with member expression could not be fixed if alphabetize.order was used ([#2490], thanks [@msvab])
+- [`order`]: leave more space in rankings for consecutive path groups ([#2506], thanks [@Pearce-Ropion])
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -997,6 +998,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
@@ -1657,6 +1659,7 @@ for info on changes for earlier releases.
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet
+[@Pearce-Ropion]: https://github.com/Pearce-Ropion
 [@Pessimistress]: https://github.com/Pessimistress
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
