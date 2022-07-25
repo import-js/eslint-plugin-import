@@ -532,7 +532,18 @@ ExportMap.parse = function (path, content, context) {
     let tsConfig = tsConfigCache.get(cacheKey);
     if (typeof tsConfig === 'undefined') {
       tsconfigRootDir = tsconfigRootDir || process.cwd();
-      const tsconfigResult = getTsconfig(project ? pathResolve(tsconfigRootDir, project) : tsconfigRootDir);
+      let tsconfigResult;
+      if (project) {
+        const projects = Array.isArray(project) ? project : [project];
+        for (const project of projects) {
+          tsconfigResult = getTsconfig(pathResolve(tsconfigRootDir, project));
+          if (tsconfigResult) {
+            break;
+          }
+        }
+      } else {
+        tsconfigResult = getTsconfig(tsconfigRootDir);
+      }
       tsConfig = tsconfigResult && tsconfigResult.config || null;
       tsConfigCache.set(cacheKey, tsConfig);
     }
