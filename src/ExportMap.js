@@ -501,6 +501,26 @@ ExportMap.parse = function (path, content, context) {
     m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) });
   }
 
+  function captureDependencyWithSpecifiers(n) {
+    // import type { Foo } (TS and Flow)
+    const declarationIsType = n.importKind === 'type';
+    // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
+    // shouldn't be considered to be just importing types
+    let specifiersOnlyImportingTypes = n.specifiers.length > 0;
+    const importedSpecifiers = new Set();
+    n.specifiers.forEach(specifier => {
+      if (specifier.type === 'ImportSpecifier') {
+        importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
+      } else if (supportedImportTypes.has(specifier.type)) {
+        importedSpecifiers.add(specifier.type);
+      }
+
+      // import { type Foo } (Flow)
+      specifiersOnlyImportingTypes = specifiersOnlyImportingTypes && specifier.importKind === 'type';
+    });
+    captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
+  }
+
   function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
     if (source == null) return null;
 
@@ -587,25 +607,7 @@ ExportMap.parse = function (path, content, context) {
 
     // capture namespaces in case of later export
     if (n.type === 'ImportDeclaration') {
-      // import type { Foo } (TS and Flow)
-      const declarationIsType = n.importKind === 'type';
-      // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
-      // shouldn't be considered to be just importing types
-      let specifiersOnlyImportingTypes = n.specifiers.length;
-      const importedSpecifiers = new Set();
-      n.specifiers.forEach(specifier => {
-        if (supportedImportTypes.has(specifier.type)) {
-          importedSpecifiers.add(specifier.type);
-        }
-        if (specifier.type === 'ImportSpecifier') {
-          importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
-        }
-
-        // import { type Foo } (Flow)
-        specifiersOnlyImportingTypes =
-          specifiersOnlyImportingTypes && specifier.importKind === 'type';
-      });
-      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
+      captureDependencyWithSpecifiers(n);
 
       const ns = n.specifiers.find(s => s.type === 'ImportNamespaceSpecifier');
       if (ns) {
@@ -615,6 +617,8 @@ ExportMap.parse = function (path, content, context) {
     }
 
     if (n.type === 'ExportNamedDeclaration') {
+      captureDependencyWithSpecifiers(n);
+
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {

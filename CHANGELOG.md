@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-restricted-paths`]: use `Minimatch.match` instead of `minimatch` to comply with Windows Native paths ([#2466], thanks [@AdriAt360])
 - [`order`]: require with member expression could not be fixed if alphabetize.order was used ([#2490], thanks [@msvab])
 - [`order`]: leave more space in rankings for consecutive path groups ([#2506], thanks [@Pearce-Ropion])
+- [`no-cycle`]: add ExportNamedDeclaration statements to dependencies ([#2511], thanks [@BenoitZugmeyer])
 
 ### Changed
 - [Tests] `named`: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1001,6 +1002,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
+[#2511]: https://github.com/import-js/eslint-plugin-import/pull/2511
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
@@ -1529,6 +1531,7 @@ for info on changes for earlier releases.
 [@beatrizrezener]: https://github.com/beatrizrezener
 [@benmosher]: https://github.com/benmosher
 [@benmunro]: https://github.com/benmunro
+[@BenoitZugmeyer]: https://github.com/BenoitZugmeyer
 [@bicstone]: https://github.com/bicstone
 [@Blasz]: https://github.com/Blasz
 [@bmish]: https://github.com/bmish

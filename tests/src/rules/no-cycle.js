@@ -167,6 +167,11 @@ ruleTester.run('no-cycle', rule, {
         options: [{ ...opts, amd: true }],
       }),
       test({
+        code: `import { foo } from "./${testDialect}/depth-one-reexport"`,
+        options: [{ ...opts }],
+        errors: [error(`Dependency cycle detected.`)],
+      }),
+      test({
         code: `import { foo } from "./${testDialect}/depth-two"`,
         options: [{ ...opts }],
         errors: [error(`Dependency cycle via ./depth-one:1`)],
