@@ -72,11 +72,7 @@ ruleTester.run('default', rule, {
     // jsx
     test({
       code: 'import MyCoolComponent from "./jsx/MyCoolComponent.jsx"',
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 6,
-        ecmaFeatures: { jsx: true },
-      },
+      features: ['import'],
     }),
 
     // #54: import of named export default
@@ -92,18 +88,24 @@ ruleTester.run('default', rule, {
     }),
 
     // from no-errors
-    test({ code: "import Foo from './jsx/FooES7.js';" }),
+    test({ code: "import Foo from './jsx/FooES7.js';",
+      features : ['import'],
+    }),
 
     // #545: more ES7 cases
-    test({ code: "import bar from './default-export-from.js';" }),
-    test({ code: "import bar from './default-export-from-named.js';" }),
+    test({ code: "import bar from './default-export-from.js';",
+      features: ['import'] }),
+    test({ code: "import bar from './default-export-from-named.js';",
+      features: ['import'] }),
     test({
       code: "import bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
+      features: ['import'],
     }),
     test({
       code: "export bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
+      features: ['import'],
     }),
 
     //typescript context
@@ -192,6 +194,7 @@ ruleTester.run('default', rule, {
       parserOptions: {
         ecmaVersion: 2022,
       },
+      features: ['export'],
     })),
 
 
@@ -207,56 +210,62 @@ ruleTester.run('default', rule, {
     test({
       code: "import Foo from './jsx/FooES7.js';",
       errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
+      features: ['import'],
     }),
 
     test({
       code: 'import baz from "./named-exports";',
       errors: [{ message: 'No default export found in imported module "./named-exports".',
-        type: 'ImportDefaultSpecifier' }] }),
+        type: 'ImportDefaultSpecifier' }],
+      features: ['import'] }),
 
     // es7 export syntax
     test({
       code: 'export baz from "./named-exports"',
       errors: ['No default export found in imported module "./named-exports".'],
+      features: ['export'],
     }),
     test({
       code: 'export baz, { bar } from "./named-exports"',
       errors: ['No default export found in imported module "./named-exports".'],
+      features: ['export'],
     }),
     test({
       code: 'export baz, * as names from "./named-exports"',
       errors: ['No default export found in imported module "./named-exports".'],
+      features: ['export'],
     }),
     // exports default from a module with no default
     test({
       code: 'import twofer from "./broken-trampoline"',
       errors: ['No default export found in imported module "./broken-trampoline".'],
+      features: ['import'],
     }),
 
     // #328: * exports do not include default
     test({
       code: 'import barDefault from "./re-export"',
       errors: ['No default export found in imported module "./re-export".'],
+      features: ['import'],
     }),
 
 
-    //typescript context
-    //context('TypeScript', function () 
+    //typescript context 
     test({
-      code: `import foobar from "./typescript"`,
-          
+      code: `import foobar from "./typescript"`,   
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
       errors: ['No default export found in imported module "./typescript".'],
+      features: ['import'],
     }),
     test({
-      code: `import React from "./typescript-export-assign-default-namespace"`,
-          
+      code: `import React from "./typescript-export-assign-default-namespace"`,  
       settings: {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
       errors: ['No default export found in imported module "./typescript-export-assign-default-namespace".'],
+      features: ['import'],
     }),
     test({
       code: `import FooBar from "./typescript-export-as-default-namespace"`,
@@ -264,6 +273,7 @@ ruleTester.run('default', rule, {
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
       errors: ['No default export found in imported module "./typescript-export-as-default-namespace".'],
+      features: ['import'],
     }),
     test({
       code: `import Foo from "./typescript-export-as-default-namespace"`,
@@ -282,6 +292,7 @@ ruleTester.run('default', rule, {
           endColumn: 11,
         },
       ],
+      features: ['import'],
     }),
 
     // #311: import of mismatched case
