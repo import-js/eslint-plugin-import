@@ -106,7 +106,7 @@
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-module-utils": "^2.7.3",
     "has": "^1.0.3",
-    "is-core-module": "^2.9.0",
+    "is-core-module": "^2.10.0",
     "is-glob": "^4.0.3",
     "minimatch": "^3.1.2",
     "object.values": "^1.1.5",
