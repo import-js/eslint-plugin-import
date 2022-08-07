@@ -24,7 +24,7 @@ let ts;
 const log = debug('eslint-plugin-import:ExportMap');
 
 const exportCache = new Map();
-const tsConfigCache = new Map();
+const tsconfigCache = new Map();
 
 export default class ExportMap {
   constructor(path) {
@@ -549,20 +549,20 @@ ExportMap.parse = function (path, content, context) {
   const source = makeSourceCode(content, ast);
 
   function readTsConfig(context) {
-    const tsConfigInfo = tsConfigLoader({
+    const tsconfigInfo = tsConfigLoader({
       cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
       getEnv: (key) => process.env[key],
     });
     try {
-      if (tsConfigInfo.tsConfigPath !== undefined) {
+      if (tsconfigInfo.tsConfigPath !== undefined) {
         // Projects not using TypeScript won't have `typescript` installed.
         if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
 
-        const configFile = ts.readConfigFile(tsConfigInfo.tsConfigPath, ts.sys.readFile);
+        const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
         return ts.parseJsonConfigFileContent(
           configFile.config,
           ts.sys,
-          dirname(tsConfigInfo.tsConfigPath),
+          dirname(tsconfigInfo.tsConfigPath),
         );
       }
     } catch (e) {
@@ -576,10 +576,10 @@ ExportMap.parse = function (path, content, context) {
     const cacheKey = hashObject({
       tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
     }).digest('hex');
-    let tsConfig = tsConfigCache.get(cacheKey);
+    let tsConfig = tsconfigCache.get(cacheKey);
     if (typeof tsConfig === 'undefined') {
       tsConfig = readTsConfig(context);
-      tsConfigCache.set(cacheKey, tsConfig);
+      tsconfigCache.set(cacheKey, tsConfig);
     }
 
     return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
