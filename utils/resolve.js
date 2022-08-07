@@ -80,13 +80,13 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   return result;
 };
 
-function relative(modulePath, sourceFile, settings) {
-  return fullResolve(modulePath, sourceFile, settings).path;
+function relative(modulePath, sourceFile, settings, context, extra) {
+  return fullResolve(modulePath, sourceFile, settings, context, extra).path;
 }
 
 let prevSettings = null;
 let memoizedHash = '';
-function fullResolve(modulePath, sourceFile, settings) {
+function fullResolve(modulePath, sourceFile, settings, context, extra) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules']);
   if (coreSet.has(modulePath)) { return { found: true, path: null }; }
@@ -111,11 +111,11 @@ function fullResolve(modulePath, sourceFile, settings) {
 
   function withResolver(resolver, config) {
     if (resolver.interfaceVersion === 2) {
-      return resolver.resolve(modulePath, sourceFile, config);
+      return resolver.resolve(modulePath, sourceFile, config, Object.assign({ context }, extra));
     }
 
     try {
-      const resolved = resolver.resolveImport(modulePath, sourceFile, config);
+      const resolved = resolver.resolveImport(modulePath, sourceFile, config, Object.assign({ context }, extra));
       if (resolved === undefined) { return { found: false }; }
       return { found: true, path: resolved };
     } catch (err) {
@@ -213,7 +213,7 @@ const erroredContexts = new Set();
  */
 function resolve(p, context) {
   try {
-    return relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context.settings);
+    return relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context.settings, context);
   } catch (err) {
     if (!erroredContexts.has(context)) {
       // The `err.stack` string starts with `err.name` followed by colon and `err.message`.
