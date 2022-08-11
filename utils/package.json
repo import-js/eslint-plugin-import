@@ -27,5 +27,10 @@
   "homepage": "https://github.com/import-js/eslint-plugin-import#readme",
   "dependencies": {
     "debug": "^3.2.7"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    }
   }
 }

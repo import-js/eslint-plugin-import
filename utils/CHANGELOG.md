@@ -8,6 +8,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [Fix] Ignore hashbang and BOM while parsing ([#2431], thanks [@silverwind])
 
+### Changed
+- [patch] mark eslint as an optional peer dep ([#2523], thanks [@wmertens])
+
 ## v2.7.3 - 2022-01-26
 
 ### Fixed
@@ -118,6 +121,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2523]: https://github.com/import-js/eslint-plugin-import/pull/2523
 [#2431]: https://github.com/import-js/eslint-plugin-import/pull/2431
 [#2350]: https://github.com/import-js/eslint-plugin-import/issues/2350
 [#2343]: https://github.com/import-js/eslint-plugin-import/pull/2343
@@ -164,3 +168,4 @@ Yanked due to critical issue with cache key resulting from #839.
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01
 [@VitusFW]: https://github.com/VitusFW
+[@wmertens]: https://github.com/wmertens
