@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.7.4 - 2022-08-11
+
 ### Fixed
 - [Fix] Ignore hashbang and BOM while parsing ([#2431], thanks [@silverwind])
 
