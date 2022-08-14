@@ -925,6 +925,161 @@ ruleTester.run('order', rule, {
         },
       },
     }),
+    // Option pathGroup[].distinctGroup: 'true' does not prevent 'position' properties from affecting the visible grouping
+    test({
+      code: `
+        import A from 'a';
+
+        import C from 'c';
+
+        import B from 'b';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+          'distinctGroup': true,
+          'pathGroupsExcludedImportTypes': [],
+          'pathGroups': [
+            {
+              'pattern': 'a',
+              'group': 'external',
+              'position': 'before',
+            },
+            {
+              'pattern': 'b',
+              'group': 'external',
+              'position': 'after',
+            },
+          ],
+        },
+      ],
+    }),
+    // Option pathGroup[].distinctGroup: 'false' should prevent 'position' properties from affecting the visible grouping
+    test({
+      code: `
+        import A from 'a';
+        import C from 'c';
+        import B from 'b';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+          'distinctGroup': false,
+          'pathGroupsExcludedImportTypes': [],
+          'pathGroups': [
+            {
+              'pattern': 'a',
+              'group': 'external',
+              'position': 'before',
+            },
+            {
+              'pattern': 'b',
+              'group': 'external',
+              'position': 'after',
+            },
+          ],
+        },
+      ],
+    }),
+    // Option pathGroup[].distinctGroup: 'false' should prevent 'position' properties from affecting the visible grouping 2
+    test({
+      code: `
+        import A from 'a';
+
+        import b from './b';
+        import B from './B';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+          'distinctGroup': false,
+          'pathGroupsExcludedImportTypes': [],
+          'pathGroups': [
+            {
+              'pattern': 'a',
+              'group': 'external',
+            },
+            {
+              'pattern': 'b',
+              'group': 'internal',
+              'position': 'before',
+            },
+          ],
+        },
+      ],
+    }),
+    // Option pathGroup[].distinctGroup: 'false' should prevent 'position' properties from affecting the visible grouping 3
+    test({
+      code: `
+        import A from "baz";
+        import B from "Bar";
+        import C from "Foo";
+
+        import D from "..";
+        import E from "../";
+        import F from "../baz";
+        import G from "../Bar";
+        import H from "../Foo";
+
+        import I from ".";
+        import J from "./baz";
+        import K from "./Bar";
+        import L from "./Foo";
+      `,
+      options: [
+        {
+          'alphabetize': {
+            'caseInsensitive': false,
+            'order': 'asc',
+          },
+          'newlines-between': 'always',
+          'groups': [
+            ['builtin', 'external', 'internal', 'unknown', 'object', 'type'],
+            'parent',
+            ['sibling', 'index'],
+          ],
+          'distinctGroup': false,
+          'pathGroupsExcludedImportTypes': [],
+          'pathGroups': [
+            {
+              'pattern': './',
+              'group': 'sibling',
+              'position': 'before',
+            },
+            {
+              'pattern': '.',
+              'group': 'sibling',
+              'position': 'before',
+            },
+            {
+              'pattern': '..',
+              'group': 'parent',
+              'position': 'before',
+            },
+            {
+              'pattern': '../',
+              'group': 'parent',
+              'position': 'before',
+            },
+            {
+              'pattern': '[a-z]*',
+              'group': 'external',
+              'position': 'before',
+            },
+            {
+              'pattern': '../[a-z]*',
+              'group': 'parent',
+              'position': 'before',
+            },
+            {
+              'pattern': './[a-z]*',
+              'group': 'sibling',
+              'position': 'before',
+            },
+          ],
+        },
+      ],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -2437,6 +2592,62 @@ ruleTester.run('order', rule, {
       }],
       errors: [{
         message: '`..` import should occur before import of `../a`',
+      }],
+    }),
+    // Option pathGroup[].distinctGroup: 'false' should error when newlines are incorrect 2
+    test({
+      code: `
+        import A from 'a';
+        import C from './c';
+      `,
+      output: `
+        import A from 'a';
+
+        import C from './c';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+          'distinctGroup': false,
+          'pathGroupsExcludedImportTypes': [],
+        },
+      ],
+      errors: [{
+        message: 'There should be at least one empty line between import groups',
+      }],
+    }),
+    // Option pathGroup[].distinctGroup: 'false' should error when newlines are incorrect 2
+    test({
+      code: `
+        import A from 'a';
+
+        import C from 'c';
+      `,
+      output: `
+        import A from 'a';
+        import C from 'c';
+      `,
+      options: [
+        {
+          'newlines-between': 'always',
+          'distinctGroup': false,
+          'pathGroupsExcludedImportTypes': [],
+          'pathGroups': [
+            {
+              'pattern': 'a',
+              'group': 'external',
+              'position': 'before',
+            },
+            {
+              'pattern': 'c',
+              'group': 'external',
+              'position': 'after',
+            },
+          ],
+        },
+      ],
+      errors: [{
+        message: 'There should be no empty line within import group',
       }],
     }),
     // Alphabetize with require

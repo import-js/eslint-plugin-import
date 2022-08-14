@@ -128,6 +128,31 @@ Properties of the objects
 }
 ```
 
+### `distinctGroup: [boolean]`:
+
+This changes how `pathGroups[].position` affects grouping. The property is most useful when `newlines-between` is set to `always` and at least 1 `pathGroups` entry has a `position` property set.
+
+By default, in the context of a particular `pathGroup` entry, when setting `position`, a new "group" will silently be created. That is, even if the `group` is specified, a newline will still separate imports that match that `pattern` with the rest of the group (assuming `newlines-between` is `always`). This is undesirable if your intentions are to use `position` to position _within_ the group (and not create a new one). Override this behavior by setting `distinctGroup` to `false`; this will keep imports within the same group as intended.
+
+Note that currently, `distinctGroup` defaults to `true`. However, in a later update, the default will change to `false`
+
+Example:
+```json
+{
+  "import/order": ["error", {
+    "newlines-between": "always",
+    "pathGroups": [
+      {
+        "pattern": "@app/**",
+        "group": "external",
+        "position": "after"
+      }
+    ],
+    "distinctGroup": false
+  }]
+}
+```
+
 ### `pathGroupsExcludedImportTypes: [array]`:
 
 This defines import types that are not handled by configured pathGroups.

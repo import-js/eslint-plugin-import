@@ -493,7 +493,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
   return undefined;
 }
 
-function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports) {
+function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = context.getSourceCode().lines.slice(
       previousImport.node.loc.end.line,
@@ -502,27 +502,34 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports) {
 
     return linesBetweenImports.filter((line) => !line.trim().length).length;
   };
+  const getIsStartOfDistinctGroup = (currentImport, previousImport) => {
+    return currentImport.rank - 1 >= previousImport.rank;
+  };
   let previousImport = imported[0];
 
   imported.slice(1).forEach(function (currentImport) {
     const emptyLinesBetween = getNumberOfEmptyLinesBetween(currentImport, previousImport);
+    const isStartOfDistinctGroup = getIsStartOfDistinctGroup(currentImport, previousImport);
 
     if (newlinesBetweenImports === 'always'
         || newlinesBetweenImports === 'always-and-inside-groups') {
       if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
-        context.report({
-          node: previousImport.node,
-          message: 'There should be at least one empty line between import groups',
-          fix: fixNewLineAfterImport(context, previousImport),
-        });
-      } else if (currentImport.rank === previousImport.rank
-        && emptyLinesBetween > 0
+        if (distinctGroup || (!distinctGroup && isStartOfDistinctGroup)) {
+          context.report({
+            node: previousImport.node,
+            message: 'There should be at least one empty line between import groups',
+            fix: fixNewLineAfterImport(context, previousImport),
+          });
+        }
+      } else if (emptyLinesBetween > 0
         && newlinesBetweenImports !== 'always-and-inside-groups') {
-        context.report({
-          node: previousImport.node,
-          message: 'There should be no empty line within import group',
-          fix: removeNewLineAfterImport(context, currentImport, previousImport),
-        });
+        if ((distinctGroup && currentImport.rank === previousImport.rank) || (!distinctGroup && !isStartOfDistinctGroup)) {
+          context.report({
+            node: previousImport.node,
+            message: 'There should be no empty line within import group',
+            fix: removeNewLineAfterImport(context, currentImport, previousImport),
+          });
+        }
       }
     } else if (emptyLinesBetween > 0) {
       context.report({
@@ -544,6 +551,9 @@ function getAlphabetizeConfig(options) {
   return { order, caseInsensitive };
 }
 
+// TODO, semver-major: Change the default of "distinctGroup" from true to false
+const defaultDistinctGroup = true;
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -561,6 +571,10 @@ module.exports = {
           },
           pathGroupsExcludedImportTypes: {
             type: 'array',
+          },
+          distinctGroup: {
+            type: 'boolean',
+            default: defaultDistinctGroup,
           },
           pathGroups: {
             type: 'array',
@@ -582,6 +596,7 @@ module.exports = {
                   enum: ['after', 'before'],
                 },
               },
+              additionalProperties: false,
               required: ['pattern', 'group'],
             },
           },
@@ -622,6 +637,7 @@ module.exports = {
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object']);
     const alphabetize = getAlphabetizeConfig(options);
+    const distinctGroup = options.distinctGroup == null ? defaultDistinctGroup : !!options.distinctGroup;
     let ranks;
 
     try {
@@ -724,7 +740,7 @@ module.exports = {
       'Program:exit': function reportAndReset() {
         importMap.forEach((imported) => {
           if (newlinesBetweenImports !== 'ignore') {
-            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports);
+            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup);
           }
 
           if (alphabetize.order !== 'ignore') {

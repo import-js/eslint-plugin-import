@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-cycle`]: add `allowUnsafeDynamicCyclicDependency` option ([#2387], thanks [@GerkinDev])
 - [`no-restricted-paths`]: support arrays for `from` and `target` options ([#2466], thanks [@AdriAt360])
 - [`no-anonymous-default-export`]: add `allowNew` option ([#2505], thanks [@DamienCassou])
+- [`order`]: Add `distinctGroup` option ([#2395], thanks [@hyperupcall])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1014,6 +1015,7 @@ for info on changes for earlier releases.
 [#2411]: https://github.com/import-js/eslint-plugin-import/pull/2411
 [#2399]: https://github.com/import-js/eslint-plugin-import/pull/2399
 [#2396]: https://github.com/import-js/eslint-plugin-import/pull/2396
+[#2395]: https://github.com/import-js/eslint-plugin-import/pull/2395
 [#2393]: https://github.com/import-js/eslint-plugin-import/pull/2393
 [#2388]: https://github.com/import-js/eslint-plugin-import/pull/2388
 [#2387]: https://github.com/import-js/eslint-plugin-import/pull/2387
