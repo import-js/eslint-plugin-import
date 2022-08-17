@@ -254,8 +254,12 @@ describe('dynamic imports', () => {
   // test for unused exports with `import()`
   ruleTester.run('no-unused-modules', rule, {
     valid: [].concat(
+<<<<<<< HEAD
+      semver.satisfies(eslintPkg.version, '< 8') ? test({
+=======
       // TODO: fix this in eslint 6 and 7?
       semver.satisfies(eslintPkg.version, '< 6') ? test({
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
         options: unusedExportsOptions,
         code: `
             export const a = 10
@@ -268,7 +272,11 @@ describe('dynamic imports', () => {
         filename: testFilePath('./no-unused-modules/exports-for-dynamic-js.js'),
       }) : [],
     ),
+<<<<<<< HEAD
+    invalid: [
+=======
     invalid: [].concat(
+>>>>>>> 704dbd29d2b411acfb7ab481c2832d8d50146e8d
       test({
         options: unusedExportsOptions,
         code: `
