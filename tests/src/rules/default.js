@@ -66,7 +66,7 @@ ruleTester.run('default', rule, {
     test({ code: 'export {a} from "./named-exports"' }),
     test({ 
       code: 'import twofer from "./trampoline"',
-      features: ['import'],
+      features: ['import', 'export'],
     }),
 
     // jsx
@@ -89,12 +89,12 @@ ruleTester.run('default', rule, {
 
     // from no-errors
     test({ code: "import Foo from './jsx/FooES7.js';",
-      features : ['import'],
+      features : ['import', 'class fields'],
     }),
 
     // #545: more ES7 cases
     test({ code: "import bar from './default-export-from.js';",
-      features: ['import'] }),
+      features: ['import', 'export']}),
     test({ code: "import bar from './default-export-from-named.js';",
       features: ['import'] }),
     test({
@@ -105,7 +105,7 @@ ruleTester.run('default', rule, {
     test({
       code: "export bar from './default-export-from-ignored.js';",
       settings: { 'import/ignore': ['common'] },
-      features: ['import'],
+      features: ['import' ,'export'],
     }),
 
     //typescript context
@@ -208,12 +208,6 @@ ruleTester.run('default', rule, {
 
   invalid: parsers.all([].concat(
     test({
-      code: "import Foo from './jsx/FooES7.js';",
-      errors: ["Parse errors in imported module './jsx/FooES7.js': Unexpected token = (6:16)"],
-      features: ['import'],
-    }),
-
-    test({
       code: 'import baz from "./named-exports";',
       errors: [{ message: 'No default export found in imported module "./named-exports".',
         type: 'ImportDefaultSpecifier' }],
@@ -239,7 +233,7 @@ ruleTester.run('default', rule, {
     test({
       code: 'import twofer from "./broken-trampoline"',
       errors: ['No default export found in imported module "./broken-trampoline".'],
-      features: ['import'],
+      features: ['import', 'export'],
     }),
 
     // #328: * exports do not include default

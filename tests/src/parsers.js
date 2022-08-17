@@ -102,7 +102,9 @@ const parsers = {
           && typeof testObject.errors !== 'number'
           && {
             errors: testObject.errors.map(
-              (errorObject) => {
+              (error) => {
+                const errorObject = typeof error === 'string' ? { message: error } : error;
+
                 const nextSuggestions = errorObject.suggestions && {
                   suggestions: errorObject.suggestions.map((suggestion) => Object.assign({}, suggestion, {
                     output: suggestion.output + extraComment,
@@ -150,6 +152,7 @@ const parsers = {
         || features.has('flow')
         || features.has('jsx namespace')
         || features.has('bind operator')
+        || features.has('export')
         || features.has('do expressions');
       const tsOld = !skipTS && !features.has('no-ts-old');
       const tsNew = !skipTS && !features.has('no-ts-new');
