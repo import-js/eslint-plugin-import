@@ -39,6 +39,7 @@ export const rules = {
   'unambiguous': require('./rules/unambiguous'),
   'no-unassigned-import': require('./rules/no-unassigned-import'),
   'no-useless-path-segments': require('./rules/no-useless-path-segments'),
+  'default-import-match-filename': require('./rules/default-import-match-filename'),
   'dynamic-import-chunkname': require('./rules/dynamic-import-chunkname'),
   'no-import-module-exports': require('./rules/no-import-module-exports'),
 
