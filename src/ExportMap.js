@@ -346,7 +346,11 @@ ExportMap.for = function (context) {
   exportMap = ExportMap.parse(path, content, context);
 
   // ambiguous modules return null
-  if (exportMap == null) return null;
+  if (exportMap == null) {
+    log('ignored path due to ambiguous parse:', path);
+    exportCache.set(cacheKey, null);
+    return null;
+  }
 
   exportMap.mtime = stats.mtime;
 

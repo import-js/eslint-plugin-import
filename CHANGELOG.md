@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] remove global install in readme ([#2412], thanks [@aladdin-add])
 - [readme] clarify `eslint-import-resolver-typescript` usage ([#2503], thanks [@JounQin])
 - [Refactor] `no-cycle`: Add per-run caching of traversed paths ([#2419], thanks [@nokel81])
+- [Performance] `ExportMap`: add caching after parsing for an ambiguous module ([#2531], thanks [@stenin-nikita])
 
 ## [2.26.0] - 2022-04-05
 
@@ -999,6 +1000,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
@@ -1701,6 +1703,7 @@ for info on changes for earlier releases.
 [@spalger]: https://github.com/spalger
 [@st-sloth]: https://github.com/st-sloth
 [@stekycz]: https://github.com/stekycz
+[@stenin-nikita]: https://github.com/stenin-nikita
 [@stephtr]: https://github.com/stephtr
 [@straub]: https://github.com/straub
 [@strawbrary]: https://github.com/strawbrary

@@ -431,6 +431,19 @@ describe('ExportMap', function () {
           ExportMap.parse('./baz.ts', 'export const baz = 5', differentContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
         });
+
+        it('should cache after parsing for an ambiguous module', function () {
+          const source = './typescript-declare-module.ts';
+          const parseSpy = sinon.spy(ExportMap, 'parse');
+      
+          expect(ExportMap.get(source, context)).to.be.null;
+      
+          ExportMap.get(source, context);
+      
+          expect(parseSpy.callCount).to.equal(1);
+      
+          parseSpy.restore();
+        });
       });
     });
   });
