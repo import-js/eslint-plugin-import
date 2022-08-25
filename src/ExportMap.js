@@ -442,7 +442,12 @@ ExportMap.parse = function (path, content, context) {
   const namespaces = new Map();
 
   function remotePath(value) {
-    return resolve.relative(value, path, context.settings);
+    const file = resolve.relative(value, path, context.settings);
+    try {
+      return file && fs.realpathSync(file);
+    } catch (e) {
+      return file;
+    }
   }
 
   function resolveImport(value) {
