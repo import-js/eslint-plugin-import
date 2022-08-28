@@ -45,6 +45,17 @@ ruleTester.run('export', rule, {
         ecmaVersion: 2020,
       },
     })) || [],
+
+    getTSParsers().map((parser) => ({
+      code: `
+        export default function foo(param: string): boolean;
+        export default function foo(param: string, param1: number): boolean;
+        export default function foo(param: string, param1?: number): boolean {
+          return param && param1;
+        }
+      `,
+      parser,
+    })),
   ),
 
   invalid: [].concat(

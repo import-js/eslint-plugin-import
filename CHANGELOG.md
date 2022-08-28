@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: leave more space in rankings for consecutive path groups ([#2506], thanks [@Pearce-Ropion])
 - [`no-cycle`]: add ExportNamedDeclaration statements to dependencies ([#2511], thanks [@BenoitZugmeyer])
 - [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
+- [`export`]: do not error on TS export overloads ([#1590], thanks [@ljharb])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1341,6 +1342,7 @@ for info on changes for earlier releases.
 [#1631]: https://github.com/import-js/eslint-plugin-import/issues/1631
 [#1616]: https://github.com/import-js/eslint-plugin-import/issues/1616
 [#1613]: https://github.com/import-js/eslint-plugin-import/issues/1613
+[#1590]: https://github.com/import-js/eslint-plugin-import/issues/1590
 [#1589]: https://github.com/import-js/eslint-plugin-import/issues/1589
 [#1565]: https://github.com/import-js/eslint-plugin-import/issues/1565
 [#1366]: https://github.com/import-js/eslint-plugin-import/issues/1366

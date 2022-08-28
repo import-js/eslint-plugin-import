@@ -1,6 +1,7 @@
 import ExportMap, { recursivePatternCapture } from '../ExportMap';
 import docsUrl from '../docsUrl';
 import includes from 'array-includes';
+import flatMap from 'array.prototype.flatmap';
 
 /*
 Notes on TypeScript namespaces aka TSModuleDeclaration:
@@ -35,12 +36,31 @@ const tsTypePrefix = 'type:';
  * @returns {boolean}
  */
 function isTypescriptFunctionOverloads(nodes) {
-  const types = new Set(Array.from(nodes, node => node.parent.type));
-  return types.has('TSDeclareFunction')
-    && (
-      types.size === 1
-      || (types.size === 2 && types.has('FunctionDeclaration'))
-    );
+  const nodesArr = Array.from(nodes);
+  const types = new Set(nodesArr.map(node => node.parent.type));
+
+  const idents = flatMap(nodesArr, (node) => (
+    node.declaration && (
+      node.declaration.type === 'TSDeclareFunction' // eslint 6+
+      || node.declaration.type === 'TSEmptyBodyFunctionDeclaration' // eslint 4-5
+    )
+      ? node.declaration.id.name
+      : []
+  ));
+  if (new Set(idents).size !== idents.length) {
+    return true;
+  }
+
+  if (!types.has('TSDeclareFunction')) {
+    return false;
+  }
+  if (types.size === 1) {
+    return true;
+  }
+  if (types.size === 2 && types.has('FunctionDeclaration')) {
+    return true;
+  }
+  return false;
 }
 
 /**
