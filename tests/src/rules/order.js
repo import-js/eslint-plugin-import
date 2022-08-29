@@ -2876,6 +2876,29 @@ context('TypeScript', function () {
               },
             ],
           }),
+          test({
+            code: `
+              import { useLazyQuery, useQuery } from "@apollo/client";
+              import { useEffect } from "react";
+            `,
+            options: [
+              {
+                groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'react',
+                    group: 'external',
+                    position: 'before',
+                  },
+                ],
+                'newlines-between': 'always',
+                alphabetize: {
+                  order: 'asc',
+                  caseInsensitive: true,
+                },
+              },
+            ],
+          }),
         ],
         invalid: [
           // Option alphabetize: {order: 'asc'}
