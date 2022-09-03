@@ -183,7 +183,12 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     return;
   }
 
-  if (importType(name, context) !== 'external') {
+  const typeOfImport = importType(name, context);
+
+  if (
+    typeOfImport !== 'external'
+    && (typeOfImport !== 'internal' || !depsOptions.verifyInternalDeps)
+  ) {
     return;
   }
 
@@ -261,6 +266,7 @@ module.exports = {
           'peerDependencies': { 'type': ['boolean', 'array'] },
           'bundledDependencies': { 'type': ['boolean', 'array'] },
           'packageDir': { 'type': ['string', 'array'] },
+          'includeInternal': { 'type': ['boolean'] },
         },
         'additionalProperties': false,
       },
@@ -277,6 +283,7 @@ module.exports = {
       allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
+      verifyInternalDeps: !!options.includeInternal,
     };
 
     return moduleVisitor((source, node) => {

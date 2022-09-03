@@ -1,7 +1,7 @@
 # import/no-extraneous-dependencies: Forbid the use of extraneous packages
 
 Forbid the import of external modules that are not declared in the `package.json`'s `dependencies`, `devDependencies`, `optionalDependencies`, `peerDependencies`, or `bundledDependencies`.
-The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behavior can be changed with the rule option `packageDir`.
+The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behavior can be changed with the rule option `packageDir`. Normally ignores imports of modules marked internal, but this can be changed with the rule option `includeInternal`.
 
 Modules have to be installed for this rule to work.
 
@@ -30,6 +30,12 @@ You can also use an array of globs instead of literal booleans:
 ```
 
 When using an array of globs, the setting will be set to `true` (no errors reported) if the name of the file being linted matches a single glob in the array, and `false` otherwise.
+
+There is a boolean option called `includeInternal`, which enables the checking of internal modules, which are otherwise ignored by this rule.
+
+```js
+"import/no-extraneous-dependencies": ["error", {"includeInternal": true}]
+```
 
 Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json.
 
@@ -99,6 +105,10 @@ var isArray = require('lodash.isarray');
 /* eslint import/no-extraneous-dependencies: ["error", {"bundledDependencies": false}] */
 import foo from '"@generated/foo"';
 var foo = require('"@generated/foo"');
+
+/* eslint import/no-extraneous-dependencies: ["error", {"includeInternal": true}] */
+import foo from './foo';
+var foo = require('./foo');
 ```
 
 

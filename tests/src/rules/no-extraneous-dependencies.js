@@ -392,6 +392,18 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         message: `'esm-package-not-in-pkg-json' should be listed in the project's dependencies. Run 'npm i -S esm-package-not-in-pkg-json' to add it`,
       }],
     }),
+
+    test({
+      code: 'import "not-a-dependency"',
+      settings: {
+        'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } },
+        'import/internal-regex': '^not-a-dependency.*',
+      },
+      options: [{ includeInternal: true }],
+      errors: [{
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
   ],
 });
 

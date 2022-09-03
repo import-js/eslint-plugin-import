@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-restricted-paths`]: support arrays for `from` and `target` options ([#2466], thanks [@AdriAt360])
 - [`no-anonymous-default-export`]: add `allowNew` option ([#2505], thanks [@DamienCassou])
 - [`order`]: Add `distinctGroup` option ([#2395], thanks [@hyperupcall])
+- [`no-extraneous-dependencies`]: Add `includeInternal` option ([#2541], thanks [@bdwain])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1008,6 +1009,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2541]: https://github.com/import-js/eslint-plugin-import/pull/2541
 [#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
 [#2511]: https://github.com/import-js/eslint-plugin-import/pull/2511
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
