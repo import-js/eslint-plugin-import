@@ -1,7 +1,7 @@
 # import/no-extraneous-dependencies: Forbid the use of extraneous packages
 
 Forbid the import of external modules that are not declared in the `package.json`'s `dependencies`, `devDependencies`, `optionalDependencies`, `peerDependencies`, or `bundledDependencies`.
-The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behavior can be changed with the rule option `packageDir`. Normally ignores imports of modules marked internal, but this can be changed with the rule option `includeInternal`.
+The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behavior can be changed with the rule option `packageDir`. Normally ignores imports of modules marked internal, but this can be changed with the rule option `includeInternal`. Type imports can be verified by specifying `includeTypes`.
 
 Modules have to be installed for this rule to work.
 
@@ -31,10 +31,10 @@ You can also use an array of globs instead of literal booleans:
 
 When using an array of globs, the setting will be set to `true` (no errors reported) if the name of the file being linted matches a single glob in the array, and `false` otherwise.
 
-There is a boolean option called `includeInternal`, which enables the checking of internal modules, which are otherwise ignored by this rule.
+There are 2 boolean options to opt into checking extra imports that are normally ignored: `includeInternal`, which enables the checking of internal modules, and `includeTypes`, which enables checking of type imports in TypeScript.
 
 ```js
-"import/no-extraneous-dependencies": ["error", {"includeInternal": true}]
+"import/no-extraneous-dependencies": ["error", {"includeInternal": true, "includeTypes": true}]
 ```
 
 Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json.
@@ -109,6 +109,9 @@ var foo = require('"@generated/foo"');
 /* eslint import/no-extraneous-dependencies: ["error", {"includeInternal": true}] */
 import foo from './foo';
 var foo = require('./foo');
+
+/* eslint import/no-extraneous-dependencies: ["error", {"includeTypes": true}] */
+import type { MyType } from 'foo';
 ```
 
 
@@ -123,6 +126,7 @@ import test from 'ava';
 import find from 'lodash.find';
 import isArray from 'lodash.isarray';
 import foo from '"@generated/foo"';
+import type { MyType } from 'foo';
 
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 import react from 'react';

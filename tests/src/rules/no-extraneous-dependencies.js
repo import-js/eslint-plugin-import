@@ -435,6 +435,18 @@ describe('TypeScript', () => {
               message: "'a' should be listed in the project's dependencies, not devDependencies.",
             }],
           }, parserConfig)),
+
+          test(Object.assign({
+            code: 'import type T from "a";',
+            options: [{ 
+              packageDir: packageDirWithTypescriptDevDependencies,
+              devDependencies: false,
+              includeTypes: true,
+            }],
+            errors: [{
+              message: "'a' should be listed in the project's dependencies, not devDependencies.",
+            }],
+          }, parserConfig)),
         ],
       });
     });
@@ -454,5 +466,14 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
     }),
   ],
   invalid: [
+    test({
+      code: 'import type { MyType } from "not-a-dependency";',
+      options: [{ includeTypes: true }],
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
   ],
 });

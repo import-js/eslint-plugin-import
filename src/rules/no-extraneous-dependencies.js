@@ -175,10 +175,10 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
-  // Do not report when importing types
+  // Do not report when importing types unless option is enabled
   if (
-    node.importKind === 'type' ||
-    node.importKind === 'typeof'
+    !depsOptions.verifyTypeImports &&
+    (node.importKind === 'type' || node.importKind === 'typeof')
   ) {
     return;
   }
@@ -267,6 +267,7 @@ module.exports = {
           'bundledDependencies': { 'type': ['boolean', 'array'] },
           'packageDir': { 'type': ['string', 'array'] },
           'includeInternal': { 'type': ['boolean'] },
+          'includeTypes': { 'type': ['boolean'] },
         },
         'additionalProperties': false,
       },
@@ -284,6 +285,7 @@ module.exports = {
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
       verifyInternalDeps: !!options.includeInternal,
+      verifyTypeImports: !!options.includeTypes,
     };
 
     return moduleVisitor((source, node) => {
