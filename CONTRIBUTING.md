@@ -44,6 +44,10 @@ You can learn how from this _free_ series [How to Contribute to an Open Source P
 
 Here are some things to keep in mind when working on a PR:
 
+**Trying to update an inactive Pull Request?**
+If a PR is open, but unfortunately the author is, for any reason, not available to apply code review fixes or rebase the source branch, then please **do not open a new PR**.
+Instead, paste a link to your own branch in the PR, and the maintainers can pull in your changes and update the existing PR in-place.
+
 #### Tests
 
 A PR that is just failing test cases for an existing issue is very helpful, as this can take as much time (if not more) as it takes to implement a new feature or fix a bug.

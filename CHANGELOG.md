@@ -40,6 +40,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] [`no-useless-path-segments`]: fix paths ([#2424], thanks [@s-h-a-d-o-w])
 - [Tests] [`no-cycle`]: add passing test cases ([#2438], thanks [@georeith])
 - [Refactor] [`no-extraneous-dependencies`] improve performance using cache ([#2374], thanks [@meowtec])
+- [meta] `CONTRIBUTING.md`: mention inactive PRs ([#2546], thanks [@stropho])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1013,6 +1014,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2546]: https://github.com/import-js/eslint-plugin-import/pull/2546
 [#2541]: https://github.com/import-js/eslint-plugin-import/pull/2541
 [#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
 [#2511]: https://github.com/import-js/eslint-plugin-import/pull/2511
