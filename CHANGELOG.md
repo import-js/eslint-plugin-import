@@ -40,6 +40,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] [`no-useless-path-segments`]: fix paths ([#2424], thanks [@s-h-a-d-o-w])
 - [Tests] [`no-cycle`]: add passing test cases ([#2438], thanks [@georeith])
 - [Refactor] [`no-extraneous-dependencies`] improve performance using cache ([#2374], thanks [@meowtec])
+- [Refactor] `importType`: resolve path lazily ([#2374], thanks [@meowtec])
 
 ## [2.26.0] - 2022-04-05
 

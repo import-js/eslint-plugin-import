@@ -31,17 +31,17 @@ export function isBuiltIn(name, settings, path) {
 }
 
 export function isExternalModule(name, path, context) {
-  if (arguments.length < 3) {                                                                                                                                                                              
+  if (arguments.length < 3) {
     throw new TypeError('isExternalModule: name, path, and context are all required');
   }
-  return (isModule(name) || isScoped(name)) && typeTest(name, context, path) === 'external';
+  return (isModule(name) || isScoped(name)) && typeTest(name, context, () => path) === 'external';
 }
 
 export function isExternalModuleMain(name, path, context) {
-  if (arguments.length < 3) {                                                                                                                                                                              
+  if (arguments.length < 3) {
     throw new TypeError('isExternalModule: name, path, and context are all required');
   }
-  return isModuleMain(name) && typeTest(name, context, path) === 'external';
+  return isModuleMain(name) && typeTest(name, context, () => path) === 'external';
 }
 
 const moduleRegExp = /^\w/;
@@ -109,14 +109,17 @@ function isExternalLookingName(name) {
   return isModule(name) || isScoped(name);
 }
 
-function typeTest(name, context, path ) {
+function typeTest(name, context, getPath) {
   const { settings } = context;
   if (isInternalRegexMatch(name, settings)) { return 'internal'; }
-  if (isAbsolute(name, settings, path)) { return 'absolute'; }
+  if (isAbsolute(name)) { return 'absolute'; }
+  if (isRelativeToParent(name)) { return 'parent'; }
+  if (isIndex(name)) { return 'index'; }
+  if (isRelativeToSibling(name)) { return 'sibling'; }
+
+  // `resolve` is expensive, do it only when necessary
+  const path = getPath();
   if (isBuiltIn(name, settings, path)) { return 'builtin'; }
-  if (isRelativeToParent(name, settings, path)) { return 'parent'; }
-  if (isIndex(name, settings, path)) { return 'index'; }
-  if (isRelativeToSibling(name, settings, path)) { return 'sibling'; }
   if (isExternalPath(path, context)) { return 'external'; }
   if (isInternalPath(path, context)) { return 'internal'; }
   if (isExternalLookingName(name)) { return 'external'; }
@@ -124,5 +127,5 @@ function typeTest(name, context, path ) {
 }
 
 export default function resolveImportType(name, context) {
-  return typeTest(name, context, resolve(name, context));
+  return typeTest(name, context, () => resolve(name, context));
 }
