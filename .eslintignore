@@ -7,6 +7,8 @@ tests/files/with-syntax-error
 tests/files/just-json-files/invalid.json
 tests/files/typescript-d-ts/
 resolvers/webpack/test/files
+# A downleveled vendor file generate by `npm run downlevel-get-tsconfig`
+src/get-tsconfig.js
 # we want to ignore "tests/files" here, but unfortunately doing so would
 # interfere with unit test and fail it for some reason.
 # tests/files
