@@ -41,12 +41,6 @@ export { Alpha, Bravo } // <- reported
 
 ### Options
 
-#### `esmodule`
-This option enables reporting of errors if `import` / `export` specifiers are not sorted. Its value is `true` by default.
-
-#### `commonjs`
-This option enablee reporting of errors if `require` specifiers are not sorted. Its value is `true` by default.
-
 #### `order`
 There is a `order` option available to sort an order into either `caseInsensitive`  or `lowercaseFirst` or `lowercaseLast`.
 
