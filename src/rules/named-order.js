@@ -118,6 +118,7 @@ module.exports = {
 
     // sorters
     const namedImportSpecifierSorter = makeDeepSorter(options, 'imported.name');
+    const namedExportSpecifierSorter = makeDeepSorter(options, 'exported.name');
 
     return {
       ImportDeclaration: (node) => {
@@ -143,6 +144,38 @@ module.exports = {
           context.report({
             node,
             message: 'Named import specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
+            data: {
+              source: sourceString,
+              destination: destinationString,
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange(sourceFullRange, destinationString);
+            },
+          });
+        }
+      },
+      ExportNamedDeclaration: (node) => {
+        if (
+          !options.esmodule
+          || !node
+          || node.type !== 'ExportNamedDeclaration'
+          || !node.specifiers
+          || node.specifiers.length === 0) {
+          return;
+        }
+
+        const { specifiers } = node;
+
+        const sortedSpecifiers = [...specifiers].sort(namedExportSpecifierSorter);
+
+        if (!isArrayShallowEquals(specifiers, sortedSpecifiers)) {
+          const sourceString = specifiers.map(getSourceCodeTextOfNode).join(', ');
+          const sourceFullRange = getFullRangeOfNodes(specifiers);
+          const destinationString = sortedSpecifiers.map(getSourceCodeTextOfNode).join(', ');
+
+          context.report({
+            node,
+            message: 'Named export specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
             data: {
               source: sourceString,
               destination: destinationString,
