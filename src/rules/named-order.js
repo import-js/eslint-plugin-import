@@ -3,6 +3,26 @@
 import docsUrl from '../docsUrl';
 
 //
+// utils
+//
+
+const getOptions = (context) => {
+  const {
+    caseInsensitive = false,
+    order = 'asc',
+    commonjs = true,
+    esmodule = true,
+  } = context.options[0] || {};
+
+  return {
+    caseInsensitive,
+    order,
+    commonjs,
+    esmodule,
+  };
+};
+
+//
 // named-order rule
 // 
 
@@ -40,6 +60,7 @@ module.exports = {
     ],
   },
 
-  create: function namedOrderRule() {
+  create: function namedOrderRule(context) {
+    const options = getOptions(context);
   },
 };
