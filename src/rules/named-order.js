@@ -8,14 +8,12 @@ import docsUrl from '../docsUrl';
 
 function getOptions(context) {
   const {
-    caseInsensitive = false,
-    order = 'asc',
+    order = 'caseInsensitive',
     commonjs = true,
     esmodule = true,
   } = context.options[0] || {};
 
   return {
-    caseInsensitive,
     order,
     commonjs,
     esmodule,
@@ -45,17 +43,31 @@ function compareString(left, right) {
   return 0;
 }
 
-function makeDeepSorter(options, sortFieldKeyPath) {
-  const orderMultiplier = options.order === 'desc' ? -1 : 1;
+function getCaseFlippedStr(str) {
+  return Array.from(str)
+    .map(char => {
+      if (char >= 'a' && char <= 'z') {
+        return char.toUpperCase();
+      } else if (char >= 'A' && char <= 'Z') {
+        return char.toLowerCase();
+      }
+      return char;
+    })
+    .join('');
+}
 
+function makeDeepSorter(options, sortFieldKeyPath) {
   const sortFieldKeys = sortFieldKeyPath.split('.');
 
   function getNormalizedValue(rootValue) {
-    const value = sortFieldKeys.reduce((value, key) => value[key], rootValue);
+    const value = String(sortFieldKeys.reduce((value, key) => value[key], rootValue));
 
-    return options.caseInsensitive
-      ? String(value).toLowerCase()
-      : String(value);
+    switch (options.order) {
+    case 'caseInsensitive': return value.toLowerCase();
+    case 'lowercaseFirst': return getCaseFlippedStr(value);
+    case 'uppercaseFirst': return value;
+    default: return ''; // Invalid order option
+    }
   }
 
   return function sorter(left, right) {
@@ -63,8 +75,7 @@ function makeDeepSorter(options, sortFieldKeyPath) {
     const rightValue = getNormalizedValue(right);
 
     const order = compareString(leftValue, rightValue);
-  
-    return order * orderMultiplier;
+    return order;
   };
 }
 
@@ -84,13 +95,9 @@ module.exports = {
       {
         type: 'object',
         properties: {
-          caseInsensitive: {
-            type: 'boolean',
-            default: false,
-          },
           order: {
-            enum: ['asc', 'desc'],
-            default: 'asc',
+            enum: ['caseInsensitive', 'lowercaseFirst', 'uppercaseFirst'],
+            default: 'caseInsensitive',
           },
           commonjs: {
             type: 'boolean',
