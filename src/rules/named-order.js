@@ -6,7 +6,7 @@ import docsUrl from '../docsUrl';
 // utils
 //
 
-const getOptions = (context) => {
+function getOptions(context) {
   const {
     caseInsensitive = false,
     order = 'asc',
@@ -20,23 +20,23 @@ const getOptions = (context) => {
     commonjs,
     esmodule,
   };
-};
+}
 
-const isArrayShallowEquals = (left, right) => {
+function isArrayShallowEquals(left, right) {
   return left.length === right.length && left.every((leftValue, offset) => {
     const rightValue = right[offset];
     return leftValue === rightValue;
   });
-};
+}
 
-const getFullRangeOfNodes = (nodes) => {
+function getFullRangeOfNodes(nodes) {
   const ranges = nodes.map(node => node.range);
   const rangeFrom = Math.min(...ranges[0]);
   const rangeTo = Math.max(...ranges[1]);
   return [rangeFrom, rangeTo];
-};
+}
 
-const compareString = (left, right) => {
+function compareString(left, right) {
   if (left < right) {
     return -1;
   }
@@ -44,22 +44,22 @@ const compareString = (left, right) => {
     return 1;
   }
   return 0;
-};
+}
 
-const makeDeepSorter = (options, sortFieldKeyPath) => {
+function makeDeepSorter(options, sortFieldKeyPath) {
   const orderMultiplier = options.order === 'desc' ? -1 : 1;
 
   const sortFieldKeys = sortFieldKeyPath.split('.');
 
-  const getNormalizedValue = (rootValue) => {
+  function getNormalizedValue(rootValue) {
     const value = sortFieldKeys.reduce((value, key) => value[key], rootValue);
 
     return options.caseInsensitive
       ? String(value).toLowerCase()
       : String(value);
-  };
+  }
 
-  return (left, right) => {
+  return function sorter(left, right) {
     const leftValue = getNormalizedValue(left);
     const rightValue = getNormalizedValue(right);
 
@@ -67,7 +67,7 @@ const makeDeepSorter = (options, sortFieldKeyPath) => {
   
     return order * orderMultiplier;
   };
-};
+}
 
 //
 // named-order rule
@@ -111,10 +111,10 @@ module.exports = {
     const options = getOptions(context);
     const sourceCode = context.getSourceCode();
 
-    const getSourceCodeTextOfNode = (node) => {
+    function getSourceCodeTextOfNode(node) {
       const [from, to] = node.range;
       return sourceCode.text.substring(from, to);
-    };
+    }
 
     // sorters
     const namedImportSpecifierSorter = makeDeepSorter(options, 'imported.name');
@@ -122,7 +122,7 @@ module.exports = {
     const requireIdPropertySorter = makeDeepSorter(options, 'key.name');
 
     return {
-      ImportDeclaration: (node) => {
+      ImportDeclaration: function handleImports(node) {
         if (
           !options.esmodule
           || !node 
@@ -155,7 +155,7 @@ module.exports = {
           });
         }
       },
-      ExportNamedDeclaration: (node) => {
+      ExportNamedDeclaration: function handleExports(node) {
         if (
           !options.esmodule
           || !node
@@ -187,7 +187,7 @@ module.exports = {
           });
         }
       },
-      VariableDeclarator: (node) => {
+      VariableDeclarator: function handleRequires(node) {
         if (
           !options.commonjs
           || !node
