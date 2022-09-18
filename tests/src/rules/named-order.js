@@ -47,6 +47,34 @@ ruleTester.run('named-order', rule, {
       code: `import {A, a} from 'foo'`,
       options: [{ caseInsensitive: true }],
     }),
+    //
+    // named export
+    //
+    test({
+      code: `export {}`,
+    }),
+    test({
+      code: `
+        function a() {}
+        function b() {}
+        export {a, b}
+      `,
+    }),
+    test({
+      code: `
+        function foo() {}
+        function b() {}
+        export {foo as a, b}
+      `,
+    }),
+    test({
+      code: `
+        const A = ''
+        function a() {}
+        export {a, A}
+      `,
+      options: [{ caseInsensitive: true }],
+    }),
   ],
   invalid: [
     //
@@ -92,6 +120,48 @@ ruleTester.run('named-order', rule, {
       output: `import {b, a} from 'foo'`,
       errors: ['Named import specifiers of `{a, b}` should sort as `{b, a}`'],
       options: [{ order: 'desc' }],
+    }),
+    //
+    // named export
+    //
+    test({
+      code: `
+        function a() {}
+        function b() {}
+        export {b, a}
+      `,
+      output: `
+        function a() {}
+        function b() {}
+        export {a, b}
+      `,
+      errors: ['Named export specifiers of `{b, a}` should sort as `{a, b}`'],
+    }),
+    test({
+      code: `
+        function foo() {}
+        function b() {}
+        export {b, foo as a}
+      `,
+      output: `
+        function foo() {}
+        function b() {}
+        export {foo as a, b}
+      `,
+      errors: ['Named export specifiers of `{b, foo as a}` should sort as `{foo as a, b}`'],
+    }),
+    test({
+      code: `
+        const A = ''
+        function a() {}
+        export {a, A}
+      `,
+      output: `
+        const A = ''
+        function a() {}
+        export {A, a}
+      `,
+      errors: ['Named export specifiers of `{a, A}` should sort as `{A, a}`'],
     }),
   ],
 });
