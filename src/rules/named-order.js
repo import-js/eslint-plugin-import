@@ -30,9 +30,8 @@ function isArrayShallowEquals(left, right) {
 }
 
 function getFullRangeOfNodes(nodes) {
-  const ranges = nodes.map(node => node.range);
-  const rangeFrom = Math.min(...ranges[0]);
-  const rangeTo = Math.max(...ranges[1]);
+  const rangeFrom = Math.min(...nodes.map(node => node.range[0]));
+  const rangeTo = Math.max(...nodes.map(node => node.range[1]));
   return [rangeFrom, rangeTo];
 }
 
