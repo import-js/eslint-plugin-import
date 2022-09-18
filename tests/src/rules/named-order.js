@@ -40,12 +40,16 @@ ruleTester.run('named-order', rule, {
       parser: parsers.BABEL_OLD,
     }),
     test({
-      code: `import {b, a} from 'foo'`,
-      options: [{ order: 'desc' }],
+      code: `import {A, a, B} from 'foo'`,
+      options: [{ order: 'caseInsensitive' }],
     }),
     test({
-      code: `import {A, a} from 'foo'`,
-      options: [{ caseInsensitive: true }],
+      code: `import {a, A, B} from 'foo'`,
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `import {A, B, a} from 'foo'`,
+      options: [{ order: 'uppercaseFirst' }],
     }),
     //
     // named export
@@ -70,10 +74,29 @@ ruleTester.run('named-order', rule, {
     test({
       code: `
         const A = ''
+        const B = ''
         function a() {}
-        export {a, A}
+        export {A, a, B}
       `,
-      options: [{ caseInsensitive: true }],
+      options: [{ order: 'caseInsensitive' }],
+    }),
+    test({
+      code: `
+        const A = ''
+        const B = ''
+        function a() {}
+        export {a, A, B}
+      `,
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `
+        const A = ''
+        const B = ''
+        function a() {}
+        export {A, B, a}
+      `,
+      options: [{ order: 'uppercaseFirst' }],
     }),
     //
     // require
@@ -88,8 +111,16 @@ ruleTester.run('named-order', rule, {
       code: `const {a, b} = require('foo')`,
     }),
     test({
-      code: `const {a, A} = require('foo')`,
-      options: [{ caseInsensitive: true }],
+      code: `const {A, a, B} = require('foo')`,
+      options: [{ order: 'caseInsensitive' }],
+    }),
+    test({
+      code: `const {a, A, B} = require('foo')`,
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `const {A, B, a} = require('foo')`,
+      options: [{ order: 'uppercaseFirst' }],
     }),
   ],
   invalid: [
@@ -132,10 +163,22 @@ ruleTester.run('named-order', rule, {
       parser: parsers.BABEL_OLD,
     }),
     test({
-      code: `import {a, b} from 'foo'`,
-      output: `import {b, a} from 'foo'`,
-      errors: ['Named import specifiers of `{a, b}` should sort as `{b, a}`'],
-      options: [{ order: 'desc' }],
+      code: `import {A, B, a} from 'foo'`,
+      output: `import {A, a, B} from 'foo'`,
+      errors: ['Named import specifiers of `{A, B, a}` should sort as `{A, a, B}`'],
+      options: [{ order: 'caseInsensitive' }],
+    }),
+    test({
+      code: `import {A, a, B} from 'foo'`,
+      output: `import {a, A, B} from 'foo'`,
+      errors: ['Named import specifiers of `{A, a, B}` should sort as `{a, A, B}`'],
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `import {A, a, B} from 'foo'`,
+      output: `import {A, B, a} from 'foo'`,
+      errors: ['Named import specifiers of `{A, a, B}` should sort as `{A, B, a}`'],
+      options: [{ order: 'uppercaseFirst' }],
     }),
     //
     // named export
@@ -168,16 +211,51 @@ ruleTester.run('named-order', rule, {
     }),
     test({
       code: `
-        const A = ''
+        const A = null
+        const B = null
         function a() {}
-        export {a, A}
+        export {A, B, a}
       `,
       output: `
-        const A = ''
+        const A = null
+        const B = null
         function a() {}
-        export {A, a}
+        export {A, a, B}
       `,
-      errors: ['Named export specifiers of `{a, A}` should sort as `{A, a}`'],
+      errors: ['Named export specifiers of `{A, B, a}` should sort as `{A, a, B}`'],
+      options: [{ order: 'caseInsensitive' }],
+    }),
+    test({
+      code: `
+        const A = null
+        const B = null
+        function a() {}
+        export {A, a, B}
+      `,
+      output: `
+        const A = null
+        const B = null
+        function a() {}
+        export {a, A, B}
+      `,
+      errors: ['Named export specifiers of `{A, a, B}` should sort as `{a, A, B}`'],
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `
+        const A = null
+        const B = null
+        function a() {}
+        export {A, a, B}
+      `,
+      output: `
+        const A = null
+        const B = null
+        function a() {}
+        export {A, B, a}
+      `,
+      errors: ['Named export specifiers of `{A, a, B}` should sort as `{A, B, a}`'],
+      options: [{ order: 'uppercaseFirst' }],
     }),
     //
     // require
@@ -188,9 +266,22 @@ ruleTester.run('named-order', rule, {
       errors: ['Require specifiers of `{b, a}` should sort as `{a, b}`'],
     }),
     test({
-      code: `const {a, A} = require('foo')`,
-      output: `const {A, a} = require('foo')`,
-      errors: ['Require specifiers of `{a, A}` should sort as `{A, a}`'],
+      code: `const {A, B, a} = require('foo')`,
+      output: `const {A, a, B} = require('foo')`,
+      errors: ['Require specifiers of `{A, B, a}` should sort as `{A, a, B}`'],
+      options: [{ order: 'caseInsensitive' }],
+    }),
+    test({
+      code: `const {A, a, B} = require('foo')`,
+      output: `const {a, A, B} = require('foo')`,
+      errors: ['Require specifiers of `{A, a, B}` should sort as `{a, A, B}`'],
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `const {A, a, B} = require('foo')`,
+      output: `const {A, B, a} = require('foo')`,
+      errors: ['Require specifiers of `{A, a, B}` should sort as `{A, B, a}`'],
+      options: [{ order: 'uppercaseFirst' }],
     }),
   ],
 });
