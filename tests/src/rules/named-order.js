@@ -75,6 +75,22 @@ ruleTester.run('named-order', rule, {
       `,
       options: [{ caseInsensitive: true }],
     }),
+    //
+    // require
+    //
+    test({
+      code: `const foo = require('foo')`,
+    }),
+    test({
+      code: `const {} = require('foo')`,
+    }),
+    test({
+      code: `const {a, b} = require('foo')`,
+    }),
+    test({
+      code: `const {a, A} = require('foo')`,
+      options: [{ caseInsensitive: true }],
+    }),
   ],
   invalid: [
     //
@@ -162,6 +178,19 @@ ruleTester.run('named-order', rule, {
         export {A, a}
       `,
       errors: ['Named export specifiers of `{a, A}` should sort as `{A, a}`'],
+    }),
+    //
+    // require
+    //
+    test({
+      code: `const {b, a} = require('foo')`,
+      output: `const {a, b} = require('foo')`,
+      errors: ['Require specifiers of `{b, a}` should sort as `{a, b}`'],
+    }),
+    test({
+      code: `const {a, A} = require('foo')`,
+      output: `const {A, a} = require('foo')`,
+      errors: ['Require specifiers of `{a, A}` should sort as `{A, a}`'],
     }),
   ],
 });
