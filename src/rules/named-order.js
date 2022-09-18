@@ -119,6 +119,7 @@ module.exports = {
     // sorters
     const namedImportSpecifierSorter = makeDeepSorter(options, 'imported.name');
     const namedExportSpecifierSorter = makeDeepSorter(options, 'exported.name');
+    const requireIdPropertySorter = makeDeepSorter(options, 'key.name');
 
     return {
       ImportDeclaration: (node) => {
@@ -176,6 +177,49 @@ module.exports = {
           context.report({
             node,
             message: 'Named export specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
+            data: {
+              source: sourceString,
+              destination: destinationString,
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange(sourceFullRange, destinationString);
+            },
+          });
+        }
+      },
+      VariableDeclarator: (node) => {
+        if (
+          !options.commonjs
+          || !node
+          // check root node
+          || node.type !== 'VariableDeclarator'
+          // check it has valid properties
+          || !node.id
+          || node.id.type !== 'ObjectPattern'
+          || node.id.properties.length === 0
+          // check it is valid require()
+          || !node.init
+          || node.init.type !== 'CallExpression'
+          || node.init.callee.type !== 'Identifier'
+          || node.init.callee.name !== 'require'
+          || node.init.arguments.length !== 1 
+          || node.init.arguments[0].type !== 'Literal'
+        ) {
+          return;
+        }
+
+        const { properties } = node.id;
+
+        const sortedProperties = [...properties].sort(requireIdPropertySorter);
+
+        if (!isArrayShallowEquals(properties, sortedProperties)) {
+          const sourceString = properties.map(getSourceCodeTextOfNode).join(', ');
+          const sourceFullRange = getFullRangeOfNodes(properties);
+          const destinationString = sortedProperties.map(getSourceCodeTextOfNode).join(', ');
+
+          context.report({
+            node,
+            message: 'Require specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
             data: {
               source: sourceString,
               destination: destinationString,
