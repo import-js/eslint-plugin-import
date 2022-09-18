@@ -144,11 +144,7 @@ module.exports = {
 
           context.report({
             node,
-            message: 'Named import specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
-            data: {
-              source: sourceString,
-              destination: destinationString,
-            },
+            message: `Named import specifiers of \`${sourceString}\` should sort as \`${destinationString}\``,
             fix(fixer) {
               return fixer.replaceTextRange(sourceFullRange, destinationString);
             },
@@ -176,11 +172,7 @@ module.exports = {
 
           context.report({
             node,
-            message: 'Named export specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
-            data: {
-              source: sourceString,
-              destination: destinationString,
-            },
+            message: `Named export specifiers of \`${sourceString}\` should sort as \`${destinationString}\``,
             fix(fixer) {
               return fixer.replaceTextRange(sourceFullRange, destinationString);
             },
@@ -219,11 +211,7 @@ module.exports = {
 
           context.report({
             node,
-            message: 'Require specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
-            data: {
-              source: sourceString,
-              destination: destinationString,
-            },
+            message: `Require specifiers of \`${sourceString}\` should sort as \`${destinationString}\``,
             fix(fixer) {
               return fixer.replaceTextRange(sourceFullRange, destinationString);
             },
