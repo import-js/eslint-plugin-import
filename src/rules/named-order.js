@@ -22,6 +22,53 @@ const getOptions = (context) => {
   };
 };
 
+const isArrayShallowEquals = (left, right) => {
+  return left.length === right.length && left.every((leftValue, offset) => {
+    const rightValue = right[offset];
+    return leftValue === rightValue;
+  });
+};
+
+const getFullRangeOfNodes = (nodes) => {
+  const ranges = nodes.map(node => node.range);
+  const rangeFrom = Math.min(...ranges[0]);
+  const rangeTo = Math.max(...ranges[1]);
+  return [rangeFrom, rangeTo];
+};
+
+const compareString = (left, right) => {
+  if (left < right) {
+    return -1;
+  }
+  if (left > right) {
+    return 1;
+  }
+  return 0;
+};
+
+const makeDeepSorter = (options, sortFieldKeyPath) => {
+  const orderMultiplier = options.order === 'desc' ? -1 : 1;
+
+  const sortFieldKeys = sortFieldKeyPath.split('.');
+
+  const getNormalizedValue = (rootValue) => {
+    const value = sortFieldKeys.reduce((value, key) => value[key], rootValue);
+
+    return options.caseInsensitive
+      ? String(value).toLowerCase()
+      : String(value);
+  };
+
+  return (left, right) => {
+    const leftValue = getNormalizedValue(left);
+    const rightValue = getNormalizedValue(right);
+
+    const order = compareString(leftValue, rightValue);
+  
+    return order * orderMultiplier;
+  };
+};
+
 //
 // named-order rule
 // 
@@ -62,5 +109,11 @@ module.exports = {
 
   create: function namedOrderRule(context) {
     const options = getOptions(context);
+    const sourceCode = context.getSourceCode();
+
+    const getSourceCodeTextOfNode = (node) => {
+      const [from, to] = node.range;
+      return sourceCode.text.substring(from, to);
+    };
   },
 };
