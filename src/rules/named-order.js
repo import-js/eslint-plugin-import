@@ -115,5 +115,44 @@ module.exports = {
       const [from, to] = node.range;
       return sourceCode.text.substring(from, to);
     };
+
+    // sorters
+    const namedImportSpecifierSorter = makeDeepSorter(options, 'imported.name');
+
+    return {
+      ImportDeclaration: (node) => {
+        if (
+          !options.esmodule
+          || !node 
+          || node.type !== 'ImportDeclaration'
+          || !node.specifiers 
+          || node.specifiers.length === 0
+        ) {
+          return;
+        }
+      
+        const { specifiers } = node;
+
+        const sortedSpecifiers = [...specifiers].sort(namedImportSpecifierSorter);
+
+        if (!isArrayShallowEquals(specifiers, sortedSpecifiers)) {
+          const sourceString = specifiers.map(getSourceCodeTextOfNode).join(', ');
+          const sourceFullRange = getFullRangeOfNodes(specifiers);
+          const destinationString = sortedSpecifiers.map(getSourceCodeTextOfNode).join(', ');
+
+          context.report({
+            node,
+            message: 'Named import specifiers of `{{{source}}}` should sort as `{{{destination}}}`',
+            data: {
+              source: sourceString,
+              destination: destinationString,
+            },
+            fix(fixer) {
+              return fixer.replaceTextRange(sourceFullRange, destinationString);
+            },
+          });
+        }
+      },
+    };
   },
 };
