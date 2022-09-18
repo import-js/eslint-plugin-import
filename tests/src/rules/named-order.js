@@ -48,12 +48,6 @@ ruleTester.run('named-order', rule, {
       options: [{ order: 'lowercaseFirst' }],
     }),
     test({
-      code: `import {A2, A1, a} from 'foo'`,
-      output: `import {a, A1, A2} from 'foo'`,
-      errors: ['Named import specifiers of `{A2, A1, a}` should sort as `{a, A1, A2}`'],
-      options: [{ order: 'lowercaseFirst' }],
-    }),
-    test({
       code: `import {A, B, a} from 'foo'`,
       options: [{ order: 'uppercaseFirst' }],
     }),
@@ -178,6 +172,12 @@ ruleTester.run('named-order', rule, {
       code: `import {A, a, B} from 'foo'`,
       output: `import {a, A, B} from 'foo'`,
       errors: ['Named import specifiers of `{A, a, B}` should sort as `{a, A, B}`'],
+      options: [{ order: 'lowercaseFirst' }],
+    }),
+    test({
+      code: `import {A2, A1, a} from 'foo'`,
+      output: `import {a, A1, A2} from 'foo'`,
+      errors: ['Named import specifiers of `{A2, A1, a}` should sort as `{a, A1, A2}`'],
       options: [{ order: 'lowercaseFirst' }],
     }),
     test({
