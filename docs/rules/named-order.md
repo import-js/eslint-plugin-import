@@ -47,21 +47,12 @@ This option enables reporting of errors if `import` / `export` specifiers are no
 #### `commonjs`
 This option enablee reporting of errors if `require` specifiers are not sorted. Its value is `true` by default.
 
-#### `caseInsensitive`
-There is a `caseInsensitive` option available to be case insensitive. Its value is `false` by default.
-
-Without `caseInsensitive` option:
-```js
-import { alpha, Alpha, ALPHA } from 'foo' // <- reported, should sort as { ALPHA, Alpha, alpha }
-```
-
-With `caseInsensitive` option:
-```js
-import { alpha, Alpha, ALPHA } from 'foo' // <- will not report
-```
-
 #### `order`
-There is a `order` option available to sort an order into either `asc` or `desc`. Its value is `asc` by default.
+There is a `order` option available to sort an order into either `caseInsensitive`  or `lowercaseFirst` or `lowercaseLast`.
+
+* `caseInsensitive` : Correct order is `['Bar', 'baz', 'Foo']`. (This is the default.)
+* `lowercaseFirst`: Correct order is `['baz', 'Bar', 'Foo']`.
+* `lowercaseLast`: Correct order is `['Bar', 'Foo', 'baz']`.
 
 ## When Not To Use It
 
