@@ -9,14 +9,10 @@ import docsUrl from '../docsUrl';
 function getOptions(context) {
   const {
     order = 'caseInsensitive',
-    commonjs = true,
-    esmodule = true,
   } = context.options[0] || {};
 
   return {
     order,
-    commonjs,
-    esmodule,
   };
 }
 
@@ -99,14 +95,6 @@ module.exports = {
             enum: ['caseInsensitive', 'lowercaseFirst', 'uppercaseFirst'],
             default: 'caseInsensitive',
           },
-          commonjs: {
-            type: 'boolean',
-            default: true,
-          },
-          esmodule: {
-            type: 'boolean',
-            default: true,
-          },
         },
         additionalProperties: false,
       },
@@ -130,8 +118,7 @@ module.exports = {
     return {
       ImportDeclaration: function handleImports(node) {
         if (
-          !options.esmodule
-          || !node 
+          !node 
           || node.type !== 'ImportDeclaration'
           || !node.specifiers 
           || node.specifiers.length === 0
@@ -159,8 +146,7 @@ module.exports = {
       },
       ExportNamedDeclaration: function handleExports(node) {
         if (
-          !options.esmodule
-          || !node
+          !node
           || node.type !== 'ExportNamedDeclaration'
           || !node.specifiers
           || node.specifiers.length === 0) {
@@ -187,8 +173,7 @@ module.exports = {
       },
       VariableDeclarator: function handleRequires(node) {
         if (
-          !options.commonjs
-          || !node
+          !node
           // check root node
           || node.type !== 'VariableDeclarator'
           // check it has valid properties
