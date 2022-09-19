@@ -36,7 +36,7 @@ const { Bravo, Alpha } = require('foo') // <- reported
 const Alpha = 'A'
 const Bravo = 'B'
 
-export { Alpha, Bravo } // <- reported
+export { Bravo, Alpha } // <- reported
 ```
 
 ### Options
