@@ -54,6 +54,12 @@ folder layouts:
 "import/no-extraneous-dependencies": ["error", {"packageDir": ['./some-dir/', './root-pkg']}]
 ```
 
+There is `ignoreImports` options, it can be used to ignore some files or directories.
+
+```js
+"import/no-extraneous-dependencies": ["error", {"ignoreImports": ['./some-root-dir/', '__mocks__']}]
+```
+
 ## Rule Details
 
 Given the following `package.json`:
