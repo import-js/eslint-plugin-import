@@ -254,7 +254,7 @@ function testConfig(config, filename) {
 
 function testIgnoreImports(config, filename) {
   if (!config) {
-    return true
+    return false
   }
   return config.some(c => (
     filename.includes(value.substr(0, 2) === './' ? value.replace('.', process.cwd()) : value)
