@@ -42,6 +42,7 @@ export const rules = {
   'no-useless-path-segments': require('./rules/no-useless-path-segments'),
   'dynamic-import-chunkname': require('./rules/dynamic-import-chunkname'),
   'no-import-module-exports': require('./rules/no-import-module-exports'),
+  'no-empty-named-blocks': require('./rules/no-empty-named-blocks'),
 
   // export
   'exports-last': require('./rules/exports-last'),

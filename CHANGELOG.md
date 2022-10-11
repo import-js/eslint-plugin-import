@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: Add `includeTypes` option ([#2543], thanks [@bdwain])
 - [`order`]: new `alphabetize.orderImportKind` option to sort imports with same path based on their kind (`type`, `typeof`) ([#2544], thanks [@stropho])
 - [`consistent-type-specifier-style`]: add rule ([#2473], thanks [@bradzacher])
+- Add [`no-empty-named-blocks`] rule ([#2568], thanks [@guilhermelimak])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -990,6 +991,7 @@ for info on changes for earlier releases.
 [`no-deprecated`]: ./docs/rules/no-deprecated.md
 [`no-duplicates`]: ./docs/rules/no-duplicates.md
 [`no-dynamic-require`]: ./docs/rules/no-dynamic-require.md
+[`no-empty-named-blocks`]: ./docs/rules/no-empty-named-blocks.md
 [`no-extraneous-dependencies`]: ./docs/rules/no-extraneous-dependencies.md
 [`no-import-module-exports`]: ./docs/rules/no-import-module-exports.md
 [`no-internal-modules`]: ./docs/rules/no-internal-modules.md
@@ -1016,6 +1018,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2570]: https://github.com/import-js/eslint-plugin-import/pull/2570
+[#2568]: https://github.com/import-js/eslint-plugin-import/pull/2568
 [#2546]: https://github.com/import-js/eslint-plugin-import/pull/2546
 [#2541]: https://github.com/import-js/eslint-plugin-import/pull/2541
 [#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
@@ -1603,13 +1606,14 @@ for info on changes for earlier releases.
 [@futpib]: https://github.com/futpib
 [@gajus]: https://github.com/gajus
 [@gausie]: https://github.com/gausie
-[@georeith]: https://github.com/georeith
 [@gavriguy]: https://github.com/gavriguy
+[@georeith]: https://github.com/georeith
 [@giodamelio]: https://github.com/giodamelio
 [@golopot]: https://github.com/golopot
 [@GoodForOneFare]: https://github.com/GoodForOneFare
 [@graingert]: https://github.com/graingert
 [@grit96]: https://github.com/grit96
+[@guilhermelimak]: https://github.com/guilhermelimak
 [@guillaumewuip]: https://github.com/guillaumewuip
 [@hayes]: https://github.com/hayes
 [@himynameisdave]: https://github.com/himynameisdave
