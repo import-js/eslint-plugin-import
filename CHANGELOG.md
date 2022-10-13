@@ -41,6 +41,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] [`no-cycle`]: add passing test cases ([#2438], thanks [@georeith])
 - [Refactor] [`no-extraneous-dependencies`] improve performance using cache ([#2374], thanks [@meowtec])
 - [meta] `CONTRIBUTING.md`: mention inactive PRs ([#2546], thanks [@stropho])
+- [readme] make json for setting groups multiline ([#2570], thanks [@bertyhell])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1014,6 +1015,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2570]: https://github.com/import-js/eslint-plugin-import/pull/2570
 [#2546]: https://github.com/import-js/eslint-plugin-import/pull/2546
 [#2541]: https://github.com/import-js/eslint-plugin-import/pull/2541
 [#2531]: https://github.com/import-js/eslint-plugin-import/pull/2531
@@ -1555,6 +1557,7 @@ for info on changes for earlier releases.
 [@benmosher]: https://github.com/benmosher
 [@benmunro]: https://github.com/benmunro
 [@BenoitZugmeyer]: https://github.com/BenoitZugmeyer
+[@bertyhell]: https://github.com/bertyhell
 [@bicstone]: https://github.com/bicstone
 [@Blasz]: https://github.com/Blasz
 [@bmish]: https://github.com/bmish

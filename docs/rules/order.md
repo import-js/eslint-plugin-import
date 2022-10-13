@@ -99,7 +99,21 @@ The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 You can set the options like this:
 
 ```ts
-"import/order": ["error", {"groups": ["index", "sibling", "parent", "internal", "external", "builtin", "object", "type"]}]
+"import/order": [
+  "error",
+  {
+    "groups": [
+      "index",
+      "sibling",
+      "parent",
+      "internal",
+      "external",
+      "builtin",
+      "object",
+      "type"
+    ]
+  }
+]
 ```
 
 ### `pathGroups: [array of objects]`:
