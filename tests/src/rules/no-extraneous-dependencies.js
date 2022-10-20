@@ -116,6 +116,30 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import rightpad from "right-pad";',
       options: [{ packageDir: [packageDirMonoRepoRoot, packageDirMonoRepoWithNested] }],
     }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod', 'dev'] }],
+    }),
+    test({
+      code: 'import rightpad from "right-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod', 'dev'] }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['dev'] }],
+    }),
+    test({
+      code: 'import lodash from "lodash";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['peer'] }],
+    }),
+    test({
+      code: 'import chalk from "chalk";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['optional'] }],
+    }),
+    test({
+      code: 'import commander from "commander";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['bundled'] }],
+    }),
     test({ code: 'import foo from "@generated/foo"' }),
     test({
       code: 'import foo from "@generated/foo"',
@@ -317,6 +341,48 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       options: [{ packageDir: packageDirMonoRepoWithNested }],
       errors: [{
         message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
+      }],
+    }),
+    test({
+      code: 'import rightpad from "right-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: [] }],
+      errors: [{
+        message: "'right-pad' should be listed in the project's dependencies. Run 'npm i -S right-pad' to add it",
+      }],
+    }),
+    test({
+      code: 'import rightpad from "right-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['dev'] }],
+      errors: [{
+        message: "'right-pad' should be listed in the project's dependencies. Run 'npm i -S right-pad' to add it",
+      }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod'] }],
+      errors: [{
+        message: "'left-pad' should be listed in the project's dependencies. Run 'npm i -S left-pad' to add it",
+      }],
+    }),
+    test({
+      code: 'import lodash from "lodash";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod'] }],
+      errors: [{
+        message: "'lodash' should be listed in the project's dependencies. Run 'npm i -S lodash' to add it",
+      }],
+    }),
+    test({
+      code: 'import chalk from "chalk";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod'] }],
+      errors: [{
+        message: "'chalk' should be listed in the project's dependencies. Run 'npm i -S chalk' to add it",
+      }],
+    }),
+    test({
+      code: 'import commander from "commander";',
+      options: [{ packageDir: packageDirMonoRepoWithNested, considerInParents: ['prod'] }],
+      errors: [{
+        message: "'commander' should be listed in the project's dependencies. Run 'npm i -S commander' to add it",
       }],
     }),
     test({
