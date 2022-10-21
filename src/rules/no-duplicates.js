@@ -79,8 +79,7 @@ function getFix(first, rest, sourceCode, context) {
 
       return {
         importNode: node,
-        text: sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]),
-        hasTrailingComma: isPunctuator(sourceCode.getTokenBefore(closeBrace), ','),
+        identifiers: sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]).split(','), // Split the text into separate identifiers (retaining any whitespace before or after)
         isEmpty: !hasSpecifiers(node),
       };
     })
@@ -111,9 +110,15 @@ function getFix(first, rest, sourceCode, context) {
       closeBrace != null &&
       isPunctuator(sourceCode.getTokenBefore(closeBrace), ',');
     const firstIsEmpty = !hasSpecifiers(first);
+    const firstExistingIdentifiers = firstIsEmpty
+      ? new Set()
+      : new Set(sourceCode.text.slice(openBrace.range[1], closeBrace.range[0])
+        .split(',')
+        .map((x) => x.trim()),
+      );
 
     const [specifiersText] = specifiers.reduce(
-      ([result, needsComma], specifier) => {
+      ([result, needsComma, existingIdentifiers], specifier) => {
         const isTypeSpecifier = specifier.importNode.importKind === 'type';
 
         const preferInline = context.options[0] && context.options[0]['prefer-inline'];
@@ -122,15 +127,25 @@ function getFix(first, rest, sourceCode, context) {
           throw new Error('Your version of TypeScript does not support inline type imports.');
         }
 
-        const insertText = `${preferInline && isTypeSpecifier ? 'type ' : ''}${specifier.text}`;
+        // Add *only* the new identifiers that don't already exist, and track any new identifiers so we don't add them again in the next loop
+        const [specifierText, updatedExistingIdentifiers] = specifier.identifiers.reduce(([text, set], cur) => {
+          const trimmed = cur.trim(); // Trim whitespace before/after to compare to our set of existing identifiers
+          const curWithType = trimmed.length > 0 && preferInline && isTypeSpecifier ? `type ${cur}` : cur;
+          if (existingIdentifiers.has(trimmed)) {
+            return [text, set];
+          }
+          return [text.length > 0 ? `${text},${curWithType}` : curWithType, set.add(trimmed)];
+        }, ['', existingIdentifiers]);
+
         return [
-          needsComma && !specifier.isEmpty
-            ? `${result},${insertText}`
-            : `${result}${insertText}`,
+          needsComma && !specifier.isEmpty && specifierText.length > 0
+            ? `${result},${specifierText}`
+            : `${result}${specifierText}`,
           specifier.isEmpty ? needsComma : true,
+          updatedExistingIdentifiers,
         ];
       },
-      ['', !firstHasTrailingComma && !firstIsEmpty],
+      ['', !firstHasTrailingComma && !firstIsEmpty, firstExistingIdentifiers],
     );
 
     const fixes = [];
