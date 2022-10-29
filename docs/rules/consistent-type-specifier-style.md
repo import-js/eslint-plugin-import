@@ -1,5 +1,9 @@
 # import/consistent-type-specifier-style
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 In both Flow and TypeScript you can mark an import as a type-only import by adding a "kind" marker to the import. Both languages support two positions for marker.
 
 **At the top-level** which marks all names in the import as type-only and applies to named, default, and namespace (for TypeScript) specifiers:

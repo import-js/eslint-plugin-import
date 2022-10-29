@@ -1,5 +1,9 @@
 # import/no-relative-packages
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 Use this rule to prevent importing packages through relative paths.
 
 It's useful in Yarn/Lerna workspaces, were it's possible to import a sibling

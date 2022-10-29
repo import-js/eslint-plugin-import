@@ -10,6 +10,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Module systems',
+      description: 'Forbid potentially ambiguous parse goal (`script` vs. `module`).',
       url: docsUrl('unambiguous'),
     },
     schema: [],

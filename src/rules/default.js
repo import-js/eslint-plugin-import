@@ -5,6 +5,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Ensure a default export is present, given a default import.',
       url: docsUrl('default'),
     },
     schema: [],

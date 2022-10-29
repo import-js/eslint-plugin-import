@@ -13,6 +13,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Module systems',
+      description: 'Forbid AMD `require` and `define` calls.',
       url: docsUrl('no-amd'),
     },
     schema: [],

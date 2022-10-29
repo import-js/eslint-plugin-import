@@ -40,7 +40,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Enforce or ban the use of inline type-only markers for named imports',
+      category: 'Style guide',
+      description: 'Enforce or ban the use of inline type-only markers for named imports.',
       url: docsUrl('consistent-type-specifier-style'),
     },
     fixable: 'code',

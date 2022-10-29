@@ -1,5 +1,7 @@
 # import/no-relative-parent-imports
 
+<!-- end auto-generated rule header -->
+
 Use this rule to prevent imports to folders in relative parent paths.
 
 This rule is useful for enforcing tree-like folder structures instead of complex graph-like folder structures. While this restriction might be a departure from Node's default resolution style, it can lead large, complex codebases to be easier to maintain. If you've ever had debates over "where to put files" this rule is for you.

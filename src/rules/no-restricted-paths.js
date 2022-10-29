@@ -16,6 +16,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Enforce which files can be imported in a given folder.',
       url: docsUrl('no-restricted-paths'),
     },
 

@@ -15,6 +15,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Forbid namespace (a.k.a. "wildcard" `*`) imports.',
       url: docsUrl('no-namespace'),
     },
     fixable: 'code',

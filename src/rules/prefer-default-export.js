@@ -6,6 +6,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Prefer a default export if module exports a single name.',
       url: docsUrl('prefer-default-export'),
     },
     schema: [],

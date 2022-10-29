@@ -245,6 +245,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Style guide',
+      description: 'Forbid repeated import of the same module in multiple places.',
       url: docsUrl('no-duplicates'),
     },
     fixable: 'code',

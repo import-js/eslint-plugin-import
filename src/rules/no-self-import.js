@@ -23,7 +23,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Forbid a module from importing itself',
+      category: 'Static analysis',
+      description: 'Forbid a module from importing itself.',
       recommended: true,
       url: docsUrl('no-self-import'),
     },

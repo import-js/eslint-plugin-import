@@ -1,5 +1,7 @@
 # import/prefer-default-export
 
+<!-- end auto-generated rule header -->
+
 When there is only a single export from a module, prefer using default export over named export.
 
 ## Rule Details

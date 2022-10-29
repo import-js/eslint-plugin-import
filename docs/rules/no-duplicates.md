@@ -1,5 +1,11 @@
 # import/no-duplicates
 
+⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, 🚸 `warnings`.
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 Reports if a resolved path is imported more than once.
 +(fixable) The `--fix` option on the [command line] automatically fixes some problems reported by this rule.
 

@@ -17,6 +17,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Enforce the maximum number of dependencies a module can have.',
       url: docsUrl('max-dependencies'),
     },
 

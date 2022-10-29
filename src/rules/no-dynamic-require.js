@@ -25,6 +25,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid `require()` calls with expressions.',
       url: docsUrl('no-dynamic-require'),
     },
     schema: [

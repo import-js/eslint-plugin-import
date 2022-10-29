@@ -1,5 +1,9 @@
 # import/namespace
 
+💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`.
+
+<!-- end auto-generated rule header -->
+
 Enforces names exist at the time they are dereferenced, when imported as a full namespace (i.e. `import * as foo from './foo'; foo.bar();` will report if `bar` is not exported by `./foo`.).
 
 Will report at the import declaration if there are _no_ exported names found.

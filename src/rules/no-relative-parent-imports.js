@@ -9,6 +9,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid importing modules from parent directories.',
       url: docsUrl('no-relative-parent-imports'),
     },
     schema: [makeOptionsSchema()],

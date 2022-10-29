@@ -12,6 +12,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Ensure imports point to a file/module that can be resolved.',
       url: docsUrl('no-unresolved'),
     },
 

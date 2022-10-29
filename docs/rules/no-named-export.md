@@ -1,4 +1,6 @@
-# `import/no-named-export`
+# import/no-named-export
+
+<!-- end auto-generated rule header -->
 
 Prohibit named exports. Mostly an inverse of [`no-default-export`].
 

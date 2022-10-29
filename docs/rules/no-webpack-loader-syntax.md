@@ -1,5 +1,7 @@
 # import/no-webpack-loader-syntax
 
+<!-- end auto-generated rule header -->
+
 Forbid Webpack loader syntax in imports.
 
 [Webpack](https://webpack.js.org) allows specifying the [loaders](https://webpack.js.org/concepts/loaders/) to use in the import source string using a special syntax like this:

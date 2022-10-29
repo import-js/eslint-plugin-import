@@ -45,6 +45,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [readme] make json for setting groups multiline ([#2570], thanks [@bertyhell])
 - [Tests] [`no-restricted-paths`]: Tests for `import type` statements ([#2459], thanks [@golergka])
 - [Tests] [`no-restricted-paths`]: fix one failing `import type` test case, submitted by [@golergka], thanks [@azyzz228]
+- [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
 
 ## [2.26.0] - 2022-04-05
 

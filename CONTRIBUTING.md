@@ -5,10 +5,12 @@ Thanks for your interest in helping out! Here are a **few** _weird_ tricks to ~~
 ## TL;DR: Checklist
 
 When opening an [issue](#issues):
+
 - [ ] search open/closed issues
 - [ ] discuss bug/enhancement in new or old issue
 
 [PR](#prs) time:
+
 - [ ] write tests
 - [ ] implement feature/fix bug
 - [ ] update docs
@@ -18,13 +20,13 @@ Remember, you don't need to do it all yourself; any of these are helpful! 😎
 
 ## Issues
 
-### Search open + closed issues for similar cases.
+### Search open + closed issues for similar cases
 
   You may find an open issue that closely matches what you are thinking. You may also find a closed issue with discussion that either solves your problem or explains why we are unlikely to solve it in the near future.
 
   If you find a matching issue that is open, and marked `accepted` and/or `help wanted`, you might want to [open a PR](#prs).
 
-### Open an issue.
+### Open an issue
 
   Let's discuss your issue. Could be as simple as unclear documentation or a wonky config file.
   If you're suggesting a feature, it might exist and need better documentation, or it might be in process. Even given those, some discussion might be warranted to ensure the enhancement is clear.
@@ -48,21 +50,19 @@ Here are some things to keep in mind when working on a PR:
 If a PR is open, but unfortunately the author is, for any reason, not available to apply code review fixes or rebase the source branch, then please **do not open a new PR**.
 Instead, paste a link to your own branch in the PR, and the maintainers can pull in your changes and update the existing PR in-place.
 
-#### Tests
+### Tests
 
 A PR that is just failing test cases for an existing issue is very helpful, as this can take as much time (if not more) as it takes to implement a new feature or fix a bug.
 
 If you only have enough time to write tests, fantastic! Submit away. This is a great jumping-off point for a core contributor or even another PR to continue what you've started.
 
-#### Docs
+### Docs
 
-For enhancements to rules, please update the docs in `docs/rules` matching the rule filename from `src/rules`.
-
-Also, take a quick look at the rule summary in [README.md] in case it could use tweaking, or add a line if you've implemented a new rule.
+For enhancements to rules, please update the docs in `docs/rules` matching the rule filename from `src/rules` or the rule description in `meta.docs.description`. Running `npm run update:eslint-docs` will update the [README.md] and rule doc header.
 
 Bugfixes may not warrant docs changes, though it's worth skimming the existing docs to see if there are any relevant caveats that need to be removed.
 
-#### Changelog
+### Changelog
 
 Please add a quick blurb to the [**Unreleased**](./CHANGELOG.md#unreleased) section of the change log. Give yourself some credit, and please link back to the PR for future reference. This is especially helpful for resolver changes, as the resolvers are less frequently modified and published.
 

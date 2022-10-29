@@ -57,6 +57,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid importing packages through relative paths.',
       url: docsUrl('no-relative-packages'),
     },
     fixable: 'code',

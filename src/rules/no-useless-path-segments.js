@@ -40,6 +40,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid unnecessary path segments in import and require statements.',
       url: docsUrl('no-useless-path-segments'),
     },
 

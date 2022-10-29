@@ -16,6 +16,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid imported names marked with `@deprecated` documentation tag.',
       url: docsUrl('no-deprecated'),
     },
     schema: [],

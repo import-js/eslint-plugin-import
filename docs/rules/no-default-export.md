@@ -1,4 +1,6 @@
-# `import/no-default-export`
+# import/no-default-export
+
+<!-- end auto-generated rule header -->
 
 Prohibit default exports. Mostly an inverse of [`prefer-default-export`].
 

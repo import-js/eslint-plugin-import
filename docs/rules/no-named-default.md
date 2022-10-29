@@ -1,5 +1,7 @@
 # import/no-named-default
 
+<!-- end auto-generated rule header -->
+
 Reports use of a default export as a locally named import.
 
 Rationale: the syntax exists to import default exports expressively, let's use it.

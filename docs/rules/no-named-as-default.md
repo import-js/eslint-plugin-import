@@ -1,5 +1,9 @@
 # import/no-named-as-default
 
+⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, 🚸 `warnings`.
+
+<!-- end auto-generated rule header -->
+
 Reports use of an exported name as the locally imported name of a default export.
 
 Rationale: using an exported name as the name of the default export is likely...

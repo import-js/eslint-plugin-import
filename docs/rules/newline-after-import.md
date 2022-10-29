@@ -1,5 +1,9 @@
 # import/newline-after-import
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 Enforces having one or more empty lines after the last top-level import statement or require call.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 

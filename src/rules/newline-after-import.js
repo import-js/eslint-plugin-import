@@ -56,6 +56,8 @@ module.exports = {
   meta: {
     type: 'layout',
     docs: {
+      category: 'Style guide',
+      description: 'Enforce a newline after import statements.',
       url: docsUrl('newline-after-import'),
     },
     fixable: 'whitespace',

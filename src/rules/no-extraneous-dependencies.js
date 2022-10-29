@@ -254,6 +254,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid the use of extraneous packages.',
       url: docsUrl('no-extraneous-dependencies'),
     },
 

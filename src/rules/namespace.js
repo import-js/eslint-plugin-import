@@ -45,6 +45,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Ensure imported namespaces contain dereferenced properties as they are dereferenced.',
       url: docsUrl('namespace'),
     },
 

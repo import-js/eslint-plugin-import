@@ -56,6 +56,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Forbid unassigned imports',
       url: docsUrl('no-unassigned-import'),
     },
     schema: [

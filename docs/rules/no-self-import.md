@@ -1,4 +1,6 @@
-# Forbid a module from importing itself (`import/no-self-import`)
+# import/no-self-import
+
+<!-- end auto-generated rule header -->
 
 Forbid a module from importing itself. This can sometimes happen during refactoring.
 

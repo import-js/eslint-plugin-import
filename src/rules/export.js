@@ -115,6 +115,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid any invalid exports, i.e. re-export of the same name.',
       url: docsUrl('export'),
     },
     schema: [],

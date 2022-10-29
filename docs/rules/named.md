@@ -1,5 +1,9 @@
 # import/named
 
+💼🚫 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`. This rule is _disabled_ in the ⌨️ `typescript` config.
+
+<!-- end auto-generated rule header -->
+
 Verifies that all named imports are part of the set of named exports in the referenced module.
 
 For `export`, verifies that all named exports exist in the referenced module.

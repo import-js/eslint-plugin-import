@@ -1,5 +1,7 @@
 # import/dynamic-import-chunkname
 
+<!-- end auto-generated rule header -->
+
 This rule reports any dynamic imports without a webpackChunkName specified in a leading block comment in the proper format.
 
 This rule enforces naming of webpack chunks in dynamic imports. When you don't explicitly name chunks, webpack will autogenerate chunk names that are not consistent across builds, which prevents long-term browser caching.

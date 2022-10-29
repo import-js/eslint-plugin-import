@@ -1,5 +1,9 @@
 # import/no-import-module-exports
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 Reports the use of import declarations with CommonJS exports in any module
 except for the [main module](https://docs.npmjs.com/files/package.json#main).
 

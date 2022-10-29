@@ -1,5 +1,7 @@
 # import/no-mutable-exports
 
+<!-- end auto-generated rule header -->
+
 Forbids the use of mutable exports with `var` or `let`.
 
 ## Rule Details

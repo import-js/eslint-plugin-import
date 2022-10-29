@@ -69,6 +69,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Module systems',
+      description: 'Forbid CommonJS `require` calls and `module.exports` or `exports.*`.',
       url: docsUrl('no-commonjs'),
     },
 

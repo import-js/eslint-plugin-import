@@ -19,6 +19,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid empty named import blocks.',
       url: docsUrl('no-empty-named-blocks'),
     },
     fixable: 'code',

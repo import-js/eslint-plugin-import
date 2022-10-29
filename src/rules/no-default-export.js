@@ -4,6 +4,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Forbid default exports.',
       url: docsUrl('no-default-export'),
     },
     schema: [],

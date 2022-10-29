@@ -1,4 +1,6 @@
-# import/extensions - Ensure consistent use of file extension within the import path
+# import/extensions
+
+<!-- end auto-generated rule header -->
 
 Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default. Depending on the resolver you can configure more extensions to get resolved automatically.
 
@@ -37,6 +39,7 @@ By providing both a string and an object, the string will set the default settin
 For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
 `ignorePackages` can be set as a separate boolean option like this:
+
 ```
 "import/extensions": [
   <severity>,
@@ -49,9 +52,9 @@ For example, `["error", "never", { "svg": "always" }]` would require that all ex
   }
 ]
 ```
+
 In that case, if you still want to specify extensions, you can do so inside the **pattern** property.
 Default value of `ignorePackages` is `false`.
-
 
 ### Exception
 

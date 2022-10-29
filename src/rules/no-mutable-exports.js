@@ -4,6 +4,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid the use of mutable exports with `var` or `let`.',
       url: docsUrl('no-mutable-exports'),
     },
     schema: [],

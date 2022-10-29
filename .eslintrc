@@ -71,6 +71,7 @@
         "eslint-plugin/no-deprecated-report-api": "off",
         "eslint-plugin/prefer-replace-text": "error",
         "eslint-plugin/report-message-format": "error",
+        "eslint-plugin/require-meta-docs-description": ["error", { "pattern": "^(Enforce|Ensure|Prefer|Forbid).+\\.$" }],
         "eslint-plugin/require-meta-schema": "error",
         "eslint-plugin/require-meta-type": "error",
 

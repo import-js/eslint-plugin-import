@@ -6,6 +6,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Ensure named imports correspond to a named export in the remote file.',
       url: docsUrl('named'),
     },
     schema: [

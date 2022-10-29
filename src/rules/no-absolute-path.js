@@ -6,6 +6,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid import of modules using absolute paths.',
       url: docsUrl('no-absolute-path'),
     },
     schema: [ makeOptionsSchema() ],

@@ -1,5 +1,7 @@
 # import/no-cycle
 
+<!-- end auto-generated rule header -->
+
 Ensures that there is no resolvable path back to this module via its dependencies.
 
 This includes cycles of depth 1 (imported module imports me) to `"∞"` (or `Infinity`), if the

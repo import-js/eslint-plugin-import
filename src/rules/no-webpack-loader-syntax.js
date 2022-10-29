@@ -13,6 +13,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Static analysis',
+      description: 'Forbid webpack loader syntax in imports.',
       url: docsUrl('no-webpack-loader-syntax'),
     },
     schema: [],

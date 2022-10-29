@@ -24,14 +24,16 @@
     "copy-metafiles": "node --require babel-register ./scripts/copyMetafiles",
     "watch": "npm run tests-only -- -- --watch",
     "pretest": "linklocal",
-    "posttest": "eslint .",
+    "posttest": "eslint . && npm run update:eslint-docs -- --check",
     "mocha": "cross-env BABEL_ENV=test nyc mocha",
     "tests-only": "npm run mocha tests/src",
     "test": "npm run tests-only",
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
     "prepublishOnly": "safe-publish-latest && npm run build",
-    "prepublish": "not-in-publish || npm run prepublishOnly"
+    "prepublish": "not-in-publish || npm run prepublishOnly",
+    "preupdate:eslint-docs": "npm run build",
+    "update:eslint-docs": "eslint-doc-generator --rule-doc-title-format prefix-name --rule-doc-section-options false --split-by meta.docs.category --ignore-config stage-0 --config-emoji recommended,☑️"
   },
   "repository": {
     "type": "git",
@@ -71,6 +73,7 @@
     "cross-env": "^4.0.0",
     "escope": "^3.6.0",
     "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8",
+    "eslint-doc-generator": "^0.19.0",
     "eslint-import-resolver-node": "file:./resolvers/node",
     "eslint-import-resolver-typescript": "^1.0.2 || ^1.1.1",
     "eslint-import-resolver-webpack": "file:./resolvers/webpack",

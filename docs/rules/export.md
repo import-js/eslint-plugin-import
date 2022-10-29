@@ -1,5 +1,9 @@
 # import/export
 
+💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`.
+
+<!-- end auto-generated rule header -->
+
 Reports funny business with exports, like repeated exports of names or defaults.
 
 ## Rule Details

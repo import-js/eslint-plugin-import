@@ -1,4 +1,8 @@
-# import/order: Enforce a convention in module import order
+# import/order
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
 
 Enforce a convention in the order of `require()` / `import` statements.
 +(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.

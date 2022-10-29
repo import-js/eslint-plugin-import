@@ -63,6 +63,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Ensure consistent use of file extension within the import path.',
       url: docsUrl('extensions'),
     },
 

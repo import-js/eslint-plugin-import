@@ -1,5 +1,7 @@
 # import/no-unused-modules
 
+<!-- end auto-generated rule header -->
+
 Reports:
   - modules without any exports
   - individual exports not being statically `import`ed or `require`ed from other modules in the same project

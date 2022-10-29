@@ -1,5 +1,7 @@
 # import/max-dependencies
 
+<!-- end auto-generated rule header -->
+
 Forbid modules to have too many dependencies (`import` or `require` statements).
 
 This is a useful rule because a module with too many dependencies is a code smell, and usually indicates the module is doing too much and/or should be broken up into smaller modules.

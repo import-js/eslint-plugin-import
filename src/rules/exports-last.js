@@ -10,6 +10,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Ensure all exports appear after other statements.',
       url: docsUrl('exports-last'),
     },
     schema: [],

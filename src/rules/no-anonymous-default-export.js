@@ -79,6 +79,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Forbid anonymous values as default exports.',
       url: docsUrl('no-anonymous-default-export'),
     },
 

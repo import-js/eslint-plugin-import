@@ -5,6 +5,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Enforce a leading comment with the webpackChunkName for dynamic imports.',
       url: docsUrl('dynamic-import-chunkname'),
     },
     schema: [{

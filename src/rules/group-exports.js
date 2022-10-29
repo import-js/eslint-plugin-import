@@ -5,6 +5,8 @@ import flat from 'array.prototype.flat';
 const meta = {
   type: 'suggestion',
   docs: {
+    category: 'Style guide',
+    description: 'Prefer named exports to be grouped together in a single export declaration',
     url: docsUrl('group-exports'),
   },
 };

@@ -1,5 +1,9 @@
 # import/no-named-as-default-member
 
+⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, 🚸 `warnings`.
+
+<!-- end auto-generated rule header -->
+
 Reports use of an exported name as a property on the default export.
 
 Rationale: Accessing a property that has a name that is shared by an exported

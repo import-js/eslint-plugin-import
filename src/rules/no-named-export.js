@@ -3,7 +3,11 @@ import docsUrl from '../docsUrl';
 module.exports = {
   meta: {
     type: 'suggestion',
-    docs: { url: docsUrl('no-named-export') },
+    docs: {
+      category: 'Style guide',
+      description: 'Forbid named exports.',
+      url: docsUrl('no-named-export'),
+    },
     schema: [],
   },
 

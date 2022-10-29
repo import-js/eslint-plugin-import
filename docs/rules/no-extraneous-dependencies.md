@@ -1,4 +1,6 @@
-# import/no-extraneous-dependencies: Forbid the use of extraneous packages
+# import/no-extraneous-dependencies
+
+<!-- end auto-generated rule header -->
 
 Forbid the import of external modules that are not declared in the `package.json`'s `dependencies`, `devDependencies`, `optionalDependencies`, `peerDependencies`, or `bundledDependencies`.
 The closest parent `package.json` will be used. If no `package.json` is found, the rule will not lint anything. This behavior can be changed with the rule option `packageDir`. Normally ignores imports of modules marked internal, but this can be changed with the rule option `includeInternal`. Type imports can be verified by specifying `includeTypes`.

@@ -1,5 +1,9 @@
 # import/no-useless-path-segments
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
+
 Use this rule to prevent unnecessary path segments in import and require statements.
 
 ## Rule Details

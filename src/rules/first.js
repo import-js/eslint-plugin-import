@@ -10,6 +10,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Style guide',
+      description: 'Ensure all imports appear before other statements.',
       url: docsUrl('first'),
     },
     fixable: 'code',

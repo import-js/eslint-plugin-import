@@ -23,8 +23,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      description: 'Disallow import statements with module.exports',
-      category: 'Best Practices',
+      category: 'Module systems',
+      description: 'Forbid import statements with CommonJS module.exports.',
       recommended: true,
     },
     fixable: 'code',

@@ -16,6 +16,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid use of exported name as property of default export.',
       url: docsUrl('no-named-as-default-member'),
     },
     schema: [],

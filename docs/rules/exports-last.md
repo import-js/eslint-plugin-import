@@ -1,5 +1,7 @@
 # import/exports-last
 
+<!-- end auto-generated rule header -->
+
 This rule enforces that all exports are declared at the bottom of the file. This rule will report any export declarations that comes before any non-export statements.
 
 

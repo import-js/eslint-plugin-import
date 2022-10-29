@@ -12,6 +12,8 @@ module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
+      category: 'Module systems',
+      description: 'Forbid Node.js builtin modules.',
       url: docsUrl('no-nodejs-modules'),
     },
     schema: [

@@ -6,6 +6,8 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
+      category: 'Helpful warnings',
+      description: 'Forbid use of exported name as identifier of default export.',
       url: docsUrl('no-named-as-default'),
     },
     schema: [],

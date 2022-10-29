@@ -1,5 +1,7 @@
 # import/group-exports
 
+<!-- end auto-generated rule header -->
+
 Reports when named exports are not grouped together in a single `export` declaration or when multiple assignments to CommonJS `module.exports` or `exports` object are present in a single file.
 
 **Rationale:** An `export` declaration or `module.exports` assignment can appear anywhere in the code. By requiring a single export declaration all your exports will remain at one place, making it easier to see what exports a module provides.

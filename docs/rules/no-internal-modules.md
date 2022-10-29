@@ -1,5 +1,7 @@
 # import/no-internal-modules
 
+<!-- end auto-generated rule header -->
+
 Use this rule to prevent importing the submodules of other modules.
 
 ## Rule Details
