@@ -1,6 +1,7 @@
 import declaredScope from 'eslint-module-utils/declaredScope';
 import Exports from '../ExportMap';
 import docsUrl from '../docsUrl';
+import namespaceValidator from '../core/namespaceValidator';
 
 function message(deprecation) {
   return 'Deprecated' + (deprecation.description ? ': ' + deprecation.description : '.');
@@ -111,30 +112,27 @@ module.exports = {
 
         if (declaredScope(context, dereference.object.name) !== 'module') return;
 
-        // go deep
-        let namespace = namespaces.get(dereference.object.name);
-        const namepath = [dereference.object.name];
-        // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports &&
-               dereference.type === 'MemberExpression') {
+        function onDeprecation(context){
+          return function inner(node, exported) {
+            const deprecation = getDeprecation(exported);
 
-          // ignore computed parts for now
-          if (dereference.computed) return;
-
-          const metadata = namespace.get(dereference.property.name);
-
-          if (!metadata) break;
-          const deprecation = getDeprecation(metadata);
-
-          if (deprecation) {
-            context.report({ node: dereference.property, message: message(deprecation) });
-          }
-
-          // stash and pop
-          namepath.push(dereference.property.name);
-          namespace = metadata.namespace;
-          dereference = dereference.parent;
+            if (deprecation) {
+              context.report({ node: node.property, message: message(deprecation) });
+            }
+          };
         }
+
+        function onComputed() {
+          // ignore computed parts for now
+          return arguments[2];
+        }
+
+        namespaceValidator(
+          dereference,
+          namespaces,
+          onComputed,
+          { onDeprecation: onDeprecation(context) },
+        );
       },
     };
   },
