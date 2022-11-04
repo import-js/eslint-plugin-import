@@ -133,7 +133,7 @@ rules:
 
 # TypeScript
 
-You may use the following shortcut or assemble your own config using the granular settings described below.
+You may use the following snippet or assemble your own config using the granular settings described below it.
 
 Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-resolver-typescript`] which are used in the following configuration.
 

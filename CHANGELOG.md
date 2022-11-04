@@ -46,6 +46,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] [`no-restricted-paths`]: Tests for `import type` statements ([#2459], thanks [@golergka])
 - [Tests] [`no-restricted-paths`]: fix one failing `import type` test case, submitted by [@golergka], thanks [@azyzz228]
 - [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
+- [readme] Increase clarity around typescript configuration ([#2588], thanks [@Nfinished])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1020,6 +1021,8 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2588]: https://github.com/import-js/eslint-plugin-import/pull/2588
+[#2582]: https://github.com/import-js/eslint-plugin-import/pull/2582
 [#2570]: https://github.com/import-js/eslint-plugin-import/pull/2570
 [#2568]: https://github.com/import-js/eslint-plugin-import/pull/2568
 [#2546]: https://github.com/import-js/eslint-plugin-import/pull/2546
@@ -1051,9 +1054,9 @@ for info on changes for earlier releases.
 [#2374]: https://github.com/import-js/eslint-plugin-import/pull/2374
 [#2371]: https://github.com/import-js/eslint-plugin-import/pull/2371
 [#2367]: https://github.com/import-js/eslint-plugin-import/pull/2367
-[#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
 [#2358]: https://github.com/import-js/eslint-plugin-import/pull/2358
 [#2341]: https://github.com/import-js/eslint-plugin-import/pull/2341
+[#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2330]: https://github.com/import-js/eslint-plugin-import/pull/2330
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
@@ -1695,6 +1698,7 @@ for info on changes for earlier releases.
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab
 [@mx-bernhard]: https://github.com/mx-bernhard
+[@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
 [@noelebrun]: https://github.com/noelebrun
