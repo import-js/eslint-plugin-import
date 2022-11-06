@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
 - [`export`]: do not error on TS export overloads ([#1590], thanks [@ljharb])
 - [`no-unresolved`], [`extensions`]: ignore type only exports ([#2436], thanks [@Lukas-Kullmann])
+- [Fix] `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1021,6 +1022,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2589]: https://github.com/import-js/eslint-plugin-import/pull/2589
 [#2588]: https://github.com/import-js/eslint-plugin-import/pull/2588
 [#2582]: https://github.com/import-js/eslint-plugin-import/pull/2582
 [#2570]: https://github.com/import-js/eslint-plugin-import/pull/2570
@@ -1601,6 +1603,7 @@ for info on changes for earlier releases.
 [@ernestostifano]: https://github.com/ernestostifano
 [@ertrzyiks]: https://github.com/ertrzyiks
 [@fa93hws]: https://github.com/fa93hws
+[@Fdawgs]: https://github.com/Fdawgs
 [@fengkfengk]: https://github.com/fengkfengk
 [@fernandopasik]: https://github.com/fernandopasik
 [@feychenie]: https://github.com/feychenie

@@ -547,7 +547,7 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast);
 
-  function readTsConfig() {
+  function readTsConfig(context) {
     const tsConfigInfo = tsConfigLoader({
       cwd:
         (context.parserOptions && context.parserOptions.tsconfigRootDir) ||
