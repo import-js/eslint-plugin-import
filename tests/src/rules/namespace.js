@@ -29,6 +29,35 @@ const valid = [
       ecmaVersion: 2015,
     },
   }),
+  // import re-exported jsx files, where jsx file exports a string
+  test({
+    code: `
+      import * as foo from "./jsx/re-export.js";
+      console.log(foo.jsxFoo);
+    `,
+    settings: {
+      'import/extensions': ['.js', '.jsx'],
+    },
+  }),
+  // import re-exported jsx files, where jsx files export functions that return html tags
+  test({
+    code: `
+      import * as foo from "./jsx/bar/index.js";
+      console.log(foo.Baz1);
+      console.log(foo.Baz2);
+      console.log(foo.Qux1);
+      console.log(foo.Qux2);
+    `,
+    settings: {
+      'import/extensions': ['.js', '.jsx'],
+    },
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
+  }),
+
   test({ code: "import * as foo from './common';" }),
 
   // destructuring namespaces
