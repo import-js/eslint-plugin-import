@@ -75,7 +75,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports.      |    |       |    | 🔧 |    |    |
 | [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |    |       |    |    |    |    |
 | [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                          |    |       |    |    |    |    |
-| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |    |       |    |    |    |    |
+| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |    |       |    | 🔧 |    |    |
 | [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                         |    |       |    | 🔧 |    |    |
 | [group-exports](docs/rules/group-exports.md)                                     | Prefer named exports to be grouped together in a single export declaration |    |       |    |    |    |    |
 | [imports-first](docs/rules/imports-first.md)                                     | Replaced by `import/first`.                                                |    |       |    | 🔧 |    | ❌  |

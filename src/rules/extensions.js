@@ -67,7 +67,7 @@ module.exports = {
       description: 'Ensure consistent use of file extension within the import path.',
       url: docsUrl('extensions'),
     },
-
+    fixable: 'code',
     schema: {
       anyOf: [
         {
@@ -175,6 +175,12 @@ module.exports = {
             node: source,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPathWithQueryString}"`,
+            fix: extension && (fixer => {
+              const [start, end] = source.range;
+              return [
+                fixer.replaceTextRange([start + 1, end - 1], `${source.value}.${extension}`),
+              ];
+            }),
           });
         }
       } else if (extension) {
@@ -182,6 +188,15 @@ module.exports = {
           context.report({
             node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPathWithQueryString}"`,
+            fix: (fixer) => {
+              const [start, end] = source.range;
+              const extensionIndex = source.value.lastIndexOf(`.${extension}`);
+              const specifierBeforeExt = source.value.slice(0, extensionIndex);
+              const specifierAfterExt = source.value.slice(extensionIndex + extension.length + 1);
+              return [
+                fixer.replaceTextRange([start + 1, end - 1], `${specifierBeforeExt}${specifierAfterExt}`),
+              ];
+            },
           });
         }
       }
