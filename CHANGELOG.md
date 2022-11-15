@@ -28,7 +28,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: prevent false report on a valid webpack magic comment ([#2330], thanks [@mhmadhamster])
 - [`export`]: do not error on TS export overloads ([#1590], thanks [@ljharb])
 - [`no-unresolved`], [`extensions`]: ignore type only exports ([#2436], thanks [@Lukas-Kullmann])
-- [Fix] `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
+- `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
+- [`no-unused-modules`]: `checkPkgFieldObject` filters boolean fields from checks ([#2598], thanks [@mpint])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1022,6 +1023,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2598]: https://github.com/import-js/eslint-plugin-import/pull/2598
 [#2589]: https://github.com/import-js/eslint-plugin-import/pull/2589
 [#2588]: https://github.com/import-js/eslint-plugin-import/pull/2588
 [#2582]: https://github.com/import-js/eslint-plugin-import/pull/2582
@@ -1697,6 +1699,7 @@ for info on changes for earlier releases.
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
 [@MikeyBeLike]: https://github.com/MikeyBeLike
+[@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab

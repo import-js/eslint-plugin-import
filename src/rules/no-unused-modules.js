@@ -364,7 +364,10 @@ const fileIsInPkg = file => {
   };
 
   const checkPkgFieldObject = pkgField => {
-    const pkgFieldFiles = values(pkgField).map(value => join(basePath, value));
+    const pkgFieldFiles = values(pkgField)
+      .filter((value) => typeof value !== 'boolean')
+      .map(value => join(basePath, value));
+
     if (includes(pkgFieldFiles, file)) {
       return true;
     }
