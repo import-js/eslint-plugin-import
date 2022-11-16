@@ -25,6 +25,7 @@ matrix:
   fast_finish: true
 
 before_install:
+  - 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash && . $NVM_DIR/nvm.sh'
   - 'nvm install-latest-npm'
   - 'NPM_CONFIG_LEGACY_PEER_DEPS=true npm install'
   - 'npm run copy-metafiles'
