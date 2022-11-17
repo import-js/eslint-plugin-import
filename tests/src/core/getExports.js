@@ -367,7 +367,7 @@ describe('ExportMap', function () {
 
         let imports;
         before('load imports', function () {
-          this.timeout(20000);  // takes a long time :shrug:
+          this.timeout(20e3);  // takes a long time :shrug:
           sinon.spy(tsConfigLoader, 'tsConfigLoader');
           imports = ExportMap.get('./typescript.ts', context);
         });
@@ -436,13 +436,13 @@ describe('ExportMap', function () {
         it('should cache after parsing for an ambiguous module', function () {
           const source = './typescript-declare-module.ts';
           const parseSpy = sinon.spy(ExportMap, 'parse');
-      
+
           expect(ExportMap.get(source, context)).to.be.null;
-      
+
           ExportMap.get(source, context);
-      
+
           expect(parseSpy.callCount).to.equal(1);
-      
+
           parseSpy.restore();
         });
       });

@@ -401,7 +401,7 @@ describe('resolve', function () {
 
         // special behavior for infinity
         describe('infinite cache', function () {
-          this.timeout(1500);
+          this.timeout(1.5e3);
 
           before((done) => setTimeout(done, 1100));
 
@@ -414,7 +414,7 @@ describe('resolve', function () {
         });
 
         describe('finite cache', function () {
-          this.timeout(1200);
+          this.timeout(1.2e3);
           before((done) => setTimeout(done, 1000));
           it('gets correct values after cache lifetime', function () {
             expect(resolve(original, context)).not.to.exist;

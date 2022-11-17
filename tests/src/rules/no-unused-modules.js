@@ -243,13 +243,15 @@ ruleTester.run('no-unused-modules', rule, {
 });
 
 
-describe('dynamic imports', () => {
+describe('dynamic imports', function () {
   if (semver.satisfies(eslintPkg.version, '< 6')) {
     beforeEach(function () {
       this.skip();
     });
     return;
   }
+
+  this.timeout(10e3);
 
   // test for unused exports with `import()`
   ruleTester.run('no-unused-modules', rule, {
