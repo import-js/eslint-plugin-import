@@ -89,7 +89,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | [no-namespace](docs/rules/no-namespace.md)                                       | Forbid namespace (a.k.a. "wildcard" `*`) imports.                          |    |       |    | 🔧 |    |    |
 | [no-unassigned-import](docs/rules/no-unassigned-import.md)                       | Forbid unassigned imports                                                  |    |       |    |    |    |    |
 | [order](docs/rules/order.md)                                                     | Enforce a convention in module import order.                               |    |       |    | 🔧 |    |    |
-| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name.                   |    |       |    |    |    |    |
+| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name or multiple names. |    |       |    |    |    |    |
 
 <!-- end auto-generated rules list -->
 

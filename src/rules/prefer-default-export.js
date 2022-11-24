@@ -2,15 +2,28 @@
 
 import docsUrl from '../docsUrl';
 
+const SINGLE_EXPORT_ERROR_MESSAGE = 'Prefer default export on a file with single export.';
+const ANY_EXPORT_ERROR_MESSAGE = 'Prefer default export to be present on every file that has export.';
+
 module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
       category: 'Style guide',
-      description: 'Prefer a default export if module exports a single name.',
+      description: 'Prefer a default export if module exports a single name or multiple names.',
       url: docsUrl('prefer-default-export'),
     },
-    schema: [],
+    schema: [{
+      type: 'object',
+      properties:{
+        target: {
+          type: 'string',
+          enum: ['single', 'any'],
+          default: 'single',
+        },
+      },
+      additionalProperties: false,
+    }],
   },
 
   create(context) {
@@ -19,7 +32,8 @@ module.exports = {
     let hasStarExport = false;
     let hasTypeExport = false;
     let namedExportNode = null;
-
+    // get options. by default we look into files with single export
+    const { target = 'single' } =  context.options[0] || {};
     function captureDeclaration(identifierOrPattern) {
       if (identifierOrPattern && identifierOrPattern.type === 'ObjectPattern') {
         // recursively capture
@@ -88,8 +102,13 @@ module.exports = {
       },
 
       'Program:exit': function () {
-        if (specifierExportCount === 1 && !hasDefaultExport && !hasStarExport && !hasTypeExport) {
-          context.report(namedExportNode, 'Prefer default export.');
+        if (hasDefaultExport || hasStarExport || hasTypeExport) {
+          return;
+        }
+        if (target === 'single' && specifierExportCount === 1) {
+          context.report(namedExportNode, SINGLE_EXPORT_ERROR_MESSAGE);
+        } else if (target === 'any' && specifierExportCount > 0) {
+          context.report(namedExportNode, ANY_EXPORT_ERROR_MESSAGE);
         }
       },
     };
