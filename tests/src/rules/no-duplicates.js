@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { test as testUtil, getNonDefaultParsers, parsers } from '../utils';
+import jsxConfig from '../../../config/react';
 
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
@@ -411,6 +412,44 @@ import {x,y} from './foo'
       code: "import { Foo } from './foo';\nimport Bar from './foo';\nexport const value = {}",
       output: "import Bar, { Foo } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: `
+        import {
+          DEFAULT_FILTER_KEYS,
+          BULK_DISABLED,
+        } from '../constants';
+        import React from 'react';
+        import {
+          BULK_ACTIONS_ENABLED
+        } from '../constants';
+        
+        const TestComponent = () => {
+          return <div>
+          </div>;
+        }
+        
+        export default TestComponent;
+      `,
+      output: `
+        import {
+          DEFAULT_FILTER_KEYS,
+          BULK_DISABLED,
+        
+          BULK_ACTIONS_ENABLED
+        } from '../constants';
+        import React from 'react';
+                
+        const TestComponent = () => {
+          return <div>
+          </div>;
+        }
+        
+        export default TestComponent;
+      `,
+      errors: ["'../constants' imported multiple times.", "'../constants' imported multiple times."],
+      ...jsxConfig,
     }),
   ],
 });
