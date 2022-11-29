@@ -49,6 +49,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] [`no-restricted-paths`]: fix one failing `import type` test case, submitted by [@golergka], thanks [@azyzz228]
 - [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
 - [readme] Increase clarity around typescript configuration ([#2588], thanks [@Nfinished])
+- [Docs] update `eslint-doc-generator` to v1.0.0 ([#2605], thanks [@bmish])
 
 ## [2.26.0] - 2022-04-05
 
@@ -1023,6 +1024,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
 [#2598]: https://github.com/import-js/eslint-plugin-import/pull/2598
 [#2589]: https://github.com/import-js/eslint-plugin-import/pull/2589
 [#2588]: https://github.com/import-js/eslint-plugin-import/pull/2588
