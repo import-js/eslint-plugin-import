@@ -68,16 +68,17 @@ If the resolver cannot resolve `source` relative to `file`, it should just retur
 Here is most of the [Node resolver] at the time of this writing. It is just a wrapper around substack/Browserify's synchronous [`resolve`]:
 
 ```js
-var resolve = require('resolve')
+var resolve = require('resolve');
+var isCoreModule = require('is-core-module');
 
 exports.resolve = function (source, file, config) {
-  if (resolve.isCore(source)) return { found: true, path: null }
+  if (isCoreModule(source)) return { found: true, path: null };
   try {
-    return { found: true, path: resolve.sync(source, opts(file, config)) }
+    return { found: true, path: resolve.sync(source, opts(file, config)) };
   } catch (err) {
-    return { found: false }
+    return { found: false };
   }
-}
+};
 ```
 
 [Node resolver]: ./node/index.js
