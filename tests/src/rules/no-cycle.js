@@ -111,6 +111,10 @@ ruleTester.run('no-cycle', rule, {
       code: 'import { bar } from "./flow-types-only-importing-multiple-types"',
       parser: parsers.BABEL_OLD,
     }),
+    test({
+      code: 'import { bar } from "./flow-typeof"',
+      parser: parsers.BABEL_OLD,
+    }),
   ),
 
   invalid: [].concat(

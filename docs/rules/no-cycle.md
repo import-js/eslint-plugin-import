@@ -22,6 +22,8 @@ import { b } from './dep-b.js' // reported: Dependency cycle detected.
 This rule does _not_ detect imports that resolve directly to the linted module;
 for that, see [`no-self-import`].
 
+This rule ignores type-only imports in Flow and TypeScript syntax (`import type` and `import typeof`), which have no runtime effect.
+
 
 ## Rule Details
 

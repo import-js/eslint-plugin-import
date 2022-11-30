@@ -502,8 +502,8 @@ ExportMap.parse = function (path, content, context) {
   }
 
   function captureDependencyWithSpecifiers(n) {
-    // import type { Foo } (TS and Flow)
-    const declarationIsType = n.importKind === 'type';
+    // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
+    const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
     // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
     // shouldn't be considered to be just importing types
     let specifiersOnlyImportingTypes = n.specifiers.length > 0;
@@ -515,8 +515,9 @@ ExportMap.parse = function (path, content, context) {
         importedSpecifiers.add(specifier.type);
       }
 
-      // import { type Foo } (Flow)
-      specifiersOnlyImportingTypes = specifiersOnlyImportingTypes && specifier.importKind === 'type';
+      // import { type Foo } (Flow); import { typeof Foo } (Flow)
+      specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
+        && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
     });
     captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
   }

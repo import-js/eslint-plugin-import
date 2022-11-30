@@ -31,6 +31,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`extensions`]: ignore type only exports ([#2436], thanks [@Lukas-Kullmann])
 - `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
 - [`no-unused-modules`]: `checkPkgFieldObject` filters boolean fields from checks ([#2598], thanks [@mpint])
+- [`no-cycle`]: accept Flow `typeof` imports, just like `type` ([#2608], thanks [@gnprice])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -1025,6 +1026,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
 [#2602]: https://github.com/import-js/eslint-plugin-import/pull/2602
 [#2598]: https://github.com/import-js/eslint-plugin-import/pull/2598
@@ -1626,6 +1628,7 @@ for info on changes for earlier releases.
 [@gavriguy]: https://github.com/gavriguy
 [@georeith]: https://github.com/georeith
 [@giodamelio]: https://github.com/giodamelio
+[@gnprice]: https://github.com/gnprice
 [@golergka]: https://github.com/golergka
 [@golopot]: https://github.com/golopot
 [@GoodForOneFare]: https://github.com/GoodForOneFare
