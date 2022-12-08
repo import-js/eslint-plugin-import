@@ -92,15 +92,15 @@ module.exports = {
           'type': 'array',
           'items': {
             'type': 'string',
-            'enum': ['none', 'separate', 'inline'],
+            'enum': ['separate', 'inline'],
           },
           'minItems': 1,
-          'maxItems': 3,
+          'maxItems': 2,
           'uniqueItems': true,
         },
         {
           'type': 'string',
-          'enum': ['none', 'separate', 'inline'],
+          'enum': ['separate', 'inline'],
         },
       ],
     }],
@@ -151,23 +151,6 @@ module.exports = {
         if (typeof(context.options[0]) === 'string' || config.length === 1) {
           // only one config
           
-          // we have none, but have word type
-          if (config === 'none' && node.importKind === 'type') {
-            log('inside of if');
-            context.report({
-              node,
-              message: 'BOOM',
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
-                // log('tokens -> need to find the one we need');
-                const token = sourceCode.getTokens(node)[1];
-                return fixer.replaceTextRange([token.range[0], token.range[1]+1], '');
-              },
-            });
-            // log('fixed node');
-            // console.log(node);: after fix, importKind for ImportDeclaration is still "type"
-
-          }
 
           // Question: maybe we do not need to check the condition below because typescript checks for us?
         } else if ((config === 'separate' || config[0] === 'separate') && node.importKind === 'type' && !supportsTypeImport) {
@@ -187,6 +170,10 @@ module.exports = {
 
         }
 
+        // Question TODO: iterate over all import specifiers and get a list of all inline type imports
+        // If option is separate, but we got none as input, how do we determine which named imports get to the new line?
+        // how to we deal when we have two fixers?
+
         // case where we want type modifier but we got separate import type
         if (supportsTypeModifier && prefer === 'modifier' && node.importKind === 'type') {
           context.report(node, 'BOOM');
@@ -201,19 +188,6 @@ module.exports = {
           // only one config
           
           // we have none, but have word type
-          if ((config === 'none' || config[0] === 'none') && node.importKind === 'type') {
-            context.report({
-              node,
-              message: 'BOOM',
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
-                const token = sourceCode.getTokens(node)[0];
-                // log('source code tokens');
-                // console.log(sourceCode.getTokens(node));
-                return fixer.replaceTextRange([token.range[0], token.range[1]+1], '');
-              },
-            });
-          }
 
           // wanted separate but got inline case. Question: How to make two fixes?
           if ((config === 'separate' || config[0] === 'separate') && node.importKind === 'type') {
@@ -235,11 +209,6 @@ module.exports = {
           }
 
         }
-
-        // we want separate import, but have type modifier
-        // if (supportsTypeImport && prefer === 'separate' && node.importKind === 'type') {
-        //   context.report(node, 'BOOM');
-        // }
 
         // if none => remove all type key words ?
 
