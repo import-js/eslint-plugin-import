@@ -35,3 +35,8 @@ export namespace MyNamespace {
 }
 
 interface NotExported {}
+type DefaultTypeExport = {
+  name: string,
+  age: number
+}
+export default DefaultTypeExport;
