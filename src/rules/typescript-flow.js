@@ -1,7 +1,6 @@
 'use strict';
 
 import docsUrl from '../docsUrl';
-import Exports from '../ExportMap';
 
 import debug from 'debug';
 const log = debug('eslint-plugin-import/typescript-flow');
@@ -12,52 +11,6 @@ import semver from 'semver';
 
 function tsVersionSatisfies(specifier) {
   return semver.satisfies(typescriptPkg.version, specifier);
-}
-// no need to have separate function, or doing it before the program start running => need to incorporate inside of the function
-function processBodyStatement(context, typeExports, node) {
-  if (node.type !== 'ImportDeclaration') return;
-  
-  if (node.specifiers.length === 0) return;
-  
-  const imports = Exports.get(node.source.value, context);
-  // log('imports');
-  // console.log(imports.namespace);
-  if (imports == null) return null;
-  
-  if (imports.errors.length > 0) {
-    imports.reportErrors(context, node);
-    return;
-  }
-
-  imports.namespace.forEach((value, key) =>{
-    if (value === 'type') {
-      typeExports.add(key);
-    }
-  });
-  
-  // node.specifiers.forEach((specifier) => {
-  //   switch (specifier.type) {
-  //   case 'ImportNamespaceSpecifier':
-  //     if (!imports.size) {
-  //       context.report(
-  //         specifier,
-  //         `No exported names found in module '${node.source.value}'.`,
-  //       );
-  //     }
-  //     namespaces.set(specifier.local.name, imports);
-  //     break;
-  //   case 'ImportDefaultSpecifier':
-  //   case 'ImportSpecifier': {
-  //     const meta = imports.get(
-  //       // default to 'default' for default https://i.imgur.com/nj6qAWy.jpg
-  //       specifier.imported ? (specifier.imported.name || specifier.imported.value) : 'default',
-  //     );
-  //     if (!meta || !meta.namespace) { break; }
-  //     namespaces.set(specifier.local.name, meta.namespace);
-  //     break;
-  //   }
-  //   }
-  // });
 }
 
 // It seems unfortunate to have a rule that is only useful for typescript, but perhaps a rule that detects your TS (or flow) version, 
@@ -102,11 +55,6 @@ module.exports = {
       ],
     }],
   },
-
-
-  
-  
-
   create(context) {
     // if TS is < 3.8 => we can just name import it. 
  
@@ -118,181 +66,109 @@ module.exports = {
     // import { type Person, Cache } from "./foo"; 
     // ImportDeclaration importKind = 'value', ImportSpecifier.importKind = 'type'
 
+    // 3 cases: strict cases: separate, inline. 3rd case is array of preference. The only thing to check is if arr[0] === inline => 
+    // check if it can be supported. If not, fall back on separate. 
+    // If arr[0] === separate => just do separate ? Then what is really a logic? Taking care of user worrying about TS version?
+
+    const supportInlineTypeImport = tsVersionSatisfies('>=4.5'); // type modifiers were introduced in TS 4.5. 
     // get Rule options.
-    const config = context.options[0];
-    
-    // check the config
-    const configSingle = typeof(context.options[0]) === 'string' ? true : false;
-
-    const prefer = 'separate';
-
-    // allow single value or array of values. When list of available values not possible => message: unfixable problem. When there is multiple problems, finds first value in the list and makes it happen.
-    const supportsTypeImport = tsVersionSatisfies('>=3.8'); // separate `import type { a } from 'x'` was introduced in TS 3.8
-    const supportsTypeModifier = tsVersionSatisfies('>=4.5'); // type modifiers were introduced in TS 4.5. 
-    // TODO: check the array on TS version to leave possible options 
-    // If ! supportsTypeModifier => remove type modifier from the array
-    // if ! supportsTypeImport => check if options array has 'none', if not => flag an error
-
-    // useful if we can just remove as.
-    const typeExports = new Set();
-
-    //const typeImports = new Set();
-    const valueImports = new Set();
+    let config = context.options[0];
+    if (config.length === 2 && config[0] === 'inline' && !supportInlineTypeImport) {
+      config = 'separate';
+    }
 
     const fixerArray = [];
-    // TODO: filter down available preferences: find the first one available then use it as preferred. If none is option: find all type key words and auto fixer => remove them.
-    // return 3 rule objets?
+    const typeImports = [];
+    const valueImports =[];
+    const importRangesToBeRemoved = [];
+    let allImportsSize = 0;
+
     return {
-      // // pick up all type imports at body entry time, to properly respect hoisting
-      // Program({ body }) {
-      //   body.forEach(x => processBodyStatement(context, typeExports, x));
-      // },
-      'ImportNamespaceSpecifier': function (){
-        return;
-      },
+
       'ImportDeclaration': function (node){
-
-        // 3 cases: strict cases: separate, inline. 3rd case is array of preference. The only thing to check is if arr[0] === inline => 
-        // check if it can be supported. If not, fall back on separate. 
-        // If arr[0] === separate => just do separate ? Then what is really a logic? Taking care of user worrying about TS version?
-
-        // only one config. Since we determined that rule will fall back on option that works.
-        if (typeof(context.options[0]) === 'string' || config.length === 1) {
-          // strict config: separate, but we got inline:
-          if (config === 'separate' && node.importKind !== 'type') {
-            const typeImports = [];
-            const inlineValueImports =[];
-            const importRangesToBeRemoved = [];
-            // identify importSpecifiers that have inline type imports as well as value imports
-            node.specifiers.forEach((specifier) => {
-              // catch all inline imports and add them to the set
-              if (specifier.importKind === 'type') {
-                log('specifier');
-                console.log(specifier);
-
-                if (specifier.local.name !== specifier.imported.name) {
-                  typeImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
-                } else {
-                  typeImports.push(specifier.local.name);
-                }
-                importRangesToBeRemoved.push(specifier.range);
-                // typeImports.add(specifier);
-              } else {
-                if (specifier.local.name !== specifier.imported.name) {
-                  inlineValueImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
-                } else {
-                  inlineValueImports.push(specifier.local.name);
-                }
-                importRangesToBeRemoved.push(specifier.range);
-                // valueImports.add(specifier);
-              }
-            });
-            // no inline type imports
-            if (typeImports.size === 0) {
-              return;
+        
+        // identify importSpecifiers that have inline type imports as well as value imports
+        node.specifiers.forEach((specifier) => {
+          // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
+          // For now, ignore default export
+          if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
+            return;
+          }
+          allImportsSize += 1;
+          // catch all inline imports and add them to the set
+          if (specifier.importKind === 'type') {
+            if (specifier.local.name !== specifier.imported.name) {
+              typeImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
+            } else {
+              typeImports.push(specifier.local.name);
             }
+            importRangesToBeRemoved.push(specifier.range);
+          } else {
+            if (specifier.local.name !== specifier.imported.name) {
+              valueImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
+            } else {
+              valueImports.push(specifier.local.name);
+            }
+            importRangesToBeRemoved.push(specifier.range);
+          }
+        });
 
-            //remove inline type imports + add them as separate import statements
+        if (config === 'separate' && node.importKind !== 'type') {
+          // no inline type imports found
+          if (typeImports.length === 0) {
+            return;
+          } else if (typeImports.length === allImportsSize) {
+            // all inline imports are type imports => need to change it to separate import statement
             context.report({
               node,
               message: 'BOOM',
               fix(fixer) {
-
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
-                // log('tokens');
-                // console.log(tokens);
-              
-                // get import source
+                tokens.forEach(token => {
+                  if (token.value === 'type') {
+                    fixerArray.push(fixer.remove(token));
+                  }
+                });
+                fixerArray.push(fixer.insertTextAfter(tokens[0], ' type'));
+                return fixerArray;
+              },
+            });
+          }
+          else {
+            context.report({
+              node,
+              message: 'BOOM',
+              fix(fixer) {
+                const sourceCode = context.getSourceCode();
+                const tokens = sourceCode.getTokens(node);
                 const importPath = tokens[tokens.length-1].value;
-                // log('import path');
-                // console.log(importPath);
-
+  
+                // remove all imports
                 importRangesToBeRemoved.forEach((range)=>{
-                  // log('ranges to remove');
-                  // console.log(range);
                   fixerArray.push(fixer.removeRange([range[0], range[1]]));
                 });
-                // get the named type imports and remove them from the initial code
-                // typeImports.forEach((element)=> {
-                //   newTypeImports.push(element.local.name);
-                //   fixerArray.push(fixer.removeRange([element.range[0], element.range[1]]));
-                // });
-                // // remove inline value imports => maybe remove all at once by removing everything between { and }? TODO
-                // valueImports.forEach((element)=> {
-                //   if (element.local.name !== element.imported.name) {
-                //     inlineValueImports.push(`${element.imported.name} as ${element.local.name}`);
-                //   } else {
-                //     inlineValueImports.push(element.local.name);
-                //   }
-                //   fixerArray.push(fixer.removeRange([element.range[0], element.range[1]]));
-                // });
 
                 let namedImportStart = undefined;
-                for (let i = 0; i < tokens.length; i++) {
-                  if (tokens[i].value === '{') {
-                    namedImportStart = tokens[i];
+                // remove all commas
+                tokens.forEach( element => {
+                  if (element.value === '{') {
+                    namedImportStart = element;
                   }
-                  if (tokens[i].value === ',' && tokens[i].type === 'Punctuator') {
-                    fixerArray.push(fixer.remove(tokens[i]));
-                  }            
-                }
-
-                
+                  if (element.value === ',') {
+                    fixerArray.push(fixer.remove(element));
+                  }   
+                });
                 // add inline value imports back
-                fixerArray.push(fixer.insertTextAfter(namedImportStart, inlineValueImports.join(', ')));
+                fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImports.join(', ')));
                 // add new line with separate type import
                 fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImports.join(', ')} } from ${importPath}`));
                 return fixerArray;
               },
             });
           }
-
-          // log('inlineTypeImports');
-          // console.log(typeImports);
-
-
-             
         }
-
-        // case where we want type modifier but we got separate import type
-        // if (supportsTypeModifier && prefer === 'modifier' && node.importKind === 'type') {
-        //   context.report(node, 'BOOM');
-        // }
         
-      },
-      'ImportSpecifier': function (node) {
-
-        // cases when we have only one config option
-        if (typeof(context.options[0]) === 'string' || config.length === 1) {
-          // only one config
-          
-          // we have none, but have word type
-
-          // wanted separate but got inline case. Question: How to make two fixes?
-          // if ((config === 'separate' || config[0] === 'separate') && node.importKind === 'type') {
-          //   context.report({
-          //     node,
-          //     message: 'BOOM',
-          //     fix(fixer) {
-          //       const sourceCode = context.getSourceCode();
-          //       const token = sourceCode.getTokens(node);
-          //       log('source code tokens');
-          //       console.log(token);
-
-          //       const tokenParent = sourceCode.getTokens(node.parent);
-          //       log('source code tokens -- PARENT');
-          //       console.log(tokenParent);
-          //       return fixer.replaceTextRange([token.range[0], token.range[1]+1], '') ;
-          //     },
-          //   });
-          // }
-
-        }
-
-        // if none => remove all type key words ?
-
-        // TODO: import Cache from "./foo";  import Default Specifier type?
       },
     };
   },
