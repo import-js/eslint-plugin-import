@@ -76,10 +76,14 @@ module.exports = {
     if (config.length === 2 && config[0] === 'inline' && !supportInlineTypeImport) {
       config = 'separate';
     }
+    if (config[0]==='separate') {
+      config = 'separate';
+    }
 
     const fixerArray = [];
     const typeImports = [];
     const valueImports =[];
+    const valueNodeImports =[];
     const importRangesToBeRemoved = [];
     let allImportsSize = 0;
 
@@ -104,6 +108,7 @@ module.exports = {
             }
             importRangesToBeRemoved.push(specifier.range);
           } else {
+            valueNodeImports.push(specifier);
             if (specifier.local.name !== specifier.imported.name) {
               valueImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
             } else {
@@ -167,6 +172,34 @@ module.exports = {
               },
             });
           }
+        }
+
+        if (config === 'inline' && node.importKind === 'type') {
+          // check if there are other imports from the same source, if there are, them add type imports there
+
+          // if there are none => remove type and add "type" to every import
+          // import type {a,b} from 'x' => import {type a, type b} from 'x'
+          log('want inline but got separate type import');
+          context.report({
+            node,
+            message: 'BOOM',
+            fix(fixer) {
+              const sourceCode = context.getSourceCode();
+              const tokens = sourceCode.getTokens(node);
+              log('tokens');
+              console.log(tokens);
+              fixerArray.push(fixer.remove(tokens[1]));
+
+              log('value imports');
+              console.log(valueNodeImports);
+
+              valueNodeImports.forEach(element => {
+                fixerArray.push(fixer.insertTextBefore(element, 'type '));
+              });
+              return fixerArray;
+            },
+          });
+
         }
         
       },
