@@ -5,7 +5,7 @@ import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/typescript-flow');
-// TODO: add exports from .TSX files to the test cases, import default
+// TODO: add exports from .TSX files to the test cases, import default, import * as b statement
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
     // const parserConfig = {
@@ -29,14 +29,14 @@ context('TypeScript', function () {
       //     settings,
       //     options: ['separate'],
       //   }),
-      //   test({
-      //     code: `import { MyType } from "./typescript.ts"`,
-      //     parser,
-      //     settings,
-      //     options: [{
-      //       prefer: 'modifier',
-      //     }],
-      //   }),
+        // test({
+        //   code: `import { MyType } from "./typescript.ts"`,
+        //   parser,
+        //   settings,
+        //   options: [{
+        //     prefer: 'modifier',
+        //   }],
+        // }),
       ], 
       invalid: [
         // test({
@@ -85,14 +85,38 @@ context('TypeScript', function () {
 
         // Single Config option which is separate
         test({
-          code: 'import { type MyType, Bar } from "./typescript.ts"',
+          code: 'import {type MyType,Bar} from "./typescript.ts"',
           parser,
           settings,
           options: ['separate'],
           errors: [{
             message: 'BOOM',
           }],
-          output: 'import type { MyType, Bar } from "./typescript.ts"',
+          // Question: Do we just remove the problematic node, what about comma? // import { type MyType, Bar, type Foo } => mport { , Bar,  }
+          output: 'import {Bar} from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
+          //output: 'import type { Bar } from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
+        }),
+        test({
+          code: 'import {type MyType,Bar,type Foo} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          // Question: Do we just remove the problematic node, what about comma? // import { type MyType, Bar, type Foo } => mport { , Bar,  }
+          output: 'import {Bar} from "./typescript.ts"\nimport type { MyType, Foo } from "./typescript.ts"',
+        }),
+        test({
+          code: 'import {type MyType,Bar as Namespace} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar as Namespace} from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
+          //output: 'import type { Bar } from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
         }),
       ] },
     );
