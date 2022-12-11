@@ -30,12 +30,24 @@ context('TypeScript', function () {
           options: ['separate'],
         }),
         test({
+          code: `import type { MyType, Bar } from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import type { MyType as Foo } from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
           code: `import * as Bar from "./typescript.ts"`,
           parser,
           settings,
           options: ['separate'],
         }),
-        // default import is ignored for now
+        // default imports are ignored
         test({
           code: `import Bar from "./typescript.ts"`,
           parser,
@@ -48,60 +60,20 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
         }),
-        // test({
-        //   code: `import { MyType } from "./typescript.ts"`,
-        //   parser,
-        //   settings,
-        //   options: [{
-        //     prefer: 'modifier',
-        //   }],
-        // }),
+        test({
+          code: `import { type MyType } from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
+          code: `import { type MyType, Bar, MyEnum } from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
       ], 
       invalid: [
-        // test({
-        //   code: `import type { MyType, Bar } from "./typescript.ts"`,
-        //   parser,
-        //   settings,
-        //   options: ['none'],
-        //   errors: [{
-        //     message: 'BOOM',
-        //   }],
-        //   output: 'import { MyType, Bar } from "./typescript.ts"',
-        // }),
-        // test({
-        //   code: 'import { type MyType, Bar } from "./typescript.ts"',
-        //   parser,
-        //   settings,
-        //   options: ['none'],
-        //   errors: [{
-        //     message: 'BOOM',
-        //   }],
-        //   output: 'import { MyType, Bar } from "./typescript.ts"',
-        // }),
-        // test({
-        //   code: 'import { MyType, type Bar } from "./typescript.ts"',
-        //   parser,
-        //   settings,
-        //   options: ['none'],
-        //   errors: [{
-        //     message: 'BOOM',
-        //   }],
-        //   output: 'import { MyType, Bar } from "./typescript.ts"',
-        // }),
-        // test({
-        //   code: 'import { type MyType, type Bar } from "./typescript.ts"',
-        //   parser,
-        //   settings,
-        //   options: ['none'],
-        //   errors: [{
-        //     message: 'BOOM',
-        //   },
-        //   {
-        //     message: 'BOOM',
-        //   }],
-        //   output: 'import { MyType, Bar } from "./typescript.ts"',
-        // }),
-
         test({
           code: 'import {type MyType,Bar} from "./typescript.ts"',
           parser,
@@ -154,6 +126,28 @@ context('TypeScript', function () {
             message: 'BOOM',
           }],
           output: 'import type { MyType as Bar, Foo} from "./typescript.ts"',
+        }),
+        // the space is left over when 'type' is removed. Question
+        test({
+          code: 'import type {MyType} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType} from "./typescript.ts"',
+        }),
+
+        test({
+          code: 'import type {MyType, Bar} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType, type Bar} from "./typescript.ts"',
         }),
       ] },
     );
