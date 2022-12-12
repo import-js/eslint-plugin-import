@@ -81,7 +81,7 @@ module.exports = {
       let path = resolvedPaths[name];
       if (path === undefined) {
         path = resolve(name, context);
-        resolvedPaths[name]= path;
+        resolvedPaths[name] = path;
       }
 
       let isExternal = externalModules[path];
