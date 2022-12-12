@@ -10,6 +10,16 @@ import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisi
 import docsUrl from '../docsUrl';
 
 const traversed = new Set();
+/** 
+ * Cache of resolved paths for faster subsequent lookups
+ * @type {{ [importPath: string]: string }} 
+ */
+const resolvedPaths = {};
+/** 
+ * Cache of external module evaluations for faster subsequent lookups
+ * @type {{ [resolvedPath: string]: boolean }} 
+ */
+const externalModules = {};
 
 module.exports = {
   meta: {
@@ -52,11 +62,36 @@ module.exports = {
 
     const options = context.options[0] || {};
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity;
-    const ignoreModule = (name) => options.ignoreExternal && isExternalModule(
-      name,
-      resolve(name, context),
-      context,
-    );
+    
+    const ignoreModule = (name) => {
+      // Note: This fn is optimized to eliminate call time because it may be
+      // called hundreds of thousands of times during a full repository lint run
+      // and can add minutes to the total time in large codebases
+
+      // Low cost evaluation; do not ignore if not opted in or module starts
+      // with a relative path
+      // NOTE: skipping further resolve codepath also ensures that only unique
+      // import paths are set in resolvedPaths, eg "./index.js", or "../file.js"
+      // should not be stored because there could be duplicates that resolve to
+      // different paths
+      if (!options.ignoreExternal || name[0] === '.') return false;
+
+      // High cost evaluation; cache evaluations of resolve() and
+      // isExternalModule() calls for faster subsequent lookups
+      let path = resolvedPaths[name];
+      if (path === undefined) {
+        path = resolve(name, context);
+        resolvedPaths[name]= path;
+      }
+
+      let isExternal = externalModules[path];
+      if (isExternal === undefined) {
+        isExternal = isExternalModule(name, path, context);
+        externalModules[path] = isExternal;
+      }
+      
+      return isExternal;
+    };
 
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {
