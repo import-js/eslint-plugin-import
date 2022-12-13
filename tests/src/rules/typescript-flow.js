@@ -5,8 +5,9 @@ import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/typescript-flow');
-// TODO: add exports from .TSX files to the test cases, import default, import * as b statement
+// TODO: add imports from .TSX files to the test cases
 context('TypeScript', function () {
+  // Do we need to check for different TS parsers? TODO Question
   getTSParsers().forEach((parser) => {
     // const parserConfig = {
     //   parser,
@@ -47,7 +48,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
         }),
-        // default imports are ignored
+        // default imports are ignored for strict option separate
         test({
           code: `import Bar from "./typescript.ts"`,
           parser,
@@ -82,9 +83,7 @@ context('TypeScript', function () {
           errors: [{
             message: 'BOOM',
           }],
-          // Question: Do we just remove the problematic node, what about comma? // import { type MyType, Bar, type Foo } => mport { , Bar,  }
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
-          //output: 'import type { Bar } from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
         }),
         test({
           code: 'import {type MyType,Bar,type Foo} from "./typescript.ts"',
@@ -94,7 +93,6 @@ context('TypeScript', function () {
           errors: [{
             message: 'BOOM',
           }],
-          // Question: Do we just remove the problematic node, what about comma? // import { type MyType, Bar, type Foo } => mport { , Bar,  }
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType, Foo } from "./typescript.ts"',
         }),
         test({
@@ -138,7 +136,6 @@ context('TypeScript', function () {
           }],
           output: 'import  {type MyType} from "./typescript.ts"',
         }),
-
         test({
           code: 'import type {MyType, Bar} from "./typescript.ts"',
           parser,
@@ -149,6 +146,47 @@ context('TypeScript', function () {
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts"',
         }),
+        test({
+          code: 'import type {MyType, Bar} from "./typescript.ts";import {MyEnum} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {MyEnum, type MyType, type Bar} from "./typescript.ts"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./typescript.ts";import {default as B} from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {default as B, type MyType, type Bar} from "./typescript.ts"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./typescript.ts";import defaultExport from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import defaultExport, { type MyType, type Bar } from "./typescript.ts"',
+        }),
+        // // TODO: what to do here? Output: import * as b, { type MyType, type Bar } from "./typescript.ts" ?
+        // test({
+        //   code: 'import type {MyType, Bar} from "./typescript.ts";import * as b from "./typescript.ts"',
+        //   parser,
+        //   settings,
+        //   options: ['inline'],
+        //   errors: [{
+        //     message: 'BOOM',
+        //   }],
+        //   output: 'import defaultExport, { type MyType, type Bar } from "./typescript.ts"',
+        // }),
       ] },
     );
   });
