@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add rule ([#2473], thanks [@bradzacher])
 - Add [`no-empty-named-blocks`] rule ([#2568], thanks [@guilhermelimak])
 - [`prefer-default-export`]: add "target" option ([#2602], thanks [@azyzz228])
+- [`no-absolute-path`]: add fixer ([#2613], thanks [@adipascu])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1026,6 +1027,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
 [#2602]: https://github.com/import-js/eslint-plugin-import/pull/2602

@@ -56,7 +56,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | [default](docs/rules/default.md)                                       | Ensure a default export is present, given a default import.                          | ❗ ☑️ |    |    |    |    |    |
 | [named](docs/rules/named.md)                                           | Ensure named imports correspond to a named export in the remote file.                | ❗ ☑️ |    | ⌨️ |    |    |    |
 | [namespace](docs/rules/namespace.md)                                   | Ensure imported namespaces contain dereferenced properties as they are dereferenced. | ❗ ☑️ |    |    |    |    |    |
-| [no-absolute-path](docs/rules/no-absolute-path.md)                     | Forbid import of modules using absolute paths.                                       |      |    |    |    |    |    |
+| [no-absolute-path](docs/rules/no-absolute-path.md)                     | Forbid import of modules using absolute paths.                                       |      |    |    | 🔧 |    |    |
 | [no-cycle](docs/rules/no-cycle.md)                                     | Forbid a module from importing a module with a dependency path back to itself.       |      |    |    |    |    |    |
 | [no-dynamic-require](docs/rules/no-dynamic-require.md)                 | Forbid `require()` calls with expressions.                                           |      |    |    |    |    |    |
 | [no-internal-modules](docs/rules/no-internal-modules.md)               | Forbid importing the submodules of other modules.                                    |      |    |    |    |    |    |
