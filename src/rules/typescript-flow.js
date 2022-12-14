@@ -203,10 +203,12 @@ module.exports = {
           
           // function process body statement to find if there are any non-type imports from the same location
           node.parent.body.forEach(declaration => processBodyStatement(nonTypeImportDeclarations, declaration));
+          
+          // file has non type import from the same source
+          const declaration = nonTypeImportDeclarations.get(node.source.value);
 
-          if (nonTypeImportDeclarations.has(node.source.value)) {
-            // file has non type import from the same source
-            const declaration = nonTypeImportDeclarations.get(node.source.value);
+          if (declaration && !declaration.hasNamespaceImport) {
+
             // get the last specifier
             const  lastSpecifier = declaration.specifiers[declaration.specifiers.length - 1];
 
