@@ -5,7 +5,7 @@ import docsUrl from '../docsUrl';
 import debug from 'debug';
 const log = debug('eslint-plugin-import/typescript-flow');
 
-// comes from tests/src/utils file, TODO?: import directly from there
+// comes from tests/src/utils file, TODO?: import directly from there, issue: too many layers of folders away
 import typescriptPkg from 'typescript/package.json';
 import semver from 'semver';
 
@@ -43,16 +43,7 @@ function processBodyStatement(importMap, node){
   importMap.set(node.source.value, { specifiers, hasDefaultImport, hasInlineDefaultImport, hasNamespaceImport });
 }
 
-// It seems unfortunate to have a rule that is only useful for typescript, but perhaps a rule that detects your TS (or flow) version, 
-// and can be configured for an order of preferences - ie, between "types as separate import statements", 
-// "types mixed with values, but marked with a type modifier", you could prefer one over the other, 
-// and it would fall back to the next one if the preferred one wasn't supported, and if neither are supported, the rule would noop.
-
-// 3 options of prefering importing types: none, separate, modifier. 
-// none => no use of word 'type' preferred. 
-// separate: types as separate import statements
-// modifier: types mixed with values, but marked with a type modifier
-
+// TODO: revert changes in ExportMap file. 
 module.exports = {
   meta: {
     type: 'suggestion', // Layout?
@@ -70,7 +61,7 @@ module.exports = {
             'type': 'string',
             'enum': ['separate', 'inline'],
           },
-          'minItems': 1,
+          'minItems': 2,
           'maxItems': 2,
           'uniqueItems': true,
         },
@@ -81,20 +72,11 @@ module.exports = {
       ],
     }],
   },
-  create(context) {
-    // if TS is < 3.8 => we can just name import it. 
- 
-    // works from typescript >= 3.8
-    // import type { Person, Cache } from "./foo"  
-    // ImportDeclaration importKind = 'type', ImportSpecifier.importKind = 'value'
-
-    // works only on typescript >= 4.5
-    // import { type Person, Cache } from "./foo"; 
-    // ImportDeclaration importKind = 'value', ImportSpecifier.importKind = 'type'
+  create(context) { 
 
     // 3 cases: strict cases: separate, inline. 3rd case is array of preference. The only thing to check is if arr[0] === inline => 
     // check if it can be supported. If not, fall back on separate. 
-    // If arr[0] === separate => just do separate ? Then what is really a logic? Taking care of user worrying about TS version?
+    // If arr[0] === separate => just assume it is separate
 
     const supportInlineTypeImport = tsVersionSatisfies('>=4.5'); // type modifiers (inline type import) were introduced in TS 4.5. 
     // get Rule options.
@@ -270,11 +252,7 @@ module.exports = {
               },
             });
           }
-          
-
-
         }
-        
       },
     };
   },
