@@ -84,6 +84,9 @@ module.exports = {
     if (config.length === 2 && config[0] === 'inline' && !supportInlineTypeImport) {
       config = 'separate';
     }
+    if (config === 'inline' && !supportInlineTypeImport) {
+      // raise error
+    }
     if (config[0] === 'separate') {
       config = 'separate';
     }
