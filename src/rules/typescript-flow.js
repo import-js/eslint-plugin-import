@@ -84,9 +84,6 @@ module.exports = {
     if (config.length === 2 && config[0] === 'inline' && !supportInlineTypeImport) {
       config = 'separate';
     }
-    if (config === 'inline' && !supportInlineTypeImport) {
-      // raise error
-    }
     if (config[0] === 'separate') {
       config = 'separate';
     }
@@ -101,6 +98,11 @@ module.exports = {
 
     return {
       'ImportDeclaration': function (node){
+
+        if (config === 'inline' && !supportInlineTypeImport) {
+          // raise error
+          context.report(node, 'Type modifiers are not supported by your version of TS.');
+        }
 
         if (config === 'separate' && node.importKind !== 'type') {
           // identify importSpecifiers that have inline type imports as well as value imports
