@@ -52,6 +52,9 @@ export const rules = {
 
   // deprecated aliases to rules
   'imports-first': require('./rules/imports-first'),
+
+  // new typescript flow rule
+  'typescript-flow': require('./rules/typescript-flow'),
 };
 
 export const configs = {
