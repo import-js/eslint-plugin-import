@@ -21,7 +21,7 @@ module.exports = {
     },
     schema: [makeOptionsSchema({
       maxDepth: {
-        oneOf: [
+        anyOf: [
           {
             description: 'maximum dependency depth to traverse',
             type: 'integer',

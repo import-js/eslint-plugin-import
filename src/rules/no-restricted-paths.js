@@ -32,7 +32,7 @@ module.exports = {
               type: 'object',
               properties: {
                 target: {
-                  oneOf: [
+                  anyOf: [
                     { type: 'string' },
                     {
                       type: 'array',
@@ -43,7 +43,7 @@ module.exports = {
                   ],
                 },
                 from: {
-                  oneOf: [
+                  anyOf: [
                     { type: 'string' },
                     {
                       type: 'array',

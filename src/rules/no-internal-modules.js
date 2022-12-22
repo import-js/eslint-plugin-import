@@ -16,7 +16,7 @@ module.exports = {
 
     schema: [
       {
-        oneOf: [
+        anyOf: [
           {
             type: 'object',
             properties: {

@@ -53,6 +53,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
 - [readme] Increase clarity around typescript configuration ([#2588], thanks [@Nfinished])
 - [Docs] update `eslint-doc-generator` to v1.0.0 ([#2605], thanks [@bmish])
+- [Perf] `no-cycle`, `no-internal-modules`, `no-restricted-paths`: use `anyOf` instead of `oneOf` (thanks [@ljharb], [@remcohaszing])
 
 ## [2.26.0] - 2022-04-05
 
