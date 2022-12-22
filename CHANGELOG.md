@@ -53,12 +53,12 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
 - [readme] Increase clarity around typescript configuration ([#2588], thanks [@Nfinished])
 - [Docs] update `eslint-doc-generator` to v1.0.0 ([#2605], thanks [@bmish])
-- [Perf] `no-cycle`, `no-internal-modules`, `no-restricted-paths`: use `anyOf` instead of `oneOf` (thanks [@ljharb], [@remcohaszing])
+- [Perf] [`no-cycle`], [`no-internal-modules`], [`no-restricted-paths`]: use `anyOf` instead of `oneOf` (thanks [@ljharb], [@remcohaszing])
 
 ## [2.26.0] - 2022-04-05
 
 ### Added
-- [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [`no-named-default`], [`no-default-export`], [`prefer-default-export`], [`no-named-export`], [`export`], [`named`], [`namespace`], [`no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 - [`no-relative-packages`]: add fixer ([#2381], thanks [@forivall])
 
@@ -69,13 +69,13 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: avoid a crash when processing re-exports ([#2388], thanks [@ljharb])
 
 ### Changed
-- [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
-- [Tests] `default`, `no-anonymous-default-export`, `no-mutable-exports`, `no-named-as-default-member`, `no-named-as-default`: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [Tests] [`no-nodejs-modules`]: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
+- [Tests] [`default`], [`no-anonymous-default-export`], [`no-mutable-exports`], [`no-named-as-default-member`], [`no-named-as-default`]: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [Docs] [`no-unresolved`]: Fix RegExp escaping in readme ([#2332], thanks [@stephtr])
-- [Refactor] `namespace`: try to improve performance ([#2340], thanks [@ljharb])
+- [Refactor] [`namespace`]: try to improve performance ([#2340], thanks [@ljharb])
 - [Docs] make rule doc titles consistent ([#2393], thanks [@TheJaredWilcurt])
-- [Docs] `order`: TS code examples should use TS code blocks ([#2411], thanks [@MM25Zamanian])
-- [Docs] `no-unresolved`: fix link ([#2417], thanks [@kylemh])
+- [Docs] [`order`]: TS code examples should use TS code blocks ([#2411], thanks [@MM25Zamanian])
+- [Docs] [`no-unresolved`]: fix link ([#2417], thanks [@kylemh])
 
 ## [2.25.4] - 2022-01-02
 
@@ -186,7 +186,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: restore default behavior unless `type` is in groups ([#2087], thanks [@grit96])
 
 ### Changed
-- [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
+- [Docs] Add [`no-relative-packages`] to list of to the list of rules ([#2075], thanks [@arvigeus])
 
 ## [2.23.2] - 2021-05-15
 
@@ -231,9 +231,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
 - [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
-- [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
-- [Docs] `order`: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
-- [Tests] `no-unresolved`: add tests for `import()` ([#2012], thanks [@davidbonnet])
+- [Docs] [`no-extraneous-dependencies`]: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
+- [Docs] [`order`]: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
+- [Tests] [`no-unresolved`]: add tests for `import()` ([#2012], thanks [@davidbonnet])
 - [Docs] Add import/recommended ruleset to README ([#2034], thanks [@edemaine])
 
 ## [2.22.1] - 2020-09-27
@@ -303,12 +303,12 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - TypeScript: [`export`]: avoid a crash with `export =` ([#1801], thanks [@ljharb])
 
 ### Changed
-- [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
+- [Refactor] [`no-extraneous-dependencies`]: use moduleVisitor ([#1735], thanks [@adamborowski])
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate [`no-unused-modules`] from docs ([#1690], thanks [@arvigeus])
-- [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
+- [Docs] [`order`]: fix bad inline config ([#1788], thanks [@nickofthyme])
 - [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
-- [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
+- [Docs] [`no-unused-rules`]: Fix docs for unused exports ([#1776], thanks [@barbogast])
 - [eslint] bump minimum v7 version to v7.2.0
 
 ## [2.20.2] - 2020-03-28
@@ -319,7 +319,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 - [`no-unused-modules`]: Handle `export { default } from` syntax ([#1631], thanks [@richardxia])
 - [`first`]: Add a way to disable `absolute-first` explicitly ([#1664], thanks [@TheCrueltySage])
-- [Docs] `no-webpack-loader-syntax`: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
+- [Docs] [`no-webpack-loader-syntax`]: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
 
 ## [2.20.1] - 2020-02-01
 
@@ -337,7 +337,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
 - [meta] fix "files" field to include/exclude the proper files ([#1635], thanks [@ljharb])
-- [Tests] `order`: Add TS import type tests ([#1736], thanks [@kmui2])
+- [Tests] [`order`]: Add TS import type tests ([#1736], thanks [@kmui2])
 
 ## [2.20.0] - 2020-01-10
 
@@ -436,7 +436,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
 
 ### Docs
-- add missing `no-unused-modules` in README ([#1358], thanks [@golopot])
+- add missing [`no-unused-modules`] in README ([#1358], thanks [@golopot])
 - [`no-unused-modules`]: Indicates usage, plugin defaults to no-op, and add description to main README.md ([#1352], thanks [@johndevedu])
 - Document `env` option for `eslint-import-resolver-webpack` ([#1363], thanks [@kgregory])
 
