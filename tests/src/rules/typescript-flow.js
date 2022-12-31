@@ -238,17 +238,16 @@ context('TypeScript', function () {
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts";import * as b from "./typescript.ts"',
         }),
-        // TODO: Fix the one below
-        // test({
-        //   code: 'import type {MyType, Bar} from "./typescript.ts";import type A from "./typescript.ts"',
-        //   parser,
-        //   settings,
-        //   options: ['inline'],
-        //   errors: [{
-        //     message: 'BOOM',
-        //   }],
-        //   output: 'import  {type MyType, type Bar} from "./typescript.ts";import type A from "./typescript.ts"',
-        // }),
+        test({
+          code: 'import type {MyType, Bar} from "./typescript.ts";import type A from "./typescript.ts"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType, type Bar} from "./typescript.ts";import type A from "./typescript.ts"',
+        }),
       ] },
     );
   });

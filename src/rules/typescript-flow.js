@@ -2,8 +2,8 @@
 
 import docsUrl from '../docsUrl';
 
-import debug from 'debug';
-const log = debug('eslint-plugin-import/typescript-flow');
+// import debug from 'debug';
+// const log = debug('eslint-plugin-import/typescript-flow');
 
 // comes from tests/src/utils file, TODO?: import directly from there, issue: too many layers of folders away
 import typescriptPkg from 'typescript/package.json';
@@ -191,7 +191,10 @@ module.exports = {
         }
 
         if (config === 'inline' && node.importKind === 'type') {
-          
+          // ignore default type import like: import type A from 'x'
+          if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
+            return;
+          }
           node.specifiers.forEach((specifier) => {
             if (specifier.local.name !== specifier.imported.name) {
               typeImports.push(`type ${specifier.imported.name} as ${specifier.local.name}`);
@@ -217,7 +220,6 @@ module.exports = {
               node,
               message: 'BOOM',
               fix(fixer) {
-
                 if (lastSpecifier.type === 'ImportDefaultSpecifier' && declaration.specifiers.length === 1) {
                   // import defaultExport from 'x'
                   // import type { X, Y } from 'x'
@@ -247,11 +249,7 @@ module.exports = {
               fix(fixer) {
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
-                // log('tokens');
-                // console.log(tokens);
                 fixerArray.push(fixer.remove(tokens[1]));
-                // log('value imports');
-                // console.log(valueNodeImports);
                 valueNodeImports.forEach(element => {
                   fixerArray.push(fixer.insertTextBefore(element, 'type '));
                 });
