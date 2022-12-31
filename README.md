@@ -144,6 +144,9 @@ extends:
 # the following lines do the trick
   - plugin:import/typescript
 settings:
+  import/parsers:
+    # Your paths may differ, this example parses all Typescript files within cwd
+    '@typescript-eslint/parser': ['**/.ts', '**/.tsx']
   import/resolver:
     # You will also need to install and configure the TypeScript resolver
     # See also https://github.com/import-js/eslint-import-resolver-typescript#configuration
