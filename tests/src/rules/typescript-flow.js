@@ -5,7 +5,6 @@ import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/typescript-flow');
-// TODO: add imports from .TSX files to the test cases
 context('TypeScript', function () {
   // Do we need to check for different TS parsers? TODO Question
   getTSParsers().forEach((parser) => {
@@ -81,6 +80,68 @@ context('TypeScript', function () {
         }),
         test({
           code: `import { type MyType as Persona, Bar as Bar, MyEnum } from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        // the same imports from TSX file
+        test({
+          code: `import type { MyType } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import type { MyType, Bar } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import type { MyType as Foo } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import * as Bar from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        // default imports are ignored for strict option separate. Question. TODO
+        test({
+          code: `import Bar from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import type Bar from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['separate'],
+        }),
+        test({
+          code: `import { type MyType } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
+          code: `import { type MyType as Persona } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
+          code: `import { type MyType, Bar, MyEnum } from "./tsx-type-exports.tsx"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
+          code: `import { type MyType as Persona, Bar as Bar, MyEnum } from "./tsx-type-exports.tsx"`,
           parser,
           settings,
           options: ['inline'],
@@ -248,7 +309,170 @@ context('TypeScript', function () {
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts";import type A from "./typescript.ts"',
         }),
-      ] },
+        // TSX cases
+        test({
+          code: 'import {type MyType,Bar} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType as Persona,Bar} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType as Persona } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType,Bar,type Foo} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType, Foo } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType as Persona,Bar,type Foo as Baz} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType as Persona, Foo as Baz } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType,Bar as Namespace} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {Bar as Namespace} from "./tsx-type-exports.tsx"\nimport type { MyType } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType,type Foo} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import type { MyType, Foo} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import {type MyType as Bar,type Foo} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['separate'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import type { MyType as Bar, Foo} from "./tsx-type-exports.tsx"',
+        }),
+        // the space is left over when 'type' is removed. Question. TODO
+        test({
+          code: 'import type {MyType} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx";import {MyEnum} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {MyEnum, type MyType, type Bar} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType as Persona, Bar as Foo} from "./tsx-type-exports.tsx";import {MyEnum} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {MyEnum, type MyType as Persona, type Bar as Foo} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx";import {default as B} from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import {default as B, type MyType, type Bar} from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx";import defaultExport from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import defaultExport, { type MyType, type Bar } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType as Persona, Bar as Foo} from "./tsx-type-exports.tsx";import defaultExport from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import defaultExport, { type MyType as Persona, type Bar as Foo } from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx";import * as b from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx";import * as b from "./tsx-type-exports.tsx"',
+        }),
+        test({
+          code: 'import type {MyType, Bar} from "./tsx-type-exports.tsx";import type A from "./tsx-type-exports.tsx"',
+          parser,
+          settings,
+          options: ['inline'],
+          errors: [{
+            message: 'BOOM',
+          }],
+          output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx";import type A from "./tsx-type-exports.tsx"',
+        }),
+      ],
+    },
     );
   });
 });
