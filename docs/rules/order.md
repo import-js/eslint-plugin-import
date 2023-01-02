@@ -77,6 +77,25 @@ import foo from './foo';
 var path = require('path');
 ```
 
+## Limitations of `--fix`
+
+Unbound imports are assumed to have side effects, and will never be moved/reordered. This can cause other imports to get "stuck" around them, and the fix to fail.
+
+```javascript
+import b from 'b'
+import 'format.css';  // This will prevent --fix from working.
+import a from 'a'
+```
+
+As a workaround, move unbound imports to be entirely above or below bound ones.
+
+```javascript
+import 'format1.css';  // OK
+import b from 'b'
+import a from 'a'
+import 'format2.css';  // OK
+```
+
 ## Options
 
 This rule supports the following options:

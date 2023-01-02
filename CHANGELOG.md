@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: add console message to help debug [#2866]
 - [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
 - [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
+- [Docs] `order`: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1130,6 +1131,7 @@ for info on changes for earlier releases.
 [#2735]: https://github.com/import-js/eslint-plugin-import/pull/2735
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
+[#2640]: https://github.com/import-js/eslint-plugin-import/pull/2640
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
@@ -1846,6 +1848,7 @@ for info on changes for earlier releases.
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
 [@MikeyBeLike]: https://github.com/MikeyBeLike
+[@minervabot]: https://github.com/minervabot
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
