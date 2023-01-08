@@ -623,9 +623,6 @@ ExportMap.parse = function (path, content, context) {
       // capture declaration
       if (n.declaration != null) {
         switch (n.declaration.type) {
-        case 'TSTypeAliasDeclaration':
-          m.namespace.set(n.declaration.id.name, 'type');
-          break;
         case 'FunctionDeclaration':
         case 'ClassDeclaration':
         case 'TypeAlias': // flowtype with babel-eslint parser
@@ -633,6 +630,7 @@ ExportMap.parse = function (path, content, context) {
         case 'DeclareFunction':
         case 'TSDeclareFunction':
         case 'TSEnumDeclaration':
+        case 'TSTypeAliasDeclaration':
         case 'TSInterfaceDeclaration':
         case 'TSAbstractClassDeclaration':
         case 'TSModuleDeclaration':
