@@ -12,13 +12,6 @@ const INLINE_ERROR_MESSAGE = 'Type imports should be imported inline with type m
 context('TypeScript', function () {
   // Do we need to check for different TS parsers? TODO Question
   getTSParsers().forEach((parser) => {
-    // const parserConfig = {
-    //   parser,
-    //   settings: {
-    //     'import/parsers': { [parser]: ['.ts'] },
-    //     'import/resolver': { 'eslint-import-resolver-typescript': true },
-    //   },
-    // };
 
     const settings = {
       'import/parsers': { [parser]: ['.ts'] },
@@ -51,7 +44,6 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
         }),
-        // default imports are ignored for strict option separate. Question. TODO
         test({
           code: `import Bar from "./typescript.ts"`,
           parser,
@@ -113,7 +105,6 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
         }),
-        // default imports are ignored for strict option separate. Question. TODO
         test({
           code: `import Bar from "./tsx-type-exports.tsx"`,
           parser,
@@ -222,7 +213,6 @@ context('TypeScript', function () {
           }],
           output: 'import type { MyType as Bar, Foo} from "./typescript.ts"',
         }),
-        // the space is left over when 'type' is removed. Question. TODO
         test({
           code: 'import type {MyType} from "./typescript.ts"',
           parser,
