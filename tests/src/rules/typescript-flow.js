@@ -57,6 +57,18 @@ context('TypeScript', function () {
           options: ['separate'],
         }),
         test({
+          code: `import type Bar from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
+          code: `import Bar from "./typescript.ts"`,
+          parser,
+          settings,
+          options: ['inline'],
+        }),
+        test({
           code: `import { type MyType } from "./typescript.ts"`,
           parser,
           settings,
