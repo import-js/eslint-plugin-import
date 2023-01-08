@@ -27,7 +27,6 @@
     "posttest": "eslint . && npm run update:eslint-docs -- --check",
     "mocha": "cross-env BABEL_ENV=test nyc mocha",
     "tests-only": "npm run mocha tests/src",
-    "debug": "DEBUG=eslint-plugin-import/typescript-flow npm run mocha tests/src/rules/typescript-flow",
     "test": "npm run tests-only",
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
