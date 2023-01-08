@@ -5,6 +5,10 @@ import { RuleTester } from 'eslint';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/typescript-flow');
+
+const SEPARATE_ERROR_MESSAGE = 'Type imports should be separately imported.';
+const INLINE_ERROR_MESSAGE = 'Type imports should be imported inline with type modifier.';
+
 context('TypeScript', function () {
   // Do we need to check for different TS parsers? TODO Question
   getTSParsers().forEach((parser) => {
@@ -154,7 +158,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
         }),
@@ -164,7 +168,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType as Persona } from "./typescript.ts"',
         }),
@@ -174,7 +178,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType, Foo } from "./typescript.ts"',
         }),
@@ -184,7 +188,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./typescript.ts"\nimport type { MyType as Persona, Foo as Baz } from "./typescript.ts"',
         }),
@@ -194,7 +198,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar as Namespace} from "./typescript.ts"\nimport type { MyType } from "./typescript.ts"',
         }),
@@ -204,7 +208,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import type { MyType, Foo} from "./typescript.ts"',
         }),
@@ -214,7 +218,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import type { MyType as Bar, Foo} from "./typescript.ts"',
         }),
@@ -225,7 +229,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType} from "./typescript.ts"',
         }),
@@ -235,7 +239,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts"',
         }),
@@ -245,7 +249,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {MyEnum, type MyType, type Bar} from "./typescript.ts"',
         }),
@@ -255,7 +259,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {MyEnum, type MyType as Persona, type Bar as Foo} from "./typescript.ts"',
         }),
@@ -265,7 +269,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {default as B, type MyType, type Bar} from "./typescript.ts"',
         }),
@@ -275,7 +279,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import defaultExport, { type MyType, type Bar } from "./typescript.ts"',
         }),
@@ -285,7 +289,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import defaultExport, { type MyType as Persona, type Bar as Foo } from "./typescript.ts"',
         }),
@@ -295,7 +299,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts";import * as b from "./typescript.ts"',
         }),
@@ -305,7 +309,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./typescript.ts";import type A from "./typescript.ts"',
         }),
@@ -316,7 +320,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType } from "./tsx-type-exports.tsx"',
         }),
@@ -326,7 +330,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType as Persona } from "./tsx-type-exports.tsx"',
         }),
@@ -336,7 +340,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType, Foo } from "./tsx-type-exports.tsx"',
         }),
@@ -346,7 +350,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar} from "./tsx-type-exports.tsx"\nimport type { MyType as Persona, Foo as Baz } from "./tsx-type-exports.tsx"',
         }),
@@ -356,7 +360,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import {Bar as Namespace} from "./tsx-type-exports.tsx"\nimport type { MyType } from "./tsx-type-exports.tsx"',
         }),
@@ -366,7 +370,7 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import type { MyType, Foo} from "./tsx-type-exports.tsx"',
         }),
@@ -376,18 +380,17 @@ context('TypeScript', function () {
           settings,
           options: ['separate'],
           errors: [{
-            message: 'BOOM',
+            message: SEPARATE_ERROR_MESSAGE,
           }],
           output: 'import type { MyType as Bar, Foo} from "./tsx-type-exports.tsx"',
         }),
-        // the space is left over when 'type' is removed. Question. TODO
         test({
           code: 'import type {MyType} from "./tsx-type-exports.tsx"',
           parser,
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType} from "./tsx-type-exports.tsx"',
         }),
@@ -397,7 +400,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx"',
         }),
@@ -407,7 +410,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {MyEnum, type MyType, type Bar} from "./tsx-type-exports.tsx"',
         }),
@@ -417,7 +420,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {MyEnum, type MyType as Persona, type Bar as Foo} from "./tsx-type-exports.tsx"',
         }),
@@ -427,7 +430,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import {default as B, type MyType, type Bar} from "./tsx-type-exports.tsx"',
         }),
@@ -437,7 +440,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import defaultExport, { type MyType, type Bar } from "./tsx-type-exports.tsx"',
         }),
@@ -447,7 +450,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import defaultExport, { type MyType as Persona, type Bar as Foo } from "./tsx-type-exports.tsx"',
         }),
@@ -457,7 +460,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx";import * as b from "./tsx-type-exports.tsx"',
         }),
@@ -467,7 +470,7 @@ context('TypeScript', function () {
           settings,
           options: ['inline'],
           errors: [{
-            message: 'BOOM',
+            message: INLINE_ERROR_MESSAGE,
           }],
           output: 'import  {type MyType, type Bar} from "./tsx-type-exports.tsx";import type A from "./tsx-type-exports.tsx"',
         }),

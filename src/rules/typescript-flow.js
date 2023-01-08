@@ -5,13 +5,15 @@ import docsUrl from '../docsUrl';
 // import debug from 'debug';
 // const log = debug('eslint-plugin-import/typescript-flow');
 
-// comes from tests/src/utils file, TODO?: import directly from there, issue: too many layers of folders away
 import typescriptPkg from 'typescript/package.json';
 import semver from 'semver';
 
 function tsVersionSatisfies(specifier) {
   return semver.satisfies(typescriptPkg.version, specifier);
 }
+
+const SEPARATE_ERROR_MESSAGE = 'Type imports should be separately imported.';
+const INLINE_ERROR_MESSAGE = 'Type imports should be imported inline with type modifier.';
 
 function processBodyStatement(importMap, node){
   if (node.type !== 'ImportDeclaration' || node.importKind === 'type') return;
@@ -139,7 +141,7 @@ module.exports = {
           if (typeImports.length === allImportsSize) {
             context.report({
               node,
-              message: 'BOOM',
+              message: SEPARATE_ERROR_MESSAGE,
               fix(fixer) {
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
@@ -159,7 +161,7 @@ module.exports = {
           else {
             context.report({
               node,
-              message: 'BOOM',
+              message: SEPARATE_ERROR_MESSAGE,
               fix(fixer) {
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
@@ -218,7 +220,7 @@ module.exports = {
             // try to insert after the last specifier
             context.report({
               node,
-              message: 'BOOM',
+              message: INLINE_ERROR_MESSAGE,
               fix(fixer) {
                 if (lastSpecifier.type === 'ImportDefaultSpecifier' && declaration.specifiers.length === 1) {
                   // import defaultExport from 'x'
@@ -245,7 +247,7 @@ module.exports = {
             // TODO: check this statement: valueNodeImports => possibly rename it ?
             context.report({
               node,
-              message: 'BOOM',
+              message: INLINE_ERROR_MESSAGE,
               fix(fixer) {
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
