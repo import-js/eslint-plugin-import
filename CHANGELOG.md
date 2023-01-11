@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.27.0] - 2023-01-11
+
 ### Added
 - [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
 - [`no-cycle`]: add `allowUnsafeDynamicCyclicDependency` option ([#2387], thanks [@GerkinDev])
@@ -1471,7 +1473,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.0...HEAD
+[2.27.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...v2.27.0
 [2.26.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.4...v2.26.0
 [2.25.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...v2.25.4
 [2.25.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...v2.25.3
