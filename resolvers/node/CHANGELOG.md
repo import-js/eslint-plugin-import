@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v0.3.7 - 2023-01-11
+### Changed
+- [Refactor] use `is-core-module` directly
+
 ## v0.3.6 - 2021-08-15
 ### Fixed
 - when "module" does not exist, fall back to "main" ([#2186], thanks [@ljharb])
