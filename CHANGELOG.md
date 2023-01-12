@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- `semver` should be a prod dep ([#2668])
+
 ## [2.27.3] - 2023-01-11
 
 ### Fixed
@@ -1371,6 +1374,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
 [#2665]: https://github.com/import-js/eslint-plugin-import/issues/2665
 [#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
