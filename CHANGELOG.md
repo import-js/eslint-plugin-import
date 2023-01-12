@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- `array.prototype.flatmap` should be a prod dep ([#2664], thanks [@cristobal])
+
 ## [2.27.0] - 2023-01-11
 
 ### Added
@@ -1032,6 +1035,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
@@ -1604,6 +1608,7 @@ for info on changes for earlier releases.
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
 [@christophercurrie]: https://github.com/christophercurrie
+[@cristobal]: https://github.com/cristobal
 [@DamienCassou]: https://github.com/DamienCassou
 [@danny-andrews]: https://github.com/dany-andrews
 [@darkartur]: https://github.com/darkartur
