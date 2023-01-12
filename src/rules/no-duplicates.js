@@ -1,7 +1,11 @@
 import resolve from 'eslint-module-utils/resolve';
 import docsUrl from '../docsUrl';
 import semver from 'semver';
-import typescriptPkg from 'typescript/package.json';
+
+let typescriptPkg;
+try {
+  typescriptPkg = require('typescript/package.json');
+} catch (e) { /**/ }
 
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
@@ -114,7 +118,7 @@ function getFix(first, rest, sourceCode, context) {
 
         const preferInline = context.options[0] && context.options[0]['prefer-inline'];
         // a user might set prefer-inline but not have a supporting TypeScript version.  Flow does not support inline types so this should fail in that case as well.
-        if (preferInline && !semver.satisfies(typescriptPkg.version, '>= 4.5')) {
+        if (preferInline && (!typescriptPkg || !semver.satisfies(typescriptPkg.version, '>= 4.5'))) {
           throw new Error('Your version of TypeScript does not support inline type imports.');
         }
 
