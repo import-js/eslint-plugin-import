@@ -42,9 +42,27 @@ ruleTester.run('no-empty-named-blocks', rule, {
     ] : [],
 
     // Flow
-    test({ code: `import typeof Default from 'mod';`, parser: parsers.BABEL_OLD }),
-    test({ code: `import typeof { Named } from 'mod';`, parser: parsers.BABEL_OLD }),
-    test({ code: `import typeof Default, { Named } from 'mod';`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof Default from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof { Named } from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof Default, { Named } from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({
+      code: `
+        module.exports = {
+          rules: {
+            'keyword-spacing': ['error', {overrides: {}}],
+          }
+        };
+      `,
+    }),
+    test({
+      code: `
+        import { DESCRIPTORS, NODE } from '../helpers/constants';
+        // ...
+        import { timeLimitedPromise } from '../helpers/helpers';
+        // ...
+        import { DESCRIPTORS2 } from '../helpers/constants';
+      `,
+    }),
   ),
   invalid: [].concat(
     test({
