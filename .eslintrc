@@ -76,7 +76,16 @@
         "eslint-plugin/require-meta-type": "error",
 
         // dog fooding
-        "import/no-extraneous-dependencies": "error",
+        "import/no-extraneous-dependencies": ["error", {
+            "devDependencies": [
+                "tests/**",
+                "resolvers/*/test/**",
+                "scripts/**"
+            ],
+            "optionalDependencies": false,
+            "peerDependencies": true,
+            "bundledDependencies": false,
+        }],
         "import/unambiguous": "off",
     },
 
@@ -106,7 +115,6 @@
         {
             "files": "resolvers/webpack/**",
             "rules": {
-                "import/no-extraneous-dependencies": 1,
                 "no-console": 1,
             },
             "env": {

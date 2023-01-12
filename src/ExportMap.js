@@ -558,7 +558,7 @@ ExportMap.parse = function (path, content, context) {
     try {
       if (tsConfigInfo.tsConfigPath !== undefined) {
         // Projects not using TypeScript won't have `typescript` installed.
-        if (!ts) { ts = require('typescript'); }
+        if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
   
         const configFile = ts.readConfigFile(tsConfigInfo.tsConfigPath, ts.sys.readFile);
         return ts.parseJsonConfigFileContent(

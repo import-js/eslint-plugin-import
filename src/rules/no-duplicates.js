@@ -4,7 +4,7 @@ import semver from 'semver';
 
 let typescriptPkg;
 try {
-  typescriptPkg = require('typescript/package.json');
+  typescriptPkg = require('typescript/package.json'); // eslint-disable-line import/no-extraneous-dependencies
 } catch (e) { /**/ }
 
 function checkImports(imported, context) {
