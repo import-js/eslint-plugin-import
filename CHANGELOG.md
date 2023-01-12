@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.27.3] - 2023-01-11
+
 ### Fixed
 - [`no-empty-named-blocks`]: rewrite rule to only check import declarations ([#2666])
 
@@ -1489,7 +1491,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.2...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.3...HEAD
+[2.27.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.2...v2.27.3
 [2.27.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.1...v2.27.2
 [2.27.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.0...v2.27.1
 [2.27.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...v2.27.0
