@@ -334,9 +334,12 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
     return acc;
   }, {});
 
-  const groupRanks = Object.keys(groupedByRanks);
-
   const sorterFn = getSorter(alphabetizeOptions);
+
+  // sort group keys so that they can be iterated on in order
+  const groupRanks = Object.keys(groupedByRanks).sort(function (a, b) {
+    return a - b;
+  });
 
   // sort imports locally within their group
   groupRanks.forEach(function (groupRank) {
@@ -345,7 +348,7 @@ function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
 
   // assign globally unique rank to each import
   let newRank = 0;
-  const alphabetizedRanks = groupRanks.sort().reduce(function (acc, groupRank) {
+  const alphabetizedRanks = groupRanks.reduce(function (acc, groupRank) {
     groupedByRanks[groupRank].forEach(function (importedItem) {
       acc[`${importedItem.value}|${importedItem.node.importKind}`] = parseInt(groupRank, 10) + newRank;
       newRank += 1;

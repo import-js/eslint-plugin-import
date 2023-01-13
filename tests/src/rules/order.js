@@ -2280,6 +2280,8 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+
+    // pathGroups overflowing to previous/next groups
     test({
       code: `
         import path from 'path';
@@ -2347,6 +2349,47 @@ ruleTester.run('order', rule, {
         'import/internal-regex': '^(a|b|c|d|e|f|g|h|i|j|k)(\\/|$)',
       },
       errors: Array.from({ length: 11 }, () => 'There should be at least one empty line between import groups'),
+    }),
+
+    // rankings that overflow to double-digit ranks
+    test({
+      code: `
+        import external from 'external';
+        import a from '@namespace/a';
+        import b from '@namespace/b';
+        import { parent } from '../../parent';
+        import local from './local';
+        import './side-effect';`,
+      output: `
+        import external from 'external';
+
+        import a from '@namespace/a';
+        import b from '@namespace/b';
+
+        import { parent } from '../../parent';
+
+        import local from './local';
+        import './side-effect';`,
+      options: [
+        {
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+          groups: ['type', 'builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
+          'newlines-between': 'always',
+          pathGroups: [
+            { pattern: '@namespace', group: 'external', position: 'after' },
+            { pattern: '@namespace/**', group: 'external', position: 'after' },
+          ],
+          pathGroupsExcludedImportTypes: ['@namespace'],
+        },
+      ],
+      errors: [
+        'There should be at least one empty line between import groups',
+        'There should be at least one empty line between import groups',
+        'There should be at least one empty line between import groups',
+      ],
     }),
 
     // reorder fix cannot cross non import or require
