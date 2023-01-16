@@ -367,14 +367,14 @@ context('TypeScript', () => {
     },
   });
   ruleTester.run('consistent-type-specifier-style', rule, {
-    valid: [
-      ...COMMON_TESTS.valid,
-      ...TS_ONLY.valid,
-    ],
-    invalid: [
-      ...COMMON_TESTS.invalid,
-      ...TS_ONLY.invalid,
-    ],
+    valid: [].concat(
+      COMMON_TESTS.valid,
+      TS_ONLY.valid,
+    ),
+    invalid: [].concat(
+      COMMON_TESTS.invalid,
+      TS_ONLY.invalid,
+    ),
   });
 });
 
@@ -391,13 +391,13 @@ context('Babel/Flow', () => {
     },
   });
   ruleTester.run('consistent-type-specifier-style', rule, {
-    valid: [
-      ...COMMON_TESTS.valid,
-      ...FLOW_ONLY.valid,
-    ],
-    invalid: [
-      ...COMMON_TESTS.invalid,
-      ...FLOW_ONLY.invalid,
-    ],
+    valid: [].concat(
+      COMMON_TESTS.valid,
+      FLOW_ONLY.valid,
+    ),
+    invalid: [].concat(
+      COMMON_TESTS.invalid,
+      FLOW_ONLY.invalid,
+    ),
   });
 });

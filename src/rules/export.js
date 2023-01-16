@@ -37,7 +37,6 @@ const tsTypePrefix = 'type:';
  */
 function isTypescriptFunctionOverloads(nodes) {
   const nodesArr = Array.from(nodes);
-  const types = new Set(nodesArr.map(node => node.parent.type));
 
   const idents = flatMap(nodesArr, (node) => (
     node.declaration && (
@@ -51,6 +50,7 @@ function isTypescriptFunctionOverloads(nodes) {
     return true;
   }
 
+  const types = new Set(nodesArr.map(node => node.parent.type));
   if (!types.has('TSDeclareFunction')) {
     return false;
   }

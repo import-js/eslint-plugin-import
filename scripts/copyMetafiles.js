@@ -8,11 +8,11 @@ const files = [
   '.nycrc',
 ];
 
-const directories = [
+const directories = [].concat(
   'memo-parser',
-  ...resolverDirectories,
+  resolverDirectories,
   'utils',
-];
+);
 
 for (const directory of directories) {
   for (const file of files) {

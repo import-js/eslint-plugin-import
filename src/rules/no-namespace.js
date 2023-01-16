@@ -144,10 +144,7 @@ function getVariableNamesInScope(scopeManager, node) {
     currentNode = currentNode.parent;
     scope = scopeManager.acquire(currentNode, true);
   }
-  return new Set([
-    ...scope.variables.map(variable => variable.name),
-    ...scope.upper.variables.map(variable => variable.name),
-  ]);
+  return new Set(scope.variables.concat(scope.upper.variables).map(variable => variable.name));
 }
 
 /**
