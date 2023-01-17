@@ -1096,16 +1096,15 @@ ruleTester.run('order', rule, {
     // orderImportKind option that is not used
     test({
       code: `
-            import B from './B';
-            import b from './b';
-          `,
+        import B from './B';
+        import b from './b';
+      `,
       options: [
         {
           'alphabetize': { order: 'asc', orderImportKind: 'asc', 'caseInsensitive': true },
         },
       ],
     }),
-
   ],
   invalid: [
     // builtin before external module (require)
@@ -3274,6 +3273,85 @@ flowRuleTester.run('order', rule, {
       errors: [{
         message: '`./local/sub` typeof import should occur before import of `./local/sub`',
       }],
+    }),
+    test({
+      code: `
+        import { cfg } from 'path/path/path/src/Cfg';
+        import { l10n } from 'path/src/l10n';
+        import { helpers } from 'path/path/path/helpers';
+        import { tip } from 'path/path/tip';
+
+        import { controller } from '../../../../path/path/path/controller';
+        import { component } from '../../../../path/path/path/component';
+      `,
+      output: semver.satisfies(eslintPkg.version, '< 3') ? `
+        import { cfg } from 'path/path/path/src/Cfg';
+        import { tip } from 'path/path/tip';
+        import { l10n } from 'path/src/l10n';
+        import { helpers } from 'path/path/path/helpers';
+
+        import { component } from '../../../../path/path/path/component';
+        import { controller } from '../../../../path/path/path/controller';
+      ` : `
+        import { helpers } from 'path/path/path/helpers';
+        import { cfg } from 'path/path/path/src/Cfg';
+        import { l10n } from 'path/src/l10n';
+        import { tip } from 'path/path/tip';
+
+        import { component } from '../../../../path/path/path/component';
+        import { controller } from '../../../../path/path/path/controller';
+      `,
+      options: [
+        {
+          'groups': [
+            ['builtin', 'external'],
+            'internal',
+            ['sibling', 'parent'],
+            'object',
+            'type',
+          ],
+          'pathGroups': [
+            {
+              'pattern': 'react',
+              'group': 'builtin',
+              'position': 'before',
+              'patternOptions': {
+                'matchBase': true,
+              },
+            },
+            {
+              'pattern': '*.+(css|svg)',
+              'group': 'type',
+              'position': 'after',
+              'patternOptions': {
+                'matchBase': true,
+              },
+            },
+          ],
+          'pathGroupsExcludedImportTypes': ['react'],
+          'alphabetize': {
+            'order': 'asc',
+          },
+          'newlines-between': 'always',
+        },
+      ],
+      errors: [
+        {
+          message: '`path/path/path/helpers` import should occur before import of `path/path/path/src/Cfg`',
+          line: 4,
+          column: 9,
+        },
+        {
+          message: '`path/path/tip` import should occur before import of `path/src/l10n`',
+          line: 5,
+          column: 9,
+        },
+        {
+          message: '`../../../../path/path/path/component` import should occur before import of `../../../../path/path/path/controller`',
+          line: 8,
+          column: 9,
+        },
+      ],
     }),
   ],
 });
