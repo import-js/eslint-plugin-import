@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
+
 ## [2.27.5] - 2023-01-16
 
 ### Fixed
@@ -1381,6 +1384,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
 [#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
 [#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
@@ -1800,6 +1804,7 @@ for info on changes for earlier releases.
 [@sheepsteak]: https://github.com/sheepsteak
 [@silviogutierrez]: https://github.com/silviogutierrez
 [@SimenB]: https://github.com/SimenB
+[@simmo]: https://github.com/simmo
 [@sindresorhus]: https://github.com/sindresorhus
 [@singles]: https://github.com/singles
 [@skozin]: https://github.com/skozin

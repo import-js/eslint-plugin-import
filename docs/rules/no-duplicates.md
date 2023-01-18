@@ -79,14 +79,14 @@ Config:
 
 <!--tabs-->
 
-❌ Invalid `["error", "prefer-inline"]`
+❌ Invalid `["error", {"prefer-inline": true}]`
 
 ```js
 import { AValue, type AType } from './mama-mia'
 import type { BType } from './mama-mia'
 ```
 
-✅ Valid with `["error", "prefer-inline"]`
+✅ Valid with `["error", {"prefer-inline": true}]`
 
 ```js
 import { AValue, type AType, type BType } from './mama-mia'
