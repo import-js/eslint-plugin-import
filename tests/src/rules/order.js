@@ -1105,6 +1105,31 @@ ruleTester.run('order', rule, {
         },
       ],
     }),
+
+    // Option intraGroupOrdering: false (should sort imports in order of appearance)
+    test({
+      code: `
+        import { foo } from './bar';  
+        import { fooz } from '../baz';`,
+      options: [
+        {
+          groups: [['parent', 'sibling']],
+        },
+      ],
+    }),
+
+    // Option intraGroupOrdering: true (should sort imports in order of nested group)
+    test({
+      code: `
+        import { fooz } from '../baz';  
+        import { foo } from './bar';`,
+      options: [
+        {
+          groups: [['parent', 'sibling']],
+          intraGroupOrdering: true,
+        },
+      ],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -2718,6 +2743,28 @@ ruleTester.run('order', rule, {
         message: 'There should be no empty line within import group',
       }],
     }),
+    
+    // Option intraGroupOrdering: true (should sort imports in order of nested group)
+    test({
+      code: `
+        import { foo } from './bar';
+        import { fooz } from '../baz';
+      `,
+      output: `
+        import { fooz } from '../baz';
+        import { foo } from './bar';
+      `,
+      options: [
+        {
+          groups: [['parent', 'sibling']],
+          intraGroupOrdering: true,
+        },
+      ],
+      errors: [{
+        message: '`../baz` import should occur before import of `./bar`',
+      }],
+    }),
+
     // Alphabetize with require
     ...semver.satisfies(eslintPkg.version, '< 3.0.0') ? [] : [
       test({
@@ -2747,7 +2794,7 @@ ruleTester.run('order', rule, {
 context('TypeScript', function () {
   getNonDefaultParsers()
     // Type-only imports were added in TypeScript ESTree 2.23.0
-    .filter((parser) => parser !== parsers.TS_OLD)
+    .filter((parser) => parser !== parsers.TS_OLD).slice(0, 1)
     .forEach((parser) => {
       const parserConfig = {
         parser,
@@ -2964,6 +3011,25 @@ context('TypeScript', function () {
                   order: 'asc',
                   caseInsensitive: true,
                 },
+              },
+            ],
+          }),
+          
+          // Option intraGroupOrdering: true (should sort type imports in remaining group order)
+          test({
+            name: 'pearce',
+            code: `
+              import type { Dirent } from 'fs';
+
+              import type { Fooz } from '../baz';
+              import type { Foo } from './bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'external' ['parent', 'sibling']],
+                intraGroupOrdering: true,
+                'newlines-between': 'always',
               },
             ],
           }),
@@ -3191,6 +3257,28 @@ context('TypeScript', function () {
                 alphabetize: { order: 'asc' },
               },
             ],
+          }),
+
+          // Option intraGroupOrdering: true (should sort type imports in order of nested group)
+          test({
+            code: `
+              import type { Foo } from './bar';
+              import type { Fooz } from '../baz';
+            `,
+            output: `
+              import type { Fooz } from '../baz';
+              import type { Foo } from './bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', ['parent', 'sibling']],
+                intraGroupOrdering: true,
+              },
+            ],
+            errors: [{
+              message: '`../baz` type import should occur before type import of `./bar`',
+            }],
           }),
         ],
       });

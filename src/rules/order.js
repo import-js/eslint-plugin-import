@@ -3,7 +3,7 @@
 import minimatch from 'minimatch';
 import includes from 'array-includes';
 
-import importType from '../core/importType';
+import resolveImportType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
 import docsUrl from '../docsUrl';
 
@@ -325,81 +325,169 @@ function getSorter(alphabetizeOptions) {
   };
 }
 
-function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
-  const groupedByRanks = imported.reduce(function (acc, importedItem) {
-    if (!Array.isArray(acc[importedItem.rank])) {
-      acc[importedItem.rank] = [];
+function mutateRanksForIntraGroupOrdering(computedContext, imported, groups, intraGroupOrdering, alphabetizeOptions) {
+  const { omittedTypes } = computedContext;
+
+  const nonTypeGroups = new Set(groups.flat());
+  if (intraGroupOrdering) {
+    nonTypeGroups.delete('type');
+
+    if (omittedTypes.size) {
+      nonTypeGroups.add('unknown');
     }
-    acc[importedItem.rank].push(importedItem);
+  }
+
+  let groupIndexMap = {};
+  if (intraGroupOrdering) {
+    // map of indices of each import type in the original groups array
+    groupIndexMap = groups.reduce(function (acc, group, idx) {
+      if (typeof group === 'string') {
+        acc[group] = idx;
+      } else if (Array.isArray(group)) {
+        for (const groupItem of group) {
+          acc[groupItem] = idx;
+        }
+      }
+
+      return acc;
+    }, groupIndexMap);
+  }
+
+  const groupedByRanks = imported.reduce(function (acc, importedItem) {
+    const { rank, groupType, pathType } = importedItem;
+
+    if (
+      !intraGroupOrdering ||
+      (intraGroupOrdering && (omittedTypes.has(groupType) || !includes(types, pathType)))
+    ) {
+      if (!Array.isArray(acc[rank])) {
+        acc[rank] = [[]];
+      }
+
+      acc[rank][0].push(importedItem);
+    } else if (intraGroupOrdering) {
+      // index of the import type in the original groups array
+      const groupsIndex = groupIndexMap[groupType];
+      let group = Array.isArray(groups[groupsIndex]) ? groups[groupsIndex] : [groups[groupsIndex]];
+
+      if (groupType === 'type') {
+        if (omittedTypes.size) {
+          nonTypeGroups.add('unknown');
+        }
+
+        // sort type imports in the same order groups are sorted in but without newlines
+        group = Array.from(nonTypeGroups);
+      }
+
+      if (!Array.isArray(acc[rank])) {
+        acc[rank] = Array.from({ length: group.length }, function () {
+          return [];
+        });
+      }
+
+      let groupIdx;
+      if (groupType === 'type') {
+        groupIdx = group.indexOf(pathType);
+
+        if (groupIdx === -1) {
+        // if a type isn't specified, put in in the `unknown` group
+          groupIdx = group.length - 1;
+        }
+      } else {
+        groupIdx = group.indexOf(groupType);
+      }
+
+      acc[rank][groupIdx].push(importedItem);
+    }
+
     return acc;
   }, {});
 
-  const sorterFn = getSorter(alphabetizeOptions);
 
   // sort group keys so that they can be iterated on in order
   const groupRanks = Object.keys(groupedByRanks).sort(function (a, b) {
     return a - b;
   });
 
-  // sort imports locally within their group
-  groupRanks.forEach(function (groupRank) {
-    groupedByRanks[groupRank].sort(sorterFn);
-  });
+  if (alphabetizeOptions.order !== 'ignore') {
+    const sorterFn = getSorter(alphabetizeOptions);
+  
+    // sort imports locally within their group
+    for (const groupRank of groupRanks) {
+      for (const importedGroup of groupedByRanks[groupRank]) {
+        importedGroup.sort(sorterFn);
+      }
+    }
+  }
 
   // assign globally unique rank to each import
   let newRank = 0;
-  const alphabetizedRanks = groupRanks.reduce(function (acc, groupRank) {
-    groupedByRanks[groupRank].forEach(function (importedItem) {
-      acc[`${importedItem.value}|${importedItem.node.importKind}`] = parseInt(groupRank, 10) + newRank;
-      newRank += 1;
-    });
+  const mutatedRanks = groupRanks.reduce(function (acc, groupRank) {
+    for (const importedGroup of groupedByRanks[groupRank]) {
+      for (const importedItem of importedGroup) {
+        acc[`${importedItem.value}|${importedItem.node.importKind}`] = parseInt(groupRank, 10) + newRank;
+        newRank += 1;
+      }
+    }
     return acc;
   }, {});
 
   // mutate the original group-rank with alphabetized-rank
   imported.forEach(function (importedItem) {
-    importedItem.rank = alphabetizedRanks[`${importedItem.value}|${importedItem.node.importKind}`];
+    importedItem.rank = mutatedRanks[`${importedItem.value}|${importedItem.node.importKind}`];
   });
 }
 
 // DETECTING
 
-function computePathRank(ranks, pathGroups, path, maxPosition) {
+function computePathGroupRank(ranks, pathGroups, path, maxPosition) {
   for (let i = 0, l = pathGroups.length; i < l; i++) {
     const { pattern, patternOptions, group, position = 1 } = pathGroups[i];
     if (minimatch(path, pattern, patternOptions || { nocomment: true })) {
-      return ranks[group] + (position / maxPosition);
+      return [ranks[group] + (position / maxPosition), group];
     }
   }
 }
 
-function computeRank(context, ranks, importEntry, excludedImportTypes) {
-  let impType;
+function computeRank(context, computedContext, importEntry, excludedImportTypes) {
   let rank;
+  let groupType; // the assigned group type of the import
+  let pathType; // the computed type of the import's path with no other modifiers (used for sorting type imports)
+  
   if (importEntry.type === 'import:object') {
-    impType = 'object';
-  } else if (importEntry.node.importKind === 'type' && ranks.omittedTypes.indexOf('type') === -1) {
-    impType = 'type';
+    groupType = 'object';
   } else {
-    impType = importType(importEntry.value, context);
+    groupType = resolveImportType(importEntry.value, context);
+    pathType = groupType;
   }
-  if (!excludedImportTypes.has(impType)) {
-    rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition);
+
+  if (importEntry.node.importKind === 'type' && !computedContext.omittedTypes.has('type')) {
+    groupType = 'type';
   }
+
+  if (!excludedImportTypes.has(groupType)) {
+    const pathGroupRank = computePathGroupRank(computedContext.ranks, computedContext.pathGroups, importEntry.value, computedContext.maxPosition);
+    if (pathGroupRank) {
+      [rank, groupType] = pathGroupRank;
+      pathType = groupType;
+    }
+  }
+
   if (typeof rank === 'undefined') {
-    rank = ranks.groups[impType];
+    rank = computedContext.ranks[groupType];
   }
+
   if (importEntry.type !== 'import' && !importEntry.type.startsWith('import:')) {
     rank += 100;
   }
 
-  return rank;
+  return { rank, groupType, pathType };
 }
 
-function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, ranks, importEntry, excludedImportTypes);
-  if (rank !== -1) {
-    imported.push(Object.assign({}, importEntry, { rank }));
+function registerNode(context, importEntry, computedContext, imported, excludedImportTypes) {
+  const computedRank = computeRank(context, computedContext, importEntry, excludedImportTypes);
+  if (computedRank.rank !== -1) {
+    imported.push(Object.assign({}, importEntry, computedRank));
   }
 }
 
@@ -428,10 +516,11 @@ const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling'
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
 // Will throw an error if it contains a type that does not exist, or has a duplicate
 function convertGroupsToRanks(groups) {
-  const rankObject = groups.reduce(function (res, group, index) {
+  const ranks = groups.reduce(function (res, group, index) {
     if (typeof group === 'string') {
       group = [group];
     }
+
     group.forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
         throw new Error('Incorrect configuration of the rule: Unknown type `' +
@@ -445,16 +534,15 @@ function convertGroupsToRanks(groups) {
     return res;
   }, {});
 
-  const omittedTypes = types.filter(function (type) {
-    return rankObject[type] === undefined;
-  });
+  const omittedTypes = new Set(types.filter(function (type) {
+    return ranks[type] === undefined;
+  }));
 
-  const ranks = omittedTypes.reduce(function (res, type) {
-    res[type] = groups.length * 2;
-    return res;
-  }, rankObject);
+  for (const omittedType of omittedTypes) {
+    ranks[omittedType] = groups.length * 2;
+  }
 
-  return { groups: ranks, omittedTypes };
+  return { ranks, omittedTypes };
 }
 
 function convertPathGroupsForRanks(pathGroups) {
@@ -588,6 +676,9 @@ function getAlphabetizeConfig(options) {
 // TODO, semver-major: Change the default of "distinctGroup" from true to false
 const defaultDistinctGroup = true;
 
+// TODO, semver-major: Remove the "intraGroupOrdering" option and make it's truthy case the default implementation of this rule
+const defaultIntraGroupOrdering = false;
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -604,6 +695,10 @@ module.exports = {
         properties: {
           groups: {
             type: 'array',
+          },
+          intraGroupOrdering: {
+            type: 'boolean',
+            default: defaultIntraGroupOrdering,
           },
           pathGroupsExcludedImportTypes: {
             type: 'array',
@@ -674,17 +769,20 @@ module.exports = {
 
   create: function importOrderRule(context) {
     const options = context.options[0] || {};
+    const groups = options.groups || defaultGroups;
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object']);
     const alphabetize = getAlphabetizeConfig(options);
     const distinctGroup = options.distinctGroup == null ? defaultDistinctGroup : !!options.distinctGroup;
-    let ranks;
-
+    const intraGroupOrdering =  options.intraGroupOrdering == null ? defaultIntraGroupOrdering : !!options.intraGroupOrdering;
+    
+    let computedContext;
     try {
       const { pathGroups, maxPosition } = convertPathGroupsForRanks(options.pathGroups || []);
-      const { groups, omittedTypes } = convertGroupsToRanks(options.groups || defaultGroups);
-      ranks = {
-        groups,
+      const { ranks, omittedTypes } = convertGroupsToRanks(groups);
+
+      computedContext = {
+        ranks,
         omittedTypes,
         pathGroups,
         maxPosition,
@@ -719,7 +817,7 @@ module.exports = {
               displayName: name,
               type: 'import',
             },
-            ranks,
+            computedContext,
             getBlockImports(node.parent),
             pathGroupsExcludedImportTypes,
           );
@@ -750,7 +848,7 @@ module.exports = {
             displayName,
             type,
           },
-          ranks,
+          computedContext,
           getBlockImports(node.parent),
           pathGroupsExcludedImportTypes,
         );
@@ -772,7 +870,7 @@ module.exports = {
             displayName: name,
             type: 'require',
           },
-          ranks,
+          computedContext,
           getBlockImports(block),
           pathGroupsExcludedImportTypes,
         );
@@ -783,8 +881,8 @@ module.exports = {
             makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup);
           }
 
-          if (alphabetize.order !== 'ignore') {
-            mutateRanksToAlphabetize(imported, alphabetize);
+          if (intraGroupOrdering || alphabetize.order !== 'ignore') {
+            mutateRanksForIntraGroupOrdering(computedContext, imported, groups, intraGroupOrdering, alphabetize);
           }
 
           makeOutOfOrderReport(context, imported);
