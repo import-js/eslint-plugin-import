@@ -62,7 +62,7 @@ test.another = true
 module.exports = test
 ```
 
-```flow js
+```ts
 const first = true;
 type firstType = boolean
 
@@ -105,7 +105,7 @@ module.exports.first = true
 module.exports.second = true
 ```
 
-```flow js
+```ts
 type firstType = boolean
 type secondType = any
 

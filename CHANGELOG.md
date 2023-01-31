@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
+- [Docs] [`group-exports`]: fix syntax highlighting ([#2699], thanks [@devinrhode2])
 
 ## [2.27.5] - 2023-01-16
 
@@ -1064,6 +1065,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
@@ -1654,6 +1656,7 @@ for info on changes for earlier releases.
 [@darkartur]: https://github.com/darkartur
 [@davidbonnet]: https://github.com/davidbonnet
 [@dbrewer5]: https://github.com/dbrewer5
+[@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
 [@duncanbeevers]: https://github.com/duncanbeevers
