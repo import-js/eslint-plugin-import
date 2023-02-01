@@ -1,6 +1,6 @@
 # import/named
 
-💼🚫 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`. This rule is _disabled_ in the ⌨️ `typescript` config.
+💼🚫 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`, `recommended-esm`. This rule is _disabled_ in the ⌨️ `typescript` config.
 
 <!-- end auto-generated rule header -->
 

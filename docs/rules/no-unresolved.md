@@ -1,6 +1,6 @@
 # import/no-unresolved
 
-💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`.
+💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`, `recommended-esm`.
 
 <!-- end auto-generated rule header -->
 

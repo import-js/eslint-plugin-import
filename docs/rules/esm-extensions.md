@@ -1,5 +1,11 @@
 # import/esm-extensions
 
+💼 This rule is enabled in the `recommended-esm` config.
+
+🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+<!-- end auto-generated rule header -->
+
 Check for full path imports (as required by ESM modules).
 
 This rule will flag any relative import paths that do not resolve to a file.

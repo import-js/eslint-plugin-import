@@ -1,6 +1,6 @@
 # import/no-named-as-default-member
 
-⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, 🚸 `warnings`.
+⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, `recommended-esm`, 🚸 `warnings`.
 
 <!-- end auto-generated rule header -->
 

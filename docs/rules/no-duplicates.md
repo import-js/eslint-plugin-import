@@ -1,6 +1,6 @@
 # import/no-duplicates
 
-⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, 🚸 `warnings`.
+⚠️ This rule _warns_ in the following configs: ☑️ `recommended`, `recommended-esm`, 🚸 `warnings`.
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
