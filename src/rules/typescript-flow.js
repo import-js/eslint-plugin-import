@@ -2,8 +2,8 @@
 
 import docsUrl from '../docsUrl';
 
-// import debug from 'debug';
-// const log = debug('eslint-plugin-import/typescript-flow');
+import debug from 'debug';
+const log = debug('eslint-plugin-import/typescript-flow');
 
 import typescriptPkg from 'typescript/package.json';
 import semver from 'semver';
@@ -91,12 +91,12 @@ module.exports = {
     }
 
     const fixerArray = [];
-    const typeImports = [];
-    const valueImports =[];
-    const valueNodeImports =[];
+    const typeImportSpecifiers = [];
+    const valueImportSpecifiers =[];
+    const valueImportNodes =[];
     const importSpecifierRanges = [];
     let allImportsSize = 0;
-    const nonTypeImportDeclarations = new Map();
+    const importMap = new Map();
 
     return {
       'ImportDeclaration': function (node){
@@ -108,37 +108,48 @@ module.exports = {
 
         if (config === 'separate' && node.importKind !== 'type') {
           // identify importSpecifiers that have inline type imports as well as value imports
-          node.specifiers.forEach((specifier) => {
-            if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
-              return;
-            }
-            // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
-            allImportsSize = allImportsSize + 1;
-            // catch all inline imports and add them to the set
-            if (specifier.importKind === 'type') {
-              if (specifier.local.name !== specifier.imported.name) {
-                typeImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
-              } else {
-                typeImports.push(specifier.local.name);
-              }
-              importSpecifierRanges.push(specifier.range);
-            } else {
-              valueNodeImports.push(specifier);
-              if (specifier.local.name !== specifier.imported.name) {
-                valueImports.push(`${specifier.imported.name} as ${specifier.local.name}`);
-              } else {
-                valueImports.push(specifier.local.name);
-              }
-              importSpecifierRanges.push(specifier.range);
-            }
-          });
-          // no inline type imports found
-          if (typeImports.length === 0) {
+
+          const specifierCache = {
+            typeImportSpecifiers, valueImportSpecifiers, valueImportNodes, importSpecifierRanges, allImportsSize,
+          };
+
+          if (!setImportSpecifierCache(node.specifiers, specifierCache)) {
             return;
           }
+          allImportsSize = typeImportSpecifiers.length + valueImportSpecifiers.length;
+          // for (let i = 0; i < node.specifiers.length; i++) {
+          //   const specifier = node.specifiers[i];
+          //   if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
+          //     return;
+          //   }
+          //   // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
+          //   allImportsSize = allImportsSize + 1;
+          //   // catch all inline imports and add them to the set
+          //   if (specifier.importKind === 'type') {
+          //     if (specifier.local.name !== specifier.imported.name) {
+          //       typeImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
+          //     } else {
+          //       typeImportSpecifiers.push(specifier.local.name);
+          //     }
+          //     importSpecifierRanges.push(specifier.range);
+          //   } else {
+          //     valueImportNodes.push(specifier);
+          //     if (specifier.local.name !== specifier.imported.name) {
+          //       valueImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
+          //     } else {
+          //       valueImportSpecifiers.push(specifier.local.name);
+          //     }
+          //     importSpecifierRanges.push(specifier.range);
+          //   }
+          // }
+          // no inline type imports found
+          if (typeImportSpecifiers.length === 0) {
+            return;
+          }
+          log('all imports size - ', allImportsSize);
           // all inline imports are type imports => need to change it to separate import statement
           // import {type X, type Y} form 'x' => import type { X, Y} from 'x'
-          if (typeImports.length === allImportsSize) {
+          if (typeImportSpecifiers.length === allImportsSize) {
             context.report({
               node,
               message: SEPARATE_ERROR_MESSAGE,
@@ -183,9 +194,9 @@ module.exports = {
                   }   
                 });
                 // add inline value imports back
-                fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImports.join(', ')));
+                fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImportSpecifiers.join(', ')));
                 // add new line with separate type import
-                fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImports.join(', ')} } from ${importPath}`));
+                fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImportSpecifiers.join(', ')} } from ${importPath}`));
                 return fixerArray;
               },
             });
@@ -197,42 +208,47 @@ module.exports = {
           if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
             return;
           }
-          node.specifiers.forEach((specifier) => {
-            if (specifier.local.name !== specifier.imported.name) {
-              typeImports.push(`type ${specifier.imported.name} as ${specifier.local.name}`);
-            } else {
-              typeImports.push(`type ${specifier.local.name}`);
-            }
-            valueNodeImports.push(specifier);
-          });
-          
-          // function process body statement to find if there are any non-type imports from the same location
-          node.parent.body.forEach(declaration => processBodyStatement(nonTypeImportDeclarations, declaration));
-          
-          // file has non type import from the same source
-          const declaration = nonTypeImportDeclarations.get(node.source.value);
 
-          if (declaration && !declaration.hasNamespaceImport) {
+          // IMPROVE: take out to separate function
+          for (let i = 0; i < node.specifiers.length; i++) {
+            const specifier = node.specifiers[i];
+            if (specifier.local.name !== specifier.imported.name) {
+              typeImportSpecifiers.push(`type ${specifier.imported.name} as ${specifier.local.name}`);
+            } else {
+              typeImportSpecifiers.push(`type ${specifier.local.name}`);
+            }
+            valueImportNodes.push(specifier);
+          }
+          
+          // IMPROVE: separate function to handle it? find if there are any non-type imports from the same location
+          const body = node.parent.body;
+          for (let j = 0; j < body.length; j++) {
+            const element = body[j];
+            processBodyStatement(importMap, element);
+          }
+          const sameSourceValueImport = importMap.get(node.source.value);
+
+          if (sameSourceValueImport && !sameSourceValueImport.hasNamespaceImport) {
 
             // get the last specifier
-            const  lastSpecifier = declaration.specifiers[declaration.specifiers.length - 1];
+            const  lastSpecifier = sameSourceValueImport.specifiers[sameSourceValueImport.specifiers.length - 1];
 
             // try to insert after the last specifier
             context.report({
               node,
               message: INLINE_ERROR_MESSAGE,
               fix(fixer) {
-                if (lastSpecifier.type === 'ImportDefaultSpecifier' && declaration.specifiers.length === 1) {
+                if (lastSpecifier.type === 'ImportDefaultSpecifier' && sameSourceValueImport.specifiers.length === 1) {
                   // import defaultExport from 'x'
                   // import type { X, Y } from 'x'
                   // => import defaultExport, { type X, type Y } from 'x'
-                  const inlineTypeImportsToInsert = ', { ' + typeImports.join(', ') + ' }';
+                  const inlineTypeImportsToInsert = ', { ' + typeImportSpecifiers.join(', ') + ' }';
                   fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
                 } else {
                   // import { namedImport } from 'x'
                   // import type { X, Y } from 'x'
                   // => import { namedImport, type X, type Y } from 'x'
-                  const inlineTypeImportsToInsert = ', ' + typeImports.join(', ');
+                  const inlineTypeImportsToInsert = ', ' + typeImportSpecifiers.join(', ');
                   fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
                 }
 
@@ -252,7 +268,7 @@ module.exports = {
                 const sourceCode = context.getSourceCode();
                 const tokens = sourceCode.getTokens(node);
                 fixerArray.push(fixer.remove(tokens[1]));
-                valueNodeImports.forEach(element => {
+                valueImportNodes.forEach(element => {
                   fixerArray.push(fixer.insertTextBefore(element, 'type '));
                 });
                 return fixerArray;
@@ -264,3 +280,37 @@ module.exports = {
     };
   },
 };
+
+function setImportSpecifierCache(specifiers, specifierCache) {
+  const typeImportSpecifiers = specifierCache.typeImportSpecifiers;
+  const valueImportSpecifiers = specifierCache.valueImportSpecifiers;
+  const valueImportNodes = specifierCache.valueImportNodes;
+  const importSpecifierRanges = specifierCache.importSpecifierRanges;
+
+  for (let i = 0; i < specifiers.length; i++) {
+    const specifier = specifiers[i];
+    if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
+      return false;
+    }
+    // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
+    specifierCache.allImportsSize = specifierCache.allImportsSize + 1;
+    // catch all inline imports and add them to the set
+    if (specifier.importKind === 'type') {
+      if (specifier.local.name !== specifier.imported.name) {
+        typeImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
+      } else {
+        typeImportSpecifiers.push(specifier.local.name);
+      }
+      importSpecifierRanges.push(specifier.range);
+    } else {
+      valueImportNodes.push(specifier);
+      if (specifier.local.name !== specifier.imported.name) {
+        valueImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
+      } else {
+        valueImportSpecifiers.push(specifier.local.name);
+      }
+      importSpecifierRanges.push(specifier.range);
+    }
+  }
+  return true;
+}
