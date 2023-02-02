@@ -2,8 +2,8 @@
 
 import docsUrl from '../docsUrl';
 
-import debug from 'debug';
-const log = debug('eslint-plugin-import/typescript-flow');
+// import debug from 'debug';
+// const log = debug('eslint-plugin-import/typescript-flow');
 
 import typescriptPkg from 'typescript/package.json';
 import semver from 'semver';
@@ -14,36 +14,6 @@ function tsVersionSatisfies(specifier) {
 
 const SEPARATE_ERROR_MESSAGE = 'Type imports should be separately imported.';
 const INLINE_ERROR_MESSAGE = 'Type imports should be imported inline with type modifier.';
-
-function processBodyStatement(importMap, node){
-  if (node.type !== 'ImportDeclaration' || node.importKind === 'type') return;
-  if (node.specifiers.length === 0) return;
-
-  const specifiers = [];
-  let hasDefaultImport= false;
-  let hasInlineDefaultImport = false;
-  let hasNamespaceImport =  false;
-  
-  node.specifiers.forEach((specifier)=>{
-    if (specifier.type === 'ImportNamespaceSpecifier') {
-      hasNamespaceImport = true;
-    }
-    // ignore the case for now. TODO: talk with Jordan and implement the handling of the rule here
-    if (specifier.type === 'ImportDefaultSpecifier') {
-      hasDefaultImport = true;
-      specifiers.push(specifier);
-    }
-    if (specifier.type === 'ImportSpecifier') {
-      // check if its {default as B}
-      if (specifier.imported.name === 'default') {
-        hasInlineDefaultImport = true;
-      }
-      specifiers.push(specifier);
-    }
-  });
-  // cache all imports
-  importMap.set(node.source.value, { specifiers, hasDefaultImport, hasInlineDefaultImport, hasNamespaceImport });
-}
 
 // TODO: revert changes in ExportMap file. 
 module.exports = {
@@ -80,128 +50,46 @@ module.exports = {
     // check if it can be supported. If not, fall back on separate. 
     // If arr[0] === separate => just assume it is separate
 
-    const supportInlineTypeImport = tsVersionSatisfies('>=4.5'); // type modifiers (inline type import) were introduced in TS 4.5. 
+    const isInlineTypeImportSupported = tsVersionSatisfies('>=4.5'); // type modifiers (inline type import) were introduced in TS 4.5. 
     // get Rule options.
-    let config = context.options[0];
-    if (config.length === 2 && config[0] === 'inline' && !supportInlineTypeImport) {
-      config = 'separate';
-    }
-    if (config[0] === 'separate') {
-      config = 'separate';
-    }
+    const config = getRuleConfig(context.options[0], isInlineTypeImportSupported);
 
-    const fixerArray = [];
     const typeImportSpecifiers = [];
     const valueImportSpecifiers =[];
     const valueImportNodes =[];
     const importSpecifierRanges = [];
-    let allImportsSize = 0;
-    const importMap = new Map();
+
+
+    const specifierCache = {
+      typeImportSpecifiers, valueImportSpecifiers, valueImportNodes, importSpecifierRanges,
+    };
+
 
     return {
       'ImportDeclaration': function (node){
 
-        if (config === 'inline' && !supportInlineTypeImport) {
-          // raise error
+        if (config === 'inline' && !isInlineTypeImportSupported) {
           context.report(node, 'Type modifiers are not supported by your version of TS.');
         }
 
+
         if (config === 'separate' && node.importKind !== 'type') {
           // identify importSpecifiers that have inline type imports as well as value imports
-
-          const specifierCache = {
-            typeImportSpecifiers, valueImportSpecifiers, valueImportNodes, importSpecifierRanges, allImportsSize,
-          };
-
-          if (!setImportSpecifierCache(node.specifiers, specifierCache)) {
+          if (!setImportSpecifierCacheForSeparate(node.specifiers, specifierCache)) {
             return;
           }
-          allImportsSize = typeImportSpecifiers.length + valueImportSpecifiers.length;
-          // for (let i = 0; i < node.specifiers.length; i++) {
-          //   const specifier = node.specifiers[i];
-          //   if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
-          //     return;
-          //   }
-          //   // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
-          //   allImportsSize = allImportsSize + 1;
-          //   // catch all inline imports and add them to the set
-          //   if (specifier.importKind === 'type') {
-          //     if (specifier.local.name !== specifier.imported.name) {
-          //       typeImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
-          //     } else {
-          //       typeImportSpecifiers.push(specifier.local.name);
-          //     }
-          //     importSpecifierRanges.push(specifier.range);
-          //   } else {
-          //     valueImportNodes.push(specifier);
-          //     if (specifier.local.name !== specifier.imported.name) {
-          //       valueImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
-          //     } else {
-          //       valueImportSpecifiers.push(specifier.local.name);
-          //     }
-          //     importSpecifierRanges.push(specifier.range);
-          //   }
-          // }
           // no inline type imports found
           if (typeImportSpecifiers.length === 0) {
             return;
           }
-          log('all imports size - ', allImportsSize);
-          // all inline imports are type imports => need to change it to separate import statement
-          // import {type X, type Y} form 'x' => import type { X, Y} from 'x'
-          if (typeImportSpecifiers.length === allImportsSize) {
-            context.report({
-              node,
-              message: SEPARATE_ERROR_MESSAGE,
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
-                const tokens = sourceCode.getTokens(node);
-                tokens.forEach(token => {
-                  if (token.value === 'type') {
-                    fixerArray.push(fixer.remove(token));
-                  }
-                });
-                fixerArray.push(fixer.insertTextAfter(tokens[0], ' type'));
-                return fixerArray;
-              },
-            });
+          if (typeImportSpecifiers.length === typeImportSpecifiers.length + valueImportSpecifiers.length) {
+            changeInlineImportToSeparate(node, context);
           }
-          
-          // there is a mix of inline value imports and type imports
-          // import {type X, type Y, Z} form 'x' => import {Z} form 'x'\nimport type { X, Y } from 'x'
-          else {
-            context.report({
-              node,
-              message: SEPARATE_ERROR_MESSAGE,
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
-                const tokens = sourceCode.getTokens(node);
-                const importPath = tokens[tokens.length-1].value;
-  
-                // remove all imports
-                importSpecifierRanges.forEach((range)=>{
-                  fixerArray.push(fixer.removeRange([range[0], range[1]]));
-                });
-
-                let namedImportStart = undefined;
-                // remove all commas
-                tokens.forEach( element => {
-                  if (element.value === '{') {
-                    namedImportStart = element;
-                  }
-                  if (element.value === ',') {
-                    fixerArray.push(fixer.remove(element));
-                  }   
-                });
-                // add inline value imports back
-                fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImportSpecifiers.join(', ')));
-                // add new line with separate type import
-                fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImportSpecifiers.join(', ')} } from ${importPath}`));
-                return fixerArray;
-              },
-            });
+          else { 
+            addSeparateTypeImportDeclaration(node, context, specifierCache);
           }
         }
+
 
         if (config === 'inline' && node.importKind === 'type') {
           // ignore default type import like: import type A from 'x'
@@ -209,71 +97,14 @@ module.exports = {
             return;
           }
 
-          // IMPROVE: take out to separate function
-          for (let i = 0; i < node.specifiers.length; i++) {
-            const specifier = node.specifiers[i];
-            if (specifier.local.name !== specifier.imported.name) {
-              typeImportSpecifiers.push(`type ${specifier.imported.name} as ${specifier.local.name}`);
-            } else {
-              typeImportSpecifiers.push(`type ${specifier.local.name}`);
-            }
-            valueImportNodes.push(specifier);
-          }
+          setImportSpecifierCacheForInline(node, specifierCache);
           
-          // IMPROVE: separate function to handle it? find if there are any non-type imports from the same location
-          const body = node.parent.body;
-          for (let j = 0; j < body.length; j++) {
-            const element = body[j];
-            processBodyStatement(importMap, element);
-          }
-          const sameSourceValueImport = importMap.get(node.source.value);
+          const sameSourceValueImport = getImportDeclarationFromTheSameSource(node);
 
           if (sameSourceValueImport && !sameSourceValueImport.hasNamespaceImport) {
-
-            // get the last specifier
-            const  lastSpecifier = sameSourceValueImport.specifiers[sameSourceValueImport.specifiers.length - 1];
-
-            // try to insert after the last specifier
-            context.report({
-              node,
-              message: INLINE_ERROR_MESSAGE,
-              fix(fixer) {
-                if (lastSpecifier.type === 'ImportDefaultSpecifier' && sameSourceValueImport.specifiers.length === 1) {
-                  // import defaultExport from 'x'
-                  // import type { X, Y } from 'x'
-                  // => import defaultExport, { type X, type Y } from 'x'
-                  const inlineTypeImportsToInsert = ', { ' + typeImportSpecifiers.join(', ') + ' }';
-                  fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
-                } else {
-                  // import { namedImport } from 'x'
-                  // import type { X, Y } from 'x'
-                  // => import { namedImport, type X, type Y } from 'x'
-                  const inlineTypeImportsToInsert = ', ' + typeImportSpecifiers.join(', ');
-                  fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
-                }
-
-                fixerArray.push(fixer.remove(node));
-                return fixerArray;
-              },
-            });
+            insertInlineTypeImportsToSameSourceImport(node, context, sameSourceValueImport, typeImportSpecifiers);
           } else {
-          // There are no other imports from the same location => remove 'type' next to import statement and add "type" to every named import
-          // import type {a,b} from 'x' => import {type a, type b} from 'x'
-
-            // TODO: check this statement: valueNodeImports => possibly rename it ?
-            context.report({
-              node,
-              message: INLINE_ERROR_MESSAGE,
-              fix(fixer) {
-                const sourceCode = context.getSourceCode();
-                const tokens = sourceCode.getTokens(node);
-                fixerArray.push(fixer.remove(tokens[1]));
-                valueImportNodes.forEach(element => {
-                  fixerArray.push(fixer.insertTextBefore(element, 'type '));
-                });
-                return fixerArray;
-              },
-            });
+            changeToInlineTypeImport(node, context, valueImportNodes);
           }
         }
       },
@@ -281,7 +112,21 @@ module.exports = {
   },
 };
 
-function setImportSpecifierCache(specifiers, specifierCache) {
+
+function getRuleConfig(config, isInlineTypeImportSupported) {
+  if (config.length === 2 && config[0] === 'inline' && !isInlineTypeImportSupported) {
+    config = 'separate';
+  }
+  if (config[0] === 'separate') {
+    config = 'separate';
+  }
+  return config;
+}
+
+/* 
+  Functions for config === separate
+*/ 
+function setImportSpecifierCacheForSeparate(specifiers, specifierCache) {
   const typeImportSpecifiers = specifierCache.typeImportSpecifiers;
   const valueImportSpecifiers = specifierCache.valueImportSpecifiers;
   const valueImportNodes = specifierCache.valueImportNodes;
@@ -313,4 +158,176 @@ function setImportSpecifierCache(specifiers, specifierCache) {
     }
   }
   return true;
+}
+
+function changeInlineImportToSeparate(node, context){
+  // all inline imports are type imports => need to change it to separate import statement
+  // import {type X, type Y} form 'x' => import type { X, Y} from 'x'
+
+  const fixerArray = [];
+  context.report({
+    node,
+    message: SEPARATE_ERROR_MESSAGE,
+    fix(fixer) {
+      const sourceCode = context.getSourceCode();
+      const tokens = sourceCode.getTokens(node);
+      tokens.forEach(token => {
+        if (token.value === 'type') {
+          fixerArray.push(fixer.remove(token));
+        }
+      });
+      fixerArray.push(fixer.insertTextAfter(tokens[0], ' type'));
+      return fixerArray;
+    },
+  }); 
+}
+
+function addSeparateTypeImportDeclaration(node, context, specifierCache) {
+  // there is a mix of inline value imports and type imports
+  // import {type X, type Y, Z} form 'x' => import {Z} form 'x'\nimport type { X, Y } from 'x'
+  const fixerArray = [];
+  const importSpecifierRanges = specifierCache.importSpecifierRanges;
+  const valueImportSpecifiers = specifierCache.valueImportSpecifiers;
+  const typeImportSpecifiers = specifierCache.typeImportSpecifiers;
+
+  context.report({
+    node,
+    message: SEPARATE_ERROR_MESSAGE,
+    fix(fixer) {
+      const sourceCode = context.getSourceCode();
+      const tokens = sourceCode.getTokens(node);
+      const importPath = tokens[tokens.length-1].value;
+
+      // remove all imports
+      importSpecifierRanges.forEach((range)=>{
+        fixerArray.push(fixer.removeRange([range[0], range[1]]));
+      });
+
+      let namedImportStart = undefined;
+      // remove all commas
+      tokens.forEach( element => {
+        if (element.value === '{') {
+          namedImportStart = element;
+        }
+        if (element.value === ',') {
+          fixerArray.push(fixer.remove(element));
+        }   
+      });
+      // add inline value imports back
+      fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImportSpecifiers.join(', ')));
+      // add new line with separate type import
+      fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImportSpecifiers.join(', ')} } from ${importPath}`));
+      return fixerArray;
+    },
+  });
+}
+
+
+/* 
+  Functions for config === inline
+*/ 
+
+function setImportSpecifierCacheForInline(node, specifierCache) {
+  const typeImportSpecifiers = specifierCache.typeImportSpecifiers;
+  const valueImportNodes = specifierCache.valueImportNodes;
+
+  for (let i = 0; i < node.specifiers.length; i++) {
+    const specifier = node.specifiers[i];
+    if (specifier.local.name !== specifier.imported.name) {
+      typeImportSpecifiers.push(`type ${specifier.imported.name} as ${specifier.local.name}`);
+    } else {
+      typeImportSpecifiers.push(`type ${specifier.local.name}`);
+    }
+    valueImportNodes.push(specifier);
+  }
+}
+
+
+function getImportDeclarationFromTheSameSource(node) {
+  const importDeclarationCache = new Map();
+  const body = node.parent.body;
+  for (let j = 0; j < body.length; j++) {
+    const element = body[j];
+    processBodyStatement(importDeclarationCache, element);
+  }
+  return importDeclarationCache.get(node.source.value);
+}
+
+function processBodyStatement(importDeclarationCache, node){
+  if (node.type !== 'ImportDeclaration' || node.importKind === 'type') return;
+  if (node.specifiers.length === 0) return;
+
+  const specifiers = [];
+  let hasDefaultImport= false;
+  let hasInlineDefaultImport = false;
+  let hasNamespaceImport =  false;
+  
+  node.specifiers.forEach((specifier)=>{
+    if (specifier.type === 'ImportNamespaceSpecifier') {
+      hasNamespaceImport = true;
+    }
+    // ignore the case for now. TODO: talk with Jordan and implement the handling of the rule here
+    if (specifier.type === 'ImportDefaultSpecifier') {
+      hasDefaultImport = true;
+      specifiers.push(specifier);
+    }
+    if (specifier.type === 'ImportSpecifier') {
+      // check if its {default as B}
+      if (specifier.imported.name === 'default') {
+        hasInlineDefaultImport = true;
+      }
+      specifiers.push(specifier);
+    }
+  });
+  // cache all imports
+  importDeclarationCache.set(node.source.value, { specifiers, hasDefaultImport, hasInlineDefaultImport, hasNamespaceImport });
+}
+
+function insertInlineTypeImportsToSameSourceImport(node, context, sameSourceValueImport, typeImportSpecifiers) {
+  const fixerArray = [];
+  const  lastSpecifier = sameSourceValueImport.specifiers[sameSourceValueImport.specifiers.length - 1];
+
+  context.report({
+    node,
+    message: INLINE_ERROR_MESSAGE,
+    fix(fixer) {
+      if (lastSpecifier.type === 'ImportDefaultSpecifier' && sameSourceValueImport.specifiers.length === 1) {
+        // import defaultExport from 'x'
+        // import type { X, Y } from 'x'
+        // => import defaultExport, { type X, type Y } from 'x'
+        const inlineTypeImportsToInsert = ', { ' + typeImportSpecifiers.join(', ') + ' }';
+        fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
+      } else {
+        // import { namedImport } from 'x'
+        // import type { X, Y } from 'x'
+        // => import { namedImport, type X, type Y } from 'x'
+        const inlineTypeImportsToInsert = ', ' + typeImportSpecifiers.join(', ');
+        fixerArray.push(fixer.insertTextAfter(lastSpecifier, inlineTypeImportsToInsert));
+      }
+
+      fixerArray.push(fixer.remove(node));
+      return fixerArray;
+    },
+  });
+}
+
+function changeToInlineTypeImport(node, context, valueNodeImports) {
+  // There are no other imports from the same location => remove 'type' next to import statement and add "type" to every named import
+  // import type {a,b} from 'x' => import {type a, type b} from 'x'
+
+  const fixerArray = [];
+
+  context.report({
+    node,
+    message: INLINE_ERROR_MESSAGE,
+    fix(fixer) {
+      const sourceCode = context.getSourceCode();
+      const tokens = sourceCode.getTokens(node);
+      fixerArray.push(fixer.remove(tokens[1]));
+      valueNodeImports.forEach(element => {
+        fixerArray.push(fixer.insertTextBefore(element, 'type '));
+      });
+      return fixerArray;
+    },
+  });
 }
