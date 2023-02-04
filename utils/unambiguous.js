@@ -13,7 +13,8 @@ const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
  * @type {RegExp}
  */
 exports.test = function isMaybeUnambiguousModule(content) {
-  return pattern.test(content);
+  return true;
+  // return pattern.test(content);
 };
 
 // future-/Babel-proof at the expense of being a little loose
