@@ -1,6 +1,6 @@
 # import/namespace
 
-💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`, `recommended-esm`.
+💼 This rule is enabled in the following configs: ❗ `errors`, ☑️ `recommended`.
 
 <!-- end auto-generated rule header -->
 
