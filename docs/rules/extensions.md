@@ -38,7 +38,14 @@ By providing both a string and an object, the string will set the default settin
 
 For example, `["error", "never", { "svg": "always" }]` would require that all extensions are omitted, except for "svg".
 
-`ignorePackages` can be set as a separate boolean option like this:
+## Additional Options
+
+This rule provides additional options for configuration:
+
+- `ignorePackages` follows the same logic as setting the string value of the rule config to `ignorePackages`. Useful when using `always` as the string config.
+- `enforceEsmExtensions` will flag any relative import paths that do not resolve to a file. (supports --fix)
+
+`ignorePackages` and `enforceEsmExtensions` can be set as a separate boolean option like this:
 
 ```
 "import/extensions": [
@@ -46,6 +53,7 @@ For example, `["error", "never", { "svg": "always" }]` would require that all ex
   "never" | "always" | "ignorePackages",
   {
     ignorePackages: true | false,
+    enforceEsmExtensions: true | false,
     pattern: {
       <extension>: "never" | "always" | "ignorePackages"
     }
@@ -165,6 +173,24 @@ import baz from 'foo/baz.js';
 import express from 'express';
 
 import foo from '@/foo';
+```
+
+The following patterns are considered problems when configuration set to `['error', 'always', {ignorePackages: true, enforceEsmExtensions: true} ]`:
+
+```js
+import foo from './foo'
+import bar from './bar'
+import Component from './Component'
+import express from 'express'
+```
+
+The following patterns are not considered problems when configuration set to `['error', 'always', {ignorePackages: true, enforceEsmExtensions: true} ]`:
+
+```js
+import foo from './foo.js'
+import bar from './bar/index.js'
+import Component from './Component.js'
+import express from 'express'
 ```
 
 ## When Not To Use It
