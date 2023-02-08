@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
+- TypeScript config: fix resolver extension settings (thanks [@gajus])
+
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
 
@@ -1389,6 +1393,7 @@ for info on changes for earlier releases.
 [#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
 [#2665]: https://github.com/import-js/eslint-plugin-import/issues/2665
+[#2577]: https://github.com/import-js/eslint-plugin-import/issues/2577
 [#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
 [#2412]: https://github.com/import-js/eslint-plugin-import/issues/2412
 [#2392]: https://github.com/import-js/eslint-plugin-import/issues/2392
@@ -1703,6 +1708,7 @@ for info on changes for earlier releases.
 [@jimbolla]: https://github.com/jimbolla
 [@jkimbo]: https://github.com/jkimbo
 [@joaovieira]: https://github.com/joaovieira
+[@joe-matsec]: https://github.com/joe-matsec
 [@johndevedu]: https://github.com/johndevedu
 [@johnthagen]: https://github.com/johnthagen
 [@jonboiser]: https://github.com/jonboiser

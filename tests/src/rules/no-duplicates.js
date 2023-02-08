@@ -5,6 +5,7 @@ import jsxConfig from '../../../config/react';
 import { RuleTester } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
+import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');
@@ -128,6 +129,36 @@ ruleTester.run('no-duplicates', rule, {
       code: "import {x} from './foo'; import {} from './foo'",
       output: "import {x} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    // These test cases use duplicate import identifiers, which causes a fatal parsing error using ESPREE (default) and TS_OLD.
+    ...flatMap([parsers.BABEL_OLD, parsers.TS_NEW], parser => {
+      if (!parser) return []; // TS_NEW is not always available
+      return [
+        // #2347: duplicate identifiers should be removed
+        test({
+          code: "import {a} from './foo'; import { a } from './foo'",
+          output: "import {a} from './foo'; ",
+          errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+          parser,
+        }),
+
+        // #2347: duplicate identifiers should be removed
+        test({
+          code: "import {a,b} from './foo'; import { b, c } from './foo'; import {b,c,d} from './foo'",
+          output: "import {a,b, c ,d} from './foo';  ",
+          errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+          parser,
+        }),
+
+        // #2347: duplicate identifiers should be removed, but not if they are adjacent to comments
+        test({
+          code: "import {a} from './foo'; import { a/*,b*/ } from './foo'",
+          output: "import {a, a/*,b*/ } from './foo'; ",
+          errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+          parser,
+        }),
+      ];
     }),
 
     test({
