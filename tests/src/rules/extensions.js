@@ -91,6 +91,16 @@ ruleTester.run('extensions', rule, {
     }),
 
     test({
+      code: `
+        import foo from './foo.js'
+        import bar from './bar/index.js'
+        import Component from './Component.js'
+        import express from 'express'
+      `,
+      options: [ 'always', { enforceEsmExtensions: true, ignorePackages: true } ],
+    }),
+
+    test({
       code: 'import exceljs from "exceljs"',
       options: [ 'always', { js: 'never', jsx: 'never' } ],
       filename: testFilePath('./internal-modules/plugins/plugin.js'),
@@ -355,6 +365,39 @@ ruleTester.run('extensions', rule, {
           column: 27,
         },
       ],
+    }),
+
+    test({
+      code: `
+        import testModule from './test-module'
+        import bar from './bar'
+        import Component from './Component'
+        import express from 'express'
+      `,
+      options: [ 'always', { enforceEsmExtensions: true, ignorePackages: true } ],
+      errors: [
+        {
+          message: 'Invalid ESM import of "./test-module". Use "./test-module/index.js" instead.',
+          line: 2,
+          column: 9,
+        },
+        {
+          message: 'Invalid ESM import of "./bar". Use "./bar.js" instead.',
+          line: 3,
+          column: 9,
+        },
+        {
+          message: 'Missing file extension for "./Component"',
+          line: 4,
+          column: 31,
+        },
+      ],
+      output: `
+        import testModule from './test-module/index.js'
+        import bar from './bar.js'
+        import Component from './Component'
+        import express from 'express'
+      `,
     }),
 
     test({
