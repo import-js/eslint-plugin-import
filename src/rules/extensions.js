@@ -71,8 +71,7 @@ const fileExists = function (filePath) {
   try {
     fs.accessSync(filePath, fs.constants.F_OK);
     return true;
-  }
-  catch (err) {
+  } catch (err) {
     if (err && err.code) === 'ENOENT') {
       // known and somewhat expected failure case.
       return false;
