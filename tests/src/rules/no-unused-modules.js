@@ -7,6 +7,11 @@ import fs from 'fs';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
+let FlatRuleTester;
+try {
+  ({ FlatRuleTester } = require('eslint/use-at-your-own-risk'));
+} catch (e) { /**/ }
+
 // TODO: figure out why these tests fail in eslint 4 and 5
 const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
 
@@ -1369,5 +1374,22 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
       }),
     ],
     invalid: [],
+  });
+});
+
+describe('supports flat eslint', { skip: !FlatRuleTester }, () => {
+  const flatRuleTester = new FlatRuleTester();
+  flatRuleTester.run('no-unused-modules', rule, {
+    valid: [{
+      options: unusedExportsOptions,
+      code: 'import { o2 } from "./file-o";export default () => 12',
+      filename: testFilePath('./no-unused-modules/file-a.js'),
+    }],
+    invalid: [{
+      options: unusedExportsOptions,
+      code: 'export default () => 13',
+      filename: testFilePath('./no-unused-modules/file-f.js'),
+      errors: [error(`exported declaration 'default' not used within other modules`)],
+    }],
   });
 });

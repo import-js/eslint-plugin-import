@@ -23,10 +23,10 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
   if (parsedResult && parsedResult.visitorKeys) {
     return parsedResult.visitorKeys;
   }
-  if (/.*espree.*/.test(parserPath)) {
+  if (typeof parserPath === 'string' && /.*espree.*/.test(parserPath)) {
     return parserInstance.VisitorKeys;
   }
-  if (/.*babel-eslint.*/.test(parserPath)) {
+  if (typeof parserPath === 'string' && /.*babel-eslint.*/.test(parserPath)) {
     return getBabelEslintVisitorKeys(parserPath);
   }
   return null;
@@ -51,13 +51,13 @@ function transformHashbang(text) {
 }
 
 exports.default = function parse(path, content, context) {
-
   if (context == null) throw new Error('need context to parse properly');
 
-  let parserOptions = context.parserOptions;
-  const parserPath = getParserPath(path, context);
+  // ESLint in "flat" mode only sets context.languageOptions.parserOptions
+  let parserOptions = (context.languageOptions && context.languageOptions.parserOptions) || context.parserOptions;
+  const parserOrPath = getParser(path, context);
 
-  if (!parserPath) throw new Error('parserPath is required!');
+  if (!parserOrPath) throw new Error('parserPath or languageOptions.parser is required!');
 
   // hack: espree blows up with frozen options
   parserOptions = Object.assign({}, parserOptions);
@@ -84,7 +84,7 @@ exports.default = function parse(path, content, context) {
   delete parserOptions.projects;
 
   // require the parser relative to the main module (i.e., ESLint)
-  const parser = moduleRequire(parserPath);
+  const parser = typeof parserOrPath === 'string' ? moduleRequire(parserOrPath) : parserOrPath;
 
   // replicate bom strip and hashbang transform of ESLint
   // https://github.com/eslint/eslint/blob/b93af98b3c417225a027cabc964c38e779adb945/lib/linter/linter.js#L779
@@ -95,7 +95,7 @@ exports.default = function parse(path, content, context) {
     try {
       const parserRaw = parser.parseForESLint(content, parserOptions);
       ast = parserRaw.ast;
-      return makeParseReturn(ast, keysFromParser(parserPath, parser, parserRaw));
+      return makeParseReturn(ast, keysFromParser(parserOrPath, parser, parserRaw));
     } catch (e) {
       console.warn();
       console.warn('Error while parsing ' + parserOptions.filePath);
@@ -104,17 +104,33 @@ exports.default = function parse(path, content, context) {
     if (!ast || typeof ast !== 'object') {
       console.warn(
         '`parseForESLint` from parser `' +
-          parserPath +
+          (typeof parserOrPath === 'string' ? parserOrPath : '`context.languageOptions.parser`') + // Can only be invalid for custom parser per imports/parser
           '` is invalid and will just be ignored'
       );
     } else {
-      return makeParseReturn(ast, keysFromParser(parserPath, parser, undefined));
+      return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));
     }
   }
 
   const ast = parser.parse(content, parserOptions);
-  return makeParseReturn(ast, keysFromParser(parserPath, parser, undefined));
+  return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));
 };
+
+function getParser(path, context) {
+  const parserPath = getParserPath(path, context);
+  if (parserPath) {
+    return parserPath;
+  }
+  const isFlat = context.languageOptions
+    && context.languageOptions.parser
+    && typeof context.languageOptions.parser !== 'string'
+    && (
+      typeof context.languageOptions.parser.parse === 'function'
+      || typeof context.languageOptions.parser.parseForESLint === 'function'
+    );
+
+  return isFlat ? context.languageOptions.parser : null;
+}
 
 function getParserPath(path, context) {
   const parsers = context.settings['import/parsers'];
