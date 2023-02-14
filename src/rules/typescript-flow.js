@@ -75,13 +75,11 @@ module.exports = {
 
         if (config === 'separate' && node.importKind !== 'type') {
           // identify importSpecifiers that have inline type imports as well as value imports
-          if (!setImportSpecifierCacheForSeparate(node.specifiers, specifierCache)) {
-            return;
-          }
+          if (!setImportSpecifierCacheForSeparate(node.specifiers, specifierCache)) return;
+
           // no inline type imports found
-          if (typeImportSpecifiers.length === 0) {
-            return;
-          }
+          if (typeImportSpecifiers.length === 0) return;
+
           if (typeImportSpecifiers.length === typeImportSpecifiers.length + valueImportSpecifiers.length) {
             changeInlineImportToSeparate(node, context);
           }
@@ -96,11 +94,8 @@ module.exports = {
           if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
             return;
           }
-
           setImportSpecifierCacheForInline(node, specifierCache);
-          
           const sameSourceValueImport = getImportDeclarationFromTheSameSource(node);
-
           if (sameSourceValueImport && !sameSourceValueImport.hasNamespaceImport) {
             insertInlineTypeImportsToSameSourceImport(node, context, sameSourceValueImport, typeImportSpecifiers);
           } else {
@@ -137,9 +132,7 @@ function setImportSpecifierCacheForSeparate(specifiers, specifierCache) {
     if (specifier.type === 'ImportNamespaceSpecifier' || specifier.type === 'ImportDefaultSpecifier') {
       return false;
     }
-    // Question: do we want our rule to deal with default imports? It does not make sense that rule needs to since we do not know the type of default export.
     specifierCache.allImportsSize = specifierCache.allImportsSize + 1;
-    // catch all inline imports and add them to the set
     if (specifier.importKind === 'type') {
       if (specifier.local.name !== specifier.imported.name) {
         typeImportSpecifiers.push(`${specifier.imported.name} as ${specifier.local.name}`);
@@ -204,7 +197,6 @@ function addSeparateTypeImportDeclaration(node, context, specifierCache) {
       });
 
       let namedImportStart = undefined;
-      // remove all commas
       tokens.forEach( element => {
         if (element.value === '{') {
           namedImportStart = element;
@@ -213,9 +205,7 @@ function addSeparateTypeImportDeclaration(node, context, specifierCache) {
           fixerArray.push(fixer.remove(element));
         }   
       });
-      // add inline value imports back
       fixerArray.push(fixer.insertTextAfter(namedImportStart, valueImportSpecifiers.join(', ')));
-      // add new line with separate type import
       fixerArray.push(fixer.insertTextAfter(node, `\nimport type { ${typeImportSpecifiers.join(', ')} } from ${importPath}`));
       return fixerArray;
     },
@@ -242,7 +232,6 @@ function setImportSpecifierCacheForInline(node, specifierCache) {
   }
 }
 
-
 function getImportDeclarationFromTheSameSource(node) {
   const importDeclarationCache = new Map();
   const body = node.parent.body;
@@ -266,20 +255,17 @@ function processBodyStatement(importDeclarationCache, node){
     if (specifier.type === 'ImportNamespaceSpecifier') {
       hasNamespaceImport = true;
     }
-    // ignore the case for now. TODO: talk with Jordan and implement the handling of the rule here
     if (specifier.type === 'ImportDefaultSpecifier') {
       hasDefaultImport = true;
       specifiers.push(specifier);
     }
     if (specifier.type === 'ImportSpecifier') {
-      // check if its {default as B}
       if (specifier.imported.name === 'default') {
         hasInlineDefaultImport = true;
       }
       specifiers.push(specifier);
     }
   });
-  // cache all imports
   importDeclarationCache.set(node.source.value, { specifiers, hasDefaultImport, hasInlineDefaultImport, hasNamespaceImport });
 }
 
