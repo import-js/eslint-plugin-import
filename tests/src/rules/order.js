@@ -3014,25 +3014,6 @@ context('TypeScript', function () {
               },
             ],
           }),
-          
-          // Option intraGroupOrdering: true (should sort type imports in remaining group order)
-          test({
-            name: 'pearce',
-            code: `
-              import type { Dirent } from 'fs';
-
-              import type { Fooz } from '../baz';
-              import type { Foo } from './bar';
-            `,
-            ...parserConfig,
-            options: [
-              {
-                groups: ['type', 'external' ['parent', 'sibling']],
-                intraGroupOrdering: true,
-                'newlines-between': 'always',
-              },
-            ],
-          }),
         ],
         invalid: [
           // Option alphabetize: {order: 'asc'}

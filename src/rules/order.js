@@ -517,11 +517,12 @@ const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling'
 // Will throw an error if it contains a type that does not exist, or has a duplicate
 function convertGroupsToRanks(groups) {
   const ranks = groups.reduce(function (res, group, index) {
+    let groupItems = group;
     if (typeof group === 'string') {
-      group = [group];
+      groupItems = [group];
     }
 
-    group.forEach(function (groupItem) {
+    groupItems.forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
         throw new Error('Incorrect configuration of the rule: Unknown type `' +
           JSON.stringify(groupItem) + '`');
@@ -780,7 +781,7 @@ module.exports = {
     try {
       const { pathGroups, maxPosition } = convertPathGroupsForRanks(options.pathGroups || []);
       const { ranks, omittedTypes } = convertGroupsToRanks(groups);
-
+      
       computedContext = {
         ranks,
         omittedTypes,
