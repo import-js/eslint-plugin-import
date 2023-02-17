@@ -2,6 +2,7 @@
 
 import minimatch from 'minimatch';
 import includes from 'array-includes';
+import flat from 'array.prototype.flat';
 
 import resolveImportType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
@@ -328,7 +329,7 @@ function getSorter(alphabetizeOptions) {
 function mutateRanksForIntraGroupOrdering(computedContext, imported, groups, intraGroupOrdering, alphabetizeOptions) {
   const { omittedTypes } = computedContext;
 
-  const nonTypeGroups = new Set(groups.flat());
+  const nonTypeGroups = new Set(flat(groups));
   if (intraGroupOrdering) {
     nonTypeGroups.delete('type');
 
