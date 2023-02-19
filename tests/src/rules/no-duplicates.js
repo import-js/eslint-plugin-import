@@ -1039,7 +1039,7 @@ context('TypeScript', function () {
           code: "import { type C, } from './foo';import {AValue, BValue, } from './foo';",
           ...parserConfig,
           options: [{ 'prefer-inline': true }],
-          output: "import { type C , AValue, BValue} from './foo';",
+          output: "import { type C,  AValue, BValue} from './foo';",
           errors: [
             {
               line: 1,

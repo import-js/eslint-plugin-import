@@ -109,22 +109,26 @@ function getInlineTypeFix(nodes, sourceCode) {
     const nodeClosingBrace = nodeTokens[nodeClosingBraceIndex];
     const tokenBeforeClosingBrace = nodeTokens[nodeClosingBraceIndex - 1];
     if (nodeClosingBrace) {
-      if (rest.length && isComma(tokenBeforeClosingBrace)) {
-        fixes.push(fixer.remove(tokenBeforeClosingBrace));
-      }
+      const specifiers = [];
       rest.forEach((node) => {
         // these will be all Type imports, no Value specifiers
         // then add inline type specifiers to importKind === 'type' import
         node.specifiers.forEach((specifier) => {
           if (specifier.importKind === 'type') {
-            fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, type ${specifier.local.name}`));
+            specifiers.push(`type ${specifier.local.name}`);
           } else {
-            fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, ${specifier.local.name}`));
+            specifiers.push(specifier.local.name);
           }
         });
 
         fixes.push(fixer.remove(node));
       });
+
+      if (isComma(tokenBeforeClosingBrace)) {
+        fixes.push(fixer.insertTextBefore(nodeClosingBrace, ` ${specifiers.join(', ')}`));
+      } else {
+        fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, ${specifiers.join(', ')}`));
+      }
     } else {
       // we have a default import only
       const defaultSpecifier = firstImport.specifiers.find((spec) => spec.type === 'ImportDefaultSpecifier');
