@@ -111,19 +111,19 @@ function getInlineTypeFix(nodes, sourceCode) {
     const nodeClosingBrace = nodeTokens.find(token => isPunctuator(token, '}'));
     // const preferInline = context.options[0] && context.options[0]['prefer-inline'];
     if (nodeClosingBrace) {
-      for (const node of rest) {
+      rest.forEach((node) => {
         // these will be all Type imports, no Value specifiers
         // then add inline type specifiers to importKind === 'type' import
-        for (const specifier of node.specifiers) {
+        node.specifiers.forEach((specifier) => {
           if (specifier.importKind === 'type') {
             fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, type ${specifier.local.name}`));
           } else {
             fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, ${specifier.local.name}`));
           }
-        }
+        });
 
         fixes.push(fixer.remove(node));
-      }
+      });
     } else {
       // we have a default import only
       const defaultSpecifier = firstImport.specifiers.find((spec) => spec.type === 'ImportDefaultSpecifier');
