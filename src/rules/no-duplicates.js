@@ -94,13 +94,10 @@ function getInlineTypeFix(nodes, sourceCode) {
   return fixer => {
     const fixes = [];
 
-    // if (!semver.satisfies(typescriptPkg.version, '>= 4.5')) {
-    //   throw new Error('Your version of TypeScript does not support inline type imports.');
-    // }
-
     // push to first import
     let [firstImport, ...rest] = nodes;
-    const valueImport = nodes.find((n) => n.specifiers.every((spec) => spec.importKind === 'value')) || nodes.find((n) => n.specifiers.some((spec) => spec.type === 'ImportDefaultSpecifier'));
+    // const valueImport = nodes.find((n) => n.specifiers.every((spec) => spec.importKind === 'value')) || nodes.find((n) => n.specifiers.some((spec) => spec.type === 'ImportDefaultSpecifier'));
+    const valueImport = nodes.find((n) => n.specifiers.some((spec) => spec.type === 'ImportDefaultSpecifier'));
     if (valueImport) {
       firstImport = valueImport;
       rest = nodes.filter((n) => n !== firstImport);
@@ -108,9 +105,13 @@ function getInlineTypeFix(nodes, sourceCode) {
 
     const nodeTokens = sourceCode.getTokens(firstImport);
     // we are moving the rest of the Type or Inline Type imports here.
-    const nodeClosingBrace = nodeTokens.find(token => isPunctuator(token, '}'));
-    // const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+    const nodeClosingBraceIndex = nodeTokens.findIndex(token => isPunctuator(token, '}'));
+    const nodeClosingBrace = nodeTokens[nodeClosingBraceIndex];
+    const tokenBeforeClosingBrace = nodeTokens[nodeClosingBraceIndex - 1];
     if (nodeClosingBrace) {
+      if (rest.length && isComma(tokenBeforeClosingBrace)) {
+        fixes.push(fixer.remove(tokenBeforeClosingBrace));
+      }
       rest.forEach((node) => {
         // these will be all Type imports, no Value specifiers
         // then add inline type specifiers to importKind === 'type' import

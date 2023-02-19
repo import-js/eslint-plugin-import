@@ -614,6 +614,23 @@ context('TypeScript', function () {
             },
           ],
         }),
+        test({
+          code: "import {type x} from './foo'; import {y} from './foo'",
+          ...parserConfig,
+          output: `import {type x, y} from './foo'; `,
+          errors: [
+            {
+              line: 1,
+              column: 22,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 47,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
       ].concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
         // without prefer-inline, will dedupe with type import kind
         test({
@@ -1018,6 +1035,24 @@ context('TypeScript', function () {
             },
           ],
         }),
+        test({
+          code: "import { type C, } from './foo';import {AValue, BValue, } from './foo';",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: "import { type C , AValue, BValue} from './foo';",
+          errors: [
+            {
+              line: 1,
+              column: 25,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 64,
+              message: "'./foo' imported multiple times.",
+            }
+          ],
+        }),
         // #2834 Detect duplicates across type and regular imports
         test({
           code: "import {AValue} from './foo'; import type {AType} from './foo'",
@@ -1028,10 +1063,6 @@ context('TypeScript', function () {
             {
               line: 1,
               column: 22,
-              message: "'./foo' imported multiple times.",
-            },
-            {
-              line: 1,
               column: 56,
               message: "'./foo' imported multiple times.",
             },
