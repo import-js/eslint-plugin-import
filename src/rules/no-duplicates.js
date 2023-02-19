@@ -51,12 +51,12 @@ function checkTypeImports(imported, context) {
           fix, // Attach the autofix (if any) to the first import.
         });
 
-        for (const node of rest) {
+        rest.forEach((node) => {
           context.report({
             node: node.source,
             message,
           });
-        }
+        });
       }
     }
   }
