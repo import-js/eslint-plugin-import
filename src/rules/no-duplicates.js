@@ -35,11 +35,11 @@ function checkImports(imported, context) {
 }
 
 function checkTypeImports(imported, context) {
-  for (const [module, nodes] of imported.entries()) {
+  Array.from(imported).forEach(([module, nodes]) => {
     const typeImports = nodes.filter((node) => node.importKind === 'type');
     if (nodes.length > 1) {
-      const someInlineTypeImports = nodes.filter((node) => node.specifiers.some((spec) => spec.importKind === 'type'));
-      if (typeImports.length > 0 && someInlineTypeImports.length > 0) {
+      const someInlineTypeImports = nodes.some((node) => node.specifiers.some((spec) => spec.importKind === 'type'));
+      if (typeImports.length > 0 && someInlineTypeImports) {
         const message = `'${module}' imported multiple times.`;
         const sourceCode = context.getSourceCode();
         const fix = getTypeFix(nodes, sourceCode, context);
@@ -59,11 +59,11 @@ function checkTypeImports(imported, context) {
         });
       }
     }
-  }
+  });
 }
 
 function checkInlineTypeImports(imported, context) {
-  for (const [module, nodes] of imported.entries()) {
+  Array.from(imported).forEach(([module, nodes]) => {
     if (nodes.length > 1) {
       const message = `'${module}' imported multiple times.`;
       const sourceCode = context.getSourceCode();
@@ -83,7 +83,7 @@ function checkInlineTypeImports(imported, context) {
         });
       });
     }
-  }
+  });
 }
 
 function isComma(token) {
