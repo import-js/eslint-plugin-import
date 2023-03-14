@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 - [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
+- [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1070,6 +1071,7 @@ for info on changes for earlier releases.
 [#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
 [#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
+[#2735]: https://github.com/import-js/eslint-plugin-import/pull/2735
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
@@ -1625,6 +1627,7 @@ for info on changes for earlier releases.
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@andreubotella]: https://github.com/andreubotella
 [@AndrewLeedham]: https://github.com/AndrewLeedham
+[@andyogo]: https://github.com/andyogo
 [@aravindet]: https://github.com/aravindet
 [@arvigeus]: https://github.com/arvigeus
 [@asapach]: https://github.com/asapach

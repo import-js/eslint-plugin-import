@@ -178,7 +178,12 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types unless option is enabled
   if (
     !depsOptions.verifyTypeImports &&
-    (node.importKind === 'type' || node.importKind === 'typeof')
+    (node.importKind === 'type' || node.importKind === 'typeof' ||
+    (
+      Array.isArray(node.specifiers) &&
+      node.specifiers.length &&
+      node.specifiers.every((specifier) => specifier.importKind === 'type' || specifier.importKind === 'typeof'))
+    )
   ) {
     return;
   }

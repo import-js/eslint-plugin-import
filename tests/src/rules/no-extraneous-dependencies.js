@@ -438,7 +438,7 @@ describe('TypeScript', () => {
 
           test(Object.assign({
             code: 'import type T from "a";',
-            options: [{ 
+            options: [{
               packageDir: packageDirWithTypescriptDevDependencies,
               devDependencies: false,
               includeTypes: true,
@@ -464,6 +464,16 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
       parser: parsers.BABEL_OLD,
     }),
+    test({
+      code: 'import { type MyType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+    }),
+    test({
+      code: 'import { type MyType, type OtherType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+    }),
   ],
   invalid: [
     test({
@@ -476,8 +486,24 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
       }],
     }),
     test({
-      code: `import type { Foo } from 'not-a-dependency'`,
+      code: `import type { Foo } from 'not-a-dependency';`,
       options: [{ includeTypes: true }],
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+    test({
+      code: 'import Foo, { type MyType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+    test({
+      code: 'import { type MyType, Foo } from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
       parser: parsers.BABEL_OLD,
       errors: [{
