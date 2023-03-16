@@ -18,6 +18,14 @@ matrix:
   fast_finish: false
   exclude:
     - configuration: WSL
+      nodejs_version: "16"
+    - configuration: WSL
+      nodejs_version: "14"
+    - configuration: WSL
+      nodejs_version: "12"
+    - configuration: WSL
+      nodejs_version: "10"
+    - configuration: WSL
       nodejs_version: "8"
     - configuration: WSL
       nodejs_version: "6"
