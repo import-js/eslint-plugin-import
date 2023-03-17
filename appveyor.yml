@@ -6,10 +6,10 @@ configuration:
 environment:
   matrix:
     - nodejs_version: "16"
-    - nodejs_version: "14"
-    - nodejs_version: "12"
-    - nodejs_version: "10"
-    - nodejs_version: "8"
+    #- nodejs_version: "14"
+    #- nodejs_version: "12"
+    #- nodejs_version: "10"
+    #- nodejs_version: "8"
     # - nodejs_version: "6"
     # - nodejs_version: "4"
 
@@ -17,6 +17,8 @@ image: Visual Studio 2019
 matrix:
   fast_finish: false
   exclude:
+    - configuration: Native
+      nodejs_version: "16"
     - configuration: WSL
       nodejs_version: "8"
     - configuration: WSL
@@ -29,7 +31,7 @@ matrix:
 
 platform:
   - x86
-  - x64
+  #- x64
 
 # Initialization scripts. (runs before repo cloning)
 init:
@@ -156,7 +158,16 @@ for:
       - ps: $env:WSLENV += ":nodejs_version"
       - ps: wsl sudo apt-get purge --auto-remove nodejs
       - ps: wsl sudo apt-get install dos2unix
+      - wsl printenv
+      - wsl touch ~/.bash_profile
       - wsl curl --fail -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | dos2unix | bash
+      # - wsl export NVM_DIR="$HOME/.nvm"
+      - wsl $env:NVM_DIR="$HOME/.nvm"
+      #- ps: $env:WSLENV += ":NVM_DIR"
+      - wsl ls -R
+      - wsl echo "HOME=$HOME"
+      - wsl echo "NVM_DIR=$NVM_DIR"
+      - wsl [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
       - wsl nvm install ${nodejs_version}
 
     on_success:
