@@ -155,7 +155,7 @@ for:
       # Get a specific version of Node.js
       - ps: $env:WSLENV += ":nodejs_version"
       - ps: wsl sudo apt-get purge --auto-remove nodejs
-      - wsl curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+      - wsl curl --fail -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
       - wsl nvm install ${nodejs_version}
 
     on_success:
