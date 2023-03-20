@@ -158,6 +158,7 @@ for:
       - ps: $env:WSLENV += ":nodejs_version"
       - ps: wsl sudo apt-get purge --auto-remove nodejs
       - ps: wsl sudo apt-get install dos2unix
+      - wsl which -a bash
       - wsl printenv
       - wsl curl --fail -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | dos2unix | bash
       - wsl ls -aR $HOME
