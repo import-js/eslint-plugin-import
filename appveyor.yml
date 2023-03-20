@@ -13,7 +13,7 @@ environment:
     # - nodejs_version: "6"
     # - nodejs_version: "4"
 
-image: Visual Studio 2019
+image: Visual Studio 2022
 matrix:
   fast_finish: false
   exclude:
@@ -153,24 +153,43 @@ for:
       only:
         - configuration: WSL
     # Install scripts. (runs after repo cloning)
+    environment:
+      GIT_REDIRECT_STDERR: 2>&1
+
     install:
       # Get a specific version of Node.js
       - ps: $env:WSLENV += ":nodejs_version"
       - ps: wsl sudo apt-get purge --auto-remove nodejs
-      - ps: wsl sudo apt-get install dos2unix
+      - ps: wsl sudo apt-get purge --auto-remove npm
+      #- ps: wsl sudo apt-get update
+      #- ps: wsl sudo apt-get install build-essential libssl-dev
+      # - wsl --list --verbose
       - wsl which -a bash
       - wsl printenv
-      - wsl curl --fail -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | dos2unix | bash
+      #- ps: $ErrorActionPreference = 'SilentlyContinue'
+      - ps: $env:GIT_REDIRECT_STDERR = '2>&1'
+      - ps: $env:WSLENV += ":GIT_REDIRECT_STDERR"
+      #- ps: wsl curl --fail -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -
+      - wsl curl -sL -o- https://raw.githubusercontent.com/AndyOGo/nvm/bugfix/powershell-git-clone-stderr/install.sh | bash -
+      - wsl echo "DONE install"
       - wsl ls -aR $HOME
-      - wsl ls -ad /
-      - wsl ls -aR /c/Users/appveyor/
-      # - wsl export NVM_DIR="$HOME/.nvm"
-      - wsl $env:NVM_DIR="/c/Users/appveyor/.nvm"
-      #- ps: $env:WSLENV += ":NVM_DIR"
+      # - wsl ls -ad /
+      # - wsl ls -a /mnt/c/Users/appveyor/.nvm/
+      - ps: $env:NVM_DIR="$HOME/.nvm"
+      - ps: $env:WSLENV += ":NVM_DIR"
       - wsl echo "HOME=$HOME"
       - wsl echo "NVM_DIR=$NVM_DIR"
-      - wsl [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      - wsl echo "Load nvm"
+      - wsl [ -s "$HOME/.nvm/nvm.sh" ] && sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 source "$HOME/.nvm/nvm.sh"  # This loads nvm
+      #- ps: wsl echo '[ -s "$HOME/.nvm/nvm.sh" ] && source "$HOME/.nvm/nvm.sh"' `| sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 -E bash -  # This loads nvm
+      #- wsl [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"  # This loads nvm
+      #- ps: wsl sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 /home/appveyor/.nvm/nvm.sh install ${nodejs_version}
+      #- ps: wsl sudo APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 /home/appveyor/.nvm/nvm.sh use ${nodejs_version}
       - wsl nvm install ${nodejs_version}
+      - wsl nvm use ${nodejs_version}
+      #- wsl which -a nvm
+      #- wsl which -a node
+      #- wsl which -a npm
 
     on_success:
       - ci curl -Os https://uploader.codecov.io/latest/linux/codecov
