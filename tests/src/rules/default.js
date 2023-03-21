@@ -1,10 +1,9 @@
+import fs from 'fs';
 import path from 'path';
-import { test, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
+import { test, testFilePath, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
 import { RuleTester } from 'eslint';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
-
-import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/default');
@@ -148,13 +147,19 @@ ruleTester.run('default', rule, {
 });
 
 // #311: import of mismatched case
-if (!CASE_SENSITIVE_FS) {
+if (fs.existsSync(testFilePath('./MyUncoolComponent.jsx'))) {
   ruleTester.run('default (path case-insensitivity)', rule, {
     valid: [
       test({
         code: 'import foo from "./jsx/MyUncoolComponent.jsx"',
       }),
     ],
+  });
+}
+
+if (fs.existsSync(testFilePath('./Named-Exports.js'))) {
+  ruleTester.run('default (path case-insensitivity)', rule, {
+    valid: [],
     invalid: [
       test({
         code: 'import bar from "./Named-Exports"',

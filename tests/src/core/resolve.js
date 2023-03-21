@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
+import resolve, { fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -315,7 +315,8 @@ describe('resolve', function () {
     });
   });
 
-  const caseDescribe = (!CASE_SENSITIVE_FS ? describe : describe.skip);
+  const caseInsensitive = fs.existsSync(utils.testFilePath('./MyUncoolComponent.jsx'));
+  const caseDescribe = (caseInsensitive ? describe : describe.skip);
   caseDescribe('case sensitivity', function () {
     let file;
     const testContext = utils.testContext({

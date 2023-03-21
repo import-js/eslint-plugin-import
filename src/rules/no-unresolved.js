@@ -3,7 +3,7 @@
  * @author Ben Mosher
  */
 
-import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
+import resolve, { fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
 import ModuleCache from 'eslint-module-utils/ModuleCache';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
@@ -34,8 +34,8 @@ module.exports = {
         return;
       }
 
-      const caseSensitive = !CASE_SENSITIVE_FS && options.caseSensitive !== false;
-      const caseSensitiveStrict = !CASE_SENSITIVE_FS && options.caseSensitiveStrict;
+      const caseSensitive = options.caseSensitive !== false;
+      const caseSensitiveStrict = options.caseSensitiveStrict;
 
       const resolvedPath = resolve(source.value, context);
 

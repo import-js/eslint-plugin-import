@@ -52,9 +52,6 @@ function tryRequire(target, sourceFile) {
 
 // https://stackoverflow.com/a/27382838
 exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cacheSettings, strict) {
-  // don't care if the FS is case-sensitive
-  if (CASE_SENSITIVE_FS) return true;
-
   // null means it resolved to a builtin
   if (filepath === null) return true;
   if (filepath.toLowerCase() === process.cwd().toLowerCase() && !strict) return true;
