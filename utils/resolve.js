@@ -79,19 +79,25 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   return result;
 };
 
-function relative(modulePath, sourceFile, settings) {
-  return fullResolve(modulePath, sourceFile, settings).path;
+function relative(modulePath, sourceFile, context) {
+  return fullResolve(
+    modulePath,
+    sourceFile,
+    // Accept context or settings, for backward compatibility
+    !('settings' in context) ? { settings: context } : context,
+  ).path;
 }
 
-function fullResolve(modulePath, sourceFile, settings) {
+function fullResolve(modulePath, sourceFile, context) {
   // check if this is a bonus core module
-  const coreSet = new Set(settings['import/core-modules']);
+  const coreSet = new Set(context.settings['import/core-modules']);
   if (coreSet.has(modulePath)) return { found: true, path: null };
 
   const sourceDir = path.dirname(sourceFile);
-  const cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath;
+  const cacheKey =
+    sourceDir + hashObject(context.settings).digest('hex') + modulePath;
 
-  const cacheSettings = ModuleCache.getSettings(settings);
+  const cacheSettings = ModuleCache.getSettings(context.settings);
 
   const cachedPath = fileExistsCache.get(cacheKey, cacheSettings);
   if (cachedPath !== undefined) return { found: true, path: cachedPath };
@@ -104,7 +110,12 @@ function fullResolve(modulePath, sourceFile, settings) {
 
     function v1() {
       try {
-        const resolved = resolver.resolveImport(modulePath, sourceFile, config);
+        const resolved = resolver.resolveImport(
+          modulePath,
+          sourceFile,
+          config,
+          context.parserServices,
+        );
         if (resolved === undefined) return { found: false };
         return { found: true, path: resolved };
       } catch (err) {
@@ -113,7 +124,12 @@ function fullResolve(modulePath, sourceFile, settings) {
     }
 
     function v2() {
-      return resolver.resolve(modulePath, sourceFile, config);
+      return resolver.resolve(
+        modulePath,
+        sourceFile,
+        config,
+        context.parserServices,
+      );
     }
 
     switch (resolver.interfaceVersion) {
@@ -126,8 +142,8 @@ function fullResolve(modulePath, sourceFile, settings) {
     }
   }
 
-  const configResolvers = (settings['import/resolver']
-    || { 'node': settings['import/resolve'] }); // backward compatibility
+  const configResolvers = (context.settings['import/resolver']
+    || { 'node': context.settings['import/resolve'] }); // backward compatibility
 
   const resolvers = resolverReducer(configResolvers, new Map());
 
@@ -216,7 +232,7 @@ const erroredContexts = new Set();
  */
 function resolve(p, context) {
   try {
-    return relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context.settings);
+    return relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context);
   } catch (err) {
     if (!erroredContexts.has(context)) {
       // The `err.stack` string starts with `err.name` followed by colon and `err.message`.
