@@ -2,7 +2,7 @@
 
 <!-- end auto-generated rule header -->
 
-Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default. Depending on the resolver you can configure more extensions to get resolved automatically.
+Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver (which does not yet support ESM/`import`) can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default in CJS. Depending on the resolver you can configure more extensions to get resolved automatically.
 
 In order to provide a consistent use of file extensions across your code base, this rule can enforce or disallow the use of certain file extensions.
 
@@ -170,3 +170,5 @@ import foo from '@/foo';
 ## When Not To Use It
 
 If you are not concerned about a consistent usage of file extension.
+
+In the future, when this rule supports native node ESM resolution, and the plugin is configured to use native rather than transpiled ESM (a config option that is not yet available) - setting this to `always` will have no effect.
