@@ -168,6 +168,33 @@ const COMMON_TESTS = {
         type: 'ImportSpecifier',
       }],
     },
+    // https://github.com/import-js/eslint-plugin-import/issues/2753
+    {
+      code: `\
+import { Component, type ComponentProps } from "package-1";
+import {
+  Component1,
+  Component2,
+  Component3,
+  Component4,
+  Component5,
+} from "package-2";`,
+      output: `\
+import { Component  } from "package-1";
+import type {ComponentProps} from "package-1";
+import {
+  Component1,
+  Component2,
+  Component3,
+  Component4,
+  Component5,
+} from "package-2";`,
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only import instead of inline type specifiers.',
+        type: 'ImportSpecifier',
+      }],
+    },
 
     //
     // prefer-inline

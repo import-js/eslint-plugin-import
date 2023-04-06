@@ -7,9 +7,9 @@ function isComma(token) {
 function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
   for (const specifier of specifiers) {
     // remove the trailing comma
-    const comma = sourceCode.getTokenAfter(specifier, isComma);
-    if (comma) {
-      fixes.push(fixer.remove(comma));
+    const token = sourceCode.getTokenAfter(specifier);
+    if (token && isComma(token)) {
+      fixes.push(fixer.remove(token));
     }
     fixes.push(fixer.remove(specifier));
   }

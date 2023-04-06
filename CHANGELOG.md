@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - TypeScript config: fix resolver extension settings (thanks [@gajus])
+- [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1065,6 +1066,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
