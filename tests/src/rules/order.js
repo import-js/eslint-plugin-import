@@ -3192,6 +3192,20 @@ context('TypeScript', function () {
               },
             ],
           }),
+          // groups in groups
+          test({
+            code: `
+              import sibling from './foo';
+              import fs from 'fs';
+              import parent from '../foo/bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            errors: [{
+              message: '`./foo` import should occur after import of `../foo/bar`',
+            }],
+            options: [{ groups: [['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'unknown'], 'type'] }],
+          }),
         ],
       });
     });
