@@ -475,5 +475,14 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
         message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
       }],
     }),
+    test({
+      code: `import type { Foo } from 'not-a-dependency'`,
+      options: [{ includeTypes: true }],
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
   ],
 });
