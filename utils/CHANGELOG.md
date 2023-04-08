@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+- Improve performance of `fullResolve` for large projects ([#2755], thanks [@leipert])
+
 ## v2.7.4 - 2022-08-11
 
 ### Fixed
@@ -123,6 +126,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
 [#2523]: https://github.com/import-js/eslint-plugin-import/pull/2523
 [#2431]: https://github.com/import-js/eslint-plugin-import/pull/2431
 [#2350]: https://github.com/import-js/eslint-plugin-import/issues/2350
@@ -160,6 +164,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@iamnapo]: https://github.com/iamnapo
 [@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
+[@leipert]: https://github.com/leipert
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@mgwalker]: https://github.com/mgwalker

@@ -83,13 +83,21 @@ function relative(modulePath, sourceFile, settings) {
   return fullResolve(modulePath, sourceFile, settings).path;
 }
 
+let prevSettings = null;
+let memoizedHash = '';
 function fullResolve(modulePath, sourceFile, settings) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules']);
   if (coreSet.has(modulePath)) return { found: true, path: null };
 
   const sourceDir = path.dirname(sourceFile);
-  const cacheKey = sourceDir + hashObject(settings).digest('hex') + modulePath;
+
+  if (prevSettings !== settings) {
+    memoizedHash = hashObject(settings).digest('hex');
+    prevSettings = settings;
+  }
+
+  const cacheKey = sourceDir + memoizedHash + modulePath;
 
   const cacheSettings = ModuleCache.getSettings(settings);
 
