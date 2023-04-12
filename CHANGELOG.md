@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
+- [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1066,6 +1067,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
 [#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
@@ -1737,6 +1739,7 @@ for info on changes for earlier releases.
 [@kylemh]: https://github.com/kylemh
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
+[@leipert]: https://github.com/leipert
 [@lemonmade]: https://github.com/lemonmade
 [@lencioni]: https://github.com/lencioni
 [@leonardodino]: https://github.com/leonardodino

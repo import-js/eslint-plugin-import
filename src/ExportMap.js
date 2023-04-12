@@ -305,7 +305,7 @@ ExportMap.get = function (source, context) {
 ExportMap.for = function (context) {
   const { path } = context;
 
-  const cacheKey = hashObject(context).digest('hex');
+  const cacheKey = context.cacheKey || hashObject(context).digest('hex');
   let exportMap = exportCache.get(cacheKey);
 
   // return cached ignore
@@ -559,7 +559,7 @@ ExportMap.parse = function (path, content, context) {
       if (tsConfigInfo.tsConfigPath !== undefined) {
         // Projects not using TypeScript won't have `typescript` installed.
         if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
-  
+
         const configFile = ts.readConfigFile(tsConfigInfo.tsConfigPath, ts.sys.readFile);
         return ts.parseJsonConfigFileContent(
           configFile.config,
@@ -781,12 +781,29 @@ export function recursivePatternCapture(pattern, callback) {
   }
 }
 
+let parserOptionsHash = '';
+let prevParserOptions = '';
+let settingsHash = '';
+let prevSettings = '';
 /**
  * don't hold full context object in memory, just grab what we need.
+ * also calculate a cacheKey, where parts of the cacheKey hash are memoized
  */
 function childContext(path, context) {
   const { settings, parserOptions, parserPath } = context;
+
+  if (JSON.stringify(settings) !== prevSettings) {
+    settingsHash = hashObject({ settings }).digest('hex');
+    prevSettings = JSON.stringify(settings);
+  }
+
+  if (JSON.stringify(parserOptions) !== prevParserOptions) {
+    parserOptionsHash = hashObject({ parserOptions }).digest('hex');
+    prevParserOptions = JSON.stringify(parserOptions);
+  }
+
   return {
+    cacheKey: String(parserPath) + parserOptionsHash + settingsHash + String(path),
     settings,
     parserOptions,
     parserPath,
