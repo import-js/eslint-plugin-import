@@ -2,6 +2,7 @@ import declaredScope from 'eslint-module-utils/declaredScope';
 import Exports from '../ExportMap';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
+import namespaceValidator from '../core/namespaceValidator';
 
 function processBodyStatement(context, namespaces, declaration) {
   if (declaration.type !== 'ImportDeclaration') return;
@@ -118,37 +119,37 @@ module.exports = {
           );
         }
 
-        // go deep
-        let namespace = namespaces.get(dereference.object.name);
-        const namepath = [dereference.object.name];
-        // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
-          if (dereference.computed) {
+        function onComputed(context, allowComputed){
+          return function innerOnComputed(node, returnChecker) {
             if (!allowComputed) {
               context.report(
-                dereference.property,
+                node.property,
                 `Unable to validate computed reference to imported namespace '${dereference.object.name}'.`,
               );
             }
-            return;
-          }
-
-          if (!namespace.has(dereference.property.name)) {
-            context.report(
-              dereference.property,
-              makeMessage(dereference.property, namepath),
-            );
-            break;
-          }
-
-          const exported = namespace.get(dereference.property.name);
-          if (exported == null) return;
-
-          // stash and pop
-          namepath.push(dereference.property.name);
-          namespace = exported.namespace;
-          dereference = dereference.parent;
+            return returnChecker;
+          };
         }
+
+        function onNamespaceNotFound(context) {
+          return function inner(node, namespace, namepath, returnChecker) {
+            if (!namespace.has(node.property.name)) {
+              context.report(
+                node.property,
+                makeMessage(node.property, namepath),
+              );
+              return returnChecker;
+            }
+          };
+        }
+
+        namespaceValidator(
+          dereference,
+          namespaces,
+          onComputed(context, allowComputed),
+          { onNamespaceNotFound: onNamespaceNotFound(context) },
+        );
+
       },
 
       VariableDeclarator({ id, init }) {
