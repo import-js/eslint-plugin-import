@@ -200,6 +200,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
 
   if (
     declarationStatus.isInDeps ||
+    depsOptions.allowIgnoreImports ||
     (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
     (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
     (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
@@ -216,6 +217,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
 
     if (
       declarationStatus.isInDeps ||
+      depsOptions.allowIgnoreImports ||
       (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
       (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
       (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
@@ -250,6 +252,16 @@ function testConfig(config, filename) {
   ));
 }
 
+function testIgnoreImports(config, filename) {
+  if (!config) {
+    return false
+  }
+  return config.some(c => (
+    filename.includes(value.substr(0, 2) === './' ? value.replace('.', process.cwd()) : value)
+  ))
+}
+
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -270,6 +282,7 @@ module.exports = {
           'packageDir': { 'type': ['string', 'array'] },
           'includeInternal': { 'type': ['boolean'] },
           'includeTypes': { 'type': ['boolean'] },
+          'ignoreImports': { 'type': ['array'] },
         },
         'additionalProperties': false,
       },
@@ -282,6 +295,7 @@ module.exports = {
     const deps = getDependencies(context, options.packageDir) || extractDepFields({});
 
     const depsOptions = {
+      allowIgnoreImports: testIgnoreImports(options.ignoreImports, filename) !== false,
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,
       allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
       allowPeerDeps: testConfig(options.peerDependencies, filename) !== false,
