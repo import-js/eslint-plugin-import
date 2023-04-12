@@ -88,7 +88,12 @@ let memoizedHash = '';
 function fullResolve(modulePath, sourceFile, settings) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules']);
-  if (coreSet.has(modulePath)) return { found: true, path: null };
+  if (coreSet.some(c => {
+    const regex = new RegExp(`^${c.slice(-1) === '*' ? c.replaceFirst('.$', '.*') : c}$`);
+    return regex.test(modulePath);
+  })) {
+    return { found: true, path: null };
+  }
 
   const sourceDir = path.dirname(sourceFile);
 
