@@ -88,7 +88,9 @@ This rule supports the following options:
 
 How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are:
 `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, `"type"`.
-The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+By default, the order of elements in a group is ignored and can be mingled
+together (see `intraGroupOrder`). Omitted types are implicitly grouped together as the last element.
+Example:
 ```ts
 [
   'builtin', // Built-in types are first
@@ -321,6 +323,73 @@ import * as classnames from 'classnames';
 import aTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
+```
+
+### `intraGroupOrdering: true|false`:
+
+* default: `false`
+* Will be changed to `true` in the next major release.
+
+Enforces or forbids the ordering of imports within a group. This option applies
+slightly differently depending on whether the import is a `type` import or a
+regular import.
+
+#### Regular imports
+When nested groups have been defined in `groups` (ie. `['builtin', ['parent', 'sibling']]`),
+regular imports are sorted in the order of the elements in the nested group. So
+in the case of `['builtin', ['parent', 'sibling']]`, parents would be sorted
+above sibling imports but no newline would separate them.
+
+When `intraGroupOrdering` is set to `true`, the following will be invalid:
+
+```ts
+/* eslint import/order: ["error", {"intraGroupOrdering": true, groups: ['builtin', ['parent', 'sibling']]}] */
+import { fs } from 'fs';
+import { Select } from './Select';
+import { Button } from '../Button';
+```
+
+While this will be valid:
+
+```ts
+/* eslint import/order: ["error", {"intraGroupOrdering": true, groups: ['builtin', ['parent', 'sibling']]}] */
+import { fs } from 'fs';
+import { Button } from '../Button';
+import { Select } from './Select';
+```
+
+When alphabetization is enabled, imports with will be sorted in alphabetical
+order within each sub group before the sub group is sorted relative to the order
+of the nested group.
+
+#### Type imports
+When `intraGroupOrdering` is set to `true`, type imports are sorted in the order
+of the original groups array but flattened. So in the case of
+`['builtin', ['parent', 'sibling']]`, the order would be [`builtin`, `parent`, `sibling`].
+
+When `intraGroupOrdering` is set to `true`, the following will be invalid:
+
+```ts
+/* eslint import/order: ["error", {"intraGroupOrdering": true, groups: ['type', 'builtin', ['parent', 'sibling']]}] */
+import type { SelectProps } from './Select';
+import type { ButtonProps } from '../Button';
+import type { Dirent } from 'fs';
+
+import fs from 'fs';
+import { Button } from '../Button';
+import { Select } from './Select';
+```
+
+While this will be valid:
+```ts
+/* eslint import/order: ["error", {"intraGroupOrdering": true, groups: ['type', 'builtin', ['parent', 'sibling']]}] */
+import type { Dirent } from 'fs';
+import type { ButtonProps } from '../Button';
+import type { SelectProps } from './Select';
+
+import fs from 'fs';
+import { Button } from '../Button';
+import { Select } from './Select';
 ```
 
 ### `warnOnUnassignedImports: true|false`:
