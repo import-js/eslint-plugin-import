@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import pkgUp from 'eslint-module-utils/pkgUp';
 import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
@@ -40,16 +39,43 @@ function extractDepFields(pkg) {
   };
 }
 
-function getPackageDepFields(packageJsonPath, throwAtRead) {
-  if (!depFieldCache.has(packageJsonPath)) {
-    const depFields = extractDepFields(readJSON(packageJsonPath, throwAtRead));
-    depFieldCache.set(packageJsonPath, depFields);
+function getPackageDepFields(packageDir, considerInParents, requireInDir) {
+  const cacheKey = JSON.stringify({ packageDir, considerInParents: [...considerInParents] });
+
+  if (!depFieldCache.has(cacheKey)) {
+    // try in the current directory, erroring if the user explicitly specified this directory
+    // and reading fails
+    const parsedPackage = readJSON(path.join(packageDir, 'package.json'), requireInDir);
+    const depFields = extractDepFields(parsedPackage || {});
+
+    // If readJSON returned nothing, we want to keep searching since the current directory didn't
+    // have a package.json. Also keep searching if we're merging in some set of parents dependencies.
+    // However, if we're already at the root, stop.
+    if ((!parsedPackage || considerInParents.size > 0) && packageDir !== path.parse(packageDir).root) {
+      const parentDepFields = getPackageDepFields(path.dirname(packageDir), considerInParents, false);
+
+      Object.keys(depFields).forEach(depsKey => {
+        if (
+          (depsKey === 'dependencies' && considerInParents.has('prod')) ||
+          (depsKey === 'devDependencies' && considerInParents.has('dev')) ||
+          (depsKey === 'peerDependencies' && considerInParents.has('peer')) ||
+          (depsKey === 'optionalDependencies' && considerInParents.has('optional'))
+        ) {
+          Object.assign(depFields[depsKey], parentDepFields[depsKey]);
+        }
+        if (depsKey === 'bundledDependencies' && considerInParents.has('bundled')) {
+          depFields[depsKey] = depFields[depsKey].concat(parentDepFields[depsKey]);
+        }
+      });
+    }
+
+    depFieldCache.set(cacheKey, depFields);
   }
 
-  return depFieldCache.get(packageJsonPath);
+  return depFieldCache.get(cacheKey);
 }
 
-function getDependencies(context, packageDir) {
+function getDependencies(context, packageDir, considerInParents) {
   let paths = [];
   try {
     const packageContent = {
@@ -71,22 +97,24 @@ function getDependencies(context, packageDir) {
     if (paths.length > 0) {
       // use rule config to find package.json
       paths.forEach(dir => {
-        const packageJsonPath = path.join(dir, 'package.json');
-        const _packageContent = getPackageDepFields(packageJsonPath, true);
-        Object.keys(packageContent).forEach(depsKey =>
-          Object.assign(packageContent[depsKey], _packageContent[depsKey]),
-        );
+        const _packageContent = getPackageDepFields(dir, considerInParents, true);
+        Object.keys(packageContent).forEach(depsKey => {
+          if (depsKey === 'bundledDependencies') {
+            packageContent[depsKey] = packageContent[depsKey].concat(_packageContent[depsKey]);
+          } else {
+            Object.assign(packageContent[depsKey], _packageContent[depsKey]);
+          }
+        });
       });
     } else {
-      const packageJsonPath = pkgUp({
-        cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(),
-        normalize: false,
-      });
-
       // use closest package.json
       Object.assign(
         packageContent,
-        getPackageDepFields(packageJsonPath, false),
+        getPackageDepFields(
+          path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()),
+          considerInParents,
+          false,
+        ),
       );
     }
 
@@ -275,6 +303,21 @@ module.exports = {
           'packageDir': { 'type': ['string', 'array'] },
           'includeInternal': { 'type': ['boolean'] },
           'includeTypes': { 'type': ['boolean'] },
+          'considerInParents': {
+            'type': 'array',
+            'uniqueItems': true,
+            'additionalItems': false,
+            'items': {
+              'type': 'string',
+              'enum': [
+                'prod',
+                'dev',
+                'peer',
+                'bundled',
+                'optional',
+              ],
+            },
+          },
         },
         'additionalProperties': false,
       },
@@ -284,7 +327,7 @@ module.exports = {
   create(context) {
     const options = context.options[0] || {};
     const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    const deps = getDependencies(context, options.packageDir) || extractDepFields({});
+    const deps = getDependencies(context, options.packageDir, new Set(options.considerInParents || [])) || extractDepFields({});
 
     const depsOptions = {
       allowDevDeps: testConfig(options.devDependencies, filename) !== false,

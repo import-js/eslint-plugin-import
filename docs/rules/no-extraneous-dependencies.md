@@ -40,7 +40,17 @@ There are 2 boolean options to opt into checking extra imports that are normally
 "import/no-extraneous-dependencies": ["error", {"includeInternal": true, "includeTypes": true}]
 ```
 
-Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json.
+To take `package.json` files in parent directories into account, use the `considerInParents` option.
+This takes an array of strings, which can include `"prod"`, `"dev"`, `"peer"`, `"optional"`, and/or `"bundled"`.
+The default is an empty array (only the nearest `package.json` is taken into account).
+
+For example, the following would allow imports when the relevant packages are found in either `dependencies`
+or `devDependencies` in either the closest `package.json` or any `package.json` found in parent directories:
+```js
+"import/no-extraneous-dependencies": ["error", { "considerInParents": ["prod", "dev"] }]
+```
+
+To specify the path to the folder containing package.json, use the `packageDir` option.
 
 If provided as a relative path string, will be computed relative to the current working directory at linter execution time. If this is not ideal (does not work with some editor integrations), consider using `__dirname` to provide a path relative to your configuration.
 

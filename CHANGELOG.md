@@ -58,6 +58,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`prefer-default-export`]: add "target" option ([#2602], thanks [@azyzz228])
 - [`no-absolute-path`]: add fixer ([#2613], thanks [@adipascu])
 - [`no-duplicates`]: support inline type import with `inlineTypeImport` option ([#2475], thanks [@snewcomer])
+- [`no-extraneous-dependencies`]: Add `considerInParents` option to support package.json files in parent folders ([#2481], thanks [@luxaritas])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -1091,6 +1092,7 @@ for info on changes for earlier releases.
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
+[#2481]: https://github.com/import-js/eslint-plugin-import/pull/2481
 [#2475]: https://github.com/import-js/eslint-plugin-import/pull/2475
 [#2473]: https://github.com/import-js/eslint-plugin-import/pull/2473
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
@@ -1757,6 +1759,7 @@ for info on changes for earlier releases.
 [@ludofischer]: https://github.com/ludofischer
 [@Lukas-Kullmann]: https://github.com/Lukas-Kullmann
 [@lukeapage]: https://github.com/lukeapage
+[@luxaritas]: https://github.com/luxaritas
 [@lydell]: https://github.com/lydell
 [@magarcia]: https://github.com/magarcia
 [@Mairu]: https://github.com/Mairu
