@@ -75,7 +75,7 @@ exports.resolve = function (source, file, settings) {
     if (!configPath || !path.isAbsolute(configPath)) {
       // if not, find ancestral package.json and use its directory as base for the path
       packageDir = findRoot(path.resolve(file));
-      if (!packageDir) throw new Error('package not found above ' + file);
+      if (!packageDir) { throw new Error('package not found above ' + file); }
     }
 
     configPath = findConfigPath(configPath, packageDir);
@@ -108,7 +108,7 @@ exports.resolve = function (source, file, settings) {
   }
 
   if (Array.isArray(webpackConfig)) {
-    webpackConfig = webpackConfig.map(cfg => {
+    webpackConfig = webpackConfig.map((cfg) => {
       if (typeof cfg === 'function') {
         return cfg(env, argv);
       }
@@ -284,16 +284,15 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     new ResultSymlinkPlugin(),
   );
 
-
   const resolvePlugins = [];
 
   // support webpack.ResolverPlugin
   if (plugins) {
     plugins.forEach(function (plugin) {
       if (
-        plugin.constructor &&
-        plugin.constructor.name === 'ResolverPlugin' &&
-        Array.isArray(plugin.plugins)
+        plugin.constructor
+        && plugin.constructor.name === 'ResolverPlugin'
+        && Array.isArray(plugin.plugins)
       ) {
         resolvePlugins.push.apply(resolvePlugins, plugin.plugins);
       }
@@ -324,10 +323,10 @@ function makeRootPlugin(ModulesInRootPlugin, name, root) {
 /* eslint-enable */
 
 function findExternal(source, externals, context, resolveSync) {
-  if (!externals) return false;
+  if (!externals) { return false; }
 
   // string match
-  if (typeof externals === 'string') return (source === externals);
+  if (typeof externals === 'string') { return source === externals; }
 
   // array: recurse
   if (Array.isArray(externals)) {
@@ -384,8 +383,8 @@ function findExternal(source, externals, context, resolveSync) {
 
   // else, vanilla object
   for (const key in externals) {
-    if (!has(externals, key)) continue;
-    if (source === key) return true;
+    if (!has(externals, key)) { continue; }
+    if (source === key) { return true; }
   }
   return false;
 }
@@ -395,7 +394,6 @@ function findConfigPath(configPath, packageDir) {
     return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length;
   });
   let extension;
-
 
   if (configPath) {
     // extensions is not reused below, so safe to mutate it here.

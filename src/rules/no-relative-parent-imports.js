@@ -18,7 +18,7 @@ module.exports = {
 
   create: function noRelativePackages(context) {
     const myPath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    if (myPath === '<text>') return {}; // can't check a non-file
+    if (myPath === '<text>') { return {}; } // can't check a non-file
 
     function checkSourceValue(sourceNode) {
       const depPath = sourceNode.value;
@@ -38,10 +38,7 @@ module.exports = {
       if (importType(relDepPath, context) === 'parent') {
         context.report({
           node: sourceNode,
-          message: 'Relative imports from parent directories are not allowed. ' +
-            `Please either pass what you're importing through at runtime ` +
-            `(dependency injection), move \`${basename(myPath)}\` to same ` +
-            `directory as \`${depPath}\` or consider making \`${depPath}\` a package.`,
+          message: `Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move \`${basename(myPath)}\` to same directory as \`${depPath}\` or consider making \`${depPath}\` a package.`,
         });
       }
     }

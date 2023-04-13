@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 const moduleRequire = require('./module-require').default;
@@ -23,10 +24,10 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
   if (parsedResult && parsedResult.visitorKeys) {
     return parsedResult.visitorKeys;
   }
-  if (typeof parserPath === 'string' && /.*espree.*/.test(parserPath)) {
+  if (typeof parserPath === 'string' && (/.*espree.*/).test(parserPath)) {
     return parserInstance.VisitorKeys;
   }
-  if (typeof parserPath === 'string' && /.*babel-eslint.*/.test(parserPath)) {
+  if (typeof parserPath === 'string' && (/.*babel-eslint.*/).test(parserPath)) {
     return getBabelEslintVisitorKeys(parserPath);
   }
   return null;
@@ -51,13 +52,13 @@ function transformHashbang(text) {
 }
 
 exports.default = function parse(path, content, context) {
-  if (context == null) throw new Error('need context to parse properly');
+  if (context == null) { throw new Error('need context to parse properly'); }
 
   // ESLint in "flat" mode only sets context.languageOptions.parserOptions
-  let parserOptions = (context.languageOptions && context.languageOptions.parserOptions) || context.parserOptions;
+  let parserOptions = context.languageOptions && context.languageOptions.parserOptions || context.parserOptions;
   const parserOrPath = getParser(path, context);
 
-  if (!parserOrPath) throw new Error('parserPath or languageOptions.parser is required!');
+  if (!parserOrPath) { throw new Error('parserPath or languageOptions.parser is required!'); }
 
   // hack: espree blows up with frozen options
   parserOptions = Object.assign({}, parserOptions);
@@ -103,9 +104,8 @@ exports.default = function parse(path, content, context) {
     }
     if (!ast || typeof ast !== 'object') {
       console.warn(
-        '`parseForESLint` from parser `' +
-          (typeof parserOrPath === 'string' ? parserOrPath : '`context.languageOptions.parser`') + // Can only be invalid for custom parser per imports/parser
-          '` is invalid and will just be ignored'
+        // Can only be invalid for custom parser per imports/parser
+        '`parseForESLint` from parser `' + (typeof parserOrPath === 'string' ? parserOrPath : '`context.languageOptions.parser`') + '` is invalid and will just be ignored'
       );
     } else {
       return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));

@@ -6,9 +6,9 @@ import flatMap from 'array.prototype.flatmap';
 const ruleTester = new RuleTester();
 const rule = require('rules/no-cycle');
 
-const error = message => ({ message });
+const error = (message) => ({ message });
 
-const test = def => _test(Object.assign(def, {
+const test = (def) => _test(Object.assign(def, {
   filename: testFilePath('./cycles/depth-zero.js'),
 }));
 const testVersion = (specifier, t) => _testVersion(specifier, () => Object.assign(t(), {

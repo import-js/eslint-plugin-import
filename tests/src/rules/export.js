@@ -137,7 +137,6 @@ ruleTester.run('export', rule, {
     //   errors: ['Parsing error: Duplicate export \'bar\''],
     // }),
 
-
     // #328: "export * from" does not export a default
     test({
       code: 'export * from "./default-export"',
@@ -157,7 +156,6 @@ ruleTester.run('export', rule, {
     })),
   ),
 });
-
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {

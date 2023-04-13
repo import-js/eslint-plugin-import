@@ -24,17 +24,17 @@ module.exports = {
 
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'max': { 'type': 'number' },
-          'ignoreTypeImports': { 'type': 'boolean' },
+        type: 'object',
+        properties: {
+          max: { type: 'number' },
+          ignoreTypeImports: { type: 'boolean' },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
 
-  create: context => {
+  create(context) {
     const {
       ignoreTypeImports = DEFAULT_IGNORE_TYPE_IMPORTS,
     } = context.options[0] || {};
@@ -42,15 +42,19 @@ module.exports = {
     const dependencies = new Set(); // keep track of dependencies
     let lastNode; // keep track of the last node to report on
 
-    return Object.assign({
-      'Program:exit': function () {
+    return {
+      'Program:exit'() {
         countDependencies(dependencies, lastNode, context);
       },
-    }, moduleVisitor((source, { importKind }) => {
-      if (importKind !== TYPE_IMPORT || !ignoreTypeImports) {
-        dependencies.add(source.value);
-      }
-      lastNode = source;
-    }, { commonjs: true }));
+      ...moduleVisitor(
+        (source, { importKind }) => {
+          if (importKind !== TYPE_IMPORT || !ignoreTypeImports) {
+            dependencies.add(source.value);
+          }
+          lastNode = source;
+        },
+        { commonjs: true },
+      ),
+    };
   },
 };

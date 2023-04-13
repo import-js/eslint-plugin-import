@@ -98,7 +98,7 @@ function create(context) {
     'Program:exit': function onExit() {
       // Report multiple `export` declarations (ES2015 modules)
       if (nodes.modules.set.size > 1) {
-        nodes.modules.set.forEach(node => {
+        nodes.modules.set.forEach((node) => {
           context.report({
             node,
             message: errors[node.type],
@@ -108,7 +108,7 @@ function create(context) {
 
       // Report multiple `aggregated exports` from the same module (ES2015 modules)
       flat(values(nodes.modules.sources)
-        .filter(nodesWithSource => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
+        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
         .forEach((node) => {
           context.report({
             node,
@@ -118,7 +118,7 @@ function create(context) {
 
       // Report multiple `export type` declarations (FLOW ES2015 modules)
       if (nodes.types.set.size > 1) {
-        nodes.types.set.forEach(node => {
+        nodes.types.set.forEach((node) => {
           context.report({
             node,
             message: errors[node.type],
@@ -128,7 +128,7 @@ function create(context) {
 
       // Report multiple `aggregated type exports` from the same module (FLOW ES2015 modules)
       flat(values(nodes.types.sources)
-        .filter(nodesWithSource => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
+        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
         .forEach((node) => {
           context.report({
             node,
@@ -138,7 +138,7 @@ function create(context) {
 
       // Report multiple `module.exports` assignments (CommonJS)
       if (nodes.commonjs.set.size > 1) {
-        nodes.commonjs.set.forEach(node => {
+        nodes.commonjs.set.forEach((node) => {
           context.report({
             node,
             message: errors[node.type],

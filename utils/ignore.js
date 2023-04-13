@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 const extname = require('path').extname;
@@ -28,7 +29,7 @@ function makeValidExtensionSet(settings) {
       if (!Array.isArray(parserSettings)) {
         throw new TypeError('"settings" for ' + parser + ' must be an array');
       }
-      parserSettings.forEach(ext => exts.add(ext));
+      parserSettings.forEach((ext) => exts.add(ext));
     }
   }
 
@@ -38,9 +39,9 @@ exports.getFileExtensions = makeValidExtensionSet;
 
 exports.default = function ignore(path, context) {
   // check extension whitelist first (cheap)
-  if (!hasValidExtension(path, context)) return true;
+  if (!hasValidExtension(path, context)) { return true; }
 
-  if (!('import/ignore' in context.settings)) return false;
+  if (!('import/ignore' in context.settings)) { return false; }
   const ignoreStrings = context.settings['import/ignore'];
 
   for (let i = 0; i < ignoreStrings.length; i++) {

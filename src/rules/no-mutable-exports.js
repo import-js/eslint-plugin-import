@@ -52,8 +52,8 @@ module.exports = {
     }
 
     return {
-      'ExportDefaultDeclaration': handleExportDefault,
-      'ExportNamedDeclaration': handleExportNamed,
+      ExportDefaultDeclaration: handleExportDefault,
+      ExportNamedDeclaration: handleExportNamed,
     };
   },
 };

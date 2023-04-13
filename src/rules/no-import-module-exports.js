@@ -16,12 +16,12 @@ function getEntryPoint(context) {
 function findScope(context, identifier) {
   const { scopeManager } = context.getSourceCode();
 
-  return scopeManager && scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some(variable => variable.identifiers.some((node) => node.name === identifier)));
+  return scopeManager && scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some((variable) => variable.identifiers.some((node) => node.name === identifier)));
 }
 
 function findDefinition(objectScope, identifier) {
-  const variable = objectScope.variables.find(variable => variable.name === identifier);
-  return variable.defs.find(def => def.name.name === identifier);
+  const variable = objectScope.variables.find((variable) => variable.name === identifier);
+  return variable.defs.find((def) => def.name.name === identifier);
 }
 
 module.exports = {
@@ -35,11 +35,11 @@ module.exports = {
     fixable: 'code',
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'exceptions': { 'type': 'array' },
+        type: 'object',
+        properties: {
+          exceptions: { type: 'array' },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
@@ -58,14 +58,13 @@ module.exports = {
       const variableDefinition = objectScope && findDefinition(objectScope, node.object.name);
       const isImportBinding = variableDefinition && variableDefinition.type === 'ImportBinding';
       const hasCJSExportReference = hasKeywords && (!objectScope || objectScope.type === 'module');
-      const isException = !!options.exceptions && options.exceptions.some(glob => minimatch(fileName, glob));
+      const isException = !!options.exceptions && options.exceptions.some((glob) => minimatch(fileName, glob));
 
       if (isIdentifier && hasCJSExportReference && !isEntryPoint && !isException && !isImportBinding) {
-        importDeclarations.forEach(importDeclaration => {
+        importDeclarations.forEach((importDeclaration) => {
           context.report({
             node: importDeclaration,
-            message: `Cannot use import declarations in modules that export using ` +
-              `CommonJS (module.exports = 'foo' or exports.bar = 'hi')`,
+            message: `Cannot use import declarations in modules that export using CommonJS (module.exports = 'foo' or exports.bar = 'hi')`,
           });
         });
         alreadyReported = true;

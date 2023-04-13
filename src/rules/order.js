@@ -13,7 +13,7 @@ const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index'];
 
 function reverse(array) {
   return array.map(function (v) {
-    return Object.assign({}, v, { rank: -v.rank });
+    return { ...v, rank: -v.rank };
   }).reverse();
 }
 
@@ -111,9 +111,9 @@ function findEndOfLineWithComments(sourceCode, node) {
 }
 
 function commentOnSameLineAs(node) {
-  return token => (token.type === 'Block' ||  token.type === 'Line') &&
-      token.loc.start.line === token.loc.end.line &&
-      token.loc.end.line === node.loc.end.line;
+  return (token) => (token.type === 'Block' ||  token.type === 'Line')
+      && token.loc.start.line === token.loc.end.line
+      && token.loc.end.line === node.loc.end.line;
 }
 
 function findStartOfLineWithComments(sourceCode, node) {
@@ -130,13 +130,13 @@ function findStartOfLineWithComments(sourceCode, node) {
 }
 
 function isRequireExpression(expr) {
-  return expr != null &&
-    expr.type === 'CallExpression' &&
-    expr.callee != null &&
-    expr.callee.name === 'require' &&
-    expr.arguments != null &&
-    expr.arguments.length === 1 &&
-    expr.arguments[0].type === 'Literal';
+  return expr != null
+    && expr.type === 'CallExpression'
+    && expr.callee != null
+    && expr.callee.name === 'require'
+    && expr.arguments != null
+    && expr.arguments.length === 1
+    && expr.arguments[0].type === 'Literal';
 }
 
 function isSupportedRequireModule(node) {
@@ -147,16 +147,16 @@ function isSupportedRequireModule(node) {
     return false;
   }
   const decl = node.declarations[0];
-  const isPlainRequire = decl.id &&
-    (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern') &&
-    isRequireExpression(decl.init);
-  const isRequireWithMemberExpression = decl.id &&
-    (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern') &&
-    decl.init != null &&
-    decl.init.type === 'CallExpression' &&
-    decl.init.callee != null &&
-    decl.init.callee.type === 'MemberExpression' &&
-    isRequireExpression(decl.init.callee.object);
+  const isPlainRequire = decl.id
+    && (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern')
+    && isRequireExpression(decl.init);
+  const isRequireWithMemberExpression = decl.id
+    && (decl.id.type === 'Identifier' || decl.id.type === 'ObjectPattern')
+    && decl.init != null
+    && decl.init.type === 'CallExpression'
+    && decl.init.callee != null
+    && decl.init.callee.type === 'MemberExpression'
+    && isRequireExpression(decl.init.callee.object);
   return isPlainRequire || isRequireWithMemberExpression;
 }
 
@@ -211,7 +211,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
 
   let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd);
   if (newCode[newCode.length - 1] !== '\n') {
-    newCode = newCode + '\n';
+    newCode = `${newCode}\n`;
   }
 
   const firstImport = `${makeImportDescription(firstNode)} of \`${firstNode.displayName}\``;
@@ -222,21 +222,19 @@ function fixOutOfOrder(context, firstNode, secondNode, order) {
     context.report({
       node: secondNode.node,
       message,
-      fix: canFix && (fixer =>
-        fixer.replaceTextRange(
-          [firstRootStart, secondRootEnd],
-          newCode + sourceCode.text.substring(firstRootStart, secondRootStart),
-        )),
+      fix: canFix && ((fixer) => fixer.replaceTextRange(
+        [firstRootStart, secondRootEnd],
+        newCode + sourceCode.text.substring(firstRootStart, secondRootStart),
+      )),
     });
   } else if (order === 'after') {
     context.report({
       node: secondNode.node,
       message,
-      fix: canFix && (fixer =>
-        fixer.replaceTextRange(
-          [secondRootStart, firstRootEnd],
-          sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode,
-        )),
+      fix: canFix && ((fixer) => fixer.replaceTextRange(
+        [secondRootStart, firstRootEnd],
+        sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode,
+      )),
     });
   }
 }
@@ -285,8 +283,8 @@ const getNormalizedValue = (node, toLowerCase) => {
 function getSorter(alphabetizeOptions) {
   const multiplier = alphabetizeOptions.order === 'asc' ? 1 : -1;
   const orderImportKind = alphabetizeOptions.orderImportKind;
-  const multiplierImportKind = orderImportKind !== 'ignore' &&
-    (alphabetizeOptions.orderImportKind === 'asc' ? 1 : -1);
+  const multiplierImportKind = orderImportKind !== 'ignore'
+    && (alphabetizeOptions.orderImportKind === 'asc' ? 1 : -1);
 
   return function importsSorter(nodeA, nodeB) {
     const importA = getNormalizedValue(nodeA, alphabetizeOptions.caseInsensitive);
@@ -303,7 +301,7 @@ function getSorter(alphabetizeOptions) {
 
       for (let i = 0; i < Math.min(a, b); i++) {
         result = compareString(A[i], B[i]);
-        if (result) break;
+        if (result) { break; }
       }
 
       if (!result && a !== b) {
@@ -368,7 +366,7 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   for (let i = 0, l = pathGroups.length; i < l; i++) {
     const { pattern, patternOptions, group, position = 1 } = pathGroups[i];
     if (minimatch(path, pattern, patternOptions || { nocomment: true })) {
-      return ranks[group] + (position / maxPosition);
+      return ranks[group] + position / maxPosition;
     }
   }
 }
@@ -399,7 +397,7 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
 function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
   const rank = computeRank(context, ranks, importEntry, excludedImportTypes);
   if (rank !== -1) {
-    imported.push(Object.assign({}, importEntry, { rank }));
+    imported.push({ ...importEntry, rank });
   }
 }
 
@@ -408,15 +406,15 @@ function getRequireBlock(node) {
   // Handle cases like `const baz = require('foo').bar.baz`
   // and `const foo = require('foo')()`
   while (
-    (n.parent.type === 'MemberExpression' && n.parent.object === n) ||
-    (n.parent.type === 'CallExpression' && n.parent.callee === n)
+    n.parent.type === 'MemberExpression' && n.parent.object === n
+    || n.parent.type === 'CallExpression' && n.parent.callee === n
   ) {
     n = n.parent;
   }
   if (
-    n.parent.type === 'VariableDeclarator' &&
-    n.parent.parent.type === 'VariableDeclaration' &&
-    n.parent.parent.parent.type === 'Program'
+    n.parent.type === 'VariableDeclarator'
+    && n.parent.parent.type === 'VariableDeclaration'
+    && n.parent.parent.parent.type === 'Program'
   ) {
     return n.parent.parent.parent;
   }
@@ -434,11 +432,10 @@ function convertGroupsToRanks(groups) {
     }
     group.forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
-        throw new Error('Incorrect configuration of the rule: Unknown type `' +
-          JSON.stringify(groupItem) + '`');
+        throw new Error(`Incorrect configuration of the rule: Unknown type \`${JSON.stringify(groupItem)}\``);
       }
       if (res[groupItem] !== undefined) {
-        throw new Error('Incorrect configuration of the rule: `' + groupItem + '` is duplicated');
+        throw new Error(`Incorrect configuration of the rule: \`${groupItem}\` is duplicated`);
       }
       res[groupItem] = index * 2;
     });
@@ -476,7 +473,7 @@ function convertPathGroupsForRanks(pathGroups) {
       before[group].push(index);
     }
 
-    return Object.assign({}, pathGroup, { position });
+    return { ...pathGroup, position };
   });
 
   let maxPosition = 1;
@@ -520,7 +517,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
     findEndOfLineWithComments(sourceCode, prevRoot),
     findStartOfLineWithComments(sourceCode, currRoot),
   ];
-  if (/^\s*$/.test(sourceCode.text.substring(rangeToRemove[0], rangeToRemove[1]))) {
+  if ((/^\s*$/).test(sourceCode.text.substring(rangeToRemove[0], rangeToRemove[1]))) {
     return (fixer) => fixer.removeRange(rangeToRemove);
   }
   return undefined;
@@ -535,9 +532,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
 
     return linesBetweenImports.filter((line) => !line.trim().length).length;
   };
-  const getIsStartOfDistinctGroup = (currentImport, previousImport) => {
-    return currentImport.rank - 1 >= previousImport.rank;
-  };
+  const getIsStartOfDistinctGroup = (currentImport, previousImport) => currentImport.rank - 1 >= previousImport.rank;
   let previousImport = imported[0];
 
   imported.slice(1).forEach(function (currentImport) {
@@ -547,7 +542,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
     if (newlinesBetweenImports === 'always'
         || newlinesBetweenImports === 'always-and-inside-groups') {
       if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
-        if (distinctGroup || (!distinctGroup && isStartOfDistinctGroup)) {
+        if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
           context.report({
             node: previousImport.node,
             message: 'There should be at least one empty line between import groups',
@@ -556,7 +551,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
         }
       } else if (emptyLinesBetween > 0
         && newlinesBetweenImports !== 'always-and-inside-groups') {
-        if ((distinctGroup && currentImport.rank === previousImport.rank) || (!distinctGroup && !isStartOfDistinctGroup)) {
+        if (distinctGroup && currentImport.rank === previousImport.rank || !distinctGroup && !isStartOfDistinctGroup) {
           context.report({
             node: previousImport.node,
             message: 'There should be no empty line within import group',
@@ -675,7 +670,7 @@ module.exports = {
   create: function importOrderRule(context) {
     const options = context.options[0] || {};
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
-    const pathGroupsExcludedImportTypes = new Set(options['pathGroupsExcludedImportTypes'] || ['builtin', 'external', 'object']);
+    const pathGroupsExcludedImportTypes = new Set(options.pathGroupsExcludedImportTypes || ['builtin', 'external', 'object']);
     const alphabetize = getAlphabetizeConfig(options);
     const distinctGroup = options.distinctGroup == null ? defaultDistinctGroup : !!options.distinctGroup;
     let ranks;

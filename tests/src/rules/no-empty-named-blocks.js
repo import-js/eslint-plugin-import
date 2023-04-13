@@ -5,9 +5,8 @@ import { RuleTester } from 'eslint';
 const ruleTester = new RuleTester();
 const rule = require('rules/no-empty-named-blocks');
 
-
 function generateSuggestionsTestCases(cases, parser) {
-  return cases.map(code => test({
+  return cases.map((code) => test({
     code,
     parser,
     errors: [{

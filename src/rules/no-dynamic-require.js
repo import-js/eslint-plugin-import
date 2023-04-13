@@ -1,22 +1,22 @@
 import docsUrl from '../docsUrl';
 
 function isRequire(node) {
-  return node &&
-    node.callee &&
-    node.callee.type === 'Identifier' &&
-    node.callee.name === 'require' &&
-    node.arguments.length >= 1;
+  return node
+    && node.callee
+    && node.callee.type === 'Identifier'
+    && node.callee.name === 'require'
+    && node.arguments.length >= 1;
 }
 
 function isDynamicImport(node) {
-  return node &&
-    node.callee &&
-    node.callee.type === 'Import';
+  return node
+    && node.callee
+    && node.callee.type === 'Import';
 }
 
 function isStaticValue(arg) {
-  return arg.type === 'Literal' ||
-    (arg.type === 'TemplateLiteral' && arg.expressions.length === 0);
+  return arg.type === 'Literal'
+    || arg.type === 'TemplateLiteral' && arg.expressions.length === 0;
 }
 
 const dynamicImportErrorMessage = 'Calls to import() should use string literals';

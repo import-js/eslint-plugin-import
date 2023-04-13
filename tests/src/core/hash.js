@@ -7,7 +7,7 @@ const createHash = require('crypto').createHash;
 function expectHash(actualHash, expectedString) {
   const expectedHash = createHash('sha256');
   expectedHash.update(expectedString);
-  expect(actualHash.digest('hex'), 'to be a hex digest of sha256 hash of string <' + expectedString + '>').to.equal(expectedHash.digest('hex'));
+  expect(actualHash.digest('hex'), `to be a hex digest of sha256 hash of string <${expectedString}>`).to.equal(expectedHash.digest('hex'));
 }
 
 describe('hash', function () {

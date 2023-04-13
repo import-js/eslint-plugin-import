@@ -713,7 +713,7 @@ ruleTester.run('no-restricted-paths', rule, {
 });
 
 context('Typescript', function () {
-  getTSParsers().forEach(parser => {
+  getTSParsers().forEach((parser) => {
     const settings = {
       'import/parsers': { [parser]: ['.ts'] },
       'import/resolver': { 'eslint-import-resolver-typescript': true },
@@ -933,8 +933,7 @@ context('Typescript', function () {
             }],
           }],
           errors: [{
-            message: 'Restricted path exceptions must be descendants of the configured ' +
-              '`from` path for that zone.',
+            message: 'Restricted path exceptions must be descendants of the configured `from` path for that zone.',
             line: 1,
             column: 20,
           }],

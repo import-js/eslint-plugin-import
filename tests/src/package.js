@@ -38,8 +38,8 @@ describe('package', function () {
   it('exports all configs', function (done) {
     fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
       if (err) { done(err); return; }
-      files.filter(isJSFile).forEach(file => {
-        if (file[0] === '.') return;
+      files.filter(isJSFile).forEach((file) => {
+        if (file[0] === '.') { return; }
         expect(module.configs).to.have.property(path.basename(file, '.js'));
       });
       done();
@@ -66,7 +66,7 @@ describe('package', function () {
 
   it('marks deprecated rules in their metadata', function () {
     expect(module.rules['imports-first'].meta.deprecated).to.be.true;
-    expect(module.rules['first'].meta.deprecated).not.to.be.true;
+    expect(module.rules.first.meta.deprecated).not.to.be.true;
   });
 
 });

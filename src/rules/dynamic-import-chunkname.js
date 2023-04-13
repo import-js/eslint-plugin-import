@@ -72,8 +72,7 @@ module.exports = {
         try {
           // just like webpack itself does
           vm.runInNewContext(`(function() {return {${comment.value}}})()`);
-        }
-        catch (error) {
+        } catch (error) {
           context.report({
             node,
             message: `dynamic imports require a "webpack" comment with valid syntax`,

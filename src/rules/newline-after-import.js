@@ -63,22 +63,22 @@ module.exports = {
     fixable: 'whitespace',
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'count': {
-            'type': 'integer',
-            'minimum': 1,
+        type: 'object',
+        properties: {
+          count: {
+            type: 'integer',
+            minimum: 1,
           },
-          'considerComments': { 'type': 'boolean' },
+          considerComments: { type: 'boolean' },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
   create(context) {
     let level = 0;
     const requireCalls = [];
-    const options = Object.assign({ count: 1, considerComments: false }, context.options[0]);
+    const options = { count: 1, considerComments: false, ...context.options[0] };
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode) || isExportNameClass(nextNode)) {
@@ -107,7 +107,7 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after ${type} statement not followed by another ${type}.`,
-          fix: fixer => fixer.insertTextAfter(
+          fix: (fixer) => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
           ),
@@ -132,7 +132,7 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after import statement not followed by another import.`,
-          fix: fixer => fixer.insertTextAfter(
+          fix: (fixer) => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
           ),
@@ -155,9 +155,8 @@ module.exports = {
       let nextComment;
 
       if (typeof parent.comments !== 'undefined' && options.considerComments) {
-        nextComment = parent.comments.find(o => o.loc.start.line === endLine + 1);
+        nextComment = parent.comments.find((o) => o.loc.start.line === endLine + 1);
       }
-
 
       // skip "export import"s
       if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
@@ -179,12 +178,12 @@ module.exports = {
           requireCalls.push(node);
         }
       },
-      'Program:exit': function () {
+      'Program:exit'() {
         log('exit processing for', context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
         const scopeBody = getScopeBody(context.getScope());
         log('got scope:', scopeBody);
 
-        requireCalls.forEach(function (node, index) {
+        requireCalls.forEach((node, index) => {
           const nodePosition = findNodeIndexInScopeBody(scopeBody, node);
           log('node position in scope:', nodePosition);
 
@@ -196,8 +195,12 @@ module.exports = {
             return;
           }
 
-          if (nextStatement &&
-             (!nextRequireCall || !containsNodeOrEqual(nextStatement, nextRequireCall))) {
+          if (
+            nextStatement && (
+              !nextRequireCall
+              || !containsNodeOrEqual(nextStatement, nextRequireCall)
+            )
+          ) {
 
             checkForNewLine(statementWithRequireCall, nextStatement, 'require');
           }

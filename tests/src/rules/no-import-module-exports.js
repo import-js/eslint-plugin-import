@@ -9,8 +9,7 @@ const ruleTester = new RuleTester({
 const rule = require('rules/no-import-module-exports');
 
 const error = {
-  message: `Cannot use import declarations in modules that export using CommonJS ` +
-    `(module.exports = 'foo' or exports.bar = 'hi')`,
+  message: `Cannot use import declarations in modules that export using CommonJS (module.exports = 'foo' or exports.bar = 'hi')`,
   type: 'ImportDeclaration',
 };
 

@@ -969,7 +969,7 @@ ruleTester.run('dynamic-import-chunkname', rule, {
 
 context('TypeScript', () => {
   getTSParsers().forEach((typescriptParser) => {
-    const nodeType = typescriptParser === parsers.TS_OLD || (typescriptParser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '^2'))
+    const nodeType = typescriptParser === parsers.TS_OLD || typescriptParser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '^2')
       ? 'CallExpression'
       : 'ImportExpression';
 

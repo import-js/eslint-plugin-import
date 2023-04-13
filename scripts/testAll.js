@@ -10,11 +10,11 @@ const spawnOptions = {
 spawnSync(
   npmPath,
   ['test'],
-  Object.assign({ cwd: __dirname }, spawnOptions));
+  { cwd: __dirname, ...spawnOptions });
 
 for (const resolverDir of resolverDirectories) {
   spawnSync(
     npmPath,
     ['test'],
-    Object.assign({ cwd: resolverDir }, spawnOptions));
+    { cwd: resolverDir, ...spawnOptions });
 }

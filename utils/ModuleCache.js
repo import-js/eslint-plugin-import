@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 const log = require('debug')('eslint-module-utils:ModuleCache');
@@ -23,8 +24,10 @@ class ModuleCache {
     if (this.map.has(cacheKey)) {
       const f = this.map.get(cacheKey);
       // check freshness
-      if (process.hrtime(f.lastSeen)[0] < settings.lifetime) return f.result;
-    } else log('cache miss for', cacheKey);
+      if (process.hrtime(f.lastSeen)[0] < settings.lifetime) { return f.result; }
+    } else {
+      log('cache miss for', cacheKey);
+    }
     // cache miss
     return undefined;
   }

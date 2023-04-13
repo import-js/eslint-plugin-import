@@ -77,11 +77,9 @@ module.exports = {
     const restrictedPaths = options.zones || [];
     const basePath = options.basePath || process.cwd();
     const currentFilename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    const matchingZones = restrictedPaths.filter((zone) => {
-      return [].concat(zone.target)
-        .map(target => path.resolve(basePath, target))
-        .some(targetPath => isMatchingTargetPath(currentFilename, targetPath));
-    });
+    const matchingZones = restrictedPaths.filter((zone) => [].concat(zone.target)
+      .map((target) => path.resolve(basePath, target))
+      .some((targetPath) => isMatchingTargetPath(currentFilename, targetPath)));
 
     function isMatchingTargetPath(filename, targetPath) {
       if (isGlob(targetPath)) {
@@ -180,7 +178,7 @@ module.exports = {
     }
 
     function reportInvalidExceptions(validators, node) {
-      validators.forEach(validator => validator.reportInvalidException(node));
+      validators.forEach((validator) => validator.reportInvalidException(node));
     }
 
     function reportImportsInRestrictedZone(validators, node, importPath, customMessage) {
@@ -203,7 +201,7 @@ module.exports = {
 
       const isGlobPattern = areGlobPatterns.every((isGlob) => isGlob);
 
-      return allZoneFrom.map(singleZoneFrom => {
+      return allZoneFrom.map((singleZoneFrom) => {
         const absoluteFrom = path.resolve(basePath, singleZoneFrom);
 
         if (isGlobPattern) {
@@ -227,14 +225,14 @@ module.exports = {
           validators[index] = makePathValidators(zone.from, zone.except);
         }
 
-        const applicableValidatorsForImportPath = validators[index].filter(validator => validator.isPathRestricted(absoluteImportPath));
+        const applicableValidatorsForImportPath = validators[index].filter((validator) => validator.isPathRestricted(absoluteImportPath));
 
-        const validatorsWithInvalidExceptions = applicableValidatorsForImportPath.filter(validator => !validator.hasValidExceptions);
+        const validatorsWithInvalidExceptions = applicableValidatorsForImportPath.filter((validator) => !validator.hasValidExceptions);
         reportInvalidExceptions(validatorsWithInvalidExceptions, node);
 
         const applicableValidatorsForImportPathExcludingExceptions = applicableValidatorsForImportPath
-          .filter(validator => validator.hasValidExceptions)
-          .filter(validator => !validator.isPathException(absoluteImportPath));
+          .filter((validator) => validator.hasValidExceptions)
+          .filter((validator) => !validator.isPathException(absoluteImportPath));
         reportImportsInRestrictedZone(applicableValidatorsForImportPathExcludingExceptions, node, importPath, zone.message);
       });
     }

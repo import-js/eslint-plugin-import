@@ -16,9 +16,9 @@ function normalizeLegacyOptions(options) {
 }
 
 function allowPrimitive(node, options) {
-  if (!options.allowPrimitiveModules) return false;
-  if (node.parent.type !== 'AssignmentExpression') return false;
-  return (node.parent.right.type !== 'ObjectExpression');
+  if (!options.allowPrimitiveModules) { return false; }
+  if (node.parent.type !== 'AssignmentExpression') { return false; }
+  return node.parent.right.type !== 'ObjectExpression';
 }
 
 function allowRequire(node, options) {
@@ -40,14 +40,16 @@ function isConditional(node) {
     || node.type === 'TryStatement'
     || node.type === 'LogicalExpression'
     || node.type === 'ConditionalExpression'
-  ) return true;
-  if (node.parent) return isConditional(node.parent);
+  ) {
+    return true;
+  }
+  if (node.parent) { return isConditional(node.parent); }
   return false;
 }
 
 function isLiteralString(node) {
-  return (node.type === 'Literal' && typeof node.value === 'string') ||
-    (node.type === 'TemplateLiteral' && node.expressions.length === 0);
+  return node.type === 'Literal' && typeof node.value === 'string'
+    || node.type === 'TemplateLiteral' && node.expressions.length === 0;
 }
 
 //------------------------------------------------------------------------------
@@ -58,9 +60,9 @@ const schemaString = { enum: ['allow-primitive-modules'] };
 const schemaObject = {
   type: 'object',
   properties: {
-    allowPrimitiveModules: { 'type': 'boolean' },
-    allowRequire: { 'type': 'boolean' },
-    allowConditionalRequire: { 'type': 'boolean' },
+    allowPrimitiveModules: { type: 'boolean' },
+    allowRequire: { type: 'boolean' },
+    allowConditionalRequire: { type: 'boolean' },
   },
   additionalProperties: false,
 };
@@ -95,11 +97,11 @@ module.exports = {
 
     return {
 
-      'MemberExpression': function (node) {
+      MemberExpression(node) {
 
         // module.exports
         if (node.object.name === 'module' && node.property.name === 'exports') {
-          if (allowPrimitive(node, options)) return;
+          if (allowPrimitive(node, options)) { return; }
           context.report({ node, message: EXPORT_MESSAGE });
         }
 
@@ -107,25 +109,25 @@ module.exports = {
         if (node.object.name === 'exports') {
           const isInScope = context.getScope()
             .variables
-            .some(variable => variable.name === 'exports');
-          if (! isInScope) {
+            .some((variable) => variable.name === 'exports');
+          if (!isInScope) {
             context.report({ node, message: EXPORT_MESSAGE });
           }
         }
 
       },
-      'CallExpression': function (call) {
-        if (!validateScope(context.getScope())) return;
+      CallExpression(call) {
+        if (!validateScope(context.getScope())) { return; }
 
-        if (call.callee.type !== 'Identifier') return;
-        if (call.callee.name !== 'require') return;
+        if (call.callee.type !== 'Identifier') { return; }
+        if (call.callee.name !== 'require') { return; }
 
-        if (call.arguments.length !== 1) return;
-        if (!isLiteralString(call.arguments[0])) return;
+        if (call.arguments.length !== 1) { return; }
+        if (!isLiteralString(call.arguments[0])) { return; }
 
-        if (allowRequire(call, options)) return;
+        if (allowRequire(call, options)) { return; }
 
-        if (allowConditionalRequire(call, options) && isConditional(call.parent)) return;
+        if (allowConditionalRequire(call, options) && isConditional(call.parent)) { return; }
 
         // keeping it simple: all 1-string-arg `require` calls are reported
         context.report({

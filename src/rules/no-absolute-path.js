@@ -21,12 +21,12 @@ module.exports = {
         context.report({
           node: source,
           message: 'Do not import modules using an absolute path',
-          fix: fixer => {
+          fix(fixer) {
             const resolvedContext = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
             // node.js and web imports work with posix style paths ("/")
             let relativePath = path.posix.relative(path.dirname(resolvedContext), source.value);
             if (!relativePath.startsWith('.')) {
-              relativePath = './' + relativePath;
+              relativePath = `./${relativePath}`;
             }
             return fixer.replaceText(source, JSON.stringify(relativePath));
           },
@@ -34,7 +34,7 @@ module.exports = {
       }
     }
 
-    const options = Object.assign({ esmodule: true, commonjs: true }, context.options[0]);
+    const options = { esmodule: true, commonjs: true, ...context.options[0] };
     return moduleVisitor(reportIfAbsolute, options);
   },
 };

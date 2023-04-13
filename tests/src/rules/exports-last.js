@@ -5,7 +5,7 @@ import rule from 'rules/exports-last';
 
 const ruleTester = new RuleTester();
 
-const error = type => ({
+const error = (type) => ({
   message: 'Export statements should appear at the end of the file',
   type,
 });

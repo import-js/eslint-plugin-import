@@ -26,7 +26,7 @@ function getImportText(
     return '';
   }
 
-  const names = specifiers.map(s => {
+  const names = specifiers.map((s) => {
     if (s.imported.name === s.local.name) {
       return s.imported.name;
     }
@@ -67,12 +67,14 @@ module.exports = {
 
           if (
             // no specifiers (import type {} from '') have no specifiers to mark as inline
-            node.specifiers.length === 0 ||
-            (node.specifiers.length === 1 &&
-              // default imports are both "inline" and "top-level"
-              (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-                // namespace imports are both "inline" and "top-level"
-                node.specifiers[0].type === 'ImportNamespaceSpecifier'))
+            node.specifiers.length === 0
+            || node.specifiers.length === 1
+            // default imports are both "inline" and "top-level"
+            && (
+              node.specifiers[0].type === 'ImportDefaultSpecifier'
+              // namespace imports are both "inline" and "top-level"
+              || node.specifiers[0].type === 'ImportNamespaceSpecifier'
+            )
           ) {
             return;
           }
@@ -101,15 +103,17 @@ module.exports = {
       ImportDeclaration(node) {
         if (
           // already top-level is valid
-          node.importKind === 'type' ||
-          node.importKind === 'typeof' ||
+          node.importKind === 'type'
+          || node.importKind === 'typeof'
           // no specifiers (import {} from '') cannot have inline - so is valid
-          node.specifiers.length === 0 ||
-          (node.specifiers.length === 1 &&
-            // default imports are both "inline" and "top-level"
-            (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-              // namespace imports are both "inline" and "top-level"
-              node.specifiers[0].type === 'ImportNamespaceSpecifier'))
+          || node.specifiers.length === 0
+          || node.specifiers.length === 1
+          // default imports are both "inline" and "top-level"
+          && (
+            node.specifiers[0].type === 'ImportDefaultSpecifier'
+            // namespace imports are both "inline" and "top-level"
+            || node.specifiers[0].type === 'ImportNamespaceSpecifier'
+          )
         ) {
           return;
         }
@@ -195,7 +199,7 @@ module.exports = {
                   const comma = sourceCode.getTokenAfter(defaultSpecifier, isComma);
                   const closingBrace = sourceCode.getTokenAfter(
                     node.specifiers[node.specifiers.length - 1],
-                    token => token.type === 'Punctuator' && token.value === '}',
+                    (token) => token.type === 'Punctuator' && token.value === '}',
                   );
                   fixes.push(fixer.removeRange([
                     comma.range[0],

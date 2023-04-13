@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 /**
@@ -16,14 +17,14 @@ exports.default = function visitModules(visitor, options) {
 
   let ignoreRegExps = [];
   if (options.ignore != null) {
-    ignoreRegExps = options.ignore.map(p => new RegExp(p));
+    ignoreRegExps = options.ignore.map((p) => new RegExp(p));
   }
 
   function checkSourceValue(source, importer) {
-    if (source == null) return; //?
+    if (source == null) { return; } //?
 
     // handle ignore
-    if (ignoreRegExps.some(re => re.test(source.value))) return;
+    if (ignoreRegExps.some((re) => re.test(source.value))) { return; }
 
     // fire visitor
     visitor(source, importer);
@@ -41,14 +42,14 @@ exports.default = function visitModules(visitor, options) {
     if (node.type === 'ImportExpression') {
       modulePath = node.source;
     } else if (node.type === 'CallExpression') {
-      if (node.callee.type !== 'Import') return;
-      if (node.arguments.length !== 1) return;
+      if (node.callee.type !== 'Import') { return; }
+      if (node.arguments.length !== 1) { return; }
 
       modulePath = node.arguments[0];
     }
 
-    if (modulePath.type !== 'Literal') return;
-    if (typeof modulePath.value !== 'string') return;
+    if (modulePath.type !== 'Literal') { return; }
+    if (typeof modulePath.value !== 'string') { return; }
 
     checkSourceValue(modulePath, node);
   }
@@ -56,32 +57,35 @@ exports.default = function visitModules(visitor, options) {
   // for CommonJS `require` calls
   // adapted from @mctep: https://git.io/v4rAu
   function checkCommon(call) {
-    if (call.callee.type !== 'Identifier') return;
-    if (call.callee.name !== 'require') return;
-    if (call.arguments.length !== 1) return;
+    if (call.callee.type !== 'Identifier') { return; }
+    if (call.callee.name !== 'require') { return; }
+    if (call.arguments.length !== 1) { return; }
 
     const modulePath = call.arguments[0];
-    if (modulePath.type !== 'Literal') return;
-    if (typeof modulePath.value !== 'string') return;
+    if (modulePath.type !== 'Literal') { return; }
+    if (typeof modulePath.value !== 'string') { return; }
 
     checkSourceValue(modulePath, call);
   }
 
   function checkAMD(call) {
-    if (call.callee.type !== 'Identifier') return;
-    if (call.callee.name !== 'require' &&
-        call.callee.name !== 'define') return;
-    if (call.arguments.length !== 2) return;
+    if (call.callee.type !== 'Identifier') { return; }
+    if (call.callee.name !== 'require' && call.callee.name !== 'define') { return; }
+    if (call.arguments.length !== 2) { return; }
 
     const modules = call.arguments[0];
-    if (modules.type !== 'ArrayExpression') return;
+    if (modules.type !== 'ArrayExpression') { return; }
 
     for (const element of modules.elements) {
-      if (element.type !== 'Literal') continue;
-      if (typeof element.value !== 'string') continue;
+      if (element.type !== 'Literal') { continue; }
+      if (typeof element.value !== 'string') { continue; }
 
-      if (element.value === 'require' ||
-          element.value === 'exports') continue; // magic modules: https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic-modules
+      if (
+        element.value === 'require'
+        || element.value === 'exports'
+      ) {
+        continue; // magic modules: https://github.com/requirejs/requirejs/wiki/Differences-between-the-simplified-CommonJS-wrapper-and-standard-AMD-define#magic-modules
+      }
 
       checkSourceValue(element, element);
     }
@@ -90,20 +94,20 @@ exports.default = function visitModules(visitor, options) {
   const visitors = {};
   if (options.esmodule) {
     Object.assign(visitors, {
-      'ImportDeclaration': checkSource,
-      'ExportNamedDeclaration': checkSource,
-      'ExportAllDeclaration': checkSource,
-      'CallExpression': checkImportCall,
-      'ImportExpression': checkImportCall,
+      ImportDeclaration: checkSource,
+      ExportNamedDeclaration: checkSource,
+      ExportAllDeclaration: checkSource,
+      CallExpression: checkImportCall,
+      ImportExpression: checkImportCall,
     });
   }
 
   if (options.commonjs || options.amd) {
-    const currentCallExpression = visitors['CallExpression'];
-    visitors['CallExpression'] = function (call) {
-      if (currentCallExpression) currentCallExpression(call);
-      if (options.commonjs) checkCommon(call);
-      if (options.amd) checkAMD(call);
+    const currentCallExpression = visitors.CallExpression;
+    visitors.CallExpression = function (call) {
+      if (currentCallExpression) { currentCallExpression(call); }
+      if (options.commonjs) { checkCommon(call); }
+      if (options.amd) { checkAMD(call); }
     };
   }
 
@@ -116,19 +120,19 @@ exports.default = function visitModules(visitor, options) {
  */
 function makeOptionsSchema(additionalProperties) {
   const base =  {
-    'type': 'object',
-    'properties': {
-      'commonjs': { 'type': 'boolean' },
-      'amd': { 'type': 'boolean' },
-      'esmodule': { 'type': 'boolean' },
-      'ignore': {
-        'type': 'array',
-        'minItems': 1,
-        'items': { 'type': 'string' },
-        'uniqueItems': true,
+    type: 'object',
+    properties: {
+      commonjs: { type: 'boolean' },
+      amd: { type: 'boolean' },
+      esmodule: { type: 'boolean' },
+      ignore: {
+        type: 'array',
+        minItems: 1,
+        items: { type: 'string' },
+        uniqueItems: true,
       },
     },
-    'additionalProperties': false,
+    additionalProperties: false,
   };
 
   if (additionalProperties) {

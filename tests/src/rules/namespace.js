@@ -5,7 +5,6 @@ import flatMap from 'array.prototype.flatmap';
 const ruleTester = new RuleTester({ env: { es6: true } });
 const rule = require('rules/namespace');
 
-
 function error(name, namespace) {
   return { message: `'${name}' not found in imported namespace '${namespace}'.` };
 }
@@ -14,13 +13,10 @@ const valid = [
   test({ code: 'import "./malformed.js"' }),
 
   test({ code: "import * as foo from './empty-folder';" }),
-  test({ code: 'import * as names from "./named-exports"; ' +
-               'console.log((names.b).c); ' }),
+  test({ code: 'import * as names from "./named-exports"; console.log((names.b).c); ' }),
 
-  test({ code: 'import * as names from "./named-exports"; ' +
-               'console.log(names.a);' }),
-  test({ code: 'import * as names from "./re-export-names"; ' +
-               'console.log(names.foo);' }),
+  test({ code: 'import * as names from "./named-exports"; console.log(names.a);' }),
+  test({ code: 'import * as names from "./re-export-names"; console.log(names.foo);' }),
   test({
     code: "import * as elements from './jsx';",
     parserOptions: {
@@ -61,26 +57,23 @@ const valid = [
   test({ code: "import * as foo from './common';" }),
 
   // destructuring namespaces
-  test({ code: 'import * as names from "./named-exports";' +
-               'const { a } = names' }),
-  test({ code: 'import * as names from "./named-exports";' +
-               'const { d: c } = names' }),
-  test({ code: 'import * as names from "./named-exports";' +
-               'const { c } = foo\n' +
-               '    , { length } = "names"\n' +
-               '    , alt = names' }),
+  test({ code: 'import * as names from "./named-exports"; const { a } = names' }),
+  test({ code: 'import * as names from "./named-exports"; const { d: c } = names' }),
+  test({
+    code: `
+      import * as names from "./named-exports";
+      const { c } = foo,
+        { length } = "names",
+        alt = names;
+      `,
+  }),
   // deep destructuring only cares about top level
-  test({ code: 'import * as names from "./named-exports";' +
-               'const { ExportedClass: { length } } = names' }),
+  test({ code: 'import * as names from "./named-exports"; const { ExportedClass: { length } } = names' }),
 
   // detect scope redefinition
-  test({ code: 'import * as names from "./named-exports";' +
-               'function b(names) { const { c } = names }' }),
-  test({ code: 'import * as names from "./named-exports";' +
-               'function b() { let names = null; const { c } = names }' }),
-  test({ code: 'import * as names from "./named-exports";' +
-               'const x = function names() { const { c } = names }' }),
-
+  test({ code: 'import * as names from "./named-exports"; function b(names) { const { c } = names }' }),
+  test({ code: 'import * as names from "./named-exports"; function b() { let names = null; const { c } = names }' }),
+  test({ code: 'import * as names from "./named-exports"; const x = function names() { const { c } = names }' }),
 
   /////////
   // es7 //
@@ -101,8 +94,7 @@ const valid = [
   // respect hoisting
   test({
     code:
-      'function x() { console.log((names.b).c); } ' +
-      'import * as names from "./named-exports"; ',
+      'function x() { console.log((names.b).c); } import * as names from "./named-exports"; ',
   }),
 
   // names.default is valid export
@@ -241,13 +233,11 @@ const valid = [
 ];
 
 const invalid = [].concat(
-  test({ code: "import * as names from './named-exports'; " +
-               ' console.log(names.c);',
-  errors: [error('c', 'names')] }),
+  test({ code: "import * as names from './named-exports'; console.log(names.c)",
+    errors: [error('c', 'names')] }),
 
-  test({ code: "import * as names from './named-exports';" +
-               " console.log(names['a']);",
-  errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
+  test({ code: "import * as names from './named-exports'; console.log(names['a']);",
+    errors: ["Unable to validate computed reference to imported namespace 'names'."] }),
 
   // assignment warning (from no-reassign)
   test({ code: 'import * as foo from \'./bar\'; foo.foo = \'y\';',
@@ -269,8 +259,7 @@ const invalid = [].concat(
     errors: [{ type: 'Property', message: "'c' not found in imported namespace 'names'." }],
   }),
   test({
-    code: 'import * as names from "./named-exports";' +
-           'const { c: { d } } = names',
+    code: 'import * as names from "./named-exports"; const { c: { d } } = names',
     errors: [{ type: 'Property', message: "'c' not found in imported namespace 'names'." }],
   }),
 
@@ -300,15 +289,11 @@ const invalid = [].concat(
 
   // respect hoisting
   test({
-    code:
-      'console.log(names.c);' +
-      "import * as names from './named-exports'; ",
+    code: `console.log(names.c); import * as names from './named-exports';`,
     errors: [error('c', 'names')],
   }),
   test({
-    code:
-      'function x() { console.log(names.c) } ' +
-      "import * as names from './named-exports'; ",
+    code: `function x() { console.log(names.c) } import * as names from './named-exports';`,
     errors: [error('c', 'names')],
   }),
 
@@ -340,12 +325,12 @@ const invalid = [].concat(
     errors: [ "'e' not found in deeply imported namespace 'b.c'." ],
     parserOptions: { ecmaVersion: 2022 },
   })),
-)
+);
 
 ///////////////////////
 // deep dereferences //
 //////////////////////
-;[['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
+[['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),

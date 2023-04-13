@@ -362,15 +362,15 @@ context('TypeScript', function () {
           ...parserConfig,
         }),
         semver.satisfies(tsEslintVersion, '>= 22') ? test({
-          code: 'export type foo = string /* ' + parser.replace(process.cwd(), '$$PWD') + '*/',
+          code: `export type foo = string /* ${parser.replace(process.cwd(), '$$PWD')}*/`,
           ...parserConfig,
         }) : [],
         semver.satisfies(tsEslintVersion, '> 20') ? test({
-          code: 'export interface foo { bar: string; } /* ' + parser.replace(process.cwd(), '$$PWD') + '*/',
+          code: `export interface foo { bar: string; } /* ${parser.replace(process.cwd(), '$$PWD')}*/`,
           ...parserConfig,
         }) : [],
         test({
-          code: 'export interface foo { bar: string; }; export function goo() {} /* ' + parser.replace(process.cwd(), '$$PWD') + '*/',
+          code: `export interface foo { bar: string; }; export function goo() {} /* ${parser.replace(process.cwd(), '$$PWD')}*/`,
           ...parserConfig,
         }),
       ),

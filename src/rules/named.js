@@ -67,12 +67,12 @@ module.exports = {
         if (!deepLookup.found) {
           if (deepLookup.path.length > 1) {
             const deepPath = deepLookup.path
-              .map(i => path.relative(path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()), i.path))
+              .map((i) => path.relative(path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()), i.path))
               .join(' -> ');
 
             context.report(im[key], `${name} not found via ${deepPath}`);
           } else {
-            context.report(im[key], name + ' not found in \'' + node.source.value + '\'');
+            context.report(im[key], `${name} not found in '${node.source.value}'`);
           }
         }
       });
@@ -121,12 +121,12 @@ module.exports = {
         if (!deepLookup.found) {
           if (deepLookup.path.length > 1) {
             const deepPath = deepLookup.path
-              .map(i => path.relative(path.dirname(context.getFilename()), i.path))
+              .map((i) => path.relative(path.dirname(context.getFilename()), i.path))
               .join(' -> ');
 
             context.report(im.key, `${im.key.name} not found via ${deepPath}`);
           } else {
-            context.report(im.key, im.key.name + ' not found in \'' + source.value + '\'');
+            context.report(im.key, `${im.key.name} not found in '${source.value}'`);
           }
         }
       });

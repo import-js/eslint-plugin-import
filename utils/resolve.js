@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 const fs = require('fs');
@@ -53,16 +54,16 @@ function tryRequire(target, sourceFile) {
 // https://stackoverflow.com/a/27382838
 exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cacheSettings, strict) {
   // don't care if the FS is case-sensitive
-  if (CASE_SENSITIVE_FS) return true;
+  if (CASE_SENSITIVE_FS) { return true; }
 
   // null means it resolved to a builtin
-  if (filepath === null) return true;
-  if (filepath.toLowerCase() === process.cwd().toLowerCase() && !strict) return true;
+  if (filepath === null) { return true; }
+  if (filepath.toLowerCase() === process.cwd().toLowerCase() && !strict) { return true; }
   const parsedPath = path.parse(filepath);
   const dir = parsedPath.dir;
 
   let result = fileExistsCache.get(filepath, cacheSettings);
-  if (result != null) return result;
+  if (result != null) { return result; }
 
   // base case
   if (dir === '' || parsedPath.root === filepath) {
@@ -88,7 +89,7 @@ let memoizedHash = '';
 function fullResolve(modulePath, sourceFile, settings) {
   // check if this is a bonus core module
   const coreSet = new Set(settings['import/core-modules']);
-  if (coreSet.has(modulePath)) return { found: true, path: null };
+  if (coreSet.has(modulePath)) { return { found: true, path: null }; }
 
   const sourceDir = path.dirname(sourceFile);
 
@@ -102,40 +103,28 @@ function fullResolve(modulePath, sourceFile, settings) {
   const cacheSettings = ModuleCache.getSettings(settings);
 
   const cachedPath = fileExistsCache.get(cacheKey, cacheSettings);
-  if (cachedPath !== undefined) return { found: true, path: cachedPath };
+  if (cachedPath !== undefined) { return { found: true, path: cachedPath }; }
 
   function cache(resolvedPath) {
     fileExistsCache.set(cacheKey, resolvedPath);
   }
 
   function withResolver(resolver, config) {
-
-    function v1() {
-      try {
-        const resolved = resolver.resolveImport(modulePath, sourceFile, config);
-        if (resolved === undefined) return { found: false };
-        return { found: true, path: resolved };
-      } catch (err) {
-        return { found: false };
-      }
-    }
-
-    function v2() {
+    if (resolver.interfaceVersion === 2) {
       return resolver.resolve(modulePath, sourceFile, config);
     }
 
-    switch (resolver.interfaceVersion) {
-    case 2:
-      return v2();
-
-    default:
-    case 1:
-      return v1();
+    try {
+      const resolved = resolver.resolveImport(modulePath, sourceFile, config);
+      if (resolved === undefined) { return { found: false }; }
+      return { found: true, path: resolved };
+    } catch (err) {
+      return { found: false };
     }
   }
 
-  const configResolvers = (settings['import/resolver']
-    || { 'node': settings['import/resolve'] }); // backward compatibility
+  const configResolvers = settings['import/resolver']
+    || { node: settings['import/resolve'] }; // backward compatibility
 
   const resolvers = resolverReducer(configResolvers, new Map());
 
@@ -145,7 +134,7 @@ function fullResolve(modulePath, sourceFile, settings) {
     const resolver = requireResolver(name, sourceFile);
     const resolved = withResolver(resolver, config);
 
-    if (!resolved.found) continue;
+    if (!resolved.found) { continue; }
 
     // else, counts
     cache(resolved.path);
@@ -160,7 +149,7 @@ exports.relative = relative;
 
 function resolverReducer(resolvers, map) {
   if (Array.isArray(resolvers)) {
-    resolvers.forEach(r => resolverReducer(r, map));
+    resolvers.forEach((r) => resolverReducer(r, map));
     return map;
   }
 
@@ -186,9 +175,9 @@ function getBaseDir(sourceFile) {
 }
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
-  const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile) ||
-    tryRequire(name, sourceFile) ||
-    tryRequire(path.resolve(getBaseDir(sourceFile), name));
+  const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile)
+    || tryRequire(name, sourceFile)
+    || tryRequire(path.resolve(getBaseDir(sourceFile), name));
 
   if (!resolver) {
     const err = new Error(`unable to load resolver "${name}".`);

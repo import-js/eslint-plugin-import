@@ -62,16 +62,16 @@ function getFix(first, rest, sourceCode, context) {
 
   // Leave it to the user to handle comments. Also skip `import * as ns from
   // './foo'` imports, since they cannot be merged into another import.
-  const restWithoutComments = rest.filter(node => !(
-    hasProblematicComments(node, sourceCode) ||
-    hasNamespace(node)
+  const restWithoutComments = rest.filter((node) => !(
+    hasProblematicComments(node, sourceCode)
+    || hasNamespace(node)
   ));
 
   const specifiers = restWithoutComments
-    .map(node => {
+    .map((node) => {
       const tokens = sourceCode.getTokens(node);
-      const openBrace = tokens.find(token => isPunctuator(token, '{'));
-      const closeBrace = tokens.find(token => isPunctuator(token, '}'));
+      const openBrace = tokens.find((token) => isPunctuator(token, '{'));
+      const closeBrace = tokens.find((token) => isPunctuator(token, '}'));
 
       if (openBrace == null || closeBrace == null) {
         return undefined;
@@ -85,10 +85,9 @@ function getFix(first, rest, sourceCode, context) {
     })
     .filter(Boolean);
 
-  const unnecessaryImports = restWithoutComments.filter(node =>
-    !hasSpecifiers(node) &&
-    !hasNamespace(node) &&
-    !specifiers.some(specifier => specifier.importNode === node),
+  const unnecessaryImports = restWithoutComments.filter((node) => !hasSpecifiers(node)
+    && !hasNamespace(node)
+    && !specifiers.some((specifier) => specifier.importNode === node),
   );
 
   const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1;
@@ -99,16 +98,14 @@ function getFix(first, rest, sourceCode, context) {
     return undefined;
   }
 
-  return fixer => {
+  return (fixer) => {
     const tokens = sourceCode.getTokens(first);
-    const openBrace = tokens.find(token => isPunctuator(token, '{'));
-    const closeBrace = tokens.find(token => isPunctuator(token, '}'));
+    const openBrace = tokens.find((token) => isPunctuator(token, '{'));
+    const closeBrace = tokens.find((token) => isPunctuator(token, '}'));
     const firstToken = sourceCode.getFirstToken(first);
     const [defaultImportName] = defaultImportNames;
 
-    const firstHasTrailingComma =
-      closeBrace != null &&
-      isPunctuator(sourceCode.getTokenBefore(closeBrace), ',');
+    const firstHasTrailingComma = closeBrace != null && isPunctuator(sourceCode.getTokenBefore(closeBrace), ',');
     const firstIsEmpty = !hasSpecifiers(first);
     const firstExistingIdentifiers = firstIsEmpty
       ? new Set()
@@ -214,21 +211,21 @@ function isPunctuator(node, value) {
 // Get the name of the default import of `node`, if any.
 function getDefaultImportName(node) {
   const defaultSpecifier = node.specifiers
-    .find(specifier => specifier.type === 'ImportDefaultSpecifier');
+    .find((specifier) => specifier.type === 'ImportDefaultSpecifier');
   return defaultSpecifier != null ? defaultSpecifier.local.name : undefined;
 }
 
 // Checks whether `node` has a namespace import.
 function hasNamespace(node) {
   const specifiers = node.specifiers
-    .filter(specifier => specifier.type === 'ImportNamespaceSpecifier');
+    .filter((specifier) => specifier.type === 'ImportNamespaceSpecifier');
   return specifiers.length > 0;
 }
 
 // Checks whether `node` has any non-default specifiers.
 function hasSpecifiers(node) {
   const specifiers = node.specifiers
-    .filter(specifier => specifier.type === 'ImportSpecifier');
+    .filter((specifier) => specifier.type === 'ImportSpecifier');
   return specifiers.length > 0;
 }
 
@@ -236,9 +233,9 @@ function hasSpecifiers(node) {
 // duplicate imports, so skip imports with comments when autofixing.
 function hasProblematicComments(node, sourceCode) {
   return (
-    hasCommentBefore(node, sourceCode) ||
-    hasCommentAfter(node, sourceCode) ||
-    hasCommentInsideNonSpecifiers(node, sourceCode)
+    hasCommentBefore(node, sourceCode)
+    || hasCommentAfter(node, sourceCode)
+    || hasCommentInsideNonSpecifiers(node, sourceCode)
   );
 }
 
@@ -246,29 +243,29 @@ function hasProblematicComments(node, sourceCode) {
 // the same line as `node` (starts).
 function hasCommentBefore(node, sourceCode) {
   return sourceCode.getCommentsBefore(node)
-    .some(comment => comment.loc.end.line >= node.loc.start.line - 1);
+    .some((comment) => comment.loc.end.line >= node.loc.start.line - 1);
 }
 
 // Checks whether `node` has a comment (that starts) on the same line as `node`
 // (ends).
 function hasCommentAfter(node, sourceCode) {
   return sourceCode.getCommentsAfter(node)
-    .some(comment => comment.loc.start.line === node.loc.end.line);
+    .some((comment) => comment.loc.start.line === node.loc.end.line);
 }
 
 // Checks whether `node` has any comments _inside,_ except inside the `{...}`
 // part (if any).
 function hasCommentInsideNonSpecifiers(node, sourceCode) {
   const tokens = sourceCode.getTokens(node);
-  const openBraceIndex = tokens.findIndex(token => isPunctuator(token, '{'));
-  const closeBraceIndex = tokens.findIndex(token => isPunctuator(token, '}'));
+  const openBraceIndex = tokens.findIndex((token) => isPunctuator(token, '{'));
+  const closeBraceIndex = tokens.findIndex((token) => isPunctuator(token, '}'));
   // Slice away the first token, since we're no looking for comments _before_
   // `node` (only inside). If there's a `{...}` part, look for comments before
   // the `{`, but not before the `}` (hence the `+1`s).
   const someTokens = openBraceIndex >= 0 && closeBraceIndex >= 0
     ? tokens.slice(1, openBraceIndex + 1).concat(tokens.slice(closeBraceIndex + 1))
     : tokens.slice(1);
-  return someTokens.some(token => sourceCode.getCommentsBefore(token).length > 0);
+  return someTokens.some((token) => sourceCode.getCommentsBefore(token).length > 0);
 }
 
 module.exports = {
@@ -298,16 +295,16 @@ module.exports = {
 
   create(context) {
     // Prepare the resolver from options.
-    const considerQueryStringOption = context.options[0] &&
-      context.options[0]['considerQueryString'];
-    const defaultResolver = sourcePath => resolve(sourcePath, context) || sourcePath;
-    const resolver = considerQueryStringOption ? (sourcePath => {
+    const considerQueryStringOption = context.options[0]
+      && context.options[0].considerQueryString;
+    const defaultResolver = (sourcePath) => resolve(sourcePath, context) || sourcePath;
+    const resolver = considerQueryStringOption ? (sourcePath) => {
       const parts = sourcePath.match(/^([^?]*)\?(.*)$/);
       if (!parts) {
         return defaultResolver(sourcePath);
       }
-      return defaultResolver(parts[1]) + '?' + parts[2];
-    }) : defaultResolver;
+      return `${defaultResolver(parts[1])}?${parts[2]}`;
+    } : defaultResolver;
 
     const moduleMaps = new Map();
 
@@ -344,7 +341,7 @@ module.exports = {
         }
       },
 
-      'Program:exit': function () {
+      'Program:exit'() {
         for (const map of moduleMaps.values()) {
           checkImports(map.imported, context);
           checkImports(map.nsImported, context);

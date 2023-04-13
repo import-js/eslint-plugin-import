@@ -10,7 +10,6 @@ import docsUrl from '../docsUrl';
 // Rule Definition
 //------------------------------------------------------------------------------
 
-
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -40,20 +39,20 @@ module.exports = {
 
     return {
       ImportNamespaceSpecifier(node) {
-        if (ignoreGlobs && ignoreGlobs.find(glob => minimatch(node.parent.source.value, glob, { matchBase: true }))) {
+        if (ignoreGlobs && ignoreGlobs.find((glob) => minimatch(node.parent.source.value, glob, { matchBase: true }))) {
           return;
         }
 
         const scopeVariables = context.getScope().variables;
         const namespaceVariable = scopeVariables.find((variable) => variable.defs[0].node === node);
         const namespaceReferences = namespaceVariable.references;
-        const namespaceIdentifiers = namespaceReferences.map(reference => reference.identifier);
+        const namespaceIdentifiers = namespaceReferences.map((reference) => reference.identifier);
         const canFix = namespaceIdentifiers.length > 0 && !usesNamespaceAsObject(namespaceIdentifiers);
 
         context.report({
           node,
           message: `Unexpected namespace import.`,
-          fix: canFix && (fixer => {
+          fix: canFix && ((fixer) => {
             const scopeManager = context.getSourceCode().scopeManager;
             const fixes = [];
 
@@ -82,11 +81,10 @@ module.exports = {
             );
 
             // Replace the ImportNamespaceSpecifier with a list of ImportSpecifiers
-            const namedImportSpecifiers = importNames.map((importName) => (
-              importName === importLocalNames[importName]
-                ? importName
-                : `${importName} as ${importLocalNames[importName]}`
-            ));
+            const namedImportSpecifiers = importNames.map((importName) => importName === importLocalNames[importName]
+              ? importName
+              : `${importName} as ${importLocalNames[importName]}`,
+            );
             fixes.push(fixer.replaceText(node, `{ ${namedImportSpecifiers.join(', ')} }`));
 
             // Pass 2: Replace references to the namespace with references to the named imports
@@ -116,8 +114,9 @@ function usesNamespaceAsObject(namespaceIdentifiers) {
 
     // `namespace.x` or `namespace['x']`
     return (
-      parent && parent.type === 'MemberExpression' &&
-      (parent.property.type === 'Identifier' || parent.property.type === 'Literal')
+      parent
+      && parent.type === 'MemberExpression'
+      && (parent.property.type === 'Identifier' || parent.property.type === 'Literal')
     );
   });
 }
@@ -144,7 +143,7 @@ function getVariableNamesInScope(scopeManager, node) {
     currentNode = currentNode.parent;
     scope = scopeManager.acquire(currentNode, true);
   }
-  return new Set(scope.variables.concat(scope.upper.variables).map(variable => variable.name));
+  return new Set(scope.variables.concat(scope.upper.variables).map((variable) => variable.name));
 }
 
 /**

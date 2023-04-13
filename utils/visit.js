@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 exports.default = function visit(node, keys, visitorSpec) {

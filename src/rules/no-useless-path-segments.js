@@ -25,7 +25,7 @@ import docsUrl from '../docsUrl';
 function toRelativePath(relativePath) {
   const stripped = relativePath.replace(/\/$/g, ''); // Remove trailing /
 
-  return /^((\.\.)|(\.))($|\/)/.test(stripped) ? stripped : `./${stripped}`;
+  return (/^((\.\.)|(\.))($|\/)/).test(stripped) ? stripped : `./${stripped}`;
 }
 
 function normalize(fn) {
@@ -71,7 +71,7 @@ module.exports = {
           node: source,
           // Note: Using messageIds is not possible due to the support for ESLint 2 and 3
           message: `Useless path segments for "${importPath}", should be "${proposedPath}"`,
-          fix: fixer => proposedPath && fixer.replaceText(source, JSON.stringify(proposedPath)),
+          fix: (fixer) => proposedPath && fixer.replaceText(source, JSON.stringify(proposedPath)),
         });
       }
 

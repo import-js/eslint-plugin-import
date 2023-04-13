@@ -24,16 +24,15 @@ function testIsAllow(globs, filename, source) {
     filePath = path.resolve(path.dirname(filename), source); // get source absolute path
   }
 
-  return globs.find(glob => (
-    minimatch(filePath, glob) ||
-    minimatch(filePath, path.join(process.cwd(), glob))
-  )) !== undefined;
+  return globs.find((glob) => minimatch(filePath, glob)
+    || minimatch(filePath, path.join(process.cwd(), glob)),
+  ) !== undefined;
 }
 
 function create(context) {
   const options = context.options[0] || {};
   const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-  const isAllow = source => testIsAllow(options.allow, filename, source);
+  const isAllow = (source) => testIsAllow(options.allow, filename, source);
 
   return {
     ImportDeclaration(node) {
@@ -42,9 +41,11 @@ function create(context) {
       }
     },
     ExpressionStatement(node) {
-      if (node.expression.type === 'CallExpression' &&
-        isStaticRequire(node.expression) &&
-        !isAllow(node.expression.arguments[0].value)) {
+      if (
+        node.expression.type === 'CallExpression'
+        && isStaticRequire(node.expression)
+        && !isAllow(node.expression.arguments[0].value)
+      ) {
         report(context, node.expression);
       }
     },
@@ -62,19 +63,19 @@ module.exports = {
     },
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'devDependencies': { 'type': ['boolean', 'array'] },
-          'optionalDependencies': { 'type': ['boolean', 'array'] },
-          'peerDependencies': { 'type': ['boolean', 'array'] },
-          'allow': {
-            'type': 'array',
-            'items': {
-              'type': 'string',
+        type: 'object',
+        properties: {
+          devDependencies: { type: ['boolean', 'array'] },
+          optionalDependencies: { type: ['boolean', 'array'] },
+          peerDependencies: { type: ['boolean', 'array'] },
+          allow: {
+            type: 'array',
+            items: {
+              type: 'string',
             },
           },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },

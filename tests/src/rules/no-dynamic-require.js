@@ -30,10 +30,9 @@ ruleTester.run('no-dynamic-require', rule, {
 
     //dynamic import
     ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
-      const _test =
-        parser === parsers.ESPREE
-          ? (testObj) => testVersion('>= 6.2.0', () => testObj)
-          : (testObj) => test(testObj);
+      const _test = parser === parsers.ESPREE
+        ? (testObj) => testVersion('>= 6.2.0', () => testObj)
+        : (testObj) => test(testObj);
       return [].concat(
         _test({
           code: 'import("foo")',
@@ -143,10 +142,9 @@ ruleTester.run('no-dynamic-require', rule, {
 
     // dynamic import
     ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
-      const _test =
-        parser === parsers.ESPREE
-          ? (testObj) => testVersion('>= 6.2.0', () => testObj)
-          : (testObj) => test(testObj);
+      const _test = parser === parsers.ESPREE
+        ? (testObj) => testVersion('>= 6.2.0', () => testObj)
+        : (testObj) => test(testObj);
       return [].concat(
         _test({
           code: 'import("../" + name)',

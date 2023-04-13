@@ -88,12 +88,8 @@ context('TypeScript', function () {
     if (!(parser === parsers.TS_NEW && semver.satisfies(require('@typescript-eslint/parser/package.json').version, '>= 5'))) {
       ruleTester.run('no-webpack-loader-syntax', rule, {
         valid: [
-          test(Object.assign({
-            code: 'import { foo } from\nalert()',
-          }, parserConfig)),
-          test(Object.assign({
-            code: 'import foo from\nalert()',
-          }, parserConfig)),
+          test({ code: 'import { foo } from\nalert()', ...parserConfig }),
+          test({ code: 'import foo from\nalert()', ...parserConfig }),
         ],
         invalid: [],
       });

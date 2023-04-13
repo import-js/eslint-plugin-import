@@ -6,9 +6,7 @@ import { version as tsEslintVersion } from 'typescript-eslint-parser/package.jso
 import { getTSParsers, parsers, testVersion } from '../utils';
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
-const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
-  return `Expected ${count} empty lines after import statement not followed by another import.`;
-};
+const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => `Expected ${count} empty lines after import statement not followed by another import.`;
 const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.';
 
 const ruleTester = new RuleTester();
@@ -22,7 +20,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `
         const x = () => require('baz')
             , y = () => require('bar')`,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     {
       code: `
@@ -31,12 +29,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
             
         // some comment here
       `,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
       options: [{ considerComments: true }],
     },
     {
       code: `const x = () => require('baz') && require('bar')`,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     {
       code: `
@@ -45,8 +43,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // Some random single line comment
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 6 } ,
-      options: [{ 'considerComments': true }],
+      parserOptions: { ecmaVersion: 6 },
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -57,7 +55,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     `function x() { require('baz'); }`,
     `a(require('b'), require('c'), require('d'));`,
@@ -122,12 +120,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 2 }],
+      options: [{ count: 2 }],
     },
     {
       code: `import foo from 'foo';\n\n\n\n\nvar bar = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 4 }],
+      options: [{ count: 4 }],
     },
     {
       code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
@@ -136,12 +134,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 2 }],
+      options: [{ count: 2 }],
     },
     {
       code: `var foo = require('foo-module');\n\n\n\n\nvar foo = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 4 }],
+      options: [{ count: 4 }],
     },
     {
       code: `require('foo-module');\n\nvar foo = 'bar';`,
@@ -202,12 +200,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: parsers.BABEL_OLD,
     },
     {
-      code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      code: `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
-      code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      code: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
@@ -296,7 +294,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `
@@ -308,8 +306,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -319,7 +317,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // Some random single line comment
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
   ),
 
@@ -344,7 +342,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE,
       } ],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'considerComments': true }],
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -370,8 +368,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -391,8 +389,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
       } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true, 'count': 1 }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true, count: 1 }],
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
@@ -407,7 +405,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
       output: `import foo from 'foo';\n\n\nexport default function() {};`,
-      options: [{ 'count': 2 }],
+      options: [{ count: 2 }],
       errors: [ {
         line: 1,
         column: 1,
@@ -428,7 +426,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
-      options: [{ 'count': 1 }],
+      options: [{ count: 1 }],
       errors: [ {
         line: 1,
         column: 1,

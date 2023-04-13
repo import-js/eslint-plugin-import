@@ -81,7 +81,7 @@ ruleTester.run('first', rule, {
       code: "if (true) { console.log(1) }import a from 'b'",
       errors: 1,
       output: "import a from 'b'\nif (true) { console.log(1) }",
-    }),  
+    }),
   ],
 });
 

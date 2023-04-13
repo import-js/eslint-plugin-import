@@ -1,9 +1,9 @@
 import docsUrl from '../docsUrl';
 
 function isNonExportStatement({ type }) {
-  return type !== 'ExportDefaultDeclaration' &&
-    type !== 'ExportNamedDeclaration' &&
-    type !== 'ExportAllDeclaration';
+  return type !== 'ExportDefaultDeclaration'
+    && type !== 'ExportNamedDeclaration'
+    && type !== 'ExportAllDeclaration';
 }
 
 module.exports = {

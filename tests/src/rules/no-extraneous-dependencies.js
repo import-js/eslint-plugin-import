@@ -308,7 +308,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import foo from "foo"',
       options: [{ packageDir: packageDirWithSyntaxError }],
       errors: [{
-        message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
+        message: `The package.json file could not be parsed: ${packageFileWithSyntaxErrorMessage}`,
       }],
     }),
     test({
@@ -422,31 +422,29 @@ describe('TypeScript', () => {
 
       ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [
-          test(Object.assign({
+          test({
             code: 'import type T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-          }, parserConfig)),
+            ...parserConfig,
+          }),
         ],
         invalid: [
-          test(Object.assign({
+          test({
             code: 'import T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
+            errors: [{ message: "'a' should be listed in the project's dependencies, not devDependencies." }],
+            ...parserConfig,
+          }),
 
-          test(Object.assign({
-            code: 'import type T from "a";',
+          test({ code: 'import type T from "a";',
             options: [{
               packageDir: packageDirWithTypescriptDevDependencies,
               devDependencies: false,
               includeTypes: true,
             }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
+            errors: [{ message: "'a' should be listed in the project's dependencies, not devDependencies." }],
+            ...parserConfig,
+          }),
         ],
       });
     });

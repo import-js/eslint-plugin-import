@@ -48,7 +48,7 @@ module.exports = {
 
   create(context) {
     const myPath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    if (myPath === '<text>') return {}; // can't cycle-check a non-file
+    if (myPath === '<text>') { return {}; } // can't cycle-check a non-file
 
     const options = context.options[0] || {};
     const maxDepth = typeof options.maxDepth === 'number' ? options.maxDepth : Infinity;
@@ -62,20 +62,23 @@ module.exports = {
       if (ignoreModule(sourceNode.value)) {
         return; // ignore external modules
       }
-      if (options.allowUnsafeDynamicCyclicDependency && (
-        // Ignore `import()`
-        importer.type === 'ImportExpression' ||
-        // `require()` calls are always checked (if possible)
-        (importer.type === 'CallExpression' && importer.callee.name !== 'require'))) {
+      if (
+        options.allowUnsafeDynamicCyclicDependency && (
+          // Ignore `import()`
+          importer.type === 'ImportExpression'
+          // `require()` calls are always checked (if possible)
+          || importer.type === 'CallExpression' && importer.callee.name !== 'require'
+        )
+      ) {
         return; // cycle via dynamic import allowed by config
       }
 
       if (
         importer.type === 'ImportDeclaration' && (
           // import type { Foo } (TS and Flow)
-          importer.importKind === 'type' ||
+          importer.importKind === 'type'
           // import { type Foo } (Flow)
-          importer.specifiers.every(({ importKind }) => importKind === 'type')
+          || importer.specifiers.every(({ importKind }) => importKind === 'type')
         )
       ) {
         return; // ignore type imports
@@ -91,25 +94,24 @@ module.exports = {
         return;  // no-self-import territory
       }
 
-      const untraversed = [{ mget: () => imported, route:[] }];
+      const untraversed = [{ mget: () => imported, route: [] }];
       function detectCycle({ mget, route }) {
         const m = mget();
-        if (m == null) return;
-        if (traversed.has(m.path)) return;
+        if (m == null) { return; }
+        if (traversed.has(m.path)) { return; }
         traversed.add(m.path);
 
         for (const [path, { getter, declarations }] of m.imports) {
-          if (traversed.has(path)) continue;
-          const toTraverse = [...declarations].filter(({ source, isOnlyImportingTypes }) =>
-            !ignoreModule(source.value) &&
+          if (traversed.has(path)) { continue; }
+          const toTraverse = [...declarations].filter(({ source, isOnlyImportingTypes }) => !ignoreModule(source.value)
             // Ignore only type imports
-            !isOnlyImportingTypes,
+            && !isOnlyImportingTypes,
           );
 
           /*
           If cyclic dependency is allowed via dynamic import, skip checking if any module is imported dynamically
           */
-          if (options.allowUnsafeDynamicCyclicDependency && toTraverse.some(d => d.dynamic)) return;
+          if (options.allowUnsafeDynamicCyclicDependency && toTraverse.some((d) => d.dynamic)) { return; }
 
           /*
           Only report as a cycle if there are any import declarations that are considered by
@@ -121,7 +123,7 @@ module.exports = {
           b.ts:
           import type { Bar } from './a'
           */
-          if (path === myPath && toTraverse.length > 0) return true;
+          if (path === myPath && toTraverse.length > 0) { return true; }
           if (route.length + 1 < maxDepth) {
             for (const { source } of toTraverse) {
               untraversed.push({ mget: getter, route: route.concat(source) });
@@ -133,9 +135,9 @@ module.exports = {
       while (untraversed.length > 0) {
         const next = untraversed.shift(); // bfs!
         if (detectCycle(next)) {
-          const message = (next.route.length > 0
+          const message = next.route.length > 0
             ? `Dependency cycle via ${routeString(next.route)}`
-            : 'Dependency cycle detected.');
+            : 'Dependency cycle detected.';
           context.report(importer, message);
           return;
         }
@@ -143,7 +145,7 @@ module.exports = {
     }
 
     return Object.assign(moduleVisitor(checkSourceValue, context.options[0]), {
-      'Program:exit': () => {
+      'Program:exit'() {
         traversed.clear();
       },
     });
@@ -151,5 +153,5 @@ module.exports = {
 };
 
 function routeString(route) {
-  return route.map(s => `${s.value}:${s.loc.start.line}`).join('=>');
+  return route.map((s) => `${s.value}:${s.loc.start.line}`).join('=>');
 }

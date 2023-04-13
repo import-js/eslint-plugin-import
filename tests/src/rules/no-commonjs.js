@@ -19,12 +19,12 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
     { code: 'export default "x"', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     { code: 'export function house() {}', parserOptions: { ecmaVersion: 2015, sourceType: 'module' } },
     {
-      code:
-      'function someFunc() {\n'+
-      '  const exports = someComputation();\n'+
-      '\n'+
-      '  expect(exports.someProp).toEqual({ a: \'value\' });\n'+
-      '}',
+      code: `
+        function someFunc() {
+          const exports = someComputation();
+          expect(exports.someProp).toEqual({ a: 'value' });
+        }
+      `,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
 
@@ -68,7 +68,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
   invalid: [
 
     // imports
-    ...(semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
+    ...semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
       { code: 'var x = require("x")', output: 'var x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
       { code: 'x = require("x")', output: 'x = require("x")', errors: [ { message: IMPORT_MESSAGE }] },
       { code: 'require("x")', output: 'require("x")', errors: [ { message: IMPORT_MESSAGE }] },
@@ -93,7 +93,7 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
         output: 'try { require("x") } catch (error) {}',
         errors: [ { message: IMPORT_MESSAGE }],
       },
-    ]),
+    ],
 
     // exports
     { code: 'exports.face = "palm"', output: 'exports.face = "palm"', errors: [ { message: EXPORT_MESSAGE }] },

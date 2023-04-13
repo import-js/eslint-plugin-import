@@ -50,14 +50,15 @@ export function test(t) {
   if (arguments.length !== 1) {
     throw new SyntaxError('`test` requires exactly one object argument');
   }
-  return Object.assign({
+  return {
     filename: FILENAME,
-  }, t, {
-    parserOptions: Object.assign({
+    ...t,
+    parserOptions: {
       sourceType: 'module',
       ecmaVersion: 9,
-    }, t.parserOptions),
-  });
+      ...t.parserOptions,
+    },
+  };
 }
 
 export function testContext(settings) {
@@ -133,5 +134,4 @@ export const SYNTAX_CASES = [
   test({
     code: 'import { foo } from "./ignore.invalid.extension"',
   }),
-
 ];

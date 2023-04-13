@@ -13,8 +13,8 @@ const patternProperties = {
 const properties = {
   type: 'object',
   properties: {
-    'pattern': patternProperties,
-    'ignorePackages': { type: 'boolean' },
+    pattern: patternProperties,
+    ignorePackages: { type: 'boolean' },
   },
 };
 
@@ -26,7 +26,7 @@ function buildProperties(context) {
     ignorePackages: false,
   };
 
-  context.options.forEach(obj => {
+  context.options.forEach((obj) => {
 
     // If this is a string, set defaultConfig to its value
     if (typeof obj === 'string') {
@@ -132,25 +132,25 @@ module.exports = {
     function isExternalRootModule(file) {
       const slashCount = file.split('/').length - 1;
 
-      if (slashCount === 0)  return true;
-      if (isScoped(file) && slashCount <= 1) return true;
+      if (slashCount === 0)  { return true; }
+      if (isScoped(file) && slashCount <= 1) { return true; }
       return false;
     }
 
     function checkFileExtension(source, node) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
-      if (!source || !source.value) return;
+      if (!source || !source.value) { return; }
 
       const importPathWithQueryString = source.value;
 
       // don't enforce anything on builtins
-      if (isBuiltIn(importPathWithQueryString, context.settings)) return;
+      if (isBuiltIn(importPathWithQueryString, context.settings)) { return; }
 
       const importPath = importPathWithQueryString.replace(/\?(.*)$/, '');
 
       // don't enforce in root external packages as they may have names with `.js`.
       // Like `import Decimal from decimal.js`)
-      if (isExternalRootModule(importPath)) return;
+      if (isExternalRootModule(importPath)) { return; }
 
       const resolvedPath = resolve(importPath, context);
 
@@ -167,7 +167,7 @@ module.exports = {
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports and exports
-        if (node.importKind === 'type' || node.exportKind === 'type') return;
+        if (node.importKind === 'type' || node.exportKind === 'type') { return; }
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {

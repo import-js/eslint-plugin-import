@@ -13,9 +13,19 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   const eslintParserPath = require.resolve('./eslintParser');
   let content;
 
-  before((done) =>
-    fs.readFile(path, { encoding: 'utf8' },
-      (err, f) => { if (err) { done(err); } else { content = f; done(); }}));
+  before((done) => {
+    fs.readFile(
+      path,
+      { encoding: 'utf8' },
+      (err, f) => {
+        if (err) {
+          done(err);
+        } else {
+          content = f; done();
+        }
+      },
+    );
+  });
 
   it('doesn\'t support JSX by default', function () {
     expect(() => parse(path, content, { parserPath: 'espree' })).to.throw(Error);

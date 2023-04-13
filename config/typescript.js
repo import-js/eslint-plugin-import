@@ -16,8 +16,8 @@ module.exports = {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
     'import/resolver': {
-      'node': {
-        'extensions': allExtensions,
+      node: {
+        extensions: allExtensions,
       },
     },
   },

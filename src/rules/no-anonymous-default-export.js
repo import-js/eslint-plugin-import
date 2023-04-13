@@ -88,16 +88,16 @@ module.exports = {
       {
         type: 'object',
         properties: schemaProperties,
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
 
   create(context) {
-    const options = Object.assign({}, defaults, context.options[0]);
+    const options = { ...defaults, ...context.options[0] };
 
     return {
-      'ExportDefaultDeclaration': (node) => {
+      ExportDefaultDeclaration(node) {
         const def = defs[node.declaration.type];
 
         // Recognized node type and allowed by configuration,

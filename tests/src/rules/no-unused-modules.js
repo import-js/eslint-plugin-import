@@ -20,7 +20,7 @@ const typescriptRuleTester = new RuleTester(typescriptConfig);
 const jsxRuleTester = new RuleTester(jsxConfig);
 const rule = require('rules/no-unused-modules');
 
-const error = message => ({ message });
+const error = (message) => ({ message });
 
 const missingExportsOptions = [{
   missingExports: true,
@@ -108,7 +108,6 @@ ruleTester.run('no-unused-modules', rule, {
     }),
   ],
 });
-
 
 // tests for exports
 ruleTester.run('no-unused-modules', rule, {
@@ -246,7 +245,6 @@ ruleTester.run('no-unused-modules', rule, {
     }),
   ],
 });
-
 
 describe('dynamic imports', function () {
   if (semver.satisfies(eslintPkg.version, '< 6')) {
@@ -817,7 +815,6 @@ describe('test behavior for new file', () => {
     ],
   });
 
-
   describe('test behavior for new file', () => {
     before(() => {
       fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', { encoding: 'utf8' });
@@ -1382,7 +1379,7 @@ describe('supports flat eslint', { skip: !FlatRuleTester }, () => {
   flatRuleTester.run('no-unused-modules', rule, {
     valid: [{
       options: unusedExportsOptions,
-      code: 'import { o2 } from "./file-o";export default () => 12',
+      code: 'import { o2 } from "./file-o"; export default () => 12',
       filename: testFilePath('./no-unused-modules/file-a.js'),
     }],
     invalid: [{

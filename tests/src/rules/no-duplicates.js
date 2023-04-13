@@ -12,7 +12,7 @@ const rule = require('rules/no-duplicates');
 
 // autofix only possible with eslint 4+
 const test = semver.satisfies(eslintPkg.version, '< 4')
-  ? t => testUtil(Object.assign({}, t, { output: t.code }))
+  ? (t) => testUtil({ ...t, output: t.code })
   : testUtil;
 
 ruleTester.run('no-duplicates', rule, {
@@ -22,8 +22,7 @@ ruleTester.run('no-duplicates', rule, {
     test({ code: "import { x } from './foo'; import { y } from './bar'" }),
 
     // #86: every unresolved module should not show up as 'null' and duplicate
-    test({ code: 'import foo from "234artaf";' +
-                 'import { shoop } from "234q25ad"' }),
+    test({ code: 'import foo from "234artaf"; import { shoop } from "234q25ad"' }),
 
     // #225: ignore duplicate if is a flow type import
     test({
@@ -34,12 +33,12 @@ ruleTester.run('no-duplicates', rule, {
     // #1107: Using different query strings that trigger different webpack loaders.
     test({
       code: "import x from './bar?optionX'; import y from './bar?optionY';",
-      options: [{ 'considerQueryString': true }],
+      options: [{ considerQueryString: true }],
       settings: { 'import/resolver': 'webpack' },
     }),
     test({
       code: "import x from './foo'; import y from './bar';",
-      options: [{ 'considerQueryString': true }],
+      options: [{ considerQueryString: true }],
       settings: { 'import/resolver': 'webpack' },
     }),
 
@@ -68,10 +67,11 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import { x } from './bar'; import { y } from 'bar';",
       output: "import { x , y } from './bar'; ",
-      settings: { 'import/resolve': {
-        paths: [path.join( process.cwd()
-          , 'tests', 'files',
-        )] } },
+      settings: {
+        'import/resolve': {
+          paths: [path.join(process.cwd(), 'tests', 'files')],
+        },
+      },
       errors: 2, // path ends up hardcoded
     }),
 
@@ -90,7 +90,7 @@ ruleTester.run('no-duplicates', rule, {
     // #1107: Using same query strings that trigger the same loader.
     test({
       code: "import x from './bar?optionX'; import y from './bar.js?optionX';",
-      options: [{ 'considerQueryString': true }],
+      options: [{ considerQueryString: true }],
       settings: { 'import/resolver': 'webpack' },
       errors: 2, // path ends up hardcoded
     }),
@@ -132,8 +132,8 @@ ruleTester.run('no-duplicates', rule, {
     }),
 
     // These test cases use duplicate import identifiers, which causes a fatal parsing error using ESPREE (default) and TS_OLD.
-    ...flatMap([parsers.BABEL_OLD, parsers.TS_NEW], parser => {
-      if (!parser) return []; // TS_NEW is not always available
+    ...flatMap([parsers.BABEL_OLD, parsers.TS_NEW], (parser) => {
+      if (!parser) { return []; } // TS_NEW is not always available
       return [
         // #2347: duplicate identifiers should be removed
         test({

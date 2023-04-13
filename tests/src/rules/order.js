@@ -7,7 +7,6 @@ import flatMap from 'array.prototype.flatmap';
 import { resolve } from 'path';
 import { default as babelPresetFlow } from 'babel-preset-flow';
 
-
 const ruleTester = new RuleTester();
 const flowRuleTester = new RuleTester({
   parser: resolve(__dirname, '../../../node_modules/babel-eslint'),
@@ -22,7 +21,7 @@ const flowRuleTester = new RuleTester({
 const rule = require('rules/order');
 
 function withoutAutofixOutput(test) {
-  return Object.assign({}, test, { output: test.code });
+  return { ...test, output: test.code };
 }
 
 ruleTester.run('order', rule, {
@@ -193,7 +192,7 @@ ruleTester.run('order', rule, {
         var index = require('./');
       `,
     }),
-    ...flatMap(getTSParsers(), parser => [
+    ...flatMap(getTSParsers(), (parser) => [
       // Export equals expressions should be on top alongside with ordinary import-statements.
       test({
         code: `
@@ -829,7 +828,7 @@ ruleTester.run('order', rule, {
         pathGroupsExcludedImportTypes: [],
       }],
     }),
-    ...flatMap(getTSParsers, parser => [
+    ...flatMap(getTSParsers, (parser) => [
       // Order of the `import ... = require(...)` syntax
       test({
         code: `
@@ -950,18 +949,18 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
-          'distinctGroup': true,
-          'pathGroupsExcludedImportTypes': [],
-          'pathGroups': [
+          distinctGroup: true,
+          pathGroupsExcludedImportTypes: [],
+          pathGroups: [
             {
-              'pattern': 'a',
-              'group': 'external',
-              'position': 'before',
+              pattern: 'a',
+              group: 'external',
+              position: 'before',
             },
             {
-              'pattern': 'b',
-              'group': 'external',
-              'position': 'after',
+              pattern: 'b',
+              group: 'external',
+              position: 'after',
             },
           ],
         },
@@ -977,18 +976,18 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
-          'distinctGroup': false,
-          'pathGroupsExcludedImportTypes': [],
-          'pathGroups': [
+          distinctGroup: false,
+          pathGroupsExcludedImportTypes: [],
+          pathGroups: [
             {
-              'pattern': 'a',
-              'group': 'external',
-              'position': 'before',
+              pattern: 'a',
+              group: 'external',
+              position: 'before',
             },
             {
-              'pattern': 'b',
-              'group': 'external',
-              'position': 'after',
+              pattern: 'b',
+              group: 'external',
+              position: 'after',
             },
           ],
         },
@@ -1005,17 +1004,17 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
-          'distinctGroup': false,
-          'pathGroupsExcludedImportTypes': [],
-          'pathGroups': [
+          distinctGroup: false,
+          pathGroupsExcludedImportTypes: [],
+          pathGroups: [
             {
-              'pattern': 'a',
-              'group': 'external',
+              pattern: 'a',
+              group: 'external',
             },
             {
-              'pattern': 'b',
-              'group': 'internal',
-              'position': 'before',
+              pattern: 'b',
+              group: 'internal',
+              position: 'before',
             },
           ],
         },
@@ -1041,53 +1040,53 @@ ruleTester.run('order', rule, {
       `,
       options: [
         {
-          'alphabetize': {
-            'caseInsensitive': false,
-            'order': 'asc',
+          alphabetize: {
+            caseInsensitive: false,
+            order: 'asc',
           },
           'newlines-between': 'always',
-          'groups': [
+          groups: [
             ['builtin', 'external', 'internal', 'unknown', 'object', 'type'],
             'parent',
             ['sibling', 'index'],
           ],
-          'distinctGroup': false,
-          'pathGroupsExcludedImportTypes': [],
-          'pathGroups': [
+          distinctGroup: false,
+          pathGroupsExcludedImportTypes: [],
+          pathGroups: [
             {
-              'pattern': './',
-              'group': 'sibling',
-              'position': 'before',
+              pattern: './',
+              group: 'sibling',
+              position: 'before',
             },
             {
-              'pattern': '.',
-              'group': 'sibling',
-              'position': 'before',
+              pattern: '.',
+              group: 'sibling',
+              position: 'before',
             },
             {
-              'pattern': '..',
-              'group': 'parent',
-              'position': 'before',
+              pattern: '..',
+              group: 'parent',
+              position: 'before',
             },
             {
-              'pattern': '../',
-              'group': 'parent',
-              'position': 'before',
+              pattern: '../',
+              group: 'parent',
+              position: 'before',
             },
             {
-              'pattern': '[a-z]*',
-              'group': 'external',
-              'position': 'before',
+              pattern: '[a-z]*',
+              group: 'external',
+              position: 'before',
             },
             {
-              'pattern': '../[a-z]*',
-              'group': 'parent',
-              'position': 'before',
+              pattern: '../[a-z]*',
+              group: 'parent',
+              position: 'before',
             },
             {
-              'pattern': './[a-z]*',
-              'group': 'sibling',
-              'position': 'before',
+              pattern: './[a-z]*',
+              group: 'sibling',
+              position: 'before',
             },
           ],
         },
@@ -1101,7 +1100,7 @@ ruleTester.run('order', rule, {
       `,
       options: [
         {
-          'alphabetize': { order: 'asc', orderImportKind: 'asc', 'caseInsensitive': true },
+          alphabetize: { order: 'asc', orderImportKind: 'asc', caseInsensitive: true },
         },
       ],
     }),
@@ -1179,12 +1178,8 @@ ruleTester.run('order', rule, {
     }),
     // fix order with windows end of lines
     test({
-      code:
-        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n` +
-        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`,
-      output:
-        `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n` +
-        `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`,
+      code: `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n` + `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n`,
+      output: `/* comment3 */  var fs = require('fs'); /* comment4 */` + `\r\n` + `/* comment0 */  /* comment1 */  var async = require('async'); /* comment2 */` + `\r\n`,
       errors: [{
         message: '`fs` import should occur before import of `async`',
       }],
@@ -1558,7 +1553,7 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur after import of `../foo/bar`',
       }],
     }),
-    ...flatMap(getTSParsers(), parser => [
+    ...flatMap(getTSParsers(), (parser) => [
       // Order of the `import ... = require(...)` syntax
       test({
         code: `
@@ -2676,8 +2671,8 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
-          'distinctGroup': false,
-          'pathGroupsExcludedImportTypes': [],
+          distinctGroup: false,
+          pathGroupsExcludedImportTypes: [],
         },
       ],
       errors: [{
@@ -2698,18 +2693,18 @@ ruleTester.run('order', rule, {
       options: [
         {
           'newlines-between': 'always',
-          'distinctGroup': false,
-          'pathGroupsExcludedImportTypes': [],
-          'pathGroups': [
+          distinctGroup: false,
+          pathGroupsExcludedImportTypes: [],
+          pathGroups: [
             {
-              'pattern': 'a',
-              'group': 'external',
-              'position': 'before',
+              pattern: 'a',
+              group: 'external',
+              position: 'before',
             },
             {
-              'pattern': 'c',
-              'group': 'external',
-              'position': 'after',
+              pattern: 'c',
+              group: 'external',
+              position: 'after',
             },
           ],
         },
@@ -2742,7 +2737,6 @@ ruleTester.run('order', rule, {
     ],
   ].filter((t) => !!t),
 });
-
 
 context('TypeScript', function () {
   getNonDefaultParsers()
@@ -3182,7 +3176,7 @@ context('TypeScript', function () {
             `,
             errors: [{
               message: '`fs` type import should occur before type import of `path`',
-            },{
+            }, {
               message: '`fs` type import should occur before type import of `path`',
             }],
             ...parserConfig,
@@ -3303,34 +3297,34 @@ flowRuleTester.run('order', rule, {
       `,
       options: [
         {
-          'groups': [
+          groups: [
             ['builtin', 'external'],
             'internal',
             ['sibling', 'parent'],
             'object',
             'type',
           ],
-          'pathGroups': [
+          pathGroups: [
             {
-              'pattern': 'react',
-              'group': 'builtin',
-              'position': 'before',
-              'patternOptions': {
-                'matchBase': true,
+              pattern: 'react',
+              group: 'builtin',
+              position: 'before',
+              patternOptions: {
+                matchBase: true,
               },
             },
             {
-              'pattern': '*.+(css|svg)',
-              'group': 'type',
-              'position': 'after',
-              'patternOptions': {
-                'matchBase': true,
+              pattern: '*.+(css|svg)',
+              group: 'type',
+              position: 'after',
+              patternOptions: {
+                matchBase: true,
               },
             },
           ],
-          'pathGroupsExcludedImportTypes': ['react'],
-          'alphabetize': {
-            'order': 'asc',
+          pathGroupsExcludedImportTypes: ['react'],
+          alphabetize: {
+            order: 'asc',
           },
           'newlines-between': 'always',
         },

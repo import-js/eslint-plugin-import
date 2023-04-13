@@ -58,11 +58,10 @@ describe('ExportMap', function () {
     const firstAccess = ExportMap.get('./named-exports', fakeContext);
     expect(firstAccess).to.exist;
 
-    const differentSettings = Object.assign(
-      {},
-      fakeContext,
-      { parserPath: 'espree' },
-    );
+    const differentSettings = {
+      ...fakeContext,
+      parserPath: 'espree',
+    };
 
     expect(ExportMap.get('./named-exports', differentSettings))
       .to.exist.and
@@ -320,17 +319,19 @@ describe('ExportMap', function () {
     });
     it(`'has' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
-        .to.exist.and.satisfy(m => m.has('soGreat'));
+        .to.exist.and.satisfy((m) => m.has('soGreat'));
     });
     it(`can 'get' circular reference`, function () {
       expect(ExportMap.get('./narcissist', fakeContext))
-        .to.exist.and.satisfy(m => m.get('soGreat') != null);
+        .to.exist.and.satisfy((m) => m.get('soGreat') != null);
     });
   });
 
   context('issue #478: never parse non-whitelist extensions', function () {
-    const context = Object.assign({}, fakeContext,
-      { settings: { 'import/extensions': ['.js'] } });
+    const context = {
+      ...fakeContext,
+      settings: { 'import/extensions': ['.js'] },
+    };
 
     let imports;
     before('load imports', function () {
@@ -359,11 +360,13 @@ describe('ExportMap', function () {
     configs.forEach(([description, parserConfig]) => {
 
       describe(description, function () {
-        const context = Object.assign({}, fakeContext,
-          { settings: {
+        const context = {
+          ...fakeContext,
+          settings: {
             'import/extensions': ['.js'],
             'import/parsers': parserConfig,
-          } });
+          },
+        };
 
         let imports;
         before('load imports', function () {
@@ -404,30 +407,24 @@ describe('ExportMap', function () {
         });
 
         it('should cache tsconfig until tsconfigRootDir parser option changes', function () {
-          const customContext = Object.assign(
-            {},
-            context,
-            {
-              parserOptions: {
-                tsconfigRootDir: null,
-              },
+          const customContext = {
+            ...context,
+            parserOptions: {
+              tsconfigRootDir: null,
             },
-          );
+          };
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(0);
           ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
           ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
 
-          const differentContext = Object.assign(
-            {},
-            context,
-            {
-              parserOptions: {
-                tsconfigRootDir: process.cwd(),
-              },
+          const differentContext = {
+            ...context,
+            parserOptions: {
+              tsconfigRootDir: process.cwd(),
             },
-          );
+          };
 
           ExportMap.parse('./baz.ts', 'export const baz = 5', differentContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
@@ -460,7 +457,7 @@ describe('ExportMap', function () {
 
     for (const [testFile, expectedRegexResult] of testFiles) {
       it(`works for ${testFile} (${expectedRegexResult})`, function () {
-        const content = fs.readFileSync('./tests/files/' + testFile, 'utf8');
+        const content = fs.readFileSync(`./tests/files/${testFile}`, 'utf8');
         expect(testUnambiguous(content)).to.equal(expectedRegexResult);
       });
     }
