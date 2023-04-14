@@ -5,6 +5,7 @@ import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
 import { resolve } from 'path';
+import isCoreModule from 'is-core-module';
 import { default as babelPresetFlow } from 'babel-preset-flow';
 
 const ruleTester = new RuleTester();
@@ -2962,7 +2963,7 @@ context('TypeScript', function () {
             ],
           }),
         ],
-        invalid: [
+        invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
           test({
             code: `
@@ -3186,53 +3187,22 @@ context('TypeScript', function () {
             ],
           }),
 
-          test({
-            code: `
-              import express from 'express';
-              import log4js from 'log4js';
-              import chpro from 'node:child_process';
-              // import fsp from 'node:fs/promises';
-            `,
-            output: `
-              import chpro from 'node:child_process';
-              import express from 'express';
-              import log4js from 'log4js';
-              // import fsp from 'node:fs/promises';
-            `,
-            options: [{
-              groups: [
-                'builtin',
-                'external',
-                'internal',
-                'parent',
-                'sibling',
-                'index',
-                'object',
-                'type',
-              ],
-            }],
-            errors: [
-              { message: '`node:child_process` import should occur before import of `express`' },
-              // { message: '`node:fs/promises` import should occur before import of `express`' },
-            ],
-          }),
-
-          test({
-            code: `
-              import express from 'express';
-              import log4js from 'log4js';
-              import chpro from 'node:child_process';
-              // import fsp from 'node:fs/promises';
-            `,
-            output: `
-              import chpro from 'node:child_process';
-              import express from 'express';
-              import log4js from 'log4js';
-              // import fsp from 'node:fs/promises';
-            `,
-            options: [{
-              groups: [
-                [
+          isCoreModule('node:child_process') && isCoreModule('node:fs/promises') ? [
+            test({
+              code: `
+                import express from 'express';
+                import log4js from 'log4js';
+                import chpro from 'node:child_process';
+                // import fsp from 'node:fs/promises';
+              `,
+              output: `
+                import chpro from 'node:child_process';
+                import express from 'express';
+                import log4js from 'log4js';
+                // import fsp from 'node:fs/promises';
+              `,
+              options: [{
+                groups: [
                   'builtin',
                   'external',
                   'internal',
@@ -3242,14 +3212,47 @@ context('TypeScript', function () {
                   'object',
                   'type',
                 ],
+              }],
+              errors: [
+                { message: '`node:child_process` import should occur before import of `express`' },
+                // { message: '`node:fs/promises` import should occur before import of `express`' },
               ],
-            }],
-            errors: [
-              { message: '`node:child_process` import should occur before import of `express`' },
-              // { message: '`node:fs/promises` import should occur before import of `express`' },
-            ],
-          }),
-        ],
+            }),
+
+            test({
+              code: `
+                import express from 'express';
+                import log4js from 'log4js';
+                import chpro from 'node:child_process';
+                // import fsp from 'node:fs/promises';
+              `,
+              output: `
+                import chpro from 'node:child_process';
+                import express from 'express';
+                import log4js from 'log4js';
+                // import fsp from 'node:fs/promises';
+              `,
+              options: [{
+                groups: [
+                  [
+                    'builtin',
+                    'external',
+                    'internal',
+                    'parent',
+                    'sibling',
+                    'index',
+                    'object',
+                    'type',
+                  ],
+                ],
+              }],
+              errors: [
+                { message: '`node:child_process` import should occur before import of `express`' },
+                // { message: '`node:fs/promises` import should occur before import of `express`' },
+              ],
+            }),
+          ] : [],
+        ),
       });
     });
 });

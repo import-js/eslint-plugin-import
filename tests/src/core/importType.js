@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import * as path from 'path';
+import isCoreModule from 'is-core-module';
 
 import importType, { isExternalModule, isScoped, isAbsolute } from 'core/importType';
 
@@ -16,12 +17,12 @@ describe('importType(name)', function () {
   });
 
   it("should return 'builtin' for node.js modules", function () {
-    expect(importType('fs', context)).to.equal('builtin');
-    expect(importType('node:fs', context)).to.equal('builtin');
-    expect(importType('fs/promises', context)).to.equal('builtin');
-    expect(importType('node:fs/promises', context)).to.equal('builtin');
-    expect(importType('path', context)).to.equal('builtin');
-    expect(importType('node:path', context)).to.equal('builtin');
+    ['fs', 'fs/promises', 'path'].filter((x) => isCoreModule(x)).forEach((x) => {
+      expect(importType(x, context)).to.equal('builtin');
+      if (isCoreModule(`node:${x}`)) {
+        expect(importType(`node:${x}`, context)).to.equal('builtin');
+      }
+    });
   });
 
   it("should return 'external' for non-builtin modules without a relative path", function () {
