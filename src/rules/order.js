@@ -253,6 +253,7 @@ function makeOutOfOrderReport(context, imported) {
   if (!outOfOrder.length) {
     return;
   }
+
   // There are things to report. Try to minimize the number of reported errors.
   const reversedImported = reverse(imported);
   const reversedOrder = findOutOfOrder(reversedImported);
@@ -426,11 +427,12 @@ const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling'
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
 // Will throw an error if it contains a type that does not exist, or has a duplicate
 function convertGroupsToRanks(groups) {
+  if (groups.length === 1) {
+    // TODO: remove this `if` and fix the bug
+    return convertGroupsToRanks(groups[0]);
+  }
   const rankObject = groups.reduce(function (res, group, index) {
-    if (typeof group === 'string') {
-      group = [group];
-    }
-    group.forEach(function (groupItem) {
+    [].concat(group).forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
         throw new Error(`Incorrect configuration of the rule: Unknown type \`${JSON.stringify(groupItem)}\``);
       }
@@ -443,7 +445,7 @@ function convertGroupsToRanks(groups) {
   }, {});
 
   const omittedTypes = types.filter(function (type) {
-    return rankObject[type] === undefined;
+    return typeof rankObject[type] === 'undefined';
   });
 
   const ranks = omittedTypes.reduce(function (res, type) {

@@ -3174,16 +3174,79 @@ context('TypeScript', function () {
                 import type { ParsedPath } from 'path';
               }
             `,
-            errors: [{
-              message: '`fs` type import should occur before type import of `path`',
-            }, {
-              message: '`fs` type import should occur before type import of `path`',
-            }],
+            errors: [
+              { message: '`fs` type import should occur before type import of `path`' },
+              { message: '`fs` type import should occur before type import of `path`' },
+            ],
             ...parserConfig,
             options: [
               {
                 alphabetize: { order: 'asc' },
               },
+            ],
+          }),
+
+          test({
+            code: `
+              import express from 'express';
+              import log4js from 'log4js';
+              import chpro from 'node:child_process';
+              // import fsp from 'node:fs/promises';
+            `,
+            output: `
+              import chpro from 'node:child_process';
+              import express from 'express';
+              import log4js from 'log4js';
+              // import fsp from 'node:fs/promises';
+            `,
+            options: [{
+              groups: [
+                'builtin',
+                'external',
+                'internal',
+                'parent',
+                'sibling',
+                'index',
+                'object',
+                'type',
+              ],
+            }],
+            errors: [
+              { message: '`node:child_process` import should occur before import of `express`' },
+              // { message: '`node:fs/promises` import should occur before import of `express`' },
+            ],
+          }),
+
+          test({
+            code: `
+              import express from 'express';
+              import log4js from 'log4js';
+              import chpro from 'node:child_process';
+              // import fsp from 'node:fs/promises';
+            `,
+            output: `
+              import chpro from 'node:child_process';
+              import express from 'express';
+              import log4js from 'log4js';
+              // import fsp from 'node:fs/promises';
+            `,
+            options: [{
+              groups: [
+                [
+                  'builtin',
+                  'external',
+                  'internal',
+                  'parent',
+                  'sibling',
+                  'index',
+                  'object',
+                  'type',
+                ],
+              ],
+            }],
+            errors: [
+              { message: '`node:child_process` import should occur before import of `express`' },
+              // { message: '`node:fs/promises` import should occur before import of `express`' },
             ],
           }),
         ],
