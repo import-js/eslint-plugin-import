@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 - [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
+* [`order`]: partial fix for [#2687] (thanks [@ljharb])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1397,6 +1398,7 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+[#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
 [#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
 [#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
 [#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
