@@ -1,6 +1,6 @@
 {
   "name": "eslint-module-utils",
-  "version": "2.7.4",
+  "version": "2.8.0",
   "description": "Core utilities to support eslint-plugin-import and other module-related plugins.",
   "engines": {
     "node": ">=4"

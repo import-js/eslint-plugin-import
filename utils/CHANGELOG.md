@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.8.0 - 2023-04-14
+
+### New
+- `parse`: support flat config ([#2714], thanks [@DMartens])
+
 ### Fixed
 - Improve performance of `fullResolve` for large projects ([#2755], thanks [@leipert])
 
@@ -19,7 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## v2.7.3 - 2022-01-26
 
 ### Fixed
-- [Fix] `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
+- `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
 
 ## v2.7.2 - 2022-01-01
 
@@ -127,6 +132,7 @@ Yanked due to critical issue with cache key resulting from #839.
 - `unambiguous.test()` regex is now properly in multiline mode
 
 [#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
+[#2714]: https://github.com/import-js/eslint-plugin-import/pull/2714
 [#2523]: https://github.com/import-js/eslint-plugin-import/pull/2523
 [#2431]: https://github.com/import-js/eslint-plugin-import/pull/2431
 [#2350]: https://github.com/import-js/eslint-plugin-import/issues/2350
@@ -159,6 +165,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@bradzacher]: https://github.com/bradzacher
 [@brettz9]: https://github.com/brettz9
 [@christophercurrie]: https://github.com/christophercurrie
+[@DMartens]: https://github.com/DMartens
 [@hulkish]: https://github.com/hulkish
 [@Hypnosphi]: https://github.com/Hypnosphi
 [@iamnapo]: https://github.com/iamnapo
