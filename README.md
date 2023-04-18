@@ -355,7 +355,7 @@ directly using webpack, for example:
 # .eslintrc.yml
 settings:
   import/parsers:
-    @typescript-eslint/parser: [ .ts, .tsx ]
+    "@typescript-eslint/parser": [ .ts, .tsx ]
 ```
 
 In this case, [`@typescript-eslint/parser`](https://www.npmjs.com/package/@typescript-eslint/parser)
