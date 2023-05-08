@@ -60,6 +60,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | [no-cycle](docs/rules/no-cycle.md)                                     | Forbid a module from importing a module with a dependency path back to itself.       |      |    |    |    |    |    |
 | [no-dynamic-require](docs/rules/no-dynamic-require.md)                 | Forbid `require()` calls with expressions.                                           |      |    |    |    |    |    |
 | [no-internal-modules](docs/rules/no-internal-modules.md)               | Forbid importing the submodules of other modules.                                    |      |    |    |    |    |    |
+| [no-parent-barrel-import](docs/rules/no-parent-barrel-import.md)       | Forbid a module from importing from parent barrel file.                              |      |    |    |    |    |    |
 | [no-relative-packages](docs/rules/no-relative-packages.md)             | Forbid importing packages through relative paths.                                    |      |    |    | 🔧 |    |    |
 | [no-relative-parent-imports](docs/rules/no-relative-parent-imports.md) | Forbid importing modules from parent directories.                                    |      |    |    |    |    |    |
 | [no-restricted-paths](docs/rules/no-restricted-paths.md)               | Enforce which files can be imported in a given folder.                               |      |    |    |    |    |    |
