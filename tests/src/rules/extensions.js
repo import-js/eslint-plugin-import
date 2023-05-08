@@ -268,6 +268,26 @@ ruleTester.run('extensions', rule, {
 
     test({
       code: [
+        'import barjs from "."',
+        'import barjs2 from ".."',
+      ].join('\n'),
+      options: [ 'always' ],
+      errors: [
+        {
+          message: 'Missing file extension "js" for "."',
+          line: 1,
+          column: 19,
+        },
+        {
+          message: 'Missing file extension "js" for ".."',
+          line: 2,
+          column: 20,
+        },
+      ],
+    }),
+
+    test({
+      code: [
         'import barjs from "./bar.js"',
         'import barjson from "./bar.json"',
         'import barnone from "./bar"',
@@ -591,6 +611,35 @@ ruleTester.run('extensions', rule, {
         {
           message: 'Unexpected use of file extension "js" for "@test-scope/some-module/index.js"',
           line: 3,
+        },
+      ],
+    }),
+
+    // TODO: properly ignore packages resolved via relative imports
+    test({
+      code: [
+        'import * as test from "."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/test.js'),
+      options: [ 'ignorePackages' ],
+      errors: [
+        {
+          message: 'Missing file extension for "."',
+          line: 1,
+        },
+      ],
+    }),
+    // TODO: properly ignore packages resolved via relative imports
+    test({
+      code: [
+        'import * as test from ".."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/plugins/plugin.js'),
+      options: [ 'ignorePackages' ],
+      errors: [
+        {
+          message: 'Missing file extension for ".."',
+          line: 1,
         },
       ],
     }),

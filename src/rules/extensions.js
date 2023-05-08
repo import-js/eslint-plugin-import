@@ -130,6 +130,7 @@ module.exports = {
     }
 
     function isExternalRootModule(file) {
+      if (file === '.' || file === '..') { return false; }
       const slashCount = file.split('/').length - 1;
 
       if (slashCount === 0)  { return true; }
