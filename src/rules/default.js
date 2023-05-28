@@ -13,9 +13,7 @@ module.exports = {
   },
 
   create(context) {
-
     function checkDefault(specifierType, node) {
-
       const defaultSpecifier = node.specifiers.find(
         (specifier) => specifier.type === specifierType,
       );
