@@ -110,7 +110,7 @@
     "has": "^1.0.3",
     "is-core-module": "^2.12.1",
     "is-glob": "^4.0.3",
-    "minimatch": "^3.1.2",
+    "minimatch": "^5.1.4",
     "object.values": "^1.1.6",
     "resolve": "^1.22.3",
     "semver": "^6.3.0",

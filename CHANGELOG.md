@@ -22,6 +22,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`order]`: Fix group ranks order when alphabetizing ([#2674], thanks [@Pearce-Ropion])
+- [`no-internal-modules`]: fix a glob bug caused by minimatch([#2680])
 
 ## [2.27.4] - 2023-01-11
 

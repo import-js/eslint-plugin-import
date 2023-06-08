@@ -77,7 +77,7 @@ ruleTester.run('no-internal-modules', rule, {
       code: 'import b from "app/a"',
       filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
       options: [ {
-        forbid: [ 'app/**/**' ],
+        forbid: [ 'app/' ],
       } ],
     }),
     test({
@@ -153,7 +153,7 @@ ruleTester.run('no-internal-modules', rule, {
       code: 'export * from "app/a"',
       filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
       options: [ {
-        forbid: [ 'app/**/**' ],
+        forbid: [ 'app/' ],
       } ],
     }),
     test({
