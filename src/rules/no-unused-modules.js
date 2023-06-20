@@ -175,7 +175,15 @@ const resolveFiles = (src, ignoreExports, context) => {
   const srcFileList = listFilesToProcess(src, extensions);
 
   // prepare list of ignored files
-  const ignoredFilesList =  listFilesToProcess(ignoreExports, extensions);
+  let ignoredFilesList = [];
+  try {
+    ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
+  } catch (e) {
+    // pattern for ignored files is allowed to have zero matches
+    if (e.constructor.name !== 'NoFilesFoundError') {
+      throw e;
+    }
+  }
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename));
 
   // prepare list of source files, don't consider files from node_modules
