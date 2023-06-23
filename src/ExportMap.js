@@ -359,6 +359,43 @@ ExportMap.for = function (context) {
   return exportMap;
 };
 
+ExportMap.getTsConfig = function (context) {
+  const cacheKey = hashObject({
+    tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+  }).digest('hex');
+  let tsConfig = tsconfigCache.get(cacheKey);
+  if (typeof tsConfig === 'undefined') {
+    tsConfig = readTsConfig(context);
+    tsconfigCache.set(cacheKey, tsConfig);
+  }
+
+  return tsConfig;
+
+  function readTsConfig(context) {
+    const tsconfigInfo = tsConfigLoader({
+      cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+      getEnv: (key) => process.env[key],
+    });
+    try {
+      if (tsconfigInfo.tsConfigPath !== undefined) {
+        // Projects not using TypeScript won't have `typescript` installed.
+        if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
+
+        const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
+        return ts.parseJsonConfigFileContent(
+          configFile.config,
+          ts.sys,
+          dirname(tsconfigInfo.tsConfigPath),
+        );
+      }
+    } catch (e) {
+      // Catch any errors
+    }
+
+    return null;
+  }
+};
+
 ExportMap.parse = function (path, content, context) {
   const m = new ExportMap(path);
   const isEsModuleInteropTrue = isEsModuleInterop();
@@ -548,40 +585,8 @@ ExportMap.parse = function (path, content, context) {
 
   const source = makeSourceCode(content, ast);
 
-  function readTsConfig(context) {
-    const tsconfigInfo = tsConfigLoader({
-      cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
-      getEnv: (key) => process.env[key],
-    });
-    try {
-      if (tsconfigInfo.tsConfigPath !== undefined) {
-        // Projects not using TypeScript won't have `typescript` installed.
-        if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
-
-        const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
-        return ts.parseJsonConfigFileContent(
-          configFile.config,
-          ts.sys,
-          dirname(tsconfigInfo.tsConfigPath),
-        );
-      }
-    } catch (e) {
-      // Catch any errors
-    }
-
-    return null;
-  }
-
   function isEsModuleInterop() {
-    const cacheKey = hashObject({
-      tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
-    }).digest('hex');
-    let tsConfig = tsconfigCache.get(cacheKey);
-    if (typeof tsConfig === 'undefined') {
-      tsConfig = readTsConfig(context);
-      tsconfigCache.set(cacheKey, tsConfig);
-    }
-
+    const tsConfig = ExportMap.getTsConfig(context);
     return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
   }
 
