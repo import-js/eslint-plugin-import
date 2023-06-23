@@ -29,7 +29,7 @@ module.exports = {
   meta: {
     type: 'problem',
     docs: {
-      category: 'Static analysis',
+      category: 'Style guide',
       description: 'Enforce a convention in import path.',
       url: docsUrl('path'),
     },

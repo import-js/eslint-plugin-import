@@ -2,6 +2,8 @@
 
 🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
+<!-- end auto-generated rule header -->
+
 Enforce paths of `require()` / `import` statements to be "absolute" or "relative".
 
 ## Rule Details
