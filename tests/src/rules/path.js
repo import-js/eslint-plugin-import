@@ -2,19 +2,8 @@ import { test, getTSParsers, testFilePath } from '../utils';
 
 import { RuleTester } from 'eslint';
 import { resolve } from 'path';
-import { default as babelPresetFlow } from 'babel-preset-flow';
 
 const ruleTester = new RuleTester();
-const flowRuleTester = new RuleTester({
-  parser: resolve(__dirname, '../../../node_modules/babel-eslint'),
-  parserOptions: {
-    babelOptions: {
-      configFile: false,
-      babelrc: false,
-      presets: [babelPresetFlow],
-    },
-  },
-});
 const rule = require('rules/path');
 
 function createTest(parser) {
@@ -27,30 +16,30 @@ function createTest(parser) {
     },
     parserOptions: {
       tsconfigRootDir: resolve(__dirname, '../../files/path/'),
-    }
-  }
+    },
+  };
 }
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
-    ruleTester.run(`path`, rule, {
+    ruleTester.run('path', rule, {
       valid: [
         test({
           ...createTest(parser),
-          code: `import bar from "./sub/bar"`,
+          code: 'import bar from "./sub/bar"',
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "home/sub/bar"`,
+          code: 'import bar from "home/sub/bar"',
           options: [{ underSameDirectory: 'absolute' }],
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "../other/bar"`,
+          code: 'import bar from "../other/bar"',
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "other/bar"`,
+          code: 'import bar from "other/bar"',
           options: [{ other: 'absolute' }],
         }),
       ],
@@ -58,26 +47,26 @@ context('TypeScript', function () {
       invalid: [
         test({
           ...createTest(parser),
-          code: `import bar from "home/sub/bar"`,
+          code: 'import bar from "home/sub/bar"',
           errors: ['Imports under the same directory of the current file must be relative to the current file.'],
           output: 'import bar from "./sub/bar"',
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "./sub/bar"`,
+          code: 'import bar from "./sub/bar"',
           options: [{ underSameDirectory: 'absolute' }],
           errors: ['Imports under the same directory of the current file must be relative to the project root.'],
           output: 'import bar from "home/sub/bar"',
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "other/bar"`,
+          code: 'import bar from "other/bar"',
           errors: ['Imports not under the same directory of the current file must be relative to the current file.'],
           output: 'import bar from "../other/bar"',
         }),
         test({
           ...createTest(parser),
-          code: `import bar from "../other/bar"`,
+          code: 'import bar from "../other/bar"',
           options: [{ other: 'absolute' }],
           errors: ['Imports not under the same directory of the current file must be relative to the project root.'],
           output: 'import bar from "other/bar"',
