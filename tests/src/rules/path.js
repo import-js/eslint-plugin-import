@@ -31,7 +31,7 @@ context('TypeScript', function () {
         test({
           ...createTest(parser),
           code: 'import bar from "home/sub/bar"',
-          options: [{ underSameDirectory: 'absolute' }],
+          options: [{ underSameDirectory: 'relativeToRoot' }],
         }),
         test({
           ...createTest(parser),
@@ -40,7 +40,13 @@ context('TypeScript', function () {
         test({
           ...createTest(parser),
           code: 'import bar from "other/bar"',
-          options: [{ other: 'absolute' }],
+          options: [{ other: 'relativeToRoot' }],
+        }),
+        test({
+          ...createTest(parser),
+          code: 'import bar from "other/bar"',
+          parserOptions: {},
+          options: [{ other: 'relativeToRoot', root: resolve(__dirname, '../../files/path/') }],
         }),
       ],
 
@@ -54,7 +60,7 @@ context('TypeScript', function () {
         test({
           ...createTest(parser),
           code: 'import bar from "./sub/bar"',
-          options: [{ underSameDirectory: 'absolute' }],
+          options: [{ underSameDirectory: 'relativeToRoot' }],
           errors: ['Imports under the same directory of the current file must be relative to the project root.'],
           output: 'import bar from "home/sub/bar"',
         }),
@@ -67,9 +73,16 @@ context('TypeScript', function () {
         test({
           ...createTest(parser),
           code: 'import bar from "../other/bar"',
-          options: [{ other: 'absolute' }],
+          options: [{ other: 'relativeToRoot' }],
           errors: ['Imports not under the same directory of the current file must be relative to the project root.'],
           output: 'import bar from "other/bar"',
+        }),
+        test({
+          ...createTest(parser),
+          code: 'import bar from "other/bar"',
+          parserOptions: {},
+          options: [{ other: 'relativeToRoot' }],
+          errors: ['Imports cannot be relative to the project root because the project root is not defined.'],
         }),
       ],
     });
