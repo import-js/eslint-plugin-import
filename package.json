@@ -113,7 +113,7 @@
     "minimatch": "^3.1.2",
     "object.values": "^1.1.6",
     "resolve": "^1.22.3",
-    "semver": "^6.3.0",
+    "semver": "7.5.3",
     "tsconfig-paths": "^3.14.2"
   }
 }
