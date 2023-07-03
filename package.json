@@ -42,6 +42,7 @@
   "keywords": [
     "eslint",
     "eslintplugin",
+    "eslint-plugin",
     "es6",
     "jsnext",
     "modules",
