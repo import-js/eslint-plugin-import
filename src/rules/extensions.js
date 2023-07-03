@@ -165,7 +165,8 @@ module.exports = {
         context,
       ) || isScoped(importPath);
 
-      if (!extension || !importPath.endsWith(`.${extension}`)) {
+      const validExtensions = getValidExtensionFor(context, importPath, extension);
+      if (!extension || !validExtensions.some((extension) => importPath.endsWith(`.${extension}`))) {
         // ignore type-only imports and exports
         if (node.importKind === 'type' || node.exportKind === 'type') { return; }
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
@@ -190,3 +191,39 @@ module.exports = {
     return moduleVisitor(checkFileExtension, { commonjs: true });
   },
 };
+
+/**
+ * Taken from `eslint-import-resolver-typescript`.
+ * This could be imported from current versions of that plugin,
+ * but this project still depends on an older version.
+ * Also, importing it would add a dependency, or at least an
+ * optional peer dependency - copying the code seems like the
+ * more sane option.
+ * [LICENSE](https://github.com/import-js/eslint-import-resolver-typescript/blob/71b23a206514842fef70a99220e5ffb1d6da2a0e/LICENSE)
+ */
+const defaultExtensionAlias = {
+  '.js': [
+    '.ts',
+    // `.tsx` can also be compiled as `.js`
+    '.tsx',
+    '.d.ts',
+    '.js',
+  ],
+  '.jsx': ['.tsx', '.d.ts', '.jsx'],
+  '.cjs': ['.cts', '.d.cts', '.cjs'],
+  '.mjs': ['.mts', '.d.mts', '.mjs'],
+};
+
+function getValidExtensionFor(context, importPath, resolvedExtension) {
+  let extensionAlias = {};
+  if (context.settings['import/resolver']  && context.settings['import/resolver'].typescript) {
+    extensionAlias = context.settings['import/resolver'].typescript.extensionAlias || defaultExtensionAlias;
+  }
+
+  const importedExtension = path.extname(importPath);
+  if (importedExtension in extensionAlias) {
+    return extensionAlias[importedExtension].map((ext) => ext.substring(1));
+  }
+  return [ resolvedExtension ];
+}
+
