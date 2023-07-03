@@ -224,6 +224,6 @@ function getValidExtensionFor(context, importPath, resolvedExtension) {
   if (importedExtension in extensionAlias) {
     return extensionAlias[importedExtension].map((ext) => ext.substring(1));
   }
-  return [ resolvedExtension ];
+  return [resolvedExtension];
 }
 
