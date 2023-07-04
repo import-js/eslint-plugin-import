@@ -19,6 +19,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] [`extensions`]: reference node ESM behavior ([#2748], thanks [@xM8WVqaG])
 - [Refactor] [`exports-last`]: use `array.prototype.findlastindex` (thanks [@ljharb])
 - [Refactor] [`no-anonymous-default-export`]: use `object.fromentries` (thanks [@ljharb])
+- [Refactor] [`no-unused-modules`]: use `array.prototype.flatmap` (thanks [@ljharb])
 
 ## [2.27.5] - 2023-01-16
 
