@@ -3,8 +3,11 @@
  * @author Duncan Beevers
  */
 
-import docsUrl from '../docsUrl';
 import has from 'has';
+import values from 'object.values';
+import fromEntries from 'object.fromentries';
+
+import docsUrl from '../docsUrl';
 
 const defs = {
   ArrayExpression: {
@@ -68,12 +71,7 @@ const schemaProperties = Object.keys(defs)
     return acc;
   }, {});
 
-const defaults = Object.keys(defs)
-  .map((key) => defs[key])
-  .reduce((acc, def) => {
-    acc[def.option] = has(def, 'default') ? def.default : false;
-    return acc;
-  }, {});
+const defaults = fromEntries(values(defs).map((def) => [def.option, has(def, 'default') ? def.default : false]));
 
 module.exports = {
   meta: {
