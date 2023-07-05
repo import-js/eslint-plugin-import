@@ -4,6 +4,7 @@ import resolve from 'eslint-module-utils/resolve';
 import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
+import has from 'has';
 
 const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] };
 const patternProperties = {
@@ -156,7 +157,7 @@ module.exports = {
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.
-      const extension = path.extname(resolvedPath || importPath).substring(1);
+      const extension = path.extname(resolvedPath || importPath).slice(1);
 
       // determine if this is a module
       const isPackage = isExternalModule(
@@ -221,8 +222,8 @@ function getValidExtensionFor(context, importPath, resolvedExtension) {
   }
 
   const importedExtension = path.extname(importPath);
-  if (importedExtension in extensionAlias) {
-    return extensionAlias[importedExtension].map((ext) => ext.substring(1));
+  if (has(extensionAlias, importedExtension)) {
+    return extensionAlias[importedExtension].map((ext) => ext.slice(1));
   }
   return [resolvedExtension];
 }
