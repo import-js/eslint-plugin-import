@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
 - support eslint v9 ([#2996], thanks [@G-Rath] [@michaelfaith])
 - [`order`]: allow validating named imports ([#3043], thanks [@manuth])
+- [`extensions`]: add the `checkTypeImports` option ([#2817], thanks [@phryneas])
 
 ### Fixed
 - `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
@@ -1187,6 +1188,7 @@ for info on changes for earlier releases.
 [#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
 [#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
+[#2817]: https://github.com/import-js/eslint-plugin-import/pull/2817
 [#2778]: https://github.com/import-js/eslint-plugin-import/pull/2778
 [#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
@@ -1942,6 +1944,7 @@ for info on changes for earlier releases.
 [@pcorpet]: https://github.com/pcorpet
 [@Pearce-Ropion]: https://github.com/Pearce-Ropion
 [@Pessimistress]: https://github.com/Pessimistress
+[@phryneas]: https://github.com/phryneas
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@preco21]: https://github.com/preco21
 [@pri1311]: https://github.com/pri1311

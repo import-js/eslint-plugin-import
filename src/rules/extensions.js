@@ -14,6 +14,7 @@ const properties = {
   type: 'object',
   properties: {
     pattern: patternProperties,
+    checkTypeImports: { type: 'boolean' },
     ignorePackages: { type: 'boolean' },
   },
 };
@@ -35,7 +36,7 @@ function buildProperties(context) {
     }
 
     // If this is not the new structure, transfer all props to result.pattern
-    if (obj.pattern === undefined && obj.ignorePackages === undefined) {
+    if (obj.pattern === undefined && obj.ignorePackages === undefined && obj.checkTypeImports === undefined) {
       Object.assign(result.pattern, obj);
       return;
     }
@@ -48,6 +49,10 @@ function buildProperties(context) {
     // If ignorePackages is provided, transfer it to result
     if (obj.ignorePackages !== undefined) {
       result.ignorePackages = obj.ignorePackages;
+    }
+
+    if (obj.checkTypeImports !== undefined) {
+      result.checkTypeImports = obj.checkTypeImports;
     }
   });
 
@@ -168,7 +173,7 @@ module.exports = {
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports and exports
-        if (node.importKind === 'type' || node.exportKind === 'type') { return; }
+        if (!props.checkTypeImports && (node.importKind === 'type' || node.exportKind === 'type')) { return; }
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {

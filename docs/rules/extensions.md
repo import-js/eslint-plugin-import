@@ -56,6 +56,8 @@ For example, `["error", "never", { "svg": "always" }]` would require that all ex
 In that case, if you still want to specify extensions, you can do so inside the **pattern** property.
 Default value of `ignorePackages` is `false`.
 
+By default, `import type` and `export type` style imports/exports are ignored. If you want to check them as well, you can set the `checkTypeImports` option to `true`.
+
 ### Exception
 
 When disallowing the use of certain extensions this rule makes an exception and allows the use of extension when the file would not be resolvable without extension.
@@ -102,6 +104,14 @@ import Component from './Component';
 import express from 'express/index';
 
 import * as path from 'path';
+```
+
+The following patterns are considered problems when the configuration is set to "never" and the option "checkTypeImports" is set to `true`:
+
+```js
+import type { Foo } from './foo.ts';
+
+export type { Foo } from './foo.ts';
 ```
 
 The following patterns are considered problems when configuration set to "always":
@@ -165,6 +175,14 @@ import baz from 'foo/baz.js';
 import express from 'express';
 
 import foo from '@/foo';
+```
+
+The following patterns are considered problems when the configuration is set to "always" and the option "checkTypeImports" is set to `true`:
+
+```js
+import type { Foo } from './foo';
+
+export type { Foo } from './foo';
 ```
 
 ## When Not To Use It
