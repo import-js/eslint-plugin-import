@@ -4,15 +4,17 @@
  * @author René Fermann
  */
 
-import Exports, { recursivePatternCapture } from '../ExportMap';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
-import docsUrl from '../docsUrl';
 import { dirname, join } from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
 import values from 'object.values';
 import includes from 'array-includes';
+import flatMap from 'array.prototype.flatmap';
+
+import Exports, { recursivePatternCapture } from '../ExportMap';
+import docsUrl from '../docsUrl';
 
 let FileEnumerator;
 let listFilesToProcess;
@@ -40,12 +42,7 @@ try {
       const { listFilesToProcess: originalListFilesToProcess } = require('eslint/lib/util/glob-util');
 
       listFilesToProcess = function (src, extensions) {
-        const patterns = src.reduce(
-          (carry, pattern) => carry.concat(
-            extensions.map((extension) => (/\*\*|\*\./).test(pattern) ? pattern : `${pattern}/**/*${extension}`),
-          ),
-          src,
-        );
+        const patterns = src.concat(flatMap(src, (pattern) => extensions.map((extension) => (/\*\*|\*\./).test(pattern) ? pattern : `${pattern}/**/*${extension}`)));
 
         return originalListFilesToProcess(patterns);
       };
@@ -171,18 +168,17 @@ const isNodeModule = (path) => (/\/(node_modules)\//).test(path);
 const resolveFiles = (src, ignoreExports, context) => {
   const extensions = Array.from(getFileExtensions(context.settings));
 
-  const srcFiles = new Set();
   const srcFileList = listFilesToProcess(src, extensions);
 
   // prepare list of ignored files
-  const ignoredFilesList =  listFilesToProcess(ignoreExports, extensions);
+  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename));
 
   // prepare list of source files, don't consider files from node_modules
-  srcFileList.filter(({ filename }) => !isNodeModule(filename)).forEach(({ filename }) => {
-    srcFiles.add(filename);
-  });
-  return srcFiles;
+
+  return new Set(
+    srcFileList.filter(({ filename }) => !isNodeModule(filename)).map(({ filename }) => filename),
+  );
 };
 
 /**
