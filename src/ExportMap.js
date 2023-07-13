@@ -791,7 +791,7 @@ let prevSettings = '';
  * also calculate a cacheKey, where parts of the cacheKey hash are memoized
  */
 function childContext(path, context) {
-  const { settings, parserOptions, parserPath } = context;
+  const { settings, parserOptions, parserPath, languageOptions } = context;
 
   if (JSON.stringify(settings) !== prevSettings) {
     settingsHash = hashObject({ settings }).digest('hex');
@@ -805,6 +805,7 @@ function childContext(path, context) {
 
   return {
     cacheKey: String(parserPath) + parserOptionsHash + settingsHash + String(path),
+    languageOptions,
     settings,
     parserOptions,
     parserPath,
