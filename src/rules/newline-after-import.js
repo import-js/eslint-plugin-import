@@ -149,6 +149,11 @@ module.exports = {
 
     function checkImport(node) {
       const { parent } = node;
+
+      if (!parent || !parent.body) {
+        return;
+      }
+
       const nodePosition = parent.body.indexOf(node);
       const nextNode = parent.body[nodePosition + 1];
       const endLine = node.loc.end.line;

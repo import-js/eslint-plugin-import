@@ -26,7 +26,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `
         const x = () => require('baz')
             , y = () => require('bar')
-            
+
         // some comment here
       `,
       parserOptions: { ecmaVersion: 6 },
@@ -273,6 +273,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
+      {
+        code: `
+        import { ns } from 'namespace';
+        import Bar = ns.baz.foo.Bar;
+
+        export import Foo = ns.baz.bar.Foo;
+      `,
+        parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
     )),
     {
       code: `
@@ -299,7 +309,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `
         import path from 'path';import foo from 'foo';
-        
+
         /**
          * some multiline comment here
          * another line of comment
@@ -313,7 +323,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `
         import path from 'path';
         import foo from 'foo';
-        
+
         // Some random single line comment
         var bar = 42;
       `,

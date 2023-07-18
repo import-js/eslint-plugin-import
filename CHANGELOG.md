@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 - [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
+- [`newline-after-import`]/TypeScript: do not error when re-exporting a namespaced import ([#2832], thanks [@laurens-dg])
 * [`order`]: partial fix for [#2687] (thanks [@ljharb])
 
 ### Changed
@@ -1072,6 +1073,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
 [#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
 [#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
@@ -1746,6 +1748,7 @@ for info on changes for earlier releases.
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
 [@laysent]: https://github.com/laysent
+[@laurens-dg]: https://github.com/laurens-dg
 [@le0nik]: https://github.com/le0nik
 [@leipert]: https://github.com/leipert
 [@lemonmade]: https://github.com/lemonmade
