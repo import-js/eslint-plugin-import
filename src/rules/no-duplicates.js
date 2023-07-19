@@ -318,10 +318,11 @@ module.exports = {
         });
       }
       const map = moduleMaps.get(n.parent);
-      if (n.importKind === 'type') {
+      const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+      if (!preferInline && n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
       }
-      if (n.specifiers.some((spec) => spec.importKind === 'type')) {
+      if (!preferInline && n.specifiers.some((spec) => spec.importKind === 'type')) {
         return map.namedTypesImported;
       }
 

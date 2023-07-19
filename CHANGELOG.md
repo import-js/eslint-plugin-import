@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
 - [`newline-after-import`]/TypeScript: do not error when re-exporting a namespaced import ([#2832], thanks [@laurens-dg])
 * [`order`]: partial fix for [#2687] (thanks [@ljharb])
+- [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1073,6 +1074,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
 [#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
 [#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
@@ -1647,6 +1649,7 @@ for info on changes for earlier releases.
 [@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
+[@benkrejci]: https://github.com/benkrejci
 [@benmosher]: https://github.com/benmosher
 [@benmunro]: https://github.com/benmunro
 [@BenoitZugmeyer]: https://github.com/BenoitZugmeyer

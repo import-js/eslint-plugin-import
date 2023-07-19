@@ -84,12 +84,17 @@ Config:
 ```js
 import { AValue, type AType } from './mama-mia'
 import type { BType } from './mama-mia'
+
+import { CValue } from './papa-mia'
+import type { CType } from './papa-mia'
 ```
 
 ✅ Valid with `["error", {"prefer-inline": true}]`
 
 ```js
 import { AValue, type AType, type BType } from './mama-mia'
+
+import { CValue, type CType } from './papa-mia'
 ```
 
 <!--tabs-->
