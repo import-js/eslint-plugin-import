@@ -184,17 +184,17 @@ ruleTester.run('no-unused-modules', rule, {
         {
           message: `exported declaration 'default' not used within other modules`,
           line: 12,
-          column: 9,
+          column: 18,
         },
         {
           message: `exported declaration 'o0' not used within other modules`,
           line: 12,
-          column: 9,
+          column: 27,
         },
         {
           message: `exported declaration 'o3' not used within other modules`,
           line: 12,
-          column: 9,
+          column: 31,
         },
         error(`exported declaration 'p' not used within other modules`),
       ],

@@ -15,7 +15,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: partial fix for [#2687] (thanks [@ljharb])
 - [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
 - [`extensions`]: handle `.` and `..` properly ([#2778], thanks [@benasher44])
- - [`no-unused-modules`]: improve schema (thanks [@ljharb])
+- [`no-unused-modules`]: improve schema (thanks [@ljharb])
+- [`no-unused-modules`]: report error on binding instead of parent export ([#2842], thanks [@Chamion])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1076,6 +1077,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
 [#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
 [#2778]: https://github.com/import-js/eslint-plugin-import/pull/2778
@@ -1666,6 +1668,7 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
 [@charpeni]: https://github.com/charpeni
 [@cherryblossom000]: https://github.com/cherryblossom000

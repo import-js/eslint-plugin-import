@@ -931,7 +931,7 @@ module.exports = {
       },
       ExportNamedDeclaration(node) {
         node.specifiers.forEach((specifier) => {
-          checkUsage(node, specifier.exported.name || specifier.exported.value);
+          checkUsage(specifier, specifier.exported.name || specifier.exported.value);
         });
         forEachDeclarationIdentifier(node.declaration, (name) => {
           checkUsage(node, name);
