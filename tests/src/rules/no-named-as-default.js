@@ -33,28 +33,28 @@ ruleTester.run('no-named-as-default', rule, {
   invalid: [].concat(
     test({
       code: 'import foo from "./bar";',
-      errors: [ {
+      errors: [{
         message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ImportDefaultSpecifier' } ] }),
+        type: 'ImportDefaultSpecifier' }] }),
     test({
       code: 'import foo, { foo as bar } from "./bar";',
-      errors: [ {
+      errors: [{
         message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ImportDefaultSpecifier' } ] }),
+        type: 'ImportDefaultSpecifier' }] }),
 
     // es7
     test({
       code: 'export foo from "./bar";',
       parser: parsers.BABEL_OLD,
-      errors: [ {
+      errors: [{
         message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ExportDefaultSpecifier' } ] }),
+        type: 'ExportDefaultSpecifier' }] }),
     test({
       code: 'export foo, { foo as bar } from "./bar";',
       parser: parsers.BABEL_OLD,
-      errors: [ {
+      errors: [{
         message: 'Using exported name \'foo\' as identifier for default export.',
-        type: 'ExportDefaultSpecifier' } ] }),
+        type: 'ExportDefaultSpecifier' }] }),
 
     test({
       code: 'import foo from "./malformed.js"',

@@ -346,11 +346,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // some comment
         var foo = 'bar';
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ considerComments: true }],
     },
@@ -373,11 +373,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ considerComments: true }],
     },
@@ -394,54 +394,54 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // Some random single line comment
         var bar = 42;
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ considerComments: true, count: 1 }],
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
       output: `import foo from 'foo';\n\n\nexport default function() {};`,
       options: [{ count: 2 }],
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar something = 123;`,
       output: `var foo = require('foo-module');\n\nvar something = 123;`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
       options: [{ count: 1 }],
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
@@ -495,20 +495,20 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `var path = require('path');\nvar foo = require('foo');\nvar bar = 42;`,
       output: `var path = require('path');\nvar foo = require('foo');\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
     },
     {
       code: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;`,
       output: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
     },
     {
       code: `require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\nvar foo = 'bar';`,
@@ -535,64 +535,64 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import path from 'path';\nimport foo from 'foo';\nvar bar = 42;`,
       output: `import path from 'path';\nimport foo from 'foo';\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';import foo from 'foo';var bar = 42;`,
       output: `import path from 'path';import foo from 'foo';\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 25,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
       output: `import foo from 'foo';\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
       output: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
       output: `// issue 10042\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
       output: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },

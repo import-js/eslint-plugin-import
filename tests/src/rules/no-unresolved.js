@@ -387,7 +387,7 @@ ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
   invalid: [
     test({
       code: 'import * as foo from "jsx-module/foo"',
-      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+      errors: ["Unable to resolve path to module 'jsx-module/foo'."],
     }),
   ],
 });
@@ -536,12 +536,12 @@ context('TypeScript', () => {
       invalid: [
         test({
           code: 'import { JSONSchema7Type } from "@types/json-schema";',
-          errors: [ "Unable to resolve path to module '@types/json-schema'." ],
+          errors: ["Unable to resolve path to module '@types/json-schema'."],
           parser,
         }),
         test({
           code: 'export { JSONSchema7Type } from "@types/json-schema";',
-          errors: [ "Unable to resolve path to module '@types/json-schema'." ],
+          errors: ["Unable to resolve path to module '@types/json-schema'."],
           parser,
         }),
       ],

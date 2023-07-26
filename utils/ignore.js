@@ -20,7 +20,7 @@ function validExtensions(context) {
 
 function makeValidExtensionSet(settings) {
   // start with explicit JS-parsed extensions
-  const exts = new Set(settings['import/extensions'] || [ '.js' ]);
+  const exts = new Set(settings['import/extensions'] || ['.js']);
 
   // all alternate parser extensions are also valid
   if ('import/parsers' in settings) {

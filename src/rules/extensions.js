@@ -5,7 +5,7 @@ import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
-const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] };
+const enumValues = { enum: ['always', 'ignorePackages', 'never'] };
 const patternProperties = {
   type: 'object',
   patternProperties: { '.*': enumValues },

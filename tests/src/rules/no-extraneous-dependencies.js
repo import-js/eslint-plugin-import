@@ -57,7 +57,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     // 'project' type
     test({
       code: 'import "importType"',
-      settings: { 'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } } },
+      settings: { 'import/resolver': { node: { paths: [path.join(__dirname, '../../files')] } } },
     }),
     test({
       code: 'import chai from "chai"',
@@ -396,7 +396,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "not-a-dependency"',
       settings: {
-        'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } },
+        'import/resolver': { node: { paths: [path.join(__dirname, '../../files')] } },
         'import/internal-regex': '^not-a-dependency.*',
       },
       options: [{ includeInternal: true }],

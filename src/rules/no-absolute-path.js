@@ -12,7 +12,7 @@ module.exports = {
       url: docsUrl('no-absolute-path'),
     },
     fixable: 'code',
-    schema: [ makeOptionsSchema() ],
+    schema: [makeOptionsSchema()],
   },
 
   create(context) {

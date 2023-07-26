@@ -236,7 +236,7 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
         import { add } from './helper';`,
       options: [{
-        groups: [ 'unknown', 'builtin', 'external', 'parent', 'sibling', 'index' ],
+        groups: ['unknown', 'builtin', 'external', 'parent', 'sibling', 'index'],
       }],
     }),
     // Using unknown import types (e.g. using a resolver alias via babel)
