@@ -164,24 +164,38 @@ ruleTester.run('no-unused-modules', rule, {
   invalid: [
     test({
       options: unusedExportsOptions,
-      code: `import eslint from 'eslint'
-           import fileA from './file-a'
-           import { b } from './file-b'
-           import { c1, c2 } from './file-c'
-           import { d } from './file-d'
-           import { e } from './file-e'
-           import { e2 } from './file-e'
-           import { h2 } from './file-h'
-           import * as l from './file-l'
-           export * from './file-n'
-           export { default, o0, o3 } from './file-o'
-           export { p } from './file-p'
-           import s from './file-s'`,
+      code: `
+        import eslint from 'eslint'
+        import fileA from './file-a'
+        import { b } from './file-b'
+        import { c1, c2 } from './file-c'
+        import { d } from './file-d'
+        import { e } from './file-e'
+        import { e2 } from './file-e'
+        import { h2 } from './file-h'
+        import * as l from './file-l'
+        export * from './file-n'
+        export { default, o0, o3 } from './file-o'
+        export { p } from './file-p'
+        import s from './file-s'
+      `,
       filename: testFilePath('./no-unused-modules/file-0.js'),
       errors: [
-        error(`exported declaration 'default' not used within other modules`),
-        error(`exported declaration 'o0' not used within other modules`),
-        error(`exported declaration 'o3' not used within other modules`),
+        {
+          message: `exported declaration 'default' not used within other modules`,
+          line: 12,
+          column: 9,
+        },
+        {
+          message: `exported declaration 'o0' not used within other modules`,
+          line: 12,
+          column: 9,
+        },
+        {
+          message: `exported declaration 'o3' not used within other modules`,
+          line: 12,
+          column: 9,
+        },
         error(`exported declaration 'p' not used within other modules`),
       ],
     }),
