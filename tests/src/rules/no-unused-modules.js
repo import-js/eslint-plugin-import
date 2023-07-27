@@ -1374,19 +1374,21 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
   });
 });
 
-describe('supports flat eslint', { skip: !FlatRuleTester }, () => {
-  const flatRuleTester = new FlatRuleTester();
-  flatRuleTester.run('no-unused-modules', rule, {
-    valid: [{
-      options: unusedExportsOptions,
-      code: 'import { o2 } from "./file-o"; export default () => 12',
-      filename: testFilePath('./no-unused-modules/file-a.js'),
-    }],
-    invalid: [{
-      options: unusedExportsOptions,
-      code: 'export default () => 13',
-      filename: testFilePath('./no-unused-modules/file-f.js'),
-      errors: [error(`exported declaration 'default' not used within other modules`)],
-    }],
+(FlatRuleTester ? describe : describe.skip)('supports flat eslint', () => {
+  it('passes', () => {
+    const flatRuleTester = new FlatRuleTester();
+    flatRuleTester.run('no-unused-modules', rule, {
+      valid: [{
+        options: unusedExportsOptions,
+        code: 'import { o2 } from "./file-o"; export default () => 12',
+        filename: testFilePath('./no-unused-modules/file-a.js'),
+      }],
+      invalid: [{
+        options: unusedExportsOptions,
+        code: 'export default () => 13',
+        filename: testFilePath('./no-unused-modules/file-f.js'),
+        errors: [error(`exported declaration 'default' not used within other modules`)],
+      }],
+    });
   });
 });
