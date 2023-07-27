@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: partial fix for [#2687] (thanks [@ljharb])
 - [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
 - [`extensions`]: handle `.` and `..` properly ([#2778], thanks [@benasher44])
+ - [`no-unused-modules`]: improve schema (thanks [@ljharb])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])

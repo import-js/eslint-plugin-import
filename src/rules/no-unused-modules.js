@@ -416,17 +416,16 @@ module.exports = {
         src: {
           description: 'files/paths to be analyzed (only for unused exports)',
           type: 'array',
-          minItems: 1,
+          uniqueItems: true,
           items: {
             type: 'string',
             minLength: 1,
           },
         },
         ignoreExports: {
-          description:
-            'files/paths for which unused exports will not be reported (e.g module entry points)',
+          description: 'files/paths for which unused exports will not be reported (e.g module entry points)',
           type: 'array',
-          minItems: 1,
+          uniqueItems: true,
           items: {
             type: 'string',
             minLength: 1,
@@ -441,37 +440,23 @@ module.exports = {
           type: 'boolean',
         },
       },
-      not: {
-        properties: {
-          unusedExports: { enum: [false] },
-          missingExports: { enum: [false] },
-        },
-      },
-      anyOf: [{
-        not: {
+      anyOf: [
+        {
           properties: {
             unusedExports: { enum: [true] },
+            src: {
+              minItems: 1,
+            },
           },
+          required: ['unusedExports'],
         },
-        required: ['missingExports'],
-      }, {
-        not: {
+        {
           properties: {
             missingExports: { enum: [true] },
           },
+          required: ['missingExports'],
         },
-        required: ['unusedExports'],
-      }, {
-        properties: {
-          unusedExports: { enum: [true] },
-        },
-        required: ['unusedExports'],
-      }, {
-        properties: {
-          missingExports: { enum: [true] },
-        },
-        required: ['missingExports'],
-      }],
+      ],
     }],
   },
 

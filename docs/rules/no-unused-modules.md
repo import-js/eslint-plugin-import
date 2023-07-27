@@ -12,7 +12,7 @@ Reports:
 
 ### Usage
 
-In order for this plugin to work, one of the options `missingExports` or `unusedExports` must be enabled (see "Options" section below). In the future, these options will be enabled by default (see https://github.com/import-js/eslint-plugin-import/issues/1324)
+In order for this plugin to work, at least one of the options `missingExports` or `unusedExports` must be enabled (see "Options" section below). In the future, these options will be enabled by default (see https://github.com/import-js/eslint-plugin-import/issues/1324)
 
 Example:
 ```
