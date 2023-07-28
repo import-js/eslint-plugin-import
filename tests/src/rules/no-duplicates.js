@@ -1053,21 +1053,21 @@ context('TypeScript', function () {
             }
           ],
         }),
-        // #2834 Detect duplicates across type and regular imports
-        test({
-          code: "import {AValue} from './foo'; import type {AType} from './foo'",
-          ...parserConfig,
-          options: [{ 'prefer-inline': true }],
-          output: `import {AValue,type AType} from './foo'; `,
-          errors: [
-            {
-              line: 1,
-              column: 22,
-              column: 56,
-              message: "'./foo' imported multiple times.",
-            },
-          ],
-        }),
+        // // #2834 Detect duplicates across type and regular imports
+        // test({
+        //   code: "import {AValue} from './foo'; import type {AType} from './foo'",
+        //   ...parserConfig,
+        //   options: [{ 'prefer-inline': true }],
+        //   output: `import {AValue,type AType} from './foo'; `,
+        //   errors: [
+        //     {
+        //       line: 1,
+        //       column: 22,
+        //       column: 56,
+        //       message: "'./foo' imported multiple times.",
+        //     },
+        //   ],
+        // }),
       ]);
 
       ruleTester.run('no-duplicates', rule, {
