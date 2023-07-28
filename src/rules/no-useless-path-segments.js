@@ -33,7 +33,7 @@ function normalize(fn) {
 }
 
 function countRelativeParents(pathSegments) {
-  return pathSegments.reduce((sum, pathSegment) => pathSegment === '..' ? sum + 1 : sum, 0);
+  return pathSegments.filter((x) => x === '..').length;
 }
 
 module.exports = {
