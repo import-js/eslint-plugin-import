@@ -26,6 +26,7 @@ matrix:
 
   allow_failures:
     - nodejs_version: "4" # for eslint 5
+    - configuration: WSL
 
 platform:
   - x86
