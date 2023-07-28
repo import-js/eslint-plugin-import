@@ -60,16 +60,10 @@ const defs = {
   },
 };
 
-const schemaProperties = Object.keys(defs)
-  .map((key) => defs[key])
-  .reduce((acc, def) => {
-    acc[def.option] = {
-      description: def.description,
-      type: 'boolean',
-    };
-
-    return acc;
-  }, {});
+const schemaProperties = fromEntries(values(defs).map((def) => [def.option, {
+  description: def.description,
+  type: 'boolean',
+}]));
 
 const defaults = fromEntries(values(defs).map((def) => [def.option, has(def, 'default') ? def.default : false]));
 
