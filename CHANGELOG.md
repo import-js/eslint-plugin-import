@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.28.0] - 2023-07-27
+
 ### Fixed
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
@@ -1535,7 +1537,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...HEAD
+[2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
 [2.27.5]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.4...v2.27.5
 [2.27.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.3...v2.27.4
 [2.27.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.2...v2.27.3

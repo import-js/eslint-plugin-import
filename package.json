@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import",
-  "version": "2.27.5",
+  "version": "2.28.0",
   "description": "Import with sanity.",
   "engines": {
     "node": ">=4"
