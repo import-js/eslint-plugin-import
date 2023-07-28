@@ -2,6 +2,7 @@
 
 import minimatch from 'minimatch';
 import includes from 'array-includes';
+import groupBy from 'object.groupby';
 
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
@@ -325,13 +326,7 @@ function getSorter(alphabetizeOptions) {
 }
 
 function mutateRanksToAlphabetize(imported, alphabetizeOptions) {
-  const groupedByRanks = imported.reduce(function (acc, importedItem) {
-    if (!Array.isArray(acc[importedItem.rank])) {
-      acc[importedItem.rank] = [];
-    }
-    acc[importedItem.rank].push(importedItem);
-    return acc;
-  }, {});
+  const groupedByRanks = groupBy(imported, (item) => item.rank);
 
   const sorterFn = getSorter(alphabetizeOptions);
 
