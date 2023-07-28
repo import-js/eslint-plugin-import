@@ -2736,7 +2736,7 @@ ruleTester.run('order', rule, {
         }],
       }),
     ],
-  ].filter((t) => !!t),
+  ].filter(Boolean),
 });
 
 context('TypeScript', function () {

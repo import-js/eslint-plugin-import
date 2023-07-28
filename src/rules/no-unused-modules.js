@@ -177,7 +177,7 @@ const resolveFiles = (src, ignoreExports, context) => {
   // prepare list of source files, don't consider files from node_modules
 
   return new Set(
-    srcFileList.filter(({ filename }) => !isNodeModule(filename)).map(({ filename }) => filename),
+    flatMap(srcFileList, ({ filename }) => isNodeModule(filename) ? [] : filename),
   );
 };
 
@@ -359,9 +359,7 @@ const fileIsInPkg = (file) => {
   };
 
   const checkPkgFieldObject = (pkgField) => {
-    const pkgFieldFiles = values(pkgField)
-      .filter((value) => typeof value !== 'boolean')
-      .map((value) => join(basePath, value));
+    const pkgFieldFiles = flatMap(values(pkgField), (value) => typeof value === 'boolean' ? [] : join(basePath, value));
 
     if (includes(pkgFieldFiles, file)) {
       return true;

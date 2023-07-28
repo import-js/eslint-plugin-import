@@ -27,8 +27,7 @@ describe('package', function () {
         expect(err).not.to.exist;
 
         files.filter(isJSFile).forEach(function (f) {
-          expect(module.rules).to.have
-            .property(path.basename(f, '.js'));
+          expect(module.rules).to.have.property(path.basename(f, '.js'));
         });
 
         done();

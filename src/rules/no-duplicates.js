@@ -1,6 +1,8 @@
 import resolve from 'eslint-module-utils/resolve';
-import docsUrl from '../docsUrl';
 import semver from 'semver';
+import flatMap from 'array.prototype.flatmap';
+
+import docsUrl from '../docsUrl';
 
 let typescriptPkg;
 try {
@@ -51,7 +53,7 @@ function getFix(first, rest, sourceCode, context) {
   }
 
   const defaultImportNames = new Set(
-    [first, ...rest].map(getDefaultImportName).filter(Boolean),
+    flatMap([].concat(first, rest || []), (x) => getDefaultImportName(x) || []),
   );
 
   // Bail if there are multiple different default import names – it's up to the
@@ -62,10 +64,7 @@ function getFix(first, rest, sourceCode, context) {
 
   // Leave it to the user to handle comments. Also skip `import * as ns from
   // './foo'` imports, since they cannot be merged into another import.
-  const restWithoutComments = rest.filter((node) => !(
-    hasProblematicComments(node, sourceCode)
-    || hasNamespace(node)
-  ));
+  const restWithoutComments = rest.filter((node) => !hasProblematicComments(node, sourceCode) && !hasNamespace(node));
 
   const specifiers = restWithoutComments
     .map((node) => {
