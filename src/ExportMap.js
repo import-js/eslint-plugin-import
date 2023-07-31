@@ -561,7 +561,7 @@ ExportMap.parse = function (path, content, context) {
       if (project) {
         const projects = Array.isArray(project) ? project : [project];
         for (const project of projects) {
-          tsconfigResult = getTsconfig(pathResolve(tsconfigRootDir, project));
+          tsconfigResult = getTsconfig(project === true ? context.filename : pathResolve(tsconfigRootDir, project));
           if (tsconfigResult) {
             break;
           }
@@ -800,6 +800,13 @@ function childContext(path, context) {
     parserOptions,
     parserPath,
     path,
+    filename: typeof context.getPhysicalFilename === 'function'
+      ? context.getPhysicalFilename()
+      : context.physicalFilename != null
+        ? context.physicalFilename
+        : typeof context.getFilename === 'function'
+          ? context.getFilename()
+          : context.filename,
   };
 }
 

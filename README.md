@@ -4,7 +4,7 @@ A fork of [`eslint-plugin-import`] using [`get-tsconfig`] to replace [`tsconfig-
 
 It will rebase and try to release in order to sync with the upstream every day, see [.github/workflows/rebase-upstream.yml](.github/workflows/rebase-upstream.yml) for details.
 
-And also you can take https://github.com/import-js/eslint-plugin-import/pull/2447 and https://github.com/import-js/eslint-plugin-import/pull/2504 to understand why this forked project exists.
+And also you can take <https://github.com/import-js/eslint-plugin-import/pull/2447> and <https://github.com/import-js/eslint-plugin-import/pull/2504> to understand why this forked project exists.
 
 Issues related to `get-tsconfig` should be posted here or [`get-tsconfig`] instead, and other issues should be posted to [`eslint-plugin-import`] instead.
 
@@ -14,11 +14,12 @@ Issues related to `get-tsconfig` should be posted here or [`get-tsconfig`] inste
 ## Installation
 
 ```bash
-$ npm install -D eslint-plugin-import@npm:eslint-plugin-i@latest
+npm install -D eslint-plugin-import@npm:eslint-plugin-i@latest
 ```
 
 ---
 
+<!-- markdownlint-disable-next-line MD025 -->
 # eslint-plugin-import
 
 [![github actions][actions-image]][actions-url]
@@ -120,6 +121,7 @@ Available as part of the Tidelift Subscription.
 
 The maintainers of `eslint-plugin-import` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-eslint-plugin-import?utm_source=npm-eslint-plugin-import&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
+<!-- markdownlint-disable-next-line MD024 -->
 ## Installation
 
 ```sh
