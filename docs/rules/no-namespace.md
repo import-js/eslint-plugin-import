@@ -6,8 +6,7 @@
 
 Enforce a convention of not using namespace (a.k.a. "wildcard" `*`) imports.
 
-+(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule, provided that the namespace object is only used for direct member access, e.g. `namespace.a`.
-The `--fix` functionality for this rule requires ESLint 5 or newer.
+The rule is auto-fixable when the namespace object is only used for direct member access, e.g. `namespace.a`.
 
 ### Options
 

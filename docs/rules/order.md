@@ -5,7 +5,6 @@
 <!-- end auto-generated rule header -->
 
 Enforce a convention in the order of `require()` / `import` statements.
-+(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 With the [`groups`](#groups-array) option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
 

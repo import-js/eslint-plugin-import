@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Docs] remove duplicate fixable notices in docs ([#2850], thanks [@bmish])
+
 ## [2.28.0] - 2023-07-27
 
 ### Fixed
@@ -1079,6 +1082,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
 [#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
 [#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
