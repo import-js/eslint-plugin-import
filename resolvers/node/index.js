@@ -1,6 +1,6 @@
 'use strict';
 
-const resolve = require('resolve');
+const resolve = require('resolve/sync');
 const isCoreModule = require('is-core-module');
 const path = require('path');
 
@@ -19,7 +19,7 @@ exports.resolve = function (source, file, config) {
 
   try {
     const cachedFilter = function (pkg, dir) { return packageFilter(pkg, dir, config); };
-    resolvedPath = resolve.sync(source, opts(file, config, cachedFilter));
+    resolvedPath = resolve(source, opts(file, config, cachedFilter));
     log('Resolved to:', resolvedPath);
     return { found: true, path: resolvedPath };
   } catch (err) {
@@ -46,7 +46,7 @@ function packageFilter(pkg, dir, config) {
   const file = path.join(dir, 'dummy.js');
   if (pkg.module) {
     try {
-      resolve.sync(String(pkg.module).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
+      resolve(String(pkg.module).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
       pkg.main = pkg.module;
       found = true;
     } catch (err) {
@@ -55,7 +55,7 @@ function packageFilter(pkg, dir, config) {
   }
   if (!found && pkg['jsnext:main']) {
     try {
-      resolve.sync(String(pkg['jsnext:main']).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
+      resolve(String(pkg['jsnext:main']).replace(/^(?:\.\/)?/, './'), opts(file, config, identity));
       pkg.main = pkg['jsnext:main'];
       found = true;
     } catch (err) {

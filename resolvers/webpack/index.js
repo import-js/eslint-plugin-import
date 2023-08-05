@@ -8,7 +8,7 @@ const find = require('array-find');
 const interpret = require('interpret');
 const fs = require('fs');
 const isCore = require('is-core-module');
-const resolve = require('resolve');
+const resolve = require('resolve/sync');
 const semver = require('semver');
 const has = require('has');
 const isRegex = require('is-regex');
@@ -190,11 +190,11 @@ function createResolveSync(configPath, webpackConfig, cwd) {
 
   try {
     // Attempt to resolve webpack from the given `basedir`
-    const webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false });
+    const webpackFilename = resolve('webpack', { basedir, preserveSymlinks: false });
     const webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false };
 
     webpackRequire = function (id) {
-      return require(resolve.sync(id, webpackResolveOpts));
+      return require(resolve(id, webpackResolveOpts));
     };
   } catch (e) {
     // Something has gone wrong (or we're in a test). Use our own bundled
