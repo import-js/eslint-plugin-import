@@ -40,7 +40,7 @@
     "is-regex": "^1.1.4",
     "lodash": "^4.17.21",
     "resolve": "^1.22.4",
-    "semver": "^5.7.1"
+    "semver": "^5.7.2"
   },
   "peerDependencies": {
     "eslint-plugin-import": ">=1.4.0",
