@@ -5,60 +5,59 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v0.3.8 - 2023-08-05
+ - [deps] update `is-core-module`, `resolve`
+ - [eslint] tighten up rules
+
 ## v0.3.7 - 2023-01-11
 ### Changed
-- [Refactor] use `is-core-module` directly
+ - [Refactor] use `is-core-module` directly
 
 ## v0.3.6 - 2021-08-15
 ### Fixed
-- when "module" does not exist, fall back to "main" ([#2186], thanks [@ljharb])
+ - when "module" does not exist, fall back to "main" ([#2186], thanks [@ljharb])
 
 ## v0.3.5 - 2021-08-08
 ### Added
-- use "module" in the same spot as "jsnext:main" ([#2166], thanks [@MustafaHaddara])
+ - use "module" in the same spot as "jsnext:main" ([#2166], thanks [@MustafaHaddara])
 
 ## v0.3.4 - 2020-06-16
 ### Added
-- add `.node` extension ([#1663])
+ - add `.node` extension ([#1663])
 
 ## v0.3.3 - 2020-01-10
 ### Changed
-- [meta] copy LICENSE file to all npm packages on prepublish ([#1595], thanks [@opichals])
+ - [meta] copy LICENSE file to all npm packages on prepublish ([#1595], thanks [@opichals])
 
 ## v0.3.2 - 2018-01-05
 ### Added
-- `.mjs` extension detected by default to support `experimental-modules` ([#939])
+ - `.mjs` extension detected by default to support `experimental-modules` ([#939])
 
 ### Deps
-- update `debug`, `resolve`
+ - update `debug`, `resolve`
 
 ## v0.3.1 - 2017-06-23
 ### Changed
-- bumped `debug` dep to match other packages
+ - bumped `debug` dep to match other packages
 
 ## v0.3.0 - 2016-12-15
 ### Changed
-- bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
+ - bumped `resolve` to fix issues with Node builtins (thanks [@SkeLLLa] and [@ljharb])
 
 ### Fixed
-- use `files` in `package.json` to ship only `index.js` ([#531], thanks for noticing [@lukeapage])
+ - use `files` in `package.json` to ship only `index.js` ([#531], thanks for noticing [@lukeapage])
 
 ## v0.2.3 - 2016-08-20
 ### Added
-- debug logging (use `DEBUG=eslint-plugin-import:resolver:node eslint [...]`)
+ - debug logging (use `DEBUG=eslint-plugin-import:resolver:node eslint [...]`)
 
 ## v0.2.2 - 2016-07-14
 ### Fixed
-- Node resolver no longer declares the import plugin as a `peerDependency`. See [#437]
-  for a well-articulated and thoughtful expression of why this doesn't make sense.
-  Thanks [@jasonkarns] for the issue and the PR to fix it ([#438]).
-
-  Also, apologies to the others who expressed this before, but I never understood
-  what the problem was.😅
+ - Node resolver no longer declares the import plugin as a `peerDependency`. See [#437] for a well-articulated and thoughtful expression of why this doesn't make sense. Thanks [@jasonkarns] for the issue and the PR to fix it ([#438]). Also, apologies to the others who expressed this before, but I never understood what the problem was.😅
 
 ## v0.2.1
 ### Fixed
-- find files with `.json` extensions (#333, thanks for noticing @jfmengels)
+ - find files with `.json` extensions (#333, thanks for noticing @jfmengels)
 
 [#2186]: https://github.com/import-js/eslint-plugin-import/issues/2186
 [#2166]: https://github.com/import-js/eslint-plugin-import/pull/2166
@@ -70,8 +69,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 [#437]: https://github.com/import-js/eslint-plugin-import/issues/437
 
 [@jasonkarns]: https://github.com/jasonkarns
-[@lukeapage]: https://github.com/lukeapage
-[@SkeLLLa]: https://github.com/SkeLLLa
 [@ljharb]: https://github.com/ljharb
-[@opichals]: https://github.com/opichals
+[@lukeapage]: https://github.com/lukeapage
 [@MustafaHaddara]: https://github.com/MustafaHaddara
+[@opichals]: https://github.com/opichals
+[@SkeLLLa]: https://github.com/SkeLLLa
