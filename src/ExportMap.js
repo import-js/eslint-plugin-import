@@ -361,12 +361,14 @@ ExportMap.for = function (context) {
 
 ExportMap.parse = function (path, content, context) {
   const m = new ExportMap(path);
-  const isEsModuleInteropTrue = isEsModuleInterop();
+  const tsconfig = getTsconfig();
+
+  const isEsModuleInteropTrue = !!(tsconfig && tsconfig.options && tsconfig.options.esModuleInterop);
 
   let ast;
   let visitorKeys;
   try {
-    const result = parse(path, content, context);
+    const result = parse(path, content, context, { tsconfig });
     ast = result.ast;
     visitorKeys = result.visitorKeys;
   } catch (err) {
@@ -442,7 +444,7 @@ ExportMap.parse = function (path, content, context) {
   const namespaces = new Map();
 
   function remotePath(value) {
-    return resolve.relative(value, path, context.settings);
+    return resolve.relative(value, path, context.settings, context);
   }
 
   function resolveImport(value) {
@@ -572,17 +574,17 @@ ExportMap.parse = function (path, content, context) {
     return null;
   }
 
-  function isEsModuleInterop() {
+  function getTsconfig() {
     const cacheKey = hashObject({
       tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
     }).digest('hex');
-    let tsConfig = tsconfigCache.get(cacheKey);
-    if (typeof tsConfig === 'undefined') {
-      tsConfig = readTsConfig(context);
-      tsconfigCache.set(cacheKey, tsConfig);
+    let tsconfig = tsconfigCache.get(cacheKey);
+    if (typeof tsconfig === 'undefined') {
+      tsconfig = readTsConfig(context);
+      tsconfigCache.set(cacheKey, tsconfig);
     }
 
-    return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
+    return tsconfig;
   }
 
   ast.body.forEach(function (n) {

@@ -18,7 +18,7 @@ To the extent it is feasible, trailing versions of the resolvers will continue t
 
 Currently, version 1 is assumed if no `interfaceVersion` is available. (didn't think to define it until v2, heh. 😅)
 
-### `resolve(source, file, config) => { found: Boolean, path: String? }`
+### `resolve(source, file, config, options) => { found: Boolean, path: String? }`
 
 Given:
 ```js
@@ -52,6 +52,20 @@ the absolute path to the file making the import (`/some/path/to/module.js`)
 an object provided via the `import/resolver` setting. `my-cool-resolver` will get `["some", "stuff"]` as its `config`, while
   `node` will get `{ "paths": ["a", "b", "c"] }` provided as `config`.
 
+##### `options`
+
+###### `options.context`
+
+**Only available after `eslint-plugin-import@2.27.0`**
+
+Please view [ESLint Context] for more details.
+
+##### `options.tsconfig`
+
+**Only available after `eslint-plugin-import@2.27.0`**
+
+Please view [TSConfig] and [ParsedCommandLine] for more details.
+
 #### Return value
 
 The first resolver to return `{found: true}` is considered the source of truth. The returned object has:
@@ -83,3 +97,6 @@ exports.resolve = function (source, file, config) {
 
 [Node resolver]: ./node/index.js
 [`resolve`]: https://www.npmjs.com/package/resolve
+[ESLint Context]: https://eslint.org/docs/latest/developer-guide/working-with-rules#the-context-object
+[TSConfig]: https://www.typescriptlang.org/tsconfig
+[ParsedCommandLine]: https://github.com/microsoft/TypeScript/blob/fd3a84c3f0c80cb201c47399a055625f919a9b91/lib/typescriptServices.d.ts#L3168-L3178
