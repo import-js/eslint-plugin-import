@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+- TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+
 ## [2.28.1] - 2023-08-18
 
 ### Fixed
@@ -1088,6 +1091,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
+[#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
 [#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
@@ -1896,4 +1900,5 @@ for info on changes for earlier releases.
 [@xpl]: https://github.com/xpl
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
+[@Zamiell]: https://github.com/Zamiell
 [@zloirock]: https://github.com/zloirock

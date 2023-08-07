@@ -1,19 +1,22 @@
 /**
- * Adds `.jsx`, `.ts` and `.tsx` as an extension, and enables JSX/TSX parsing.
+ * This config:
+ * 1) adds `.jsx`, `.ts`, `.cts`, `.mts`, and `.tsx` as an extension
+ * 2) enables JSX/TSX parsing
  */
 
 // Omit `.d.ts` because 1) TypeScript compilation already confirms that
 // types are resolved, and 2) it would mask an unresolved
 // `.ts`/`.tsx`/`.js`/`.jsx` implementation.
-const allExtensions = ['.ts', '.tsx', '.js', '.jsx'];
+const typeScriptExtensions = ['.ts', '.cts', '.mts', '.tsx'];
+
+const allExtensions = [...typeScriptExtensions, '.js', '.jsx'];
 
 module.exports = {
-
   settings: {
     'import/extensions': allExtensions,
     'import/external-module-folders': ['node_modules', 'node_modules/@types'],
     'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx'],
+      '@typescript-eslint/parser': typeScriptExtensions,
     },
     'import/resolver': {
       node: {
