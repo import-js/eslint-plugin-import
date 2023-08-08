@@ -17,6 +17,7 @@ is different in two key ways:
 ## Rule Details
 
 Valid:
+
 ```js
 import SomeDefaultClass, * as names from './mod'
 // Flow `type` import from same module is fine
@@ -52,6 +53,7 @@ Config:
 ```
 
 And then the following code becomes valid:
+
 ```js
 import minifiedMod from './mod?minify'
 import noCommentsMod from './mod?comments=0'
@@ -59,6 +61,7 @@ import originalMod from './mod'
 ```
 
 It will still catch duplicates when using the same module and the exact same query string:
+
 ```js
 import SomeDefaultClass from './mod?minify'
 

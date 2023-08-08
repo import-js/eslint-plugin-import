@@ -131,7 +131,7 @@ rules:
   # etc...
 ```
 
-# TypeScript
+## TypeScript
 
 You may use the following snippet or assemble your own config using the granular settings described below it.
 
@@ -154,7 +154,7 @@ settings:
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 [`eslint-import-resolver-typescript`]: https://github.com/import-js/eslint-import-resolver-typescript
 
-# Resolvers
+## Resolvers
 
 With the advent of module bundlers and the current state of modules and module
 syntax specs, it's not always obvious where `import x from 'module'` should look
@@ -175,7 +175,7 @@ resolvers are just npm packages, so [third party packages are supported](https:/
 
 You can reference resolvers in several ways (in order of precedence):
 
-- as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
+ - as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
 
 ```yaml
 # .eslintrc.yml
@@ -195,7 +195,7 @@ module.exports = {
 }
 ```
 
-- with a full npm module name, like `my-awesome-npm-module`:
+ - with a full npm module name, like `my-awesome-npm-module`:
 
 ```yaml
 # .eslintrc.yml
@@ -214,7 +214,7 @@ module.exports = {
 }
 ```
 
-- with a filesystem path to resolver, defined in this example as a `computed property` name:
+ - with a filesystem path to resolver, defined in this example as a `computed property` name:
 
 ```js
 // .eslintrc.js
@@ -336,11 +336,11 @@ If you are using `yarn` PnP as your package manager, add the `.yarn` folder and 
 
 Each item in this array is either a folder's name, its subpath, or its absolute prefix path:
 
-- `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.
+ - `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.
 
-- `packages/core` will match any path that contains these two segments, for example `/home/me/project/packages/core/src/utils.js`.
+ - `packages/core` will match any path that contains these two segments, for example `/home/me/project/packages/core/src/utils.js`.
 
-- `/home/me/project/packages` will only match files and directories inside this directory, and the directory itself.
+ - `/home/me/project/packages` will only match files and directories inside this directory, and the directory itself.
 
 Please note that incomplete names are not allowed here so `components` won't match `bower_components` and `packages/ui` won't match `packages/ui-utils` (but will match `packages/ui/utils`).
 

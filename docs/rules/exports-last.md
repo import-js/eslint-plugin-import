@@ -4,7 +4,6 @@
 
 This rule enforces that all exports are declared at the bottom of the file. This rule will report any export declarations that comes before any non-export statements.
 
-
 ## This will be reported
 
 ```JS
@@ -45,7 +44,7 @@ export const str = 'foo'
 
 If you don't mind exports being sprinkled throughout a file, you may not want to enable this rule.
 
-#### ES6 exports only
+### ES6 exports only
 
 The exports-last rule is currently only working on ES6 exports. You may not want to enable this rule if you're using CommonJS exports.
 

@@ -13,6 +13,7 @@ Note that type imports, as used by [Flow], are always ignored.
 ## Rule Details
 
 Given:
+
 ```js
 // foo.js
 export default 'foo';
@@ -20,12 +21,14 @@ export const bar = 'baz';
 ```
 
 ...these would be valid:
+
 ```js
 import foo from './foo.js';
 import foo, { bar } from './foo.js';
 ```
 
 ...and these would be reported:
+
 ```js
 // message: Using exported name 'bar' as identifier for default export.
 import { default as foo } from './foo.js';

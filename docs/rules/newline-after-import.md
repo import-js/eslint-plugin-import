@@ -9,9 +9,10 @@ Enforces having one or more empty lines after the last top-level import statemen
 ## Rule Details
 
 This rule supports the following options:
-- `count` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
 
-- `considerComments` which enforces the rule on comments after the last import-statement as well when set to true. This option defaults to `false`.
+ - `count` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
+
+ - `considerComments` which enforces the rule on comments after the last import-statement as well when set to true. This option defaults to `false`.
 
 Valid:
 
@@ -103,6 +104,7 @@ const FOO = 'BAR'
 ```
 
 ## Example options usage
+
 ```json
 {
   "rules": {
@@ -110,7 +112,6 @@ const FOO = 'BAR'
   }
 }
 ```
-
 
 ## When Not To Use It
 

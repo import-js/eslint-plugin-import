@@ -4,11 +4,11 @@
 
 Forbid the use of Node.js builtin modules. Can be useful for client-side web projects that do not have access to those modules.
 
-### Options
+## Options
 
 This rule supports the following options:
 
-- `allow`: Array of names of allowed modules. Defaults to an empty array.
+ - `allow`: Array of names of allowed modules. Defaults to an empty array.
 
 ## Rule Details
 

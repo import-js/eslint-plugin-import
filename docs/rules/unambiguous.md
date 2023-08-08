@@ -32,6 +32,7 @@ export {} // simple way to mark side-effects-only file as 'module' without any i
 ```
 
 ...whereas the following file would be reported:
+
 ```js
 (function x() { return 42 })()
 ```
@@ -48,9 +49,9 @@ a `module`.
 
 ## Further Reading
 
-- [Unambiguous JavaScript Grammar]
-- [`parserOptions.sourceType`]
-- [node-eps#13](https://github.com/nodejs/node-eps/issues/13)
+ - [Unambiguous JavaScript Grammar]
+ - [`parserOptions.sourceType`]
+ - [node-eps#13](https://github.com/nodejs/node-eps/issues/13)
 
 [`parserOptions.sourceType`]: https://eslint.org/docs/user-guide/configuring#specifying-parser-options
 [Unambiguous JavaScript Grammar]: https://github.com/nodejs/node-eps/blob/HEAD/002-es-modules.md#32-determining-if-source-is-an-es-module

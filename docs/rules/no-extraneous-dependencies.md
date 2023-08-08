@@ -7,7 +7,7 @@ The closest parent `package.json` will be used. If no `package.json` is found, t
 
 Modules have to be installed for this rule to work.
 
-### Options
+## Options
 
 This rule supports the following options:
 
@@ -60,6 +60,7 @@ folder layouts:
 ## Rule Details
 
 Given the following `package.json`:
+
 ```json
 {
   "name": "my-project",
@@ -87,7 +88,6 @@ Given the following `package.json`:
   ]
 }
 ```
-
 
 ## Fail
 
@@ -117,7 +117,6 @@ var foo = require('./foo');
 import type { MyType } from 'foo';
 ```
 
-
 ## Pass
 
 ```js
@@ -134,7 +133,6 @@ import type { MyType } from 'foo';
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 import react from 'react';
 ```
-
 
 ## When Not To Use It
 

@@ -8,11 +8,11 @@ Enforce a convention of not using namespace (a.k.a. "wildcard" `*`) imports.
 
 The rule is auto-fixable when the namespace object is only used for direct member access, e.g. `namespace.a`.
 
-### Options
+## Options
 
 This rule supports the following options:
 
-- `ignore`: array of glob strings for modules that should be ignored by the rule.
+ - `ignore`: array of glob strings for modules that should be ignored by the rule.
 
 ## Rule Details
 
