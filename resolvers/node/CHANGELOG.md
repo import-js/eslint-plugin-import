@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v0.3.9 - 2023-08-08
+ - [fix] restore node 6 compatibility
+
 ## v0.3.8 - 2023-08-05
  - [deps] update `is-core-module`, `resolve`
  - [eslint] tighten up rules
