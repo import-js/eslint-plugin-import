@@ -29,14 +29,14 @@ exports.resolve = function (source, file, config) {
 };
 
 function opts(file, config, packageFilter) {
-  return { // more closely matches Node (#333)
+  return Object.assign({ // more closely matches Node (#333)
     // plus 'mjs' for native modules! (#939)
     extensions: ['.mjs', '.js', '.json', '.node'],
-    ...config,
+  }, config, {
     // path.resolve will handle paths relative to CWD
     basedir: path.dirname(path.resolve(file)),
     packageFilter,
-  };
+  });
 }
 
 function identity(x) { return x; }

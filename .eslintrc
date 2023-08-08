@@ -190,36 +190,16 @@
             },
         },
         {
-            "files": "resolvers/**",
+            "files": [
+                "resolvers/**",
+                "utils/**",
+            ],
             "env": {
                 "es6": false,
             },
-        },
-        {
-            "files": "resolvers/webpack/**",
-            "rules": {
-                "no-console": 1,
-                "prefer-template": 0,
-                "prefer-object-spread": 0,
-                "prefer-rest-params": 0,
-            },
-            "env": {
-                "es6": true,
-            },
-        },
-        {
-            "files": [
-                "resolvers/*/test/**/*",
-            ],
-            "env": {
-                "mocha": true,
-                "es6": false
-            },
-        },
-        {
-            "files": "utils/**",
             "parserOptions": {
-                "ecmaVersion": 6,
+                "sourceType": "module",
+                "ecmaVersion": 2016,
             },
             "rules": {
                 "comma-dangle": ["error", {
@@ -229,9 +209,29 @@
                     "exports": "always-multiline",
                     "functions": "never"
                 }],
+                "prefer-destructuring": "warn",
                 "prefer-object-spread": "off",
+                "prefer-rest-params": "off",
+                "prefer-spread": "warn",
                 "prefer-template": "off",
+            }
+        },
+        {
+            "files": [
+                "resolvers/webpack/**",
+                "utils/**",
+            ],
+            "rules": {
                 "no-console": 1,
+            },
+        },
+        {
+            "files": [
+                "resolvers/*/test/**/*",
+            ],
+            "env": {
+                "mocha": true,
+                "es6": false
             },
         },
         {

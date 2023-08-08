@@ -270,18 +270,18 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
     new ModulesInDirectoriesPlugin(
       'module',
-      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules'],
+      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules']
     ),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.fallback),
     new ModuleAsFilePlugin('module'),
     new ModuleAsDirectoryPlugin('module'),
     new DirectoryDescriptionFilePlugin(
       'package.json',
-      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains),
+      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
     ),
     new DirectoryDefaultFilePlugin(['index']),
     new FileAppendPlugin(resolveConfig.extensions || ['', '.webpack.js', '.web.js', '.js']),
-    new ResultSymlinkPlugin(),
+    new ResultSymlinkPlugin()
   );
 
   const resolvePlugins = [];
@@ -419,7 +419,7 @@ function findConfigPath(configPath, packageDir) {
       }
 
       const maybePath = path.resolve(
-        path.join(packageDir, 'webpack.config' + maybeExtension),
+        path.join(packageDir, 'webpack.config' + maybeExtension)
       );
       if (fs.existsSync(maybePath)) {
         configPath = maybePath;
