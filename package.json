@@ -85,6 +85,7 @@
     "fs-copy-file-sync": "^1.1.1",
     "glob": "^7.2.3",
     "in-publish": "^2.0.1",
+    "jackspeak": "=2.1.1",
     "linklocal": "^2.8.2",
     "lodash.isarray": "^4.0.0",
     "markdownlint-cli": "^0.35.0",
