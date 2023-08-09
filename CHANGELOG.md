@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- [`order`]: revert breaking change to single nested group ([#2854], thanks [@yndajas])
+
 ### Changed
 - [Docs] remove duplicate fixable notices in docs ([#2850], thanks [@bmish])
 
@@ -1082,6 +1085,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
 [#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
@@ -1887,5 +1891,6 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
 [@zloirock]: https://github.com/zloirock

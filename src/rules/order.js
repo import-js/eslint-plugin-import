@@ -422,10 +422,6 @@ const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling'
 // Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
 // Will throw an error if it contains a type that does not exist, or has a duplicate
 function convertGroupsToRanks(groups) {
-  if (groups.length === 1) {
-    // TODO: remove this `if` and fix the bug
-    return convertGroupsToRanks(groups[0]);
-  }
   const rankObject = groups.reduce(function (res, group, index) {
     [].concat(group).forEach(function (groupItem) {
       if (types.indexOf(groupItem) === -1) {
