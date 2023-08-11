@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import/tree/HEAD/resolvers/webpack",
   "dependencies": {
-    "array-find": "^1.0.0",
+    "array.prototype.find": "^2.2.1",
     "debug": "^3.2.7",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
