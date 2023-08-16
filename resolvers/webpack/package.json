@@ -32,13 +32,13 @@
   "dependencies": {
     "array.prototype.find": "^2.2.1",
     "debug": "^3.2.7",
-    "deep-equal": "^2.2.2",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
     "has": "^1.0.3",
     "interpret": "^1.4.0",
     "is-core-module": "^2.13.0",
     "is-regex": "^1.1.4",
+    "lodash": "^4.17.21",
     "resolve": "^2.0.0-next.4",
     "semver": "^5.7.2"
   },
