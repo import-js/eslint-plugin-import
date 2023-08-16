@@ -2,7 +2,6 @@
 
 const findRoot = require('find-root');
 const path = require('path');
-const get = require('lodash/get');
 const isEqual = require('lodash/isEqual');
 const find = require('array.prototype.find');
 const interpret = require('interpret');
@@ -51,15 +50,15 @@ exports.resolve = function (source, file, settings) {
 
   let webpackConfig;
 
-  const _configPath = get(settings, 'config');
+  const _configPath = settings && settings.config;
   /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
      */
-  const cwd = get(settings, 'cwd');
-  const configIndex = get(settings, 'config-index');
-  const env = get(settings, 'env');
-  const argv = get(settings, 'argv', {});
+  const cwd = settings && settings.cwd;
+  const configIndex = settings && settings['config-index'];
+  const env = settings && settings.env;
+  const argv = settings && typeof settings.argv !== 'undefined' ? settings.argv : {};
   let packageDir;
 
   let configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
