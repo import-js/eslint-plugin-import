@@ -2,7 +2,7 @@
 
 const findRoot = require('find-root');
 const path = require('path');
-const isEqual = require('lodash/isEqual');
+const deepEqual = require('deep-equal');
 const find = require('array.prototype.find');
 const interpret = require('interpret');
 const fs = require('fs');
@@ -163,7 +163,7 @@ const MAX_CACHE = 10;
 const _cache = [];
 function getResolveSync(configPath, webpackConfig, cwd) {
   const cacheKey = { configPath, webpackConfig };
-  let cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey); });
+  let cached = find(_cache, function (entry) { return deepEqual(entry.key, cacheKey, { strict: true }); });
   if (!cached) {
     cached = {
       key: cacheKey,
