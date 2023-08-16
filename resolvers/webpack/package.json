@@ -39,7 +39,7 @@
     "interpret": "^1.4.0",
     "is-core-module": "^2.13.0",
     "is-regex": "^1.1.4",
-    "resolve": "^1.22.4",
+    "resolve": "^2.0.0-next.4",
     "semver": "^5.7.2"
   },
   "peerDependencies": {
