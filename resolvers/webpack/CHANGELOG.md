@@ -4,7 +4,12 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
- - [refactor] switch to a maintained array.prototype.find package
+
+## 0.13.5 - 2023-08-15
+ - [refactor] replace `lodash/isEqual` usage with `deep-equal`
+ - [refactor] remove `lodash/get` usage
+ - [refactor] switch to a maintained `array.prototype.find` package
+ - [deps] update `resolve`
 
 ## 0.13.4 - 2023-08-08
  - [fix] restore node 6 compatibility
