@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## 0.13.6 - 2023-08-16
+ - [refactor] revert back to `lodash/isEqual`
+
 ## 0.13.5 - 2023-08-15
  - [refactor] replace `lodash/isEqual` usage with `deep-equal`
  - [refactor] remove `lodash/get` usage
