@@ -183,7 +183,7 @@ function createResolveSync(configPath, webpackConfig, cwd) {
 
   if (typeof configPath === 'string') {
     // This can be changed via the settings passed in when defining the resolver
-    basedir = cwd || configPath;
+    basedir = cwd || path.dirname(configPath);
     log(`Attempting to load webpack path from ${basedir}`);
   }
 

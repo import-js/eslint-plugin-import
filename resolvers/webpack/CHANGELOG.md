@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+ - [fix] use the `dirname` of the `configPath` as `basedir` ([#2859])
 
 ## 0.13.6 - 2023-08-16
  - [refactor] revert back to `lodash/isEqual`
@@ -197,6 +198,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 [#181]: https://github.com/import-js/eslint-plugin-import/pull/181
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 
+[#2859]: https://github.com/import-js/eslint-plugin-import/issues/2859
 [#2268]: https://github.com/import-js/eslint-plugin-import/issues/2268
 [#1219]: https://github.com/import-js/eslint-plugin-import/issues/1219
 [#788]: https://github.com/import-js/eslint-plugin-import/issues/788
