@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+
+## 0.13.7 - 2023-08-19
  - [fix] use the `dirname` of the `configPath` as `basedir` ([#2859])
 
 ## 0.13.6 - 2023-08-16
