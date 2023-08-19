@@ -157,6 +157,18 @@ const valid = [
     }),
 
     test({
+      code: `
+        import * as foo from "./typescript-declare-nested-shadowed"
+        console.log(foo.a)
+      `,
+      parser,
+      settings: {
+        'import/parsers': { [parser]: ['.ts'] },
+        'import/resolver': { 'eslint-import-resolver-typescript': true },
+      },
+    }),
+
+    test({
       code: `import { foobar } from "./typescript-declare-interface"`,
       parser,
       settings: {
