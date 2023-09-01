@@ -4,6 +4,6 @@ module.exports = [
   {
     plugins: {
       import: importPlugin,
-    }
-  }
+    },
+  },
 ];
