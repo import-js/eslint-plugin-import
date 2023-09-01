@@ -2,7 +2,7 @@
 
 exports.__esModule = true;
 
-const extname = require('path').extname;
+const { extname } = require('path');
 
 const log = require('debug')('eslint-plugin-import:utils:ignore');
 

@@ -6,7 +6,7 @@ const fs = require('fs');
 const Module = require('module');
 const path = require('path');
 
-const hashObject = require('./hash').hashObject;
+const { hashObject } = require('./hash');
 const ModuleCache = require('./ModuleCache').default;
 const pkgDir = require('./pkgDir').default;
 
@@ -60,7 +60,7 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   if (filepath === null) { return true; }
   if (filepath.toLowerCase() === process.cwd().toLowerCase() && !strict) { return true; }
   const parsedPath = path.parse(filepath);
-  const dir = parsedPath.dir;
+  const { dir } = parsedPath;
 
   let result = fileExistsCache.get(filepath, cacheSettings);
   if (result != null) { return result; }
@@ -129,8 +129,7 @@ function fullResolve(modulePath, sourceFile, settings) {
   const resolvers = resolverReducer(configResolvers, new Map());
 
   for (const pair of resolvers) {
-    const name = pair[0];
-    const config = pair[1];
+    const [name, config] = pair;
     const resolver = requireResolver(name, sourceFile);
     const resolved = withResolver(resolver, config);
 

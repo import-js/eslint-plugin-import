@@ -3,7 +3,7 @@
 exports.__esModule = true;
 
 const moduleRequire = require('./module-require').default;
-const extname = require('path').extname;
+const { extname } = require('path');
 const fs = require('fs');
 
 const log = require('debug')('eslint-plugin-import:parse');
@@ -95,7 +95,7 @@ exports.default = function parse(path, content, context) {
     let ast;
     try {
       const parserRaw = parser.parseForESLint(content, parserOptions);
-      ast = parserRaw.ast;
+      ({ ast } = parserRaw);
       return makeParseReturn(ast, keysFromParser(parserOrPath, parser, parserRaw));
     } catch (e) {
       console.warn();

@@ -7,9 +7,9 @@
 
 exports.__esModule = true;
 
-const createHash = require('crypto').createHash;
+const { createHash } = require('crypto');
 
-const stringify = JSON.stringify;
+const { stringify } = JSON;
 
 function hashify(value, hash) {
   if (!hash) { hash = createHash('sha256'); }

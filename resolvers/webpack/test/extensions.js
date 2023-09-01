@@ -1,10 +1,9 @@
 'use strict';
 
-const chai =  require('chai');
-const expect = chai.expect;
+const { expect } =  require('chai');
 const path = require('path');
 
-const resolve = require('../index').resolve;
+const { resolve } = require('../index');
 
 const file = path.join(__dirname, 'files', 'dummy.js');
 const extensions = path.join(__dirname, 'custom-extensions', 'dummy.js');

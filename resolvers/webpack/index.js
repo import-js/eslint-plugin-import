@@ -293,15 +293,15 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
         && plugin.constructor.name === 'ResolverPlugin'
         && Array.isArray(plugin.plugins)
       ) {
-        resolvePlugins.push.apply(resolvePlugins, plugin.plugins);
+        resolvePlugins.push(...plugin.plugins);
       }
     });
   }
 
-  resolver.apply.apply(resolver, resolvePlugins);
+  resolver.apply(...resolvePlugins);
 
   return function () {
-    return resolver.resolveSync.apply(resolver, arguments);
+    return resolver.resolveSync(...arguments);
   };
 }
 

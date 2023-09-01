@@ -45,7 +45,7 @@ exports.default = function visitModules(visitor, options) {
       if (node.callee.type !== 'Import') { return; }
       if (node.arguments.length !== 1) { return; }
 
-      modulePath = node.arguments[0];
+      [modulePath] = node.arguments;
     }
 
     if (modulePath.type !== 'Literal') { return; }
@@ -61,7 +61,7 @@ exports.default = function visitModules(visitor, options) {
     if (call.callee.name !== 'require') { return; }
     if (call.arguments.length !== 1) { return; }
 
-    const modulePath = call.arguments[0];
+    const [modulePath] = call.arguments;
     if (modulePath.type !== 'Literal') { return; }
     if (typeof modulePath.value !== 'string') { return; }
 
@@ -73,7 +73,7 @@ exports.default = function visitModules(visitor, options) {
     if (call.callee.name !== 'require' && call.callee.name !== 'define') { return; }
     if (call.arguments.length !== 2) { return; }
 
-    const modules = call.arguments[0];
+    const [modules] = call.arguments;
     if (modules.type !== 'ArrayExpression') { return; }
 
     for (const element of modules.elements) {

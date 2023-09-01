@@ -2,7 +2,7 @@
 
 const path = require('path');
 
-const resolve = require('../index').resolve;
+const { resolve } = require('../index');
 
 const file = path.join(__dirname, 'files', 'src', 'dummy.js');
 

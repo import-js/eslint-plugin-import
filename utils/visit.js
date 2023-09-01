@@ -6,7 +6,7 @@ exports.default = function visit(node, keys, visitorSpec) {
   if (!node || !keys) {
     return;
   }
-  const type = node.type;
+  const { type } = node;
   if (typeof visitorSpec[type] === 'function') {
     visitorSpec[type](node);
   }

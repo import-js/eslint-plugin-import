@@ -33,7 +33,7 @@ const path = require('path');
  */
 function findUp(filename, cwd) {
   let dir = path.resolve(cwd || '');
-  const root = path.parse(dir).root;
+  const { root } = path.parse(dir);
 
   const filenames = [].concat(filename);
 

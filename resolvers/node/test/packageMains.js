@@ -1,7 +1,6 @@
 'use strict';
 
-const chai = require('chai');
-const expect = chai.expect;
+const { expect } = require('chai');
 const path = require('path');
 
 const resolver = require('../');
