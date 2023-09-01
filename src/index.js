@@ -68,4 +68,7 @@ export const configs = {
   'react-native': require('../config/react-native'),
   electron: require('../config/electron'),
   typescript: require('../config/typescript'),
+
+  // flat config support
+  flat: require('../config/flat'),
 };
