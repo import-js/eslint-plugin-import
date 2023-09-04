@@ -7,9 +7,15 @@
 // Omit `.d.ts` because 1) TypeScript compilation already confirms that
 // types are resolved, and 2) it would mask an unresolved
 // `.ts`/`.tsx`/`.js`/`.jsx` implementation.
-const typeScriptExtensions = ['.ts', '.cts', '.mts', '.tsx'];
+const typeScriptKeys = ['ts', 'cts', 'mts', 'tsx'];
+const typeScriptExtensions = typeScriptKeys.map((key) => `.${key}`);
+const typeScriptFiles = typeScriptExtensions.map((ext) => `**/*${ext}`);
 
 const allExtensions = [...typeScriptExtensions, '.js', '.jsx'];
+
+const typeScriptRules = Object.fromEntries(
+  typeScriptKeys.map((key) => [key, 'never']),
+);
 
 module.exports = {
   settings: {
@@ -31,4 +37,16 @@ module.exports = {
     // TypeScript compilation already ensures that named imports exist in the referenced module
     'import/named': 'off',
   },
+  overrides: [
+    {
+      files: typeScriptFiles,
+      rules: {
+        'import/extensions': [
+          'error',
+          'ignorePackages',
+          typeScriptRules,
+        ],
+      },
+    },
+  ],
 };
