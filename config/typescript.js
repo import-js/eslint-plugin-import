@@ -41,11 +41,7 @@ module.exports = {
     {
       files: typeScriptFiles,
       rules: {
-        'import/extensions': [
-          'error',
-          'ignorePackages',
-          typeScriptRules,
-        ],
+        'import/extensions': 'off',
       },
     },
   ],
