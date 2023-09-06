@@ -3,6 +3,7 @@
     "plugins": [
         "eslint-plugin",
         "import",
+        "prefer-node-builtin-imports",
     ],
     "extends": [
         "eslint:recommended",
@@ -114,6 +115,7 @@
         }],
         "prefer-const": 2,
         "prefer-object-spread": 2,
+        "prefer-node-builtin-imports": 1,
         "prefer-rest-params": 2,
         "prefer-template": 2,
         "quote-props": [2, "as-needed", { "keywords": false }],
