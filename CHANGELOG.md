@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-cycle`]: use scc algorithm to optimize ([#2998], thanks [@soryy708])
 - [`no-duplicates`]: Removing duplicates breaks in TypeScript ([#3033], thanks [@yesl-kim])
 - [`newline-after-import`]: fix considerComments option when require ([#2952], thanks [@developer-bandi])
+- [`order`]: do not compare first path segment for relative paths ([#2682]) ([#2885], thanks [@mihkeleidast])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1141,6 +1142,7 @@ for info on changes for earlier releases.
 [#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
 [#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
 [#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
+[#2885]: https://github.com/import-js/eslint-plugin-import/pull/2885
 [#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
 [#2866]: https://github.com/import-js/eslint-plugin-import/pull/2866
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
@@ -1486,6 +1488,7 @@ for info on changes for earlier releases.
 [#2930]: https://github.com/import-js/eslint-plugin-import/issues/2930
 [#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
 [#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
+[#2682]: https://github.com/import-js/eslint-plugin-import/issues/2682
 [#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
 [#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
@@ -1880,6 +1883,7 @@ for info on changes for earlier releases.
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
 [@michaelfaith]: https://github.com/michaelfaith
+[@mihkeleidast]: https://github.com/mihkeleidast
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@minervabot]: https://github.com/minervabot
 [@mpint]: https://github.com/mpint
