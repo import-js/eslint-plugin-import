@@ -169,7 +169,7 @@ module.exports = {
       let nextComment;
 
       if (typeof parent.comments !== 'undefined' && options.considerComments) {
-        nextComment = parent.comments.find((o) => o.loc.start.line === endLine + 1);
+        nextComment = parent.comments.find((o) => o.loc.start.line >= endLine && o.loc.start.line <= endLine + options.count + 1);
       }
 
       // skip "export import"s
