@@ -115,7 +115,7 @@ module.exports = {
       }
 
       // Path is not existing --> Return directly (following code requires path to be defined)
-      if (resolvedPath === undefined) {
+      if (typeof resolvedPath !== "string") {
         return;
       }
 
