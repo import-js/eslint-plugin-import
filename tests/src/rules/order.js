@@ -185,6 +185,18 @@ ruleTester.run('order', rule, {
         ['builtin', 'external'],
       ], alphabetize: { order: 'asc', caseInsensitive: true } }],
     }),
+    test({
+      code: `
+      import { fooz } from '../baz.js'
+      import { foo } from './bar.js'
+      `,
+      options: [{
+        alphabetize: { order: 'asc', caseInsensitive: true },
+        groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object'],
+        'newlines-between': 'always',
+        warnOnUnassignedImports: true,
+      }],
+    }),
     // Omitted types should implicitly be considered as the last type
     test({
       code: `
