@@ -8,6 +8,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+- [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
+- [`newline-after-import`]: fix `exactCount` with `considerComments` false positive, when there is a leading comment ([#2884], thanks [@kinland])
 
 ## [2.28.1] - 2023-08-18
 
@@ -1090,6 +1092,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
@@ -1768,6 +1771,7 @@ for info on changes for earlier releases.
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory
+[@kinland]: https://github.com/kinland
 [@kirill-konshin]: https://github.com/kirill-konshin
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
@@ -1775,8 +1779,8 @@ for info on changes for earlier releases.
 [@knpwrs]: https://github.com/knpwrs
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
-[@laysent]: https://github.com/laysent
 [@laurens-dg]: https://github.com/laurens-dg
+[@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@leipert]: https://github.com/leipert
 [@lemonmade]: https://github.com/lemonmade

@@ -69,6 +69,7 @@ module.exports = {
             type: 'integer',
             minimum: 1,
           },
+          exactCount: { type: 'boolean' },
           considerComments: { type: 'boolean' },
         },
         additionalProperties: false,
@@ -78,7 +79,12 @@ module.exports = {
   create(context) {
     let level = 0;
     const requireCalls = [];
-    const options = { count: 1, considerComments: false, ...context.options[0] };
+    const options = {
+      count: 1,
+      exactCount: false,
+      considerComments: false,
+      ...context.options[0],
+    };
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode) || isExportNameClass(nextNode)) {
@@ -94,7 +100,10 @@ module.exports = {
       const lineDifference = getLineDifference(node, nextNode);
       const EXPECTED_LINE_DIFFERENCE = options.count + 1;
 
-      if (lineDifference < EXPECTED_LINE_DIFFERENCE) {
+      if (
+        lineDifference < EXPECTED_LINE_DIFFERENCE
+        || options.exactCount && lineDifference !== EXPECTED_LINE_DIFFERENCE
+      ) {
         let column = node.loc.start.column;
 
         if (node.loc.start.line !== node.loc.end.line) {
@@ -107,7 +116,7 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after ${type} statement not followed by another ${type}.`,
-          fix: (fixer) => fixer.insertTextAfter(
+          fix: options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference ? undefined : (fixer) => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
           ),
@@ -132,7 +141,7 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after import statement not followed by another import.`,
-          fix: (fixer) => fixer.insertTextAfter(
+          fix: options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference ? undefined : (fixer) => fixer.insertTextAfter(
             node,
             '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
           ),
@@ -160,7 +169,7 @@ module.exports = {
       let nextComment;
 
       if (typeof parent.comments !== 'undefined' && options.considerComments) {
-        nextComment = parent.comments.find((o) => o.loc.start.line === endLine + 1);
+        nextComment = parent.comments.find((o) => o.loc.start.line >= endLine && o.loc.start.line <= endLine + options.count + 1);
       }
 
       // skip "export import"s
