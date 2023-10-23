@@ -30,16 +30,16 @@
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import/tree/HEAD/resolvers/webpack",
   "dependencies": {
-    "array.prototype.find": "^2.2.1",
+    "array.prototype.find": "^2.2.2",
     "debug": "^3.2.7",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
     "hasown": "^2.0.0",
     "interpret": "^1.4.0",
-    "is-core-module": "^2.13.0",
+    "is-core-module": "^2.13.1",
     "is-regex": "^1.1.4",
     "lodash": "^4.17.21",
-    "resolve": "^2.0.0-next.4",
+    "resolve": "^2.0.0-next.5",
     "semver": "^5.7.2"
   },
   "peerDependencies": {
