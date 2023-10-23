@@ -3,7 +3,7 @@
  * @author Duncan Beevers
  */
 
-import has from 'has';
+import hasOwn from 'hasown';
 import values from 'object.values';
 import fromEntries from 'object.fromentries';
 
@@ -65,7 +65,7 @@ const schemaProperties = fromEntries(values(defs).map((def) => [def.option, {
   type: 'boolean',
 }]));
 
-const defaults = fromEntries(values(defs).map((def) => [def.option, has(def, 'default') ? def.default : false]));
+const defaults = fromEntries(values(defs).map((def) => [def.option, hasOwn(def, 'default') ? def.default : false]));
 
 module.exports = {
   meta: {
