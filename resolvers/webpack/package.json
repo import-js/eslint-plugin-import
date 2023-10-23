@@ -34,7 +34,7 @@
     "debug": "^3.2.7",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
-    "has": "^1.0.3",
+    "hasown": "^2.0.0",
     "interpret": "^1.4.0",
     "is-core-module": "^2.13.0",
     "is-regex": "^1.1.4",

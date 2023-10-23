@@ -9,7 +9,7 @@ const fs = require('fs');
 const isCore = require('is-core-module');
 const resolve = require('resolve/sync');
 const semver = require('semver');
-const has = require('has');
+const hasOwn = require('hasown');
 const isRegex = require('is-regex');
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
@@ -382,7 +382,7 @@ function findExternal(source, externals, context, resolveSync) {
 
   // else, vanilla object
   for (const key in externals) {
-    if (!has(externals, key)) { continue; }
+    if (!hasOwn(externals, key)) { continue; }
     if (source === key) { return true; }
   }
   return false;
