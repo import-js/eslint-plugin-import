@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## 0.13.8 - 2023-10-22
+ - [refactor] use `hasown` instead of `has`
+ - [deps] update `array.prototype.find`, `is-core-module`, `resolve`
+
+
 ## 0.13.7 - 2023-08-19
  - [fix] use the `dirname` of the `configPath` as `basedir` ([#2859])
 
