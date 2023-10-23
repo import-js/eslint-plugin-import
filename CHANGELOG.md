@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.29.0] - 2023-10-22
+
 ### Added
 - TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
 - [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
@@ -1554,7 +1556,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...HEAD
+[2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
 [2.28.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...v2.28.1
 [2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
 [2.27.5]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.4...v2.27.5
