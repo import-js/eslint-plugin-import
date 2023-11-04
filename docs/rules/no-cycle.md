@@ -28,6 +28,20 @@ This rule ignores type-only imports in Flow and TypeScript syntax (`import type`
 
 ### Options
 
+<!-- begin auto-generated rule options list -->
+
+| Name                                 | Description                                                                  | Type     | Default |
+| :----------------------------------- | :--------------------------------------------------------------------------- | :------- | :------ |
+| `allowUnsafeDynamicCyclicDependency` | Allow cyclic dependency if there is at least one dynamic import in the chain | Boolean  | `false` |
+| `amd`                                |                                                                              | Boolean  | `false` |
+| `commonjs`                           |                                                                              | Boolean  | `true`  |
+| `esmodule`                           |                                                                              | Boolean  | `true`  |
+| `ignore`                             |                                                                              | String[] |         |
+| `ignoreExternal`                     | ignore external modules                                                      | Boolean  | `false` |
+| `maxDepth`                           |                                                                              |          |         |
+
+<!-- end auto-generated rule options list -->
+
 By default, this rule only detects cycles for ES6 imports, but see the [`no-unresolved` options](./no-unresolved.md#options) as this rule also supports the same `commonjs` and `amd` flags. However, these flags only impact which import types are _linted_; the
 import/export infrastructure only registers `import` statements in dependencies, so
 cycles created by `require` within imported modules may not be detected.

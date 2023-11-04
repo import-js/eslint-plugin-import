@@ -35,6 +35,7 @@ module.exports = {
         properties: {
           esmodule: {
             type: 'boolean',
+            default: false,
           },
         },
         additionalProperties: false,

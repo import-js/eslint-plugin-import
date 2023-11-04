@@ -68,3 +68,16 @@ import bar from 'bar'; // Import sibling package using package name
 
 import bar from 'bar'; // Import sibling package using package name
 ```
+
+## Options
+
+<!-- begin auto-generated rule options list -->
+
+| Name       | Type     | Default |
+| :--------- | :------- | :------ |
+| `amd`      | Boolean  | `false` |
+| `commonjs` | Boolean  | `true`  |
+| `esmodule` | Boolean  | `true`  |
+| `ignore`   | String[] |         |
+
+<!-- end auto-generated rule options list -->

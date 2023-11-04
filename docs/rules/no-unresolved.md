@@ -21,6 +21,19 @@ If you are using Webpack, see the section on [resolvers](../../README.md#resolve
 
 ### Options
 
+<!-- begin auto-generated rule options list -->
+
+| Name                  | Type     | Default |
+| :-------------------- | :------- | :------ |
+| `amd`                 | Boolean  | `false` |
+| `caseSensitive`       | Boolean  | `true`  |
+| `caseSensitiveStrict` | Boolean  | `false` |
+| `commonjs`            | Boolean  | `true`  |
+| `esmodule`            | Boolean  | `true`  |
+| `ignore`              | String[] |         |
+
+<!-- end auto-generated rule options list -->
+
 By default, only ES6 imports will be resolved:
 
 ```js

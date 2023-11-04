@@ -38,9 +38,16 @@ By default, only ES6 imports and CommonJS `require` calls will have this rule en
 
 You may provide an options object providing true/false for any of
 
- - `esmodule`: defaults to `true`
- - `commonjs`: defaults to `true`
- - `amd`: defaults to `false`
+<!-- begin auto-generated rule options list -->
+
+| Name       | Type     | Default |
+| :--------- | :------- | :------ |
+| `amd`      | Boolean  | `false` |
+| `commonjs` | Boolean  | `true`  |
+| `esmodule` | Boolean  | `true`  |
+| `ignore`   | String[] |         |
+
+<!-- end auto-generated rule options list -->
 
 If `{ amd: true }` is provided, dependency paths for AMD-style `define` and `require`
 calls will be resolved:

@@ -37,7 +37,7 @@ module.exports = {
       {
         type: 'object',
         properties: {
-          exceptions: { type: 'array' },
+          exceptions: { type: 'array', description: 'An array of globs. The rule will be omitted from any file that matches a glob in the options array. For example, `"**/*/some-file.js"` will omit the rule in the `some-file.js` file.' },
         },
         additionalProperties: false,
       },

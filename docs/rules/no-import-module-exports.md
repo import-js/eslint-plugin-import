@@ -12,17 +12,13 @@ If you have multiple entry points or are using `js:next` this rule includes an
 
 ## Options
 
-### `exceptions`
+<!-- begin auto-generated rule options list -->
 
- - An array of globs. The rule will be omitted from any file that matches a glob
-   in the options array. For example, the following setting will omit the rule
-   in the `some-file.js` file.
+| Name         | Description                                                                                                                                                                           | Type  |
+| :----------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---- |
+| `exceptions` | An array of globs. The rule will be omitted from any file that matches a glob in the options array. For example, `"**/*/some-file.js"` will omit the rule in the `some-file.js` file. | Array |
 
-```json
-"import/no-import-module-exports": ["error", {
-    "exceptions": ["**/*/some-file.js"]
-}]
-```
+<!-- end auto-generated rule options list -->
 
 ## Rule Details
 

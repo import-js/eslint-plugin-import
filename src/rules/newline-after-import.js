@@ -68,9 +68,10 @@ module.exports = {
           count: {
             type: 'integer',
             minimum: 1,
+            description: 'Sets the number of newlines that are enforced after the last top-level import statement or require call.',
           },
-          exactCount: { type: 'boolean' },
-          considerComments: { type: 'boolean' },
+          exactCount: { type: 'boolean', description: 'enforce the exact numbers of newlines that is mentioned in `count`', default: false },
+          considerComments: { type: 'boolean', description: 'enforces the rule on comments after the last import-statement as well when set to true', default: false },
         },
         additionalProperties: false,
       },

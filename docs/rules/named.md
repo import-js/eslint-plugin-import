@@ -86,6 +86,16 @@ then the following is not reported:
 import { notWhatever } from './whatever'
 ```
 
+## Options
+
+<!-- begin auto-generated rule options list -->
+
+| Name       | Type    | Default |
+| :--------- | :------ | :------ |
+| `commonjs` | Boolean | `false` |
+
+<!-- end auto-generated rule options list -->
+
 ## When Not To Use It
 
 If you are using CommonJS and/or modifying the exported namespace of any module at

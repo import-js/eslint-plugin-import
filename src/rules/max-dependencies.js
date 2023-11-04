@@ -26,8 +26,8 @@ module.exports = {
       {
         type: 'object',
         properties: {
-          max: { type: 'number' },
-          ignoreTypeImports: { type: 'boolean' },
+          max: { type: 'number', default: 10 },
+          ignoreTypeImports: { type: 'boolean', default: false },
         },
         additionalProperties: false,
       },

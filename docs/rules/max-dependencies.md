@@ -10,14 +10,14 @@ Importing multiple named exports from a single module will only count once (e.g.
 
 ## Options
 
-This rule has the following options, with these defaults:
+<!-- begin auto-generated rule options list -->
 
-```js
-"import/max-dependencies": ["error", {
-  "max": 10,
-  "ignoreTypeImports": false,
-}]
-```
+| Name                | Type    | Default |
+| :------------------ | :------ | :------ |
+| `ignoreTypeImports` | Boolean | `false` |
+| `max`               | Number  | `10`    |
+
+<!-- end auto-generated rule options list -->
 
 ### `max`
 

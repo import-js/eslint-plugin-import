@@ -42,6 +42,17 @@ The motivation is that this is likely a result of two developers importing diffe
 names from the same module at different times (and potentially largely different
 locations in the file.) This rule brings both (or n-many) to attention.
 
+## Options
+
+<!-- begin auto-generated rule options list -->
+
+| Name                  | Type    | Default |
+| :-------------------- | :------ | :------ |
+| `considerQueryString` | Boolean | `false` |
+| `prefer-inline`       | Boolean | `false` |
+
+<!-- end auto-generated rule options list -->
+
 ### Query Strings
 
 By default, this rule ignores query strings (i.e. paths followed by a question mark), and thus imports from `./mod?a` and `./mod?b` will be considered as duplicates. However you can use the option `considerQueryString` to handle them as different (primarily because browsers will resolve those imports differently).

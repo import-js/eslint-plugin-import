@@ -6,39 +6,19 @@ In exporting files, this rule checks if there is default export or not.
 
 ## Rule Details
 
-### rule schema
-
-```javascript
-"import/prefer-default-export": [
-    ( "off" | "warn" | "error" ),
-    { "target": "single" | "any" } // default is "single"
-]
-```
-
 ### Config Options
 
-There are two options available: `single` and `any`. By default, if you do not specify the option, rule will assume it is `single`.
+<!-- begin auto-generated rule options list -->
+
+| Name     | Type   | Choices         | Default  |
+| :------- | :----- | :-------------- | :------- |
+| `target` | String | `single`, `any` | `single` |
+
+<!-- end auto-generated rule options list -->
 
 #### single
 
 **Definition**: When there is only a single export from a module, prefer using default export over named export.
-
-How to setup config file for this rule:
-
-```javascript
-// you can manually specify it
-"rules": {
-    "import/prefer-default-export": [
-        ( "off" | "warn" | "error" ),
-        { "target": "single" }
-    ]
-}
-
-// config setup below will also work
-"rules": {
-    "import/prefer-default-export": "off" | "warn" | "error"
-}
-```
 
 The following patterns are considered warnings:
 
@@ -96,18 +76,6 @@ export * from './other-module'
 #### any
 
 **Definition**: any exporting file must contain a default export.
-
-How to setup config file for this rule:
-
-```javascript
-// you have to manually specify it
-"rules": {
-    "import/prefer-default-export": [
-        ( "off" | "warn" | "error" ),
-        { "target": "any" }
-    ]
-}
-```
 
 The following patterns are *not* considered warnings:
 

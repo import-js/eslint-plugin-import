@@ -23,3 +23,13 @@ require(name());
 require('../name');
 require(`../name`);
 ```
+
+## Options
+
+<!-- begin auto-generated rule options list -->
+
+| Name       | Type    | Default |
+| :--------- | :------ | :------ |
+| `esmodule` | Boolean | `false` |
+
+<!-- end auto-generated rule options list -->

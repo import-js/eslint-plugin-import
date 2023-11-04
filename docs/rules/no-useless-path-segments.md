@@ -59,6 +59,15 @@ import fs from "fs";
 
 ## Options
 
+<!-- begin auto-generated rule options list -->
+
+| Name             | Type    |
+| :--------------- | :------ |
+| `commonjs`       | Boolean |
+| `noUselessIndex` | Boolean |
+
+<!-- end auto-generated rule options list -->
+
 ### noUselessIndex
 
 If you want to detect unnecessary `/index` or `/index.js` (depending on the specified file extensions, see below) imports in your paths, you can enable the option `noUselessIndex`. By default it is set to `false`:

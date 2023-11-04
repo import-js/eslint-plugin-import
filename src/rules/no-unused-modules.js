@@ -419,9 +419,10 @@ module.exports = {
             type: 'string',
             minLength: 1,
           },
+          default: 'process.cwd()',
         },
         ignoreExports: {
-          description: 'files/paths for which unused exports will not be reported (e.g module entry points)',
+          description: 'files/paths for which unused exports will not be reported (e.g module entry points in a published package)',
           type: 'array',
           uniqueItems: true,
           items: {
@@ -432,10 +433,12 @@ module.exports = {
         missingExports: {
           description: 'report modules without any exports',
           type: 'boolean',
+          default: false,
         },
         unusedExports: {
           description: 'report exports without any usage',
           type: 'boolean',
+          default: false,
         },
       },
       anyOf: [

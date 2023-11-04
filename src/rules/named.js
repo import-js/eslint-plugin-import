@@ -16,6 +16,7 @@ module.exports = {
         properties: {
           commonjs: {
             type: 'boolean',
+            default: false,
           },
         },
         additionalProperties: false,

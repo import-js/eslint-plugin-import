@@ -121,3 +121,16 @@ import a from './lib/a'; // Import child file using relative path
 
 import b from './b'; // Import sibling file using relative path
 ```
+
+## Options
+
+<!-- begin auto-generated rule options list -->
+
+| Name       | Type     | Default |
+| :--------- | :------- | :------ |
+| `amd`      | Boolean  | `false` |
+| `commonjs` | Boolean  | `true`  |
+| `esmodule` | Boolean  | `true`  |
+| `ignore`   | String[] |         |
+
+<!-- end auto-generated rule options list -->
