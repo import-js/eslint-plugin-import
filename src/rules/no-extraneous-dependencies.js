@@ -177,6 +177,7 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     && (
       node.importKind === 'type'
       || node.importKind === 'typeof'
+      || node.exportKind === 'type'
       || Array.isArray(node.specifiers) && node.specifiers.length && node.specifiers.every((specifier) => specifier.importKind === 'type' || specifier.importKind === 'typeof')
     )
   ) {

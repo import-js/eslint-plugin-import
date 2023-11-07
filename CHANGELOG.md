@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
+
 ## [2.29.0] - 2023-10-22
 
 ### Added
@@ -1094,6 +1097,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
 [#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
@@ -1830,6 +1834,7 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512
 [@ombene]: https://github.com/ombene
+[@Pandemic1617]: https://github.com/Pandemic1617
 [@ota-meshi]: https://github.com/ota-meshi
 [@OutdatedVersion]: https://github.com/OutdatedVersion
 [@panrafal]: https://github.com/panrafal

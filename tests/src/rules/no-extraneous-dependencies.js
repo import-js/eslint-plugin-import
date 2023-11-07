@@ -427,6 +427,18 @@ describe('TypeScript', () => {
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
             ...parserConfig,
           }),
+
+          test({
+            code: 'import type { T } from "a"; export type { T };',
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            ...parserConfig,
+          }),
+
+          test({
+            code: 'export type { T } from "a";',
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            ...parserConfig,
+          }),
         ],
         invalid: [
           test({
