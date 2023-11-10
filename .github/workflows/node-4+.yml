@@ -32,10 +32,6 @@ jobs:
           - 8
           - 7
           - 6
-          - 5
-          - 4
-          - 3
-          - 2
         include:
           - node-version: 'lts/*'
             eslint: 7
@@ -81,22 +77,6 @@ jobs:
             eslint: 7
           - node-version: 6
             eslint: 6
-          - node-version: 5
-            eslint: 8
-          - node-version: 5
-            eslint: 7
-          - node-version: 5
-            eslint: 6
-          - node-version: 5
-            eslint: 5
-          - node-version: 4
-            eslint: 8
-          - node-version: 4
-            eslint: 7
-          - node-version: 4
-            eslint: 6
-          - node-version: 4
-            eslint: 5
 
     steps:
       - uses: actions/checkout@v3

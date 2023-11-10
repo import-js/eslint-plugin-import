@@ -1,7 +1,6 @@
 'use strict';
 
 import minimatch from 'minimatch';
-import includes from 'array-includes';
 import groupBy from 'object.groupby';
 
 import importType from '../core/importType';
@@ -293,7 +292,7 @@ function getSorter(alphabetizeOptions) {
     const importB = getNormalizedValue(nodeB, alphabetizeOptions.caseInsensitive);
     let result = 0;
 
-    if (!includes(importA, '/') && !includes(importB, '/')) {
+    if (!importA.includes('/') && !importB.includes('/')) {
       result = compareString(importA, importB);
     } else {
       const A = importA.split('/');

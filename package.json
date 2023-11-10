@@ -3,7 +3,7 @@
   "version": "2.29.0",
   "description": "Import with sanity.",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "main": "lib/index.js",
   "directories": {
@@ -100,10 +100,9 @@
     "typescript-eslint-parser": "^15 || ^20 || ^22"
   },
   "peerDependencies": {
-    "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8"
+    "eslint": "^6 || ^7.2.0 || ^8"
   },
   "dependencies": {
-    "array-includes": "^3.1.7",
     "array.prototype.findlastindex": "^1.2.3",
     "array.prototype.flat": "^1.3.2",
     "array.prototype.flatmap": "^1.3.2",

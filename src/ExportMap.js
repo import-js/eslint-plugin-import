@@ -17,8 +17,6 @@ import * as unambiguous from 'eslint-module-utils/unambiguous';
 
 import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
 
-import includes from 'array-includes';
-
 let ts;
 
 const log = debug('eslint-plugin-import:ExportMap');
@@ -655,7 +653,7 @@ ExportMap.parse = function (path, content, context) {
     }
 
     // This doesn't declare anything, but changes what's being exported.
-    if (includes(exports, n.type)) {
+    if (exports.includes(n.type)) {
       const exportedName = n.type === 'TSNamespaceExportDeclaration'
         ? (n.id || n.name).name
         : n.expression && n.expression.name || n.expression.id && n.expression.id.name || null;
@@ -669,7 +667,7 @@ ExportMap.parse = function (path, content, context) {
         'TSAbstractClassDeclaration',
         'TSModuleDeclaration',
       ];
-      const exportedDecls = ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+      const exportedDecls = ast.body.filter(({ type, id, declarations }) => declTypes.includes(type) && (
         id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
       ));
       if (exportedDecls.length === 0) {

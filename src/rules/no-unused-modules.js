@@ -10,7 +10,6 @@ import visit from 'eslint-module-utils/visit';
 import { dirname, join } from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
 import values from 'object.values';
-import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
 import Exports, { recursivePatternCapture } from '../ExportMap';
@@ -361,7 +360,7 @@ const fileIsInPkg = (file) => {
   const checkPkgFieldObject = (pkgField) => {
     const pkgFieldFiles = flatMap(values(pkgField), (value) => typeof value === 'boolean' ? [] : join(basePath, value));
 
-    if (includes(pkgFieldFiles, file)) {
+    if (pkgFieldFiles.includes(file)) {
       return true;
     }
   };

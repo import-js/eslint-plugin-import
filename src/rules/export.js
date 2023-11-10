@@ -1,6 +1,5 @@
 import ExportMap, { recursivePatternCapture } from '../ExportMap';
 import docsUrl from '../docsUrl';
-import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
 /*
@@ -174,10 +173,10 @@ module.exports = {
         const isTypeVariableDecl = node.declaration.kind === 'type';
 
         if (node.declaration.id != null) {
-          if (includes([
+          if ([
             'TSTypeAliasDeclaration',
             'TSInterfaceDeclaration',
-          ], node.declaration.type)) {
+          ].includes(node.declaration.type)) {
             addNamed(node.declaration.id.name, node.declaration.id, parent, true);
           } else {
             addNamed(node.declaration.id.name, node.declaration.id, parent, isTypeVariableDecl);
