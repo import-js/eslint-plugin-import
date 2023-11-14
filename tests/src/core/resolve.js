@@ -86,7 +86,7 @@ describe('resolve', function () {
   });
 
   it('respects import/resolver as array of strings', function () {
-    const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] });
+    const testContext = utils.testContext({ 'import/resolver': ['./foo-bar-resolver-v2', './foo-bar-resolver-v1'] });
 
     expect(resolve(
       '../files/foo',
@@ -104,7 +104,7 @@ describe('resolve', function () {
   });
 
   it('respects import/resolver as array of objects', function () {
-    const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] });
+    const testContext = utils.testContext({ 'import/resolver': [{ './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} }] });
 
     expect(resolve(
       '../files/foo',
@@ -254,7 +254,7 @@ describe('resolve', function () {
     });
 
     it('respects import/resolver as array of strings', function () {
-      const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] });
+      const testContext = utils.testContext({ 'import/resolver': ['./foo-bar-resolver-v2', './foo-bar-resolver-v1'] });
 
       expect(resolve(
         '../files/foo',
@@ -272,7 +272,7 @@ describe('resolve', function () {
     });
 
     it('respects import/resolver as array of objects', function () {
-      const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] });
+      const testContext = utils.testContext({ 'import/resolver': [{ './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} }] });
 
       expect(resolve(
         '../files/foo',
@@ -386,7 +386,7 @@ describe('resolve', function () {
       'import/cache': { lifetime: 1 },
     });
 
-    const infiniteContexts = [ '∞', 'Infinity' ].map((inf) => [inf,
+    const infiniteContexts = ['∞', 'Infinity'].map((inf) => [inf,
       utils.testContext({
         'import/cache': { lifetime: inf },
       })]);

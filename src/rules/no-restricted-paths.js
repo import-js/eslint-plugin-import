@@ -77,9 +77,11 @@ module.exports = {
     const restrictedPaths = options.zones || [];
     const basePath = options.basePath || process.cwd();
     const currentFilename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    const matchingZones = restrictedPaths.filter((zone) => [].concat(zone.target)
-      .map((target) => path.resolve(basePath, target))
-      .some((targetPath) => isMatchingTargetPath(currentFilename, targetPath)));
+    const matchingZones = restrictedPaths.filter(
+      (zone) => [].concat(zone.target)
+        .map((target) => path.resolve(basePath, target))
+        .some((targetPath) => isMatchingTargetPath(currentFilename, targetPath)),
+    );
 
     function isMatchingTargetPath(filename, targetPath) {
       if (isGlob(targetPath)) {
@@ -231,8 +233,7 @@ module.exports = {
         reportInvalidExceptions(validatorsWithInvalidExceptions, node);
 
         const applicableValidatorsForImportPathExcludingExceptions = applicableValidatorsForImportPath
-          .filter((validator) => validator.hasValidExceptions)
-          .filter((validator) => !validator.isPathException(absoluteImportPath));
+          .filter((validator) => validator.hasValidExceptions && !validator.isPathException(absoluteImportPath));
         reportImportsInRestrictedZone(applicableValidatorsForImportPathExcludingExceptions, node, importPath, zone.message);
       });
     }

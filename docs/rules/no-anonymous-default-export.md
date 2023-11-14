@@ -28,6 +28,7 @@ The complete default configuration looks like this.
 ## Rule Details
 
 ### Fail
+
 ```js
 export default []
 
@@ -48,6 +49,7 @@ export default new Foo()
 ```
 
 ### Pass
+
 ```js
 const foo = 123
 export default foo

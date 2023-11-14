@@ -50,6 +50,7 @@ const { default: x } = require('./foo') // ignored
 ```
 
 Both may be provided, too:
+
 ```js
 /*eslint import/no-unresolved: [2, { commonjs: true, amd: true }]*/
 const { default: x } = require('./foo') // reported if './foo' is not found
@@ -84,7 +85,6 @@ const { default: x } = require('./foo') // reported if './foo' is actually './Fo
 
 The `caseSensitive` option does not detect case for the current working directory. The `caseSensitiveStrict` option allows checking `cwd` in resolved path. By default, the option is disabled.
 
-
 ```js
 /*eslint import/no-unresolved: [2, { caseSensitiveStrict: true }]*/
 
@@ -102,9 +102,9 @@ If you're using a module bundler other than Node or Webpack, you may end up with
 
 ## Further Reading
 
-- [Resolver plugins](../../README.md#resolvers)
-- [Node resolver](https://npmjs.com/package/eslint-import-resolver-node) (default)
-- [Webpack resolver](https://npmjs.com/package/eslint-import-resolver-webpack)
-- [`import/ignore`] global setting
+ - [Resolver plugins](../../README.md#resolvers)
+ - [Node resolver](https://npmjs.com/package/eslint-import-resolver-node) (default)
+ - [Webpack resolver](https://npmjs.com/package/eslint-import-resolver-webpack)
+ - [`import/ignore`] global setting
 
 [`import/ignore`]: ../../README.md#importignore

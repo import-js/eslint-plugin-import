@@ -28,10 +28,10 @@ ruleTester.run('no-amd', require('rules/no-amd'), {
   ],
 
   invalid: semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
-    { code: 'define([], function() {})', errors: [ { message: 'Expected imports instead of AMD define().' }] },
-    { code: 'define(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD define().' }] },
+    { code: 'define([], function() {})', errors: [{ message: 'Expected imports instead of AMD define().' }] },
+    { code: 'define(["a"], function(a) { console.log(a); })', errors: [{ message: 'Expected imports instead of AMD define().' }] },
 
-    { code: 'require([], function() {})', errors: [ { message: 'Expected imports instead of AMD require().' }] },
-    { code: 'require(["a"], function(a) { console.log(a); })', errors: [ { message: 'Expected imports instead of AMD require().' }] },
+    { code: 'require([], function() {})', errors: [{ message: 'Expected imports instead of AMD require().' }] },
+    { code: 'require(["a"], function(a) { console.log(a); })', errors: [{ message: 'Expected imports instead of AMD require().' }] },
   ],
 });

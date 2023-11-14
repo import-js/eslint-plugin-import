@@ -19,7 +19,6 @@ A module path that is [ignored] or not [unambiguously an ES module] will not be 
 [ignored]: ../README.md#importignore
 [unambiguously an ES module]: https://github.com/bmeck/UnambiguousJavaScriptGrammar
 
-
 ## Rule Details
 
 Given:
@@ -54,7 +53,6 @@ import bar from './bar' // no default export found in ./bar
 import baz from './baz' // no default export found in ./baz
 ```
 
-
 ## When Not To Use It
 
 If you are using CommonJS and/or modifying the exported namespace of any module at
@@ -65,10 +63,9 @@ either, so such a situation will be reported in the importing module.
 
 ## Further Reading
 
-- Lee Byron's [ES7] export proposal
-- [`import/ignore`] setting
-- [`jsnext:main`] (Rollup)
-
+ - Lee Byron's [ES7] export proposal
+ - [`import/ignore`] setting
+ - [`jsnext:main`] (Rollup)
 
 [ES7]: https://github.com/leebyron/ecmascript-more-export-from
 [`import/ignore`]: ../../README.md#importignore

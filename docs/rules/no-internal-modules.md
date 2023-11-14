@@ -8,14 +8,14 @@ Use this rule to prevent importing the submodules of other modules.
 
 This rule has two mutally exclusive options that are arrays of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) patterns:
 
-- `allow` that include paths and import statements that can be imported with reaching.
-- `forbid` that exclude paths and import statements that can be imported with reaching.
+ - `allow` that include paths and import statements that can be imported with reaching.
+ - `forbid` that exclude paths and import statements that can be imported with reaching.
 
 ### Examples
 
 Given the following folder structure:
 
-```
+```pt
 my-project
 ├── actions
 │   └── getUser.js
@@ -33,7 +33,8 @@ my-project
 ```
 
 And the .eslintrc file:
-```
+
+```json
 {
   ...
   "rules": {
@@ -76,7 +77,7 @@ export { settings } from '../app';
 
 Given the following folder structure:
 
-```
+```pt
 my-project
 ├── actions
 │   └── getUser.js
@@ -94,7 +95,8 @@ my-project
 ```
 
 And the .eslintrc file:
-```
+
+```json
 {
   ...
   "rules": {

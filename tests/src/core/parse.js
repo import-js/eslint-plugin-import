@@ -76,7 +76,7 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
     const parseSpy = sinon.spy();
     const parserOptions = { ecmaFeatures: { jsx: true } };
     parseStubParser.parse = parseSpy;
-    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, parserOptions })).not.to.throw(Error);
+    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: ['.js'] } }, parserPath: null, parserOptions })).not.to.throw(Error);
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1);
   });
 
@@ -123,7 +123,7 @@ describe('parse(content, { settings, ecmaFeatures })', function () {
   it('prefers parsers specified in the settings over languageOptions.parser', () => {
     const parseSpy = sinon.spy();
     parseStubParser.parse = parseSpy;
-    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: [ '.js' ] } }, parserPath: null, languageOptions: { parser: { parse() {} } } })).not.to.throw(Error);
+    expect(parse.bind(null, path, content, { settings: { 'import/parsers': { [parseStubParserPath]: ['.js'] } }, parserPath: null, languageOptions: { parser: { parse() {} } } })).not.to.throw(Error);
     expect(parseSpy.callCount, 'custom parser to be called once').to.equal(1);
   });
 

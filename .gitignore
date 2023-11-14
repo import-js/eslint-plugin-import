@@ -25,13 +25,9 @@ resolvers/node/LICENSE
 resolvers/webpack/LICENSE
 utils/LICENSE
 memo-parser/.npmrc
-memo-parser/.nycrc
 resolvers/node/.npmrc
-resolvers/node/.nycrc
 resolvers/webpack/.npmrc
-resolvers/webpack/.nycrc
 utils/.npmrc
-utils/.nycrc
 
 # Dependency directory
 # Commenting this out is preferred by some people, see

@@ -5,6 +5,7 @@
 Forbid Webpack loader syntax in imports.
 
 [Webpack](https://webpack.js.org) allows specifying the [loaders](https://webpack.js.org/concepts/loaders/) to use in the import source string using a special syntax like this:
+
 ```js
 var moduleWithOneLoader = require("my-loader!./my-awesome-module");
 ```

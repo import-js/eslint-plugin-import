@@ -24,7 +24,6 @@ for that, see [`no-self-import`].
 
 This rule ignores type-only imports in Flow and TypeScript syntax (`import type` and `import typeof`), which have no runtime effect.
 
-
 ## Rule Details
 
 ### Options
@@ -103,9 +102,9 @@ this rule enabled.
 
 ## Further Reading
 
-- [Original inspiring issue](https://github.com/import-js/eslint-plugin-import/issues/941)
-- Rule to detect that module imports itself: [`no-self-import`]
-- [`import/external-module-folders`] setting
+ - [Original inspiring issue](https://github.com/import-js/eslint-plugin-import/issues/941)
+ - Rule to detect that module imports itself: [`no-self-import`]
+ - [`import/external-module-folders`] setting
 
 [`no-self-import`]: ./no-self-import.md
 

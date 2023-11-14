@@ -71,7 +71,6 @@ export {first}
 export type {firstType}
 ```
 
-
 ### Invalid
 
 ```js

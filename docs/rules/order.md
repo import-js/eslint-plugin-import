@@ -5,7 +5,6 @@
 <!-- end auto-generated rule header -->
 
 Enforce a convention in the order of `require()` / `import` statements.
-+(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 With the [`groups`](#groups-array) option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
 
@@ -37,7 +36,6 @@ Unassigned imports are ignored, as the order they are imported in may be importa
 
 Statements using the ES6 `import` syntax must appear before any `require()` statements.
 
-
 ## Fail
 
 ```ts
@@ -54,7 +52,6 @@ var path = require('path'); // `path` import should occur before import of `loda
 var path = require('path');
 import foo from './foo'; // `import` statements must be before `require` statement
 ```
-
 
 ## Pass
 
@@ -84,11 +81,12 @@ var path = require('path');
 
 This rule supports the following options:
 
-### `groups: [array]`:
+### `groups: [array]`
 
 How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are:
 `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, `"type"`.
 The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+
 ```ts
 [
   'builtin', // Built-in types are first
@@ -98,6 +96,7 @@ The enforced order is the same as the order of each element in a group. Omitted 
   // Then the rest: internal and external type
 ]
 ```
+
 The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 
 You can set the options like this:
@@ -120,7 +119,7 @@ You can set the options like this:
 ]
 ```
 
-### `pathGroups: [array of objects]`:
+### `pathGroups: [array of objects]`
 
 To be able to group by paths mostly needed with aliases pathGroups can be defined.
 
@@ -146,7 +145,7 @@ Properties of the objects
 }
 ```
 
-### `distinctGroup: [boolean]`:
+### `distinctGroup: [boolean]`
 
 This changes how `pathGroups[].position` affects grouping. The property is most useful when `newlines-between` is set to `always` and at least 1 `pathGroups` entry has a `position` property set.
 
@@ -155,6 +154,7 @@ By default, in the context of a particular `pathGroup` entry, when setting `posi
 Note that currently, `distinctGroup` defaults to `true`. However, in a later update, the default will change to `false`
 
 Example:
+
 ```json
 {
   "import/order": ["error", {
@@ -171,12 +171,13 @@ Example:
 }
 ```
 
-### `pathGroupsExcludedImportTypes: [array]`:
+### `pathGroupsExcludedImportTypes: [array]`
 
 This defines import types that are not handled by configured pathGroups.
 This is mostly needed when you want to handle path groups that look like external imports.
 
 Example:
+
 ```json
 {
   "import/order": ["error", {
@@ -195,6 +196,7 @@ Example:
 You can also use `patterns`(e.g., `react`, `react-router-dom`, etc).
 
 Example:
+
 ```json
 {
   "import/order": [
@@ -212,16 +214,17 @@ Example:
   ]
 }
 ```
+
 The default value is `["builtin", "external", "object"]`.
 
-### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
+### `newlines-between: [ignore|always|always-and-inside-groups|never]`
 
 Enforces or forbids new lines between import groups:
 
-- If set to `ignore`, no errors related to new lines between import groups will be reported.
-- If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
-- If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
-- If set to `never`, no new lines are allowed in the entire import section.
+ - If set to `ignore`, no errors related to new lines between import groups will be reported.
+ - If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
+ - If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
+ - If set to `never`, no new lines are allowed in the entire import section.
 
 The default value is `"ignore"`.
 
@@ -285,15 +288,16 @@ import index from './';
 import sibling from './foo';
 ```
 
-### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`:
+### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`
 
 Sort the order within each group in alphabetical manner based on **import path**:
 
-- `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
-- `orderImportKind`: use `asc` to sort in ascending order various import kinds, e.g. imports prefixed with `type` or `typeof`, with same import path. Use `desc` to sort in descending order (default: `ignore`).
-- `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
+ - `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
+ - `orderImportKind`: use `asc` to sort in ascending order various import kinds, e.g. imports prefixed with `type` or `typeof`, with same import path. Use `desc` to sort in descending order (default: `ignore`).
+ - `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
 
 Example setting:
+
 ```ts
 alphabetize: {
   order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
@@ -323,9 +327,9 @@ import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
 ```
 
-### `warnOnUnassignedImports: true|false`:
+### `warnOnUnassignedImports: true|false`
 
-* default: `false`
+ - default: `false`
 
 Warns when unassigned imports are out of order.  These warning will not be fixed
 with `--fix` because unassigned imports are used for side-effects and changing the
@@ -352,9 +356,9 @@ import './styles.css';
 
 ## Related
 
-- [`import/external-module-folders`] setting
+ - [`import/external-module-folders`] setting
 
-- [`import/internal-regex`] setting
+ - [`import/internal-regex`] setting
 
 [`import/external-module-folders`]: ../../README.md#importexternal-module-folders
 

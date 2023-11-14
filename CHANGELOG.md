@@ -6,12 +6,34 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.29.0] - 2023-10-22
+
+### Added
+- TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+- [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
+- [`newline-after-import`]: fix `exactCount` with `considerComments` false positive, when there is a leading comment ([#2884], thanks [@kinland])
+
+## [2.28.1] - 2023-08-18
+
+### Fixed
+- [`order`]: revert breaking change to single nested group ([#2854], thanks [@yndajas])
+
+### Changed
+- [Docs] remove duplicate fixable notices in docs ([#2850], thanks [@bmish])
+
+## [2.28.0] - 2023-07-27
+
 ### Fixed
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 - [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
 - [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
-* [`order`]: partial fix for [#2687] (thanks [@ljharb])
+- [`newline-after-import`]/TypeScript: do not error when re-exporting a namespaced import ([#2832], thanks [@laurens-dg])
+- [`order`]: partial fix for [#2687] (thanks [@ljharb])
+- [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
+- [`extensions`]: handle `.` and `..` properly ([#2778], thanks [@benasher44])
+- [`no-unused-modules`]: improve schema (thanks [@ljharb])
+- [`no-unused-modules`]: report error on binding instead of parent export ([#2842], thanks [@Chamion])
 
 ### Changed
 - [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
@@ -1072,6 +1094,14 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
+[#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
+[#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
+[#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
+[#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
+[#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
+[#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
+[#2778]: https://github.com/import-js/eslint-plugin-import/pull/2778
 [#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
 [#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
 [#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
@@ -1526,7 +1556,10 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...HEAD
+[2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
+[2.28.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...v2.28.1
+[2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
 [2.27.5]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.4...v2.27.5
 [2.27.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.3...v2.27.4
 [2.27.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.2...v2.27.3
@@ -1645,6 +1678,8 @@ for info on changes for earlier releases.
 [@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
+[@benasher44]: https://github.com/benasher44
+[@benkrejci]: https://github.com/benkrejci
 [@benmosher]: https://github.com/benmosher
 [@benmunro]: https://github.com/benmunro
 [@BenoitZugmeyer]: https://github.com/BenoitZugmeyer
@@ -1657,6 +1692,7 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
 [@charpeni]: https://github.com/charpeni
 [@cherryblossom000]: https://github.com/cherryblossom000
@@ -1738,6 +1774,7 @@ for info on changes for earlier releases.
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory
+[@kinland]: https://github.com/kinland
 [@kirill-konshin]: https://github.com/kirill-konshin
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
@@ -1745,6 +1782,7 @@ for info on changes for earlier releases.
 [@knpwrs]: https://github.com/knpwrs
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
+[@laurens-dg]: https://github.com/laurens-dg
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@leipert]: https://github.com/leipert
@@ -1867,5 +1905,7 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
+[@Zamiell]: https://github.com/Zamiell
 [@zloirock]: https://github.com/zloirock

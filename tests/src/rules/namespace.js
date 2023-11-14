@@ -284,7 +284,7 @@ const invalid = [].concat(
 
   test({
     code: "import b from './deep/default'; console.log(b.e)",
-    errors: [ "'e' not found in imported namespace 'b'." ],
+    errors: ["'e' not found in imported namespace 'b'."],
   }),
 
   // respect hoisting
@@ -317,12 +317,12 @@ const invalid = [].concat(
   // es2022: Arbitrary module namespace identifier names
   testVersion('>= 8.7', () => ({
     code: `import { "b" as b } from "./deep/a"; console.log(b.e)`,
-    errors: [ "'e' not found in imported namespace 'b'." ],
+    errors: ["'e' not found in imported namespace 'b'."],
     parserOptions: { ecmaVersion: 2022 },
   })),
   testVersion('>= 8.7', () => ({
     code: `import { "b" as b } from "./deep/a"; console.log(b.c.e)`,
-    errors: [ "'e' not found in deeply imported namespace 'b.c'." ],
+    errors: ["'e' not found in deeply imported namespace 'b.c'."],
     parserOptions: { ecmaVersion: 2022 },
   })),
 );
@@ -345,32 +345,32 @@ const invalid = [].concat(
     test({
       parser,
       code: `import * as a from "./${folder}/a"; console.log(a.b.e)`,
-      errors: [ "'e' not found in deeply imported namespace 'a.b'." ],
+      errors: ["'e' not found in deeply imported namespace 'a.b'."],
     }),
     test({
       parser,
       code: `import { b } from "./${folder}/a"; console.log(b.e)`,
-      errors: [ "'e' not found in imported namespace 'b'." ],
+      errors: ["'e' not found in imported namespace 'b'."],
     }),
     test({
       parser,
       code: `import * as a from "./${folder}/a"; console.log(a.b.c.e)`,
-      errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
+      errors: ["'e' not found in deeply imported namespace 'a.b.c'."],
     }),
     test({
       parser,
       code: `import { b } from "./${folder}/a"; console.log(b.c.e)`,
-      errors: [ "'e' not found in deeply imported namespace 'b.c'." ],
+      errors: ["'e' not found in deeply imported namespace 'b.c'."],
     }),
     test({
       parser,
       code: `import * as a from "./${folder}/a"; var {b:{ e }} = a`,
-      errors: [ "'e' not found in deeply imported namespace 'a.b'." ],
+      errors: ["'e' not found in deeply imported namespace 'a.b'."],
     }),
     test({
       parser,
       code: `import * as a from "./${folder}/a"; var {b:{c:{ e }}} = a`,
-      errors: [ "'e' not found in deeply imported namespace 'a.b.c'." ],
+      errors: ["'e' not found in deeply imported namespace 'a.b.c'."],
     }));
 });
 

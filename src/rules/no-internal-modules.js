@@ -58,16 +58,14 @@ module.exports = {
     }
 
     function toSteps(somePath) {
-      return  normalizeSep(somePath)
+      return normalizeSep(somePath)
         .split('/')
+        .filter((step) => step && step !== '.')
         .reduce((acc, step) => {
-          if (!step || step === '.') {
-            return acc;
-          } else if (step === '..') {
+          if (step === '..') {
             return acc.slice(0, -1);
-          } else {
-            return acc.concat(step);
           }
+          return acc.concat(step);
         }, []);
     }
 

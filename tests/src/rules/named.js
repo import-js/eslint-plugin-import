@@ -208,7 +208,7 @@ ruleTester.run('named', rule, {
 
   invalid: [].concat(
     test({ code: 'import { somethingElse } from "./test-module"',
-      errors: [ error('somethingElse', './test-module') ] }),
+      errors: [error('somethingElse', './test-module')] }),
 
     test({ code: 'import { baz } from "./bar"',
       errors: [error('baz', './bar')] }),
@@ -330,7 +330,7 @@ ruleTester.run('named', rule, {
     // es2022: Arbitrary module namespace identifier names
     testVersion('>= 8.7', () => ({
       code: 'import { "somethingElse" as somethingElse } from "./test-module"',
-      errors: [ error('somethingElse', './test-module', 'Literal') ],
+      errors: [error('somethingElse', './test-module', 'Literal')],
       parserOptions: { ecmaVersion: 2022 },
     })),
     testVersion('>= 8.7', () => ({

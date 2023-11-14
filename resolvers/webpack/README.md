@@ -13,13 +13,13 @@ changes.
 
 To use with `eslint-plugin-import`, run:
 
-```
+```sh
 npm i eslint-import-resolver-webpack -g
 ```
 
 or if you manage ESLint as a dev dependency:
 
-```
+```sh
 # inside your project's working tree
 npm install eslint-import-resolver-webpack --save-dev
 ```

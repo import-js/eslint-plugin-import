@@ -37,8 +37,8 @@ This rule includes a fixer that will automatically convert your specifiers to th
 
 The rule accepts a single string option which may be one of:
 
-- `'prefer-inline'` - enforces that named type-only specifiers are only ever written with an inline marker; and never as part of a top-level, type-only import.
-- `'prefer-top-level'` - enforces that named type-only specifiers only ever written as part of a top-level, type-only import; and never with an inline marker.
+ - `'prefer-inline'` - enforces that named type-only specifiers are only ever written with an inline marker; and never as part of a top-level, type-only import.
+ - `'prefer-top-level'` - enforces that named type-only specifiers only ever written as part of a top-level, type-only import; and never with an inline marker.
 
 By default the rule will use the `prefer-inline` option.
 

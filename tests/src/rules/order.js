@@ -236,7 +236,7 @@ ruleTester.run('order', rule, {
         import fs from 'fs';
         import { add } from './helper';`,
       options: [{
-        groups: [ 'unknown', 'builtin', 'external', 'parent', 'sibling', 'index' ],
+        groups: ['unknown', 'builtin', 'external', 'parent', 'sibling', 'index'],
       }],
     }),
     // Using unknown import types (e.g. using a resolver alias via babel)
@@ -2736,7 +2736,7 @@ ruleTester.run('order', rule, {
         }],
       }),
     ],
-  ].filter((t) => !!t),
+  ].filter(Boolean),
 });
 
 context('TypeScript', function () {
@@ -2753,7 +2753,7 @@ context('TypeScript', function () {
       };
 
       ruleTester.run('order', rule, {
-        valid: [
+        valid: [].concat(
           // #1667: typescript type import support
 
           // Option alphabetize: {order: 'asc'}
@@ -2962,7 +2962,31 @@ context('TypeScript', function () {
               },
             ],
           }),
-        ],
+          isCoreModule('node:child_process') && isCoreModule('node:fs/promises') ? [
+            test({
+              code: `
+                import express from 'express';
+                import log4js from 'log4js';
+                import chpro from 'node:child_process';
+                // import fsp from 'node:fs/promises';
+              `,
+              options: [{
+                groups: [
+                  [
+                    'builtin',
+                    'external',
+                    'internal',
+                    'parent',
+                    'sibling',
+                    'index',
+                    'object',
+                    'type',
+                  ],
+                ],
+              }],
+            }),
+          ] : [],
+        ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
           test({
@@ -3211,39 +3235,6 @@ context('TypeScript', function () {
                   'index',
                   'object',
                   'type',
-                ],
-              }],
-              errors: [
-                { message: '`node:child_process` import should occur before import of `express`' },
-                // { message: '`node:fs/promises` import should occur before import of `express`' },
-              ],
-            }),
-
-            test({
-              code: `
-                import express from 'express';
-                import log4js from 'log4js';
-                import chpro from 'node:child_process';
-                // import fsp from 'node:fs/promises';
-              `,
-              output: `
-                import chpro from 'node:child_process';
-                import express from 'express';
-                import log4js from 'log4js';
-                // import fsp from 'node:fs/promises';
-              `,
-              options: [{
-                groups: [
-                  [
-                    'builtin',
-                    'external',
-                    'internal',
-                    'parent',
-                    'sibling',
-                    'index',
-                    'object',
-                    'type',
-                  ],
                 ],
               }],
               errors: [

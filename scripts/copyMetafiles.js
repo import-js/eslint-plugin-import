@@ -5,7 +5,6 @@ import resolverDirectories from './resolverDirectories';
 const files = [
   'LICENSE',
   '.npmrc',
-  '.nycrc',
 ];
 
 const directories = [].concat(

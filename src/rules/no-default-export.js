@@ -27,14 +27,16 @@ module.exports = {
       },
 
       ExportNamedDeclaration(node) {
-        node.specifiers.filter((specifier) => (specifier.exported.name || specifier.exported.value) === 'default').forEach((specifier) => {
-          const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
-          if (specifier.type === 'ExportDefaultSpecifier') {
-            context.report({ node, message: preferNamed, loc });
-          } else if (specifier.type === 'ExportSpecifier') {
-            context.report({ node, message: noAliasDefault(specifier), loc  });
-          }
-        });
+        node.specifiers
+          .filter((specifier) => (specifier.exported.name || specifier.exported.value) === 'default')
+          .forEach((specifier) => {
+            const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
+            if (specifier.type === 'ExportDefaultSpecifier') {
+              context.report({ node, message: preferNamed, loc });
+            } else if (specifier.type === 'ExportSpecifier') {
+              context.report({ node, message: noAliasDefault(specifier), loc  });
+            }
+          });
       },
     };
   },

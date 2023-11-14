@@ -177,7 +177,7 @@ const resolveFiles = (src, ignoreExports, context) => {
   // prepare list of source files, don't consider files from node_modules
 
   return new Set(
-    srcFileList.filter(({ filename }) => !isNodeModule(filename)).map(({ filename }) => filename),
+    flatMap(srcFileList, ({ filename }) => isNodeModule(filename) ? [] : filename),
   );
 };
 
@@ -359,9 +359,7 @@ const fileIsInPkg = (file) => {
   };
 
   const checkPkgFieldObject = (pkgField) => {
-    const pkgFieldFiles = values(pkgField)
-      .filter((value) => typeof value !== 'boolean')
-      .map((value) => join(basePath, value));
+    const pkgFieldFiles = flatMap(values(pkgField), (value) => typeof value === 'boolean' ? [] : join(basePath, value));
 
     if (includes(pkgFieldFiles, file)) {
       return true;
@@ -416,17 +414,16 @@ module.exports = {
         src: {
           description: 'files/paths to be analyzed (only for unused exports)',
           type: 'array',
-          minItems: 1,
+          uniqueItems: true,
           items: {
             type: 'string',
             minLength: 1,
           },
         },
         ignoreExports: {
-          description:
-            'files/paths for which unused exports will not be reported (e.g module entry points)',
+          description: 'files/paths for which unused exports will not be reported (e.g module entry points)',
           type: 'array',
-          minItems: 1,
+          uniqueItems: true,
           items: {
             type: 'string',
             minLength: 1,
@@ -441,37 +438,23 @@ module.exports = {
           type: 'boolean',
         },
       },
-      not: {
-        properties: {
-          unusedExports: { enum: [false] },
-          missingExports: { enum: [false] },
-        },
-      },
-      anyOf: [{
-        not: {
+      anyOf: [
+        {
           properties: {
             unusedExports: { enum: [true] },
+            src: {
+              minItems: 1,
+            },
           },
+          required: ['unusedExports'],
         },
-        required: ['missingExports'],
-      }, {
-        not: {
+        {
           properties: {
             missingExports: { enum: [true] },
           },
+          required: ['missingExports'],
         },
-        required: ['unusedExports'],
-      }, {
-        properties: {
-          unusedExports: { enum: [true] },
-        },
-        required: ['unusedExports'],
-      }, {
-        properties: {
-          missingExports: { enum: [true] },
-        },
-        required: ['missingExports'],
-      }],
+      ],
     }],
   },
 
@@ -946,7 +929,7 @@ module.exports = {
       },
       ExportNamedDeclaration(node) {
         node.specifiers.forEach((specifier) => {
-          checkUsage(node, specifier.exported.name || specifier.exported.value);
+          checkUsage(specifier, specifier.exported.name || specifier.exported.value);
         });
         forEachDeclarationIdentifier(node.declaration, (name) => {
           checkUsage(node, name);

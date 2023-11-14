@@ -42,41 +42,41 @@ ruleTester.run('no-relative-packages', rule, {
     test({
       code: 'import foo from "./package-named"',
       filename: testFilePath('./bar.js'),
-      errors: [ {
+      errors: [{
         message: 'Relative import from another package is not allowed. Use `package-named` instead of `./package-named`',
         line: 1,
         column: 17,
-      } ],
+      }],
       output: 'import foo from "package-named"',
     }),
     test({
       code: 'import foo from "../package-named"',
       filename: testFilePath('./package/index.js'),
-      errors: [ {
+      errors: [{
         message: 'Relative import from another package is not allowed. Use `package-named` instead of `../package-named`',
         line: 1,
         column: 17,
-      } ],
+      }],
       output: 'import foo from "package-named"',
     }),
     test({
       code: 'import foo from "../package-scoped"',
       filename: testFilePath('./package/index.js'),
-      errors: [ {
+      errors: [{
         message: `Relative import from another package is not allowed. Use \`${normalize('@scope/package-named')}\` instead of \`../package-scoped\``,
         line: 1,
         column: 17,
-      } ],
+      }],
       output: `import foo from "@scope/package-named"`,
     }),
     test({
       code: 'import bar from "../bar"',
       filename: testFilePath('./package-named/index.js'),
-      errors: [ {
+      errors: [{
         message: `Relative import from another package is not allowed. Use \`${normalize('eslint-plugin-import/tests/files/bar')}\` instead of \`../bar\``,
         line: 1,
         column: 17,
-      } ],
+      }],
       output: `import bar from "eslint-plugin-import/tests/files/bar"`,
     }),
   ],

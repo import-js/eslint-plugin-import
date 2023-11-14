@@ -1,6 +1,8 @@
 import resolve from 'eslint-module-utils/resolve';
-import docsUrl from '../docsUrl';
 import semver from 'semver';
+import flatMap from 'array.prototype.flatmap';
+
+import docsUrl from '../docsUrl';
 
 let typescriptPkg;
 try {
@@ -51,7 +53,7 @@ function getFix(first, rest, sourceCode, context) {
   }
 
   const defaultImportNames = new Set(
-    [first, ...rest].map(getDefaultImportName).filter(Boolean),
+    flatMap([].concat(first, rest || []), (x) => getDefaultImportName(x) || []),
   );
 
   // Bail if there are multiple different default import names – it's up to the
@@ -62,10 +64,7 @@ function getFix(first, rest, sourceCode, context) {
 
   // Leave it to the user to handle comments. Also skip `import * as ns from
   // './foo'` imports, since they cannot be merged into another import.
-  const restWithoutComments = rest.filter((node) => !(
-    hasProblematicComments(node, sourceCode)
-    || hasNamespace(node)
-  ));
+  const restWithoutComments = rest.filter((node) => !hasProblematicComments(node, sourceCode) && !hasNamespace(node));
 
   const specifiers = restWithoutComments
     .map((node) => {
@@ -318,10 +317,11 @@ module.exports = {
         });
       }
       const map = moduleMaps.get(n.parent);
-      if (n.importKind === 'type') {
+      const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+      if (!preferInline && n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
       }
-      if (n.specifiers.some((spec) => spec.importKind === 'type')) {
+      if (!preferInline && n.specifiers.some((spec) => spec.importKind === 'type')) {
         return map.namedTypesImported;
       }
 

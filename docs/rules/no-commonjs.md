@@ -86,12 +86,11 @@ don't want this rule.
 It is also fairly noisy if you have a larger codebase that is being transitioned
 from CommonJS to ES6 modules.
 
-
 ## Contributors
 
 Special thanks to @xjamundx for donating the module.exports and exports.* bits.
 
 ## Further Reading
 
-- [`no-amd`](./no-amd.md): report on AMD `require`, `define`
-- Source: https://github.com/xjamundx/eslint-plugin-modules
+ - [`no-amd`](./no-amd.md): report on AMD `require`, `define`
+ - Source: <https://github.com/xjamundx/eslint-plugin-modules>

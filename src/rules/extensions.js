@@ -5,7 +5,7 @@ import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
-const enumValues = { enum: [ 'always', 'ignorePackages', 'never' ] };
+const enumValues = { enum: ['always', 'ignorePackages', 'never'] };
 const patternProperties = {
   type: 'object',
   patternProperties: { '.*': enumValues },
@@ -135,6 +135,7 @@ module.exports = {
     }
 
     function isExternalRootModule(file) {
+      if (file === '.' || file === '..') { return false; }
       const slashCount = file.split('/').length - 1;
 
       if (slashCount === 0)  { return true; }

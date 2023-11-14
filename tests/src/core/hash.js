@@ -29,7 +29,7 @@ describe('hash', function () {
     });
 
     it('handles Array instances', function () {
-      expectHash(hashify([ 'a string' ]), '["a string",]');
+      expectHash(hashify(['a string']), '["a string",]');
     });
 
     it('handles empty Array instances', function () {
@@ -45,13 +45,13 @@ describe('hash', function () {
     });
 
     it('handles nested Object and Array instances', function () {
-      expectHash(hashify({ foo: 123.456, 'a key': 'a value', obj: { arr: [ { def: 'ghi' } ] } }), '{"a key":"a value","foo":123.456,"obj":{"arr":[{"def":"ghi",},],},}');
+      expectHash(hashify({ foo: 123.456, 'a key': 'a value', obj: { arr: [{ def: 'ghi' }] } }), '{"a key":"a value","foo":123.456,"obj":{"arr":[{"def":"ghi",},],},}');
     });
   });
 
   describe('hashArray', function () {
     it('handles Array instances', function () {
-      expectHash(hashArray([ 'a string' ]), '["a string",]');
+      expectHash(hashArray(['a string']), '["a string",]');
     });
 
     it('handles empty Array instances', function () {
@@ -69,7 +69,7 @@ describe('hash', function () {
     });
 
     it('handles nested Object and Array instances', function () {
-      expectHash(hashObject({ foo: 123.456, 'a key': 'a value', obj: { arr: [ { def: 'ghi' } ] } }), '{"a key":"a value","foo":123.456,"obj":{"arr":[{"def":"ghi",},],},}');
+      expectHash(hashObject({ foo: 123.456, 'a key': 'a value', obj: { arr: [{ def: 'ghi' }] } }), '{"a key":"a value","foo":123.456,"obj":{"arr":[{"def":"ghi",},],},}');
     });
   });
 

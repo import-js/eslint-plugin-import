@@ -12,7 +12,8 @@ If you have multiple entry points or are using `js:next` this rule includes an
 
 ## Options
 
-#### `exceptions`
+### `exceptions`
+
  - An array of globs. The rule will be omitted from any file that matches a glob
    in the options array. For example, the following setting will omit the rule
    in the `some-file.js` file.
@@ -43,6 +44,7 @@ console.log(baz)
 ```
 
 ### Pass
+
 Given the following package.json:
 
 ```json
@@ -75,4 +77,5 @@ module.exports = foo;
 ```
 
 ### Further Reading
+
  - [webpack issue #4039](https://github.com/webpack/webpack/issues/4039)

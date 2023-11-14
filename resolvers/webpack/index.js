@@ -2,15 +2,14 @@
 
 const findRoot = require('find-root');
 const path = require('path');
-const get = require('lodash/get');
 const isEqual = require('lodash/isEqual');
-const find = require('array-find');
+const find = require('array.prototype.find');
 const interpret = require('interpret');
 const fs = require('fs');
 const isCore = require('is-core-module');
-const resolve = require('resolve');
+const resolve = require('resolve/sync');
 const semver = require('semver');
-const has = require('has');
+const hasOwn = require('hasown');
 const isRegex = require('is-regex');
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
@@ -51,15 +50,15 @@ exports.resolve = function (source, file, settings) {
 
   let webpackConfig;
 
-  const _configPath = get(settings, 'config');
+  const _configPath = settings && settings.config;
   /**
      * Attempt to set the current working directory.
      * If none is passed, default to the `cwd` where the config is located.
      */
-  const cwd = get(settings, 'cwd');
-  const configIndex = get(settings, 'config-index');
-  const env = get(settings, 'env');
-  const argv = get(settings, 'argv', {});
+  const cwd = settings && settings.cwd;
+  const configIndex = settings && settings['config-index'];
+  const env = settings && settings.env;
+  const argv = settings && typeof settings.argv !== 'undefined' ? settings.argv : {};
   let packageDir;
 
   let configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
@@ -184,17 +183,17 @@ function createResolveSync(configPath, webpackConfig, cwd) {
 
   if (typeof configPath === 'string') {
     // This can be changed via the settings passed in when defining the resolver
-    basedir = cwd || configPath;
+    basedir = cwd || path.dirname(configPath);
     log(`Attempting to load webpack path from ${basedir}`);
   }
 
   try {
     // Attempt to resolve webpack from the given `basedir`
-    const webpackFilename = resolve.sync('webpack', { basedir, preserveSymlinks: false });
+    const webpackFilename = resolve('webpack', { basedir, preserveSymlinks: false });
     const webpackResolveOpts = { basedir: path.dirname(webpackFilename), preserveSymlinks: false };
 
     webpackRequire = function (id) {
-      return require(resolve.sync(id, webpackResolveOpts));
+      return require(resolve(id, webpackResolveOpts));
     };
   } catch (e) {
     // Something has gone wrong (or we're in a test). Use our own bundled
@@ -270,18 +269,18 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.root),
     new ModulesInDirectoriesPlugin(
       'module',
-      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules'],
+      resolveConfig.modulesDirectories || resolveConfig.modules || ['web_modules', 'node_modules']
     ),
     makeRootPlugin(ModulesInRootPlugin, 'module', resolveConfig.fallback),
     new ModuleAsFilePlugin('module'),
     new ModuleAsDirectoryPlugin('module'),
     new DirectoryDescriptionFilePlugin(
       'package.json',
-      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains),
+      ['module', 'jsnext:main'].concat(resolveConfig.packageMains || webpack1DefaultMains)
     ),
     new DirectoryDefaultFilePlugin(['index']),
     new FileAppendPlugin(resolveConfig.extensions || ['', '.webpack.js', '.web.js', '.js']),
-    new ResultSymlinkPlugin(),
+    new ResultSymlinkPlugin()
   );
 
   const resolvePlugins = [];
@@ -383,7 +382,7 @@ function findExternal(source, externals, context, resolveSync) {
 
   // else, vanilla object
   for (const key in externals) {
-    if (!has(externals, key)) { continue; }
+    if (!hasOwn(externals, key)) { continue; }
     if (source === key) { return true; }
   }
   return false;
@@ -419,7 +418,7 @@ function findConfigPath(configPath, packageDir) {
       }
 
       const maybePath = path.resolve(
-        path.join(packageDir, 'webpack.config' + maybeExtension),
+        path.join(packageDir, 'webpack.config' + maybeExtension)
       );
       if (fs.existsSync(maybePath)) {
         configPath = maybePath;
