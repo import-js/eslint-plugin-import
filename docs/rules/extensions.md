@@ -106,6 +106,14 @@ import express from 'express/index';
 import * as path from 'path';
 ```
 
+The following patterns are considered problems when the configuration is set to "never" and the option "checkTypeImports" is set to `true`:
+
+```js
+import type { Foo } from './foo.ts';
+
+export type { Foo } from './foo.ts';
+```
+
 The following patterns are considered problems when configuration set to "always":
 
 ```js
@@ -169,7 +177,7 @@ import express from 'express';
 import foo from '@/foo';
 ```
 
-The following patterns are considered problems when the option "checkTypeImports" is set to `true`:
+The following patterns are considered problems when the configuration is set to "always" and the option "checkTypeImports" is set to `true`:
 
 ```js
 import type { Foo } from './foo';
