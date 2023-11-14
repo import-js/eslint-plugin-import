@@ -172,7 +172,7 @@ module.exports = {
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports and exports
-        if (props.checkTypeImports !== true && (node.importKind === 'type' || node.exportKind === 'type')) { return; }
+        if (!props.checkTypeImports && (node.importKind === 'type' || node.exportKind === 'type')) { return; }
         const extensionRequired = isUseOfExtensionRequired(extension, isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {
