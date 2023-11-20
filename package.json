@@ -119,6 +119,6 @@
     "object.groupby": "^1.0.1",
     "object.values": "^1.1.7",
     "semver": "^6.3.1",
-    "tsconfig-paths": "^3.14.2"
+    "tsconfig-paths": "^4.2.0"
   }
 }
