@@ -9,6 +9,10 @@ try {
   typescriptPkg = require('typescript/package.json'); // eslint-disable-line import/no-extraneous-dependencies
 } catch (e) { /**/ }
 
+function getSourceFromNode(node) {
+  return node.callee ? node.arguments[0] : node.source;
+}
+
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
@@ -18,14 +22,14 @@ function checkImports(imported, context) {
       const fix = getFix(first, rest, sourceCode, context);
 
       context.report({
-        node: first.source,
+        node: getSourceFromNode(first),
         message,
         fix, // Attach the autofix (if any) to the first import.
       });
 
       for (const node of rest) {
         context.report({
-          node: node.source,
+          node: getSourceFromNode(node),
           message,
         });
       }
@@ -41,6 +45,12 @@ function getFix(first, rest, sourceCode, context) {
   // `sourceCode.getCommentsBefore` was added in 4.0, so that's an easy thing to
   // check for.
   if (typeof sourceCode.getCommentsBefore !== 'function') {
+    return undefined;
+  }
+
+  // if there is a require call in any of the duplicates, return undefined
+  // this could be implemented in the future
+  if ([first, ...rest].some(node => "callee" in node)) {
     return undefined;
   }
 
@@ -307,16 +317,27 @@ module.exports = {
 
     const moduleMaps = new Map();
 
-    function getImportMap(n) {
-      if (!moduleMaps.has(n.parent)) {
-        moduleMaps.set(n.parent, {
+    function getPrimalRef(n) {
+      if (n.type === "Program" || n.type === "DeclareModule" || n.type === "TSModuleBlock") return n;
+      return getPrimalRef(n.parent);
+    }
+
+    function getModuleMaps(n) {
+      const marker = getPrimalRef(n);
+      if (!moduleMaps.has(marker)) {
+        moduleMaps.set(marker, {
           imported: new Map(),
           nsImported: new Map(),
           defaultTypesImported: new Map(),
           namedTypesImported: new Map(),
         });
       }
-      const map = moduleMaps.get(n.parent);
+      const map = moduleMaps.get(marker);
+      return map;
+    }
+
+    function getImportMap(n) {
+      const map = getModuleMaps(n)
       const preferInline = context.options[0] && context.options[0]['prefer-inline'];
       if (!preferInline && n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
@@ -338,6 +359,21 @@ module.exports = {
           importMap.get(resolvedPath).push(n);
         } else {
           importMap.set(resolvedPath, [n]);
+        }
+      },
+
+      CallExpression: (call) => {
+        if (call.callee.name !== "require" || call.callee.type !== 'Identifier' || call.arguments.length !== 1) return;
+        const modulePath = call.arguments[0];
+        if (modulePath.type !== 'Literal') return;
+
+        const resolvedPath = resolver(modulePath.value);
+        const importMap = getModuleMaps(call).imported;
+
+        if (importMap.has(resolvedPath)) {
+          importMap.get(resolvedPath).push(call);
+        } else {
+          importMap.set(resolvedPath, [call]);
         }
       },
 
