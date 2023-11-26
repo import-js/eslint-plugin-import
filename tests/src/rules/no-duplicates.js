@@ -49,8 +49,27 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import {y} from './foo'; import * as ns from './foo'",
     }),
+
+    // require imports
+    test({
+      code: "const a = require('./foo');",
+    }),
+    test({
+      code: "const a = require('./foo'); const b = require('./bar');",
+    }),
   ],
   invalid: [
+    // require imports
+    test({
+      code: "const a = require('./foo'); const b = require('./foo');",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
+    test({
+      code: "const a = require('./foo'); const b = require('./bar'); const c = require('./foo');",
+      errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
+    }),
+
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
       output: "import { x , y } from './foo'; ",
