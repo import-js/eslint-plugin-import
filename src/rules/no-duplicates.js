@@ -50,7 +50,7 @@ function getFix(first, rest, sourceCode, context) {
 
   // if there is a require call in any of the duplicates, return undefined
   // this could be implemented in the future
-  if ([first, ...rest].some(node => "callee" in node)) {
+  if ([first, ...rest].some((node) => 'callee' in node)) {
     return undefined;
   }
 
@@ -318,7 +318,7 @@ module.exports = {
     const moduleMaps = new Map();
 
     function getPrimalRef(n) {
-      if (n.type === "Program" || n.type === "DeclareModule" || n.type === "TSModuleBlock") return n;
+      if (n.type === 'Program' || n.type === 'DeclareModule' || n.type === 'TSModuleBlock') { return n; }
       return getPrimalRef(n.parent);
     }
 
@@ -337,7 +337,7 @@ module.exports = {
     }
 
     function getImportMap(n) {
-      const map = getModuleMaps(n)
+      const map = getModuleMaps(n);
       const preferInline = context.options[0] && context.options[0]['prefer-inline'];
       if (!preferInline && n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
@@ -362,10 +362,10 @@ module.exports = {
         }
       },
 
-      CallExpression: (call) => {
-        if (call.callee.name !== "require" || call.callee.type !== 'Identifier' || call.arguments.length !== 1) return;
+      CallExpression(call) {
+        if (call.callee.name !== 'require' || call.callee.type !== 'Identifier' || call.arguments.length !== 1) { return; }
         const modulePath = call.arguments[0];
-        if (modulePath.type !== 'Literal') return;
+        if (modulePath.type !== 'Literal') { return; }
 
         const resolvedPath = resolver(modulePath.value);
         const importMap = getModuleMaps(call).imported;
