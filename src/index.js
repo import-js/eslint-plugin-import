@@ -15,6 +15,7 @@ export const rules = {
   'consistent-type-specifier-style': require('./rules/consistent-type-specifier-style'),
 
   'no-self-import': require('./rules/no-self-import'),
+  'no-parent-barrel-import': require('./rules/no-parent-barrel-import'),
   'no-cycle': require('./rules/no-cycle'),
   'no-named-default': require('./rules/no-named-default'),
   'no-named-as-default': require('./rules/no-named-as-default'),

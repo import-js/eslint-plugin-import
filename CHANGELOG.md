@@ -6,6 +6,10 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+
+- Add [`no-parent-barrel-import`] rule: forbids a module from importing from parent barrel file
+
 ### Fixed
 - [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
 - [`no-unused-modules`]: support export patterns with array destructuring ([#2930], thanks [@ljharb])
@@ -1086,6 +1090,7 @@ for info on changes for earlier releases.
 [`no-relative-packages`]: ./docs/rules/no-relative-packages.md
 [`no-relative-parent-imports`]: ./docs/rules/no-relative-parent-imports.md
 [`no-restricted-paths`]: ./docs/rules/no-restricted-paths.md
+[`no-parent-barrel-import`]: ./docs/rules/no-parent-barrel-import.md
 [`no-self-import`]: ./docs/rules/no-self-import.md
 [`no-unassigned-import`]: ./docs/rules/no-unassigned-import.md
 [`no-unresolved`]: ./docs/rules/no-unresolved.md
