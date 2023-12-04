@@ -25,6 +25,7 @@ module.exports = {
                 items: {
                   type: 'string',
                 },
+                description: 'Include paths and import statements that can be imported with reaching.',
               },
             },
             additionalProperties: false,
@@ -37,6 +38,7 @@ module.exports = {
                 items: {
                   type: 'string',
                 },
+                description: 'Exclude paths and import statements that can be imported with reaching.',
               },
             },
             additionalProperties: false,

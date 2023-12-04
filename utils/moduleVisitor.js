@@ -122,9 +122,9 @@ function makeOptionsSchema(additionalProperties) {
   const base =  {
     type: 'object',
     properties: {
-      commonjs: { type: 'boolean' },
-      amd: { type: 'boolean' },
-      esmodule: { type: 'boolean' },
+      commonjs: { type: 'boolean', default: true },
+      amd: { type: 'boolean', default: false },
+      esmodule: { type: 'boolean', default: true },
       ignore: {
         type: 'array',
         minItems: 1,

@@ -26,6 +26,7 @@ module.exports = {
             items: {
               type: 'string',
             },
+            description: 'Names of allowed modules.',
           },
         },
         additionalProperties: false,

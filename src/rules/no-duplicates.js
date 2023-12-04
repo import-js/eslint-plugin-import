@@ -282,9 +282,11 @@ module.exports = {
         properties: {
           considerQueryString: {
             type: 'boolean',
+            default: false,
           },
           'prefer-inline': {
             type: 'boolean',
+            default: false,
           },
         },
         additionalProperties: false,

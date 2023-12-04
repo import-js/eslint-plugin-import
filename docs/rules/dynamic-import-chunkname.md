@@ -11,6 +11,15 @@ This rule enforces naming of webpack chunks in dynamic imports. When you don't e
 This rule runs against `import()` by default, but can be configured to also run against an alternative dynamic-import function, e.g. 'dynamicImport.'
 You can also configure the regex format you'd like to accept for the webpackChunkName - for example, if we don't want the number 6 to show up in our chunk names:
 
+<!-- begin auto-generated rule options list -->
+
+| Name                     | Type     |
+| :----------------------- | :------- |
+| `importFunctions`        | String[] |
+| `webpackChunknameFormat` | String   |
+
+<!-- end auto-generated rule options list -->
+
  ```javascript
 {
   "dynamic-import-chunkname": [2, {

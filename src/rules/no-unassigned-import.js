@@ -73,6 +73,7 @@ module.exports = {
             items: {
               type: 'string',
             },
+            description: 'An Array of globs. The files that match any of these patterns would be ignored/allowed by the linter. This can be useful for some build environments (e.g. css-loader in webpack). Note that the globs start from the where the linter is executed (usually project root), but not from each file that includes the source. Learn more in both the pass and fail examples below.',
           },
         },
         additionalProperties: false,

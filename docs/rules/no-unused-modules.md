@@ -25,12 +25,19 @@ Example:
 
 ### Options
 
-This rule takes the following option:
+<!-- begin auto-generated rule options list -->
 
- - **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
- - **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
- - `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
- - `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
+| Name             | Description                                                                                                | Type     | Choices | Default         | Required |
+| :--------------- | :--------------------------------------------------------------------------------------------------------- | :------- | :------ | :-------------- | :------- |
+| `ignoreExports`  | files/paths for which unused exports will not be reported (e.g module entry points in a published package) | String[] |         |                 |          |
+| `missingExports` | report modules without any exports                                                                         | Boolean  |         | `false`         |          |
+| `missingExports` |                                                                                                            |          | `true`  |                 | Yes      |
+| `src`            | files/paths to be analyzed (only for unused exports)                                                       | String[] |         | `process.cwd()` |          |
+| `src`            |                                                                                                            |          |         |                 |          |
+| `unusedExports`  | report exports without any usage                                                                           | Boolean  |         | `false`         |          |
+| `unusedExports`  |                                                                                                            |          | `true`  |                 | Yes      |
+
+<!-- end auto-generated rule options list -->
 
 ### Example for missing exports
 

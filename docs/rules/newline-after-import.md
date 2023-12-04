@@ -8,13 +8,15 @@ Enforces having one or more empty lines after the last top-level import statemen
 
 ## Rule Details
 
-This rule supports the following options:
+<!-- begin auto-generated rule options list -->
 
- - `count` which sets the number of newlines that are enforced after the last top-level import statement or require call. This option defaults to `1`.
+| Name               | Description                                                                                              | Type    | Default |
+| :----------------- | :------------------------------------------------------------------------------------------------------- | :------ | :------ |
+| `considerComments` | enforces the rule on comments after the last import-statement as well when set to true                   | Boolean | `false` |
+| `count`            | Sets the number of newlines that are enforced after the last top-level import statement or require call. | Integer |         |
+| `exactCount`       | enforce the exact numbers of newlines that is mentioned in `count`                                       | Boolean | `false` |
 
- - `exactCount` which enforce the exact numbers of newlines that is mentioned in `count`. This option defaults to `false`.
-
- - `considerComments` which enforces the rule on comments after the last import-statement as well when set to true. This option defaults to `false`.
+<!-- end auto-generated rule options list -->
 
 Valid:
 

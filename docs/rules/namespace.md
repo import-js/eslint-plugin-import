@@ -79,6 +79,14 @@ function deepTrouble() {
 
 ### Options
 
+<!-- begin auto-generated rule options list -->
+
+| Name            | Description                                                                               | Type    | Default |
+| :-------------- | :---------------------------------------------------------------------------------------- | :------ | :------ |
+| `allowComputed` | If `false`, will report computed (and thus, un-lintable) references to namespace members. | Boolean | `false` |
+
+<!-- end auto-generated rule options list -->
+
 #### `allowComputed`
 
 Defaults to `false`. When false, will report the following:

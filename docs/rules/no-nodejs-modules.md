@@ -6,9 +6,13 @@ Forbid the use of Node.js builtin modules. Can be useful for client-side web pro
 
 ## Options
 
-This rule supports the following options:
+<!-- begin auto-generated rule options list -->
 
- - `allow`: Array of names of allowed modules. Defaults to an empty array.
+| Name    | Description               | Type     |
+| :------ | :------------------------ | :------- |
+| `allow` | Names of allowed modules. | String[] |
+
+<!-- end auto-generated rule options list -->
 
 ## Rule Details
 

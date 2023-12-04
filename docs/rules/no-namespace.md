@@ -10,9 +10,13 @@ The rule is auto-fixable when the namespace object is only used for direct membe
 
 ## Options
 
-This rule supports the following options:
+<!-- begin auto-generated rule options list -->
 
- - `ignore`: array of glob strings for modules that should be ignored by the rule.
+| Name     | Description                                                  | Type     |
+| :------- | :----------------------------------------------------------- | :------- |
+| `ignore` | Glob strings for modules that should be ignored by the rule. | String[] |
+
+<!-- end auto-generated rule options list -->
 
 ## Rule Details
 

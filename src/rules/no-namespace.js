@@ -28,6 +28,7 @@ module.exports = {
             type: 'string',
           },
           uniqueItems: true,
+          description: 'Glob strings for modules that should be ignored by the rule.',
         },
       },
     }],
