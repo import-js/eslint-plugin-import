@@ -74,6 +74,7 @@ const FUNCTION_DECLARATION = 'FunctionDeclaration';
 const CLASS_DECLARATION = 'ClassDeclaration';
 const IDENTIFIER = 'Identifier';
 const OBJECT_PATTERN = 'ObjectPattern';
+const ARRAY_PATTERN = 'ArrayPattern';
 const TS_INTERFACE_DECLARATION = 'TSInterfaceDeclaration';
 const TS_TYPE_ALIAS_DECLARATION = 'TSTypeAliasDeclaration';
 const TS_ENUM_DECLARATION = 'TSEnumDeclaration';
@@ -96,6 +97,10 @@ function forEachDeclarationIdentifier(declaration, cb) {
             if (pattern.type === IDENTIFIER) {
               cb(pattern.name);
             }
+          });
+        } else if (id.type === ARRAY_PATTERN) {
+          id.elements.forEach(({ name }) => {
+            cb(name);
           });
         } else {
           cb(id.name);

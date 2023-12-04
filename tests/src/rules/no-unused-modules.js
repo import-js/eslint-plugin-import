@@ -160,6 +160,15 @@ ruleTester.run('no-unused-modules', rule, {
       filename: testFilePath('./no-unused-modules/file-o.js'),
       parser: parsers.BABEL_OLD,
     }),
+    test({
+      options: unusedExportsOptions,
+      code: `
+        export const [o0, o2] = createLoadingAndErrorSelectors(
+          AUTH_USER
+        );
+      `,
+      filename: testFilePath('./no-unused-modules/file-o.js'),
+    }),
   ],
   invalid: [
     test({

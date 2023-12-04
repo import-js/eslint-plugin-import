@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
+- [`no-unused-modules`]: support export patterns with array destructuring ([#2930], thanks [@ljharb])
 
 ## [2.29.0] - 2023-10-22
 
@@ -1435,6 +1436,8 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+
+[#2930]: https://github.com/import-js/eslint-plugin-import/issues/2930
 [#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
 [#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
 [#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
