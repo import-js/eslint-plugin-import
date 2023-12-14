@@ -6,9 +6,12 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.29.1] - 2023-12-14
+
 ### Fixed
 - [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
 - [`no-unused-modules`]: support export patterns with array destructuring ([#2930], thanks [@ljharb])
+- [Deps] update `tsconfig-paths` ([#2447], thanks [@domdomegg])
 
 ## [2.29.0] - 2023-10-22
 
@@ -1445,6 +1448,7 @@ for info on changes for earlier releases.
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
 [#2665]: https://github.com/import-js/eslint-plugin-import/issues/2665
 [#2577]: https://github.com/import-js/eslint-plugin-import/issues/2577
+[#2447]: https://github.com/import-js/eslint-plugin-import/issues/2447
 [#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
 [#2412]: https://github.com/import-js/eslint-plugin-import/issues/2412
 [#2392]: https://github.com/import-js/eslint-plugin-import/issues/2392
@@ -1563,7 +1567,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.1...HEAD
+[2.29.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...v2.29.1
 [2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
 [2.28.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...v2.28.1
 [2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
@@ -1715,6 +1720,7 @@ for info on changes for earlier releases.
 [@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
+[@domdomegg]: https://github.com/domdomegg
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley
