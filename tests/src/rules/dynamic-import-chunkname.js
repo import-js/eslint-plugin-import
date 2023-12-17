@@ -12,6 +12,10 @@ const pickyCommentOptions = [{
   importFunctions: ['dynamicImport'],
   webpackChunknameFormat: pickyCommentFormat,
 }];
+const allowEmptyOptions = [{
+  importFunctions: ['dynamicImport'],
+  allowEmpty: true,
+}];
 const multipleImportFunctionOptions = [{
   importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
 }];
@@ -82,6 +86,19 @@ ruleTester.run('dynamic-import-chunkname', rule, {
         'someModule'
       )`,
       options,
+    },
+    {
+      code: `import('test')`,
+      options: allowEmptyOptions,
+      parser,
+    },
+    {
+      code: `import(
+        /* webpackMode: "lazy" */
+        'test'
+      )`,
+      options: allowEmptyOptions,
+      parser,
     },
     {
       code: `import(
@@ -975,6 +992,19 @@ context('TypeScript', () => {
 
     ruleTester.run('dynamic-import-chunkname', rule, {
       valid: [
+        {
+          code: `import('test')`,
+          options: allowEmptyOptions,
+          parser: typescriptParser,
+        },
+        {
+          code: `import(
+            /* webpackMode: "lazy" */
+            'test'
+          )`,
+          options: allowEmptyOptions,
+          parser: typescriptParser,
+        },
         {
           code: `import(
             /* webpackChunkName: "someModule" */

@@ -15,7 +15,8 @@ You can also configure the regex format you'd like to accept for the webpackChun
 {
   "dynamic-import-chunkname": [2, {
     importFunctions: ["dynamicImport"],
-    webpackChunknameFormat: "[a-zA-Z0-57-9-/_]+"
+    webpackChunknameFormat: "[a-zA-Z0-57-9-/_]+",
+    allowEmpty: false
   }]
 }
 ```
@@ -85,6 +86,38 @@ The following patterns are valid:
     /* webpackChunkName: 'someModule' */
     'someModule',
   );
+```
+
+### `allowEmpty: true`
+
+If you want to allow dynamic imports without a webpackChunkName, you can set `allowEmpty: true` in the rule config. This will allow dynamic imports without a leading comment, or with a leading comment that does not contain a webpackChunkName.
+
+Given `{ "allowEmpty": true }`:
+
+<!-- markdownlint-disable-next-line MD024 -- duplicate header -->
+### valid
+
+The following patterns are valid:
+
+```javascript
+import('someModule');
+
+import(
+  /* webpackChunkName: "someModule" */
+  'someModule',
+);
+```
+<!-- markdownlint-disable-next-line MD024 -- duplicate header -->
+### invalid
+
+The following patterns are invalid:
+
+```javascript
+// incorrectly formatted comment
+import(
+  /*webpackChunkName:"someModule"*/
+  'someModule',
+);
 ```
 
 ## When Not To Use It

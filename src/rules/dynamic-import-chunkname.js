@@ -19,6 +19,9 @@ module.exports = {
             type: 'string',
           },
         },
+        allowEmpty: {
+          type: 'boolean',
+        },
         webpackChunknameFormat: {
           type: 'string',
         },
@@ -28,7 +31,7 @@ module.exports = {
 
   create(context) {
     const config = context.options[0];
-    const { importFunctions = [] } = config || {};
+    const { importFunctions = [], allowEmpty = false } = config || {};
     const { webpackChunknameFormat = '([0-9a-zA-Z-_/.]|\\[(request|index)\\])+' } = config || {};
 
     const paddedCommentRegex = /^ (\S[\s\S]+\S) $/;
@@ -42,7 +45,7 @@ module.exports = {
         ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
         : sourceCode.getComments(arg).leading; // This method is deprecated in ESLint 7.
 
-      if (!leadingComments || leadingComments.length === 0) {
+      if ((!leadingComments || leadingComments.length === 0) && !allowEmpty) {
         context.report({
           node,
           message: 'dynamic imports require a leading comment with the webpack chunkname',
@@ -94,7 +97,7 @@ module.exports = {
         }
       }
 
-      if (!isChunknamePresent) {
+      if (!isChunknamePresent && !allowEmpty) {
         context.report({
           node,
           message:
