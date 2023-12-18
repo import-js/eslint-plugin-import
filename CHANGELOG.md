@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
+
 ## [2.29.1] - 2023-12-14
 
 ### Fixed
@@ -1101,6 +1104,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
 [#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
 [#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
@@ -1835,6 +1839,7 @@ for info on changes for earlier releases.
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab
+[@mulztob]: https://github.com/mulztob
 [@mx-bernhard]: https://github.com/mx-bernhard
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
@@ -1843,9 +1848,9 @@ for info on changes for earlier releases.
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512
 [@ombene]: https://github.com/ombene
-[@Pandemic1617]: https://github.com/Pandemic1617
 [@ota-meshi]: https://github.com/ota-meshi
 [@OutdatedVersion]: https://github.com/OutdatedVersion
+[@Pandemic1617]: https://github.com/Pandemic1617
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet
