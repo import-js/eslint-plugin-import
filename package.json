@@ -88,7 +88,7 @@
     "jackspeak": "=2.1.1",
     "linklocal": "^2.8.2",
     "lodash.isarray": "^4.0.0",
-    "markdownlint-cli": "^0.38.0",
+    "markdownlint-cli": "~0.35",
     "mocha": "^3.5.3",
     "npm-which": "^3.0.1",
     "nyc": "^11.9.0",
