@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
 - [`no-cycle`]: use scc algorithm to optimize ([#2998], thanks [@soryy708])
 - [`no-duplicates`]: Removing duplicates breaks in TypeScript ([#3033], thanks [@yesl-kim])
+- [`newline-after-import`]: fix considerComments option when require ([#2952], thanks [@developer-bandi])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1136,6 +1137,7 @@ for info on changes for earlier releases.
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
 [#2985]: https://github.com/import-js/eslint-plugin-import/pull/2985
 [#2982]: https://github.com/import-js/eslint-plugin-import/pull/2982
+[#2952]: https://github.com/import-js/eslint-plugin-import/pull/2952
 [#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
 [#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
 [#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
@@ -1742,6 +1744,7 @@ for info on changes for earlier releases.
 [@bicstone]: https://github.com/bicstone
 [@Blasz]: https://github.com/Blasz
 [@bmish]: https://github.com/bmish
+[@developer-bandi]: https://github.com/developer-bandi
 [@borisyankov]: https://github.com/borisyankov
 [@bradennapier]: https://github.com/bradennapier
 [@bradzacher]: https://github.com/bradzacher
