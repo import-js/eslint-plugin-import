@@ -879,7 +879,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         column: 1,
         message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
       }],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      parserOptions: { ecmaVersion: 2015 },
       options: [{ considerComments: true, count: 2 }],
     },
   ),
