@@ -403,6 +403,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `var foo = require('foo-module');\n\n\n/**\n * Test comment\n */\nvar foo = 'bar';`,
       options: [{ count: 2, considerComments: true }],
     },
+    {
+      code: `const foo = require('foo');\n\n\n// some random comment\nconst bar = function() {};`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      parserOptions: { ecmaVersion: 2015 },
+    },
   ),
 
   invalid: [].concat(
