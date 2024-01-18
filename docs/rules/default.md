@@ -25,16 +25,24 @@ Given:
 
 ```js
 // ./foo.js
-export default function () { return 42 }
+export default function () {
+  return 42
+}
 
 // ./bar.js
-export function bar() { return null }
+export function bar() {
+  return null
+}
 
 // ./baz.js
-module.exports = function () { /* ... */ }
+module.exports = function () {
+  /* ... */
+}
 
 // node_modules/some-module/index.js
-exports.sharedFunction = function shared() { /* ... */ }
+exports.sharedFunction = function shared() {
+  /* ... */
+}
 ```
 
 The following is considered valid:
@@ -63,9 +71,9 @@ either, so such a situation will be reported in the importing module.
 
 ## Further Reading
 
- - Lee Byron's [ES7] export proposal
- - [`import/ignore`] setting
- - [`jsnext:main`] (Rollup)
+- Lee Byron's [ES7] export proposal
+- [`import/ignore`] setting
+- [`jsnext:main`] (Rollup)
 
 [ES7]: https://github.com/leebyron/ecmascript-more-export-from
 [`import/ignore`]: ../../README.md#importignore

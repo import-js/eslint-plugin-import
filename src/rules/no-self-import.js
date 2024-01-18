@@ -3,19 +3,21 @@
  * @author Gio d'Amelio
  */
 
-import resolve from 'eslint-module-utils/resolve';
-import moduleVisitor from 'eslint-module-utils/moduleVisitor';
-import docsUrl from '../docsUrl';
+import resolve from 'eslint-module-utils/resolve'
+import moduleVisitor from 'eslint-module-utils/moduleVisitor'
+import docsUrl from '../docsUrl'
 
 function isImportingSelf(context, node, requireName) {
-  const filePath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+  const filePath = context.getPhysicalFilename
+    ? context.getPhysicalFilename()
+    : context.getFilename()
 
   // If the input is from stdin, this test can't fail
   if (filePath !== '<text>' && filePath === resolve(requireName, context)) {
     context.report({
       node,
       message: 'Module imports itself.',
-    });
+    })
   }
 }
 
@@ -32,8 +34,11 @@ module.exports = {
     schema: [],
   },
   create(context) {
-    return moduleVisitor((source, node) => {
-      isImportingSelf(context, node, source.value);
-    }, { commonjs: true });
+    return moduleVisitor(
+      (source, node) => {
+        isImportingSelf(context, node, source.value)
+      },
+      { commonjs: true },
+    )
   },
-};
+}

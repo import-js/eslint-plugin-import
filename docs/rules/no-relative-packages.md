@@ -43,14 +43,14 @@ The following patterns are considered problems:
  *  in my-project/packages/foo.js
  */
 
-import bar from '../bar'; // Import sibling package using relative path
-import entry from '../../entry.js'; // Import from parent package using relative path
+import bar from '../bar' // Import sibling package using relative path
+import entry from '../../entry.js' // Import from parent package using relative path
 
 /**
  *  in my-project/entry.js
  */
 
-import bar from './packages/bar'; // Import child package using relative path
+import bar from './packages/bar' // Import child package using relative path
 ```
 
 The following patterns are NOT considered problems:
@@ -60,11 +60,11 @@ The following patterns are NOT considered problems:
  *  in my-project/packages/foo.js
  */
 
-import bar from 'bar'; // Import sibling package using package name
+import bar from 'bar' // Import sibling package using package name
 
 /**
  *  in my-project/entry.js
  */
 
-import bar from 'bar'; // Import sibling package using package name
+import bar from 'bar' // Import sibling package using package name
 ```

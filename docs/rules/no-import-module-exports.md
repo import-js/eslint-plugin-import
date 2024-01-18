@@ -14,9 +14,9 @@ If you have multiple entry points or are using `js:next` this rule includes an
 
 ### `exceptions`
 
- - An array of globs. The rule will be omitted from any file that matches a glob
-   in the options array. For example, the following setting will omit the rule
-   in the `some-file.js` file.
+- An array of globs. The rule will be omitted from any file that matches a glob
+  in the options array. For example, the following setting will omit the rule
+  in the `some-file.js` file.
 
 ```json
 "import/no-import-module-exports": ["error", {
@@ -39,7 +39,7 @@ import thing from 'other-thing'
 exports.foo = bar
 
 import thing from 'starwars'
-const baz = module.exports = thing
+const baz = (module.exports = thing)
 console.log(baz)
 ```
 
@@ -49,7 +49,7 @@ Given the following package.json:
 
 ```json
 {
-  "main": "lib/index.js",
+  "main": "lib/index.js"
 }
 ```
 
@@ -67,15 +67,15 @@ import thing from 'otherthing'
 console.log(thing.module.exports)
 
 // in lib/index.js
-import foo from 'path';
-module.exports = foo;
+import foo from 'path'
+module.exports = foo
 
 // in some-file.js
 // eslint import/no-import-module-exports: ["error", {"exceptions": ["**/*/some-file.js"]}]
-import foo from 'path';
-module.exports = foo;
+import foo from 'path'
+module.exports = foo
 ```
 
 ### Further Reading
 
- - [webpack issue #4039](https://github.com/webpack/webpack/issues/4039)
+- [webpack issue #4039](https://github.com/webpack/webpack/issues/4039)

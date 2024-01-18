@@ -1,12 +1,10 @@
 lib
 coverage
-.nyc_output
 node_modules
-tests/files/malformed.js
-tests/files/with-syntax-error
-tests/files/just-json-files/invalid.json
-tests/files/typescript-d-ts/
-resolvers/webpack/test/files
-# we want to ignore "tests/files" here, but unfortunately doing so would
+test/fixtures/malformed.js
+test/fixtures/with-syntax-error
+test/fixtures/just-json-files/invalid.json
+test/fixtures/typescript-d-ts/
+# we want to ignore "tests/fixtures" here, but unfortunately doing so would
 # interfere with unit test and fail it for some reason.
-# tests/files
+# tests/fixtures

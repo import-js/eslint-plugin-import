@@ -32,14 +32,14 @@ The following patterns are considered problems:
  *  in my-project/app.js
  */
 
-import "./../my-project/pages/about.js"; // should be "./pages/about.js"
-import "./../my-project/pages/about"; // should be "./pages/about"
-import "../my-project/pages/about.js"; // should be "./pages/about.js"
-import "../my-project/pages/about"; // should be "./pages/about"
-import "./pages//about"; // should be "./pages/about"
-import "./pages/"; // should be "./pages"
-import "./pages/index"; // should be "./pages" (except if there is a ./pages.js file)
-import "./pages/index.js"; // should be "./pages" (except if there is a ./pages.js file)
+import './../my-project/pages/about.js' // should be "./pages/about.js"
+import './../my-project/pages/about' // should be "./pages/about"
+import '../my-project/pages/about.js' // should be "./pages/about.js"
+import '../my-project/pages/about' // should be "./pages/about"
+import './pages//about' // should be "./pages/about"
+import './pages/' // should be "./pages"
+import './pages/index' // should be "./pages" (except if there is a ./pages.js file)
+import './pages/index.js' // should be "./pages" (except if there is a ./pages.js file)
 ```
 
 The following patterns are NOT considered problems:
@@ -49,12 +49,12 @@ The following patterns are NOT considered problems:
  *  in my-project/app.js
  */
 
-import "./header.js";
-import "./pages";
-import "./pages/about";
-import ".";
-import "..";
-import fs from "fs";
+import './header.js'
+import './pages'
+import './pages/about'
+import '.'
+import '..'
+import fs from 'fs'
 ```
 
 ## Options
@@ -73,9 +73,9 @@ Additionally to the patterns described above, the following imports are consider
 
 ```js
 // in my-project/app.js
-import "./helpers/index"; // should be "./helpers/" (not auto-fixable to `./helpers` because this would lead to an ambiguous import of `./helpers.js` and `./helpers/index.js`)
-import "./pages/index"; // should be "./pages" (auto-fixable)
-import "./pages/index.js"; // should be "./pages" (auto-fixable)
+import './helpers/index' // should be "./helpers/" (not auto-fixable to `./helpers` because this would lead to an ambiguous import of `./helpers.js` and `./helpers/index.js`)
+import './pages/index' // should be "./pages" (auto-fixable)
+import './pages/index.js' // should be "./pages" (auto-fixable)
 ```
 
 Note: `noUselessIndex` only avoids ambiguous imports for `.js` files if you haven't specified other resolved file extensions. See [Settings: import/extensions](https://github.com/import-js/eslint-plugin-import#importextensions) for details.

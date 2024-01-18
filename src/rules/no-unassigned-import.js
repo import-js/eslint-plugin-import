@@ -1,55 +1,62 @@
-import path from 'path';
-import minimatch from 'minimatch';
+import path from 'path'
+import minimatch from 'minimatch'
 
-import isStaticRequire from '../core/staticRequire';
-import docsUrl from '../docsUrl';
+import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
 function report(context, node) {
   context.report({
     node,
     message: 'Imported module should be assigned',
-  });
+  })
 }
 
 function testIsAllow(globs, filename, source) {
   if (!Array.isArray(globs)) {
-    return false; // default doesn't allow any patterns
+    return false // default doesn't allow any patterns
   }
 
-  let filePath;
+  let filePath
 
-  if (source[0] !== '.' && source[0] !== '/') { // a node module
-    filePath = source;
+  if (source[0] !== '.' && source[0] !== '/') {
+    // a node module
+    filePath = source
   } else {
-    filePath = path.resolve(path.dirname(filename), source); // get source absolute path
+    filePath = path.resolve(path.dirname(filename), source) // get source absolute path
   }
 
-  return globs.find((glob) => minimatch(filePath, glob)
-    || minimatch(filePath, path.join(process.cwd(), glob)),
-  ) !== undefined;
+  return (
+    globs.find(
+      glob =>
+        minimatch(filePath, glob) ||
+        minimatch(filePath, path.join(process.cwd(), glob)),
+    ) !== undefined
+  )
 }
 
 function create(context) {
-  const options = context.options[0] || {};
-  const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-  const isAllow = (source) => testIsAllow(options.allow, filename, source);
+  const options = context.options[0] || {}
+  const filename = context.getPhysicalFilename
+    ? context.getPhysicalFilename()
+    : context.getFilename()
+  const isAllow = source => testIsAllow(options.allow, filename, source)
 
   return {
     ImportDeclaration(node) {
       if (node.specifiers.length === 0 && !isAllow(node.source.value)) {
-        report(context, node);
+        report(context, node)
       }
     },
     ExpressionStatement(node) {
       if (
-        node.expression.type === 'CallExpression'
-        && isStaticRequire(node.expression)
-        && !isAllow(node.expression.arguments[0].value)
+        node.expression.type === 'CallExpression' &&
+        isStaticRequire(node.expression) &&
+        !isAllow(node.expression.arguments[0].value)
       ) {
-        report(context, node.expression);
+        report(context, node.expression)
       }
     },
-  };
+  }
 }
 
 module.exports = {
@@ -79,4 +86,4 @@ module.exports = {
       },
     ],
   },
-};
+}

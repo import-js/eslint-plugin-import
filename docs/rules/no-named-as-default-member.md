@@ -25,14 +25,14 @@ Given:
 
 ```js
 // foo.js
-export default 'foo';
-export const bar = 'baz';
+export default 'foo'
+export const bar = 'baz'
 ```
 
 ...this would be valid:
 
 ```js
-import foo, {bar} from './foo.js';
+import foo, { bar } from './foo.js'
 ```
 
 ...and the following would be reported:
@@ -40,13 +40,13 @@ import foo, {bar} from './foo.js';
 ```js
 // Caution: `foo` also has a named export `bar`.
 // Check if you meant to write `import {bar} from './foo.js'` instead.
-import foo from './foo.js';
-const bar = foo.bar;
+import foo from './foo.js'
+const bar = foo.bar
 ```
 
 ```js
 // Caution: `foo` also has a named export `bar`.
 // Check if you meant to write `import {bar} from './foo.js'` instead.
-import foo from './foo.js';
-const {bar} = foo;
+import foo from './foo.js'
+const { bar } = foo
 ```

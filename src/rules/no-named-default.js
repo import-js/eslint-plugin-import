@@ -1,4 +1,4 @@
-import docsUrl from '../docsUrl';
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
@@ -16,16 +16,20 @@ module.exports = {
       ImportDeclaration(node) {
         node.specifiers.forEach(function (im) {
           if (im.importKind === 'type' || im.importKind === 'typeof') {
-            return;
+            return
           }
 
-          if (im.type === 'ImportSpecifier' && (im.imported.name || im.imported.value) === 'default') {
+          if (
+            im.type === 'ImportSpecifier' &&
+            (im.imported.name || im.imported.value) === 'default'
+          ) {
             context.report({
               node: im.local,
-              message: `Use default import syntax to import '${im.local.name}'.` });
+              message: `Use default import syntax to import '${im.local.name}'.`,
+            })
           }
-        });
+        })
       },
-    };
+    }
   },
-};
+}

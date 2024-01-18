@@ -19,9 +19,13 @@ export default makeClass // Multiple default exports.
 or
 
 ```js
-export const foo = function () { /*...*/ } // Multiple exports of name 'foo'.
+export const foo = function () {
+  /*...*/
+} // Multiple exports of name 'foo'.
 
-function bar() { /*...*/ }
+function bar() {
+  /*...*/
+}
 export { bar as foo } // Multiple exports of name 'foo'.
 ```
 
@@ -32,6 +36,6 @@ intent to rename, etc.
 
 ## Further Reading
 
- - Lee Byron's [ES7] export proposal
+- Lee Byron's [ES7] export proposal
 
 [ES7]: https://github.com/leebyron/ecmascript-more-export-from

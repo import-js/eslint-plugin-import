@@ -14,19 +14,19 @@ The default value for `basePath` is the current working directory.
 
 Each zone consists of the `target` paths, a `from` paths, and an optional `except` and `message` attribute.
 
- - `target` contains the paths where the restricted imports should be applied. It can be expressed by
-   - directory string path that matches all its containing files
-   - glob pattern matching all the targeted files
-   - an array of multiple of the two types above
- - `from` paths define the folders that are not allowed to be used in an import. It can be expressed by
-   - directory string path that matches all its containing files
-   - glob pattern matching all the files restricted to be imported
-   - an array of multiple directory string path
-   - an array of multiple glob patterns
- - `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that it does not alter the behaviour of `target` in any way.
-   - in case `from` contains only glob patterns, `except` must be an array of glob patterns as well
-   - in case `from` contains only directory path, `except` is relative to `from` and cannot backtrack to a parent directory
- - `message` - will be displayed in case of the rule violation.
+- `target` contains the paths where the restricted imports should be applied. It can be expressed by
+  - directory string path that matches all its containing files
+  - glob pattern matching all the targeted files
+  - an array of multiple of the two types above
+- `from` paths define the folders that are not allowed to be used in an import. It can be expressed by
+  - directory string path that matches all its containing files
+  - glob pattern matching all the files restricted to be imported
+  - an array of multiple directory string path
+  - an array of multiple glob patterns
+- `except` may be defined for a zone, allowing exception paths that would otherwise violate the related `from`. Note that it does not alter the behaviour of `target` in any way.
+  - in case `from` contains only glob patterns, `except` must be an array of glob patterns as well
+  - in case `from` contains only directory path, `except` is relative to `from` and cannot backtrack to a parent directory
+- `message` - will be displayed in case of the rule violation.
 
 ### Examples
 
@@ -46,16 +46,16 @@ and the current file being linted is `my-project/client/foo.js`.
 The following patterns are considered problems when configuration set to `{ "zones": [ { "target": "./client", "from": "./server" } ] }`:
 
 ```js
-import bar from '../server/bar';
+import bar from '../server/bar'
 ```
 
 The following patterns are not considered problems when configuration set to `{ "zones": [ { "target": "./client", "from": "./server" } ] }`:
 
 ```js
-import baz from '../client/baz';
+import baz from '../client/baz'
 ```
 
----------------
+---
 
 Given the following folder structure:
 
@@ -76,11 +76,15 @@ and the current file being linted is `my-project/server/one/a.js`.
 and the current configuration is set to:
 
 ```json
-{ "zones": [ {
-    "target": "./tests/files/restricted-paths/server/one",
-    "from": "./tests/files/restricted-paths/server",
-    "except": ["./one"]
-} ] }
+{
+  "zones": [
+    {
+      "target": "./tests/files/restricted-paths/server/one",
+      "from": "./tests/files/restricted-paths/server",
+      "except": ["./one"]
+    }
+  ]
+}
 ```
 
 The following pattern is considered a problem:
@@ -93,10 +97,9 @@ The following pattern is not considered a problem:
 
 ```js
 import b from './b'
-
 ```
 
----------------
+---
 
 Given the following folder structure:
 
@@ -113,10 +116,14 @@ my-project
 and the current configuration is set to:
 
 ```json
-{ "zones": [ {
-    "target": "./tests/files/restricted-paths/client/!(sub-module)/**/*",
-    "from": "./tests/files/restricted-paths/client/sub-module/**/*",
-} ] }
+{
+  "zones": [
+    {
+      "target": "./tests/files/restricted-paths/client/!(sub-module)/**/*",
+      "from": "./tests/files/restricted-paths/client/sub-module/**/*"
+    }
+  ]
+}
 ```
 
 The following import is considered a problem in `my-project/client/foo.js`:
@@ -131,7 +138,7 @@ The following import is not considered a problem in `my-project/client/sub-modul
 import b from './baz'
 ```
 
----------------
+---
 
 Given the following folder structure:
 
@@ -154,8 +161,14 @@ and the current configuration is set to:
 {
   "zones": [
     {
-      "target": ["./tests/files/restricted-paths/two/*", "./tests/files/restricted-paths/three/*"],
-      "from": ["./tests/files/restricted-paths/one", "./tests/files/restricted-paths/three"],
+      "target": [
+        "./tests/files/restricted-paths/two/*",
+        "./tests/files/restricted-paths/three/*"
+      ],
+      "from": [
+        "./tests/files/restricted-paths/one",
+        "./tests/files/restricted-paths/three"
+      ]
     }
   ]
 }

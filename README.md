@@ -20,6 +20,7 @@ npm install -D eslint-plugin-import@npm:eslint-plugin-i@latest
 ---
 
 <!-- markdownlint-disable-next-line MD025 -->
+
 # eslint-plugin-import
 
 [![github actions][actions-image]][actions-url]
@@ -50,68 +51,68 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ### Helpful warnings
 
-| Name                                                                   | Description                                                                           | 💼   | ⚠️    | 🚫 | 🔧 | 💡 | ❌  |
-| :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------ | :--- | :---- | :- | :- | :- | :- |
-| [export](docs/rules/export.md)                                         | Forbid any invalid exports, i.e. re-export of the same name.                          | ❗ ☑️ |       |    |    |    |    |
-| [no-deprecated](docs/rules/no-deprecated.md)                           | Forbid imported names marked with `@deprecated` documentation tag.                    |      |       |    |    |    |    |
-| [no-empty-named-blocks](docs/rules/no-empty-named-blocks.md)           | Forbid empty named import blocks.                                                     |      |       |    | 🔧 | 💡 |    |
-| [no-extraneous-dependencies](docs/rules/no-extraneous-dependencies.md) | Forbid the use of extraneous packages.                                                |      |       |    |    |    |    |
-| [no-mutable-exports](docs/rules/no-mutable-exports.md)                 | Forbid the use of mutable exports with `var` or `let`.                                |      |       |    |    |    |    |
-| [no-named-as-default](docs/rules/no-named-as-default.md)               | Forbid use of exported name as identifier of default export.                          |      | ☑️ 🚸 |    |    |    |    |
-| [no-named-as-default-member](docs/rules/no-named-as-default-member.md) | Forbid use of exported name as property of default export.                            |      | ☑️ 🚸 |    |    |    |    |
-| [no-unused-modules](docs/rules/no-unused-modules.md)                   | Forbid modules without exports, or exports without matching import in another module. |      |       |    |    |    |    |
+| Name                                                                   | Description                                                                           | 💼    | ⚠️    | 🚫  | 🔧  | 💡  | ❌  |
+| :--------------------------------------------------------------------- | :------------------------------------------------------------------------------------ | :---- | :---- | :-- | :-- | :-- | :-- |
+| [export](docs/rules/export.md)                                         | Forbid any invalid exports, i.e. re-export of the same name.                          | ❗ ☑️ |       |     |     |     |     |
+| [no-deprecated](docs/rules/no-deprecated.md)                           | Forbid imported names marked with `@deprecated` documentation tag.                    |       |       |     |     |     |     |
+| [no-empty-named-blocks](docs/rules/no-empty-named-blocks.md)           | Forbid empty named import blocks.                                                     |       |       |     | 🔧  | 💡  |     |
+| [no-extraneous-dependencies](docs/rules/no-extraneous-dependencies.md) | Forbid the use of extraneous packages.                                                |       |       |     |     |     |     |
+| [no-mutable-exports](docs/rules/no-mutable-exports.md)                 | Forbid the use of mutable exports with `var` or `let`.                                |       |       |     |     |     |     |
+| [no-named-as-default](docs/rules/no-named-as-default.md)               | Forbid use of exported name as identifier of default export.                          |       | ☑️ 🚸 |     |     |     |     |
+| [no-named-as-default-member](docs/rules/no-named-as-default-member.md) | Forbid use of exported name as property of default export.                            |       | ☑️ 🚸 |     |     |     |     |
+| [no-unused-modules](docs/rules/no-unused-modules.md)                   | Forbid modules without exports, or exports without matching import in another module. |       |       |     |     |     |     |
 
 ### Module systems
 
-| Name                                                               | Description                                                          | 💼 | ⚠️ | 🚫 | 🔧 | 💡 | ❌  |
-| :----------------------------------------------------------------- | :------------------------------------------------------------------- | :- | :- | :- | :- | :- | :- |
-| [no-amd](docs/rules/no-amd.md)                                     | Forbid AMD `require` and `define` calls.                             |    |    |    |    |    |    |
-| [no-commonjs](docs/rules/no-commonjs.md)                           | Forbid CommonJS `require` calls and `module.exports` or `exports.*`. |    |    |    |    |    |    |
-| [no-import-module-exports](docs/rules/no-import-module-exports.md) | Forbid import statements with CommonJS module.exports.               |    |    |    | 🔧 |    |    |
-| [no-nodejs-modules](docs/rules/no-nodejs-modules.md)               | Forbid Node.js builtin modules.                                      |    |    |    |    |    |    |
-| [unambiguous](docs/rules/unambiguous.md)                           | Forbid potentially ambiguous parse goal (`script` vs. `module`).     |    |    |    |    |    |    |
+| Name                                                               | Description                                                          | 💼  | ⚠️  | 🚫  | 🔧  | 💡  | ❌  |
+| :----------------------------------------------------------------- | :------------------------------------------------------------------- | :-- | :-- | :-- | :-- | :-- | :-- |
+| [no-amd](docs/rules/no-amd.md)                                     | Forbid AMD `require` and `define` calls.                             |     |     |     |     |     |     |
+| [no-commonjs](docs/rules/no-commonjs.md)                           | Forbid CommonJS `require` calls and `module.exports` or `exports.*`. |     |     |     |     |     |     |
+| [no-import-module-exports](docs/rules/no-import-module-exports.md) | Forbid import statements with CommonJS module.exports.               |     |     |     | 🔧  |     |     |
+| [no-nodejs-modules](docs/rules/no-nodejs-modules.md)               | Forbid Node.js builtin modules.                                      |     |     |     |     |     |     |
+| [unambiguous](docs/rules/unambiguous.md)                           | Forbid potentially ambiguous parse goal (`script` vs. `module`).     |     |     |     |     |     |     |
 
 ### Static analysis
 
-| Name                                                                   | Description                                                                          | 💼   | ⚠️ | 🚫 | 🔧 | 💡 | ❌  |
-| :--------------------------------------------------------------------- | :----------------------------------------------------------------------------------- | :--- | :- | :- | :- | :- | :- |
-| [default](docs/rules/default.md)                                       | Ensure a default export is present, given a default import.                          | ❗ ☑️ |    |    |    |    |    |
-| [named](docs/rules/named.md)                                           | Ensure named imports correspond to a named export in the remote file.                | ❗ ☑️ |    | ⌨️ |    |    |    |
-| [namespace](docs/rules/namespace.md)                                   | Ensure imported namespaces contain dereferenced properties as they are dereferenced. | ❗ ☑️ |    |    |    |    |    |
-| [no-absolute-path](docs/rules/no-absolute-path.md)                     | Forbid import of modules using absolute paths.                                       |      |    |    | 🔧 |    |    |
-| [no-cycle](docs/rules/no-cycle.md)                                     | Forbid a module from importing a module with a dependency path back to itself.       |      |    |    |    |    |    |
-| [no-dynamic-require](docs/rules/no-dynamic-require.md)                 | Forbid `require()` calls with expressions.                                           |      |    |    |    |    |    |
-| [no-internal-modules](docs/rules/no-internal-modules.md)               | Forbid importing the submodules of other modules.                                    |      |    |    |    |    |    |
-| [no-relative-packages](docs/rules/no-relative-packages.md)             | Forbid importing packages through relative paths.                                    |      |    |    | 🔧 |    |    |
-| [no-relative-parent-imports](docs/rules/no-relative-parent-imports.md) | Forbid importing modules from parent directories.                                    |      |    |    |    |    |    |
-| [no-restricted-paths](docs/rules/no-restricted-paths.md)               | Enforce which files can be imported in a given folder.                               |      |    |    |    |    |    |
-| [no-self-import](docs/rules/no-self-import.md)                         | Forbid a module from importing itself.                                               |      |    |    |    |    |    |
-| [no-unresolved](docs/rules/no-unresolved.md)                           | Ensure imports point to a file/module that can be resolved.                          | ❗ ☑️ |    |    |    |    |    |
-| [no-useless-path-segments](docs/rules/no-useless-path-segments.md)     | Forbid unnecessary path segments in import and require statements.                   |      |    |    | 🔧 |    |    |
-| [no-webpack-loader-syntax](docs/rules/no-webpack-loader-syntax.md)     | Forbid webpack loader syntax in imports.                                             |      |    |    |    |    |    |
+| Name                                                                   | Description                                                                          | 💼    | ⚠️  | 🚫  | 🔧  | 💡  | ❌  |
+| :--------------------------------------------------------------------- | :----------------------------------------------------------------------------------- | :---- | :-- | :-- | :-- | :-- | :-- |
+| [default](docs/rules/default.md)                                       | Ensure a default export is present, given a default import.                          | ❗ ☑️ |     |     |     |     |     |
+| [named](docs/rules/named.md)                                           | Ensure named imports correspond to a named export in the remote file.                | ❗ ☑️ |     | ⌨️  |     |     |     |
+| [namespace](docs/rules/namespace.md)                                   | Ensure imported namespaces contain dereferenced properties as they are dereferenced. | ❗ ☑️ |     |     |     |     |     |
+| [no-absolute-path](docs/rules/no-absolute-path.md)                     | Forbid import of modules using absolute paths.                                       |       |     |     | 🔧  |     |     |
+| [no-cycle](docs/rules/no-cycle.md)                                     | Forbid a module from importing a module with a dependency path back to itself.       |       |     |     |     |     |     |
+| [no-dynamic-require](docs/rules/no-dynamic-require.md)                 | Forbid `require()` calls with expressions.                                           |       |     |     |     |     |     |
+| [no-internal-modules](docs/rules/no-internal-modules.md)               | Forbid importing the submodules of other modules.                                    |       |     |     |     |     |     |
+| [no-relative-packages](docs/rules/no-relative-packages.md)             | Forbid importing packages through relative paths.                                    |       |     |     | 🔧  |     |     |
+| [no-relative-parent-imports](docs/rules/no-relative-parent-imports.md) | Forbid importing modules from parent directories.                                    |       |     |     |     |     |     |
+| [no-restricted-paths](docs/rules/no-restricted-paths.md)               | Enforce which files can be imported in a given folder.                               |       |     |     |     |     |     |
+| [no-self-import](docs/rules/no-self-import.md)                         | Forbid a module from importing itself.                                               |       |     |     |     |     |     |
+| [no-unresolved](docs/rules/no-unresolved.md)                           | Ensure imports point to a file/module that can be resolved.                          | ❗ ☑️ |     |     |     |     |     |
+| [no-useless-path-segments](docs/rules/no-useless-path-segments.md)     | Forbid unnecessary path segments in import and require statements.                   |       |     |     | 🔧  |     |     |
+| [no-webpack-loader-syntax](docs/rules/no-webpack-loader-syntax.md)     | Forbid webpack loader syntax in imports.                                             |       |     |     |     |     |     |
 
 ### Style guide
 
-| Name                                                                             | Description                                                                | 💼 | ⚠️    | 🚫 | 🔧 | 💡 | ❌  |
-| :------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :- | :---- | :- | :- | :- | :- |
-| [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports.      |    |       |    | 🔧 |    |    |
-| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |    |       |    |    |    |    |
-| [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                          |    |       |    |    |    |    |
-| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |    |       |    |    |    |    |
-| [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                         |    |       |    | 🔧 |    |    |
-| [group-exports](docs/rules/group-exports.md)                                     | Prefer named exports to be grouped together in a single export declaration |    |       |    |    |    |    |
-| [imports-first](docs/rules/imports-first.md)                                     | Replaced by `import/first`.                                                |    |       |    | 🔧 |    | ❌  |
-| [max-dependencies](docs/rules/max-dependencies.md)                               | Enforce the maximum number of dependencies a module can have.              |    |       |    |    |    |    |
-| [newline-after-import](docs/rules/newline-after-import.md)                       | Enforce a newline after import statements.                                 |    |       |    | 🔧 |    |    |
-| [no-anonymous-default-export](docs/rules/no-anonymous-default-export.md)         | Forbid anonymous values as default exports.                                |    |       |    |    |    |    |
-| [no-default-export](docs/rules/no-default-export.md)                             | Forbid default exports.                                                    |    |       |    |    |    |    |
-| [no-duplicates](docs/rules/no-duplicates.md)                                     | Forbid repeated import of the same module in multiple places.              |    | ☑️ 🚸 |    | 🔧 |    |    |
-| [no-named-default](docs/rules/no-named-default.md)                               | Forbid named default exports.                                              |    |       |    |    |    |    |
-| [no-named-export](docs/rules/no-named-export.md)                                 | Forbid named exports.                                                      |    |       |    |    |    |    |
-| [no-namespace](docs/rules/no-namespace.md)                                       | Forbid namespace (a.k.a. "wildcard" `*`) imports.                          |    |       |    | 🔧 |    |    |
-| [no-unassigned-import](docs/rules/no-unassigned-import.md)                       | Forbid unassigned imports                                                  |    |       |    |    |    |    |
-| [order](docs/rules/order.md)                                                     | Enforce a convention in module import order.                               |    |       |    | 🔧 |    |    |
-| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name or multiple names. |    |       |    |    |    |    |
+| Name                                                                             | Description                                                                | 💼  | ⚠️    | 🚫  | 🔧  | 💡  | ❌  |
+| :------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :-- | :---- | :-- | :-- | :-- | :-- |
+| [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports.      |     |       |     | 🔧  |     |     |
+| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |     |       |     |     |     |     |
+| [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                          |     |       |     |     |     |     |
+| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |     |       |     |     |     |     |
+| [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                         |     |       |     | 🔧  |     |     |
+| [group-exports](docs/rules/group-exports.md)                                     | Prefer named exports to be grouped together in a single export declaration |     |       |     |     |     |     |
+| [imports-first](docs/rules/imports-first.md)                                     | Replaced by `import/first`.                                                |     |       |     | 🔧  |     | ❌  |
+| [max-dependencies](docs/rules/max-dependencies.md)                               | Enforce the maximum number of dependencies a module can have.              |     |       |     |     |     |     |
+| [newline-after-import](docs/rules/newline-after-import.md)                       | Enforce a newline after import statements.                                 |     |       |     | 🔧  |     |     |
+| [no-anonymous-default-export](docs/rules/no-anonymous-default-export.md)         | Forbid anonymous values as default exports.                                |     |       |     |     |     |     |
+| [no-default-export](docs/rules/no-default-export.md)                             | Forbid default exports.                                                    |     |       |     |     |     |     |
+| [no-duplicates](docs/rules/no-duplicates.md)                                     | Forbid repeated import of the same module in multiple places.              |     | ☑️ 🚸 |     | 🔧  |     |     |
+| [no-named-default](docs/rules/no-named-default.md)                               | Forbid named default exports.                                              |     |       |     |     |     |     |
+| [no-named-export](docs/rules/no-named-export.md)                                 | Forbid named exports.                                                      |     |       |     |     |     |     |
+| [no-namespace](docs/rules/no-namespace.md)                                       | Forbid namespace (a.k.a. "wildcard" `*`) imports.                          |     |       |     | 🔧  |     |     |
+| [no-unassigned-import](docs/rules/no-unassigned-import.md)                       | Forbid unassigned imports                                                  |     |       |     |     |     |     |
+| [order](docs/rules/order.md)                                                     | Enforce a convention in module import order.                               |     |       |     | 🔧  |     |     |
+| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name or multiple names. |     |       |     |     |     |     |
 
 <!-- end auto-generated rules list -->
 
@@ -122,6 +123,7 @@ Available as part of the Tidelift Subscription.
 The maintainers of `eslint-plugin-import` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/npm-eslint-plugin-import?utm_source=npm-eslint-plugin-import&utm_medium=referral&utm_campaign=enterprise&utm_term=repo)
 
 <!-- markdownlint-disable-next-line MD024 -->
+
 ## Installation
 
 ```sh
@@ -146,7 +148,7 @@ plugins:
   - import
 
 rules:
-  import/no-unresolved: [2, {commonjs: true, amd: true}]
+  import/no-unresolved: [2, { commonjs: true, amd: true }]
   import/named: 2
   import/namespace: 2
   import/default: 2
@@ -164,7 +166,7 @@ Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-r
 extends:
   - eslint:recommended
   - plugin:import/recommended
-# the following lines do the trick
+  # the following lines do the trick
   - plugin:import/typescript
 settings:
   import/resolver:
@@ -198,7 +200,7 @@ resolvers are just npm packages, so [third party packages are supported](https:/
 
 You can reference resolvers in several ways (in order of precedence):
 
- - as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
+- as a conventional `eslint-import-resolver` name, like `eslint-import-resolver-foo`:
 
 ```yaml
 # .eslintrc.yml
@@ -212,13 +214,13 @@ settings:
 module.exports = {
   settings: {
     'import/resolver': {
-      foo: { someConfig: value }
-    }
-  }
+      foo: { someConfig: value },
+    },
+  },
 }
 ```
 
- - with a full npm module name, like `my-awesome-npm-module`:
+- with a full npm module name, like `my-awesome-npm-module`:
 
 ```yaml
 # .eslintrc.yml
@@ -231,22 +233,22 @@ settings:
 module.exports = {
   settings: {
     'import/resolver': {
-      'my-awesome-npm-module': { someConfig: value }
-    }
-  }
+      'my-awesome-npm-module': { someConfig: value },
+    },
+  },
 }
 ```
 
- - with a filesystem path to resolver, defined in this example as a `computed property` name:
+- with a filesystem path to resolver, defined in this example as a `computed property` name:
 
 ```js
 // .eslintrc.js
 module.exports = {
   settings: {
     'import/resolver': {
-      [path.resolve('../../../my-resolver')]: { someConfig: value }
-    }
-  }
+      [path.resolve('../../../my-resolver')]: { someConfig: value },
+    },
+  },
 }
 ```
 
@@ -257,7 +259,6 @@ If you are interesting in writing a resolver, see the [spec](./resolvers/README.
 
 [`resolve`]: https://www.npmjs.com/package/resolve
 [`externals`]: https://webpack.github.io/docs/library-and-externals.html
-
 [Node]: https://www.npmjs.com/package/eslint-import-resolver-node
 [webpack]: https://www.npmjs.com/package/eslint-import-resolver-webpack
 
@@ -318,7 +319,7 @@ In practice, this means rules other than [`no-unresolved`](./docs/rules/no-unres
 ```yaml
 settings:
   import/ignore:
-    - \.coffee$          # fraught with parse errors
+    - \.coffee$ # fraught with parse errors
     - \.(scss|less|css)$ # can't parse unprocessed CSS modules, either
 ```
 
@@ -332,7 +333,7 @@ already define some of these (for example, the Node resolver knows about `fs` an
 For example, Electron exposes an `electron` module:
 
 ```js
-import 'electron'  // without extra config, will be flagged as unresolved!
+import 'electron' // without extra config, will be flagged as unresolved!
 ```
 
 that would otherwise be unresolved. To avoid this, you may provide `electron` as a
@@ -341,7 +342,7 @@ core module:
 ```yaml
 # .eslintrc.yml
 settings:
-  import/core-modules: [ electron ]
+  import/core-modules: [electron]
 ```
 
 In Electron's specific case, there is a shared config named `electron`
@@ -359,11 +360,11 @@ If you are using `yarn` PnP as your package manager, add the `.yarn` folder and 
 
 Each item in this array is either a folder's name, its subpath, or its absolute prefix path:
 
- - `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.
+- `jspm_modules` will match any file or folder named `jspm_modules` or which has a direct or non-direct parent named `jspm_modules`, e.g. `/home/me/project/jspm_modules` or `/home/me/project/jspm_modules/some-pkg/index.js`.
 
- - `packages/core` will match any path that contains these two segments, for example `/home/me/project/packages/core/src/utils.js`.
+- `packages/core` will match any path that contains these two segments, for example `/home/me/project/packages/core/src/utils.js`.
 
- - `/home/me/project/packages` will only match files and directories inside this directory, and the directory itself.
+- `/home/me/project/packages` will only match files and directories inside this directory, and the directory itself.
 
 Please note that incomplete names are not allowed here so `components` won't match `bower_components` and `packages/ui` won't match `packages/ui-utils` (but will match `packages/ui/utils`).
 
@@ -378,7 +379,7 @@ directly using webpack, for example:
 # .eslintrc.yml
 settings:
   import/parsers:
-    "@typescript-eslint/parser": [ .ts, .tsx ]
+    '@typescript-eslint/parser': [.ts, .tsx]
 ```
 
 In this case, [`@typescript-eslint/parser`](https://www.npmjs.com/package/@typescript-eslint/parser)
@@ -412,7 +413,7 @@ If you never use [`eslint_d`] or [`eslint-loader`], you may set the cache lifeti
 # .eslintrc.yml
 settings:
   import/cache:
-    lifetime: ∞  # or Infinity
+    lifetime: ∞ # or Infinity
 ```
 
 Otherwise, set some integer, and cache entries will be evicted after that many seconds have elapsed:
@@ -421,7 +422,7 @@ Otherwise, set some integer, and cache entries will be evicted after that many s
 # .eslintrc.yml
 settings:
   import/cache:
-    lifetime: 5  # 30 is the default
+    lifetime: 5 # 30 is the default
 ```
 
 [`eslint_d`]: https://www.npmjs.com/package/eslint_d
@@ -459,22 +460,18 @@ for more details and discussion, but essentially, you may find you need to add t
 
 ```json
 {
-    "folders":
-    [
-        {
-            "path": "code"
-        }
-    ],
-    "SublimeLinter":
+  "folders": [
     {
-        "linters":
-        {
-            "eslint":
-            {
-                "chdir": "${project}/code"
-            }
-        }
+      "path": "code"
     }
+  ],
+  "SublimeLinter": {
+    "linters": {
+      "eslint": {
+        "chdir": "${project}/code"
+      }
+    }
+  }
 }
 ```
 

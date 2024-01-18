@@ -1,4 +1,5 @@
 # Change Log
+
 All notable changes to this module will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
@@ -8,40 +9,49 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## v2.8.0 - 2023-04-14
 
 ### New
+
 - `parse`: support flat config ([#2714], thanks [@DMartens])
 
 ### Fixed
+
 - Improve performance of `fullResolve` for large projects ([#2755], thanks [@leipert])
 
 ## v2.7.4 - 2022-08-11
 
 ### Fixed
+
 - [Fix] Ignore hashbang and BOM while parsing ([#2431], thanks [@silverwind])
 
 ### Changed
+
 - [patch] mark eslint as an optional peer dep ([#2523], thanks [@wmertens])
 
 ## v2.7.3 - 2022-01-26
 
 ### Fixed
+
 - `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
 
 ## v2.7.2 - 2022-01-01
 
 ### Fixed
+
 - [patch] Fix `@babel/eslint-parser` 8 compatibility ([#2343], thanks [@nicolo-ribaudo])
 
 ### Changed
+
 - [Refactor] inline `pkgDir` implementation; remove `pkg-dir`
 
 ## v2.7.1 - 2021-10-13
 
 ### Fixed
+
 - fixed SyntaxError in node <= 6: Unexpected token ) in parse.js ([#2261], thanks [@VitusFW])
 
 ## v2.7.0 - 2021-10-11
 
 ### Added
+
 - `fileExistsWithCaseSync`: add `strict` argument ([#1262], thanks [@sergei-startsev])
 - add `visit`, to support dynamic imports ([#1660], [#2212], thanks [@maxkomarychev], [@aladdin-add], [@Hypnosphi])
 - create internal replacement for `pkg-up` and `read-pkg-up` ([#2047], [@mgwalker])
@@ -49,64 +59,78 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## v2.6.2 - 2021-08-08
 
 ### Fixed
+
 - Use `context.getPhysicalFilename()` when available (ESLint 7.28+) ([#2160], thanks [@pmcelhaney])
 
 ## v2.6.1 - 2021-05-13
 
 ### Fixed
+
 - `no-unresolved`: check `import()` ([#2026], thanks [@aladdin-add])
 - Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
 
 ### Changed
+
 - [deps] update `debug`
 - [Refactor] use `Array.isArray` instead of `instanceof Array`
 
 ## v2.6.0 - 2020-03-28
 
 ### Added
+
 - Print more helpful info if parsing fails ([#1671], thanks [@kaiyoma])
 
 ## v2.5.2 - 2020-01-12
 
 ### Fixed
+
 - Makes the loader resolution more tolerant ([#1606], thanks [@arcanis])
 - Use `createRequire` instead of `createRequireFromPath` if available ([#1602], thanks [@iamnapo])
 
 ## v2.5.1 - 2020-01-11
 
 ### Fixed
+
 - Uses createRequireFromPath to resolve loaders ([#1591], thanks [@arcanis])
 - report the error stack on a resolution error ([#599], thanks [@sompylasar])
 
 ## v2.5.0 - 2019-12-07
 
 ### Added
+
 - support `parseForESLint` from custom parser ([#1435], thanks [@JounQin])
 
 ### Changed
- - Avoid superfluous calls and code ([#1551], thanks [@brettz9])
+
+- Avoid superfluous calls and code ([#1551], thanks [@brettz9])
 
 ## v2.4.1 - 2019-07-19
 
 ### Fixed
- - Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
- - Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
+
+- Improve parse perf when using `@typescript-eslint/parser` ([#1409], thanks [@bradzacher])
+- Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
 
 ## v2.4.0 - 2019-04-13
 
 ### Added
- - no-useless-path-segments: Add noUselessIndex option ([#1290], thanks [@timkraut])
+
+- no-useless-path-segments: Add noUselessIndex option ([#1290], thanks [@timkraut])
 
 ### Fixed
- - Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
 
+- Fix overwriting of dynamic import() CallExpression ([`no-cycle`], [`no-relative-parent-import`], [`no-unresolved`], [`no-useless-path-segments`]) ([#1218], [#1166], [#1035], thanks [@vikr01])
 
 ## v2.3.0 - 2019-01-22
+
 ### Fixed
+
 - use `process.hrtime()` for cache dates ([#1160], thanks [@hulkish])
 
 ## v2.2.0 - 2018-03-29
+
 ### Changed
+
 - `parse`: attach node locations by default.
 - `moduleVisitor`: visitor now gets the full `import` statement node as a second
   argument, so rules may report against the full statement / `require` call instead
@@ -116,19 +140,22 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 Re-releasing v2.1.0 after vetting (again) and unable to reproduce issue.
 
-
 ## v2.1.0 - 2017-06-02 [YANKED]
 
 Yanked due to critical issue with cache key resulting from #839.
 
 ### Added
+
 - `parse` now additionally passes `filePath` to `parser` in `parserOptions` like `eslint` core does
 
 ## v2.0.0 - 2016-11-07
+
 ### Changed
+
 - `unambiguous` no longer exposes fast test regex
 
 ### Fixed
+
 - `unambiguous.test()` regex is now properly in multiline mode
 
 [#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
@@ -159,7 +186,6 @@ Yanked due to critical issue with cache key resulting from #839.
 [#1160]: https://github.com/import-js/eslint-plugin-import/pull/1160
 [#1035]: https://github.com/import-js/eslint-plugin-import/issues/1035
 [#599]: https://github.com/import-js/eslint-plugin-import/pull/599
-
 [@aladdin-add]: https://github.com/aladdin-add
 [@arcanis]: https://github.com/arcanis
 [@bradzacher]: https://github.com/bradzacher

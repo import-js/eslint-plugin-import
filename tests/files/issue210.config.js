@@ -1,3 +1,0 @@
-exports.parserOptions = {
-  sourceType: 'module',
-}

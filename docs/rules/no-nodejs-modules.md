@@ -8,33 +8,33 @@ Forbid the use of Node.js builtin modules. Can be useful for client-side web pro
 
 This rule supports the following options:
 
- - `allow`: Array of names of allowed modules. Defaults to an empty array.
+- `allow`: Array of names of allowed modules. Defaults to an empty array.
 
 ## Rule Details
 
 ### Fail
 
 ```js
-import fs from 'fs';
-import path from 'path';
+import fs from 'fs'
+import path from 'path'
 
-var fs = require('fs');
-var path = require('path');
+var fs = require('fs')
+var path = require('path')
 ```
 
 ### Pass
 
 ```js
-import _ from 'lodash';
-import foo from 'foo';
-import foo from './foo';
+import _ from 'lodash'
+import foo from 'foo'
+import foo from './foo'
 
-var _ = require('lodash');
-var foo = require('foo');
-var foo = require('./foo');
+var _ = require('lodash')
+var foo = require('foo')
+var foo = require('./foo')
 
 /* eslint import/no-nodejs-modules: ["error", {"allow": ["path"]}] */
-import path from 'path';
+import path from 'path'
 ```
 
 ## When Not To Use It

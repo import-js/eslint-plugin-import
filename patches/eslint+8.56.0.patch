@@ -1,0 +1,13 @@
+diff --git a/node_modules/eslint/lib/cli-engine/formatters/stylish.js b/node_modules/eslint/lib/cli-engine/formatters/stylish.js
+index a808448..1d4b79e 100644
+--- a/node_modules/eslint/lib/cli-engine/formatters/stylish.js
++++ b/node_modules/eslint/lib/cli-engine/formatters/stylish.js
+@@ -5,7 +5,7 @@
+ "use strict";
+ 
+ const chalk = require("chalk"),
+-    stripAnsi = require("strip-ansi"),
++    stripAnsi = require("strip-ansi-cjs"),
+     table = require("text-table");
+ 
+ //------------------------------------------------------------------------------

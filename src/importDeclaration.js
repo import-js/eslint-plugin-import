@@ -1,4 +1,4 @@
 export default function importDeclaration(context) {
-  const ancestors = context.getAncestors();
-  return ancestors[ancestors.length - 1];
+  const ancestors = context.getAncestors()
+  return ancestors[ancestors.length - 1]
 }

@@ -31,7 +31,7 @@ import typeof { mod } from 'mod'
 
 ```js
 import {} from 'mod'
-import Default, {} from 'mod'
+import Default from 'mod'
 ```
 
 When using typescript

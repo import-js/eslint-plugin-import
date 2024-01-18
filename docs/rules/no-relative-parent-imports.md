@@ -52,21 +52,21 @@ You can,
    ```js
    // three.js
    export default function three(add) {
-     return add([1, 2]);
+     return add([1, 2])
    }
 
    // somewhere else when you use `three.js`:
-   import add from './add';
-   import three from './numbers/three';
-   console.log(three(add));
+   import add from './add'
+   import three from './numbers/three'
+   console.log(three(add))
    ```
 
 3. Make the dependency a package so it's globally available to all files in your project:
 
    ```js
-   import add from 'add'; // from https://www.npmjs.com/package/add
+   import add from 'add' // from https://www.npmjs.com/package/add
    export default function three() {
-     return add([1,2]);
+     return add([1, 2])
    }
    ```
 
@@ -102,7 +102,7 @@ The following patterns are considered problems:
  *  in my-project/lib/a.js
  */
 
-import bar from '../main'; // Import parent file using a relative path
+import bar from '../main' // Import parent file using a relative path
 ```
 
 The following patterns are NOT considered problems:
@@ -112,12 +112,12 @@ The following patterns are NOT considered problems:
  *  in my-project/main.js
  */
 
-import foo from 'foo'; // Import package using module path
-import a from './lib/a'; // Import child file using relative path
+import foo from 'foo' // Import package using module path
+import a from './lib/a' // Import child file using relative path
 
 /**
  *  in my-project/lib/a.js
  */
 
-import b from './b'; // Import sibling file using relative path
+import b from './b' // Import sibling file using relative path
 ```

@@ -4,9 +4,9 @@
 
 Reports:
 
- - modules without any exports
- - individual exports not being statically `import`ed or `require`ed from other modules in the same project
- - dynamic imports are supported if argument is a literal string
+- modules without any exports
+- individual exports not being statically `import`ed or `require`ed from other modules in the same project
+- dynamic imports are supported if argument is a literal string
 
 ## Rule Details
 
@@ -27,10 +27,10 @@ Example:
 
 This rule takes the following option:
 
- - **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
- - **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
- - `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
- - `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
+- **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
+- **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
+- `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
+- `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
 
 ### Example for missing exports
 
@@ -45,11 +45,15 @@ function makeClass() { return new MyClass(...arguments) }
 #### The following will not be reported
 
 ```js
-export default function () { /*...*/ }
+export default function () {
+  /*...*/
+}
 ```
 
 ```js
-export const foo = function () { /*...*/ }
+export const foo = function () {
+  /*...*/
+}
 ```
 
 ```js
@@ -67,7 +71,7 @@ given file-f:
 ```js
 import { e } from 'file-a'
 import { f } from 'file-b'
-import * as fileC from  'file-c'
+import * as fileC from 'file-c'
 export { default, i0 } from 'file-d' // both will be reported
 
 export const j = 99 // will be reported
@@ -111,7 +115,7 @@ export { d as e } // will not be reported
 
 export function doAnything() {
   // some code
-}  // will not be reported
+} // will not be reported
 
 export default 5 // will not be reported
 ```

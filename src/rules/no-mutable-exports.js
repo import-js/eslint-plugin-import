@@ -1,4 +1,4 @@
-import docsUrl from '../docsUrl';
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
@@ -13,9 +13,12 @@ module.exports = {
 
   create(context) {
     function checkDeclaration(node) {
-      const { kind } = node;
+      const { kind } = node
       if (kind === 'var' || kind === 'let') {
-        context.report(node, `Exporting mutable '${kind}' binding, use 'const' instead.`);
+        context.report(
+          node,
+          `Exporting mutable '${kind}' binding, use 'const' instead.`,
+        )
       }
     }
 
@@ -24,7 +27,7 @@ module.exports = {
         if (variable.name === name) {
           for (const def of variable.defs) {
             if (def.type === 'Variable' && def.parent) {
-              checkDeclaration(def.parent);
+              checkDeclaration(def.parent)
             }
           }
         }
@@ -32,21 +35,21 @@ module.exports = {
     }
 
     function handleExportDefault(node) {
-      const scope = context.getScope();
+      const scope = context.getScope()
 
       if (node.declaration.name) {
-        checkDeclarationsInScope(scope, node.declaration.name);
+        checkDeclarationsInScope(scope, node.declaration.name)
       }
     }
 
     function handleExportNamed(node) {
-      const scope = context.getScope();
+      const scope = context.getScope()
 
-      if (node.declaration)  {
-        checkDeclaration(node.declaration);
+      if (node.declaration) {
+        checkDeclaration(node.declaration)
       } else if (!node.source) {
         for (const specifier of node.specifiers) {
-          checkDeclarationsInScope(scope, specifier.local.name);
+          checkDeclarationsInScope(scope, specifier.local.name)
         }
       }
     }
@@ -54,6 +57,6 @@ module.exports = {
     return {
       ExportDefaultDeclaration: handleExportDefault,
       ExportNamedDeclaration: handleExportNamed,
-    };
+    }
   },
-};
+}

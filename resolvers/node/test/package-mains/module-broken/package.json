@@ -1,4 +1,0 @@
-{
-  "main": "./main.js",
-  "module": "./doesNotExist.js"
-}

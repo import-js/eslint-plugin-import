@@ -1,5 +1,0 @@
-{
-  "main": "lib/index.js",
-  "module": "src/index.js",
-  "jsnext:main": "lib/index.js"
-}

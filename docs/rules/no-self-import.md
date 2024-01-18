@@ -10,23 +10,23 @@ Forbid a module from importing itself. This can sometimes happen during refactor
 
 ```js
 // foo.js
-import foo from './foo';
+import foo from './foo'
 
-const foo = require('./foo');
+const foo = require('./foo')
 ```
 
 ```js
 // index.js
-import index from '.';
+import index from '.'
 
-const index = require('.');
+const index = require('.')
 ```
 
 ### Pass
 
 ```js
 // foo.js
-import bar from './bar';
+import bar from './bar'
 
-const bar = require('./bar');
+const bar = require('./bar')
 ```

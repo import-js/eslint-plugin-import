@@ -22,10 +22,7 @@ const first = true
 const second = true
 
 // A single named export declaration -> ok
-export {
-  first,
-  second,
-}
+export { first, second }
 ```
 
 ```js
@@ -38,7 +35,7 @@ export { default as module2 } from 'module-2'
 // A single exports assignment -> ok
 module.exports = {
   first: true,
-  second: true
+  second: true,
 }
 ```
 
@@ -63,12 +60,12 @@ module.exports = test
 ```
 
 ```ts
-const first = true;
+const first = true
 type firstType = boolean
 
 // A single named export declaration (type exports handled separately) -> ok
-export {first}
-export type {firstType}
+export { first }
+export type { firstType }
 ```
 
 ### Invalid
@@ -109,8 +106,8 @@ type firstType = boolean
 type secondType = any
 
 // Multiple named type export statements -> not ok!
-export type {firstType}
-export type {secondType}
+export type { firstType }
+export type { secondType }
 ```
 
 ## When Not To Use It

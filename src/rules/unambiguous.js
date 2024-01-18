@@ -3,15 +3,16 @@
  * @author Ben Mosher
  */
 
-import { isModule } from 'eslint-module-utils/unambiguous';
-import docsUrl from '../docsUrl';
+import { isModule } from 'eslint-module-utils/unambiguous'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
       category: 'Module systems',
-      description: 'Forbid potentially ambiguous parse goal (`script` vs. `module`).',
+      description:
+        'Forbid potentially ambiguous parse goal (`script` vs. `module`).',
       url: docsUrl('unambiguous'),
     },
     schema: [],
@@ -20,7 +21,7 @@ module.exports = {
   create(context) {
     // ignore non-modules
     if (context.parserOptions.sourceType !== 'module') {
-      return {};
+      return {}
     }
 
     return {
@@ -29,10 +30,9 @@ module.exports = {
           context.report({
             node: ast,
             message: 'This module could be parsed as a valid script.',
-          });
+          })
         }
       },
-    };
-
+    }
   },
-};
+}

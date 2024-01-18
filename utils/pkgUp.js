@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
 
-exports.__esModule = true;
+exports.__esModule = true
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
 /**
  * Derived significantly from package find-up@2.0.0. See license below.
@@ -32,26 +32,26 @@ const path = require('path');
  * THE SOFTWARE.
  */
 function findUp(filename, cwd) {
-  let dir = path.resolve(cwd || '');
-  const root = path.parse(dir).root;
+  let dir = path.resolve(cwd || '')
+  const { root } = path.parse(dir)
 
-  const filenames = [].concat(filename);
+  const filenames = [].concat(filename)
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const file = filenames.find((el) => fs.existsSync(path.resolve(dir, el)));
+    const file = filenames.find(el => fs.existsSync(path.resolve(dir, el)))
 
     if (file) {
-      return path.join(dir, file);
+      return path.join(dir, file)
     }
     if (dir === root) {
-      return null;
+      return null
     }
 
-    dir = path.dirname(dir);
+    dir = path.dirname(dir)
   }
 }
 
 exports.default = function pkgUp(opts) {
-  return findUp('package.json', opts && opts.cwd);
-};
+  return findUp('package.json', opts && opts.cwd)
+}

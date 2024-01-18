@@ -83,9 +83,7 @@ Given the following `package.json`:
   "peerDependencies": {
     "react": ">=15.0.0 <16.0.0"
   },
-  "bundledDependencies": [
-    "@generated/foo",
-  ]
+  "bundledDependencies": ["@generated/foo"]
 }
 ```
 

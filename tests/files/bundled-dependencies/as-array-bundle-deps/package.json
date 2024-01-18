@@ -1,4 +1,0 @@
-{
-  "dummy": true,
-  "bundleDependencies": ["@generated/foo"]
-}

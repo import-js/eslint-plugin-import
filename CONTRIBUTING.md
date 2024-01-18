@@ -6,15 +6,15 @@ Thanks for your interest in helping out! Here are a **few** _weird_ tricks to ~~
 
 When opening an [issue](#issues):
 
- - [ ] search open/closed issues
- - [ ] discuss bug/enhancement in new or old issue
+- [ ] search open/closed issues
+- [ ] discuss bug/enhancement in new or old issue
 
 [PR](#prs) time:
 
- - [ ] write tests
- - [ ] implement feature/fix bug
- - [ ] update docs
- - [ ] make a note in change log
+- [ ] write tests
+- [ ] implement feature/fix bug
+- [ ] update docs
+- [ ] make a note in change log
 
 Remember, you don't need to do it all yourself; any of these are helpful! 😎
 
@@ -22,27 +22,27 @@ Remember, you don't need to do it all yourself; any of these are helpful! 😎
 
 If you are new to `eslint`, below are a few resources that will help you to familiarize yourself with the project.
 
- - Watch [this presentation](https://www.youtube.com/watch?v=2W9tUnALrLg) to learn the fundamental concept of Abstract Syntax Trees (AST) and the way `eslint` works under the hood.
- - Familiarize yourself with the [AST explorer](https://astexplorer.net/) tool. Look into rules in `docs/rules`, create patterns in the rules, then analyze its AST.
- - Explore the blog posts on how to create a custom rule. [One blog post](https://blog.yonatan.dev/writing-a-custom-eslint-rule-to-spot-undeclared-props/). [Second blog post](https://betterprogramming.pub/creating-custom-eslint-rules-cdc579694608).
- - Read the official `eslint` [developer guide](https://eslint.org/docs/latest/developer-guide/architecture/).
+- Watch [this presentation](https://www.youtube.com/watch?v=2W9tUnALrLg) to learn the fundamental concept of Abstract Syntax Trees (AST) and the way `eslint` works under the hood.
+- Familiarize yourself with the [AST explorer](https://astexplorer.net/) tool. Look into rules in `docs/rules`, create patterns in the rules, then analyze its AST.
+- Explore the blog posts on how to create a custom rule. [One blog post](https://blog.yonatan.dev/writing-a-custom-eslint-rule-to-spot-undeclared-props/). [Second blog post](https://betterprogramming.pub/creating-custom-eslint-rules-cdc579694608).
+- Read the official `eslint` [developer guide](https://eslint.org/docs/latest/developer-guide/architecture/).
 
 ## Issues
 
 ### Search open + closed issues for similar cases
 
-  You may find an open issue that closely matches what you are thinking. You may also find a closed issue with discussion that either solves your problem or explains why we are unlikely to solve it in the near future.
+You may find an open issue that closely matches what you are thinking. You may also find a closed issue with discussion that either solves your problem or explains why we are unlikely to solve it in the near future.
 
-  If you find a matching issue that is open, and marked `accepted` and/or `help wanted`, you might want to [open a PR](#prs).
+If you find a matching issue that is open, and marked `accepted` and/or `help wanted`, you might want to [open a PR](#prs).
 
 ### Open an issue
 
-  Let's discuss your issue. Could be as simple as unclear documentation or a wonky config file.
-  If you're suggesting a feature, it might exist and need better documentation, or it might be in process. Even given those, some discussion might be warranted to ensure the enhancement is clear.
+Let's discuss your issue. Could be as simple as unclear documentation or a wonky config file.
+If you're suggesting a feature, it might exist and need better documentation, or it might be in process. Even given those, some discussion might be warranted to ensure the enhancement is clear.
 
-  You're welcome to jump right to a PR, but without a discussion, can't make any guarantees about merging.
+You're welcome to jump right to a PR, but without a discussion, can't make any guarantees about merging.
 
-  That said: sometimes seeing the code makes the discussion clearer.😄
+That said: sometimes seeing the code makes the discussion clearer.😄
 
 This is a helpful contribution all by itself. Thanks!
 

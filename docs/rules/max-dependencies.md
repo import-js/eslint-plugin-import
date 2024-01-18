@@ -28,17 +28,17 @@ Given a max value of `{"max": 2}`:
 ### Fail
 
 ```js
-import a from './a'; // 1
-const b = require('./b'); // 2
-import c from './c'; // 3 - exceeds max!
+import a from './a' // 1
+const b = require('./b') // 2
+import c from './c' // 3 - exceeds max!
 ```
 
 ### Pass
 
 ```js
-import a from './a'; // 1
-const anotherA = require('./a'); // still 1
-import {x, y, z} from './foo'; // 2
+import a from './a' // 1
+const anotherA = require('./a') // still 1
+import { x, y, z } from './foo' // 2
 ```
 
 ### `ignoreTypeImports`
@@ -48,21 +48,23 @@ Ignores `type` imports. Type imports are a feature released in TypeScript 3.8, y
 Given `{"max": 2, "ignoreTypeImports": true}`:
 
 <!-- markdownlint-disable-next-line MD024 -- duplicate header -->
+
 ### Fail
 
 ```ts
-import a from './a';
-import b from './b';
-import c from './c';
+import a from './a'
+import b from './b'
+import c from './c'
 ```
 
 <!-- markdownlint-disable-next-line MD024 -- duplicate header -->
+
 ### Pass
 
 ```ts
-import a from './a';
-import b from './b';
-import type c from './c'; // Doesn't count against max
+import a from './a'
+import b from './b'
+import type c from './c' // Doesn't count against max
 ```
 
 ## When Not To Use It

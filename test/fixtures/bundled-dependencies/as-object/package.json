@@ -1,0 +1,6 @@
+{
+  "bundledDependencies": {
+    "@generated/foo": "latest"
+  },
+  "dummy": true
+}

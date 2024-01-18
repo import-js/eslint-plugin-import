@@ -46,8 +46,7 @@ The following patterns are considered warnings:
 // bad.js
 
 // There is only a single module export and it's a named export.
-export const foo = 'foo';
-
+export const foo = 'foo'
 ```
 
 The following patterns are not warnings:
@@ -56,25 +55,25 @@ The following patterns are not warnings:
 // good1.js
 
 // There is a default export.
-export const foo = 'foo';
-const bar = 'bar';
-export default bar;
+export const foo = 'foo'
+const bar = 'bar'
+export default bar
 ```
 
 ```javascript
 // good2.js
 
 // There is more than one named export in the module.
-export const foo = 'foo';
-export const bar = 'bar';
+export const foo = 'foo'
+export const bar = 'bar'
 ```
 
 ```javascript
 // good3.js
 
 // There is more than one named export in the module
-const foo = 'foo';
-const bar = 'bar';
+const foo = 'foo'
+const bar = 'bar'
 export { foo, bar }
 ```
 
@@ -82,7 +81,7 @@ export { foo, bar }
 // good4.js
 
 // There is a default export.
-const foo = 'foo';
+const foo = 'foo'
 export { foo as default }
 ```
 
@@ -109,20 +108,20 @@ How to setup config file for this rule:
 }
 ```
 
-The following patterns are *not* considered warnings:
+The following patterns are _not_ considered warnings:
 
 ```javascript
 // good1.js
 
 //has default export
-export default function bar() {};
+export default function bar() {}
 ```
 
 ```javascript
 // good2.js
 
 // has default export
-let foo;
+let foo
 export { foo as default }
 ```
 
@@ -130,9 +129,9 @@ export { foo as default }
 // good3.js
 
 //contains multiple exports AND default export
-export const a = 5;
-export function bar(){};
-let foo;
+export const a = 5
+export function bar() {}
+let foo
 export { foo as default }
 ```
 
@@ -140,7 +139,7 @@ export { foo as default }
 // good4.js
 
 // does not contain any exports => file is not checked by the rule
-import * as foo from './foo';﻿
+import * as foo from './foo'
 ```
 
 ```javascript
@@ -156,15 +155,15 @@ The following patterns are considered warnings:
 // bad1.js
 
 //has 2 named exports, but no default export
-export const foo = 'foo';
-export const bar = 'bar';
+export const foo = 'foo'
+export const bar = 'bar'
 ```
 
 ```javascript
 // bad2.js
 
 // does not have default export
-let foo, bar;
+let foo, bar
 export { foo, bar }
 ```
 
@@ -172,14 +171,14 @@ export { foo, bar }
 // bad3.js
 
 // does not have default export
-export { a, b } from "foo.js"﻿
+export { a, b } from 'foo.js'
 ```
 
 ```javascript
 // bad4.js
 
 // does not have default export
-let item;
-export const foo = item;
-export { item };
+let item
+export const foo = item
+export { item }
 ```

@@ -7,18 +7,18 @@
 // Omit `.d.ts` because 1) TypeScript compilation already confirms that
 // types are resolved, and 2) it would mask an unresolved
 // `.ts`/`.tsx`/`.js`/`.jsx` implementation.
-const typeScriptExtensions = ['.ts', '.cts', '.mts', '.tsx'];
+const typeScriptExtensions = ['.ts', '.cts', '.mts', '.tsx']
 
-const allExtensions = [...typeScriptExtensions, '.js', '.jsx'];
+const allExtensions = [...typeScriptExtensions, '.js', '.jsx']
 
 module.exports = {
   settings: {
-    'import/extensions': allExtensions,
-    'import/external-module-folders': ['node_modules', 'node_modules/@types'],
-    'import/parsers': {
+    'i/extensions': allExtensions,
+    'i/external-module-folders': ['node_modules', 'node_modules/@types'],
+    'i/parsers': {
       '@typescript-eslint/parser': typeScriptExtensions,
     },
-    'import/resolver': {
+    'i/resolver': {
       node: {
         extensions: allExtensions,
       },
@@ -29,6 +29,6 @@ module.exports = {
     // analysis/correctness
 
     // TypeScript compilation already ensures that named imports exist in the referenced module
-    'import/named': 'off',
+    'i/named': 'off',
   },
-};
+}

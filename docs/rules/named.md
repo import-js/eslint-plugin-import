@@ -93,9 +93,9 @@ runtime, you will likely see false positives with this rule.
 
 ## Further Reading
 
- - [`import/ignore`] setting
- - [`jsnext:main`] deprecation
- - [`pkg.module`] (Rollup)
+- [`import/ignore`] setting
+- [`jsnext:main`] deprecation
+- [`pkg.module`] (Rollup)
 
 [`jsnext:main`]: https://github.com/jsforum/jsforum/issues/5
 [`pkg.module`]: https://github.com/rollup/rollup/wiki/pkg.module

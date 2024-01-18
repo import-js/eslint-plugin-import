@@ -3,53 +3,66 @@
  * @author Radek Benkel
  */
 
-import isStaticRequire from '../core/staticRequire';
-import docsUrl from '../docsUrl';
+import isStaticRequire from '../core/staticRequire'
+import docsUrl from '../docsUrl'
 
-import debug from 'debug';
-const log = debug('eslint-plugin-import:rules:newline-after-import');
+import debug from 'debug'
+const log = debug('eslint-plugin-import:rules:newline-after-import')
 
 //------------------------------------------------------------------------------
 // Rule Definition
 //------------------------------------------------------------------------------
 
 function containsNodeOrEqual(outerNode, innerNode) {
-  return outerNode.range[0] <= innerNode.range[0] && outerNode.range[1] >= innerNode.range[1];
+  return (
+    outerNode.range[0] <= innerNode.range[0] &&
+    outerNode.range[1] >= innerNode.range[1]
+  )
 }
 
 function getScopeBody(scope) {
   if (scope.block.type === 'SwitchStatement') {
-    log('SwitchStatement scopes not supported');
-    return null;
+    log('SwitchStatement scopes not supported')
+    return null
   }
 
-  const { body } = scope.block;
+  const { body } = scope.block
   if (body && body.type === 'BlockStatement') {
-    return body.body;
+    return body.body
   }
 
-  return body;
+  return body
 }
 
 function findNodeIndexInScopeBody(body, nodeToFind) {
-  return body.findIndex((node) => containsNodeOrEqual(node, nodeToFind));
+  return body.findIndex(node => containsNodeOrEqual(node, nodeToFind))
 }
 
 function getLineDifference(node, nextNode) {
-  return nextNode.loc.start.line - node.loc.end.line;
+  return nextNode.loc.start.line - node.loc.end.line
 }
 
 function isClassWithDecorator(node) {
-  return node.type === 'ClassDeclaration' && node.decorators && node.decorators.length;
+  return (
+    node.type === 'ClassDeclaration' &&
+    node.decorators &&
+    node.decorators.length
+  )
 }
 
 function isExportDefaultClass(node) {
-  return node.type === 'ExportDefaultDeclaration' && node.declaration.type === 'ClassDeclaration';
+  return (
+    node.type === 'ExportDefaultDeclaration' &&
+    node.declaration.type === 'ClassDeclaration'
+  )
 }
 
 function isExportNameClass(node) {
-
-  return node.type === 'ExportNamedDeclaration' && node.declaration && node.declaration.type === 'ClassDeclaration';
+  return (
+    node.type === 'ExportNamedDeclaration' &&
+    node.declaration &&
+    node.declaration.type === 'ClassDeclaration'
+  )
 }
 
 module.exports = {
@@ -77,37 +90,37 @@ module.exports = {
     ],
   },
   create(context) {
-    let level = 0;
-    const requireCalls = [];
+    let level = 0
+    const requireCalls = []
     const options = {
       count: 1,
       exactCount: false,
       considerComments: false,
       ...context.options[0],
-    };
+    }
 
     function checkForNewLine(node, nextNode, type) {
       if (isExportDefaultClass(nextNode) || isExportNameClass(nextNode)) {
-        const classNode = nextNode.declaration;
+        const classNode = nextNode.declaration
 
         if (isClassWithDecorator(classNode)) {
-          nextNode = classNode.decorators[0];
+          nextNode = classNode.decorators[0]
         }
       } else if (isClassWithDecorator(nextNode)) {
-        nextNode = nextNode.decorators[0];
+        nextNode = nextNode.decorators[0]
       }
 
-      const lineDifference = getLineDifference(node, nextNode);
-      const EXPECTED_LINE_DIFFERENCE = options.count + 1;
+      const lineDifference = getLineDifference(node, nextNode)
+      const EXPECTED_LINE_DIFFERENCE = options.count + 1
 
       if (
-        lineDifference < EXPECTED_LINE_DIFFERENCE
-        || options.exactCount && lineDifference !== EXPECTED_LINE_DIFFERENCE
+        lineDifference < EXPECTED_LINE_DIFFERENCE ||
+        (options.exactCount && lineDifference !== EXPECTED_LINE_DIFFERENCE)
       ) {
-        let column = node.loc.start.column;
+        let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
-          column = 0;
+          column = 0
         }
 
         context.report({
@@ -116,23 +129,27 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after ${type} statement not followed by another ${type}.`,
-          fix: options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference ? undefined : (fixer) => fixer.insertTextAfter(
-            node,
-            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
-          ),
-        });
+          fix:
+            options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference
+              ? undefined
+              : fixer =>
+                  fixer.insertTextAfter(
+                    node,
+                    '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
+                  ),
+        })
       }
     }
 
     function commentAfterImport(node, nextComment) {
-      const lineDifference = getLineDifference(node, nextComment);
-      const EXPECTED_LINE_DIFFERENCE = options.count + 1;
+      const lineDifference = getLineDifference(node, nextComment)
+      const EXPECTED_LINE_DIFFERENCE = options.count + 1
 
       if (lineDifference < EXPECTED_LINE_DIFFERENCE) {
-        let column = node.loc.start.column;
+        let column = node.loc.start.column
 
         if (node.loc.start.line !== node.loc.end.line) {
-          column = 0;
+          column = 0
         }
 
         context.report({
@@ -141,46 +158,58 @@ module.exports = {
             column,
           },
           message: `Expected ${options.count} empty line${options.count > 1 ? 's' : ''} after import statement not followed by another import.`,
-          fix: options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference ? undefined : (fixer) => fixer.insertTextAfter(
-            node,
-            '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
-          ),
-        });
+          fix:
+            options.exactCount && EXPECTED_LINE_DIFFERENCE < lineDifference
+              ? undefined
+              : fixer =>
+                  fixer.insertTextAfter(
+                    node,
+                    '\n'.repeat(EXPECTED_LINE_DIFFERENCE - lineDifference),
+                  ),
+        })
       }
     }
 
     function incrementLevel() {
-      level++;
+      level++
     }
     function decrementLevel() {
-      level--;
+      level--
     }
 
     function checkImport(node) {
-      const { parent } = node;
+      const { parent } = node
 
       if (!parent || !parent.body) {
-        return;
+        return
       }
 
-      const nodePosition = parent.body.indexOf(node);
-      const nextNode = parent.body[nodePosition + 1];
-      const endLine = node.loc.end.line;
-      let nextComment;
+      const nodePosition = parent.body.indexOf(node)
+      const nextNode = parent.body[nodePosition + 1]
+      const endLine = node.loc.end.line
+      let nextComment
 
       if (typeof parent.comments !== 'undefined' && options.considerComments) {
-        nextComment = parent.comments.find((o) => o.loc.start.line >= endLine && o.loc.start.line <= endLine + options.count + 1);
+        nextComment = parent.comments.find(
+          o =>
+            o.loc.start.line >= endLine &&
+            o.loc.start.line <= endLine + options.count + 1,
+        )
       }
 
       // skip "export import"s
       if (node.type === 'TSImportEqualsDeclaration' && node.isExport) {
-        return;
+        return
       }
 
       if (nextComment && typeof nextComment !== 'undefined') {
-        commentAfterImport(node, nextComment);
-      } else if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
-        checkForNewLine(node, nextNode, 'import');
+        commentAfterImport(node, nextComment)
+      } else if (
+        nextNode &&
+        nextNode.type !== 'ImportDeclaration' &&
+        (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)
+      ) {
+        checkForNewLine(node, nextNode, 'import')
       }
     }
 
@@ -189,36 +218,42 @@ module.exports = {
       TSImportEqualsDeclaration: checkImport,
       CallExpression(node) {
         if (isStaticRequire(node) && level === 0) {
-          requireCalls.push(node);
+          requireCalls.push(node)
         }
       },
       'Program:exit'() {
-        log('exit processing for', context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
-        const scopeBody = getScopeBody(context.getScope());
-        log('got scope:', scopeBody);
+        log(
+          'exit processing for',
+          context.getPhysicalFilename
+            ? context.getPhysicalFilename()
+            : context.getFilename(),
+        )
+        const scopeBody = getScopeBody(context.getScope())
+        log('got scope:', scopeBody)
 
         requireCalls.forEach((node, index) => {
-          const nodePosition = findNodeIndexInScopeBody(scopeBody, node);
-          log('node position in scope:', nodePosition);
+          const nodePosition = findNodeIndexInScopeBody(scopeBody, node)
+          log('node position in scope:', nodePosition)
 
-          const statementWithRequireCall = scopeBody[nodePosition];
-          const nextStatement = scopeBody[nodePosition + 1];
-          const nextRequireCall = requireCalls[index + 1];
+          const statementWithRequireCall = scopeBody[nodePosition]
+          const nextStatement = scopeBody[nodePosition + 1]
+          const nextRequireCall = requireCalls[index + 1]
 
-          if (nextRequireCall && containsNodeOrEqual(statementWithRequireCall, nextRequireCall)) {
-            return;
+          if (
+            nextRequireCall &&
+            containsNodeOrEqual(statementWithRequireCall, nextRequireCall)
+          ) {
+            return
           }
 
           if (
-            nextStatement && (
-              !nextRequireCall
-              || !containsNodeOrEqual(nextStatement, nextRequireCall)
-            )
+            nextStatement &&
+            (!nextRequireCall ||
+              !containsNodeOrEqual(nextStatement, nextRequireCall))
           ) {
-
-            checkForNewLine(statementWithRequireCall, nextStatement, 'require');
+            checkForNewLine(statementWithRequireCall, nextStatement, 'require')
           }
-        });
+        })
       },
       FunctionDeclaration: incrementLevel,
       FunctionExpression: incrementLevel,
@@ -232,6 +267,6 @@ module.exports = {
       'BlockStatement:exit': decrementLevel,
       'ObjectExpression:exit': decrementLevel,
       'Decorator:exit': decrementLevel,
-    };
+    }
   },
-};
+}

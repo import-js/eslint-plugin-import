@@ -11,15 +11,15 @@ This rule forbids every call to `require()` that uses expressions for the module
 ### Fail
 
 ```js
-require(name);
-require('../' + name);
-require(`../${name}`);
-require(name());
+require(name)
+require('../' + name)
+require(`../${name}`)
+require(name())
 ```
 
 ### Pass
 
 ```js
-require('../name');
-require(`../name`);
+require('../name')
+require(`../name`)
 ```

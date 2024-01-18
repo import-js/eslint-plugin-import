@@ -1,0 +1,6 @@
+{
+  "bundleDependencies": [
+    "@generated/foo"
+  ],
+  "dummy": true
+}

@@ -1,5 +1,0 @@
-(function () {
-
-  exports.x = 'foo'
-
-}())

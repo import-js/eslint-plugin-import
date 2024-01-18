@@ -3,6 +3,6 @@
  */
 module.exports = {
   settings: {
-    'import/core-modules': ['electron'],
+    'i/core-modules': ['electron'],
   },
-};
+}

@@ -3,20 +3,20 @@
  * @type {Object}
  */
 module.exports = {
-  plugins: ['import'],
+  plugins: ['i'],
 
   rules: {
     // analysis/correctness
-    'import/no-unresolved': 'error',
-    'import/named': 'error',
-    'import/namespace': 'error',
-    'import/default': 'error',
-    'import/export': 'error',
+    'i/no-unresolved': 'error',
+    'i/named': 'error',
+    'i/namespace': 'error',
+    'i/default': 'error',
+    'i/export': 'error',
 
     // red flags (thus, warnings)
-    'import/no-named-as-default': 'warn',
-    'import/no-named-as-default-member': 'warn',
-    'import/no-duplicates': 'warn',
+    'i/no-named-as-default': 'warn',
+    'i/no-named-as-default-member': 'warn',
+    'i/no-duplicates': 'warn',
   },
 
   // need all these for parsing dependencies (even if _your_ code doesn't need
@@ -25,4 +25,4 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2018,
   },
-};
+}

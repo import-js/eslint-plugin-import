@@ -1,13 +1,14 @@
-import * as path from 'path';
-import Exports from '../ExportMap';
-import docsUrl from '../docsUrl';
+import * as path from 'path'
+import Exports from '../ExportMap'
+import docsUrl from '../docsUrl'
 
 module.exports = {
   meta: {
     type: 'problem',
     docs: {
       category: 'Static analysis',
-      description: 'Ensure named imports correspond to a named export in the remote file.',
+      description:
+        'Ensure named imports correspond to a named export in the remote file.',
       url: docsUrl('named'),
     },
     schema: [
@@ -24,120 +25,151 @@ module.exports = {
   },
 
   create(context) {
-    const options = context.options[0] || {};
+    const options = context.options[0] || {}
 
     function checkSpecifiers(key, type, node) {
       // ignore local exports and type imports/exports
       if (
-        node.source == null
-        || node.importKind === 'type'
-        || node.importKind === 'typeof'
-        || node.exportKind === 'type'
+        node.source == null ||
+        node.importKind === 'type' ||
+        node.importKind === 'typeof' ||
+        node.exportKind === 'type'
       ) {
-        return;
+        return
       }
 
-      if (!node.specifiers.some((im) => im.type === type)) {
-        return; // no named imports/exports
+      if (!node.specifiers.some(im => im.type === type)) {
+        return // no named imports/exports
       }
 
-      const imports = Exports.get(node.source.value, context);
+      const imports = Exports.get(node.source.value, context)
       if (imports == null || imports.parseGoal === 'ambiguous') {
-        return;
+        return
       }
 
       if (imports.errors.length) {
-        imports.reportErrors(context, node);
-        return;
+        imports.reportErrors(context, node)
+        return
       }
 
       node.specifiers.forEach(function (im) {
         if (
-          im.type !== type
+          im.type !== type ||
           // ignore type imports
-          || im.importKind === 'type' || im.importKind === 'typeof'
+          im.importKind === 'type' ||
+          im.importKind === 'typeof'
         ) {
-          return;
+          return
         }
 
-        const name = im[key].name || im[key].value;
+        const name = im[key].name || im[key].value
 
-        const deepLookup = imports.hasDeep(name);
+        const deepLookup = imports.hasDeep(name)
 
         if (!deepLookup.found) {
           if (deepLookup.path.length > 1) {
             const deepPath = deepLookup.path
-              .map((i) => path.relative(path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename()), i.path))
-              .join(' -> ');
+              .map(i =>
+                path.relative(
+                  path.dirname(
+                    context.getPhysicalFilename
+                      ? context.getPhysicalFilename()
+                      : context.getFilename(),
+                  ),
+                  i.path,
+                ),
+              )
+              .join(' -> ')
 
-            context.report(im[key], `${name} not found via ${deepPath}`);
+            context.report(im[key], `${name} not found via ${deepPath}`)
           } else {
-            context.report(im[key], `${name} not found in '${node.source.value}'`);
+            context.report(
+              im[key],
+              `${name} not found in '${node.source.value}'`,
+            )
           }
         }
-      });
+      })
     }
 
     function checkRequire(node) {
       if (
-        !options.commonjs
-        || node.type !== 'VariableDeclarator'
+        !options.commonjs ||
+        node.type !== 'VariableDeclarator' ||
         // return if it's not an object destructure or it's an empty object destructure
-        || !node.id || node.id.type !== 'ObjectPattern' || node.id.properties.length === 0
+        !node.id ||
+        node.id.type !== 'ObjectPattern' ||
+        node.id.properties.length === 0 ||
         // return if there is no call expression on the right side
-        || !node.init || node.init.type !== 'CallExpression'
+        !node.init ||
+        node.init.type !== 'CallExpression'
       ) {
-        return;
+        return
       }
 
-      const call = node.init;
-      const [source] = call.arguments;
-      const variableImports = node.id.properties;
-      const variableExports = Exports.get(source.value, context);
+      const call = node.init
+      const [source] = call.arguments
+      const variableImports = node.id.properties
+      const variableExports = Exports.get(source.value, context)
 
       if (
         // return if it's not a commonjs require statement
-        call.callee.type !== 'Identifier' || call.callee.name !== 'require' || call.arguments.length !== 1
+        call.callee.type !== 'Identifier' ||
+        call.callee.name !== 'require' ||
+        call.arguments.length !== 1 ||
         // return if it's not a string source
-        || source.type !== 'Literal'
-        || variableExports == null
-        || variableExports.parseGoal === 'ambiguous'
+        source.type !== 'Literal' ||
+        variableExports == null ||
+        variableExports.parseGoal === 'ambiguous'
       ) {
-        return;
+        return
       }
 
       if (variableExports.errors.length) {
-        variableExports.reportErrors(context, node);
-        return;
+        variableExports.reportErrors(context, node)
+        return
       }
 
       variableImports.forEach(function (im) {
         if (im.type !== 'Property' || !im.key || im.key.type !== 'Identifier') {
-          return;
+          return
         }
 
-        const deepLookup = variableExports.hasDeep(im.key.name);
+        const deepLookup = variableExports.hasDeep(im.key.name)
 
         if (!deepLookup.found) {
           if (deepLookup.path.length > 1) {
             const deepPath = deepLookup.path
-              .map((i) => path.relative(path.dirname(context.getFilename()), i.path))
-              .join(' -> ');
+              .map(i =>
+                path.relative(path.dirname(context.getFilename()), i.path),
+              )
+              .join(' -> ')
 
-            context.report(im.key, `${im.key.name} not found via ${deepPath}`);
+            context.report(im.key, `${im.key.name} not found via ${deepPath}`)
           } else {
-            context.report(im.key, `${im.key.name} not found in '${source.value}'`);
+            context.report(
+              im.key,
+              `${im.key.name} not found in '${source.value}'`,
+            )
           }
         }
-      });
+      })
     }
 
     return {
-      ImportDeclaration: checkSpecifiers.bind(null, 'imported', 'ImportSpecifier'),
+      ImportDeclaration: checkSpecifiers.bind(
+        null,
+        'imported',
+        'ImportSpecifier',
+      ),
 
-      ExportNamedDeclaration: checkSpecifiers.bind(null, 'local', 'ExportSpecifier'),
+      ExportNamedDeclaration: checkSpecifiers.bind(
+        null,
+        'local',
+        'ExportSpecifier',
+      ),
 
       VariableDeclarator: checkRequire,
-    };
+    }
   },
-};
+}

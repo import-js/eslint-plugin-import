@@ -7,6 +7,6 @@
 module.exports = {
   plugins: ['import'],
   rules: {
-    'import/no-deprecated': 1,
+    'i/no-deprecated': 1,
   },
-};
+}
