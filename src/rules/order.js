@@ -162,7 +162,7 @@ function isSupportedRequireModule(node) {
 }
 
 function isPlainImportModule(node) {
-  return node.type === 'ImportDeclaration' && node.specifiers != null && node.specifiers.length > 0;
+  return node.type === 'ImportDeclaration' && node.specifiers != null && node.specifiers.length >= 0;
 }
 
 function isPlainImportEquals(node) {
