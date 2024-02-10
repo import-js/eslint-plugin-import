@@ -81,6 +81,7 @@ exports.default = function parse(path, content, context) {
   // "project" or "projects" in parserOptions. Removing these options means the parser will
   // only parse one file in isolate mode, which is much, much faster.
   // https://github.com/import-js/eslint-plugin-import/issues/1408#issuecomment-509298962
+  delete parserOptions.EXPERIMENTAL_useProjectService;
   delete parserOptions.project;
   delete parserOptions.projects;
 
