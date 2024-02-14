@@ -529,6 +529,10 @@ module.exports = {
 
       exports = exportList.get(file);
 
+      if (!exports) {
+        console.error(`file \`${file}\` has no exports. Please update to the latest, and if it still happens, report this on https://github.com/import-js/eslint-plugin-import/issues/2866!`);
+      }
+
       // special case: export * from
       const exportAll = exports.get(EXPORT_ALL_DECLARATION);
       if (typeof exportAll !== 'undefined' && exportedValue !== IMPORT_DEFAULT_SPECIFIER) {

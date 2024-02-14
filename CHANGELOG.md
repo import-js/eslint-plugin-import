@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
+- [`no-unused-modules`]: add console message to help debug [#2866]
 
 ## [2.29.1] - 2023-12-14
 
@@ -1111,6 +1112,7 @@ for info on changes for earlier releases.
 [#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
 [#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
 [#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
+[#2866]: https://github.com/import-js/eslint-plugin-import/pull/2866
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
