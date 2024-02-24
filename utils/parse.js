@@ -2,12 +2,16 @@
 
 exports.__esModule = true;
 
+/** @typedef {`.${string}`} Extension  */
+/** @typedef {NonNullable<import('eslint').Rule.RuleContext['settings']> & { 'import/extensions'?: Extension[], 'import/parsers'?: { [k: string]: Extension[] }, 'import/cache'?: { lifetime: number | '∞' | 'Infinity' } }} ESLintSettings */
+
 const moduleRequire = require('./module-require').default;
 const extname = require('path').extname;
 const fs = require('fs');
 
 const log = require('debug')('eslint-plugin-import:parse');
 
+/** @type {(parserPath: NonNullable<import('eslint').Rule.RuleContext['parserPath']>) => unknown} */
 function getBabelEslintVisitorKeys(parserPath) {
   if (parserPath.endsWith('index.js')) {
     const hypotheticalLocation = parserPath.replace('index.js', 'visitor-keys.js');
@@ -19,6 +23,7 @@ function getBabelEslintVisitorKeys(parserPath) {
   return null;
 }
 
+/** @type {(parserPath: import('eslint').Rule.RuleContext['parserPath'], parserInstance: { VisitorKeys: unknown }, parsedResult?: { visitorKeys?: unknown }) => unknown} */
 function keysFromParser(parserPath, parserInstance, parsedResult) {
   // Exposed by @typescript-eslint/parser and @babel/eslint-parser
   if (parsedResult && parsedResult.visitorKeys) {
@@ -35,22 +40,28 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
 
 // this exists to smooth over the unintentional breaking change in v2.7.
 // TODO, semver-major: avoid mutating `ast` and return a plain object instead.
+/** @type {<T extends import('eslint').AST.Program>(ast: T, visitorKeys: unknown) => T} */
 function makeParseReturn(ast, visitorKeys) {
   if (ast) {
+    // @ts-expect-error see TODO
     ast.visitorKeys = visitorKeys;
+    // @ts-expect-error see TODO
     ast.ast = ast;
   }
   return ast;
 }
 
+/** @type {(text: string) => string} */
 function stripUnicodeBOM(text) {
   return text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
 }
 
+/** @type {(text: string) => string} */
 function transformHashbang(text) {
   return text.replace(/^#!([^\r\n]+)/u, (_, captured) => `//${captured}`);
 }
 
+/** @type {import('./parse').default} */
 exports.default = function parse(path, content, context) {
   if (context == null) { throw new Error('need context to parse properly'); }
 
@@ -97,10 +108,12 @@ exports.default = function parse(path, content, context) {
     try {
       const parserRaw = parser.parseForESLint(content, parserOptions);
       ast = parserRaw.ast;
+      // @ts-expect-error TODO: FIXME
       return makeParseReturn(ast, keysFromParser(parserOrPath, parser, parserRaw));
     } catch (e) {
       console.warn();
       console.warn('Error while parsing ' + parserOptions.filePath);
+      // @ts-expect-error e is almost certainly an Error here
       console.warn('Line ' + e.lineNumber + ', column ' + e.column + ': ' + e.message);
     }
     if (!ast || typeof ast !== 'object') {
@@ -109,34 +122,45 @@ exports.default = function parse(path, content, context) {
         '`parseForESLint` from parser `' + (typeof parserOrPath === 'string' ? parserOrPath : '`context.languageOptions.parser`') + '` is invalid and will just be ignored'
       );
     } else {
+      // @ts-expect-error TODO: FIXME
       return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));
     }
   }
 
   const ast = parser.parse(content, parserOptions);
+  // @ts-expect-error TODO: FIXME
   return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));
 };
 
+/** @type {(path: string, context: import('eslint').Rule.RuleContext) => string | null | (import('eslint').Linter.ParserModule)} */
 function getParser(path, context) {
   const parserPath = getParserPath(path, context);
   if (parserPath) {
     return parserPath;
   }
-  const isFlat = context.languageOptions
-    && context.languageOptions.parser
+  if (
+    !!context.languageOptions
+    && !!context.languageOptions.parser
     && typeof context.languageOptions.parser !== 'string'
     && (
+      // @ts-expect-error TODO: figure out a better type
       typeof context.languageOptions.parser.parse === 'function'
+      // @ts-expect-error TODO: figure out a better type
       || typeof context.languageOptions.parser.parseForESLint === 'function'
-    );
+    )
+  ) {
+    return context.languageOptions.parser;
+  }
 
-  return isFlat ? context.languageOptions.parser : null;
+  return null;
 }
 
+/** @type {(path: string, context: import('eslint').Rule.RuleContext & { settings?: ESLintSettings }) => import('eslint').Rule.RuleContext['parserPath']} */
 function getParserPath(path, context) {
   const parsers = context.settings['import/parsers'];
   if (parsers != null) {
-    const extension = extname(path);
+    // eslint-disable-next-line no-extra-parens
+    const extension = /** @type {Extension} */ (extname(path));
     for (const parserPath in parsers) {
       if (parsers[parserPath].indexOf(extension) > -1) {
         // use this alternate parser

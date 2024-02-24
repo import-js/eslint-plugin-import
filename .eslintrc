@@ -209,10 +209,10 @@
                     "exports": "always-multiline",
                     "functions": "never"
                 }],
-                "prefer-destructuring": "warn",
+                "prefer-destructuring": "off",
                 "prefer-object-spread": "off",
                 "prefer-rest-params": "off",
-                "prefer-spread": "warn",
+                "prefer-spread": "off",
                 "prefer-template": "off",
             }
         },

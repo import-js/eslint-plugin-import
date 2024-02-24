@@ -7,6 +7,7 @@
   },
   "scripts": {
     "prepublishOnly": "cp ../{LICENSE,.npmrc} ./",
+    "tsc": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,9 +29,20 @@
   "dependencies": {
     "debug": "^3.2.7"
   },
+  "devDependencies": {
+    "@types/debug": "^4.1.12",
+    "@types/eslint": "^8.56.3",
+    "@types/node": "^20.11.20",
+    "typescript": "next"
+  },
   "peerDependenciesMeta": {
     "eslint": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "ignore": [
+      ".attw.json"
+    ]
   }
 }

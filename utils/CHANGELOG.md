@@ -8,6 +8,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - `parse`: also delete `parserOptions.EXPERIMENTAL_useProjectService` ([#2963], thanks [@JoshuaKGoldberg])
 
+### Changed
+- add types (thanks [@ljharb])
+
 ## v2.8.0 - 2023-04-14
 
 ### New

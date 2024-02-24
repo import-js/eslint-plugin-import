@@ -11,6 +11,7 @@ const createHash = require('crypto').createHash;
 
 const stringify = JSON.stringify;
 
+/** @type {import('./hash').default} */
 function hashify(value, hash) {
   if (!hash) { hash = createHash('sha256'); }
 
@@ -26,6 +27,7 @@ function hashify(value, hash) {
 }
 exports.default = hashify;
 
+/** @type {import('./hash').hashArray} */
 function hashArray(array, hash) {
   if (!hash) { hash = createHash('sha256'); }
 
@@ -41,13 +43,15 @@ function hashArray(array, hash) {
 hashify.array = hashArray;
 exports.hashArray = hashArray;
 
-function hashObject(object, hash) {
-  if (!hash) { hash = createHash('sha256'); }
+/** @type {import('./hash').hashObject} */
+function hashObject(object, optionalHash) {
+  const hash = optionalHash || createHash('sha256');
 
   hash.update('{');
   Object.keys(object).sort().forEach((key) => {
     hash.update(stringify(key));
     hash.update(':');
+    // @ts-expect-error the key is guaranteed to exist on the object here
     hashify(object[key], hash);
     hash.update(',');
   });
