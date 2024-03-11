@@ -29,11 +29,203 @@ function checkImports(imported, context) {
           message,
         });
       }
+
     }
   }
 }
 
-function getFix(first, rest, sourceCode, context) {
+function checkTypeImports(imported, context) {
+  Array.from(imported).forEach(([module, nodes]) => {
+    const typeImports = nodes.filter((node) => node.importKind === 'type');
+    if (nodes.length > 1) {
+      const someInlineTypeImports = nodes.some((node) => node.specifiers.some((spec) => spec.importKind === 'type'));
+      if (typeImports.length > 0 && someInlineTypeImports) {
+        const message = `'${module}' imported multiple times.`;
+        const sourceCode = context.getSourceCode();
+        const fix = getTypeFix(nodes, sourceCode, context);
+
+        const [first, ...rest] = nodes;
+        context.report({
+          node: first.source,
+          message,
+          fix, // Attach the autofix (if any) to the first import.
+        });
+
+        rest.forEach((node) => {
+          context.report({
+            node: node.source,
+            message,
+          });
+        });
+      }
+    }
+  });
+}
+
+function checkInlineTypeImports(imported, context) {
+  Array.from(imported).forEach(([module, nodes]) => {
+    if (nodes.length > 1) {
+      const message = `'${module}' imported multiple times.`;
+      const sourceCode = context.getSourceCode();
+      const fix = getInlineTypeFix(nodes, sourceCode);
+
+      const [first, ...rest] = nodes;
+      context.report({
+        node: first.source,
+        message,
+        fix, // Attach the autofix (if any) to the first import.
+      });
+
+      rest.forEach((node) => {
+        context.report({
+          node: node.source,
+          message,
+        });
+      });
+    }
+  });
+}
+
+function isComma(token) {
+  return token.type === 'Punctuator' && token.value === ',';
+}
+
+function getInlineTypeFix(nodes, sourceCode) {
+  return fixer => {
+    const fixes = [];
+
+    // push to first import
+    let [firstImport, ...rest] = nodes;
+    // const valueImport = nodes.find((n) => n.specifiers.every((spec) => spec.importKind === 'value')) || nodes.find((n) => n.specifiers.some((spec) => spec.type === 'ImportDefaultSpecifier'));
+    const valueImport = nodes.find((n) => n.specifiers.some((spec) => spec.type === 'ImportDefaultSpecifier'));
+    if (valueImport) {
+      firstImport = valueImport;
+      rest = nodes.filter((n) => n !== firstImport);
+    }
+
+    const nodeTokens = sourceCode.getTokens(firstImport);
+    // we are moving the rest of the Type or Inline Type imports here.
+    const nodeClosingBraceIndex = nodeTokens.findIndex(token => isPunctuator(token, '}'));
+    const nodeClosingBrace = nodeTokens[nodeClosingBraceIndex];
+    const tokenBeforeClosingBrace = nodeTokens[nodeClosingBraceIndex - 1];
+    if (nodeClosingBrace) {
+      const specifiers = [];
+      rest.forEach((node) => {
+        // these will be all Type imports, no Value specifiers
+        // then add inline type specifiers to importKind === 'type' import
+        node.specifiers.forEach((specifier) => {
+          if (specifier.importKind === 'type') {
+            specifiers.push(`type ${specifier.local.name}`);
+          } else {
+            specifiers.push(specifier.local.name);
+          }
+        });
+
+        fixes.push(fixer.remove(node));
+      });
+
+      if (isComma(tokenBeforeClosingBrace)) {
+        fixes.push(fixer.insertTextBefore(nodeClosingBrace, ` ${specifiers.join(', ')}`));
+      } else {
+        fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, ${specifiers.join(', ')}`));
+      }
+    } else {
+      // we have a default import only
+      const defaultSpecifier = firstImport.specifiers.find((spec) => spec.type === 'ImportDefaultSpecifier');
+      const inlineTypeImports = [];
+      for (const node of rest) {
+        // these will be all Type imports, no Value specifiers
+        // then add inline type specifiers to importKind === 'type' import
+        for (const specifier of node.specifiers) {
+          if (specifier.importKind === 'type') {
+            inlineTypeImports.push(`type ${specifier.local.name}`);
+          } else {
+            inlineTypeImports.push(specifier.local.name);
+          }
+        }
+
+        fixes.push(fixer.remove(node));
+      }
+
+      fixes.push(fixer.insertTextAfter(defaultSpecifier, `, {${inlineTypeImports.join(', ')}}`));
+    }
+
+    return fixes;
+  };
+}
+
+function getTypeFix(nodes, sourceCode, context) {
+  return fixer => {
+    const fixes = [];
+
+    const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+
+    if (preferInline) {
+      if (!semver.satisfies(typescriptPkg.version, '>= 4.5')) {
+        throw new Error('Your version of TypeScript does not support inline type imports.');
+      }
+
+      // collapse all type imports to the inline type import
+      const typeImports = nodes.filter((node) => node.importKind === 'type');
+      const someInlineTypeImports = nodes.filter((node) => node.specifiers.some((spec) => spec.importKind === 'type'));
+      // push to first import
+      const firstImport = someInlineTypeImports[0];
+
+      if (firstImport) {
+        const nodeTokens = sourceCode.getTokens(firstImport);
+        // we are moving the rest of the Type imports here
+        const nodeClosingBrace = nodeTokens.find(token => isPunctuator(token, '}'));
+
+        for (const node of typeImports) {
+          for (const specifier of node.specifiers) {
+            fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, type ${specifier.local.name}`));
+          }
+
+          fixes.push(fixer.remove(node));
+        }
+      }
+    } else {
+      // move inline types to type imports
+      const typeImports = nodes.filter((node) => node.importKind === 'type');
+      const someInlineTypeImports = nodes.filter((node) => node.specifiers.some((spec) => spec.importKind === 'type'));
+
+      const firstImport = typeImports[0];
+
+      if (firstImport) {
+        const nodeTokens = sourceCode.getTokens(firstImport);
+        // we are moving the rest of the Type imports here
+        const nodeClosingBrace = nodeTokens.find(token => isPunctuator(token, '}'));
+
+        for (const node of someInlineTypeImports) {
+          for (const specifier of node.specifiers) {
+            if (specifier.importKind === 'type') {
+              fixes.push(fixer.insertTextBefore(nodeClosingBrace, `, ${specifier.local.name}`));
+            }
+          }
+
+          if (node.specifiers.every((spec) => spec.importKind === 'type')) {
+            fixes.push(fixer.remove(node));
+          } else {
+            for (const specifier of node.specifiers) {
+              if (specifier.importKind === 'type') {
+                const maybeComma = sourceCode.getTokenAfter(specifier);
+                if (isComma(maybeComma)) {
+                  fixes.push(fixer.remove(maybeComma));
+                }
+                // TODO: remove `type`?
+                fixes.push(fixer.remove(specifier));
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return fixes;
+  };
+}
+
+function getFix(first, rest, sourceCode) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
   // update the first one, and remove the rest. Support for multiple
@@ -115,22 +307,13 @@ function getFix(first, rest, sourceCode, context) {
 
     const [specifiersText] = specifiers.reduce(
       ([result, needsComma, existingIdentifiers], specifier) => {
-        const isTypeSpecifier = specifier.importNode.importKind === 'type';
-
-        const preferInline = context.options[0] && context.options[0]['prefer-inline'];
-        // a user might set prefer-inline but not have a supporting TypeScript version.  Flow does not support inline types so this should fail in that case as well.
-        if (preferInline && (!typescriptPkg || !semver.satisfies(typescriptPkg.version, '>= 4.5'))) {
-          throw new Error('Your version of TypeScript does not support inline type imports.');
-        }
-
         // Add *only* the new identifiers that don't already exist, and track any new identifiers so we don't add them again in the next loop
         const [specifierText, updatedExistingIdentifiers] = specifier.identifiers.reduce(([text, set], cur) => {
           const trimmed = cur.trim(); // Trim whitespace before/after to compare to our set of existing identifiers
-          const curWithType = trimmed.length > 0 && preferInline && isTypeSpecifier ? `type ${cur}` : cur;
           if (existingIdentifiers.has(trimmed)) {
             return [text, set];
           }
-          return [text.length > 0 ? `${text},${curWithType}` : curWithType, set.add(trimmed)];
+          return [text.length > 0 ? `${text},${cur}` : cur, set.add(trimmed)];
         }, ['', existingIdentifiers]);
 
         return [
@@ -169,7 +352,7 @@ function getFix(first, rest, sourceCode, context) {
         // `import def from './foo'` → `import def, {...} from './foo'`
         fixes.push(fixer.insertTextAfter(first.specifiers[0], `, {${specifiersText}}`));
       }
-    } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
+    } else if (!shouldAddDefault && openBrace != null && closeBrace != null && specifiersText) {
       // `import {...} './foo'` → `import {..., ...} from './foo'`
       fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
     }
@@ -314,15 +497,18 @@ module.exports = {
           nsImported: new Map(),
           defaultTypesImported: new Map(),
           namedTypesImported: new Map(),
+          inlineTypesImported: new Map(),
         });
       }
       const map = moduleMaps.get(n.parent);
-      const preferInline = context.options[0] && context.options[0]['prefer-inline'];
-      if (!preferInline && n.importKind === 'type') {
+      if (n.importKind === 'type') {
+        // import type Foo | import type { foo }
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
       }
-      if (!preferInline && n.specifiers.some((spec) => spec.importKind === 'type')) {
-        return map.namedTypesImported;
+
+      if (n.specifiers.some((spec) => spec.importKind === 'type')) {
+        // import { type foo }
+        return map.inlineTypesImported;
       }
 
       return hasNamespace(n) ? map.nsImported : map.imported;
@@ -347,6 +533,26 @@ module.exports = {
           checkImports(map.nsImported, context);
           checkImports(map.defaultTypesImported, context);
           checkImports(map.namedTypesImported, context);
+
+          const duplicatedImports = new Map(map.inlineTypesImported);
+          map.imported.forEach((value, key) => {
+            if (duplicatedImports.has(key)) {
+              duplicatedImports.get(key).push(...value);
+            } else {
+              duplicatedImports.set(key, [value]);
+            }
+          });
+          checkInlineTypeImports(duplicatedImports, context);
+
+          const duplicatedTypeImports = new Map(map.inlineTypesImported);
+          map.namedTypesImported.forEach((value, key) => {
+            if (duplicatedTypeImports.has(key)) {
+              duplicatedTypeImports.get(key).push(...value);
+            } else {
+              duplicatedTypeImports.set(key, value);
+            }
+          });
+          checkTypeImports(duplicatedTypeImports, context);
         }
       },
     };
