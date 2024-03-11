@@ -23,7 +23,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 ⌨️ Set in the `typescript` configuration.\
 🚸 Set in the `warnings` configuration.\
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
-💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).\
+💡 Manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).\
 ❌ Deprecated.
 
 ### Helpful warnings
