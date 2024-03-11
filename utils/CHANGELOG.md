@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Changed
+- [types] use shared config (thanks [@ljharb])
+
 ## v2.8.1 - 2024-02-26
 
 ### Fixed
