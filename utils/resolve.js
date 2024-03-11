@@ -76,8 +76,7 @@ exports.fileExistsWithCaseSync = function fileExistsWithCaseSync(filepath, cache
   if (dir === '' || parsedPath.root === filepath) {
     result = true;
   } else {
-    const filenames = fs.readdirSync(dir);
-    if (filenames.indexOf(parsedPath.base) === -1) {
+    if (!fs.existsSync(path.join(dir, parsedPath.base))) {
       result = false;
     } else {
       result = fileExistsWithCaseSync(dir, cacheSettings, strict);
