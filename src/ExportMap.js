@@ -409,7 +409,8 @@ ExportMap.parse = function (path, content, context) {
       processDynamicImport(node.source);
     },
     CallExpression(node) {
-      if (node.callee.type === 'Import') {
+      if (node.callee.type === 'Import' ||
+        (node.callee.type === 'Identifier' && node.callee.name === 'require')) {
         processDynamicImport(node.arguments[0]);
       }
     },
