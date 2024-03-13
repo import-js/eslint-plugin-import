@@ -23,6 +23,7 @@ let ts;
 
 const log = debug('eslint-plugin-import:ExportMap');
 
+/** @type {Map<string, ExportMap>} */
 const exportCache = new Map();
 const tsconfigCache = new Map();
 
@@ -303,7 +304,7 @@ function captureTomDoc(comments) {
 
 const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
 
-ExportMap.get = function (source, context) {
+ExportMap.get = /** @returns {ExportMap} */ function (source, context) {
   const path = resolve(source, context);
   if (path == null) { return null; }
 
@@ -314,7 +315,7 @@ ExportMap.get = function (source, context) {
  * Returns an instance of ExportMap *for* the hash key from the context
  * (file being linted + specifier)
  */
-ExportMap.for = function (context) {
+ExportMap.for = /** @returns {ExportMap} */ function (context) {
   const { path } = context;
 
   const cacheKey = context.cacheKey || hashObject(context).digest('hex');
@@ -370,7 +371,7 @@ ExportMap.for = function (context) {
   return exportMap;
 };
 
-ExportMap.parse = function (path, content, context) {
+ExportMap.parse = /** @returns {ExportMap} */ function (path, content, context) {
   const m = new ExportMap(path);
   const isEsModuleInteropTrue = isEsModuleInterop();
 
