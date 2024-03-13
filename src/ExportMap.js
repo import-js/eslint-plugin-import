@@ -26,6 +26,13 @@ const log = debug('eslint-plugin-import:ExportMap');
 const exportCache = new Map();
 const tsconfigCache = new Map();
 
+/*
+ * We have prototype methods and static methods
+ * ExportMap has 2 steps: preparation and rule evaluation
+ * The static methods use cache keys to run only once for each invocation of ESLint
+ * The prototype methods run once for each rule for each file
+ */
+
 export default class ExportMap {
   constructor(path) {
     this.path = path;
@@ -303,6 +310,10 @@ ExportMap.get = function (source, context) {
   return ExportMap.for(childContext(path, context));
 };
 
+/**
+ * Returns an instance of ExportMap *for* the hash key from the context
+ * (file being linted + specifier)
+ */
 ExportMap.for = function (context) {
   const { path } = context;
 
