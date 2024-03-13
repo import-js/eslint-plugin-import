@@ -44,7 +44,7 @@ export default class ExportMap {
     this.imports = new Map();
     this.errors = [];
     /**
-     * type {'ambiguous' | 'Module' | 'Script'}
+     * @type {'ambiguous' | 'Module' | 'Script'}
      */
     this.parseGoal = 'ambiguous';
   }
