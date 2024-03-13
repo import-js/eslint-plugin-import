@@ -237,6 +237,16 @@
         },
         {
             "files": [
+                "resolvers/webpack/index.js",
+                "resolvers/webpack/test/example.js",
+                "utils/parse.js",
+            ],
+            "rules": {
+                "no-console": "off",
+            },
+        },
+        {
+            "files": [
                 "resolvers/*/test/**/*",
             ],
             "env": {
