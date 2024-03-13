@@ -34,6 +34,14 @@ const createRequire = Module.createRequire
     return mod.exports;
   };
 
+/** @type {(resolver: object) => resolver is import('./resolve').Resolver} */
+function isResolverValid(resolver) {
+  if ('interfaceVersion' in resolver && resolver.interfaceVersion === 2) {
+    return 'resolve' in resolver && !!resolver.resolve && typeof resolver.resolve === 'function';
+  }
+  return 'resolveImport' in resolver && !!resolver.resolveImport && typeof resolver.resolveImport === 'function';
+}
+
 /** @type {<T extends string>(target: T, sourceFile?: string | null | undefined) => undefined | ReturnType<typeof require>} */
 function tryRequire(target, sourceFile) {
   let resolved;
@@ -55,6 +63,56 @@ function tryRequire(target, sourceFile) {
 
   // If the target exists then return the loaded module
   return require(resolved);
+}
+
+/** @type {<T extends Map<string, unknown>>(resolvers: string[] | string | { [k: string]: string }, map: T) => T} */
+function resolverReducer(resolvers, map) {
+  if (Array.isArray(resolvers)) {
+    resolvers.forEach((r) => resolverReducer(r, map));
+    return map;
+  }
+
+  if (typeof resolvers === 'string') {
+    map.set(resolvers, null);
+    return map;
+  }
+
+  if (typeof resolvers === 'object') {
+    for (const key in resolvers) {
+      map.set(key, resolvers[key]);
+    }
+    return map;
+  }
+
+  const err = new Error('invalid resolver config');
+  err.name = ERROR_NAME;
+  throw err;
+}
+
+/** @type {(sourceFile: string) => string} */
+function getBaseDir(sourceFile) {
+  return pkgDir(sourceFile) || process.cwd();
+}
+
+/** @type {(name: string, sourceFile: string) => import('./resolve').Resolver} */
+function requireResolver(name, sourceFile) {
+  // Try to resolve package with conventional name
+  const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile)
+    || tryRequire(name, sourceFile)
+    || tryRequire(path.resolve(getBaseDir(sourceFile), name));
+
+  if (!resolver) {
+    const err = new Error(`unable to load resolver "${name}".`);
+    err.name = ERROR_NAME;
+    throw err;
+  }
+  if (!isResolverValid(resolver)) {
+    const err = new Error(`${name} with invalid interface loaded as resolver`);
+    err.name = ERROR_NAME;
+    throw err;
+  }
+
+  return resolver;
 }
 
 // https://stackoverflow.com/a/27382838
@@ -158,64 +216,6 @@ function relative(modulePath, sourceFile, settings) {
   return fullResolve(modulePath, sourceFile, settings).path;
 }
 exports.relative = relative;
-
-/** @type {<T extends Map<string, unknown>>(resolvers: string[] | string | { [k: string]: string }, map: T) => T} */
-function resolverReducer(resolvers, map) {
-  if (Array.isArray(resolvers)) {
-    resolvers.forEach((r) => resolverReducer(r, map));
-    return map;
-  }
-
-  if (typeof resolvers === 'string') {
-    map.set(resolvers, null);
-    return map;
-  }
-
-  if (typeof resolvers === 'object') {
-    for (const key in resolvers) {
-      map.set(key, resolvers[key]);
-    }
-    return map;
-  }
-
-  const err = new Error('invalid resolver config');
-  err.name = ERROR_NAME;
-  throw err;
-}
-
-/** @type {(sourceFile: string) => string} */
-function getBaseDir(sourceFile) {
-  return pkgDir(sourceFile) || process.cwd();
-}
-
-/** @type {(name: string, sourceFile: string) => import('./resolve').Resolver} */
-function requireResolver(name, sourceFile) {
-  // Try to resolve package with conventional name
-  const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile)
-    || tryRequire(name, sourceFile)
-    || tryRequire(path.resolve(getBaseDir(sourceFile), name));
-
-  if (!resolver) {
-    const err = new Error(`unable to load resolver "${name}".`);
-    err.name = ERROR_NAME;
-    throw err;
-  }
-  if (!isResolverValid(resolver)) {
-    const err = new Error(`${name} with invalid interface loaded as resolver`);
-    err.name = ERROR_NAME;
-    throw err;
-  }
-
-  return resolver;
-}
-
-/** @type {(resolver: object) => resolver is import('./resolve').Resolver} */
-function isResolverValid(resolver) {
-  if ('interfaceVersion' in resolver && resolver.interfaceVersion === 2) {
-    return 'resolve' in resolver && !!resolver.resolve && typeof resolver.resolve === 'function';
-  }
-  return 'resolveImport' in resolver && !!resolver.resolveImport && typeof resolver.resolveImport === 'function';
-}
 
 /** @type {Set<import('eslint').Rule.RuleContext>} */
 const erroredContexts = new Set();

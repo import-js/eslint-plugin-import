@@ -61,6 +61,47 @@ function transformHashbang(text) {
   return text.replace(/^#!([^\r\n]+)/u, (_, captured) => `//${captured}`);
 }
 
+/** @type {(path: string, context: import('eslint').Rule.RuleContext & { settings?: ESLintSettings }) => import('eslint').Rule.RuleContext['parserPath']} */
+function getParserPath(path, context) {
+  const parsers = context.settings['import/parsers'];
+  if (parsers != null) {
+    // eslint-disable-next-line no-extra-parens
+    const extension = /** @type {Extension} */ (extname(path));
+    for (const parserPath in parsers) {
+      if (parsers[parserPath].indexOf(extension) > -1) {
+        // use this alternate parser
+        log('using alt parser:', parserPath);
+        return parserPath;
+      }
+    }
+  }
+  // default to use ESLint parser
+  return context.parserPath;
+}
+
+/** @type {(path: string, context: import('eslint').Rule.RuleContext) => string | null | (import('eslint').Linter.ParserModule)} */
+function getParser(path, context) {
+  const parserPath = getParserPath(path, context);
+  if (parserPath) {
+    return parserPath;
+  }
+  if (
+    !!context.languageOptions
+    && !!context.languageOptions.parser
+    && typeof context.languageOptions.parser !== 'string'
+    && (
+      // @ts-expect-error TODO: figure out a better type
+      typeof context.languageOptions.parser.parse === 'function'
+      // @ts-expect-error TODO: figure out a better type
+      || typeof context.languageOptions.parser.parseForESLint === 'function'
+    )
+  ) {
+    return context.languageOptions.parser;
+  }
+
+  return null;
+}
+
 /** @type {import('./parse').default} */
 exports.default = function parse(path, content, context) {
   if (context == null) { throw new Error('need context to parse properly'); }
@@ -131,44 +172,3 @@ exports.default = function parse(path, content, context) {
   // @ts-expect-error TODO: FIXME
   return makeParseReturn(ast, keysFromParser(parserOrPath, parser, undefined));
 };
-
-/** @type {(path: string, context: import('eslint').Rule.RuleContext) => string | null | (import('eslint').Linter.ParserModule)} */
-function getParser(path, context) {
-  const parserPath = getParserPath(path, context);
-  if (parserPath) {
-    return parserPath;
-  }
-  if (
-    !!context.languageOptions
-    && !!context.languageOptions.parser
-    && typeof context.languageOptions.parser !== 'string'
-    && (
-      // @ts-expect-error TODO: figure out a better type
-      typeof context.languageOptions.parser.parse === 'function'
-      // @ts-expect-error TODO: figure out a better type
-      || typeof context.languageOptions.parser.parseForESLint === 'function'
-    )
-  ) {
-    return context.languageOptions.parser;
-  }
-
-  return null;
-}
-
-/** @type {(path: string, context: import('eslint').Rule.RuleContext & { settings?: ESLintSettings }) => import('eslint').Rule.RuleContext['parserPath']} */
-function getParserPath(path, context) {
-  const parsers = context.settings['import/parsers'];
-  if (parsers != null) {
-    // eslint-disable-next-line no-extra-parens
-    const extension = /** @type {Extension} */ (extname(path));
-    for (const parserPath in parsers) {
-      if (parsers[parserPath].indexOf(extension) > -1) {
-        // use this alternate parser
-        log('using alt parser:', parserPath);
-        return parserPath;
-      }
-    }
-  }
-  // default to use ESLint parser
-  return context.parserPath;
-}

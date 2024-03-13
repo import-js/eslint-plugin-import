@@ -10,17 +10,6 @@ const log = require('debug')('eslint-plugin-import:utils:ignore');
 /** @type {Set<import('./types').Extension>} */ let cachedSet;
 /** @type {import('./types').ESLintSettings} */ let lastSettings;
 
-/** @type {(context: import('eslint').Rule.RuleContext) => Set<import('./types').Extension>} */
-function validExtensions(context) {
-  if (cachedSet && context.settings === lastSettings) {
-    return cachedSet;
-  }
-
-  lastSettings = context.settings;
-  cachedSet = makeValidExtensionSet(context.settings);
-  return cachedSet;
-}
-
 /** @type {import('./ignore').getFileExtensions} */
 function makeValidExtensionSet(settings) {
   // start with explicit JS-parsed extensions
@@ -42,6 +31,24 @@ function makeValidExtensionSet(settings) {
 }
 exports.getFileExtensions = makeValidExtensionSet;
 
+/** @type {(context: import('eslint').Rule.RuleContext) => Set<import('./types').Extension>} */
+function validExtensions(context) {
+  if (cachedSet && context.settings === lastSettings) {
+    return cachedSet;
+  }
+
+  lastSettings = context.settings;
+  cachedSet = makeValidExtensionSet(context.settings);
+  return cachedSet;
+}
+
+/** @type {import('./ignore').hasValidExtension} */
+function hasValidExtension(path, context) {
+  // eslint-disable-next-line no-extra-parens
+  return validExtensions(context).has(/** @type {import('./types').Extension} */ (extname(path)));
+}
+exports.hasValidExtension = hasValidExtension;
+
 /** @type {import('./ignore').default} */
 exports.default = function ignore(path, context) {
   // check extension whitelist first (cheap)
@@ -60,10 +67,3 @@ exports.default = function ignore(path, context) {
 
   return false;
 };
-
-/** @type {import('./ignore').hasValidExtension} */
-function hasValidExtension(path, context) {
-  // eslint-disable-next-line no-extra-parens
-  return validExtensions(context).has(/** @type {import('./types').Extension} */ (extname(path)));
-}
-exports.hasValidExtension = hasValidExtension;
