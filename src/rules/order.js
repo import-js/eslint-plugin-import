@@ -92,6 +92,12 @@ function findRootNode(node) {
   return parent;
 }
 
+function commentOnSameLineAs(node) {
+  return (token) => (token.type === 'Block' ||  token.type === 'Line')
+      && token.loc.start.line === token.loc.end.line
+      && token.loc.end.line === node.loc.end.line;
+}
+
 function findEndOfLineWithComments(sourceCode, node) {
   const tokensToEndOfLine = takeTokensAfterWhile(sourceCode, node, commentOnSameLineAs(node));
   const endOfTokens = tokensToEndOfLine.length > 0
@@ -109,12 +115,6 @@ function findEndOfLineWithComments(sourceCode, node) {
     result = i + 1;
   }
   return result;
-}
-
-function commentOnSameLineAs(node) {
-  return (token) => (token.type === 'Block' ||  token.type === 'Line')
-      && token.loc.start.line === token.loc.end.line
-      && token.loc.end.line === node.loc.end.line;
 }
 
 function findStartOfLineWithComments(sourceCode, node) {

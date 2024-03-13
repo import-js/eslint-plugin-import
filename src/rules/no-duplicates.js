@@ -9,28 +9,68 @@ try {
   typescriptPkg = require('typescript/package.json'); // eslint-disable-line import/no-extraneous-dependencies
 } catch (e) { /**/ }
 
-function checkImports(imported, context) {
-  for (const [module, nodes] of imported.entries()) {
-    if (nodes.length > 1) {
-      const message = `'${module}' imported multiple times.`;
-      const [first, ...rest] = nodes;
-      const sourceCode = context.getSourceCode();
-      const fix = getFix(first, rest, sourceCode, context);
+function isPunctuator(node, value) {
+  return node.type === 'Punctuator' && node.value === value;
+}
 
-      context.report({
-        node: first.source,
-        message,
-        fix, // Attach the autofix (if any) to the first import.
-      });
+// Get the name of the default import of `node`, if any.
+function getDefaultImportName(node) {
+  const defaultSpecifier = node.specifiers
+    .find((specifier) => specifier.type === 'ImportDefaultSpecifier');
+  return defaultSpecifier != null ? defaultSpecifier.local.name : undefined;
+}
 
-      for (const node of rest) {
-        context.report({
-          node: node.source,
-          message,
-        });
-      }
-    }
-  }
+// Checks whether `node` has a namespace import.
+function hasNamespace(node) {
+  const specifiers = node.specifiers
+    .filter((specifier) => specifier.type === 'ImportNamespaceSpecifier');
+  return specifiers.length > 0;
+}
+
+// Checks whether `node` has any non-default specifiers.
+function hasSpecifiers(node) {
+  const specifiers = node.specifiers
+    .filter((specifier) => specifier.type === 'ImportSpecifier');
+  return specifiers.length > 0;
+}
+
+// Checks whether `node` has a comment (that ends) on the previous line or on
+// the same line as `node` (starts).
+function hasCommentBefore(node, sourceCode) {
+  return sourceCode.getCommentsBefore(node)
+    .some((comment) => comment.loc.end.line >= node.loc.start.line - 1);
+}
+
+// Checks whether `node` has a comment (that starts) on the same line as `node`
+// (ends).
+function hasCommentAfter(node, sourceCode) {
+  return sourceCode.getCommentsAfter(node)
+    .some((comment) => comment.loc.start.line === node.loc.end.line);
+}
+
+// Checks whether `node` has any comments _inside,_ except inside the `{...}`
+// part (if any).
+function hasCommentInsideNonSpecifiers(node, sourceCode) {
+  const tokens = sourceCode.getTokens(node);
+  const openBraceIndex = tokens.findIndex((token) => isPunctuator(token, '{'));
+  const closeBraceIndex = tokens.findIndex((token) => isPunctuator(token, '}'));
+  // Slice away the first token, since we're no looking for comments _before_
+  // `node` (only inside). If there's a `{...}` part, look for comments before
+  // the `{`, but not before the `}` (hence the `+1`s).
+  const someTokens = openBraceIndex >= 0 && closeBraceIndex >= 0
+    ? tokens.slice(1, openBraceIndex + 1).concat(tokens.slice(closeBraceIndex + 1))
+    : tokens.slice(1);
+  return someTokens.some((token) => sourceCode.getCommentsBefore(token).length > 0);
+}
+
+// It's not obvious what the user wants to do with comments associated with
+// duplicate imports, so skip imports with comments when autofixing.
+function hasProblematicComments(node, sourceCode) {
+  return (
+    hasCommentBefore(node, sourceCode)
+    || hasCommentAfter(node, sourceCode)
+    || hasCommentInsideNonSpecifiers(node, sourceCode)
+  );
 }
 
 function getFix(first, rest, sourceCode, context) {
@@ -203,68 +243,28 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
-function isPunctuator(node, value) {
-  return node.type === 'Punctuator' && node.value === value;
-}
+function checkImports(imported, context) {
+  for (const [module, nodes] of imported.entries()) {
+    if (nodes.length > 1) {
+      const message = `'${module}' imported multiple times.`;
+      const [first, ...rest] = nodes;
+      const sourceCode = context.getSourceCode();
+      const fix = getFix(first, rest, sourceCode, context);
 
-// Get the name of the default import of `node`, if any.
-function getDefaultImportName(node) {
-  const defaultSpecifier = node.specifiers
-    .find((specifier) => specifier.type === 'ImportDefaultSpecifier');
-  return defaultSpecifier != null ? defaultSpecifier.local.name : undefined;
-}
+      context.report({
+        node: first.source,
+        message,
+        fix, // Attach the autofix (if any) to the first import.
+      });
 
-// Checks whether `node` has a namespace import.
-function hasNamespace(node) {
-  const specifiers = node.specifiers
-    .filter((specifier) => specifier.type === 'ImportNamespaceSpecifier');
-  return specifiers.length > 0;
-}
-
-// Checks whether `node` has any non-default specifiers.
-function hasSpecifiers(node) {
-  const specifiers = node.specifiers
-    .filter((specifier) => specifier.type === 'ImportSpecifier');
-  return specifiers.length > 0;
-}
-
-// It's not obvious what the user wants to do with comments associated with
-// duplicate imports, so skip imports with comments when autofixing.
-function hasProblematicComments(node, sourceCode) {
-  return (
-    hasCommentBefore(node, sourceCode)
-    || hasCommentAfter(node, sourceCode)
-    || hasCommentInsideNonSpecifiers(node, sourceCode)
-  );
-}
-
-// Checks whether `node` has a comment (that ends) on the previous line or on
-// the same line as `node` (starts).
-function hasCommentBefore(node, sourceCode) {
-  return sourceCode.getCommentsBefore(node)
-    .some((comment) => comment.loc.end.line >= node.loc.start.line - 1);
-}
-
-// Checks whether `node` has a comment (that starts) on the same line as `node`
-// (ends).
-function hasCommentAfter(node, sourceCode) {
-  return sourceCode.getCommentsAfter(node)
-    .some((comment) => comment.loc.start.line === node.loc.end.line);
-}
-
-// Checks whether `node` has any comments _inside,_ except inside the `{...}`
-// part (if any).
-function hasCommentInsideNonSpecifiers(node, sourceCode) {
-  const tokens = sourceCode.getTokens(node);
-  const openBraceIndex = tokens.findIndex((token) => isPunctuator(token, '{'));
-  const closeBraceIndex = tokens.findIndex((token) => isPunctuator(token, '}'));
-  // Slice away the first token, since we're no looking for comments _before_
-  // `node` (only inside). If there's a `{...}` part, look for comments before
-  // the `{`, but not before the `}` (hence the `+1`s).
-  const someTokens = openBraceIndex >= 0 && closeBraceIndex >= 0
-    ? tokens.slice(1, openBraceIndex + 1).concat(tokens.slice(closeBraceIndex + 1))
-    : tokens.slice(1);
-  return someTokens.some((token) => sourceCode.getCommentsBefore(token).length > 0);
+      for (const node of rest) {
+        context.report({
+          node: node.source,
+          message,
+        });
+      }
+    }
+  }
 }
 
 module.exports = {

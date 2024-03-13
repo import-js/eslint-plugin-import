@@ -11,6 +11,10 @@ import docsUrl from '../docsUrl';
 
 const traversed = new Set();
 
+function routeString(route) {
+  return route.map((s) => `${s.value}:${s.loc.start.line}`).join('=>');
+}
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -151,7 +155,3 @@ module.exports = {
     });
   },
 };
-
-function routeString(route) {
-  return route.map((s) => `${s.value}:${s.loc.start.line}`).join('=>');
-}

@@ -6,9 +6,74 @@
 import minimatch from 'minimatch';
 import docsUrl from '../docsUrl';
 
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
+/**
+ * @param {MemberExpression} memberExpression
+ * @returns {string} the name of the member in the object expression, e.g. the `x` in `namespace.x`
+ */
+function getMemberPropertyName(memberExpression) {
+  return memberExpression.property.type === 'Identifier'
+    ? memberExpression.property.name
+    : memberExpression.property.value;
+}
+
+/**
+ * @param {ScopeManager} scopeManager
+ * @param {ASTNode} node
+ * @return {Set<string>}
+ */
+function getVariableNamesInScope(scopeManager, node) {
+  let currentNode = node;
+  let scope = scopeManager.acquire(currentNode);
+  while (scope == null) {
+    currentNode = currentNode.parent;
+    scope = scopeManager.acquire(currentNode, true);
+  }
+  return new Set(scope.variables.concat(scope.upper.variables).map((variable) => variable.name));
+}
+
+/**
+ *
+ * @param {*} names
+ * @param {*} nameConflicts
+ * @param {*} namespaceName
+ */
+function generateLocalNames(names, nameConflicts, namespaceName) {
+  const localNames = {};
+  names.forEach((name) => {
+    let localName;
+    if (!nameConflicts[name].has(name)) {
+      localName = name;
+    } else if (!nameConflicts[name].has(`${namespaceName}_${name}`)) {
+      localName = `${namespaceName}_${name}`;
+    } else {
+      for (let i = 1; i < Infinity; i++) {
+        if (!nameConflicts[name].has(`${namespaceName}_${name}_${i}`)) {
+          localName = `${namespaceName}_${name}_${i}`;
+          break;
+        }
+      }
+    }
+    localNames[name] = localName;
+  });
+  return localNames;
+}
+
+/**
+ * @param {Identifier[]} namespaceIdentifiers
+ * @returns {boolean} `true` if the namespace variable is more than just a glorified constant
+ */
+function usesNamespaceAsObject(namespaceIdentifiers) {
+  return !namespaceIdentifiers.every((identifier) => {
+    const parent = identifier.parent;
+
+    // `namespace.x` or `namespace['x']`
+    return (
+      parent
+      && parent.type === 'MemberExpression'
+      && (parent.property.type === 'Identifier' || parent.property.type === 'Literal')
+    );
+  });
+}
 
 module.exports = {
   meta: {
@@ -103,72 +168,3 @@ module.exports = {
     };
   },
 };
-
-/**
- * @param {Identifier[]} namespaceIdentifiers
- * @returns {boolean} `true` if the namespace variable is more than just a glorified constant
- */
-function usesNamespaceAsObject(namespaceIdentifiers) {
-  return !namespaceIdentifiers.every((identifier) => {
-    const parent = identifier.parent;
-
-    // `namespace.x` or `namespace['x']`
-    return (
-      parent
-      && parent.type === 'MemberExpression'
-      && (parent.property.type === 'Identifier' || parent.property.type === 'Literal')
-    );
-  });
-}
-
-/**
- * @param {MemberExpression} memberExpression
- * @returns {string} the name of the member in the object expression, e.g. the `x` in `namespace.x`
- */
-function getMemberPropertyName(memberExpression) {
-  return memberExpression.property.type === 'Identifier'
-    ? memberExpression.property.name
-    : memberExpression.property.value;
-}
-
-/**
- * @param {ScopeManager} scopeManager
- * @param {ASTNode} node
- * @return {Set<string>}
- */
-function getVariableNamesInScope(scopeManager, node) {
-  let currentNode = node;
-  let scope = scopeManager.acquire(currentNode);
-  while (scope == null) {
-    currentNode = currentNode.parent;
-    scope = scopeManager.acquire(currentNode, true);
-  }
-  return new Set(scope.variables.concat(scope.upper.variables).map((variable) => variable.name));
-}
-
-/**
- *
- * @param {*} names
- * @param {*} nameConflicts
- * @param {*} namespaceName
- */
-function generateLocalNames(names, nameConflicts, namespaceName) {
-  const localNames = {};
-  names.forEach((name) => {
-    let localName;
-    if (!nameConflicts[name].has(name)) {
-      localName = name;
-    } else if (!nameConflicts[name].has(`${namespaceName}_${name}`)) {
-      localName = `${namespaceName}_${name}`;
-    } else {
-      for (let i = 1; i < Infinity; i++) {
-        if (!nameConflicts[name].has(`${namespaceName}_${name}_${i}`)) {
-          localName = `${namespaceName}_${name}_${i}`;
-          break;
-        }
-      }
-    }
-    localNames[name] = localName;
-  });
-  return localNames;
-}
