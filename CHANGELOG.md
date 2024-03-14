@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
 - [Docs] `order`: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
 - [Tests] appveyor -> GHA (run tests on Windows in both pwsh and WSL + Ubuntu) ([#2987], thanks [@joeyguerra])
+- [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1458,6 +1459,8 @@ for info on changes for earlier releases.
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
 
+[ljharb#37]: https://github.com/ljharb/eslint-plugin-import/pull/37
+
 [#2930]: https://github.com/import-js/eslint-plugin-import/issues/2930
 [#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
 [#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
@@ -1690,6 +1693,7 @@ for info on changes for earlier releases.
 [@adjerbetian]: https://github.com/adjerbetian
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
+[@aks-]: https://github.com/aks-
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev

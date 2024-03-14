@@ -22,11 +22,14 @@ jobs:
   latest:
     needs: [matrix]
     name: 'majors'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
           - 8
@@ -38,16 +41,19 @@ jobs:
           - 2
         include:
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 4
             env:
               TS_PARSER: 4
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 3
             env:
               TS_PARSER: 3
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 2
             env:
