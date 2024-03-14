@@ -1,0 +1,69 @@
+name: Native and WSL
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [16, 14, 12, 10, 8]
+        exclude:
+          - os: ubuntu-latest
+            node-version: 8
+          - os: ubuntu-latest
+            node-version: 6
+          - os: ubuntu-latest
+            node-version: 4
+        include:
+          - os: ubuntu-latest
+            npm-version: 6
+            eslint-version: 7
+          - os: windows-latest
+            npm-version: 6
+            eslint-version: 7
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: |
+        npm install
+        npm run copy-metafiles
+        bash ./tests/dep-time-travel.sh 2>&1
+        git config core.symlinks true
+        git reset --hard
+    - name: Install dependencies of resolvers
+      run: |
+        for dir in ./resolvers/*/
+        do
+          dir=${dir%*/}
+          pushd ${dir}
+          npm install
+          popd
+        done
+    - name: Install proper eslint-version
+      run: npm install --no-save eslint@${{ matrix.eslint-version }}
+    - name: Run tests
+      run: |
+        npm run pretest
+        npm run tests-only
+        for dir in ./resolvers/*/
+        do
+          dir=${dir%*/}
+          pushd ${dir}
+          npm test
+          popd
+        done
+    - name: Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+        file: ./coverage/coverage-final.json # optional
+        flags: unittests # optional
+        name: codecov-umbrella # optional
+        fail_ci_if_error: true # optional (default = false)
