@@ -1,5 +1,6 @@
 import declaredScope from 'eslint-module-utils/declaredScope';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMapBuilder';
+import ExportMap from '../exportMap';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
@@ -8,7 +9,7 @@ function processBodyStatement(context, namespaces, declaration) {
 
   if (declaration.specifiers.length === 0) { return; }
 
-  const imports = Exports.get(declaration.source.value, context);
+  const imports = ExportMapBuilder.get(declaration.source.value, context);
   if (imports == null) { return null; }
 
   if (imports.errors.length > 0) {
@@ -88,7 +89,7 @@ module.exports = {
       ExportNamespaceSpecifier(namespace) {
         const declaration = importDeclaration(context);
 
-        const imports = Exports.get(declaration.source.value, context);
+        const imports = ExportMapBuilder.get(declaration.source.value, context);
         if (imports == null) { return null; }
 
         if (imports.errors.length) {
@@ -122,7 +123,7 @@ module.exports = {
         let namespace = namespaces.get(dereference.object.name);
         const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
+        while (namespace instanceof ExportMap && dereference.type === 'MemberExpression') {
           if (dereference.computed) {
             if (!allowComputed) {
               context.report(
@@ -161,7 +162,7 @@ module.exports = {
 
         // DFS traverse child namespaces
         function testKey(pattern, namespace, path = [init.name]) {
-          if (!(namespace instanceof Exports)) { return; }
+          if (!(namespace instanceof ExportMap)) { return; }
 
           if (pattern.type !== 'ObjectPattern') { return; }
 

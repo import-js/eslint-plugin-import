@@ -4,7 +4,7 @@
  */
 
 import resolve from 'eslint-module-utils/resolve';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMapBuilder';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
@@ -88,7 +88,7 @@ module.exports = {
         return; // ignore type imports
       }
 
-      const imported = Exports.get(sourceNode.value, context);
+      const imported = ExportMapBuilder.get(sourceNode.value, context);
 
       if (imported == null) {
         return;  // no-unresolved territory

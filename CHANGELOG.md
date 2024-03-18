@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
 - [`no-unused-modules`]: add console message to help debug [#2866]
 - [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
+- [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1109,6 +1110,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2985]: https://github.com/import-js/eslint-plugin-import/pull/2985
 [#2982]: https://github.com/import-js/eslint-plugin-import/pull/2982
 [#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
 [#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942

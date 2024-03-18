@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
 import typescriptPkg from 'typescript/package.json';
 import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
-import ExportMap from '../../../src/ExportMap';
+import ExportMapBuilder from '../../../src/exportMapBuilder';
 
 import * as fs from 'fs';
 
@@ -28,7 +28,7 @@ describe('ExportMap', function () {
   it('handles ExportAllDeclaration', function () {
     let imports;
     expect(function () {
-      imports = ExportMap.get('./export-all', fakeContext);
+      imports = ExportMapBuilder.get('./export-all', fakeContext);
     }).not.to.throw(Error);
 
     expect(imports).to.exist;
@@ -37,25 +37,25 @@ describe('ExportMap', function () {
   });
 
   it('returns a cached copy on subsequent requests', function () {
-    expect(ExportMap.get('./named-exports', fakeContext))
-      .to.exist.and.equal(ExportMap.get('./named-exports', fakeContext));
+    expect(ExportMapBuilder.get('./named-exports', fakeContext))
+      .to.exist.and.equal(ExportMapBuilder.get('./named-exports', fakeContext));
   });
 
   it('does not return a cached copy after modification', (done) => {
-    const firstAccess = ExportMap.get('./mutator', fakeContext);
+    const firstAccess = ExportMapBuilder.get('./mutator', fakeContext);
     expect(firstAccess).to.exist;
 
     // mutate (update modified time)
     const newDate = new Date();
     fs.utimes(getFilename('mutator.js'), newDate, newDate, (error) => {
       expect(error).not.to.exist;
-      expect(ExportMap.get('./mutator', fakeContext)).not.to.equal(firstAccess);
+      expect(ExportMapBuilder.get('./mutator', fakeContext)).not.to.equal(firstAccess);
       done();
     });
   });
 
   it('does not return a cached copy with different settings', () => {
-    const firstAccess = ExportMap.get('./named-exports', fakeContext);
+    const firstAccess = ExportMapBuilder.get('./named-exports', fakeContext);
     expect(firstAccess).to.exist;
 
     const differentSettings = {
@@ -63,7 +63,7 @@ describe('ExportMap', function () {
       parserPath: 'espree',
     };
 
-    expect(ExportMap.get('./named-exports', differentSettings))
+    expect(ExportMapBuilder.get('./named-exports', differentSettings))
       .to.exist.and
       .not.to.equal(firstAccess);
   });
@@ -71,7 +71,7 @@ describe('ExportMap', function () {
   it('does not throw for a missing file', function () {
     let imports;
     expect(function () {
-      imports = ExportMap.get('./does-not-exist', fakeContext);
+      imports = ExportMapBuilder.get('./does-not-exist', fakeContext);
     }).not.to.throw(Error);
 
     expect(imports).not.to.exist;
@@ -81,7 +81,7 @@ describe('ExportMap', function () {
   it('exports explicit names for a missing file in exports', function () {
     let imports;
     expect(function () {
-      imports = ExportMap.get('./exports-missing', fakeContext);
+      imports = ExportMapBuilder.get('./exports-missing', fakeContext);
     }).not.to.throw(Error);
 
     expect(imports).to.exist;
@@ -92,7 +92,7 @@ describe('ExportMap', function () {
   it('finds exports for an ES7 module with babel-eslint', function () {
     const path = getFilename('jsx/FooES7.js');
     const contents = fs.readFileSync(path, { encoding: 'utf8' });
-    const imports = ExportMap.parse(
+    const imports = ExportMapBuilder.parse(
       path,
       contents,
       { parserPath: 'babel-eslint', settings: {} },
@@ -112,7 +112,7 @@ describe('ExportMap', function () {
         before('parse file', function () {
           const path = getFilename('deprecated.js');
           const contents = fs.readFileSync(path, { encoding: 'utf8' }).replace(/[\r]\n/g, lineEnding);
-          imports = ExportMap.parse(path, contents, parseContext);
+          imports = ExportMapBuilder.parse(path, contents, parseContext);
 
           // sanity checks
           expect(imports.errors).to.be.empty;
@@ -181,7 +181,7 @@ describe('ExportMap', function () {
         before('parse file', function () {
           const path = getFilename('deprecated-file.js');
           const contents = fs.readFileSync(path, { encoding: 'utf8' });
-          imports = ExportMap.parse(path, contents, parseContext);
+          imports = ExportMapBuilder.parse(path, contents, parseContext);
 
           // sanity checks
           expect(imports.errors).to.be.empty;
@@ -243,7 +243,7 @@ describe('ExportMap', function () {
     it('works with espree & traditional namespace exports', function () {
       const path = getFilename('deep/a.js');
       const contents = fs.readFileSync(path, { encoding: 'utf8' });
-      const a = ExportMap.parse(path, contents, espreeContext);
+      const a = ExportMapBuilder.parse(path, contents, espreeContext);
       expect(a.errors).to.be.empty;
       expect(a.get('b').namespace).to.exist;
       expect(a.get('b').namespace.has('c')).to.be.true;
@@ -252,7 +252,7 @@ describe('ExportMap', function () {
     it('captures namespace exported as default', function () {
       const path = getFilename('deep/default.js');
       const contents = fs.readFileSync(path, { encoding: 'utf8' });
-      const def = ExportMap.parse(path, contents, espreeContext);
+      const def = ExportMapBuilder.parse(path, contents, espreeContext);
       expect(def.errors).to.be.empty;
       expect(def.get('default').namespace).to.exist;
       expect(def.get('default').namespace.has('c')).to.be.true;
@@ -261,7 +261,7 @@ describe('ExportMap', function () {
     it('works with babel-eslint & ES7 namespace exports', function () {
       const path = getFilename('deep-es7/a.js');
       const contents = fs.readFileSync(path, { encoding: 'utf8' });
-      const a = ExportMap.parse(path, contents, babelContext);
+      const a = ExportMapBuilder.parse(path, contents, babelContext);
       expect(a.errors).to.be.empty;
       expect(a.get('b').namespace).to.exist;
       expect(a.get('b').namespace.has('c')).to.be.true;
@@ -278,7 +278,7 @@ describe('ExportMap', function () {
 
       const path = getFilename('deep/cache-1.js');
       const contents = fs.readFileSync(path, { encoding: 'utf8' });
-      a = ExportMap.parse(path, contents, espreeContext);
+      a = ExportMapBuilder.parse(path, contents, espreeContext);
       expect(a.errors).to.be.empty;
 
       expect(a.get('b').namespace).to.exist;
@@ -304,10 +304,10 @@ describe('ExportMap', function () {
   context('Map API', function () {
     context('#size', function () {
 
-      it('counts the names', () => expect(ExportMap.get('./named-exports', fakeContext))
+      it('counts the names', () => expect(ExportMapBuilder.get('./named-exports', fakeContext))
         .to.have.property('size', 12));
 
-      it('includes exported namespace size', () => expect(ExportMap.get('./export-all', fakeContext))
+      it('includes exported namespace size', () => expect(ExportMapBuilder.get('./export-all', fakeContext))
         .to.have.property('size', 1));
 
     });
@@ -315,14 +315,14 @@ describe('ExportMap', function () {
 
   context('issue #210: self-reference', function () {
     it(`doesn't crash`, function () {
-      expect(() => ExportMap.get('./narcissist', fakeContext)).not.to.throw(Error);
+      expect(() => ExportMapBuilder.get('./narcissist', fakeContext)).not.to.throw(Error);
     });
     it(`'has' circular reference`, function () {
-      expect(ExportMap.get('./narcissist', fakeContext))
+      expect(ExportMapBuilder.get('./narcissist', fakeContext))
         .to.exist.and.satisfy((m) => m.has('soGreat'));
     });
     it(`can 'get' circular reference`, function () {
-      expect(ExportMap.get('./narcissist', fakeContext))
+      expect(ExportMapBuilder.get('./narcissist', fakeContext))
         .to.exist.and.satisfy((m) => m.get('soGreat') != null);
     });
   });
@@ -335,7 +335,7 @@ describe('ExportMap', function () {
 
     let imports;
     before('load imports', function () {
-      imports = ExportMap.get('./typescript.ts', context);
+      imports = ExportMapBuilder.get('./typescript.ts', context);
     });
 
     it('returns nothing for a TypeScript file', function () {
@@ -372,7 +372,7 @@ describe('ExportMap', function () {
         before('load imports', function () {
           this.timeout(20e3);  // takes a long time :shrug:
           sinon.spy(tsConfigLoader, 'tsConfigLoader');
-          imports = ExportMap.get('./typescript.ts', context);
+          imports = ExportMapBuilder.get('./typescript.ts', context);
         });
         after('clear spies', function () {
           tsConfigLoader.tsConfigLoader.restore();
@@ -414,9 +414,9 @@ describe('ExportMap', function () {
             },
           };
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(0);
-          ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
+          ExportMapBuilder.parse('./baz.ts', 'export const baz = 5', customContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
-          ExportMap.parse('./baz.ts', 'export const baz = 5', customContext);
+          ExportMapBuilder.parse('./baz.ts', 'export const baz = 5', customContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(1);
 
           const differentContext = {
@@ -426,17 +426,17 @@ describe('ExportMap', function () {
             },
           };
 
-          ExportMap.parse('./baz.ts', 'export const baz = 5', differentContext);
+          ExportMapBuilder.parse('./baz.ts', 'export const baz = 5', differentContext);
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
         });
 
         it('should cache after parsing for an ambiguous module', function () {
           const source = './typescript-declare-module.ts';
-          const parseSpy = sinon.spy(ExportMap, 'parse');
+          const parseSpy = sinon.spy(ExportMapBuilder, 'parse');
 
-          expect(ExportMap.get(source, context)).to.be.null;
+          expect(ExportMapBuilder.get(source, context)).to.be.null;
 
-          ExportMap.get(source, context);
+          ExportMapBuilder.get(source, context);
 
           expect(parseSpy.callCount).to.equal(1);
 

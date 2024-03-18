@@ -229,7 +229,7 @@
         {
             "files": [
                 "utils/**", // TODO
-                "src/ExportMap.js", // TODO
+                "src/exportMapBuilder.js", // TODO
             ],
             "rules": {
                 "no-use-before-define": "off",

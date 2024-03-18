@@ -1,5 +1,6 @@
 import declaredScope from 'eslint-module-utils/declaredScope';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMapBuilder';
+import ExportMap from '../exportMap';
 import docsUrl from '../docsUrl';
 
 function message(deprecation) {
@@ -31,7 +32,7 @@ module.exports = {
       if (node.type !== 'ImportDeclaration') { return; }
       if (node.source == null) { return; } // local export, ignore
 
-      const imports = Exports.get(node.source.value, context);
+      const imports = ExportMapBuilder.get(node.source.value, context);
       if (imports == null) { return; }
 
       const moduleDeprecation = imports.doc && imports.doc.tags.find((t) => t.title === 'deprecated');
@@ -114,7 +115,7 @@ module.exports = {
         let namespace = namespaces.get(dereference.object.name);
         const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
+        while (namespace instanceof ExportMap && dereference.type === 'MemberExpression') {
           // ignore computed parts for now
           if (dereference.computed) { return; }
 

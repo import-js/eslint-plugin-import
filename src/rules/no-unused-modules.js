@@ -13,7 +13,7 @@ import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
-import Exports, { recursivePatternCapture } from '../ExportMap';
+import ExportMapBuilder, { recursivePatternCapture } from '../exportMapBuilder';
 import docsUrl from '../docsUrl';
 
 let FileEnumerator;
@@ -194,7 +194,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
   srcFiles.forEach((file) => {
     const exports = new Map();
     const imports = new Map();
-    const currentExports = Exports.get(file, context);
+    const currentExports = ExportMapBuilder.get(file, context);
     if (currentExports) {
       const {
         dependencies,

@@ -1,4 +1,4 @@
-import ExportMap, { recursivePatternCapture } from '../ExportMap';
+import ExportMapBuilder, { recursivePatternCapture } from '../exportMapBuilder';
 import docsUrl from '../docsUrl';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
@@ -197,7 +197,7 @@ module.exports = {
         // `export * as X from 'path'` does not conflict
         if (node.exported && node.exported.name) { return; }
 
-        const remoteExports = ExportMap.get(node.source.value, context);
+        const remoteExports = ExportMapBuilder.get(node.source.value, context);
         if (remoteExports == null) { return; }
 
         if (remoteExports.errors.length) {

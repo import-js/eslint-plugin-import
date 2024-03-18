@@ -1,4 +1,4 @@
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMapBuilder';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
@@ -20,7 +20,7 @@ module.exports = {
 
       const declaration = importDeclaration(context);
 
-      const imports = Exports.get(declaration.source.value, context);
+      const imports = ExportMapBuilder.get(declaration.source.value, context);
       if (imports == null) { return; }
 
       if (imports.errors.length) {
