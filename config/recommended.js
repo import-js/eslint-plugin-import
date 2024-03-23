@@ -18,11 +18,4 @@ module.exports = {
     'import/no-named-as-default-member': 'warn',
     'import/no-duplicates': 'warn',
   },
-
-  // need all these for parsing dependencies (even if _your_ code doesn't need
-  // all of them)
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 2018,
-  },
 };
