@@ -105,7 +105,7 @@ jobs:
             eslint: 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ljharb/actions/node/install@main
         continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
         name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
@@ -119,7 +119,7 @@ jobs:
           skip-ls-check: true
       - run: npm run pretest
       - run: npm run tests-only
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v3.1.5
 
   node:
     name: 'node 4+'
