@@ -118,6 +118,100 @@ const availableDocStyleParsers = {
 
 const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
 
+let parserOptionsHash = '';
+let prevParserOptions = '';
+let settingsHash = '';
+let prevSettings = '';
+/**
+ * don't hold full context object in memory, just grab what we need.
+ * also calculate a cacheKey, where parts of the cacheKey hash are memoized
+ */
+function childContext(path, context) {
+  const { settings, parserOptions, parserPath } = context;
+
+  if (JSON.stringify(settings) !== prevSettings) {
+    settingsHash = hashObject({ settings }).digest('hex');
+    prevSettings = JSON.stringify(settings);
+  }
+
+  if (JSON.stringify(parserOptions) !== prevParserOptions) {
+    parserOptionsHash = hashObject({ parserOptions }).digest('hex');
+    prevParserOptions = JSON.stringify(parserOptions);
+  }
+
+  return {
+    cacheKey: String(parserPath) + parserOptionsHash + settingsHash + String(path),
+    settings,
+    parserOptions,
+    parserPath,
+    path,
+  };
+}
+
+/**
+ * sometimes legacy support isn't _that_ hard... right?
+ */
+function makeSourceCode(text, ast) {
+  if (SourceCode.length > 1) {
+    // ESLint 3
+    return new SourceCode(text, ast);
+  } else {
+    // ESLint 4, 5
+    return new SourceCode({ text, ast });
+  }
+}
+
+/**
+ * Traverse a pattern/identifier node, calling 'callback'
+ * for each leaf identifier.
+ * @param  {node}   pattern
+ * @param  {Function} callback
+ * @return {void}
+ */
+export function recursivePatternCapture(pattern, callback) {
+  switch (pattern.type) {
+    case 'Identifier': // base case
+      callback(pattern);
+      break;
+
+    case 'ObjectPattern':
+      pattern.properties.forEach((p) => {
+        if (p.type === 'ExperimentalRestProperty' || p.type === 'RestElement') {
+          callback(p.argument);
+          return;
+        }
+        recursivePatternCapture(p.value, callback);
+      });
+      break;
+
+    case 'ArrayPattern':
+      pattern.elements.forEach((element) => {
+        if (element == null) { return; }
+        if (element.type === 'ExperimentalRestProperty' || element.type === 'RestElement') {
+          callback(element.argument);
+          return;
+        }
+        recursivePatternCapture(element, callback);
+      });
+      break;
+
+    case 'AssignmentPattern':
+      callback(pattern.left);
+      break;
+    default:
+  }
+}
+
+/**
+ * The creation of this closure is isolated from other scopes
+ * to avoid over-retention of unrelated variables, which has
+ * caused memory leaks. See #1266.
+ */
+function thunkFor(p, context) {
+  // eslint-disable-next-line no-use-before-define
+  return () => ExportMapBuilder.for(childContext(p, context));
+}
+
 export default class ExportMapBuilder {
   static get(source, context) {
     const path = resolve(source, context);
@@ -183,6 +277,43 @@ export default class ExportMapBuilder {
   }
 
   static parse(path, content, context) {
+    function readTsConfig(context) {
+      const tsconfigInfo = tsConfigLoader({
+        cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+        getEnv: (key) => process.env[key],
+      });
+      try {
+        if (tsconfigInfo.tsConfigPath !== undefined) {
+          // Projects not using TypeScript won't have `typescript` installed.
+          if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
+
+          const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
+          return ts.parseJsonConfigFileContent(
+            configFile.config,
+            ts.sys,
+            dirname(tsconfigInfo.tsConfigPath),
+          );
+        }
+      } catch (e) {
+        // Catch any errors
+      }
+
+      return null;
+    }
+
+    function isEsModuleInterop() {
+      const cacheKey = hashObject({
+        tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+      }).digest('hex');
+      let tsConfig = tsconfigCache.get(cacheKey);
+      if (typeof tsConfig === 'undefined') {
+        tsConfig = readTsConfig(context);
+        tsconfigCache.set(cacheKey, tsConfig);
+      }
+
+      return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
+    }
+
     const m = new ExportMap(path);
     const isEsModuleInteropTrue = isEsModuleInterop();
 
@@ -200,6 +331,10 @@ export default class ExportMapBuilder {
     m.visitorKeys = visitorKeys;
 
     let hasDynamicImports = false;
+
+    function remotePath(value) {
+      return resolve.relative(value, path, context.settings);
+    }
 
     function processDynamicImport(source) {
       hasDynamicImports = true;
@@ -264,10 +399,6 @@ export default class ExportMapBuilder {
 
     const namespaces = new Map();
 
-    function remotePath(value) {
-      return resolve.relative(value, path, context.settings);
-    }
-
     function resolveImport(value) {
       const rp = remotePath(value);
       if (rp == null) { return null; }
@@ -324,27 +455,6 @@ export default class ExportMapBuilder {
       m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) });
     }
 
-    function captureDependencyWithSpecifiers(n) {
-      // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
-      const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
-      // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
-      // shouldn't be considered to be just importing types
-      let specifiersOnlyImportingTypes = n.specifiers.length > 0;
-      const importedSpecifiers = new Set();
-      n.specifiers.forEach((specifier) => {
-        if (specifier.type === 'ImportSpecifier') {
-          importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
-        } else if (supportedImportTypes.has(specifier.type)) {
-          importedSpecifiers.add(specifier.type);
-        }
-
-        // import { type Foo } (Flow); import { typeof Foo } (Flow)
-        specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
-          && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
-      });
-      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
-    }
-
     function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
       if (source == null) { return null; }
 
@@ -369,44 +479,28 @@ export default class ExportMapBuilder {
       return getter;
     }
 
-    const source = makeSourceCode(content, ast);
-
-    function readTsConfig(context) {
-      const tsconfigInfo = tsConfigLoader({
-        cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
-        getEnv: (key) => process.env[key],
-      });
-      try {
-        if (tsconfigInfo.tsConfigPath !== undefined) {
-          // Projects not using TypeScript won't have `typescript` installed.
-          if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
-
-          const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
-          return ts.parseJsonConfigFileContent(
-            configFile.config,
-            ts.sys,
-            dirname(tsconfigInfo.tsConfigPath),
-          );
+    function captureDependencyWithSpecifiers(n) {
+      // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
+      const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
+      // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
+      // shouldn't be considered to be just importing types
+      let specifiersOnlyImportingTypes = n.specifiers.length > 0;
+      const importedSpecifiers = new Set();
+      n.specifiers.forEach((specifier) => {
+        if (specifier.type === 'ImportSpecifier') {
+          importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
+        } else if (supportedImportTypes.has(specifier.type)) {
+          importedSpecifiers.add(specifier.type);
         }
-      } catch (e) {
-        // Catch any errors
-      }
 
-      return null;
+        // import { type Foo } (Flow); import { typeof Foo } (Flow)
+        specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
+          && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
+      });
+      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
     }
 
-    function isEsModuleInterop() {
-      const cacheKey = hashObject({
-        tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
-      }).digest('hex');
-      let tsConfig = tsconfigCache.get(cacheKey);
-      if (typeof tsConfig === 'undefined') {
-        tsConfig = readTsConfig(context);
-        tsconfigCache.set(cacheKey, tsConfig);
-      }
-
-      return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
-    }
+    const source = makeSourceCode(content, ast);
 
     ast.body.forEach(function (n) {
       if (n.type === 'ExportDefaultDeclaration') {
@@ -553,98 +647,5 @@ export default class ExportMapBuilder {
       m.parseGoal = 'Module';
     }
     return m;
-  }
-}
-
-/**
- * The creation of this closure is isolated from other scopes
- * to avoid over-retention of unrelated variables, which has
- * caused memory leaks. See #1266.
- */
-function thunkFor(p, context) {
-  return () => ExportMapBuilder.for(childContext(p, context));
-}
-
-/**
- * Traverse a pattern/identifier node, calling 'callback'
- * for each leaf identifier.
- * @param  {node}   pattern
- * @param  {Function} callback
- * @return {void}
- */
-export function recursivePatternCapture(pattern, callback) {
-  switch (pattern.type) {
-    case 'Identifier': // base case
-      callback(pattern);
-      break;
-
-    case 'ObjectPattern':
-      pattern.properties.forEach((p) => {
-        if (p.type === 'ExperimentalRestProperty' || p.type === 'RestElement') {
-          callback(p.argument);
-          return;
-        }
-        recursivePatternCapture(p.value, callback);
-      });
-      break;
-
-    case 'ArrayPattern':
-      pattern.elements.forEach((element) => {
-        if (element == null) { return; }
-        if (element.type === 'ExperimentalRestProperty' || element.type === 'RestElement') {
-          callback(element.argument);
-          return;
-        }
-        recursivePatternCapture(element, callback);
-      });
-      break;
-
-    case 'AssignmentPattern':
-      callback(pattern.left);
-      break;
-    default:
-  }
-}
-
-let parserOptionsHash = '';
-let prevParserOptions = '';
-let settingsHash = '';
-let prevSettings = '';
-/**
- * don't hold full context object in memory, just grab what we need.
- * also calculate a cacheKey, where parts of the cacheKey hash are memoized
- */
-function childContext(path, context) {
-  const { settings, parserOptions, parserPath } = context;
-
-  if (JSON.stringify(settings) !== prevSettings) {
-    settingsHash = hashObject({ settings }).digest('hex');
-    prevSettings = JSON.stringify(settings);
-  }
-
-  if (JSON.stringify(parserOptions) !== prevParserOptions) {
-    parserOptionsHash = hashObject({ parserOptions }).digest('hex');
-    prevParserOptions = JSON.stringify(parserOptions);
-  }
-
-  return {
-    cacheKey: String(parserPath) + parserOptionsHash + settingsHash + String(path),
-    settings,
-    parserOptions,
-    parserPath,
-    path,
-  };
-}
-
-/**
- * sometimes legacy support isn't _that_ hard... right?
- */
-function makeSourceCode(text, ast) {
-  if (SourceCode.length > 1) {
-    // ESLint 3
-    return new SourceCode(text, ast);
-  } else {
-    // ESLint 4, 5
-    return new SourceCode({ text, ast });
   }
 }
