@@ -169,6 +169,34 @@ ruleTester.run('order', rule, {
         ['sibling', 'parent', 'external'],
       ] }],
     }),
+    // Grouping import types and alphabetize
+    test({
+      code: `
+        import async from 'async';
+        import fs from 'fs';
+        import path from 'path';
+
+        import index from '.';
+        import relParent3 from '../';
+        import relParent1 from '../foo';
+        import sibling from './foo';
+      `,
+      options: [{ groups: [
+        ['builtin', 'external'],
+      ], alphabetize: { order: 'asc', caseInsensitive: true } }],
+    }),
+    test({
+      code: `
+      import { fooz } from '../baz.js'
+      import { foo } from './bar.js'
+      `,
+      options: [{
+        alphabetize: { order: 'asc', caseInsensitive: true },
+        groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'object'],
+        'newlines-between': 'always',
+        warnOnUnassignedImports: true,
+      }],
+    }),
     // Omitted types should implicitly be considered as the last type
     test({
       code: `
