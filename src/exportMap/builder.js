@@ -93,6 +93,37 @@ function thunkFor(p, context) {
   return () => ExportMapBuilder.for(childContext(p, context));
 }
 
+function captureDependency(
+  { source },
+  isOnlyImportingTypes,
+  remotePathResolver,
+  exportMap,
+  context,
+  importedSpecifiers = new Set(),
+) {
+  if (source == null) { return null; }
+
+  const p = remotePathResolver.resolve(source.value);
+  if (p == null) { return null; }
+
+  const declarationMetadata = {
+    // capturing actual node reference holds full AST in memory!
+    source: { value: source.value, loc: source.loc },
+    isOnlyImportingTypes,
+    importedSpecifiers,
+  };
+
+  const existing = exportMap.imports.get(p);
+  if (existing != null) {
+    existing.declarations.add(declarationMetadata);
+    return existing.getter;
+  }
+
+  const getter = thunkFor(p, context);
+  exportMap.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
+  return getter;
+}
+
 export default class ExportMapBuilder {
   static get(source, context) {
     const path = resolve(source, context);
@@ -241,30 +272,6 @@ export default class ExportMapBuilder {
 
     const namespace = new Namespace(path, context, ExportMapBuilder);
 
-    function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
-      if (source == null) { return null; }
-
-      const p = remotePathResolver.resolve(source.value);
-      if (p == null) { return null; }
-
-      const declarationMetadata = {
-        // capturing actual node reference holds full AST in memory!
-        source: { value: source.value, loc: source.loc },
-        isOnlyImportingTypes,
-        importedSpecifiers,
-      };
-
-      const existing = exportMap.imports.get(p);
-      if (existing != null) {
-        existing.declarations.add(declarationMetadata);
-        return existing.getter;
-      }
-
-      const getter = thunkFor(p, context);
-      exportMap.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
-      return getter;
-    }
-
     function captureDependencyWithSpecifiers(n) {
       // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
       const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
@@ -283,7 +290,7 @@ export default class ExportMapBuilder {
         specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
           && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
       });
-      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, importedSpecifiers);
+      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, remotePathResolver, exportMap, context, importedSpecifiers);
     }
 
     const source = makeSourceCode(content, ast);
@@ -361,7 +368,7 @@ export default class ExportMapBuilder {
           exportMap.namespace.set('default', exportMeta);
         },
         ExportAllDeclaration() {
-          const getter = captureDependency(astNode, astNode.exportKind === 'type');
+          const getter = captureDependency(astNode, astNode.exportKind === 'type', remotePathResolver, exportMap, context);
           if (getter) { exportMap.dependencies.add(getter); }
           if (astNode.exported) {
             processSpecifier(astNode, astNode.exported, exportMap, namespace);
