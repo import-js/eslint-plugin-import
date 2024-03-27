@@ -241,8 +241,8 @@ export default class ExportMapBuilder {
 
     const namespace = new Namespace(path, context, ExportMapBuilder);
 
-    function processSpecifier(specifier, n, exportMap) {
-      const nsource = n.source && n.source.value;
+    function processSpecifier(specifier, astNode, exportMap) {
+      const nsource = astNode.source && astNode.source.value;
       const exportMeta = {};
       let local;
 
@@ -260,7 +260,7 @@ export default class ExportMapBuilder {
           exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
           return;
         case 'ExportSpecifier':
-          if (!n.source) {
+          if (!astNode.source) {
             exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.local));
             return;
           }
