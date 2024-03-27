@@ -503,76 +503,8 @@ export default class ExportMapBuilder {
     const source = makeSourceCode(content, ast);
 
     ast.body.forEach(function (n) {
-      if (n.type === 'ExportDefaultDeclaration') {
-        const exportMeta = captureDoc(source, docStyleParsers, n);
-        if (n.declaration.type === 'Identifier') {
-          addNamespace(exportMeta, n.declaration);
-        }
-        m.namespace.set('default', exportMeta);
-        return;
-      }
-
-      if (n.type === 'ExportAllDeclaration') {
-        const getter = captureDependency(n, n.exportKind === 'type');
-        if (getter) { m.dependencies.add(getter); }
-        if (n.exported) {
-          processSpecifier(n, n.exported, m);
-        }
-        return;
-      }
-
-      // capture namespaces in case of later export
-      if (n.type === 'ImportDeclaration') {
-        captureDependencyWithSpecifiers(n);
-
-        const ns = n.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
-        if (ns) {
-          namespaces.set(ns.local.name, n.source.value);
-        }
-        return;
-      }
-
-      if (n.type === 'ExportNamedDeclaration') {
-        captureDependencyWithSpecifiers(n);
-
-        // capture declaration
-        if (n.declaration != null) {
-          switch (n.declaration.type) {
-            case 'FunctionDeclaration':
-            case 'ClassDeclaration':
-            case 'TypeAlias': // flowtype with babel-eslint parser
-            case 'InterfaceDeclaration':
-            case 'DeclareFunction':
-            case 'TSDeclareFunction':
-            case 'TSEnumDeclaration':
-            case 'TSTypeAliasDeclaration':
-            case 'TSInterfaceDeclaration':
-            case 'TSAbstractClassDeclaration':
-            case 'TSModuleDeclaration':
-              m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
-              break;
-            case 'VariableDeclaration':
-              n.declaration.declarations.forEach((d) => {
-                recursivePatternCapture(
-                  d.id,
-                  (id) => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n)),
-                );
-              });
-              break;
-            default:
-          }
-        }
-
-        n.specifiers.forEach((s) => processSpecifier(s, n, m));
-      }
-
-      const exports = ['TSExportAssignment'];
-      if (isEsModuleInteropTrue) {
-        exports.push('TSNamespaceExportDeclaration');
-      }
-
       // This doesn't declare anything, but changes what's being exported.
-      if (includes(exports, n.type)) {
+      function typeScriptExport() {
         const exportedName = n.type === 'TSNamespaceExportDeclaration'
           ? (n.id || n.name).name
           : n.expression && n.expression.name || n.expression.id && n.expression.id.name || null;
@@ -632,6 +564,68 @@ export default class ExportMapBuilder {
             m.namespace.set('default', captureDoc(source, docStyleParsers, decl));
           }
         });
+      }
+
+      const visitor = {
+        ExportDefaultDeclaration() {
+          const exportMeta = captureDoc(source, docStyleParsers, n);
+          if (n.declaration.type === 'Identifier') {
+            addNamespace(exportMeta, n.declaration);
+          }
+          m.namespace.set('default', exportMeta);
+        },
+        ExportAllDeclaration() {
+          const getter = captureDependency(n, n.exportKind === 'type');
+          if (getter) { m.dependencies.add(getter); }
+          if (n.exported) {
+            processSpecifier(n, n.exported, m);
+          }
+        },
+        /** capture namespaces in case of later export */
+        ImportDeclaration() {
+          captureDependencyWithSpecifiers(n);
+          const ns = n.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
+          if (ns) {
+            namespaces.set(ns.local.name, n.source.value);
+          }
+        },
+        ExportNamedDeclaration() {
+          captureDependencyWithSpecifiers(n);
+          // capture declaration
+          if (n.declaration != null) {
+            switch (n.declaration.type) {
+              case 'FunctionDeclaration':
+              case 'ClassDeclaration':
+              case 'TypeAlias': // flowtype with babel-eslint parser
+              case 'InterfaceDeclaration':
+              case 'DeclareFunction':
+              case 'TSDeclareFunction':
+              case 'TSEnumDeclaration':
+              case 'TSTypeAliasDeclaration':
+              case 'TSInterfaceDeclaration':
+              case 'TSAbstractClassDeclaration':
+              case 'TSModuleDeclaration':
+                m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
+                break;
+              case 'VariableDeclaration':
+                n.declaration.declarations.forEach((d) => {
+                  recursivePatternCapture(
+                    d.id,
+                    (id) => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n)),
+                  );
+                });
+                break;
+              default:
+            }
+          }
+          n.specifiers.forEach((s) => processSpecifier(s, n, m));
+        },
+        TSExportAssignment: typeScriptExport,
+        ...isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
+      };
+
+      if (visitor[n.type]) {
+        visitor[n.type]();
       }
     });
 
