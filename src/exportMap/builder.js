@@ -124,6 +124,32 @@ function captureDependency(
   return getter;
 }
 
+function captureDependencyWithSpecifiers(
+  n,
+  remotePathResolver,
+  exportMap,
+  context,
+) {
+  // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
+  const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
+  // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
+  // shouldn't be considered to be just importing types
+  let specifiersOnlyImportingTypes = n.specifiers.length > 0;
+  const importedSpecifiers = new Set();
+  n.specifiers.forEach((specifier) => {
+    if (specifier.type === 'ImportSpecifier') {
+      importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
+    } else if (supportedImportTypes.has(specifier.type)) {
+      importedSpecifiers.add(specifier.type);
+    }
+
+    // import { type Foo } (Flow); import { typeof Foo } (Flow)
+    specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
+      && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
+  });
+  captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, remotePathResolver, exportMap, context, importedSpecifiers);
+}
+
 export default class ExportMapBuilder {
   static get(source, context) {
     const path = resolve(source, context);
@@ -272,27 +298,6 @@ export default class ExportMapBuilder {
 
     const namespace = new Namespace(path, context, ExportMapBuilder);
 
-    function captureDependencyWithSpecifiers(n) {
-      // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
-      const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
-      // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
-      // shouldn't be considered to be just importing types
-      let specifiersOnlyImportingTypes = n.specifiers.length > 0;
-      const importedSpecifiers = new Set();
-      n.specifiers.forEach((specifier) => {
-        if (specifier.type === 'ImportSpecifier') {
-          importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
-        } else if (supportedImportTypes.has(specifier.type)) {
-          importedSpecifiers.add(specifier.type);
-        }
-
-        // import { type Foo } (Flow); import { typeof Foo } (Flow)
-        specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
-          && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
-      });
-      captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, remotePathResolver, exportMap, context, importedSpecifiers);
-    }
-
     const source = makeSourceCode(content, ast);
 
     ast.body.forEach(function (astNode) {
@@ -376,14 +381,14 @@ export default class ExportMapBuilder {
         },
         /** capture namespaces in case of later export */
         ImportDeclaration() {
-          captureDependencyWithSpecifiers(astNode);
+          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context);
           const ns = astNode.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
           if (ns) {
             namespace.rawSet(ns.local.name, astNode.source.value);
           }
         },
         ExportNamedDeclaration() {
-          captureDependencyWithSpecifiers(astNode);
+          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context);
           // capture declaration
           if (astNode.declaration != null) {
             switch (astNode.declaration.type) {
