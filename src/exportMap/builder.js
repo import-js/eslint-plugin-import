@@ -22,12 +22,11 @@ import { isEsModuleInterop } from './typescript';
 import { Namespace } from './namespace';
 import { processSpecifier } from './specifier';
 import { RemotePath } from './remotePath';
+import { captureDependency, captureDependencyWithSpecifiers } from './captureDependency';
 
 const log = debug('eslint-plugin-import:ExportMap');
 
 const exportCache = new Map();
-
-const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
 
 /**
  * sometimes legacy support isn't _that_ hard... right?
@@ -91,63 +90,6 @@ export function recursivePatternCapture(pattern, callback) {
 function thunkFor(p, context) {
   // eslint-disable-next-line no-use-before-define
   return () => ExportMapBuilder.for(childContext(p, context));
-}
-
-function captureDependency(
-  { source },
-  isOnlyImportingTypes,
-  remotePathResolver,
-  exportMap,
-  context,
-  importedSpecifiers = new Set(),
-) {
-  if (source == null) { return null; }
-
-  const p = remotePathResolver.resolve(source.value);
-  if (p == null) { return null; }
-
-  const declarationMetadata = {
-    // capturing actual node reference holds full AST in memory!
-    source: { value: source.value, loc: source.loc },
-    isOnlyImportingTypes,
-    importedSpecifiers,
-  };
-
-  const existing = exportMap.imports.get(p);
-  if (existing != null) {
-    existing.declarations.add(declarationMetadata);
-    return existing.getter;
-  }
-
-  const getter = thunkFor(p, context);
-  exportMap.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
-  return getter;
-}
-
-function captureDependencyWithSpecifiers(
-  n,
-  remotePathResolver,
-  exportMap,
-  context,
-) {
-  // import type { Foo } (TS and Flow); import typeof { Foo } (Flow)
-  const declarationIsType = n.importKind === 'type' || n.importKind === 'typeof';
-  // import './foo' or import {} from './foo' (both 0 specifiers) is a side effect and
-  // shouldn't be considered to be just importing types
-  let specifiersOnlyImportingTypes = n.specifiers.length > 0;
-  const importedSpecifiers = new Set();
-  n.specifiers.forEach((specifier) => {
-    if (specifier.type === 'ImportSpecifier') {
-      importedSpecifiers.add(specifier.imported.name || specifier.imported.value);
-    } else if (supportedImportTypes.has(specifier.type)) {
-      importedSpecifiers.add(specifier.type);
-    }
-
-    // import { type Foo } (Flow); import { typeof Foo } (Flow)
-    specifiersOnlyImportingTypes = specifiersOnlyImportingTypes
-      && (specifier.importKind === 'type' || specifier.importKind === 'typeof');
-  });
-  captureDependency(n, declarationIsType || specifiersOnlyImportingTypes, remotePathResolver, exportMap, context, importedSpecifiers);
 }
 
 export default class ExportMapBuilder {
@@ -373,7 +315,7 @@ export default class ExportMapBuilder {
           exportMap.namespace.set('default', exportMeta);
         },
         ExportAllDeclaration() {
-          const getter = captureDependency(astNode, astNode.exportKind === 'type', remotePathResolver, exportMap, context);
+          const getter = captureDependency(astNode, astNode.exportKind === 'type', remotePathResolver, exportMap, context, thunkFor);
           if (getter) { exportMap.dependencies.add(getter); }
           if (astNode.exported) {
             processSpecifier(astNode, astNode.exported, exportMap, namespace);
@@ -381,14 +323,14 @@ export default class ExportMapBuilder {
         },
         /** capture namespaces in case of later export */
         ImportDeclaration() {
-          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context);
+          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context, thunkFor);
           const ns = astNode.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
           if (ns) {
             namespace.rawSet(ns.local.name, astNode.source.value);
           }
         },
         ExportNamedDeclaration() {
-          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context);
+          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context, thunkFor);
           // capture declaration
           if (astNode.declaration != null) {
             switch (astNode.declaration.type) {
