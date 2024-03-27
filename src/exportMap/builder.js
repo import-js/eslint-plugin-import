@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { dirname } from 'path';
 
 import doctrine from 'doctrine';
 
@@ -15,58 +14,17 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 import { hashObject } from 'eslint-module-utils/hash';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
-import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
-
 import includes from 'array-includes';
 import ExportMap from '.';
 import { availableDocStyleParsers, captureDoc } from './doc';
 import { childContext } from './childContext';
-
-let ts;
+import { isEsModuleInterop } from './typescript';
 
 const log = debug('eslint-plugin-import:ExportMap');
 
 const exportCache = new Map();
-const tsconfigCache = new Map();
 
 const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
-
-function readTsConfig(context) {
-  const tsconfigInfo = tsConfigLoader({
-    cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
-    getEnv: (key) => process.env[key],
-  });
-  try {
-    if (tsconfigInfo.tsConfigPath !== undefined) {
-      // Projects not using TypeScript won't have `typescript` installed.
-      if (!ts) { ts = require('typescript'); } // eslint-disable-line import/no-extraneous-dependencies
-
-      const configFile = ts.readConfigFile(tsconfigInfo.tsConfigPath, ts.sys.readFile);
-      return ts.parseJsonConfigFileContent(
-        configFile.config,
-        ts.sys,
-        dirname(tsconfigInfo.tsConfigPath),
-      );
-    }
-  } catch (e) {
-    // Catch any errors
-  }
-
-  return null;
-}
-
-function isEsModuleInterop(context) {
-  const cacheKey = hashObject({
-    tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
-  }).digest('hex');
-  let tsConfig = tsconfigCache.get(cacheKey);
-  if (typeof tsConfig === 'undefined') {
-    tsConfig = readTsConfig(context);
-    tsconfigCache.set(cacheKey, tsConfig);
-  }
-
-  return tsConfig && tsConfig.options ? tsConfig.options.esModuleInterop : false;
-}
 
 /**
  * sometimes legacy support isn't _that_ hard... right?
