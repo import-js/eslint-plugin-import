@@ -18,8 +18,8 @@ import * as unambiguous from 'eslint-module-utils/unambiguous';
 import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
 
 import includes from 'array-includes';
-import ExportMap from './exportMap';
-import { availableDocStyleParsers, captureDoc } from './exportMap/doc';
+import ExportMap from '.';
+import { availableDocStyleParsers, captureDoc } from './doc';
 
 let ts;
 

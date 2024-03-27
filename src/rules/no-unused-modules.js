@@ -13,7 +13,7 @@ import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
-import ExportMapBuilder, { recursivePatternCapture } from '../exportMapBuilder';
+import ExportMapBuilder, { recursivePatternCapture } from '../exportMap/builder';
 import docsUrl from '../docsUrl';
 
 let FileEnumerator;

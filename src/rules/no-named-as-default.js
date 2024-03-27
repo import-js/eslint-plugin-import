@@ -1,4 +1,4 @@
-import ExportMapBuilder from '../exportMapBuilder';
+import ExportMapBuilder from '../exportMap/builder';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
