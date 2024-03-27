@@ -155,7 +155,7 @@ export default class ExportMapBuilder {
   }
 
   static parse(path, content, context) {
-    const m = new ExportMap(path);
+    const exportMap = new ExportMap(path);
     const isEsModuleInteropTrue = isEsModuleInterop(context);
 
     let ast;
@@ -165,11 +165,11 @@ export default class ExportMapBuilder {
       ast = result.ast;
       visitorKeys = result.visitorKeys;
     } catch (err) {
-      m.errors.push(err);
-      return m; // can't continue
+      exportMap.errors.push(err);
+      return exportMap; // can't continue
     }
 
-    m.visitorKeys = visitorKeys;
+    exportMap.visitorKeys = visitorKeys;
 
     let hasDynamicImports = false;
 
@@ -189,7 +189,7 @@ export default class ExportMapBuilder {
       const importedSpecifiers = new Set();
       importedSpecifiers.add('ImportNamespaceSpecifier');
       const getter = thunkFor(p, context);
-      m.imports.set(p, {
+      exportMap.imports.set(p, {
         getter,
         declarations: new Set([{
           source: {
@@ -230,7 +230,7 @@ export default class ExportMapBuilder {
         try {
           const doc = doctrine.parse(c.value, { unwrap: true });
           if (doc.tags.some((t) => t.title === 'module')) {
-            m.doc = doc;
+            exportMap.doc = doc;
             return true;
           }
         } catch (err) { /* ignore */ }
@@ -309,14 +309,14 @@ export default class ExportMapBuilder {
         importedSpecifiers,
       };
 
-      const existing = m.imports.get(p);
+      const existing = exportMap.imports.get(p);
       if (existing != null) {
         existing.declarations.add(declarationMetadata);
         return existing.getter;
       }
 
       const getter = thunkFor(p, context);
-      m.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
+      exportMap.imports.set(p, { getter, declarations: new Set([declarationMetadata]) });
       return getter;
     }
 
@@ -364,19 +364,19 @@ export default class ExportMapBuilder {
         ));
         if (exportedDecls.length === 0) {
           // Export is not referencing any local declaration, must be re-exporting
-          m.namespace.set('default', captureDoc(source, docStyleParsers, astNode));
+          exportMap.namespace.set('default', captureDoc(source, docStyleParsers, astNode));
           return;
         }
         if (
           isEsModuleInteropTrue // esModuleInterop is on in tsconfig
-          && !m.namespace.has('default') // and default isn't added already
+          && !exportMap.namespace.has('default') // and default isn't added already
         ) {
-          m.namespace.set('default', {}); // add default export
+          exportMap.namespace.set('default', {}); // add default export
         }
         exportedDecls.forEach((decl) => {
           if (decl.type === 'TSModuleDeclaration') {
             if (decl.body && decl.body.type === 'TSModuleDeclaration') {
-              m.namespace.set(decl.body.id.name, captureDoc(source, docStyleParsers, decl.body));
+              exportMap.namespace.set(decl.body.id.name, captureDoc(source, docStyleParsers, decl.body));
             } else if (decl.body && decl.body.body) {
               decl.body.body.forEach((moduleBlockNode) => {
                 // Export-assignment exports all members in the namespace,
@@ -388,13 +388,13 @@ export default class ExportMapBuilder {
                 if (!namespaceDecl) {
                   // TypeScript can check this for us; we needn't
                 } else if (namespaceDecl.type === 'VariableDeclaration') {
-                  namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => m.namespace.set(
+                  namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => exportMap.namespace.set(
                     id.name,
                     captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode),
                   )),
                   );
                 } else {
-                  m.namespace.set(
+                  exportMap.namespace.set(
                     namespaceDecl.id.name,
                     captureDoc(source, docStyleParsers, moduleBlockNode));
                 }
@@ -402,7 +402,7 @@ export default class ExportMapBuilder {
             }
           } else {
             // Export as default
-            m.namespace.set('default', captureDoc(source, docStyleParsers, decl));
+            exportMap.namespace.set('default', captureDoc(source, docStyleParsers, decl));
           }
         });
       }
@@ -413,13 +413,13 @@ export default class ExportMapBuilder {
           if (astNode.declaration.type === 'Identifier') {
             addNamespace(exportMeta, astNode.declaration);
           }
-          m.namespace.set('default', exportMeta);
+          exportMap.namespace.set('default', exportMeta);
         },
         ExportAllDeclaration() {
           const getter = captureDependency(astNode, astNode.exportKind === 'type');
-          if (getter) { m.dependencies.add(getter); }
+          if (getter) { exportMap.dependencies.add(getter); }
           if (astNode.exported) {
-            processSpecifier(astNode, astNode.exported, m);
+            processSpecifier(astNode, astNode.exported, exportMap);
           }
         },
         /** capture namespaces in case of later export */
@@ -446,20 +446,20 @@ export default class ExportMapBuilder {
               case 'TSInterfaceDeclaration':
               case 'TSAbstractClassDeclaration':
               case 'TSModuleDeclaration':
-                m.namespace.set(astNode.declaration.id.name, captureDoc(source, docStyleParsers, astNode));
+                exportMap.namespace.set(astNode.declaration.id.name, captureDoc(source, docStyleParsers, astNode));
                 break;
               case 'VariableDeclaration':
                 astNode.declaration.declarations.forEach((d) => {
                   recursivePatternCapture(
                     d.id,
-                    (id) => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, astNode)),
+                    (id) => exportMap.namespace.set(id.name, captureDoc(source, docStyleParsers, d, astNode)),
                   );
                 });
                 break;
               default:
             }
           }
-          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, m));
+          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, exportMap));
         },
         TSExportAssignment: typeScriptExport,
         ...isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
@@ -472,15 +472,15 @@ export default class ExportMapBuilder {
 
     if (
       isEsModuleInteropTrue // esModuleInterop is on in tsconfig
-      && m.namespace.size > 0 // anything is exported
-      && !m.namespace.has('default') // and default isn't added already
+      && exportMap.namespace.size > 0 // anything is exported
+      && !exportMap.namespace.has('default') // and default isn't added already
     ) {
-      m.namespace.set('default', {}); // add default export
+      exportMap.namespace.set('default', {}); // add default export
     }
 
     if (unambiguouslyESM) {
-      m.parseGoal = 'Module';
+      exportMap.parseGoal = 'Module';
     }
-    return m;
+    return exportMap;
   }
 }
