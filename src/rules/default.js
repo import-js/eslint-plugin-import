@@ -1,4 +1,4 @@
-import ExportMapBuilder from '../exportMapBuilder';
+import ExportMapBuilder from '../exportMap/builder';
 import docsUrl from '../docsUrl';
 
 module.exports = {
