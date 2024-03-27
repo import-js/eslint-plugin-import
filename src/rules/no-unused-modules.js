@@ -534,7 +534,7 @@ module.exports = {
       }
 
       // special case: export * from
-      const exportAll = exports.get(EXPORT_ALL_DECLARATION);
+      const exportAll = exports && exports.get(EXPORT_ALL_DECLARATION);
       if (typeof exportAll !== 'undefined' && exportedValue !== IMPORT_DEFAULT_SPECIFIER) {
         if (exportAll.whereUsed.size > 0) {
           return;
@@ -542,7 +542,7 @@ module.exports = {
       }
 
       // special case: namespace import
-      const namespaceImports = exports.get(IMPORT_NAMESPACE_SPECIFIER);
+      const namespaceImports = exports && exports.get(IMPORT_NAMESPACE_SPECIFIER);
       if (typeof namespaceImports !== 'undefined') {
         if (namespaceImports.whereUsed.size > 0) {
           return;
@@ -552,7 +552,7 @@ module.exports = {
       // exportsList will always map any imported value of 'default' to 'ImportDefaultSpecifier'
       const exportsKey = exportedValue === DEFAULT ? IMPORT_DEFAULT_SPECIFIER : exportedValue;
 
-      const exportStatement = exports.get(exportsKey);
+      const exportStatement = exports && exports.get(exportsKey);
 
       const value = exportsKey === IMPORT_DEFAULT_SPECIFIER ? DEFAULT : exportsKey;
 
