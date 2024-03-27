@@ -343,12 +343,12 @@ export default class ExportMapBuilder {
 
     const source = makeSourceCode(content, ast);
 
-    ast.body.forEach(function (n) {
+    ast.body.forEach(function (astNode) {
       // This doesn't declare anything, but changes what's being exported.
       function typeScriptExport() {
-        const exportedName = n.type === 'TSNamespaceExportDeclaration'
-          ? (n.id || n.name).name
-          : n.expression && n.expression.name || n.expression.id && n.expression.id.name || null;
+        const exportedName = astNode.type === 'TSNamespaceExportDeclaration'
+          ? (astNode.id || astNode.name).name
+          : astNode.expression && astNode.expression.name || astNode.expression.id && astNode.expression.id.name || null;
         const declTypes = [
           'VariableDeclaration',
           'ClassDeclaration',
@@ -364,7 +364,7 @@ export default class ExportMapBuilder {
         ));
         if (exportedDecls.length === 0) {
           // Export is not referencing any local declaration, must be re-exporting
-          m.namespace.set('default', captureDoc(source, docStyleParsers, n));
+          m.namespace.set('default', captureDoc(source, docStyleParsers, astNode));
           return;
         }
         if (
@@ -409,32 +409,32 @@ export default class ExportMapBuilder {
 
       const visitor = {
         ExportDefaultDeclaration() {
-          const exportMeta = captureDoc(source, docStyleParsers, n);
-          if (n.declaration.type === 'Identifier') {
-            addNamespace(exportMeta, n.declaration);
+          const exportMeta = captureDoc(source, docStyleParsers, astNode);
+          if (astNode.declaration.type === 'Identifier') {
+            addNamespace(exportMeta, astNode.declaration);
           }
           m.namespace.set('default', exportMeta);
         },
         ExportAllDeclaration() {
-          const getter = captureDependency(n, n.exportKind === 'type');
+          const getter = captureDependency(astNode, astNode.exportKind === 'type');
           if (getter) { m.dependencies.add(getter); }
-          if (n.exported) {
-            processSpecifier(n, n.exported, m);
+          if (astNode.exported) {
+            processSpecifier(astNode, astNode.exported, m);
           }
         },
         /** capture namespaces in case of later export */
         ImportDeclaration() {
-          captureDependencyWithSpecifiers(n);
-          const ns = n.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
+          captureDependencyWithSpecifiers(astNode);
+          const ns = astNode.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
           if (ns) {
-            namespaces.set(ns.local.name, n.source.value);
+            namespaces.set(ns.local.name, astNode.source.value);
           }
         },
         ExportNamedDeclaration() {
-          captureDependencyWithSpecifiers(n);
+          captureDependencyWithSpecifiers(astNode);
           // capture declaration
-          if (n.declaration != null) {
-            switch (n.declaration.type) {
+          if (astNode.declaration != null) {
+            switch (astNode.declaration.type) {
               case 'FunctionDeclaration':
               case 'ClassDeclaration':
               case 'TypeAlias': // flowtype with babel-eslint parser
@@ -446,27 +446,27 @@ export default class ExportMapBuilder {
               case 'TSInterfaceDeclaration':
               case 'TSAbstractClassDeclaration':
               case 'TSModuleDeclaration':
-                m.namespace.set(n.declaration.id.name, captureDoc(source, docStyleParsers, n));
+                m.namespace.set(astNode.declaration.id.name, captureDoc(source, docStyleParsers, astNode));
                 break;
               case 'VariableDeclaration':
-                n.declaration.declarations.forEach((d) => {
+                astNode.declaration.declarations.forEach((d) => {
                   recursivePatternCapture(
                     d.id,
-                    (id) => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, n)),
+                    (id) => m.namespace.set(id.name, captureDoc(source, docStyleParsers, d, astNode)),
                   );
                 });
                 break;
               default:
             }
           }
-          n.specifiers.forEach((s) => processSpecifier(s, n, m));
+          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, m));
         },
         TSExportAssignment: typeScriptExport,
         ...isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
       };
 
-      if (visitor[n.type]) {
-        visitor[n.type]();
+      if (visitor[astNode.type]) {
+        visitor[astNode.type]();
       }
     });
 
