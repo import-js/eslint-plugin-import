@@ -91,6 +91,39 @@ function thunkFor(p, context) {
   return () => ExportMapBuilder.for(childContext(p, context));
 }
 
+function processSpecifier(specifier, astNode, exportMap, namespace) {
+  const nsource = astNode.source && astNode.source.value;
+  const exportMeta = {};
+  let local;
+
+  switch (specifier.type) {
+    case 'ExportDefaultSpecifier':
+      if (!nsource) { return; }
+      local = 'default';
+      break;
+    case 'ExportNamespaceSpecifier':
+      exportMap.namespace.set(specifier.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+        get() { return namespace.resolveImport(nsource); },
+      }));
+      return;
+    case 'ExportAllDeclaration':
+      exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
+      return;
+    case 'ExportSpecifier':
+      if (!astNode.source) {
+        exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.local));
+        return;
+      }
+    // else falls through
+    default:
+      local = specifier.local.name;
+      break;
+  }
+
+  // todo: JSDoc
+  exportMap.reexports.set(specifier.exported.name, { local, getImport: () => namespace.resolveImport(nsource) });
+}
+
 export default class ExportMapBuilder {
   static get(source, context) {
     const path = resolve(source, context);
@@ -241,39 +274,6 @@ export default class ExportMapBuilder {
 
     const namespace = new Namespace(path, context, ExportMapBuilder);
 
-    function processSpecifier(specifier, astNode, exportMap) {
-      const nsource = astNode.source && astNode.source.value;
-      const exportMeta = {};
-      let local;
-
-      switch (specifier.type) {
-        case 'ExportDefaultSpecifier':
-          if (!nsource) { return; }
-          local = 'default';
-          break;
-        case 'ExportNamespaceSpecifier':
-          exportMap.namespace.set(specifier.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-            get() { return namespace.resolveImport(nsource); },
-          }));
-          return;
-        case 'ExportAllDeclaration':
-          exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
-          return;
-        case 'ExportSpecifier':
-          if (!astNode.source) {
-            exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.local));
-            return;
-          }
-        // else falls through
-        default:
-          local = specifier.local.name;
-          break;
-      }
-
-      // todo: JSDoc
-      exportMap.reexports.set(specifier.exported.name, { local, getImport: () => namespace.resolveImport(nsource) });
-    }
-
     function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
       if (source == null) { return null; }
 
@@ -397,7 +397,7 @@ export default class ExportMapBuilder {
           const getter = captureDependency(astNode, astNode.exportKind === 'type');
           if (getter) { exportMap.dependencies.add(getter); }
           if (astNode.exported) {
-            processSpecifier(astNode, astNode.exported, exportMap);
+            processSpecifier(astNode, astNode.exported, exportMap, namespace);
           }
         },
         /** capture namespaces in case of later export */
@@ -437,7 +437,7 @@ export default class ExportMapBuilder {
               default:
             }
           }
-          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, exportMap));
+          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, exportMap, namespace));
         },
         TSExportAssignment: typeScriptExport,
         ...isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
