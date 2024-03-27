@@ -19,6 +19,7 @@ import ExportMap from '.';
 import { availableDocStyleParsers, captureDoc } from './doc';
 import { childContext } from './childContext';
 import { isEsModuleInterop } from './typescript';
+import { Namespace } from './namespace';
 
 const log = debug('eslint-plugin-import:ExportMap');
 
@@ -238,30 +239,7 @@ export default class ExportMapBuilder {
       });
     }
 
-    const namespaces = new Map();
-
-    function resolveImport(value) {
-      const rp = remotePath(value);
-      if (rp == null) { return null; }
-      return ExportMapBuilder.for(childContext(rp, context));
-    }
-
-    function getNamespace(identifier) {
-      if (!namespaces.has(identifier.name)) { return; }
-
-      return function () {
-        return resolveImport(namespaces.get(identifier.name));
-      };
-    }
-
-    function addNamespace(object, identifier) {
-      const nsfn = getNamespace(identifier);
-      if (nsfn) {
-        Object.defineProperty(object, 'namespace', { get: nsfn });
-      }
-
-      return object;
-    }
+    const namespace = new Namespace(path, context, ExportMapBuilder);
 
     function processSpecifier(s, n, m) {
       const nsource = n.source && n.source.value;
@@ -275,15 +253,15 @@ export default class ExportMapBuilder {
           break;
         case 'ExportNamespaceSpecifier':
           m.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
-            get() { return resolveImport(nsource); },
+            get() { return namespace.resolveImport(nsource); },
           }));
           return;
         case 'ExportAllDeclaration':
-          m.namespace.set(s.exported.name || s.exported.value, addNamespace(exportMeta, s.source.value));
+          m.namespace.set(s.exported.name || s.exported.value, namespace.add(exportMeta, s.source.value));
           return;
         case 'ExportSpecifier':
           if (!n.source) {
-            m.namespace.set(s.exported.name || s.exported.value, addNamespace(exportMeta, s.local));
+            m.namespace.set(s.exported.name || s.exported.value, namespace.add(exportMeta, s.local));
             return;
           }
         // else falls through
@@ -293,7 +271,7 @@ export default class ExportMapBuilder {
       }
 
       // todo: JSDoc
-      m.reexports.set(s.exported.name, { local, getImport: () => resolveImport(nsource) });
+      m.reexports.set(s.exported.name, { local, getImport: () => namespace.resolveImport(nsource) });
     }
 
     function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
@@ -411,7 +389,7 @@ export default class ExportMapBuilder {
         ExportDefaultDeclaration() {
           const exportMeta = captureDoc(source, docStyleParsers, astNode);
           if (astNode.declaration.type === 'Identifier') {
-            addNamespace(exportMeta, astNode.declaration);
+            namespace.add(exportMeta, astNode.declaration);
           }
           exportMap.namespace.set('default', exportMeta);
         },
@@ -427,7 +405,7 @@ export default class ExportMapBuilder {
           captureDependencyWithSpecifiers(astNode);
           const ns = astNode.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
           if (ns) {
-            namespaces.set(ns.local.name, astNode.source.value);
+            namespace.rawSet(ns.local.name, astNode.source.value);
           }
         },
         ExportNamedDeclaration() {
