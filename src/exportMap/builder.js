@@ -4,8 +4,6 @@ import doctrine from 'doctrine';
 
 import debug from 'debug';
 
-import { SourceCode } from 'eslint';
-
 import parse from 'eslint-module-utils/parse';
 import visit from 'eslint-module-utils/visit';
 import resolve from 'eslint-module-utils/resolve';
@@ -14,33 +12,15 @@ import isIgnored, { hasValidExtension } from 'eslint-module-utils/ignore';
 import { hashObject } from 'eslint-module-utils/hash';
 import * as unambiguous from 'eslint-module-utils/unambiguous';
 
-import includes from 'array-includes';
 import ExportMap from '.';
-import { availableDocStyleParsers, captureDoc } from './doc';
 import { childContext } from './childContext';
 import { isEsModuleInterop } from './typescript';
-import { Namespace } from './namespace';
-import { processSpecifier } from './specifier';
 import { RemotePath } from './remotePath';
-import { captureDependency, captureDependencyWithSpecifiers } from './captureDependency';
-import { recursivePatternCapture } from './patternCapture';
+import { ImportExportVisitorBuilder } from './visitor';
 
 const log = debug('eslint-plugin-import:ExportMap');
 
 const exportCache = new Map();
-
-/**
- * sometimes legacy support isn't _that_ hard... right?
- */
-function makeSourceCode(text, ast) {
-  if (SourceCode.length > 1) {
-    // ESLint 3
-    return new SourceCode(text, ast);
-  } else {
-    // ESLint 4, 5
-    return new SourceCode({ text, ast });
-  }
-}
 
 /**
  * The creation of this closure is isolated from other scopes
@@ -177,12 +157,6 @@ export default class ExportMapBuilder {
     const unambiguouslyESM = unambiguous.isModule(ast);
     if (!unambiguouslyESM && !hasDynamicImports) { return null; }
 
-    const docstyle = context.settings && context.settings['import/docstyle'] || ['jsdoc'];
-    const docStyleParsers = {};
-    docstyle.forEach((style) => {
-      docStyleParsers[style] = availableDocStyleParsers[style];
-    });
-
     // attempt to collect module doc
     if (ast.comments) {
       ast.comments.some((c) => {
@@ -198,134 +172,21 @@ export default class ExportMapBuilder {
       });
     }
 
-    const namespace = new Namespace(path, context, ExportMapBuilder);
-
-    const source = makeSourceCode(content, ast);
-
+    const visitorBuilder = new ImportExportVisitorBuilder(
+      path,
+      context,
+      exportMap,
+      ExportMapBuilder,
+      content,
+      ast,
+      isEsModuleInteropTrue,
+      thunkFor,
+    );
     ast.body.forEach(function (astNode) {
-      // This doesn't declare anything, but changes what's being exported.
-      function typeScriptExport() {
-        const exportedName = astNode.type === 'TSNamespaceExportDeclaration'
-          ? (astNode.id || astNode.name).name
-          : astNode.expression && astNode.expression.name || astNode.expression.id && astNode.expression.id.name || null;
-        const declTypes = [
-          'VariableDeclaration',
-          'ClassDeclaration',
-          'TSDeclareFunction',
-          'TSEnumDeclaration',
-          'TSTypeAliasDeclaration',
-          'TSInterfaceDeclaration',
-          'TSAbstractClassDeclaration',
-          'TSModuleDeclaration',
-        ];
-        const exportedDecls = ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
-          id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
-        ));
-        if (exportedDecls.length === 0) {
-          // Export is not referencing any local declaration, must be re-exporting
-          exportMap.namespace.set('default', captureDoc(source, docStyleParsers, astNode));
-          return;
-        }
-        if (
-          isEsModuleInteropTrue // esModuleInterop is on in tsconfig
-          && !exportMap.namespace.has('default') // and default isn't added already
-        ) {
-          exportMap.namespace.set('default', {}); // add default export
-        }
-        exportedDecls.forEach((decl) => {
-          if (decl.type === 'TSModuleDeclaration') {
-            if (decl.body && decl.body.type === 'TSModuleDeclaration') {
-              exportMap.namespace.set(decl.body.id.name, captureDoc(source, docStyleParsers, decl.body));
-            } else if (decl.body && decl.body.body) {
-              decl.body.body.forEach((moduleBlockNode) => {
-                // Export-assignment exports all members in the namespace,
-                // explicitly exported or not.
-                const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration'
-                  ? moduleBlockNode.declaration
-                  : moduleBlockNode;
-
-                if (!namespaceDecl) {
-                  // TypeScript can check this for us; we needn't
-                } else if (namespaceDecl.type === 'VariableDeclaration') {
-                  namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => exportMap.namespace.set(
-                    id.name,
-                    captureDoc(source, docStyleParsers, decl, namespaceDecl, moduleBlockNode),
-                  )),
-                  );
-                } else {
-                  exportMap.namespace.set(
-                    namespaceDecl.id.name,
-                    captureDoc(source, docStyleParsers, moduleBlockNode));
-                }
-              });
-            }
-          } else {
-            // Export as default
-            exportMap.namespace.set('default', captureDoc(source, docStyleParsers, decl));
-          }
-        });
-      }
-
-      const visitor = {
-        ExportDefaultDeclaration() {
-          const exportMeta = captureDoc(source, docStyleParsers, astNode);
-          if (astNode.declaration.type === 'Identifier') {
-            namespace.add(exportMeta, astNode.declaration);
-          }
-          exportMap.namespace.set('default', exportMeta);
-        },
-        ExportAllDeclaration() {
-          const getter = captureDependency(astNode, astNode.exportKind === 'type', remotePathResolver, exportMap, context, thunkFor);
-          if (getter) { exportMap.dependencies.add(getter); }
-          if (astNode.exported) {
-            processSpecifier(astNode, astNode.exported, exportMap, namespace);
-          }
-        },
-        /** capture namespaces in case of later export */
-        ImportDeclaration() {
-          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context, thunkFor);
-          const ns = astNode.specifiers.find((s) => s.type === 'ImportNamespaceSpecifier');
-          if (ns) {
-            namespace.rawSet(ns.local.name, astNode.source.value);
-          }
-        },
-        ExportNamedDeclaration() {
-          captureDependencyWithSpecifiers(astNode, remotePathResolver, exportMap, context, thunkFor);
-          // capture declaration
-          if (astNode.declaration != null) {
-            switch (astNode.declaration.type) {
-              case 'FunctionDeclaration':
-              case 'ClassDeclaration':
-              case 'TypeAlias': // flowtype with babel-eslint parser
-              case 'InterfaceDeclaration':
-              case 'DeclareFunction':
-              case 'TSDeclareFunction':
-              case 'TSEnumDeclaration':
-              case 'TSTypeAliasDeclaration':
-              case 'TSInterfaceDeclaration':
-              case 'TSAbstractClassDeclaration':
-              case 'TSModuleDeclaration':
-                exportMap.namespace.set(astNode.declaration.id.name, captureDoc(source, docStyleParsers, astNode));
-                break;
-              case 'VariableDeclaration':
-                astNode.declaration.declarations.forEach((d) => {
-                  recursivePatternCapture(
-                    d.id,
-                    (id) => exportMap.namespace.set(id.name, captureDoc(source, docStyleParsers, d, astNode)),
-                  );
-                });
-                break;
-              default:
-            }
-          }
-          astNode.specifiers.forEach((s) => processSpecifier(s, astNode, exportMap, namespace));
-        },
-        TSExportAssignment: typeScriptExport,
-        ...isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
-      };
+      const visitor = visitorBuilder.build(astNode);
 
       if (visitor[astNode.type]) {
-        visitor[astNode.type]();
+        visitor[astNode.type].call(visitorBuilder);
       }
     });
 
