@@ -1,5 +1,5 @@
 import declaredScope from 'eslint-module-utils/declaredScope';
-import ExportMapBuilder from '../exportMapBuilder';
+import ExportMapBuilder from '../exportMap/builder';
 import ExportMap from '../exportMap';
 import docsUrl from '../docsUrl';
 

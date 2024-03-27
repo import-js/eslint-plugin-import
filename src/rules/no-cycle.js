@@ -4,7 +4,7 @@
  */
 
 import resolve from 'eslint-module-utils/resolve';
-import ExportMapBuilder from '../exportMapBuilder';
+import ExportMapBuilder from '../exportMap/builder';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
