@@ -21,6 +21,7 @@ import { childContext } from './childContext';
 import { isEsModuleInterop } from './typescript';
 import { Namespace } from './namespace';
 import { processSpecifier } from './specifier';
+import { RemotePath } from './remotePath';
 
 const log = debug('eslint-plugin-import:ExportMap');
 
@@ -175,16 +176,14 @@ export default class ExportMapBuilder {
 
     let hasDynamicImports = false;
 
-    function remotePath(value) {
-      return resolve.relative(value, path, context.settings);
-    }
+    const remotePathResolver = new RemotePath(path, context);
 
     function processDynamicImport(source) {
       hasDynamicImports = true;
       if (source.type !== 'Literal') {
         return null;
       }
-      const p = remotePath(source.value);
+      const p = remotePathResolver.resolve(source.value);
       if (p == null) {
         return null;
       }
@@ -245,7 +244,7 @@ export default class ExportMapBuilder {
     function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
       if (source == null) { return null; }
 
-      const p = remotePath(source.value);
+      const p = remotePathResolver.resolve(source.value);
       if (p == null) { return null; }
 
       const declarationMetadata = {
