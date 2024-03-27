@@ -39,81 +39,17 @@ export class ImportExportVisitorBuilder {
     this.ast = ast;
     this.isEsModuleInteropTrue = isEsModuleInteropTrue;
     this.thunkFor = thunkFor;
+    const docstyle = this.context.settings && this.context.settings['import/docstyle'] || ['jsdoc'];
+    this.docStyleParsers = {};
+    docstyle.forEach((style) => {
+      this.docStyleParsers[style] = availableDocStyleParsers[style];
+    });
   }
 
   build(astNode) {
-    const docstyle = this.context.settings && this.context.settings['import/docstyle'] || ['jsdoc'];
-    const docStyleParsers = {};
-    docstyle.forEach((style) => {
-      docStyleParsers[style] = availableDocStyleParsers[style];
-    });
-
-    // This doesn't declare anything, but changes what's being exported.
-    function typeScriptExport() {
-      const exportedName = astNode.type === 'TSNamespaceExportDeclaration'
-        ? (astNode.id || astNode.name).name
-        : astNode.expression && astNode.expression.name || astNode.expression.id && astNode.expression.id.name || null;
-      const declTypes = [
-        'VariableDeclaration',
-        'ClassDeclaration',
-        'TSDeclareFunction',
-        'TSEnumDeclaration',
-        'TSTypeAliasDeclaration',
-        'TSInterfaceDeclaration',
-        'TSAbstractClassDeclaration',
-        'TSModuleDeclaration',
-      ];
-      const exportedDecls = this.ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
-        id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
-      ));
-      if (exportedDecls.length === 0) {
-        // Export is not referencing any local declaration, must be re-exporting
-        this.exportMap.namespace.set('default', captureDoc(this.source, docStyleParsers, astNode));
-        return;
-      }
-      if (
-        this.isEsModuleInteropTrue // esModuleInterop is on in tsconfig
-        && !this.exportMap.namespace.has('default') // and default isn't added already
-      ) {
-        this.exportMap.namespace.set('default', {}); // add default export
-      }
-      exportedDecls.forEach((decl) => {
-        if (decl.type === 'TSModuleDeclaration') {
-          if (decl.body && decl.body.type === 'TSModuleDeclaration') {
-            this.exportMap.namespace.set(decl.body.id.name, captureDoc(this.source, docStyleParsers, decl.body));
-          } else if (decl.body && decl.body.body) {
-            decl.body.body.forEach((moduleBlockNode) => {
-              // Export-assignment exports all members in the namespace,
-              // explicitly exported or not.
-              const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration'
-                ? moduleBlockNode.declaration
-                : moduleBlockNode;
-
-              if (!namespaceDecl) {
-                // TypeScript can check this for us; we needn't
-              } else if (namespaceDecl.type === 'VariableDeclaration') {
-                namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => this.exportMap.namespace.set(
-                  id.name,
-                  captureDoc(this.source, docStyleParsers, decl, namespaceDecl, moduleBlockNode),
-                )),
-                );
-              } else {
-                this.exportMap.namespace.set(
-                  namespaceDecl.id.name,
-                  captureDoc(this.source, docStyleParsers, moduleBlockNode));
-              }
-            });
-          }
-        } else {
-          // Export as default
-          this.exportMap.namespace.set('default', captureDoc(this.source, docStyleParsers, decl));
-        }
-      });
-    }
-
     return {
       ExportDefaultDeclaration() {
-        const exportMeta = captureDoc(this.source, docStyleParsers, astNode);
+        const exportMeta = captureDoc(this.source, this.docStyleParsers, astNode);
         if (astNode.declaration.type === 'Identifier') {
           this.namespace.add(exportMeta, astNode.declaration);
         }
@@ -150,13 +86,13 @@ export class ImportExportVisitorBuilder {
             case 'TSInterfaceDeclaration':
             case 'TSAbstractClassDeclaration':
             case 'TSModuleDeclaration':
-              this.exportMap.namespace.set(astNode.declaration.id.name, captureDoc(this.source, docStyleParsers, astNode));
+              this.exportMap.namespace.set(astNode.declaration.id.name, captureDoc(this.source, this.docStyleParsers, astNode));
               break;
             case 'VariableDeclaration':
               astNode.declaration.declarations.forEach((d) => {
                 recursivePatternCapture(
                   d.id,
-                  (id) => this.exportMap.namespace.set(id.name, captureDoc(this.source, docStyleParsers, d, astNode)),
+                  (id) => this.exportMap.namespace.set(id.name, captureDoc(this.source, this.docStyleParsers, d, astNode)),
                 );
               });
               break;
@@ -165,8 +101,71 @@ export class ImportExportVisitorBuilder {
         }
         astNode.specifiers.forEach((s) => processSpecifier(s, astNode, this.exportMap, this.namespace));
       },
-      TSExportAssignment: typeScriptExport,
-      ...this.isEsModuleInteropTrue && { TSNamespaceExportDeclaration: typeScriptExport },
+      TSExportAssignment: () => this.typeScriptExport(astNode),
+      ...this.isEsModuleInteropTrue && { TSNamespaceExportDeclaration: () => this.typeScriptExport(astNode) },
     };
+  }
+
+  // This doesn't declare anything, but changes what's being exported.
+  typeScriptExport(astNode) {
+    const exportedName = astNode.type === 'TSNamespaceExportDeclaration'
+      ? (astNode.id || astNode.name).name
+      : astNode.expression && astNode.expression.name || astNode.expression.id && astNode.expression.id.name || null;
+    const declTypes = [
+      'VariableDeclaration',
+      'ClassDeclaration',
+      'TSDeclareFunction',
+      'TSEnumDeclaration',
+      'TSTypeAliasDeclaration',
+      'TSInterfaceDeclaration',
+      'TSAbstractClassDeclaration',
+      'TSModuleDeclaration',
+    ];
+    const exportedDecls = this.ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+      id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
+    ));
+    if (exportedDecls.length === 0) {
+      // Export is not referencing any local declaration, must be re-exporting
+      this.exportMap.namespace.set('default', captureDoc(this.source, this.docStyleParsers, astNode));
+      return;
+    }
+    if (
+      this.isEsModuleInteropTrue // esModuleInterop is on in tsconfig
+      && !this.exportMap.namespace.has('default') // and default isn't added already
+    ) {
+      this.exportMap.namespace.set('default', {}); // add default export
+    }
+    exportedDecls.forEach((decl) => {
+      if (decl.type === 'TSModuleDeclaration') {
+        if (decl.body && decl.body.type === 'TSModuleDeclaration') {
+          this.exportMap.namespace.set(decl.body.id.name, captureDoc(this.source, this.docStyleParsers, decl.body));
+        } else if (decl.body && decl.body.body) {
+          decl.body.body.forEach((moduleBlockNode) => {
+            // Export-assignment exports all members in the namespace,
+            // explicitly exported or not.
+            const namespaceDecl = moduleBlockNode.type === 'ExportNamedDeclaration'
+              ? moduleBlockNode.declaration
+              : moduleBlockNode;
+
+            if (!namespaceDecl) {
+              // TypeScript can check this for us; we needn't
+            } else if (namespaceDecl.type === 'VariableDeclaration') {
+              namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => this.exportMap.namespace.set(
+                id.name,
+                captureDoc(this.source, this.docStyleParsers, decl, namespaceDecl, moduleBlockNode),
+              )),
+              );
+            } else {
+              this.exportMap.namespace.set(
+                namespaceDecl.id.name,
+                captureDoc(this.source, this.docStyleParsers, moduleBlockNode));
+            }
+          });
+        }
+      } else {
+        // Export as default
+        this.exportMap.namespace.set('default', captureDoc(this.source, this.docStyleParsers, decl));
+      }
+    });
   }
 }
