@@ -241,37 +241,37 @@ export default class ExportMapBuilder {
 
     const namespace = new Namespace(path, context, ExportMapBuilder);
 
-    function processSpecifier(s, n, exportMap) {
+    function processSpecifier(specifier, n, exportMap) {
       const nsource = n.source && n.source.value;
       const exportMeta = {};
       let local;
 
-      switch (s.type) {
+      switch (specifier.type) {
         case 'ExportDefaultSpecifier':
           if (!nsource) { return; }
           local = 'default';
           break;
         case 'ExportNamespaceSpecifier':
-          exportMap.namespace.set(s.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+          exportMap.namespace.set(specifier.exported.name, Object.defineProperty(exportMeta, 'namespace', {
             get() { return namespace.resolveImport(nsource); },
           }));
           return;
         case 'ExportAllDeclaration':
-          exportMap.namespace.set(s.exported.name || s.exported.value, namespace.add(exportMeta, s.source.value));
+          exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
           return;
         case 'ExportSpecifier':
           if (!n.source) {
-            exportMap.namespace.set(s.exported.name || s.exported.value, namespace.add(exportMeta, s.local));
+            exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.local));
             return;
           }
         // else falls through
         default:
-          local = s.local.name;
+          local = specifier.local.name;
           break;
       }
 
       // todo: JSDoc
-      exportMap.reexports.set(s.exported.name, { local, getImport: () => namespace.resolveImport(nsource) });
+      exportMap.reexports.set(specifier.exported.name, { local, getImport: () => namespace.resolveImport(nsource) });
     }
 
     function captureDependency({ source }, isOnlyImportingTypes, importedSpecifiers = new Set()) {
