@@ -20,6 +20,7 @@ import { tsConfigLoader } from 'tsconfig-paths/lib/tsconfig-loader';
 import includes from 'array-includes';
 import ExportMap from '.';
 import { availableDocStyleParsers, captureDoc } from './doc';
+import { childContext } from './childContext';
 
 let ts;
 
@@ -29,36 +30,6 @@ const exportCache = new Map();
 const tsconfigCache = new Map();
 
 const supportedImportTypes = new Set(['ImportDefaultSpecifier', 'ImportNamespaceSpecifier']);
-
-let parserOptionsHash = '';
-let prevParserOptions = '';
-let settingsHash = '';
-let prevSettings = '';
-/**
- * don't hold full context object in memory, just grab what we need.
- * also calculate a cacheKey, where parts of the cacheKey hash are memoized
- */
-function childContext(path, context) {
-  const { settings, parserOptions, parserPath } = context;
-
-  if (JSON.stringify(settings) !== prevSettings) {
-    settingsHash = hashObject({ settings }).digest('hex');
-    prevSettings = JSON.stringify(settings);
-  }
-
-  if (JSON.stringify(parserOptions) !== prevParserOptions) {
-    parserOptionsHash = hashObject({ parserOptions }).digest('hex');
-    prevParserOptions = JSON.stringify(parserOptions);
-  }
-
-  return {
-    cacheKey: String(parserPath) + parserOptionsHash + settingsHash + String(path),
-    settings,
-    parserOptions,
-    parserPath,
-    path,
-  };
-}
 
 /**
  * sometimes legacy support isn't _that_ hard... right?
