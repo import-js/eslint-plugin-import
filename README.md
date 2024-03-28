@@ -108,7 +108,7 @@ npm install eslint-plugin-import --save-dev
 
 All rules are off by default. You may extend one of the canned configs, or configure them manually in your `.eslintrc.(yml|json|js)`.
 
-1. Extending a canned config:
+* Extending a canned config:
 
    ```yaml
    extends:
@@ -123,20 +123,19 @@ All rules are off by default. You may extend one of the canned configs, or confi
      - plugin:import/warnings
    ```
 
-2. Configuring manually:
+* Configuring manually:
+  ```yaml
+  plugins:
+    - import
 
-   ```yaml
-   plugins:
-     - import
-
-   rules:
-     import/no-unresolved: [2, {commonjs: true, amd: true}]
-     import/named: 2
-     import/namespace: 2
-     import/default: 2
-     import/export: 2
-     # etc...
-   ```
+  rules:
+    import/no-unresolved: [2, {commonjs: true, amd: true}]
+    import/named: 2
+    import/namespace: 2
+    import/default: 2
+    import/export: 2
+    # etc...
+  ```
 
 ## TypeScript
 
