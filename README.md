@@ -106,30 +106,37 @@ The maintainers of `eslint-plugin-import` and thousands of other packages are wo
 npm install eslint-plugin-import --save-dev
 ```
 
-All rules are off by default. However, you may configure them manually
-in your `.eslintrc.(yml|json|js)`, or extend one of the canned configs:
+All rules are off by default. You may extend one of the canned configs, or configure them manually in your `.eslintrc.(yml|json|js)`.
 
-```yaml
----
-extends:
-  - eslint:recommended
-  - plugin:import/recommended
-  # alternatively, 'recommended' is the combination of these two rule sets:
-  - plugin:import/errors
-  - plugin:import/warnings
+1. Extending a canned config:
 
-# or configure manually:
-plugins:
-  - import
+   ```yaml
+   extends:
+     - eslint:recommended
+     - plugin:import/recommended
+   ```
 
-rules:
-  import/no-unresolved: [2, {commonjs: true, amd: true}]
-  import/named: 2
-  import/namespace: 2
-  import/default: 2
-  import/export: 2
-  # etc...
-```
+   `plugin:import/recommended` is the combination of these two rule sets, which you can also use instead:
+
+   ```yaml
+     - plugin:import/errors
+     - plugin:import/warnings
+   ```
+
+2. Configuring manually:
+
+   ```yaml
+   plugins:
+     - import
+
+   rules:
+     import/no-unresolved: [2, {commonjs: true, amd: true}]
+     import/named: 2
+     import/namespace: 2
+     import/default: 2
+     import/export: 2
+     # etc...
+   ```
 
 ## TypeScript
 
