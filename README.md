@@ -124,6 +124,7 @@ All rules are off by default. You may extend one of the canned configs, or confi
    ```
 
 * Configuring manually:
+
   ```yaml
   plugins:
     - import
