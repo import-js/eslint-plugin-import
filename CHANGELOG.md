@@ -30,6 +30,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
 - [Refactor] `ExportMap`: extract "builder" logic to separate files ([#2991], thanks [@soryy708])
 - [Docs] [`order`]: update the description of the `pathGroupsExcludedImportTypes` option ([#3036], thanks [@liby])
+- [readme] Clarify how to install the plugin ([#2993], thanks [@jwbth])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1133,6 +1134,7 @@ for info on changes for earlier releases.
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
 [#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
 [#2998]: https://github.com/import-js/eslint-plugin-import/pull/2998
+[#2993]: https://github.com/import-js/eslint-plugin-import/pull/2993
 [#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
@@ -1835,6 +1837,7 @@ for info on changes for earlier releases.
 [@jseminck]: https://github.com/jseminck
 [@julien1619]: https://github.com/julien1619
 [@justinanastos]: https://github.com/justinanastos
+[@jwbth]: https://github.com/jwbth
 [@k15a]: https://github.com/k15a
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
