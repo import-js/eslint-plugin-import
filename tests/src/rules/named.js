@@ -1,5 +1,5 @@
 import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
-import { RuleTester } from '../rule-tester';
+import { RuleTester, usingFlatConfig } from '../rule-tester';
 import path from 'path';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
@@ -32,7 +32,7 @@ ruleTester.run('named', rule, {
       settings: { 'import/resolve': { extensions: ['.js', '.jsx'] } } }),
 
     // validate that eslint-disable-line silences this properly
-    test({ code: 'import {a, b, d} from "./common"; // eslint-disable-line named' }),
+    test({ code: `import {a, b, d} from "./common"; // eslint-disable-line ${usingFlatConfig ? 'rule-to-test/' : ''}named` }),
 
     test({ code: 'import { foo, bar } from "./re-export-names"' }),
 

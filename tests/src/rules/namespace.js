@@ -2,7 +2,7 @@ import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } 
 import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
-const ruleTester = new RuleTester({ env: { es6: true } });
+const ruleTester = new RuleTester({ parserOptions: { ecmaVersion: 6 } });
 const rule = require('rules/namespace');
 
 function error(name, namespace) {

@@ -288,8 +288,8 @@ describe('dynamic imports', function () {
 
   // test for unused exports with `import()`
   ruleTester.run('no-unused-modules', rule, {
-    valid: [
-      test({
+    valid: [].concat(
+      testVersion('< 9', () => ({
         options: unusedExportsOptions,
         code: `
             export const a = 10
@@ -300,10 +300,10 @@ describe('dynamic imports', function () {
             `,
         parser: parsers.BABEL_OLD,
         filename: testFilePath('./no-unused-modules/exports-for-dynamic-js.js'),
-      }),
-    ],
-    invalid: [
-      test({
+      })),
+    ),
+    invalid: [].concat(
+      testVersion('< 9', () => ({
         options: unusedExportsOptions,
         code: `
         export const a = 10
@@ -319,8 +319,8 @@ describe('dynamic imports', function () {
           error(`exported declaration 'b' not used within other modules`),
           error(`exported declaration 'c' not used within other modules`),
           error(`exported declaration 'default' not used within other modules`),
-        ] }),
-    ],
+        ] })),
+    ),
   });
   typescriptRuleTester.run('no-unused-modules', rule, {
     valid: [

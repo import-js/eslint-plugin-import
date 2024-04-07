@@ -1,5 +1,47 @@
+import { RuleTester } from 'eslint';
+import { version as eslintVersion } from 'eslint/package.json';
+import semver from 'semver';
+
+export const usingFlatConfig = semver.major(eslintVersion) >= 9;
+
 export function withoutAutofixOutput(test) {
-  return { ...test, output: test.code };
+  return { ...test, ...usingFlatConfig || { output: test.code } };
 }
 
-export { RuleTester } from 'eslint';
+class FlatCompatRuleTester extends RuleTester {
+  constructor(testerConfig = { parserOptions: { sourceType: 'script' } }) {
+    super(FlatCompatRuleTester._flatCompat(testerConfig));
+  }
+
+  run(ruleName, rule, tests) {
+    super.run(ruleName, rule, {
+      valid: tests.valid.map((t) => FlatCompatRuleTester._flatCompat(t)),
+      invalid: tests.invalid.map((t) => FlatCompatRuleTester._flatCompat(t)),
+    });
+  }
+
+  static _flatCompat(config) {
+    if (!config || !usingFlatConfig || typeof config !== 'object') {
+      return config;
+    }
+
+    const { parser, parserOptions = {}, languageOptions = {}, ...remainingConfig  } = config;
+    const { ecmaVersion, sourceType, ...remainingParserOptions } = parserOptions;
+    const parserObj = typeof parser === 'string' ? require(parser) : parser;
+
+    return {
+      ...remainingConfig,
+      languageOptions: {
+        ...languageOptions,
+        ...parserObj ? { parser: parserObj } : {},
+        ...ecmaVersion ? { ecmaVersion } : {},
+        ...sourceType ? { sourceType } : {},
+        parserOptions: {
+          ...remainingParserOptions,
+        },
+      },
+    };
+  }
+}
+
+export { FlatCompatRuleTester as RuleTester };

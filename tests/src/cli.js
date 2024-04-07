@@ -15,17 +15,29 @@ describe('CLI regression tests', function () {
     let cli;
     before(function () {
       if (ESLint) {
-        eslint = new ESLint({
-          useEslintrc: false,
-          overrideConfigFile: './tests/files/issue210.config.js',
-          rulePaths: ['./src/rules'],
-          overrideConfig: {
-            rules: {
-              named: 2,
+        if (semver.satisfies(eslintPkg.version, '>= 9')) {
+          eslint = new ESLint({
+            overrideConfigFile: './tests/files/issue210.config.flat.js',
+            overrideConfig: {
+              rules: {
+                'import/named': 2,
+              },
             },
-          },
-          plugins: { 'eslint-plugin-import': importPlugin },
-        });
+            plugins: { 'eslint-plugin-import': importPlugin },
+          });
+        } else {
+          eslint = new ESLint({
+            useEslintrc: false,
+            overrideConfigFile: './tests/files/issue210.config.js',
+            rulePaths: ['./src/rules'],
+            overrideConfig: {
+              rules: {
+                named: 2,
+              },
+            },
+            plugins: { 'eslint-plugin-import': importPlugin },
+          });
+        }
       } else {
         cli = new CLIEngine({
           useEslintrc: false,
@@ -56,13 +68,20 @@ describe('CLI regression tests', function () {
         this.skip();
       } else {
         if (ESLint) {
-          eslint = new ESLint({
-            useEslintrc: false,
-            overrideConfigFile: './tests/files/just-json-files/.eslintrc.json',
-            rulePaths: ['./src/rules'],
-            ignore: false,
-            plugins: { 'eslint-plugin-import': importPlugin },
-          });
+          if (semver.satisfies(eslintPkg.version, '>= 9')) {
+            eslint = new ESLint({
+              overrideConfigFile: './tests/files/just-json-files/eslint.config.js',
+              plugins: { 'eslint-plugin-import': importPlugin },
+            });
+          } else {
+            eslint = new ESLint({
+              useEslintrc: false,
+              overrideConfigFile: './tests/files/just-json-files/.eslintrc.json',
+              rulePaths: ['./src/rules'],
+              ignore: false,
+              plugins: { 'eslint-plugin-import': importPlugin },
+            });
+          }
         } else {
           cli = new CLIEngine({
             useEslintrc: false,

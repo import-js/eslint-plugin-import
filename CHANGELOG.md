@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- support eslint v9 ([#2996], thanks [@G-Rath] [@michaelfaith])
 - [`order`]: allow validating named imports ([#3043], thanks [@manuth])
 
 ### Fixed
