@@ -5,6 +5,7 @@
 
 import resolve from 'eslint-module-utils/resolve';
 import ExportMapBuilder from '../exportMap/builder';
+import StronglyConnectedComponentsBuilder from '../scc';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
@@ -47,6 +48,11 @@ module.exports = {
         type: 'boolean',
         default: false,
       },
+      skipErrorMessagePath: {
+        description: 'for faster performance, but you lose the reported circular route',
+        type: 'boolean',
+        default: false,
+      },
     })],
   },
 
@@ -61,6 +67,8 @@ module.exports = {
       resolve(name, context),
       context,
     );
+
+    const scc = StronglyConnectedComponentsBuilder.get(myPath, context);
 
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {
@@ -96,6 +104,21 @@ module.exports = {
 
       if (imported.path === myPath) {
         return;  // no-self-import territory
+      }
+
+      /* If we're in the same Strongly Connected Component,
+       * Then there exists a path from each node in the SCC to every other node in the SCC,
+       * Then there exists at least one path from them to us and from us to them,
+       * Then we have a cycle between us.
+       */
+      const hasDependencyCycle = scc[myPath] === scc[imported.path];
+      if (!hasDependencyCycle) {
+        return;
+      }
+
+      if (options.skipErrorMessagePath) {
+        context.report(importer, 'Dependency cycle detected.');
+        return;
       }
 
       const untraversed = [{ mget: () => imported, route: [] }];
