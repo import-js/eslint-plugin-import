@@ -8,13 +8,13 @@ export function withoutAutofixOutput(test) {
   return { ...test, ...usingFlatConfig || { output: test.code } };
 }
 
-class FlatCompatRuleTester extends RuleTester {
+class FlatCompatRuleTester {
   constructor(testerConfig = { parserOptions: { sourceType: 'script' } }) {
-    super(FlatCompatRuleTester._flatCompat(testerConfig));
+    this._tester = new RuleTester(FlatCompatRuleTester._flatCompat(testerConfig));
   }
 
   run(ruleName, rule, tests) {
-    super.run(ruleName, rule, {
+    this._tester.run(ruleName, rule, {
       valid: tests.valid.map((t) => FlatCompatRuleTester._flatCompat(t)),
       invalid: tests.invalid.map((t) => FlatCompatRuleTester._flatCompat(t)),
     });
