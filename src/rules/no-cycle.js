@@ -5,6 +5,7 @@
 
 import resolve from 'eslint-module-utils/resolve';
 import ExportMapBuilder from '../exportMap/builder';
+import StronglyConnectedComponentsBuilder from '../scc';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
@@ -47,6 +48,11 @@ module.exports = {
         type: 'boolean',
         default: false,
       },
+      disableScc: {
+        description: 'When true, don\'t calculate a strongly-connected-components graph. SCC is used to reduce the time-complexity of cycle detection, but adds overhead.',
+        type: 'boolean',
+        default: false,
+      },
     })],
   },
 
@@ -61,6 +67,8 @@ module.exports = {
       resolve(name, context),
       context,
     );
+
+    const scc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context);
 
     function checkSourceValue(sourceNode, importer) {
       if (ignoreModule(sourceNode.value)) {
@@ -98,6 +106,16 @@ module.exports = {
         return;  // no-self-import territory
       }
 
+      /* If we're in the same Strongly Connected Component,
+       * Then there exists a path from each node in the SCC to every other node in the SCC,
+       * Then there exists at least one path from them to us and from us to them,
+       * Then we have a cycle between us.
+       */
+      const hasDependencyCycle = options.disableScc || scc[myPath] === scc[imported.path];
+      if (!hasDependencyCycle) {
+        return;
+      }
+
       const untraversed = [{ mget: () => imported, route: [] }];
       function detectCycle({ mget, route }) {
         const m = mget();
@@ -106,6 +124,9 @@ module.exports = {
         traversed.add(m.path);
 
         for (const [path, { getter, declarations }] of m.imports) {
+          // If we're in different SCCs, we can't have a circular dependency
+          if (!options.disableScc && scc[myPath] !== scc[path]) { continue; }
+
           if (traversed.has(path)) { continue; }
           const toTraverse = [...declarations].filter(({ source, isOnlyImportingTypes }) => !ignoreModule(source.value)
             // Ignore only type imports

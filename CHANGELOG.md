@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
+- [`no-cycle`]: use scc algorithm to optimize ([#2998], thanks [@soryy708])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1123,6 +1124,7 @@ for info on changes for earlier releases.
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
 [#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
+[#2998]: https://github.com/import-js/eslint-plugin-import/pull/2998
 [#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987

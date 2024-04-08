@@ -17,7 +17,7 @@ const testVersion = (specifier, t) => _testVersion(specifier, () => Object.assig
 
 const testDialects = ['es6'];
 
-ruleTester.run('no-cycle', rule, {
+const cases = {
   valid: [].concat(
     // this rule doesn't care if the cycle length is 0
     test({ code: 'import foo from "./foo.js"' }),
@@ -290,4 +290,30 @@ ruleTester.run('no-cycle', rule, {
       ],
     }),
   ),
+};
+
+ruleTester.run('no-cycle', rule, {
+  valid: flatMap(cases.valid, (testCase) => [
+    testCase,
+    {
+      ...testCase,
+      code: `${testCase.code} // disableScc=true`,
+      options: [{
+        ...testCase.options && testCase.options[0] || {},
+        disableScc: true,
+      }],
+    },
+  ]),
+
+  invalid: flatMap(cases.invalid, (testCase) => [
+    testCase,
+    {
+      ...testCase,
+      code: `${testCase.code} // disableScc=true`,
+      options: [{
+        ...testCase.options && testCase.options[0] || {},
+        disableScc: true,
+      }],
+    },
+  ]),
 });
