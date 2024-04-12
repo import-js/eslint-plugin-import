@@ -1,4 +1,5 @@
 import { RuleTester } from 'eslint';
+import { withoutAutofixOutput } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
@@ -710,9 +711,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-    {
+    withoutAutofixOutput({
       code: `import foo from 'foo';\n\n\n\nexport default function() {};`,
-      output: `import foo from 'foo';\n\n\n\nexport default function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -720,10 +720,9 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
+    }),
+    withoutAutofixOutput({
       code: `import foo from 'foo';\n\n\n\n\nexport default function() {};`,
-      output: `import foo from 'foo';\n\n\n\n\nexport default function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -731,7 +730,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
+    }),
     {
       code: `import foo from 'foo';\n// some random comment\nexport default function() {};`,
       output: `import foo from 'foo';\n\n// some random comment\nexport default function() {};`,
@@ -743,9 +742,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-    {
+    withoutAutofixOutput({
       code: `import foo from 'foo';\n// some random comment\n\n\nexport default function() {};`,
-      output: `import foo from 'foo';\n// some random comment\n\n\nexport default function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -753,10 +751,9 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
+    }),
+    withoutAutofixOutput({
       code: `import foo from 'foo';\n// some random comment\n\n\n\nexport default function() {};`,
-      output: `import foo from 'foo';\n// some random comment\n\n\n\nexport default function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -764,7 +761,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
+    }),
     {
       code: `import foo from 'foo';\n// some random comment\nexport default function() {};`,
       output: `import foo from 'foo';\n\n\n// some random comment\nexport default function() {};`,
@@ -787,9 +784,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-    {
+    withoutAutofixOutput({
       code: `import foo from 'foo';\n\n\n\n// some random comment\nexport default function() {};`,
-      output: `import foo from 'foo';\n\n\n\n// some random comment\nexport default function() {};`,
       options: [{ count: 2, exactCount: true, considerComments: true }],
       errors: [{
         line: 1,
@@ -797,16 +793,9 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-    },
-    {
+    }),
+    withoutAutofixOutput({
       code: `
-        import foo from 'foo';
-
-
-        // Some random single line comment
-        var bar = 42;
-      `,
-      output: `
         import foo from 'foo';
 
 
@@ -820,7 +809,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       options: [{ considerComments: true, count: 1, exactCount: true }],
-    },
+    }),
     {
       code: `import foo from 'foo';export default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
@@ -832,9 +821,8 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
-    {
+    withoutAutofixOutput({
       code: `const foo = require('foo');\n\n\n\nconst bar = function() {};`,
-      output: `const foo = require('foo');\n\n\n\nconst bar = function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -842,10 +830,9 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015 },
-    },
-    {
+    }),
+    withoutAutofixOutput({
       code: `const foo = require('foo');\n\n\n\n// some random comment\nconst bar = function() {};`,
-      output: `const foo = require('foo');\n\n\n\n// some random comment\nconst bar = function() {};`,
       options: [{ count: 2, exactCount: true }],
       errors: [{
         line: 1,
@@ -853,7 +840,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
       }],
       parserOptions: { ecmaVersion: 2015 },
-    },
+    }),
     {
       code: `import foo from 'foo';// some random comment\nexport default function() {};`,
       output: `import foo from 'foo';\n\n// some random comment\nexport default function() {};`,

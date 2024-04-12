@@ -1,6 +1,7 @@
 import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers } from '../utils';
 
 import { RuleTester } from 'eslint';
+import { withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
@@ -20,10 +21,6 @@ const flowRuleTester = new RuleTester({
   },
 });
 const rule = require('rules/order');
-
-function withoutAutofixOutput(test) {
-  return { ...test, output: test.code };
-}
 
 ruleTester.run('order', rule, {
   valid: [
@@ -1906,14 +1903,8 @@ ruleTester.run('order', rule, {
       ],
     }),
     // Cannot fix newlines-between with multiline comment after
-    test({
+    test(withoutAutofixOutput({
       code: `
-        var fs = require('fs'); /* multiline
-        comment */
-
-        var index = require('./');
-      `,
-      output: `
         var fs = require('fs'); /* multiline
         comment */
 
@@ -1931,7 +1922,7 @@ ruleTester.run('order', rule, {
           message: 'There should be no empty line between import groups',
         },
       ],
-    }),
+    })),
     // Option newlines-between: 'always' - should report lack of newline between groups
     test({
       code: `
@@ -2017,15 +2008,8 @@ ruleTester.run('order', rule, {
     }),
     // Option newlines-between: 'never' with unassigned imports and warnOnUnassignedImports disabled
     // newline is preserved to match existing behavior
-    test({
+    test(withoutAutofixOutput({
       code: `
-        import path from 'path';
-        import 'loud-rejection';
-
-        import 'something-else';
-        import _ from 'lodash';
-      `,
-      output: `
         import path from 'path';
         import 'loud-rejection';
 
@@ -2039,7 +2023,7 @@ ruleTester.run('order', rule, {
           message: 'There should be no empty line between import groups',
         },
       ],
-    }),
+    })),
     // Option newlines-between: 'never' with unassigned imports and warnOnUnassignedImports enabled
     test({
       code: `
@@ -2064,15 +2048,8 @@ ruleTester.run('order', rule, {
       ],
     }),
     // Option newlines-between: 'never' cannot fix if there are other statements between imports
-    test({
+    test(withoutAutofixOutput({
       code: `
-        import path from 'path';
-        export const abc = 123;
-
-        import 'something-else';
-        import _ from 'lodash';
-      `,
-      output: `
         import path from 'path';
         export const abc = 123;
 
@@ -2086,7 +2063,7 @@ ruleTester.run('order', rule, {
           message: 'There should be no empty line between import groups',
         },
       ],
-    }),
+    })),
     // Option newlines-between: 'always' should report missing empty lines when using not assigned imports
     test({
       code: `
@@ -2170,18 +2147,8 @@ ruleTester.run('order', rule, {
       ],
     }),
     // reorder fix cannot cross function call on moving below #1
-    test({
+    test(withoutAutofixOutput({
       code: `
-        const local = require('./local');
-
-        fn_call();
-
-        const global1 = require('global1');
-        const global2 = require('global2');
-
-        fn_call();
-      `,
-      output: `
         const local = require('./local');
 
         fn_call();
@@ -2194,18 +2161,10 @@ ruleTester.run('order', rule, {
       errors: [{
         message: '`./local` import should occur after import of `global2`',
       }],
-    }),
+    })),
     // reorder fix cannot cross function call on moving below #2
-    test({
+    test(withoutAutofixOutput({
       code: `
-        const local = require('./local');
-        fn_call();
-        const global1 = require('global1');
-        const global2 = require('global2');
-
-        fn_call();
-      `,
-      output: `
         const local = require('./local');
         fn_call();
         const global1 = require('global1');
@@ -2216,23 +2175,10 @@ ruleTester.run('order', rule, {
       errors: [{
         message: '`./local` import should occur after import of `global2`',
       }],
-    }),
+    })),
     // reorder fix cannot cross function call on moving below #3
-    test({
+    test(withoutAutofixOutput({
       code: `
-        const local1 = require('./local1');
-        const local2 = require('./local2');
-        const local3 = require('./local3');
-        const local4 = require('./local4');
-        fn_call();
-        const global1 = require('global1');
-        const global2 = require('global2');
-        const global3 = require('global3');
-        const global4 = require('global4');
-        const global5 = require('global5');
-        fn_call();
-      `,
-      output: `
         const local1 = require('./local1');
         const local2 = require('./local2');
         const local3 = require('./local3');
@@ -2251,7 +2197,7 @@ ruleTester.run('order', rule, {
         '`./local3` import should occur after import of `global5`',
         '`./local4` import should occur after import of `global5`',
       ],
-    }),
+    })),
     // reorder fix cannot cross function call on moving below
     test(withoutAutofixOutput({
       code: `
@@ -2561,18 +2507,8 @@ ruleTester.run('order', rule, {
       }],
     })),
     // reorder fix cannot cross function call on moving below (from #1252)
-    test({
+    test(withoutAutofixOutput({
       code: `
-        const env = require('./config');
-
-        Object.keys(env);
-
-        const http = require('http');
-        const express = require('express');
-
-        http.createServer(express());
-      `,
-      output: `
         const env = require('./config');
 
         Object.keys(env);
@@ -2585,7 +2521,7 @@ ruleTester.run('order', rule, {
       errors: [{
         message: '`./config` import should occur after import of `express`',
       }],
-    }),
+    })),
     // reorder cannot cross non plain requires
     test(withoutAutofixOutput({
       code: `
@@ -3497,14 +3433,8 @@ context('TypeScript', function () {
             ],
           }),
           // warns for out of order unassigned imports (warnOnUnassignedImports enabled)
-          test({
+          test(withoutAutofixOutput({
             code: `
-              import './local1';
-              import global from 'global1';
-              import local from './local2';
-              import 'global2';
-            `,
-            output: `
               import './local1';
               import global from 'global1';
               import local from './local2';
@@ -3519,18 +3449,10 @@ context('TypeScript', function () {
               },
             ],
             options: [{ warnOnUnassignedImports: true }],
-          }),
+          })),
           // fix cannot move below unassigned import (warnOnUnassignedImports enabled)
-          test({
+          test(withoutAutofixOutput({
             code: `
-              import local from './local';
-
-              import 'global1';
-
-              import global2 from 'global2';
-              import global3 from 'global3';
-            `,
-            output: `
               import local from './local';
 
               import 'global1';
@@ -3542,7 +3464,7 @@ context('TypeScript', function () {
               message: '`./local` import should occur after import of `global3`',
             }],
             options: [{ warnOnUnassignedImports: true }],
-          }),
+          })),
           // Imports inside module declaration
           test({
             code: `

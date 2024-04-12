@@ -1,4 +1,5 @@
 import { RuleTester } from 'eslint';
+import { withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
@@ -69,47 +70,41 @@ ruleTester.run('no-commonjs', require('rules/no-commonjs'), {
 
     // imports
     ...semver.satisfies(eslintPkg.version, '< 4.0.0') ? [] : [
-      { code: 'var x = require("x")', output: 'var x = require("x")', errors: [{ message: IMPORT_MESSAGE }] },
-      { code: 'x = require("x")', output: 'x = require("x")', errors: [{ message: IMPORT_MESSAGE }] },
-      { code: 'require("x")', output: 'require("x")', errors: [{ message: IMPORT_MESSAGE }] },
-      { code: 'require(`x`)',
+      withoutAutofixOutput({ code: 'var x = require("x")', errors: [{ message: IMPORT_MESSAGE }] }),
+      withoutAutofixOutput({ code: 'x = require("x")', errors: [{ message: IMPORT_MESSAGE }] }),
+      withoutAutofixOutput({ code: 'require("x")', errors: [{ message: IMPORT_MESSAGE }] }),
+      withoutAutofixOutput({ code: 'require(`x`)',
         parserOptions: { ecmaVersion: 2015 },
-        output: 'require(`x`)',
         errors: [{ message: IMPORT_MESSAGE }],
-      },
+      }),
 
-      { code: 'if (typeof window !== "undefined") require("x")',
+      withoutAutofixOutput({ code: 'if (typeof window !== "undefined") require("x")',
         options: [{ allowConditionalRequire: false }],
-        output: 'if (typeof window !== "undefined") require("x")',
         errors: [{ message: IMPORT_MESSAGE }],
-      },
-      { code: 'if (typeof window !== "undefined") { require("x") }',
+      }),
+      withoutAutofixOutput({ code: 'if (typeof window !== "undefined") { require("x") }',
         options: [{ allowConditionalRequire: false }],
-        output: 'if (typeof window !== "undefined") { require("x") }',
         errors: [{ message: IMPORT_MESSAGE }],
-      },
-      { code: 'try { require("x") } catch (error) {}',
+      }),
+      withoutAutofixOutput({ code: 'try { require("x") } catch (error) {}',
         options: [{ allowConditionalRequire: false }],
-        output: 'try { require("x") } catch (error) {}',
         errors: [{ message: IMPORT_MESSAGE }],
-      },
+      }),
     ],
 
     // exports
-    { code: 'exports.face = "palm"', output: 'exports.face = "palm"', errors: [{ message: EXPORT_MESSAGE }] },
-    { code: 'module.exports.face = "palm"', output: 'module.exports.face = "palm"', errors: [{ message: EXPORT_MESSAGE }] },
-    { code: 'module.exports = face', output: 'module.exports = face', errors: [{ message: EXPORT_MESSAGE }] },
-    { code: 'exports = module.exports = {}', output: 'exports = module.exports = {}', errors: [{ message: EXPORT_MESSAGE }] },
-    { code: 'var x = module.exports = {}', output: 'var x = module.exports = {}', errors: [{ message: EXPORT_MESSAGE }] },
-    { code: 'module.exports = {}',
+    withoutAutofixOutput({ code: 'exports.face = "palm"', errors: [{ message: EXPORT_MESSAGE }] }),
+    withoutAutofixOutput({ code: 'module.exports.face = "palm"', errors: [{ message: EXPORT_MESSAGE }] }),
+    withoutAutofixOutput({ code: 'module.exports = face', errors: [{ message: EXPORT_MESSAGE }] }),
+    withoutAutofixOutput({ code: 'exports = module.exports = {}', errors: [{ message: EXPORT_MESSAGE }] }),
+    withoutAutofixOutput({ code: 'var x = module.exports = {}', errors: [{ message: EXPORT_MESSAGE }] }),
+    withoutAutofixOutput({ code: 'module.exports = {}',
       options: ['allow-primitive-modules'],
-      output: 'module.exports = {}',
       errors: [{ message: EXPORT_MESSAGE }],
-    },
-    { code: 'var x = module.exports',
+    }),
+    withoutAutofixOutput({ code: 'var x = module.exports',
       options: ['allow-primitive-modules'],
-      output: 'var x = module.exports',
       errors: [{ message: EXPORT_MESSAGE }],
-    },
+    }),
   ],
 });

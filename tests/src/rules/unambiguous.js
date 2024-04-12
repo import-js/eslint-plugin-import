@@ -1,4 +1,5 @@
 import { RuleTester } from 'eslint';
+import { withoutAutofixOutput } from '../rule-tester';
 import { parsers } from '../utils';
 
 const ruleTester = new RuleTester();
@@ -48,11 +49,10 @@ ruleTester.run('unambiguous', rule, {
     },
   ],
   invalid: [
-    {
+    withoutAutofixOutput({
       code: 'function x() {}',
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      output: 'function x() {}',
       errors: ['This module could be parsed as a valid script.'],
-    },
+    }),
   ],
 });
