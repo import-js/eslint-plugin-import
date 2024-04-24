@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
+- [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1115,6 +1116,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
 [#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
@@ -1701,6 +1703,7 @@ for info on changes for earlier releases.
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
 [@AndrewLeedham]: https://github.com/AndrewLeedham
 [@andyogo]: https://github.com/andyogo
