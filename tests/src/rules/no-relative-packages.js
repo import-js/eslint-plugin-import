@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import rule from 'rules/no-relative-packages';
 import { normalize } from 'path';
 

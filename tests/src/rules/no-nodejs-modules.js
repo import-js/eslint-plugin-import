@@ -1,6 +1,6 @@
 import { test } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 const isCore = require('is-core-module');
 
 const ruleTester = new RuleTester();

@@ -18,7 +18,7 @@ module.exports = {
       // #566: default is a valid specifier
       if (defaultSpecifier[nameKey].name === 'default') { return; }
 
-      const declaration = importDeclaration(context);
+      const declaration = importDeclaration(context, defaultSpecifier);
 
       const imports = ExportMapBuilder.get(declaration.source.value, context);
       if (imports == null) { return; }

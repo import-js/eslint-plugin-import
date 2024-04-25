@@ -7,6 +7,7 @@ import groupBy from 'object.groupby';
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
 import docsUrl from '../docsUrl';
+import { getSourceCode } from '../context';
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index'];
 
@@ -199,7 +200,7 @@ function makeImportDescription(node) {
 }
 
 function fixOutOfOrder(context, firstNode, secondNode, order) {
-  const sourceCode = context.getSourceCode();
+  const sourceCode = getSourceCode(context);
 
   const firstRoot = findRootNode(firstNode.node);
   const firstRootStart = findStartOfLineWithComments(sourceCode, firstRoot);
@@ -493,7 +494,7 @@ function convertPathGroupsForRanks(pathGroups) {
 function fixNewLineAfterImport(context, previousImport) {
   const prevRoot = findRootNode(previousImport.node);
   const tokensToEndOfLine = takeTokensAfterWhile(
-    context.getSourceCode(), prevRoot, commentOnSameLineAs(prevRoot));
+    getSourceCode(context), prevRoot, commentOnSameLineAs(prevRoot));
 
   let endOfLine = prevRoot.range[1];
   if (tokensToEndOfLine.length > 0) {
@@ -503,7 +504,7 @@ function fixNewLineAfterImport(context, previousImport) {
 }
 
 function removeNewLineAfterImport(context, currentImport, previousImport) {
-  const sourceCode = context.getSourceCode();
+  const sourceCode = getSourceCode(context);
   const prevRoot = findRootNode(previousImport.node);
   const currRoot = findRootNode(currentImport.node);
   const rangeToRemove = [
@@ -518,7 +519,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
 
 function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
-    const linesBetweenImports = context.getSourceCode().lines.slice(
+    const linesBetweenImports = getSourceCode(context).lines.slice(
       previousImport.node.loc.end.line,
       currentImport.node.loc.start.line - 1,
     );
@@ -727,7 +728,7 @@ module.exports = {
           type = 'import';
         } else {
           value = '';
-          displayName = context.getSourceCode().getText(node.moduleReference);
+          displayName = getSourceCode(context).getText(node.moduleReference);
           type = 'import:object';
         }
         registerNode(

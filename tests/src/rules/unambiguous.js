@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import { parsers } from '../utils';
 
 const ruleTester = new RuleTester();

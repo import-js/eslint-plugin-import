@@ -107,6 +107,7 @@ exports.default = function parse(path, content, context) {
   if (context == null) { throw new Error('need context to parse properly'); }
 
   // ESLint in "flat" mode only sets context.languageOptions.parserOptions
+  console.log(context);
   let parserOptions = context.languageOptions && context.languageOptions.parserOptions || context.parserOptions;
   const parserOrPath = getParser(path, context);
 

@@ -1,5 +1,6 @@
 import vm from 'vm';
 import docsUrl from '../docsUrl';
+import { getSourceCode } from '../context';
 
 module.exports = {
   meta: {
@@ -40,7 +41,7 @@ module.exports = {
     const chunkSubstrRegex = new RegExp(chunkSubstrFormat);
 
     function run(node, arg) {
-      const sourceCode = context.getSourceCode();
+      const sourceCode = getSourceCode(context);
       const leadingComments = sourceCode.getCommentsBefore
         ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
         : sourceCode.getComments(arg).leading; // This method is deprecated in ESLint 7.

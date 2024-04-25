@@ -1,6 +1,6 @@
 import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';

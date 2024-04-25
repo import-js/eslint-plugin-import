@@ -1,5 +1,5 @@
 import path from 'path';
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 
 import { eslintVersionSatisfies, test, testVersion } from '../utils';
 
@@ -74,13 +74,13 @@ ruleTester.run('no-import-module-exports', rule, {
         import fs from 'fs/promises';
 
         const subscriptions = new Map();
-        
+
         export default async (client) => {
             /**
              * loads all modules and their subscriptions
              */
             const modules = await fs.readdir('./src/modules');
-        
+
             await Promise.all(
                 modules.map(async (moduleName) => {
                     // Loads the module
@@ -97,7 +97,7 @@ ruleTester.run('no-import-module-exports', rule, {
                     }
                 })
             );
-        
+
             /**
              * Setting up all events.
              * binds all events inside the subscriptions map to call all functions provided

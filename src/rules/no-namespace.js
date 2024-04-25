@@ -5,6 +5,7 @@
 
 import minimatch from 'minimatch';
 import docsUrl from '../docsUrl';
+import { getScope, getSourceCode } from '../context';
 
 /**
  * @param {MemberExpression} memberExpression
@@ -108,7 +109,7 @@ module.exports = {
           return;
         }
 
-        const scopeVariables = context.getScope().variables;
+        const scopeVariables = getScope(context, node).variables;
         const namespaceVariable = scopeVariables.find((variable) => variable.defs[0].node === node);
         const namespaceReferences = namespaceVariable.references;
         const namespaceIdentifiers = namespaceReferences.map((reference) => reference.identifier);
@@ -118,7 +119,7 @@ module.exports = {
           node,
           message: `Unexpected namespace import.`,
           fix: canFix && ((fixer) => {
-            const scopeManager = context.getSourceCode().scopeManager;
+            const scopeManager = getSourceCode(context).scopeManager;
             const fixes = [];
 
             // Pass 1: Collect variable names that are already in scope for each reference we want

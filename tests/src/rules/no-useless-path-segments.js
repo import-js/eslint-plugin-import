@@ -1,5 +1,5 @@
 import { parsers, test } from '../utils';
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-useless-path-segments');

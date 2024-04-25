@@ -36,6 +36,7 @@ jobs:
           - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
+          - 9
           - 8
           - 7
           - 6
@@ -63,6 +64,18 @@ jobs:
             env:
               TS_PARSER: 2
         exclude:
+          - node-version: 16
+            eslint: 9
+          - node-version: 15
+            eslint: 9
+          - node-version: 13
+            eslint: 9
+          - node-version: 11
+            eslint: 9
+          - node-version: 10
+            eslint: 9
+          - node-version: 9
+            eslint: 9
           - node-version: 15
             eslint: 8
           - node-version: 13

@@ -1,4 +1,5 @@
 import docsUrl from '../docsUrl';
+import { getSourceCode } from '../context';
 
 function isComma(token) {
   return token.type === 'Punctuator' && token.value === ',';
@@ -55,7 +56,7 @@ module.exports = {
   },
 
   create(context) {
-    const sourceCode = context.getSourceCode();
+    const sourceCode = getSourceCode(context);
 
     if (context.options[0] === 'prefer-inline') {
       return {

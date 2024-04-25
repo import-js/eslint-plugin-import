@@ -2,7 +2,7 @@ import { test, testVersion, testFilePath, getTSParsers, parsers } from '../utils
 import jsxConfig from '../../../config/react';
 import typescriptConfig from '../../../config/typescript';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import fs from 'fs';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';

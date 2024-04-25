@@ -1,6 +1,6 @@
 import { parsers, test as _test, testFilePath, testVersion as _testVersion } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester, usingFlatConfig } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
@@ -32,7 +32,7 @@ ruleTester.run('no-cycle', rule, {
     test({ code: 'var foo = require("./")' }),
     test({ code: 'var foo = require("@scope/foo")' }),
     test({ code: 'var bar = require("./bar/index")' }),
-    test({ code: 'var bar = require("./bar")' }),
+    ...usingFlatConfig ? [] : [test({ code: 'var bar = require("./bar")' })],
     test({
       code: 'var bar = require("./bar")',
       filename: '<text>',

@@ -3,6 +3,7 @@ import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
 
 import docsUrl from '../docsUrl';
+import { getSourceCode } from '../context';
 
 let typescriptPkg;
 try {
@@ -248,7 +249,7 @@ function checkImports(imported, context) {
     if (nodes.length > 1) {
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
-      const sourceCode = context.getSourceCode();
+      const sourceCode = getSourceCode(context);
       const fix = getFix(first, rest, sourceCode, context);
 
       context.report({

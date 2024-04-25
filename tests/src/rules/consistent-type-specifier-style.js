@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import { test, parsers, tsVersionSatisfies, eslintVersionSatisfies, typescriptEslintParserSatisfies } from '../utils';
 
 const rule = require('rules/consistent-type-specifier-style');

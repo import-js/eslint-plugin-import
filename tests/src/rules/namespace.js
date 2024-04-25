@@ -1,5 +1,5 @@
 import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } from '../utils';
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester({ env: { es6: true } });

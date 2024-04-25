@@ -4,6 +4,7 @@
  */
 
 import docsUrl from '../docsUrl';
+import { getScope } from '../context';
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -23,7 +24,7 @@ module.exports = {
   create(context) {
     return {
       CallExpression(node) {
-        if (context.getScope().type !== 'module') { return; }
+        if (getScope(context, node).type !== 'module') { return; }
 
         if (node.callee.type !== 'Identifier') { return; }
         if (node.callee.name !== 'require' && node.callee.name !== 'define') { return; }

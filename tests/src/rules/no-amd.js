@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 

@@ -4,7 +4,7 @@ import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers } from '../utils
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-unresolved');

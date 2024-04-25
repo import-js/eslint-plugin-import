@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import { test } from '../utils';
@@ -82,33 +82,30 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
   ],
 
   invalid: [
-    test({
+    test(withoutAutofixOutput({
       code: 'import * as foo from \'foo\';',
-      output: 'import * as foo from \'foo\';',
       errors: [{
         line: 1,
         column: 8,
         message: ERROR_MESSAGE,
       }],
-    }),
-    test({
+    })),
+    test(withoutAutofixOutput({
       code: 'import defaultExport, * as foo from \'foo\';',
-      output: 'import defaultExport, * as foo from \'foo\';',
       errors: [{
         line: 1,
         column: 23,
         message: ERROR_MESSAGE,
       }],
-    }),
-    test({
+    })),
+    test(withoutAutofixOutput({
       code: 'import * as foo from \'./foo\';',
-      output: 'import * as foo from \'./foo\';',
       errors: [{
         line: 1,
         column: 8,
         message: ERROR_MESSAGE,
       }],
-    }),
+    })),
     ...FIX_TESTS,
   ],
 });

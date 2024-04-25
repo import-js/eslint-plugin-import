@@ -35,7 +35,7 @@ module.exports = {
 
     return {
       ImportDefaultSpecifier(node) {
-        const declaration = importDeclaration(context);
+        const declaration = importDeclaration(context, node);
         const exportMap = ExportMapBuilder.get(declaration.source.value, context);
         if (exportMap == null) { return; }
 

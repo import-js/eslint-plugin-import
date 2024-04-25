@@ -7,6 +7,7 @@ import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
 import { getFilePackageName } from '../core/packagePath';
 import docsUrl from '../docsUrl';
+import { getPhysicalFilename } from '../context';
 
 const depFieldCache = new Map();
 
@@ -79,7 +80,7 @@ function getDependencies(context, packageDir) {
       });
     } else {
       const packageJsonPath = pkgUp({
-        cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(),
+        cwd: getPhysicalFilename(context),
         normalize: false,
       });
 
@@ -278,7 +279,7 @@ module.exports = {
 
   create(context) {
     const options = context.options[0] || {};
-    const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+    const filename = getPhysicalFilename(context);
     const deps = getDependencies(context, options.packageDir) || extractDepFields({});
 
     const depsOptions = {

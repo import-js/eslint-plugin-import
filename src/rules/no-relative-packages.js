@@ -5,6 +5,7 @@ import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
 import docsUrl from '../docsUrl';
+import { getPhysicalFilename } from '../context';
 
 /** @param {string} filePath */
 function toPosixPath(filePath) {
@@ -26,7 +27,7 @@ function checkImportForRelativePackage(context, importPath, node) {
   }
 
   const resolvedImport = resolve(importPath, context);
-  const resolvedContext = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+  const resolvedContext = getPhysicalFilename(context);
 
   if (!resolvedImport || !resolvedContext) {
     return;

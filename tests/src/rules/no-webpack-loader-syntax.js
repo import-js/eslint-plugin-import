@@ -1,6 +1,6 @@
 import { test, getTSParsers, parsers } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import semver from 'semver';
 
 const ruleTester = new RuleTester();

@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import rule from 'rules/no-restricted-paths';
 
 import { getTSParsers, test, testFilePath } from '../utils';

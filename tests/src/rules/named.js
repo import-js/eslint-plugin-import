@@ -1,5 +1,5 @@
 import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
-import { RuleTester } from 'eslint';
+import { FlatCompatRuleTester as RuleTester } from '../rule-tester';
 import path from 'path';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';

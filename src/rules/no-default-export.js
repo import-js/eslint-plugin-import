@@ -1,4 +1,5 @@
 import docsUrl from '../docsUrl';
+import { getSourceCode } from '../context';
 
 module.exports = {
   meta: {
@@ -22,7 +23,7 @@ module.exports = {
 
     return {
       ExportDefaultDeclaration(node) {
-        const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
+        const { loc } = getSourceCode(context).getFirstTokens(node)[1] || {};
         context.report({ node, message: preferNamed, loc });
       },
 
@@ -30,7 +31,7 @@ module.exports = {
         node.specifiers
           .filter((specifier) => (specifier.exported.name || specifier.exported.value) === 'default')
           .forEach((specifier) => {
-            const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
+            const { loc } = getSourceCode(context).getFirstTokens(node)[1] || {};
             if (specifier.type === 'ExportDefaultSpecifier') {
               context.report({ node, message: preferNamed, loc });
             } else if (specifier.type === 'ExportSpecifier') {
