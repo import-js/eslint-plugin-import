@@ -53,6 +53,7 @@ export default class ImportExportVisitorBuilder {
         if (astNode.declaration.type === 'Identifier') {
           this.namespace.add(exportMeta, astNode.declaration);
         }
+        this.exportMap.exports.set('default', astNode);
         this.exportMap.namespace.set('default', exportMeta);
       },
       ExportAllDeclaration() {
@@ -86,13 +87,17 @@ export default class ImportExportVisitorBuilder {
             case 'TSInterfaceDeclaration':
             case 'TSAbstractClassDeclaration':
             case 'TSModuleDeclaration':
+              this.exportMap.exports.set(astNode.declaration.id.name, astNode);
               this.exportMap.namespace.set(astNode.declaration.id.name, captureDoc(this.source, this.docStyleParsers, astNode));
               break;
             case 'VariableDeclaration':
               astNode.declaration.declarations.forEach((d) => {
                 recursivePatternCapture(
                   d.id,
-                  (id) => this.exportMap.namespace.set(id.name, captureDoc(this.source, this.docStyleParsers, d, astNode)),
+                  (id) => {
+                    this.exportMap.exports.set(id.name, astNode);
+                    this.exportMap.namespace.set(id.name, captureDoc(this.source, this.docStyleParsers, d, astNode));
+                  },
                 );
               });
               break;
@@ -126,6 +131,7 @@ export default class ImportExportVisitorBuilder {
     ));
     if (exportedDecls.length === 0) {
       // Export is not referencing any local declaration, must be re-exporting
+      this.exportMap.exports.set('default', astNode);
       this.exportMap.namespace.set('default', captureDoc(this.source, this.docStyleParsers, astNode));
       return;
     }
@@ -133,11 +139,13 @@ export default class ImportExportVisitorBuilder {
       this.isEsModuleInteropTrue // esModuleInterop is on in tsconfig
       && !this.exportMap.namespace.has('default') // and default isn't added already
     ) {
+      this.exportMap.exports.set('default', {}); // add default export
       this.exportMap.namespace.set('default', {}); // add default export
     }
     exportedDecls.forEach((decl) => {
       if (decl.type === 'TSModuleDeclaration') {
         if (decl.body && decl.body.type === 'TSModuleDeclaration') {
+          this.exportMap.exports.set(decl.body.id.name, astNode);
           this.exportMap.namespace.set(decl.body.id.name, captureDoc(this.source, this.docStyleParsers, decl.body));
         } else if (decl.body && decl.body.body) {
           decl.body.body.forEach((moduleBlockNode) => {
@@ -150,20 +158,19 @@ export default class ImportExportVisitorBuilder {
             if (!namespaceDecl) {
               // TypeScript can check this for us; we needn't
             } else if (namespaceDecl.type === 'VariableDeclaration') {
-              namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => this.exportMap.namespace.set(
-                id.name,
-                captureDoc(this.source, this.docStyleParsers, decl, namespaceDecl, moduleBlockNode),
-              )),
-              );
+              namespaceDecl.declarations.forEach((d) => recursivePatternCapture(d.id, (id) => {
+                this.exportMap.exports.set(id.name, astNode);
+                this.exportMap.namespace.set(id.name, captureDoc(this.source, this.docStyleParsers, decl, namespaceDecl, moduleBlockNode));
+              }));
             } else {
-              this.exportMap.namespace.set(
-                namespaceDecl.id.name,
-                captureDoc(this.source, this.docStyleParsers, moduleBlockNode));
+              this.exportMap.exports.set(namespaceDecl.id.name, astNode);
+              this.exportMap.namespace.set(namespaceDecl.id.name, captureDoc(this.source, this.docStyleParsers, moduleBlockNode));
             }
           });
         }
       } else {
         // Export as default
+        this.exportMap.exports.set('default', {});
         this.exportMap.namespace.set('default', captureDoc(this.source, this.docStyleParsers, decl));
       }
     });
