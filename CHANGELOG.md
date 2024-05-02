@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
+- [`no-cycle`]: use scc algorithm to optimize; add `skipErrorMessagePath` for faster error messages ([#2998], thanks [@soryy708])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1115,6 +1116,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2998]: https://github.com/import-js/eslint-plugin-import/pull/2998
 [#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
