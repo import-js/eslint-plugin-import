@@ -195,6 +195,7 @@ export default class ExportMapBuilder {
       && exportMap.namespace.size > 0 // anything is exported
       && !exportMap.namespace.has('default') // and default isn't added already
     ) {
+      exportMap.exports.set('default', {});
       exportMap.namespace.set('default', {}); // add default export
     }
 
