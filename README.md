@@ -108,7 +108,7 @@ npm install eslint-plugin-import --save-dev
 
 All rules are off by default. You may extend one of the canned configs, or configure them manually in your `.eslintrc.(yml|json|js)`.
 
-* Extending a canned config:
+- Extending a canned config:
 
    ```yaml
    extends:
@@ -123,7 +123,7 @@ All rules are off by default. You may extend one of the canned configs, or confi
      - plugin:import/warnings
    ```
 
-* Configuring manually:
+- Configuring manually:
 
   ```yaml
   plugins:
