@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
 import typescriptPkg from 'typescript/package.json';
 import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
-import ExportMapBuilder from '../../../src/exportMapBuilder';
+import ExportMapBuilder from '../../../src/exportMap/builder';
 
 import * as fs from 'fs';
 

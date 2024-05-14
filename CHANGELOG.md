@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] appveyor -> GHA (run tests on Windows in both pwsh and WSL + Ubuntu) ([#2987], thanks [@joeyguerra])
 - [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
 - [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
+- [Refactor] `ExportMap`: extract "builder" logic to separate files ([#2991], thanks [@soryy708])
 
 ## [2.29.1] - 2023-12-14
 
@@ -1114,6 +1115,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
 [#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
 [#2985]: https://github.com/import-js/eslint-plugin-import/pull/2985
