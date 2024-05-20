@@ -21,7 +21,7 @@ jobs:
         with:
           versionsAsRoot: true
           type: majors
-          preset: '>= 6' # preset: '>=4' # see https://github.com/import-js/eslint-plugin-import/issues/2053
+          preset: '>= 16'
 
   latest:
     needs: [matrix]
@@ -62,59 +62,12 @@ jobs:
             ts-parser: 2
             env:
               TS_PARSER: 2
-        exclude:
-          - node-version: 15
-            eslint: 8
-          - node-version: 13
-            eslint: 8
-          - node-version: 11
-            eslint: 8
-          - node-version: 10
-            eslint: 8
-          - node-version: 9
-            eslint: 8
-          - node-version: 9
-            eslint: 7
-          - node-version: 8
-            eslint: 8
-          - node-version: 8
-            eslint: 7
-          - node-version: 7
-            eslint: 8
-          - node-version: 7
-            eslint: 7
-          - node-version: 7
-            eslint: 6
-          - node-version: 6
-            eslint: 8
-          - node-version: 6
-            eslint: 7
-          - node-version: 6
-            eslint: 6
-          - node-version: 5
-            eslint: 8
-          - node-version: 5
-            eslint: 7
-          - node-version: 5
-            eslint: 6
-          - node-version: 5
-            eslint: 5
-          - node-version: 4
-            eslint: 8
-          - node-version: 4
-            eslint: 7
-          - node-version: 4
-            eslint: 6
-          - node-version: 4
-            eslint: 5
 
     steps:
       - uses: actions/checkout@v4
       - uses: ljharb/actions/node/install@main
-        continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
         name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
         env:
-          NPM_CONFIG_LEGACY_PEER_DEPS: ${{ matrix.node-version == 11 && false || true }}
           ESLINT_VERSION: ${{ matrix.eslint }}
           TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
         with:

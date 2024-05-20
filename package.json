@@ -3,7 +3,7 @@
   "version": "2.29.1",
   "description": "Import with sanity.",
   "engines": {
-    "node": ">=4"
+    "node": ">=16"
   },
   "main": "lib/index.js",
   "directories": {
@@ -93,7 +93,7 @@
     "markdownlint-cli": "~0.35",
     "mocha": "^3.5.3",
     "npm-which": "^3.0.1",
-    "nyc": "^11.9.0",
+    "nyc": "^15.0.0",
     "redux": "^3.7.2",
     "rimraf": "^2.7.1",
     "safe-publish-latest": "^2.0.0",

@@ -51,10 +51,10 @@
     "babel-register": "^6.26.0",
     "chai": "^3.5.0",
     "mocha": "^3.5.3",
-    "nyc": "^11.9.0",
+    "nyc": "^15.0.0",
     "webpack": "https://gist.github.com/ljharb/9cdb687f3806f8e6cb8a365d0b7840eb"
   },
   "engines": {
-    "node": ">= 6"
+    "node": ">= 16"
   }
 }

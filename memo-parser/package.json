@@ -2,7 +2,7 @@
   "name": "memo-parser",
   "version": "0.2.1",
   "engines": {
-    "node": ">=4"
+    "node": ">=16"
   },
   "description": "Memoizing wrapper for any ESLint-compatible parser module.",
   "main": "index.js",

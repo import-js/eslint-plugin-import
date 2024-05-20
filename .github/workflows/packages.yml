@@ -20,7 +20,7 @@ jobs:
         id: set-matrix
         with:
           type: 'majors'
-          preset: '>= 6' # preset: '>=4' # see https://github.com/import-js/eslint-plugin-import/issues/2053
+          preset: '>= 16'
           versionsAsRoot: true
 
   tests:
