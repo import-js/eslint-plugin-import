@@ -14,7 +14,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/import-js/eslint-plugin-import.git"
+    "url": "git+https://github.com/import-js/eslint-plugin-import.git",
+    "directory": "resolvers/webpack"
   },
   "keywords": [
     "eslint-plugin-import",

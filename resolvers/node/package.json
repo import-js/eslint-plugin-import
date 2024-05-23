@@ -13,7 +13,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/import-js/eslint-plugin-import"
+    "url": "https://github.com/import-js/eslint-plugin-import",
+    "directory": "resolvers/node"
   },
   "keywords": [
     "eslint",
