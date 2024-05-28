@@ -83,28 +83,30 @@ const DEFAULT = 'default';
 
 function forEachDeclarationIdentifier(declaration, cb) {
   if (declaration) {
+    const isTypeDeclaration = declaration.type === TS_INTERFACE_DECLARATION
+      || declaration.type === TS_TYPE_ALIAS_DECLARATION
+      || declaration.type === TS_ENUM_DECLARATION;
+
     if (
       declaration.type === FUNCTION_DECLARATION
       || declaration.type === CLASS_DECLARATION
-      || declaration.type === TS_INTERFACE_DECLARATION
-      || declaration.type === TS_TYPE_ALIAS_DECLARATION
-      || declaration.type === TS_ENUM_DECLARATION
+      || isTypeDeclaration
     ) {
-      cb(declaration.id.name);
+      cb(declaration.id.name, isTypeDeclaration);
     } else if (declaration.type === VARIABLE_DECLARATION) {
       declaration.declarations.forEach(({ id }) => {
         if (id.type === OBJECT_PATTERN) {
           recursivePatternCapture(id, (pattern) => {
             if (pattern.type === IDENTIFIER) {
-              cb(pattern.name);
+              cb(pattern.name, false);
             }
           });
         } else if (id.type === ARRAY_PATTERN) {
           id.elements.forEach(({ name }) => {
-            cb(name);
+            cb(name, false);
           });
         } else {
-          cb(id.name);
+          cb(id.name, false);
         }
       });
     }
@@ -443,6 +445,10 @@ module.exports = {
           description: 'report exports without any usage',
           type: 'boolean',
         },
+        ignoreUnusedTypeExports: {
+          description: 'ignore type exports without any usage',
+          type: 'boolean',
+        },
       },
       anyOf: [
         {
@@ -470,6 +476,7 @@ module.exports = {
       ignoreExports = [],
       missingExports,
       unusedExports,
+      ignoreUnusedTypeExports,
     } = context.options[0] || {};
 
     if (unusedExports) {
@@ -502,8 +509,12 @@ module.exports = {
       exportCount.set(IMPORT_NAMESPACE_SPECIFIER, namespaceImports);
     };
 
-    const checkUsage = (node, exportedValue) => {
+    const checkUsage = (node, exportedValue, isTypeExport) => {
       if (!unusedExports) {
+        return;
+      }
+
+      if (isTypeExport && ignoreUnusedTypeExports) {
         return;
       }
 
@@ -935,14 +946,14 @@ module.exports = {
         checkExportPresence(node);
       },
       ExportDefaultDeclaration(node) {
-        checkUsage(node, IMPORT_DEFAULT_SPECIFIER);
+        checkUsage(node, IMPORT_DEFAULT_SPECIFIER, false);
       },
       ExportNamedDeclaration(node) {
         node.specifiers.forEach((specifier) => {
-          checkUsage(specifier, specifier.exported.name || specifier.exported.value);
+          checkUsage(specifier, specifier.exported.name || specifier.exported.value, false);
         });
-        forEachDeclarationIdentifier(node.declaration, (name) => {
-          checkUsage(node, name);
+        forEachDeclarationIdentifier(node.declaration, (name, isTypeExport) => {
+          checkUsage(node, name, isTypeExport);
         });
       },
     };

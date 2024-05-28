@@ -29,8 +29,9 @@ This rule takes the following option:
 
  - **`missingExports`**: if `true`, files without any exports are reported (defaults to `false`)
  - **`unusedExports`**: if `true`, exports without any static usage within other modules are reported (defaults to `false`)
- - `src`: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
- - `ignoreExports`: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
+ - **`ignoreUnusedTypeExports`**: if `true`, TypeScript type exports without any static usage within other modules are reported (defaults to `false` and has no effect unless `unusedExports` is `true`)
+ - **`src`**: an array with files/paths to be analyzed. It only applies to unused exports. Defaults to `process.cwd()`, if not provided
+ - **`ignoreExports`**: an array with files/paths for which unused exports will not be reported (e.g module entry points in a published package)
 
 ### Example for missing exports
 
@@ -114,6 +115,16 @@ export function doAnything() {
 }  // will not be reported
 
 export default 5 // will not be reported
+```
+
+### Unused exports with `ignoreUnusedTypeExports` set to `true`
+
+The following will not be reported:
+
+```ts
+export type Foo = {}; // will not be reported
+export interface Foo = {}; // will not be reported
+export enum Foo {}; // will not be reported
 ```
 
 #### Important Note
