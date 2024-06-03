@@ -26,6 +26,7 @@ const packageDirWithEmpty = path.join(__dirname, '../../files/empty');
 const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps');
 const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object');
 const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition');
+const emptyPackageDir = path.join(__dirname, '../../files/empty-folder');
 
 const {
   dependencies: deps,
@@ -103,6 +104,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import leftpad from "left-pad";',
       options: [{ packageDir: packageDirMonoRepoRoot }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: [emptyPackageDir, packageDirMonoRepoRoot] }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: [packageDirMonoRepoRoot, emptyPackageDir] }],
     }),
     test({
       code: 'import react from "react";',
