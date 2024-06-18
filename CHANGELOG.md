@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
 - [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
 - [`no-unused-modules`]: Add `ignoreUnusedTypeExports` option ([#3011], thanks [@silverwind])
+- add support for Flat Config ([#3018], thanks [@michaelfaith])
 
 ### Fixed
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
@@ -1125,6 +1126,7 @@ for info on changes for earlier releases.
 
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
 [#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
+[#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
 [#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
@@ -1874,6 +1876,7 @@ for info on changes for earlier releases.
 [@meowtec]: https://github.com/meowtec
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
+[@michaelfaith]: https://github.com/michaelfaith
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@minervabot]: https://github.com/minervabot
 [@mpint]: https://github.com/mpint

@@ -1,3 +1,5 @@
+import { name, version } from '../package.json';
+
 export const rules = {
   'no-unresolved': require('./rules/no-unresolved'),
   named: require('./rules/named'),
@@ -68,4 +70,33 @@ export const configs = {
   'react-native': require('../config/react-native'),
   electron: require('../config/electron'),
   typescript: require('../config/typescript'),
+};
+
+// Base Plugin Object
+const importPlugin = {
+  meta: { name, version },
+  rules,
+};
+
+// Create flat configs (Only ones that declare plugins and parser options need to be different from the legacy config)
+const createFlatConfig = (baseConfig, configName) => ({
+  ...baseConfig,
+  name: `import/${configName}`,
+  plugins: { import: importPlugin },
+});
+
+export const flatConfigs = {
+  recommended: createFlatConfig(
+    require('../config/flat/recommended'),
+    'recommended',
+  ),
+
+  errors: createFlatConfig(require('../config/flat/errors'), 'errors'),
+  warnings: createFlatConfig(require('../config/flat/warnings'), 'warnings'),
+
+  // useful stuff for folks using various environments
+  react: require('../config/flat/react'),
+  'react-native': configs['react-native'],
+  electron: configs.electron,
+  typescript: configs.typescript,
 };

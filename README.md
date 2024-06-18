@@ -106,6 +106,8 @@ The maintainers of `eslint-plugin-import` and thousands of other packages are wo
 npm install eslint-plugin-import --save-dev
 ```
 
+### Config - Legacy (`.eslintrc`)
+
 All rules are off by default. However, you may configure them manually
 in your `.eslintrc.(yml|json|js)`, or extend one of the canned configs:
 
@@ -123,12 +125,39 @@ plugins:
   - import
 
 rules:
-  import/no-unresolved: [2, {commonjs: true, amd: true}]
+  import/no-unresolved: [2, { commonjs: true, amd: true }]
   import/named: 2
   import/namespace: 2
   import/default: 2
   import/export: 2
   # etc...
+```
+
+### Config - Flat (`eslint.config.js`)
+
+All rules are off by default. However, you may configure them manually
+in your `eslint.config.(js|cjs|mjs)`, or extend one of the canned configs:
+
+```js
+import importPlugin from 'eslint-plugin-import';
+import js from '@eslint/js';
+
+export default [
+  js.configs.recommended,
+  importPlugin.flatConfigs.recommended,
+  {
+    files: ['**/*.{js,mjs,cjs}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+    rules: {
+      'no-unused-vars': 'off',
+      'import/no-dynamic-require': 'warn',
+      'import/no-nodejs-modules': 'warn',
+    },
+  },
+];
 ```
 
 ## TypeScript

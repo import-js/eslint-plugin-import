@@ -14,7 +14,7 @@ const log = require('debug')('eslint-plugin-import:utils:ignore');
 function makeValidExtensionSet(settings) {
   // start with explicit JS-parsed extensions
   /** @type {Set<import('./types').Extension>} */
-  const exts = new Set(settings['import/extensions'] || ['.js']);
+  const exts = new Set(settings['import/extensions'] || ['.js', '.mjs', '.cjs']);
 
   // all alternate parser extensions are also valid
   if ('import/parsers' in settings) {
@@ -52,9 +52,13 @@ exports.hasValidExtension = hasValidExtension;
 /** @type {import('./ignore').default} */
 exports.default = function ignore(path, context) {
   // check extension whitelist first (cheap)
-  if (!hasValidExtension(path, context)) { return true; }
+  if (!hasValidExtension(path, context)) {
+    return true;
+  }
 
-  if (!('import/ignore' in context.settings)) { return false; }
+  if (!('import/ignore' in context.settings)) {
+    return false;
+  }
   const ignoreStrings = context.settings['import/ignore'];
 
   for (let i = 0; i < ignoreStrings.length; i++) {

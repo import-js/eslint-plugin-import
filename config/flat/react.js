@@ -7,10 +7,13 @@
  */
 module.exports = {
   settings: {
-    'import/extensions': ['.js', '.jsx'],
+    'import/extensions': ['.js', '.jsx', '.mjs', '.cjs'],
   },
-
-  parserOptions: {
-    ecmaFeatures: { jsx: true },
+  languageOptions: {
+    parserOptions: {
+      ecmaFeatures: {
+        jsx: true,
+      },
+    },
   },
 };

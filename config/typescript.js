@@ -9,7 +9,7 @@
 // `.ts`/`.tsx`/`.js`/`.jsx` implementation.
 const typeScriptExtensions = ['.ts', '.cts', '.mts', '.tsx'];
 
-const allExtensions = [...typeScriptExtensions, '.js', '.jsx'];
+const allExtensions = [...typeScriptExtensions, '.js', '.jsx', '.mjs', '.cjs'];
 
 module.exports = {
   settings: {
