@@ -38,6 +38,13 @@ const unusedExportsTypescriptOptions = [{
   ignoreExports: undefined,
 }];
 
+const unusedExportsTypescriptIgnoreUnusedTypesOptions = [{
+  unusedExports: true,
+  ignoreUnusedTypeExports: true,
+  src: [testFilePath('./no-unused-modules/typescript')],
+  ignoreExports: undefined,
+}];
+
 const unusedExportsJsxOptions = [{
   unusedExports: true,
   src: [testFilePath('./no-unused-modules/jsx')],
@@ -1141,6 +1148,24 @@ context('TypeScript', function () {
           parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-e-used-as-type.ts'),
         }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export interface c {};`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export type d = {};`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d-used-as-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export enum e { f };`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e-used-as-type.ts'),
+        }),
         // Should also be valid when the exporting files are linted before the importing ones
         isESLint4TODO ? [] : test({
           options: unusedExportsTypescriptOptions,
@@ -1165,6 +1190,24 @@ context('TypeScript', function () {
           code: `import type {g} from './file-ts-g';`,
           parser,
           filename: testFilePath('./no-unused-modules/typescript/file-ts-f-import-type.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export interface c {};`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-c-unused.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export type d = {};`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-d-unused.ts'),
+        }),
+        test({
+          options: unusedExportsTypescriptIgnoreUnusedTypesOptions,
+          code: `export enum e { f };`,
+          parser,
+          filename: testFilePath('./no-unused-modules/typescript/file-ts-e-unused.ts'),
         }),
       ),
       invalid: [].concat(

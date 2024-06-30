@@ -9,6 +9,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
 - [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
 - [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
+- [`no-unused-modules`]: Add `ignoreUnusedTypeExports` option ([#3011], thanks [@silverwind])
 
 ### Fixed
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
