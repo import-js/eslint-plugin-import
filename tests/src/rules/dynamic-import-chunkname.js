@@ -12,6 +12,10 @@ const pickyCommentOptions = [{
   importFunctions: ['dynamicImport'],
   webpackChunknameFormat: pickyCommentFormat,
 }];
+const allowEmptyOptions = [{
+  importFunctions: ['dynamicImport'],
+  allowEmpty: true,
+}];
 const multipleImportFunctionOptions = [{
   importFunctions: ['dynamicImport', 'definitelyNotStaticImport'],
 }];
@@ -22,8 +26,9 @@ const nonBlockCommentError = 'dynamic imports require a /* foo */ style comment,
 const noPaddingCommentError = 'dynamic imports require a block comment padded with spaces - /* foo */';
 const invalidSyntaxCommentError = 'dynamic imports require a "webpack" comment with valid syntax';
 const commentFormatError = `dynamic imports require a "webpack" comment with valid syntax`;
-const chunkNameFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${commentFormat}["'],? */`;
-const pickyChunkNameFormatError = `dynamic imports require a leading comment in the form /* webpackChunkName: ["']${pickyCommentFormat}["'],? */`;
+const chunkNameFormatError = `dynamic imports require a leading comment in the form /*webpackChunkName: ["']${commentFormat}["'],? */`;
+const pickyChunkNameFormatError = `dynamic imports require a leading comment in the form /*webpackChunkName: ["']${pickyCommentFormat}["'],? */`;
+const eagerModeError = `dynamic imports using eager mode do not need a webpackChunkName`;
 
 ruleTester.run('dynamic-import-chunkname', rule, {
   valid: [
@@ -82,6 +87,19 @@ ruleTester.run('dynamic-import-chunkname', rule, {
         'someModule'
       )`,
       options,
+    },
+    {
+      code: `import('test')`,
+      options: allowEmptyOptions,
+      parser,
+    },
+    {
+      code: `import(
+        /* webpackMode: "lazy" */
+        'test'
+      )`,
+      options: allowEmptyOptions,
+      parser,
     },
     {
       code: `import(
@@ -337,7 +355,6 @@ ruleTester.run('dynamic-import-chunkname', rule, {
     },
     {
       code: `import(
-        /* webpackChunkName: "someModule" */
         /* webpackMode: "eager" */
         'someModule'
       )`,
@@ -395,7 +412,7 @@ ruleTester.run('dynamic-import-chunkname', rule, {
         /* webpackPrefetch: true */
         /* webpackPreload: true */
         /* webpackIgnore: false */
-        /* webpackMode: "eager" */
+        /* webpackMode: "lazy" */
         /* webpackExports: ["default", "named"] */
         'someModule'
       )`,
@@ -964,6 +981,42 @@ ruleTester.run('dynamic-import-chunkname', rule, {
         type: 'CallExpression',
       }],
     },
+    {
+      code: `import(
+        /* webpackChunkName: "someModule" */
+        /* webpackMode: "eager" */
+        'someModule'
+      )`,
+      options,
+      parser,
+      output: `import(
+        /* webpackChunkName: "someModule" */
+        /* webpackMode: "eager" */
+        'someModule'
+      )`,
+      errors: [{
+        message: eagerModeError,
+        type: 'CallExpression',
+        suggestions: [
+          {
+            desc: 'Remove webpackChunkName',
+            output: `import(
+        
+        /* webpackMode: "eager" */
+        'someModule'
+      )`,
+          },
+          {
+            desc: 'Remove webpackMode',
+            output: `import(
+        /* webpackChunkName: "someModule" */
+        
+        'someModule'
+      )`,
+          },
+        ],
+      }],
+    },
   ],
 });
 
@@ -975,6 +1028,19 @@ context('TypeScript', () => {
 
     ruleTester.run('dynamic-import-chunkname', rule, {
       valid: [
+        {
+          code: `import('test')`,
+          options: allowEmptyOptions,
+          parser: typescriptParser,
+        },
+        {
+          code: `import(
+            /* webpackMode: "lazy" */
+            'test'
+          )`,
+          options: allowEmptyOptions,
+          parser: typescriptParser,
+        },
         {
           code: `import(
             /* webpackChunkName: "someModule" */
@@ -1185,15 +1251,6 @@ context('TypeScript', () => {
         },
         {
           code: `import(
-            /* webpackChunkName: "someModule" */
-            /* webpackMode: "lazy" */
-            'someModule'
-          )`,
-          options,
-          parser: typescriptParser,
-        },
-        {
-          code: `import(
             /* webpackChunkName: 'someModule', webpackMode: 'lazy' */
             'someModule'
           )`,
@@ -1212,7 +1269,7 @@ context('TypeScript', () => {
         {
           code: `import(
             /* webpackChunkName: "someModule" */
-            /* webpackMode: "eager" */
+            /* webpackMode: "lazy" */
             'someModule'
           )`,
           options,
@@ -1269,8 +1326,16 @@ context('TypeScript', () => {
             /* webpackPrefetch: true */
             /* webpackPreload: true */
             /* webpackIgnore: false */
-            /* webpackMode: "eager" */
+            /* webpackMode: "lazy" */
             /* webpackExports: ["default", "named"] */
+            'someModule'
+          )`,
+          options,
+          parser: typescriptParser,
+        },
+        {
+          code: `import(
+            /* webpackMode: "eager" */
             'someModule'
           )`,
           options,
@@ -1720,6 +1785,162 @@ context('TypeScript', () => {
           errors: [{
             message: commentFormatError,
             type: nodeType,
+          }],
+        },
+        {
+          code: `import(
+            /* webpackChunkName: "someModule", webpackMode: "eager" */
+            'someModule'
+          )`,
+          options,
+          parser: typescriptParser,
+          output: `import(
+            /* webpackChunkName: "someModule", webpackMode: "eager" */
+            'someModule'
+          )`,
+          errors: [{
+            message: eagerModeError,
+            type: nodeType,
+            suggestions: [
+              {
+                desc: 'Remove webpackChunkName',
+                output: `import(
+            /* webpackMode: "eager" */
+            'someModule'
+          )`,
+              },
+              {
+                desc: 'Remove webpackMode',
+                output: `import(
+            /* webpackChunkName: "someModule" */
+            'someModule'
+          )`,
+              },
+            ],
+          }],
+        },
+        {
+          code: `
+            import(
+              /* webpackMode: "eager", webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+          options,
+          parser: typescriptParser,
+          output: `
+            import(
+              /* webpackMode: "eager", webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+          errors: [{
+            message: eagerModeError,
+            type: nodeType,
+            suggestions: [
+              {
+                desc: 'Remove webpackChunkName',
+                output: `
+            import(
+              /* webpackMode: "eager" */
+              'someModule'
+            )
+          `,
+              },
+              {
+                desc: 'Remove webpackMode',
+                output: `
+            import(
+              /* webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+              },
+            ],
+          }],
+        },
+        {
+          code: `
+            import(
+              /* webpackMode: "eager", webpackPrefetch: true, webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+          options,
+          parser: typescriptParser,
+          output: `
+            import(
+              /* webpackMode: "eager", webpackPrefetch: true, webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+          errors: [{
+            message: eagerModeError,
+            type: nodeType,
+            suggestions: [
+              {
+                desc: 'Remove webpackChunkName',
+                output: `
+            import(
+              /* webpackMode: "eager", webpackPrefetch: true */
+              'someModule'
+            )
+          `,
+              },
+              {
+                desc: 'Remove webpackMode',
+                output: `
+            import(
+              /* webpackPrefetch: true, webpackChunkName: "someModule" */
+              'someModule'
+            )
+          `,
+              },
+            ],
+          }],
+        },
+        {
+          code: `
+            import(
+              /* webpackChunkName: "someModule" */
+              /* webpackMode: "eager" */
+              'someModule'
+            )
+          `,
+          options,
+          parser: typescriptParser,
+          output: `
+            import(
+              /* webpackChunkName: "someModule" */
+              /* webpackMode: "eager" */
+              'someModule'
+            )
+          `,
+          errors: [{
+            message: eagerModeError,
+            type: nodeType,
+            suggestions: [
+              {
+                desc: 'Remove webpackChunkName',
+                output: `
+            import(
+              ${''}
+              /* webpackMode: "eager" */
+              'someModule'
+            )
+          `,
+              },
+              {
+                desc: 'Remove webpackMode',
+                output: `
+            import(
+              /* webpackChunkName: "someModule" */
+              ${''}
+              'someModule'
+            )
+          `,
+              },
+            ],
           }],
         },
       ],

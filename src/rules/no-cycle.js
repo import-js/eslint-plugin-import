@@ -4,12 +4,16 @@
  */
 
 import resolve from 'eslint-module-utils/resolve';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
 import { isExternalModule } from '../core/importType';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
 const traversed = new Set();
+
+function routeString(route) {
+  return route.map((s) => `${s.value}:${s.loc.start.line}`).join('=>');
+}
 
 module.exports = {
   meta: {
@@ -84,7 +88,7 @@ module.exports = {
         return; // ignore type imports
       }
 
-      const imported = Exports.get(sourceNode.value, context);
+      const imported = ExportMapBuilder.get(sourceNode.value, context);
 
       if (imported == null) {
         return;  // no-unresolved territory
@@ -151,7 +155,3 @@ module.exports = {
     });
   },
 };
-
-function routeString(route) {
-  return route.map((s) => `${s.value}:${s.loc.start.line}`).join('=>');
-}

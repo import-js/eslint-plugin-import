@@ -482,6 +482,68 @@ import {x,y} from './foo'
       errors: ["'../constants' imported multiple times.", "'../constants' imported multiple times."],
       ...jsxConfig,
     }),
+
+    test({
+      code: `
+        import {A1,} from 'foo';
+        import {B1,} from 'foo';
+        import {C1,} from 'foo';
+
+        import {
+          A2,
+        } from 'bar';
+        import {
+          B2,
+        } from 'bar';
+        import {
+          C2,
+        } from 'bar';
+
+      `,
+      output: `
+        import {A1,B1,C1} from 'foo';
+                ${''}
+        import {
+          A2,
+        ${''}
+          B2,
+          C2} from 'bar';
+                ${''}
+      `,
+      errors: [
+        {
+          message: "'foo' imported multiple times.",
+          line: 2,
+          column: 27,
+        },
+        {
+          message: "'foo' imported multiple times.",
+          line: 3,
+          column: 27,
+        },
+        {
+          message: "'foo' imported multiple times.",
+          line: 4,
+          column: 27,
+        },
+        {
+          message: "'bar' imported multiple times.",
+          line: 8,
+          column: 16,
+        },
+        {
+          message: "'bar' imported multiple times.",
+          line: 11,
+          column: 16,
+        },
+        {
+          message: "'bar' imported multiple times.",
+          line: 14,
+          column: 16,
+        },
+      ],
+      ...jsxConfig,
+    }),
   ],
 });
 

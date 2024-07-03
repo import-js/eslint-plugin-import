@@ -31,10 +31,13 @@ const path = require('path');
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+/** @type {(filename: string | string[], cwd?: string) => string | null} */
 function findUp(filename, cwd) {
   let dir = path.resolve(cwd || '');
   const root = path.parse(dir).root;
 
+  /** @type {string[]} */ // @ts-expect-error TS sucks with concat
   const filenames = [].concat(filename);
 
   // eslint-disable-next-line no-constant-condition
@@ -52,6 +55,7 @@ function findUp(filename, cwd) {
   }
 }
 
+/** @type {import('./pkgUp').default} */
 exports.default = function pkgUp(opts) {
   return findUp('package.json', opts && opts.cwd);
 };

@@ -7,7 +7,36 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
+- [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
+
+### Fixed
+- [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
+
+### Changed
+- [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
+- [`no-unused-modules`]: add console message to help debug [#2866]
+- [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
+- [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
+- [Docs] `order`: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
+- [Tests] appveyor -> GHA (run tests on Windows in both pwsh and WSL + Ubuntu) ([#2987], thanks [@joeyguerra])
+- [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
+- [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
+- [Refactor] `ExportMap`: extract "builder" logic to separate files ([#2991], thanks [@soryy708])
+
+## [2.29.1] - 2023-12-14
+
+### Fixed
+- [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
+- [`no-unused-modules`]: support export patterns with array destructuring ([#2930], thanks [@ljharb])
+- [Deps] update `tsconfig-paths` ([#2447], thanks [@domdomegg])
+
+## [2.29.0] - 2023-10-22
+
+### Added
 - TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+- [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
+- [`newline-after-import`]: fix `exactCount` with `considerComments` false positive, when there is a leading comment ([#2884], thanks [@kinland])
 
 ## [2.28.1] - 2023-08-18
 
@@ -1090,6 +1119,18 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
+[#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
+[#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
+[#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
+[#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
+[#2985]: https://github.com/import-js/eslint-plugin-import/pull/2985
+[#2982]: https://github.com/import-js/eslint-plugin-import/pull/2982
+[#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
+[#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
+[#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
+[#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
+[#2866]: https://github.com/import-js/eslint-plugin-import/pull/2866
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
@@ -1103,6 +1144,7 @@ for info on changes for earlier releases.
 [#2735]: https://github.com/import-js/eslint-plugin-import/pull/2735
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
+[#2640]: https://github.com/import-js/eslint-plugin-import/pull/2640
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
@@ -1426,6 +1468,10 @@ for info on changes for earlier releases.
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
 [#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+
+[ljharb#37]: https://github.com/ljharb/eslint-plugin-import/pull/37
+
+[#2930]: https://github.com/import-js/eslint-plugin-import/issues/2930
 [#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
 [#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
 [#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
@@ -1433,6 +1479,7 @@ for info on changes for earlier releases.
 [#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
 [#2665]: https://github.com/import-js/eslint-plugin-import/issues/2665
 [#2577]: https://github.com/import-js/eslint-plugin-import/issues/2577
+[#2447]: https://github.com/import-js/eslint-plugin-import/issues/2447
 [#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
 [#2412]: https://github.com/import-js/eslint-plugin-import/issues/2412
 [#2392]: https://github.com/import-js/eslint-plugin-import/issues/2392
@@ -1551,7 +1598,9 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.1...HEAD
+[2.29.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...v2.29.1
+[2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
 [2.28.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...v2.28.1
 [2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
 [2.27.5]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.4...v2.27.5
@@ -1654,9 +1703,11 @@ for info on changes for earlier releases.
 [@adjerbetian]: https://github.com/adjerbetian
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
+[@aks-]: https://github.com/aks-
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
 [@AndrewLeedham]: https://github.com/AndrewLeedham
 [@andyogo]: https://github.com/andyogo
@@ -1686,6 +1737,7 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@chabb]: https://github.com/chabb
 [@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
 [@charpeni]: https://github.com/charpeni
@@ -1702,6 +1754,7 @@ for info on changes for earlier releases.
 [@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
+[@domdomegg]: https://github.com/domdomegg
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley
@@ -1751,10 +1804,12 @@ for info on changes for earlier releases.
 [@jeffshaver]: https://github.com/jeffshaver
 [@jf248]: https://github.com/jf248
 [@jfmengels]: https://github.com/jfmengels
+[@JiangWeixian]: https://github.com/JiangWeixian
 [@jimbolla]: https://github.com/jimbolla
 [@jkimbo]: https://github.com/jkimbo
 [@joaovieira]: https://github.com/joaovieira
 [@joe-matsec]: https://github.com/joe-matsec
+[@joeyguerra]: https://github.com/joeyguerra
 [@johndevedu]: https://github.com/johndevedu
 [@johnthagen]: https://github.com/johnthagen
 [@jonboiser]: https://github.com/jonboiser
@@ -1768,6 +1823,7 @@ for info on changes for earlier releases.
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory
+[@kinland]: https://github.com/kinland
 [@kirill-konshin]: https://github.com/kirill-konshin
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
@@ -1775,8 +1831,8 @@ for info on changes for earlier releases.
 [@knpwrs]: https://github.com/knpwrs
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
-[@laysent]: https://github.com/laysent
 [@laurens-dg]: https://github.com/laurens-dg
+[@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@leipert]: https://github.com/leipert
 [@lemonmade]: https://github.com/lemonmade
@@ -1811,10 +1867,12 @@ for info on changes for earlier releases.
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
 [@MikeyBeLike]: https://github.com/MikeyBeLike
+[@minervabot]: https://github.com/minervabot
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab
+[@mulztob]: https://github.com/mulztob
 [@mx-bernhard]: https://github.com/mx-bernhard
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
@@ -1825,6 +1883,7 @@ for info on changes for earlier releases.
 [@ombene]: https://github.com/ombene
 [@ota-meshi]: https://github.com/ota-meshi
 [@OutdatedVersion]: https://github.com/OutdatedVersion
+[@Pandemic1617]: https://github.com/Pandemic1617
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet

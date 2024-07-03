@@ -1,0 +1,155 @@
+name: Native and WSL
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    defaults:
+        run:
+          shell: ${{ matrix.configuration == 'wsl' && 'wsl-bash {0}' || 'pwsh' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2019]
+        node-version: [18, 16, 14, 12, 10, 8, 6, 4]
+        configuration: [wsl, native]
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: Vampire/setup-wsl@v3
+      if: matrix.configuration == 'wsl'
+      with:
+        distribution: Ubuntu-22.04
+    - run: curl --version
+    - name: 'WSL: do all npm install steps'
+      if: matrix.configuration == 'wsl'
+      env:
+        ESLINT_VERSION: 7
+        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
+      run: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        nvm install --latest-npm ${{ matrix.node-version }}
+
+        if [ ${{ matrix.node-version }} -ge 4 ] && [ ${{ matrix.node-version }} -lt 6 ]; then
+          npm install eslint@4 --no-save --ignore-scripts
+          npm install
+          npm install eslint-import-resolver-typescript@1.0.2 --no-save
+          npm uninstall @angular-eslint/template-parser @typescript-eslint/parser --no-save
+        fi
+        if [ ${{ matrix.node-version }} -ge 6 ] && [ ${{ matrix.node-version }} -lt 7 ]; then
+          npm install eslint@5 --no-save --ignore-scripts
+          npm install
+          npm uninstall @angular-eslint/template-parser --no-save
+          npm install eslint-import-resolver-typescript@1.0.2 @typescript-eslint/parser@3 --no-save
+        fi
+        if [ ${{ matrix.node-version }} -ge 7 ] && [ ${{ matrix.node-version }} -lt 8 ]; then
+          npm install eslint@6 --no-save --ignore-scripts
+          npm install
+          npm install eslint-import-resolver-typescript@1.0.2 typescript-eslint-parser@20 --no-save
+          npm uninstall @angular-eslint/template-parser --no-save
+        fi
+        if [ ${{ matrix.node-version }} -eq 8 ]; then
+          npm install eslint@6 --no-save --ignore-scripts
+          npm install
+          npm uninstall @angular-eslint/template-parser --no-save
+          npm install @typescript-eslint/parser@3 --no-save
+        fi
+        if [ ${{ matrix.node-version }} -gt 8 ] && [ ${{ matrix.node-version }} -lt 10 ]; then
+          npm install eslint@7 --no-save --ignore-scripts
+          npm install
+          npm install @typescript-eslint/parser@3 --no-save
+        fi
+        if [ ${{ matrix.node-version }} -ge 10 ] && [ ${{ matrix.node-version }} -lt 12 ]; then
+          npm install
+          npm install @typescript-eslint/parser@4 --no-save
+        fi
+        if [ ${{ matrix.node-version }} -ge 12 ]; then
+          npm install
+        fi
+        npm run copy-metafiles
+        npm run pretest
+        npm run tests-only
+
+    - name: install dependencies for node <= 10
+      if: matrix.node-version <= '10' && matrix.configuration == 'native'
+      run: |
+        npm install --legacy-peer-deps
+        npm install eslint@7 --no-save
+
+    - name: Install dependencies for node > 10
+      if: matrix.node-version > '10'  && matrix.configuration == 'native'
+      run: npm install
+
+    - name: install the latest version of nyc
+      if: matrix.configuration == 'native'
+      run: npm install nyc@latest --no-save
+
+    - name: copy metafiles for node <= 8
+      if: matrix.node-version <= 8 && matrix.configuration == 'native'
+      env:
+        ESLINT_VERSION: 6
+        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
+      run: |
+        npm run copy-metafiles
+        bash ./tests/dep-time-travel.sh 2>&1
+    - name: copy metafiles for Node > 8
+      if: matrix.node-version > 8 && matrix.configuration == 'native'
+      env:
+        ESLINT_VERSION: 7
+        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
+      run: |
+        npm run copy-metafiles
+        bash ./tests/dep-time-travel.sh 2>&1
+
+    - name: install ./resolver dependencies in Native
+      if: matrix.configuration == 'native'
+      shell: pwsh
+      run: |
+        npm config set package-lock false
+        $resolverDir = "./resolvers"
+        Get-ChildItem -Directory $resolverDir |
+          ForEach {
+            Write-output $(Resolve-Path $(Join-Path $resolverDir  $_.Name))
+            Push-Location $(Resolve-Path $(Join-Path $resolverDir  $_.Name))
+              npm install
+              npm ls nyc > $null;
+              if ($?) {
+                npm install nyc@latest --no-save
+              }
+              Pop-Location
+            }
+
+    - name: run tests in Native
+      if: matrix.configuration == 'native'
+      shell: pwsh
+      run: |
+        npm run pretest
+        npm run tests-only
+        $resolverDir = "./resolvers";
+        $resolvers = @();
+        Get-ChildItem -Directory $resolverDir |
+          ForEach {
+            $resolvers += "$(Resolve-Path $(Join-Path $resolverDir $_.Name))";
+          }
+        $env:RESOLVERS = [string]::Join(";", $resolvers);
+        foreach ($resolver in $resolvers) {
+            Set-Location -Path $resolver.Trim('"')
+            npm run tests-only
+            Set-Location -Path $PSScriptRoot
+        }
+
+    - name: codecov
+      uses: codecov/codecov-action@v3.1.5
+
+  windows:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - run: true

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -41,7 +41,7 @@ module.exports = {
         return; // no named imports/exports
       }
 
-      const imports = Exports.get(node.source.value, context);
+      const imports = ExportMapBuilder.get(node.source.value, context);
       if (imports == null || imports.parseGoal === 'ambiguous') {
         return;
       }
@@ -93,7 +93,7 @@ module.exports = {
       const call = node.init;
       const [source] = call.arguments;
       const variableImports = node.id.properties;
-      const variableExports = Exports.get(source.value, context);
+      const variableExports = ExportMapBuilder.get(source.value, context);
 
       if (
         // return if it's not a commonjs require statement

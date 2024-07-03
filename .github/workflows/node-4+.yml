@@ -2,6 +2,10 @@ name: 'Tests: node.js'
 
 on: [pull_request, push]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -22,11 +26,14 @@ jobs:
   latest:
     needs: [matrix]
     name: 'majors'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
           - 8
@@ -38,16 +45,19 @@ jobs:
           - 2
         include:
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 4
             env:
               TS_PARSER: 4
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 3
             env:
               TS_PARSER: 3
           - node-version: 'lts/*'
+            os: ubuntu-latest
             eslint: 7
             ts-parser: 2
             env:
@@ -99,7 +109,7 @@ jobs:
             eslint: 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ljharb/actions/node/install@main
         continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
         name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
@@ -113,7 +123,7 @@ jobs:
           skip-ls-check: true
       - run: npm run pretest
       - run: npm run tests-only
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v3.1.5
 
   node:
     name: 'node 4+'

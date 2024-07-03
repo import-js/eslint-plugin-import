@@ -23,7 +23,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 ⌨️ Set in the `typescript` configuration.\
 🚸 Set in the `warnings` configuration.\
 🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
-💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).\
+💡 Manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).\
 ❌ Deprecated.
 
 ### Helpful warnings
@@ -73,7 +73,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | Name                                                                             | Description                                                                | 💼 | ⚠️    | 🚫 | 🔧 | 💡 | ❌  |
 | :------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :- | :---- | :- | :- | :- | :- |
 | [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports.      |    |       |    | 🔧 |    |    |
-| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |    |       |    |    |    |    |
+| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |    |       |    |    | 💡 |    |
 | [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                          |    |       |    |    |    |    |
 | [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |    |       |    |    |    |    |
 | [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                         |    |       |    | 🔧 |    |    |

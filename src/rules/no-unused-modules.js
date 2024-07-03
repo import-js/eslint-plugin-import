@@ -13,7 +13,8 @@ import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
-import Exports, { recursivePatternCapture } from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
+import recursivePatternCapture from '../exportMap/patternCapture';
 import docsUrl from '../docsUrl';
 
 let FileEnumerator;
@@ -74,6 +75,7 @@ const FUNCTION_DECLARATION = 'FunctionDeclaration';
 const CLASS_DECLARATION = 'ClassDeclaration';
 const IDENTIFIER = 'Identifier';
 const OBJECT_PATTERN = 'ObjectPattern';
+const ARRAY_PATTERN = 'ArrayPattern';
 const TS_INTERFACE_DECLARATION = 'TSInterfaceDeclaration';
 const TS_TYPE_ALIAS_DECLARATION = 'TSTypeAliasDeclaration';
 const TS_ENUM_DECLARATION = 'TSEnumDeclaration';
@@ -96,6 +98,10 @@ function forEachDeclarationIdentifier(declaration, cb) {
             if (pattern.type === IDENTIFIER) {
               cb(pattern.name);
             }
+          });
+        } else if (id.type === ARRAY_PATTERN) {
+          id.elements.forEach(({ name }) => {
+            cb(name);
           });
         } else {
           cb(id.name);
@@ -189,7 +195,7 @@ const prepareImportsAndExports = (srcFiles, context) => {
   srcFiles.forEach((file) => {
     const exports = new Map();
     const imports = new Map();
-    const currentExports = Exports.get(file, context);
+    const currentExports = ExportMapBuilder.get(file, context);
     if (currentExports) {
       const {
         dependencies,
@@ -523,6 +529,10 @@ module.exports = {
       }
 
       exports = exportList.get(file);
+
+      if (!exports) {
+        console.error(`file \`${file}\` has no exports. Please update to the latest, and if it still happens, report this on https://github.com/import-js/eslint-plugin-import/issues/2866!`);
+      }
 
       // special case: export * from
       const exportAll = exports.get(EXPORT_ALL_DECLARATION);

@@ -4,7 +4,7 @@
  * @copyright 2016 Desmond Brand. All rights reserved.
  * See LICENSE in root directory for full license.
  */
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
@@ -36,7 +36,7 @@ module.exports = {
     return {
       ImportDefaultSpecifier(node) {
         const declaration = importDeclaration(context);
-        const exportMap = Exports.get(declaration.source.value, context);
+        const exportMap = ExportMapBuilder.get(declaration.source.value, context);
         if (exportMap == null) { return; }
 
         if (exportMap.errors.length) {

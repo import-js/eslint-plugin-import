@@ -12,6 +12,15 @@ const containsPath = (filepath, target) => {
   return relative === '' || !relative.startsWith('..');
 };
 
+function isMatchingTargetPath(filename, targetPath) {
+  if (isGlob(targetPath)) {
+    const mm = new Minimatch(targetPath);
+    return mm.match(filename);
+  }
+
+  return containsPath(filename, targetPath);
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -82,15 +91,6 @@ module.exports = {
         .map((target) => path.resolve(basePath, target))
         .some((targetPath) => isMatchingTargetPath(currentFilename, targetPath)),
     );
-
-    function isMatchingTargetPath(filename, targetPath) {
-      if (isGlob(targetPath)) {
-        const mm = new Minimatch(targetPath);
-        return mm.match(filename);
-      }
-
-      return containsPath(filename, targetPath);
-    }
 
     function isValidExceptionPath(absoluteFromPath, absoluteExceptionPath) {
       const relativeExceptionPath = path.relative(absoluteFromPath, absoluteExceptionPath);

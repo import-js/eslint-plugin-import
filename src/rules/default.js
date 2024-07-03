@@ -1,4 +1,4 @@
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
       );
 
       if (!defaultSpecifier) { return; }
-      const imports = Exports.get(node.source.value, context);
+      const imports = ExportMapBuilder.get(node.source.value, context);
       if (imports == null) { return; }
 
       if (imports.errors.length) {

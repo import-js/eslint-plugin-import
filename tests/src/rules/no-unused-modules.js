@@ -160,6 +160,15 @@ ruleTester.run('no-unused-modules', rule, {
       filename: testFilePath('./no-unused-modules/file-o.js'),
       parser: parsers.BABEL_OLD,
     }),
+    test({
+      options: unusedExportsOptions,
+      code: `
+        export const [o0, o2] = createLoadingAndErrorSelectors(
+          AUTH_USER
+        );
+      `,
+      filename: testFilePath('./no-unused-modules/file-o.js'),
+    }),
   ],
   invalid: [
     test({
@@ -723,7 +732,7 @@ describe('renameDefault', () => {
 
 describe('test behavior for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', { encoding: 'utf8' });
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', { encoding: 'utf8', flag: 'w' });
   });
 
   // add import in newly created file
@@ -831,7 +840,7 @@ describe('test behavior for new file', () => {
 
   describe('test behavior for new file', () => {
     before(() => {
-      fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', { encoding: 'utf8' });
+      fs.writeFileSync(testFilePath('./no-unused-modules/file-added-1.js'), '', { encoding: 'utf8', flag: 'w' });
     });
     ruleTester.run('no-unused-modules', rule, {
       valid: [
@@ -866,7 +875,7 @@ describe('test behavior for new file', () => {
 
 describe('test behavior for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-2.js'), '', { encoding: 'utf8' });
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-2.js'), '', { encoding: 'utf8', flag: 'w' });
   });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
@@ -892,7 +901,7 @@ describe('test behavior for new file', () => {
 
 describe('test behavior for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-3.js'), '', { encoding: 'utf8' });
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-3.js'), '', { encoding: 'utf8', flag: 'w' });
   });
   ruleTester.run('no-unused-modules', rule, {
     valid: [
@@ -943,7 +952,7 @@ describe('test behavior for destructured exports', () => {
 
 describe('test behavior for new file', () => {
   before(() => {
-    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-4.js.js'), '', { encoding: 'utf8' });
+    fs.writeFileSync(testFilePath('./no-unused-modules/file-added-4.js.js'), '', { encoding: 'utf8', flag: 'w' });
   });
   ruleTester.run('no-unused-modules', rule, {
     valid: [

@@ -2,24 +2,29 @@
 
 exports.__esModule = true;
 
+/** @type {import('./visit').default} */
 exports.default = function visit(node, keys, visitorSpec) {
   if (!node || !keys) {
     return;
   }
   const type = node.type;
-  if (typeof visitorSpec[type] === 'function') {
-    visitorSpec[type](node);
+  const visitor = visitorSpec[type];
+  if (typeof visitor === 'function') {
+    visitor(node);
   }
   const childFields = keys[type];
   if (!childFields) {
     return;
   }
   childFields.forEach((fieldName) => {
+    // @ts-expect-error TS sucks with concat
     [].concat(node[fieldName]).forEach((item) => {
       visit(item, keys, visitorSpec);
     });
   });
-  if (typeof visitorSpec[`${type}:Exit`] === 'function') {
-    visitorSpec[`${type}:Exit`](node);
+
+  const exit = visitorSpec[`${type}:Exit`];
+  if (typeof exit === 'function') {
+    exit(node);
   }
 };

@@ -5,6 +5,17 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Changed
+- [types] use shared config (thanks [@ljharb])
+
+## v2.8.1 - 2024-02-26
+
+### Fixed
+- `parse`: also delete `parserOptions.EXPERIMENTAL_useProjectService` ([#2963], thanks [@JoshuaKGoldberg])
+
+### Changed
+- add types (thanks [@ljharb])
+
 ## v2.8.0 - 2023-04-14
 
 ### New
@@ -131,6 +142,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#2963]: https://github.com/import-js/eslint-plugin-import/pull/2963
 [#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
 [#2714]: https://github.com/import-js/eslint-plugin-import/pull/2714
 [#2523]: https://github.com/import-js/eslint-plugin-import/pull/2523
@@ -169,6 +181,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@hulkish]: https://github.com/hulkish
 [@Hypnosphi]: https://github.com/Hypnosphi
 [@iamnapo]: https://github.com/iamnapo
+[@JoshuaKGoldberg]: https://github.com/JoshuaKGoldberg
 [@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
 [@leipert]: https://github.com/leipert

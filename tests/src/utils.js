@@ -42,10 +42,6 @@ export function eslintVersionSatisfies(specifier) {
   return semver.satisfies(eslintPkg.version, specifier);
 }
 
-export function testVersion(specifier, t) {
-  return eslintVersionSatisfies(specifier) ? test(t()) : [];
-}
-
 export function test(t) {
   if (arguments.length !== 1) {
     throw new SyntaxError('`test` requires exactly one object argument');
@@ -59,6 +55,10 @@ export function test(t) {
       ...t.parserOptions,
     },
   };
+}
+
+export function testVersion(specifier, t) {
+  return eslintVersionSatisfies(specifier) ? test(t()) : [];
 }
 
 export function testContext(settings) {

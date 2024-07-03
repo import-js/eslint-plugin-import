@@ -12,7 +12,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/import-js/eslint-plugin-import.git"
+    "url": "git+https://github.com/import-js/eslint-plugin-import.git",
+    "directory": "memo-parser"
   },
   "keywords": [
     "eslint",

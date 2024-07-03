@@ -5,6 +5,7 @@ exports.__esModule = true;
 const fs = require('fs');
 const pkgUp = require('./pkgUp').default;
 
+/** @type {(str: string) => string} */
 function stripBOM(str) {
   return str.replace(/^\uFEFF/, '');
 }
@@ -35,6 +36,7 @@ function stripBOM(str) {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+/** @type {import('./readPkgUp').default} */
 exports.default = function readPkgUp(opts) {
   const fp = pkgUp(opts);
 
