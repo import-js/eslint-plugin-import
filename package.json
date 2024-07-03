@@ -82,7 +82,7 @@
     "eslint-plugin-eslint-plugin": "^2.3.0",
     "eslint-plugin-import": "2.x",
     "eslint-plugin-json": "^2.1.2",
-    "eslint-plugin-prefer-node-builtin-imports": "^0.0.3",
+    "eslint-plugin-prefer-node-builtin-imports": "^0.0.4",
     "fs-copy-file-sync": "^1.1.1",
     "glob": "^7.2.3",
     "in-publish": "^2.0.1",
