@@ -1,5 +1,6 @@
 {
   "line-length": false,
+  "ignore_case": true,
   "no-duplicate-heading": {
     "siblings_only": true
   },

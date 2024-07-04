@@ -51,22 +51,23 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ### Static analysis
 
-| Name                                                                   | Description                                                                          | 💼   | ⚠️ | 🚫 | 🔧 | 💡 | ❌  |
-| :--------------------------------------------------------------------- | :----------------------------------------------------------------------------------- | :--- | :- | :- | :- | :- | :- |
-| [default](docs/rules/default.md)                                       | Ensure a default export is present, given a default import.                          | ❗ ☑️ |    |    |    |    |    |
-| [named](docs/rules/named.md)                                           | Ensure named imports correspond to a named export in the remote file.                | ❗ ☑️ |    | ⌨️ |    |    |    |
-| [namespace](docs/rules/namespace.md)                                   | Ensure imported namespaces contain dereferenced properties as they are dereferenced. | ❗ ☑️ |    |    |    |    |    |
-| [no-absolute-path](docs/rules/no-absolute-path.md)                     | Forbid import of modules using absolute paths.                                       |      |    |    | 🔧 |    |    |
-| [no-cycle](docs/rules/no-cycle.md)                                     | Forbid a module from importing a module with a dependency path back to itself.       |      |    |    |    |    |    |
-| [no-dynamic-require](docs/rules/no-dynamic-require.md)                 | Forbid `require()` calls with expressions.                                           |      |    |    |    |    |    |
-| [no-internal-modules](docs/rules/no-internal-modules.md)               | Forbid importing the submodules of other modules.                                    |      |    |    |    |    |    |
-| [no-relative-packages](docs/rules/no-relative-packages.md)             | Forbid importing packages through relative paths.                                    |      |    |    | 🔧 |    |    |
-| [no-relative-parent-imports](docs/rules/no-relative-parent-imports.md) | Forbid importing modules from parent directories.                                    |      |    |    |    |    |    |
-| [no-restricted-paths](docs/rules/no-restricted-paths.md)               | Enforce which files can be imported in a given folder.                               |      |    |    |    |    |    |
-| [no-self-import](docs/rules/no-self-import.md)                         | Forbid a module from importing itself.                                               |      |    |    |    |    |    |
-| [no-unresolved](docs/rules/no-unresolved.md)                           | Ensure imports point to a file/module that can be resolved.                          | ❗ ☑️ |    |    |    |    |    |
-| [no-useless-path-segments](docs/rules/no-useless-path-segments.md)     | Forbid unnecessary path segments in import and require statements.                   |      |    |    | 🔧 |    |    |
-| [no-webpack-loader-syntax](docs/rules/no-webpack-loader-syntax.md)     | Forbid webpack loader syntax in imports.                                             |      |    |    |    |    |    |
+| Name                                                                     | Description                                                                                     | 💼   | ⚠️ | 🚫 | 🔧 | 💡 | ❌  |
+| :----------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------- | :--- | :- | :- | :- | :- | :- |
+| [default](docs/rules/default.md)                                         | Ensure a default export is present, given a default import.                                     | ❗ ☑️ |    |    |    |    |    |
+| [enforce-node-protocol-usage](docs/rules/enforce-node-protocol-usage.md) | Enforce either using, or omitting, the `node:` protocol when importing Node.js builtin modules. |      |    |    | 🔧 |    |    |
+| [named](docs/rules/named.md)                                             | Ensure named imports correspond to a named export in the remote file.                           | ❗ ☑️ |    | ⌨️ |    |    |    |
+| [namespace](docs/rules/namespace.md)                                     | Ensure imported namespaces contain dereferenced properties as they are dereferenced.            | ❗ ☑️ |    |    |    |    |    |
+| [no-absolute-path](docs/rules/no-absolute-path.md)                       | Forbid import of modules using absolute paths.                                                  |      |    |    | 🔧 |    |    |
+| [no-cycle](docs/rules/no-cycle.md)                                       | Forbid a module from importing a module with a dependency path back to itself.                  |      |    |    |    |    |    |
+| [no-dynamic-require](docs/rules/no-dynamic-require.md)                   | Forbid `require()` calls with expressions.                                                      |      |    |    |    |    |    |
+| [no-internal-modules](docs/rules/no-internal-modules.md)                 | Forbid importing the submodules of other modules.                                               |      |    |    |    |    |    |
+| [no-relative-packages](docs/rules/no-relative-packages.md)               | Forbid importing packages through relative paths.                                               |      |    |    | 🔧 |    |    |
+| [no-relative-parent-imports](docs/rules/no-relative-parent-imports.md)   | Forbid importing modules from parent directories.                                               |      |    |    |    |    |    |
+| [no-restricted-paths](docs/rules/no-restricted-paths.md)                 | Enforce which files can be imported in a given folder.                                          |      |    |    |    |    |    |
+| [no-self-import](docs/rules/no-self-import.md)                           | Forbid a module from importing itself.                                                          |      |    |    |    |    |    |
+| [no-unresolved](docs/rules/no-unresolved.md)                             | Ensure imports point to a file/module that can be resolved.                                     | ❗ ☑️ |    |    |    |    |    |
+| [no-useless-path-segments](docs/rules/no-useless-path-segments.md)       | Forbid unnecessary path segments in import and require statements.                              |      |    |    | 🔧 |    |    |
+| [no-webpack-loader-syntax](docs/rules/no-webpack-loader-syntax.md)       | Forbid webpack loader syntax in imports.                                                        |      |    |    |    |    |    |
 
 ### Style guide
 
@@ -491,6 +492,20 @@ For example, if your packages in a monorepo are all in `@scope`, you can configu
 {
   "settings": {
     "import/internal-regex": "^@scope/",
+  },
+}
+```
+
+### `import/node-version`
+
+A string that represents the version of Node.js that you are using.
+A falsy value will imply the version of Node.js that you are running ESLint with.
+
+```jsonc
+// .eslintrc
+{
+  "settings": {
+    "import/node-version": "22.3.4",
   },
 }
 ```
