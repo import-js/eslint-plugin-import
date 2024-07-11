@@ -15,7 +15,7 @@ const testVersion = (specifier, t) => _testVersion(specifier, () => Object.assig
   filename: testFilePath('./cycles/depth-zero.js'),
 }));
 
-const testDialects = ['es6'];
+const testDialects = ['es6', 'cjs'];
 
 ruleTester.run('no-cycle', rule, {
   valid: [].concat(
