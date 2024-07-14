@@ -292,9 +292,9 @@ const MAX_CACHE = 10;
 const _cache = [];
 function getResolveSync(configPath, webpackConfig, cwd) {
   const cacheKey = { configPath, webpackConfig };
-  for (let i = 0; i < _cache.length; i++) {
-    if (isEqual(_cache[i].key, cacheKey)) {
-      return _cache[i].value;
+  for (const entry of _cache) {
+    if (isEqual(entry.key, cacheKey)) {
+      return entry.value;
     }
   }
 
@@ -411,9 +411,9 @@ exports.resolve = function (source, file, settings) {
     if (typeof configIndex !== 'undefined' && webpackConfig.length > configIndex) {
       webpackConfig = webpackConfig[configIndex];
     } else {
-      for (let i = 0; i < webpackConfig.length; i++) {
-        if (webpackConfig[i].resolve) {
-          webpackConfig = webpackConfig[i];
+      for (const config of webpackConfig) {
+        if (config.resolve) {
+          webpackConfig = config;
           break;
         }
       }
