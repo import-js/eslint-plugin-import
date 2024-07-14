@@ -14,7 +14,7 @@ export default [
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
-    ignores: ['eslint.config.js', '**/exports-unused.ts'],
+    ignores: ['eslint.config.mjs', '**/exports-unused.ts'],
     rules: {
       'no-unused-vars': 'off',
       'import/no-dynamic-require': 'warn',

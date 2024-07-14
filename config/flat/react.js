@@ -7,7 +7,7 @@
  */
 module.exports = {
   settings: {
-    'import/extensions': ['.js', '.jsx'],
+    'import/extensions': ['.js', '.jsx', '.mjs', '.cjs'],
   },
   languageOptions: {
     parserOptions: {

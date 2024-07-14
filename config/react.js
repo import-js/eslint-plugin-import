@@ -6,7 +6,6 @@
  * if you don't enable these settings at the top level.
  */
 module.exports = {
-
   settings: {
     'import/extensions': ['.js', '.jsx'],
   },
@@ -14,5 +13,4 @@ module.exports = {
   parserOptions: {
     ecmaFeatures: { jsx: true },
   },
-
 };
