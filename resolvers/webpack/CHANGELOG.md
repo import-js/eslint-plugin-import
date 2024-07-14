@@ -5,10 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+- [refactor] simplify loop ([#3029], thanks [@fregante])
+
 ## 0.13.8 - 2023-10-22
  - [refactor] use `hasown` instead of `has`
  - [deps] update `array.prototype.find`, `is-core-module`, `resolve`
-
 
 ## 0.13.7 - 2023-08-19
  - [fix] use the `dirname` of the `configPath` as `basedir` ([#2859])
@@ -178,6 +179,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
  - `interpret` configs (such as `.babel.js`). Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#3029]: https://github.com/import-js/eslint-plugin-import/pull/3029
 [#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
 [#2023]: https://github.com/import-js/eslint-plugin-import/pull/2023
 [#1967]: https://github.com/import-js/eslint-plugin-import/pull/1967
@@ -222,6 +224,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 [@benmvp]: https://github.com/benmvp
 [@daltones]: https://github.com/daltones
 [@echenley]: https://github.com/echenley
+[@fregante]: https://github.com/fregante
 [@gausie]: https://github.com/gausie
 [@grahamb]: https://github.com/grahamb
 [@graingert]: https://github.com/graingert
