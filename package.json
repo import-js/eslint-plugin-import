@@ -30,6 +30,9 @@
     "test": "npm run tests-only",
     "test-compiled": "npm run prepublish && BABEL_ENV=testCompiled mocha --compilers js:babel-register tests/src",
     "test-all": "node --require babel-register ./scripts/testAll",
+    "test-examples": "npm run build && npm run test-example:legacy && npm run test-example:flat",
+    "test-example:legacy": "cd examples/legacy && npm install && npm run lint",
+    "test-example:flat": "cd examples/flat && npm install && npm run lint",
     "prepublishOnly": "safe-publish-latest && npm run build",
     "prepublish": "not-in-publish || npm run prepublishOnly",
     "preupdate:eslint-docs": "npm run build",
@@ -105,6 +108,7 @@
     "eslint": "^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8"
   },
   "dependencies": {
+    "@nodelib/fs.walk": "^2.0.0",
     "array-includes": "^3.1.7",
     "array.prototype.findlastindex": "^1.2.4",
     "array.prototype.flat": "^1.3.2",
