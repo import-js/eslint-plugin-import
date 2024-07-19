@@ -43,6 +43,7 @@ export const rules = {
   'dynamic-import-chunkname': require('./rules/dynamic-import-chunkname'),
   'no-import-module-exports': require('./rules/no-import-module-exports'),
   'no-empty-named-blocks': require('./rules/no-empty-named-blocks'),
+  'prefer-node-builtin-imports': require('./rules/prefer-node-builtin-imports'),
 
   // export
   'exports-last': require('./rules/exports-last'),
