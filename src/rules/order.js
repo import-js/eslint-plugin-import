@@ -302,6 +302,12 @@ function getSorter(alphabetizeOptions) {
       const b = B.length;
 
       for (let i = 0; i < Math.min(a, b); i++) {
+        // Skip comparing the first path segment, if they are relative segments for both imports
+        if (i === 0 && ((A[i] === '.' || A[i] === '..') && (B[i] === '.' || B[i] === '..'))) {
+          // If one is sibling and the other parent import, no need to compare at all, since the paths belong in different groups
+          if (A[i] !== B[i]) { break; }
+          continue;
+        }
         result = compareString(A[i], B[i]);
         if (result) { break; }
       }
