@@ -3,6 +3,15 @@ import rule from 'rules/extensions';
 import { getTSParsers, test, testFilePath, parsers } from '../utils';
 
 const ruleTester = new RuleTester();
+const ruleTesterWithTypeScriptImports = new RuleTester({
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+      },
+    },
+  },
+});
 
 ruleTester.run('extensions', rule, {
   valid: [
@@ -686,6 +695,64 @@ describe('TypeScript', () => {
             options: [
               'always',
               { ts: 'never', tsx: 'never', js: 'never', jsx: 'never' },
+            ],
+            parser,
+          }),
+          test({
+            code: 'import type T from "./typescript-declare";',
+            errors: ['Missing file extension for "./typescript-declare"'],
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never', checkTypeImports: true },
+            ],
+            parser,
+          }),
+          test({
+            code: 'export type { MyType } from "./typescript-declare";',
+            errors: ['Missing file extension for "./typescript-declare"'],
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'never', jsx: 'never', checkTypeImports: true },
+            ],
+            parser,
+          }),
+        ],
+      });
+      ruleTesterWithTypeScriptImports.run(`${parser}: (with TS resolver) extensions are enforced for type imports/export when checkTypeImports is set`, rule, {
+        valid: [
+          test({
+            code: 'import type { MyType } from "./typescript-declare.ts";',
+            options: [
+              'always',
+              { checkTypeImports: true },
+            ],
+            parser,
+          }),
+          test({
+            code: 'export type { MyType } from "./typescript-declare.ts";',
+            options: [
+              'always',
+              { checkTypeImports: true },
+            ],
+            parser,
+          }),
+        ],
+        invalid: [
+          test({
+            code: 'import type { MyType } from "./typescript-declare";',
+            errors: ['Missing file extension "ts" for "./typescript-declare"'],
+            options: [
+              'always',
+              { checkTypeImports: true },
+            ],
+            parser,
+          }),
+          test({
+            code: 'export type { MyType } from "./typescript-declare";',
+            errors: ['Missing file extension "ts" for "./typescript-declare"'],
+            options: [
+              'always',
+              { checkTypeImports: true },
             ],
             parser,
           }),
