@@ -27,6 +27,12 @@ ruleTester.run('no-named-as-default', rule, {
       parserOptions: { ecmaVersion: 2022 },
     })),
 
+    // #1594: Allow importing as default if object is exported both as default and named
+    test({ code: 'import something from "./no-named-as-default/dual-export";' }),
+    test({
+      code: 'import { something } from "./no-named-as-default/dual-export";',
+    }),
+
     ...SYNTAX_CASES,
   ),
 
