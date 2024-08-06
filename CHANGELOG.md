@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
+- [`no-named-as-default`]: Allow using an identifier if the export is both a named and a default export ([#3032], thanks [@akwodkiewicz])
 
 ## [2.30.0] - 2024-09-02
 
@@ -1139,6 +1140,7 @@ for info on changes for earlier releases.
 [#3043]: https://github.com/import-js/eslint-plugin-import/pull/3043
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
 [#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
+[#3032]: https://github.com/import-js/eslint-plugin-import/pull/3032
 [#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
@@ -1726,6 +1728,7 @@ for info on changes for earlier releases.
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
 [@aks-]: https://github.com/aks-
+[@akwodkiewicz]: https://github.com/akwodkiewicz
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
