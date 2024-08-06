@@ -15,8 +15,15 @@ module.exports = {
 
   create(context) {
     function checkDefault(nameKey, defaultSpecifier) {
+
+      /**
+       * For ImportDefaultSpecifier we're interested in the "local" name (`foo` for `import {bar as foo} ...`)
+       * For ExportDefaultSpecifier we're interested in the "exported" name (`foo` for `export {bar as foo} ...`)
+       */
+      const analyzedName = defaultSpecifier[nameKey].name;
+
       // #566: default is a valid specifier
-      if (defaultSpecifier[nameKey].name === 'default') { return; }
+      if (analyzedName === 'default') { return; }
 
       const declaration = importDeclaration(context);
 
@@ -28,7 +35,15 @@ module.exports = {
         return;
       }
 
-      if (imports.has('default') && imports.has(defaultSpecifier[nameKey].name)) {
+      if (imports.has('default') && imports.has(analyzedName)) {
+
+        // #1594: the imported module exports the same thing via a default export and a named export
+        const namedExportInImportedModule = imports.reexports.get(analyzedName);
+        const defaultExportInImportedModule = imports.reexports.get('default');
+        if (defaultExportInImportedModule.getImport().path === namedExportInImportedModule.getImport().path
+          && defaultExportInImportedModule.local === namedExportInImportedModule.local) {
+          return;
+        }
 
         context.report(
           defaultSpecifier,
