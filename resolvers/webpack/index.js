@@ -3,7 +3,6 @@
 const findRoot = require('find-root');
 const path = require('path');
 const isEqual = require('lodash/isEqual');
-const find = require('array.prototype.find');
 const interpret = require('interpret');
 const fs = require('fs');
 const isCore = require('is-core-module');
@@ -293,16 +292,19 @@ const MAX_CACHE = 10;
 const _cache = [];
 function getResolveSync(configPath, webpackConfig, cwd) {
   const cacheKey = { configPath, webpackConfig };
-  let cached = find(_cache, function (entry) { return isEqual(entry.key, cacheKey); });
-  if (!cached) {
-    cached = {
-      key: cacheKey,
-      value: createResolveSync(configPath, webpackConfig, cwd),
-    };
-    // put in front and pop last item
-    if (_cache.unshift(cached) > MAX_CACHE) {
-      _cache.pop();
+  for (const entry of _cache) {
+    if (isEqual(entry.key, cacheKey)) {
+      return entry.value;
     }
+  }
+
+  const cached = {
+    key: cacheKey,
+    value: createResolveSync(configPath, webpackConfig, cwd),
+  };
+  // put in front and pop last item
+  if (_cache.unshift(cached) > MAX_CACHE) {
+    _cache.pop();
   }
   return cached.value;
 }
@@ -409,9 +411,12 @@ exports.resolve = function (source, file, settings) {
     if (typeof configIndex !== 'undefined' && webpackConfig.length > configIndex) {
       webpackConfig = webpackConfig[configIndex];
     } else {
-      webpackConfig = find(webpackConfig, function findFirstWithResolve(config) {
-        return !!config.resolve;
-      });
+      for (const config of webpackConfig) {
+        if (config.resolve) {
+          webpackConfig = config;
+          break;
+        }
+      }
     }
   }
 
