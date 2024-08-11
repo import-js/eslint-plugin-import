@@ -132,6 +132,7 @@ function getFix(first, rest, sourceCode, context) {
   const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1;
   const shouldAddSpecifiers = specifiers.length > 0;
   const shouldRemoveUnnecessary = unnecessaryImports.length > 0;
+  const preferInline = context.options[0] && context.options[0]['prefer-inline'];
 
   if (!(shouldAddDefault || shouldAddSpecifiers || shouldRemoveUnnecessary)) {
     return undefined;
@@ -157,8 +158,7 @@ function getFix(first, rest, sourceCode, context) {
       ([result, needsComma, existingIdentifiers], specifier) => {
         const isTypeSpecifier = specifier.importNode.importKind === 'type';
 
-        const preferInline = context.options[0] && context.options[0]['prefer-inline'];
-        // a user might set prefer-inline but not have a supporting TypeScript version.  Flow does not support inline types so this should fail in that case as well.
+        // a user might set prefer-inline but not have a supporting TypeScript version. Flow does not support inline types so this should fail in that case as well.
         if (preferInline && (!typescriptPkg || !semver.satisfies(typescriptPkg.version, '>= 4.5'))) {
           throw new Error('Your version of TypeScript does not support inline type imports.');
         }
@@ -185,6 +185,18 @@ function getFix(first, rest, sourceCode, context) {
     );
 
     const fixes = [];
+
+    if (shouldAddSpecifiers && preferInline && first.importKind === 'type') {
+      // `import type {a} from './foo'` → `import {type a} from './foo'`
+      const typeIdentifierToken = tokens.find((token) => token.type === 'Identifier' && token.value === 'type');
+      fixes.push(fixer.removeRange([typeIdentifierToken.range[0], typeIdentifierToken.range[1] + 1]));
+
+      tokens
+        .filter((token) => firstExistingIdentifiers.has(token.value))
+        .forEach((identifier) => {
+          fixes.push(fixer.replaceTextRange([identifier.range[0], identifier.range[1]], `type ${identifier.value}`));
+        });
+    }
 
     if (shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       // `import './foo'` → `import def, {...} from './foo'`

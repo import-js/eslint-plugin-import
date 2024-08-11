@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
 - [`no-cycle`]: use scc algorithm to optimize ([#2998], thanks [@soryy708])
+- [`no-duplicates`]: Removing duplicates breaks in TypeScript ([#3033], thanks [@yesl-kim])
 
 ### Changed
 - [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
@@ -1121,6 +1122,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
 [#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
 [#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
@@ -1962,6 +1964,7 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@yesl-kim]: https://github.com/yesl-kim
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
 [@Zamiell]: https://github.com/Zamiell

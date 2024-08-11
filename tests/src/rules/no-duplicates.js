@@ -705,6 +705,24 @@ context('TypeScript', function () {
           ],
         }),
         test({
+          code: "import type {x} from 'foo'; import {type y} from 'foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import {type x,type y} from 'foo'; `,
+          errors: [
+            {
+              line: 1,
+              column: 22,
+              message: "'foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 50,
+              message: "'foo' imported multiple times.",
+            },
+          ],
+        }),
+        test({
           code: "import {type x} from 'foo'; import type {y} from 'foo'",
           ...parserConfig,
           output: `import {type x,y} from 'foo'; `,
