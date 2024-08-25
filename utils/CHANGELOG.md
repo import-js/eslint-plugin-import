@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [types] use shared config (thanks [@ljharb])
+- [meta] add `exports`, `main`
 
 ### Fixed
 - `parse`: also delete `parserOptions.projectService` ([#3039], thanks [@Mysak0CZ])
