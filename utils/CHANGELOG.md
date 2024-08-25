@@ -5,12 +5,16 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
-### Changed
-- [types] use shared config (thanks [@ljharb])
-- [meta] add `exports`, `main`
+## v2.8.2 - 2024-08-25
 
 ### Fixed
 - `parse`: also delete `parserOptions.projectService` ([#3039], thanks [@Mysak0CZ])
+
+### Changed
+- [types] use shared config (thanks [@ljharb])
+- [meta] add `exports`, `main`
+- [meta] add `repository.directory` field
+- [refactor] avoid hoisting
 
 ## v2.8.1 - 2024-02-26
 
