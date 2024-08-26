@@ -4,12 +4,15 @@ const findRoot = require('find-root');
 const path = require('path');
 const isEqual = require('lodash/isEqual');
 const interpret = require('interpret');
-const fs = require('fs');
+const existsSync = require('fs').existsSync;
 const isCore = require('is-core-module');
 const resolve = require('resolve/sync');
 const semver = require('semver');
 const hasOwn = require('hasown');
 const isRegex = require('is-regex');
+const isArray = Array.isArray;
+const keys = Object.keys;
+const assign = Object.assign;
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
 
@@ -19,7 +22,7 @@ function registerCompiler(moduleDescriptor) {
   if (moduleDescriptor) {
     if (typeof moduleDescriptor === 'string') {
       require(moduleDescriptor);
-    } else if (!Array.isArray(moduleDescriptor)) {
+    } else if (!isArray(moduleDescriptor)) {
       moduleDescriptor.register(require(moduleDescriptor.module));
     } else {
       for (let i = 0; i < moduleDescriptor.length; i++) {
@@ -35,42 +38,34 @@ function registerCompiler(moduleDescriptor) {
 }
 
 function findConfigPath(configPath, packageDir) {
-  const extensions = Object.keys(interpret.extensions).sort(function (a, b) {
+  const extensions = keys(interpret.extensions).sort(function (a, b) {
     return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length;
   });
   let extension;
 
   if (configPath) {
-    // extensions is not reused below, so safe to mutate it here.
-    extensions.reverse();
-    extensions.forEach(function (maybeExtension) {
-      if (extension) {
-        return;
-      }
-
-      if (configPath.substr(-maybeExtension.length) === maybeExtension) {
+    for (let i = extensions.length - 1; i >= 0 && !extension; i--) {
+      const maybeExtension = extensions[i];
+      if (configPath.slice(-maybeExtension.length) === maybeExtension) {
         extension = maybeExtension;
       }
-    });
+    }
 
     // see if we've got an absolute path
     if (!path.isAbsolute(configPath)) {
       configPath = path.join(packageDir, configPath);
     }
   } else {
-    extensions.forEach(function (maybeExtension) {
-      if (extension) {
-        return;
-      }
-
+    for (let i = 0; i < extensions.length && !extension; i++) {
+      const maybeExtension = extensions[i];
       const maybePath = path.resolve(
         path.join(packageDir, 'webpack.config' + maybeExtension)
       );
-      if (fs.existsSync(maybePath)) {
+      if (existsSync(maybePath)) {
         configPath = maybePath;
         extension = maybeExtension;
       }
-    });
+    }
   }
 
   registerCompiler(interpret.extensions[extension]);
@@ -84,7 +79,7 @@ function findExternal(source, externals, context, resolveSync) {
   if (typeof externals === 'string') { return source === externals; }
 
   // array: recurse
-  if (Array.isArray(externals)) {
+  if (isArray(externals)) {
     return externals.some(function (e) { return findExternal(source, e, context, resolveSync); });
   }
 
@@ -138,8 +133,9 @@ function findExternal(source, externals, context, resolveSync) {
 
   // else, vanilla object
   for (const key in externals) {
-    if (!hasOwn(externals, key)) { continue; }
-    if (source === key) { return true; }
+    if (hasOwn(externals, key) && source === key) {
+      return true;
+    }
   }
   return false;
 }
@@ -160,15 +156,20 @@ const webpack2DefaultResolveConfig = {
 function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
   const EnhancedResolve = webpackRequire('enhanced-resolve');
 
-  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig));
+  return EnhancedResolve.create.sync(assign({}, webpack2DefaultResolveConfig, resolveConfig));
 }
 
 /**
  * webpack 1 defaults: https://webpack.github.io/docs/configuration.html#resolve-packagemains
- * @type {Array}
+ * @type {string[]}
  */
 const webpack1DefaultMains = [
-  'webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main',
+  'webpack',
+  'browser',
+  'web',
+  'browserify',
+  ['jam', 'main'],
+  'main',
 ];
 
 /* eslint-disable */
@@ -176,8 +177,9 @@ const webpack1DefaultMains = [
 function makeRootPlugin(ModulesInRootPlugin, name, root) {
   if (typeof root === 'string') {
     return new ModulesInRootPlugin(name, root);
-  } else if (Array.isArray(root)) {
-    return function() {
+  }
+  if (isArray(root)) {
+    return function () {
       root.forEach(function (root) {
         this.apply(new ModulesInRootPlugin(name, root));
       }, this);
@@ -236,7 +238,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
       if (
         plugin.constructor
         && plugin.constructor.name === 'ResolverPlugin'
-        && Array.isArray(plugin.plugins)
+        && isArray(plugin.plugins)
       ) {
         resolvePlugins.push.apply(resolvePlugins, plugin.plugins);
       }
@@ -313,9 +315,9 @@ function getResolveSync(configPath, webpackConfig, cwd) {
  * Find the full path to 'source', given 'file' as a full reference path.
  *
  * resolveImport('./foo', '/Users/ben/bar.js') => '/Users/ben/foo.js'
- * @param  {string} source - the module to resolve; i.e './some-module'
- * @param  {string} file - the importing file's full path; i.e. '/usr/local/bin/file.js'
- * @param  {object} settings - the webpack config file name, as well as cwd
+ * @param {string} source - the module to resolve; i.e './some-module'
+ * @param {string} file - the importing file's full path; i.e. '/usr/local/bin/file.js'
+ * @param {object} settings - the webpack config file name, as well as cwd
  * @example
  * options: {
  *  // Path to the webpack config
@@ -399,7 +401,7 @@ exports.resolve = function (source, file, settings) {
     webpackConfig = webpackConfig(env, argv);
   }
 
-  if (Array.isArray(webpackConfig)) {
+  if (isArray(webpackConfig)) {
     webpackConfig = webpackConfig.map((cfg) => {
       if (typeof cfg === 'function') {
         return cfg(env, argv);
