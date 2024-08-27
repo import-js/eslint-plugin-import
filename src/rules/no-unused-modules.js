@@ -16,53 +16,22 @@ import flatMap from 'array.prototype.flatmap';
 import ExportMapBuilder from '../exportMap/builder';
 import recursivePatternCapture from '../exportMap/patternCapture';
 import docsUrl from '../docsUrl';
+import { FileEnumeratorIsh } from '../FileEnumeratorIsh';
 
-let FileEnumerator;
-let listFilesToProcess;
+const listFilesToProcess = function (context, src) {
+  const extensions = Array.from(getFileExtensions(context.settings));
 
-try {
-  ({ FileEnumerator } = require('eslint/use-at-your-own-risk'));
-} catch (e) {
-  try {
-    // has been moved to eslint/lib/cli-engine/file-enumerator in version 6
-    ({ FileEnumerator } = require('eslint/lib/cli-engine/file-enumerator'));
-  } catch (e) {
-    try {
-      // eslint/lib/util/glob-util has been moved to eslint/lib/util/glob-utils with version 5.3
-      const { listFilesToProcess: originalListFilesToProcess } = require('eslint/lib/util/glob-utils');
+  const e = new FileEnumeratorIsh({
+    cwd: context.cwd,
+    extensions,
+    ...context.session,
+  });
 
-      // Prevent passing invalid options (extensions array) to old versions of the function.
-      // https://github.com/eslint/eslint/blob/v5.16.0/lib/util/glob-utils.js#L178-L280
-      // https://github.com/eslint/eslint/blob/v5.2.0/lib/util/glob-util.js#L174-L269
-      listFilesToProcess = function (src, extensions) {
-        return originalListFilesToProcess(src, {
-          extensions,
-        });
-      };
-    } catch (e) {
-      const { listFilesToProcess: originalListFilesToProcess } = require('eslint/lib/util/glob-util');
-
-      listFilesToProcess = function (src, extensions) {
-        const patterns = src.concat(flatMap(src, (pattern) => extensions.map((extension) => (/\*\*|\*\./).test(pattern) ? pattern : `${pattern}/**/*${extension}`)));
-
-        return originalListFilesToProcess(patterns);
-      };
-    }
-  }
-}
-
-if (FileEnumerator) {
-  listFilesToProcess = function (src, extensions) {
-    const e = new FileEnumerator({
-      extensions,
-    });
-
-    return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({
-      ignored,
-      filename: filePath,
-    }));
-  };
-}
+  return Array.from(e.iterateFiles(src), ({ filePath, ignored }) => ({
+    ignored,
+    filename: filePath,
+  }));
+};
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration';
 const EXPORT_NAMED_DECLARATION = 'ExportNamedDeclaration';
@@ -174,12 +143,10 @@ const isNodeModule = (path) => (/\/(node_modules)\//).test(path);
  * return all files matching src pattern, which are not matching the ignoreExports pattern
  */
 const resolveFiles = (src, ignoreExports, context) => {
-  const extensions = Array.from(getFileExtensions(context.settings));
-
-  const srcFileList = listFilesToProcess(src, extensions);
+  const srcFileList = listFilesToProcess(context, src);
 
   // prepare list of ignored files
-  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
+  const ignoredFilesList = listFilesToProcess(context, ignoreExports);
   ignoredFilesList.forEach(({ filename }) => ignoredFiles.add(filename));
 
   // prepare list of source files, don't consider files from node_modules
