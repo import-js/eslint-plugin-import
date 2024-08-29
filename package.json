@@ -11,6 +11,7 @@
   },
   "files": [
     "*.md",
+    "!{CONTRIBUTING,RELEASE}.md",
     "LICENSE",
     "docs",
     "lib",
