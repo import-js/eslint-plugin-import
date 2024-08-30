@@ -3,20 +3,25 @@
 import minimatch from 'minimatch';
 import includes from 'array-includes';
 import groupBy from 'object.groupby';
-import { getSourceCode } from 'eslint-module-utils/contextCompat';
+import { getScope, getSourceCode } from 'eslint-module-utils/contextCompat';
+import trimEnd from 'string.prototype.trimend';
 
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
 import docsUrl from '../docsUrl';
+
+const categories = {
+  named: 'named',
+  import: 'import',
+  exports: 'exports',
+};
 
 const defaultGroups = ['builtin', 'external', 'parent', 'sibling', 'index'];
 
 // REPORTING AND FIXING
 
 function reverse(array) {
-  return array.map(function (v) {
-    return { ...v, rank: -v.rank };
-  }).reverse();
+  return array.map((v) => ({ ...v, rank: -v.rank })).reverse();
 }
 
 function getTokensOrCommentsAfter(sourceCode, node, count) {
@@ -131,6 +136,26 @@ function findStartOfLineWithComments(sourceCode, node) {
   return result;
 }
 
+function findSpecifierStart(sourceCode, node) {
+  let token;
+
+  do {
+    token = sourceCode.getTokenBefore(node);
+  } while (token.value !== ',' && token.value !== '{');
+
+  return token.range[1];
+}
+
+function findSpecifierEnd(sourceCode, node) {
+  let token;
+
+  do {
+    token = sourceCode.getTokenAfter(node);
+  } while (token.value !== ',' && token.value !== '}');
+
+  return token.range[0];
+}
+
 function isRequireExpression(expr) {
   return expr != null
     && expr.type === 'CallExpression'
@@ -170,6 +195,49 @@ function isPlainImportEquals(node) {
   return node.type === 'TSImportEqualsDeclaration' && node.moduleReference.expression;
 }
 
+function isCJSExports(context, node) {
+  if (
+    node.type === 'MemberExpression'
+    && node.object.type === 'Identifier'
+    && node.property.type === 'Identifier'
+    && node.object.name === 'module'
+    && node.property.name === 'exports'
+  ) {
+    return getScope(context, node).variables.findIndex((variable) => variable.name === 'module') === -1;
+  }
+  if (
+    node.type === 'Identifier'
+    && node.name === 'exports'
+  ) {
+    return getScope(context, node).variables.findIndex((variable) => variable.name === 'exports') === -1;
+  }
+}
+
+function getNamedCJSExports(context, node) {
+  if (node.type !== 'MemberExpression') {
+    return;
+  }
+  const result = [];
+  let root = node;
+  let parent = null;
+  while (root.type === 'MemberExpression') {
+    if (root.property.type !== 'Identifier') {
+      return;
+    }
+    result.unshift(root.property.name);
+    parent = root;
+    root = root.object;
+  }
+
+  if (isCJSExports(context, root)) {
+    return result;
+  }
+
+  if (isCJSExports(context, parent)) {
+    return result.slice(1);
+  }
+}
+
 function canCrossNodeWhileReorder(node) {
   return isSupportedRequireModule(node) || isPlainImportModule(node) || isPlainImportEquals(node);
 }
@@ -190,6 +258,12 @@ function canReorderItems(firstNode, secondNode) {
 }
 
 function makeImportDescription(node) {
+  if (node.type === 'export') {
+    if (node.node.exportKind === 'type') {
+      return 'type export';
+    }
+    return 'export';
+  }
   if (node.node.importKind === 'type') {
     return 'type import';
   }
@@ -199,58 +273,123 @@ function makeImportDescription(node) {
   return 'import';
 }
 
-function fixOutOfOrder(context, firstNode, secondNode, order) {
+function fixOutOfOrder(context, firstNode, secondNode, order, category) {
+  const isNamed = category === categories.named;
+  const isExports = category === categories.exports;
   const sourceCode = getSourceCode(context);
 
-  const firstRoot = findRootNode(firstNode.node);
-  const firstRootStart = findStartOfLineWithComments(sourceCode, firstRoot);
-  const firstRootEnd = findEndOfLineWithComments(sourceCode, firstRoot);
+  const {
+    firstRoot,
+    secondRoot,
+  } = isNamed ? {
+    firstRoot: firstNode.node,
+    secondRoot: secondNode.node,
+  } : {
+    firstRoot: findRootNode(firstNode.node),
+    secondRoot: findRootNode(secondNode.node),
+  };
 
-  const secondRoot = findRootNode(secondNode.node);
-  const secondRootStart = findStartOfLineWithComments(sourceCode, secondRoot);
-  const secondRootEnd = findEndOfLineWithComments(sourceCode, secondRoot);
-  const canFix = canReorderItems(firstRoot, secondRoot);
+  const {
+    firstRootStart,
+    firstRootEnd,
+    secondRootStart,
+    secondRootEnd,
+  } = isNamed ? {
+    firstRootStart: findSpecifierStart(sourceCode, firstRoot),
+    firstRootEnd: findSpecifierEnd(sourceCode, firstRoot),
+    secondRootStart: findSpecifierStart(sourceCode, secondRoot),
+    secondRootEnd: findSpecifierEnd(sourceCode, secondRoot),
+  } : {
+    firstRootStart: findStartOfLineWithComments(sourceCode, firstRoot),
+    firstRootEnd: findEndOfLineWithComments(sourceCode, firstRoot),
+    secondRootStart: findStartOfLineWithComments(sourceCode, secondRoot),
+    secondRootEnd: findEndOfLineWithComments(sourceCode, secondRoot),
+  };
 
-  let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd);
-  if (newCode[newCode.length - 1] !== '\n') {
-    newCode = `${newCode}\n`;
+  if (firstNode.displayName === secondNode.displayName) {
+    if (firstNode.alias) {
+      firstNode.displayName = `${firstNode.displayName} as ${firstNode.alias}`;
+    }
+    if (secondNode.alias) {
+      secondNode.displayName = `${secondNode.displayName} as ${secondNode.alias}`;
+    }
   }
 
   const firstImport = `${makeImportDescription(firstNode)} of \`${firstNode.displayName}\``;
   const secondImport = `\`${secondNode.displayName}\` ${makeImportDescription(secondNode)}`;
   const message = `${secondImport} should occur ${order} ${firstImport}`;
 
-  if (order === 'before') {
-    context.report({
-      node: secondNode.node,
-      message,
-      fix: canFix && ((fixer) => fixer.replaceTextRange(
-        [firstRootStart, secondRootEnd],
-        newCode + sourceCode.text.substring(firstRootStart, secondRootStart),
-      )),
-    });
-  } else if (order === 'after') {
-    context.report({
-      node: secondNode.node,
-      message,
-      fix: canFix && ((fixer) => fixer.replaceTextRange(
-        [secondRootStart, firstRootEnd],
-        sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode,
-      )),
-    });
+  if (isNamed) {
+    const firstCode = sourceCode.text.slice(firstRootStart, firstRoot.range[1]);
+    const firstTrivia = sourceCode.text.slice(firstRoot.range[1], firstRootEnd);
+    const secondCode = sourceCode.text.slice(secondRootStart, secondRoot.range[1]);
+    const secondTrivia = sourceCode.text.slice(secondRoot.range[1], secondRootEnd);
+
+    if (order === 'before') {
+      const trimmedTrivia = trimEnd(secondTrivia);
+      const gapCode = sourceCode.text.slice(firstRootEnd, secondRootStart - 1);
+      const whitespaces = secondTrivia.slice(trimmedTrivia.length);
+      context.report({
+        node: secondNode.node,
+        message,
+        fix: (fixer) => fixer.replaceTextRange(
+          [firstRootStart, secondRootEnd],
+          `${secondCode},${trimmedTrivia}${firstCode}${firstTrivia}${gapCode}${whitespaces}`,
+        ),
+      });
+    } else if (order === 'after') {
+      const trimmedTrivia = trimEnd(firstTrivia);
+      const gapCode = sourceCode.text.slice(secondRootEnd + 1, firstRootStart);
+      const whitespaces = firstTrivia.slice(trimmedTrivia.length);
+      context.report({
+        node: secondNode.node,
+        message,
+        fix: (fixes) => fixes.replaceTextRange(
+          [secondRootStart, firstRootEnd],
+          `${gapCode}${firstCode},${trimmedTrivia}${secondCode}${whitespaces}`,
+        ),
+      });
+    }
+  } else {
+    const canFix = isExports || canReorderItems(firstRoot, secondRoot);
+    let newCode = sourceCode.text.substring(secondRootStart, secondRootEnd);
+
+    if (newCode[newCode.length - 1] !== '\n') {
+      newCode = `${newCode}\n`;
+    }
+
+    if (order === 'before') {
+      context.report({
+        node: secondNode.node,
+        message,
+        fix: canFix && ((fixer) => fixer.replaceTextRange(
+          [firstRootStart, secondRootEnd],
+          newCode + sourceCode.text.substring(firstRootStart, secondRootStart),
+        )),
+      });
+    } else if (order === 'after') {
+      context.report({
+        node: secondNode.node,
+        message,
+        fix: canFix && ((fixer) => fixer.replaceTextRange(
+          [secondRootStart, firstRootEnd],
+          sourceCode.text.substring(secondRootEnd, firstRootEnd) + newCode,
+        )),
+      });
+    }
   }
 }
 
-function reportOutOfOrder(context, imported, outOfOrder, order) {
+function reportOutOfOrder(context, imported, outOfOrder, order, category) {
   outOfOrder.forEach(function (imp) {
     const found = imported.find(function hasHigherRank(importedItem) {
       return importedItem.rank > imp.rank;
     });
-    fixOutOfOrder(context, found, imp, order);
+    fixOutOfOrder(context, found, imp, order, category);
   });
 }
 
-function makeOutOfOrderReport(context, imported) {
+function makeOutOfOrderReport(context, imported, category) {
   const outOfOrder = findOutOfOrder(imported);
   if (!outOfOrder.length) {
     return;
@@ -260,10 +399,10 @@ function makeOutOfOrderReport(context, imported) {
   const reversedImported = reverse(imported);
   const reversedOrder = findOutOfOrder(reversedImported);
   if (reversedOrder.length < outOfOrder.length) {
-    reportOutOfOrder(context, reversedImported, reversedOrder, 'after');
+    reportOutOfOrder(context, reversedImported, reversedOrder, 'after', category);
     return;
   }
-  reportOutOfOrder(context, imported, outOfOrder, 'before');
+  reportOutOfOrder(context, imported, outOfOrder, 'before', category);
 }
 
 const compareString = (a, b) => {
@@ -642,6 +781,30 @@ module.exports = {
               'never',
             ],
           },
+          named: {
+            default: false,
+            oneOf: [{
+              type: 'boolean',
+            }, {
+              type: 'object',
+              properties: {
+                enabled: { type: 'boolean' },
+                import: { type: 'boolean' },
+                export: { type: 'boolean' },
+                require: { type: 'boolean' },
+                cjsExports: { type: 'boolean' },
+                types: {
+                  type: 'string',
+                  enum: [
+                    'mixed',
+                    'types-first',
+                    'types-last',
+                  ],
+                },
+              },
+              additionalProperties: false,
+            }],
+          },
           alphabetize: {
             type: 'object',
             properties: {
@@ -670,10 +833,28 @@ module.exports = {
     ],
   },
 
-  create: function importOrderRule(context) {
+  create(context) {
     const options = context.options[0] || {};
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options.pathGroupsExcludedImportTypes || ['builtin', 'external', 'object']);
+
+    const named = {
+      types: 'mixed',
+      ...typeof options.named === 'object' ? {
+        ...options.named,
+        import: 'import' in options.named ? options.named.import : options.named.enabled,
+        export: 'export' in options.named ? options.named.export : options.named.enabled,
+        require: 'require' in options.named ? options.named.require : options.named.enabled,
+        cjsExports: 'cjsExports' in options.named ? options.named.cjsExports : options.named.enabled,
+      } : {
+        import: options.named,
+        export: options.named,
+        require: options.named,
+        cjsExports: options.named,
+      },
+    };
+
+    const namedGroups = named.types === 'mixed' ? [] : named.types === 'types-last' ? ['value'] : ['type'];
     const alphabetize = getAlphabetizeConfig(options);
     const distinctGroup = options.distinctGroup == null ? defaultDistinctGroup : !!options.distinctGroup;
     let ranks;
@@ -696,6 +877,7 @@ module.exports = {
       };
     }
     const importMap = new Map();
+    const exportMap = new Map();
 
     function getBlockImports(node) {
       if (!importMap.has(node)) {
@@ -704,8 +886,38 @@ module.exports = {
       return importMap.get(node);
     }
 
+    function getBlockExports(node) {
+      if (!exportMap.has(node)) {
+        exportMap.set(node, []);
+      }
+      return exportMap.get(node);
+    }
+
+    function makeNamedOrderReport(context, namedImports) {
+      if (namedImports.length > 1) {
+        const imports = namedImports.map(
+          (namedImport) => {
+            const kind = namedImport.kind || 'value';
+            const rank = namedGroups.findIndex((entry) => [].concat(entry).indexOf(kind) > -1);
+
+            return {
+              displayName: namedImport.value,
+              rank: rank === -1 ? namedGroups.length : rank,
+              ...namedImport,
+              value: `${namedImport.value}:${namedImport.alias || ''}`,
+            };
+          });
+
+        if (alphabetize.order !== 'ignore') {
+          mutateRanksToAlphabetize(imports, alphabetize);
+        }
+
+        makeOutOfOrderReport(context, imports, categories.named);
+      }
+    }
+
     return {
-      ImportDeclaration: function handleImports(node) {
+      ImportDeclaration(node) {
         // Ignoring unassigned imports unless warnOnUnassignedImports is set
         if (node.specifiers.length || options.warnOnUnassignedImports) {
           const name = node.source.value;
@@ -721,9 +933,27 @@ module.exports = {
             getBlockImports(node.parent),
             pathGroupsExcludedImportTypes,
           );
+
+          if (named.import) {
+            makeNamedOrderReport(
+              context,
+              node.specifiers.filter(
+                (specifier) => specifier.type === 'ImportSpecifier').map(
+                (specifier) => ({
+                  node: specifier,
+                  value: specifier.imported.name,
+                  type: 'import',
+                  kind: specifier.importKind,
+                  ...specifier.local.range[0] !== specifier.imported.range[0] && {
+                    alias: specifier.local.name,
+                  },
+                }),
+              ),
+            );
+          }
         }
       },
-      TSImportEqualsDeclaration: function handleImports(node) {
+      TSImportEqualsDeclaration(node) {
         // skip "export import"s
         if (node.isExport) {
           return;
@@ -755,7 +985,7 @@ module.exports = {
           pathGroupsExcludedImportTypes,
         );
       },
-      CallExpression: function handleRequires(node) {
+      CallExpression(node) {
         if (!isStaticRequire(node)) {
           return;
         }
@@ -777,7 +1007,90 @@ module.exports = {
           pathGroupsExcludedImportTypes,
         );
       },
-      'Program:exit': function reportAndReset() {
+      ...named.require && {
+        VariableDeclarator(node) {
+          if (node.id.type === 'ObjectPattern' && isRequireExpression(node.init)) {
+            for (let i = 0; i < node.id.properties.length; i++) {
+              if (
+                node.id.properties[i].key.type !== 'Identifier'
+                || node.id.properties[i].value.type !== 'Identifier'
+              ) {
+                return;
+              }
+            }
+            makeNamedOrderReport(
+              context,
+              node.id.properties.map((prop) => ({
+                node: prop,
+                value: prop.key.name,
+                type: 'require',
+                ...prop.key.range[0] !== prop.value.range[0] && {
+                  alias: prop.value.name,
+                },
+              })),
+            );
+          }
+        },
+      },
+      ...named.export && {
+        ExportNamedDeclaration(node) {
+          makeNamedOrderReport(
+            context,
+            node.specifiers.map((specifier) => ({
+              node: specifier,
+              value: specifier.local.name,
+              type: 'export',
+              kind: specifier.exportKind,
+              ...specifier.local.range[0] !== specifier.exported.range[0] && {
+                alias: specifier.exported.name,
+              },
+            })),
+          );
+        },
+      },
+      ...named.cjsExports && {
+        AssignmentExpression(node) {
+          if (node.parent.type === 'ExpressionStatement') {
+            if (isCJSExports(context, node.left)) {
+              if (node.right.type === 'ObjectExpression') {
+                for (let i = 0; i < node.right.properties.length; i++) {
+                  if (
+                    node.right.properties[i].key.type !== 'Identifier'
+                    || node.right.properties[i].value.type !== 'Identifier'
+                  ) {
+                    return;
+                  }
+                }
+
+                makeNamedOrderReport(
+                  context,
+                  node.right.properties.map((prop) => ({
+                    node: prop,
+                    value: prop.key.name,
+                    type: 'export',
+                    ...prop.key.range[0] !== prop.value.range[0] && {
+                      alias: prop.value.name,
+                    },
+                  })),
+                );
+              }
+            } else {
+              const nameParts = getNamedCJSExports(context, node.left);
+              if (nameParts && nameParts.length > 0) {
+                const name = nameParts.join('.');
+                getBlockExports(node.parent.parent).push({
+                  node,
+                  value: name,
+                  displayName: name,
+                  type: 'export',
+                  rank: 0,
+                });
+              }
+            }
+          }
+        },
+      },
+      'Program:exit'() {
         importMap.forEach((imported) => {
           if (newlinesBetweenImports !== 'ignore') {
             makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup);
@@ -787,10 +1100,18 @@ module.exports = {
             mutateRanksToAlphabetize(imported, alphabetize);
           }
 
-          makeOutOfOrderReport(context, imported);
+          makeOutOfOrderReport(context, imported, categories.import);
+        });
+
+        exportMap.forEach((exported) => {
+          if (alphabetize.order !== 'ignore') {
+            mutateRanksToAlphabetize(exported, alphabetize);
+            makeOutOfOrderReport(context, exported, categories.exports);
+          }
         });
 
         importMap.clear();
+        exportMap.clear();
       },
     };
   },

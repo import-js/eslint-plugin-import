@@ -285,6 +285,78 @@ import index from './';
 import sibling from './foo';
 ```
 
+### `named: true|false|{ enabled: true|false, import: true|false, export: true|false, require: true|false, cjsExports: true|false, types: mixed|types-first|types-last }`
+
+Enforce ordering of names within imports and exports:
+
+ - If set to `true`, named imports must be ordered according to the `alphabetize` options
+ - If set to `false`, named imports can occur in any order
+
+`enabled` enables the named ordering for all expressions by default.
+Use `import`, `export` and `require` and `cjsExports` to override the enablement for the following kind of expressions:
+
+ - `import`:
+
+   ```ts
+   import { Readline } from "readline";
+   ```
+
+ - `export`:
+
+   ```ts
+   export { Readline };
+   // and
+   export { Readline } from "readline";
+   ```
+
+ - `require`
+
+   ```ts
+   const { Readline } = require("readline");
+   ```
+
+ - `cjsExports`
+
+   ```ts
+   module.exports.Readline = Readline;
+   // and
+   module.exports = { Readline };
+   ```
+
+The `types` option allows you to specify the order of `import`s and `export`s of `type` specifiers.
+Following values are possible:
+
+ - `types-first`: forces `type` specifiers to occur first
+ - `types-last`: forces value specifiers to occur first
+ - `mixed`: sorts all specifiers in alphabetical order
+
+The default value is `false`.
+
+Example setting:
+
+```ts
+{
+  named: true,
+  alphabetize: {
+    order: 'asc'
+  }
+}
+```
+
+This will fail the rule check:
+
+```ts
+/* eslint import/order: ["error", {"named": true, "alphabetize": {"order": "asc"}}] */
+import { compose, apply } from 'xcompose';
+```
+
+While this will pass:
+
+```ts
+/* eslint import/order: ["error", {"named": true, "alphabetize": {"order": "asc"}}] */
+import { apply, compose } from 'xcompose';
+```
+
 ### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`
 
 Sort the order within each group in alphabetical manner based on **import path**:
