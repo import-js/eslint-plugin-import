@@ -1001,7 +1001,7 @@ ruleTester.run('dynamic-import-chunkname', rule, {
           {
             desc: 'Remove webpackChunkName',
             output: `import(
-        
+        ${''}
         /* webpackMode: "eager" */
         'someModule'
       )`,
@@ -1010,7 +1010,7 @@ ruleTester.run('dynamic-import-chunkname', rule, {
             desc: 'Remove webpackMode',
             output: `import(
         /* webpackChunkName: "someModule" */
-        
+        ${''}
         'someModule'
       )`,
           },

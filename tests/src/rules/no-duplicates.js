@@ -455,28 +455,28 @@ import {x,y} from './foo'
         import {
           BULK_ACTIONS_ENABLED
         } from '../constants';
-        
+        ${''}
         const TestComponent = () => {
           return <div>
           </div>;
         }
-        
+        ${''}
         export default TestComponent;
       `,
       output: `
         import {
           DEFAULT_FILTER_KEYS,
           BULK_DISABLED,
-        
+        ${''}
           BULK_ACTIONS_ENABLED
         } from '../constants';
         import React from 'react';
-                
+                ${''}
         const TestComponent = () => {
           return <div>
           </div>;
         }
-        
+        ${''}
         export default TestComponent;
       `,
       errors: ["'../constants' imported multiple times.", "'../constants' imported multiple times."],
