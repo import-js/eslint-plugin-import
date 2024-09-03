@@ -229,7 +229,8 @@ const erroredContexts = new Set();
  */
 function resolve(p, context) {
   try {
-    return relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context.settings);
+    const relativePath = relative(p, context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(), context.settings);
+    return relativePath && fs.realpathSync(relativePath);
   } catch (err) {
     if (!erroredContexts.has(context)) {
       // The `err.stack` string starts with `err.name` followed by colon and `err.message`.

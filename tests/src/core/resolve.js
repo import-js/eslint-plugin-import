@@ -349,6 +349,21 @@ describe('resolve', function () {
     });
   });
 
+  it('resolves symlinks', function () {
+    const testContext = utils.testContext({ 'import/resolve': { extensions: ['.js'] } });
+    const testContextReports = [];
+
+    testContext.getFilename = function () { return utils.getFilename('foo.js'); };
+    testContext.report = function (reportInfo) {
+      testContextReports.push(reportInfo);
+    };
+
+    expect(resolve(path.join('..', 'files', 'monorepo', 'node_modules', 'nested-monorepo-pkg', 'index.js')
+      , testContext,
+    )).to.equal(utils.testFilePath(path.join('monorepo', 'packages', 'nested-package', 'index.js')));
+    expect(testContextReports.length).to.equal(0);
+  });
+
   const caseDescribe = !CASE_SENSITIVE_FS ? describe : describe.skip;
   caseDescribe('case sensitivity', function () {
     let file;
