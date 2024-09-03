@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.9.0 - 2024-09-02
+
+### New
+- add support for Flat Config ([#3018], thanks [@michaelfaith])
+
 ## v2.8.2 - 2024-08-25
 
 ### Fixed
@@ -151,6 +156,7 @@ Yanked due to critical issue with cache key resulting from #839.
 - `unambiguous.test()` regex is now properly in multiline mode
 
 [#3039]: https://github.com/import-js/eslint-plugin-import/pull/3039
+[#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
 [#2963]: https://github.com/import-js/eslint-plugin-import/pull/2963
 [#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
 [#2714]: https://github.com/import-js/eslint-plugin-import/pull/2714
@@ -197,6 +203,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@mgwalker]: https://github.com/mgwalker
+[@michaelfaith]: https://github.com/michaelfaith
 [@Mysak0CZ]: https://github.com/Mysak0CZ
 [@nicolo-ribaudo]: https://github.com/nicolo-ribaudo
 [@pmcelhaney]: https://github.com/pmcelhaney
