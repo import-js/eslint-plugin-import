@@ -5,7 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## 0.13.9 - 2024-09-02
 - [refactor] simplify loop ([#3029], thanks [@fregante])
+- [meta] add `repository.directory` field
+- [refactor] avoid hoisting, misc cleanup
 
 ## 0.13.8 - 2023-10-22
  - [refactor] use `hasown` instead of `has`
