@@ -336,10 +336,10 @@ const invalid = [].concat(
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e.f)` }),
     test({ parser, code: `import * as a from "./${folder}/a"; var {b:{c:{d:{e}}}} = a` }),
-    test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }));
-
-  // deep namespaces should include explicitly exported defaults
-  test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
+    test({ parser, code: `import { b } from "./${folder}/a"; var {c:{d:{e}}} = b` }),
+    // deep namespaces should include explicitly exported defaults
+    test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.default)` }),
+  );
 
   invalid.push(
     test({
@@ -371,7 +371,8 @@ const invalid = [].concat(
       parser,
       code: `import * as a from "./${folder}/a"; var {b:{c:{ e }}} = a`,
       errors: ["'e' not found in deeply imported namespace 'a.b.c'."],
-    }));
+    }),
+  );
 });
 
 ruleTester.run('namespace', rule, { valid, invalid });
