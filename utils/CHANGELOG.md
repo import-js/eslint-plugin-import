@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### New
+- add context compatibility helpers ([#3049], thanks [@michaelfaith])
+
 ## v2.9.0 - 2024-09-02
 
 ### New
@@ -155,6 +158,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3049]: https://github.com/import-js/eslint-plugin-import/pull/3049
 [#3039]: https://github.com/import-js/eslint-plugin-import/pull/3039
 [#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
 [#2963]: https://github.com/import-js/eslint-plugin-import/pull/2963
