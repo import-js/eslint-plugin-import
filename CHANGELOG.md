@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
+
 ## [2.30.0] - 2024-09-02
 
 ### Added
@@ -1129,6 +1132,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3052]: https://github.com/import-js/eslint-plugin-import/pull/3052
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
 [#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
 [#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
