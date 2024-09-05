@@ -65,7 +65,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
 - [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
 - [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
-- [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#1820], thanks [@andyogo])
+- [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#2735], thanks [@andyogo])
 - [`newline-after-import`]/TypeScript: do not error when re-exporting a namespaced import ([#2832], thanks [@laurens-dg])
 - [`order`]: partial fix for [#2687] (thanks [@ljharb])
 - [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
@@ -321,7 +321,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks [@leonardodino])
 - [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks [@fa93hws])
 - [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks [@ljharb])
-- [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
+- [`no-unused-modules`]: make type imports mark a module as used (fixes [#1924]) ([#1974], thanks [@cherryblossom000])
 - [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 - [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
 - [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
@@ -349,7 +349,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: allow single quotes to match Webpack support ([#1848], thanks [@straub])
 
 ### Changed
-- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
+- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks [@tomprats])
 
 ## [2.22.0] - 2020-06-26
 
@@ -1473,10 +1473,7 @@ for info on changes for earlier releases.
 [#297]: https://github.com/import-js/eslint-plugin-import/pull/297
 [#296]: https://github.com/import-js/eslint-plugin-import/pull/296
 [#290]: https://github.com/import-js/eslint-plugin-import/pull/290
-[#289]: https://github.com/import-js/eslint-plugin-import/pull/289
 [#288]: https://github.com/import-js/eslint-plugin-import/pull/288
-[#287]: https://github.com/import-js/eslint-plugin-import/pull/287
-[#278]: https://github.com/import-js/eslint-plugin-import/pull/278
 [#261]: https://github.com/import-js/eslint-plugin-import/pull/261
 [#256]: https://github.com/import-js/eslint-plugin-import/pull/256
 [#254]: https://github.com/import-js/eslint-plugin-import/pull/254
@@ -1488,7 +1485,6 @@ for info on changes for earlier releases.
 [#239]: https://github.com/import-js/eslint-plugin-import/pull/239
 [#228]: https://github.com/import-js/eslint-plugin-import/pull/228
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
-[#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
 
 [ljharb#37]: https://github.com/ljharb/eslint-plugin-import/pull/37
@@ -1601,7 +1597,6 @@ for info on changes for earlier releases.
 [#313]: https://github.com/import-js/eslint-plugin-import/issues/313
 [#311]: https://github.com/import-js/eslint-plugin-import/issues/311
 [#306]: https://github.com/import-js/eslint-plugin-import/issues/306
-[#286]: https://github.com/import-js/eslint-plugin-import/issues/286
 [#283]: https://github.com/import-js/eslint-plugin-import/issues/283
 [#281]: https://github.com/import-js/eslint-plugin-import/issues/281
 [#275]: https://github.com/import-js/eslint-plugin-import/issues/275
@@ -1651,10 +1646,9 @@ for info on changes for earlier releases.
 [2.22.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.1...v2.22.0
 [2.21.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.1...v2.21.2
 [2.21.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.0...v2.21.1
-[2.21.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.2...v2.21.0
-[2.20.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.1...v2.20.2
-[2.20.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.0...v2.20.1
-[2.19.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.1...v2.20.0
+[2.21.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.1...v2.21.0
+[2.20.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.0...v2.20.1
+[2.20.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.18.1...v2.18.2
@@ -1966,7 +1960,6 @@ for info on changes for earlier releases.
 [@sveyret]: https://github.com/sveyret
 [@swernerx]: https://github.com/swernerx
 [@syymza]: https://github.com/syymza
-[@taion]: https://github.com/taion
 [@TakeScoop]: https://github.com/TakeScoop
 [@tapayne88]: https://github.com/tapayne88
 [@Taranys]: https://github.com/Taranys
