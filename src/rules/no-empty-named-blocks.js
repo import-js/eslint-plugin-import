@@ -1,3 +1,5 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 function getEmptyBlockRange(tokens, index) {
@@ -72,7 +74,7 @@ module.exports = {
                       fix(fixer) {
                         // Remove the empty block and the 'from' token, leaving the import only for its side
                         // effects, e.g. `import 'mod'`
-                        const sourceCode = context.getSourceCode();
+                        const sourceCode = getSourceCode(context);
                         const fromToken = program.tokens.find((t) => t.value === 'from');
                         const importToken = program.tokens.find((t) => t.value === 'import');
                         const hasSpaceAfterFrom = sourceCode.isSpaceBetween(fromToken, sourceCode.getTokenAfter(fromToken));

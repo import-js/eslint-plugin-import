@@ -1,3 +1,4 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
 import resolve from 'eslint-module-utils/resolve';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
@@ -260,7 +261,7 @@ function checkImports(imported, context) {
     if (nodes.length > 1) {
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
-      const sourceCode = context.getSourceCode();
+      const sourceCode = getSourceCode(context);
       const fix = getFix(first, rest, sourceCode, context);
 
       context.report({

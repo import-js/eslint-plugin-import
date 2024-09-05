@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs';
-import pkgUp from 'eslint-module-utils/pkgUp';
 import minimatch from 'minimatch';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
+import pkgUp from 'eslint-module-utils/pkgUp';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
+
 import importType from '../core/importType';
 import { getFilePackageName } from '../core/packagePath';
 import docsUrl from '../docsUrl';
@@ -84,7 +86,7 @@ function getDependencies(context, packageDir) {
       });
     } else {
       const packageJsonPath = pkgUp({
-        cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(),
+        cwd: getPhysicalFilename(context),
         normalize: false,
       });
 
@@ -283,7 +285,7 @@ module.exports = {
 
   create(context) {
     const options = context.options[0] || {};
-    const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+    const filename = getPhysicalFilename(context);
     const deps = getDependencies(context, options.packageDir) || extractDepFields({});
 
     const depsOptions = {

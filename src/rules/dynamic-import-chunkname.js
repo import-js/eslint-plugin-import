@@ -1,4 +1,6 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
 import vm from 'vm';
+
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -43,7 +45,7 @@ module.exports = {
     const eagerModeRegex = new RegExp(eagerModeFormat);
 
     function run(node, arg) {
-      const sourceCode = context.getSourceCode();
+      const sourceCode = getSourceCode(context);
       const leadingComments = sourceCode.getCommentsBefore
         ? sourceCode.getCommentsBefore(arg) // This method is available in ESLint >= 4.
         : sourceCode.getComments(arg).leading; // This method is deprecated in ESLint 7.

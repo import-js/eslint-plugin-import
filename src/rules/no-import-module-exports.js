@@ -1,9 +1,10 @@
 import minimatch from 'minimatch';
 import path from 'path';
+import { getPhysicalFilename, getSourceCode } from 'eslint-module-utils/contextCompat';
 import pkgUp from 'eslint-module-utils/pkgUp';
 
 function getEntryPoint(context) {
-  const pkgPath = pkgUp({ cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename() });
+  const pkgPath = pkgUp({ cwd: getPhysicalFilename(context) });
   try {
     return require.resolve(path.dirname(pkgPath));
   } catch (error) {
@@ -14,7 +15,7 @@ function getEntryPoint(context) {
 }
 
 function findScope(context, identifier) {
-  const { scopeManager } = context.getSourceCode();
+  const { scopeManager } = getSourceCode(context);
 
   return scopeManager && scopeManager.scopes.slice().reverse().find((scope) => scope.variables.some((variable) => variable.identifiers.some((node) => node.name === identifier)));
 }
@@ -50,7 +51,7 @@ module.exports = {
     let alreadyReported = false;
 
     function report(node) {
-      const fileName = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+      const fileName = getPhysicalFilename(context);
       const isEntryPoint = entryPoint === fileName;
       const isIdentifier = node.object.type === 'Identifier';
       const hasKeywords = (/^(module|exports)$/).test(node.object.name);

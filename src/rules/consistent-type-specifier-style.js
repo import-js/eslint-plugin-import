@@ -1,3 +1,5 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 function isComma(token) {
@@ -55,7 +57,7 @@ module.exports = {
   },
 
   create(context) {
-    const sourceCode = context.getSourceCode();
+    const sourceCode = getSourceCode(context);
 
     if (context.options[0] === 'prefer-inline') {
       return {

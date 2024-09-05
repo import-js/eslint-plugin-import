@@ -1,11 +1,12 @@
 import path from 'path';
-
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import isGlob from 'is-glob';
 import { Minimatch } from 'minimatch';
-import docsUrl from '../docsUrl';
+
 import importType from '../core/importType';
+import docsUrl from '../docsUrl';
 
 const containsPath = (filepath, target) => {
   const relative = path.relative(target, filepath);
@@ -85,7 +86,7 @@ module.exports = {
     const options = context.options[0] || {};
     const restrictedPaths = options.zones || [];
     const basePath = options.basePath || process.cwd();
-    const currentFilename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+    const currentFilename = getPhysicalFilename(context);
     const matchingZones = restrictedPaths.filter(
       (zone) => [].concat(zone.target)
         .map((target) => path.resolve(basePath, target))

@@ -1,3 +1,5 @@
+import { getScope } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -32,7 +34,7 @@ module.exports = {
     }
 
     function handleExportDefault(node) {
-      const scope = context.getScope();
+      const scope = getScope(context, node);
 
       if (node.declaration.name) {
         checkDeclarationsInScope(scope, node.declaration.name);
@@ -40,7 +42,7 @@ module.exports = {
     }
 
     function handleExportNamed(node) {
-      const scope = context.getScope();
+      const scope = getScope(context, node);
 
       if (node.declaration)  {
         checkDeclaration(node.declaration);

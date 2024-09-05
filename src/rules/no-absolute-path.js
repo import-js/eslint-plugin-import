@@ -1,5 +1,7 @@
 import path from 'path';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
+
 import { isAbsolute } from '../core/importType';
 import docsUrl from '../docsUrl';
 
@@ -22,9 +24,8 @@ module.exports = {
           node: source,
           message: 'Do not import modules using an absolute path',
           fix(fixer) {
-            const resolvedContext = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
             // node.js and web imports work with posix style paths ("/")
-            let relativePath = path.posix.relative(path.dirname(resolvedContext), source.value);
+            let relativePath = path.posix.relative(path.dirname(getPhysicalFilename(context)), source.value);
             if (!relativePath.startsWith('.')) {
               relativePath = `./${relativePath}`;
             }

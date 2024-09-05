@@ -1,3 +1,5 @@
+import { getDeclaredVariables, getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 function getImportValue(node) {
@@ -38,7 +40,7 @@ module.exports = {
         }
         const absoluteFirst = context.options[0] === 'absolute-first';
         const message = 'Import in body of module; reorder to top.';
-        const sourceCode = context.getSourceCode();
+        const sourceCode = getSourceCode(context);
         const originSourceCode = sourceCode.getText();
         let nonImportCount = 0;
         let anyExpressions = false;
@@ -66,7 +68,7 @@ module.exports = {
               }
             }
             if (nonImportCount > 0) {
-              for (const variable of context.getDeclaredVariables(node)) {
+              for (const variable of getDeclaredVariables(context, node)) {
                 if (!shouldSort) { break; }
                 const references = variable.references;
                 if (references.length) {

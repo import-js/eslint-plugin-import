@@ -3,6 +3,8 @@
  * @author Jamund Ferguson
  */
 
+import { getScope } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 const EXPORT_MESSAGE = 'Expected "export" or "export default"';
@@ -107,7 +109,7 @@ module.exports = {
 
         // exports.
         if (node.object.name === 'exports') {
-          const isInScope = context.getScope()
+          const isInScope = getScope(context, node)
             .variables
             .some((variable) => variable.name === 'exports');
           if (!isInScope) {
@@ -117,7 +119,7 @@ module.exports = {
 
       },
       CallExpression(call) {
-        if (!validateScope(context.getScope())) { return; }
+        if (!validateScope(getScope(context, call))) { return; }
 
         if (call.callee.type !== 'Identifier') { return; }
         if (call.callee.name !== 'require') { return; }

@@ -4,6 +4,7 @@
  * @author René Fermann
  */
 
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
@@ -609,7 +610,7 @@ module.exports = {
       doPreparation(src, ignoreExports, context);
     }
 
-    const file = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+    const file = getPhysicalFilename(context);
 
     const checkExportPresence = (node) => {
       if (!missingExports) {
