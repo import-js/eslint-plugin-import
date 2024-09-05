@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.10.0 - 2024-09-05
+
 ### New
 - add context compatibility helpers ([#3049], thanks [@michaelfaith])
 
