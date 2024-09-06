@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.11.0 - 2024-09-05
+
 ### New
 - `declaredScope`: take a `node` for modern eslint versions (thanks [@michaelfaith])
 
