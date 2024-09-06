@@ -87,7 +87,7 @@ module.exports = {
 
       // same as above, but does not add names to local map
       ExportNamespaceSpecifier(namespace) {
-        const declaration = importDeclaration(context);
+        const declaration = importDeclaration(context, namespace);
 
         const imports = ExportMapBuilder.get(declaration.source.value, context);
         if (imports == null) { return null; }
