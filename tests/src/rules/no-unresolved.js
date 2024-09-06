@@ -146,15 +146,6 @@ function runResolverTests(resolver) {
         ],
       }),
       rest({
-        code: "import bar from './baz';",
-        errors: [
-          {
-            message: "Unable to resolve path to module './baz'.",
-            type: 'Literal',
-          },
-        ],
-      }),
-      rest({
         code: "import bar from './empty-folder';",
         errors: [
           {

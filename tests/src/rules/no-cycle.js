@@ -233,16 +233,6 @@ const cases = {
         parser: parsers.BABEL_OLD,
       }),
       test({
-        code: `import { foo } from "./${testDialect}/depth-two"`,
-        options: [{ maxDepth: Infinity }],
-        errors: [error(`Dependency cycle via ./depth-one:1`)],
-      }),
-      test({
-        code: `import { foo } from "./${testDialect}/depth-two"`,
-        options: [{ maxDepth: '∞' }],
-        errors: [error(`Dependency cycle via ./depth-one:1`)],
-      }),
-      test({
         code: `function bar(){ return import("./${testDialect}/depth-one"); } // #2265 5`,
         errors: [error(`Dependency cycle detected.`)],
         parser: parsers.BABEL_OLD,

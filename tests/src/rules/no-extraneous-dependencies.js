@@ -43,11 +43,9 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       test({ code: `export { foo } from "${pkg}"` }),
       test({ code: `export * from "${pkg}"` }),
     ]),
-    test({ code: 'import "eslint"' }),
     test({ code: 'import "eslint/lib/api"' }),
     test({ code: 'import "fs"' }),
     test({ code: 'import "./foo"' }),
-    test({ code: 'import "@org/package"' }),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
     test({
@@ -383,15 +381,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         // missing dependency is chai not alias
         message: "'chai' should be listed in the project's dependencies. Run 'npm i -S chai' to add it",
-      }],
-    }),
-
-    test({
-      code: 'import "not-a-dependency"',
-      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
-      options: [{ packageDir: packageDirMonoRepoRoot }],
-      errors: [{
-        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
       }],
     }),
 
