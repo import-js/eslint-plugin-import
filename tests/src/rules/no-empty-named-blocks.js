@@ -10,6 +10,7 @@ function generateSuggestionsTestCases(cases, parser) {
     code,
     parser,
     errors: [{
+      message: 'Unexpected empty named import block',
       suggestions: [
         {
           desc: 'Remove unused import',
