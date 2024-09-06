@@ -98,7 +98,7 @@ module.exports = {
 
         if (!deprecated.has(node.name)) { return; }
 
-        if (declaredScope(context, node.name) !== 'module') { return; }
+        if (declaredScope(context, node.name, node) !== 'module') { return; }
         context.report({
           node,
           message: message(deprecated.get(node.name)),
@@ -109,7 +109,7 @@ module.exports = {
         if (dereference.object.type !== 'Identifier') { return; }
         if (!namespaces.has(dereference.object.name)) { return; }
 
-        if (declaredScope(context, dereference.object.name) !== 'module') { return; }
+        if (declaredScope(context, dereference.object.name, dereference) !== 'module') { return; }
 
         // go deep
         let namespace = namespaces.get(dereference.object.name);
