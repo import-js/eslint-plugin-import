@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+- `parse`: remove unneeded extra backticks ([#3057], thanks [@G-Rath])
+
 ## v2.11.0 - 2024-09-05
 
 ### New
@@ -165,6 +168,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3057]: https://github.com/import-js/eslint-plugin-import/pull/3057
 [#3049]: https://github.com/import-js/eslint-plugin-import/pull/3049
 [#3039]: https://github.com/import-js/eslint-plugin-import/pull/3039
 [#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
@@ -204,6 +208,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@brettz9]: https://github.com/brettz9
 [@christophercurrie]: https://github.com/christophercurrie
 [@DMartens]: https://github.com/DMartens
+[@G-Rath]: https://github.com/G-Rath
 [@hulkish]: https://github.com/hulkish
 [@Hypnosphi]: https://github.com/Hypnosphi
 [@iamnapo]: https://github.com/iamnapo
