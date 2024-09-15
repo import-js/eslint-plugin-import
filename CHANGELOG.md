@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`export`]: False positive for exported overloaded functions in TS ([#3065], thanks [@liuxingbaoyu])
 - `exportMap`: export map cache is tainted by unreliable parse results ([#3062], thanks [@michaelfaith])
 - `exportMap`: improve cacheKey when using flat config ([#3072], thanks [@michaelfaith])
+- adjust "is source type module" checks for flat config ([#2996], thanks [@G-Rath])
 
 ### Changed
 - [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
@@ -1165,6 +1166,7 @@ for info on changes for earlier releases.
 [#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
 [#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
 [#2998]: https://github.com/import-js/eslint-plugin-import/pull/2998
+[#2996]: https://github.com/import-js/eslint-plugin-import/pull/2996
 [#2993]: https://github.com/import-js/eslint-plugin-import/pull/2993
 [#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
 [#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
