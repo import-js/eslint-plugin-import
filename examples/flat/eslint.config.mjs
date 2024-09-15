@@ -20,6 +20,7 @@ export default [
       'import/no-dynamic-require': 'warn',
       'import/no-nodejs-modules': 'warn',
       'import/no-unused-modules': ['warn', { unusedExports: true }],
+      'import/no-cycle': 'warn',
     },
   },
 ];

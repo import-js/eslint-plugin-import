@@ -29,11 +29,17 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
   if (parsedResult && parsedResult.visitorKeys) {
     return parsedResult.visitorKeys;
   }
-  if (typeof parserPath === 'string' && (/.*espree.*/).test(parserPath)) {
-    return parserInstance.VisitorKeys;
-  }
+  // The old babel parser doesn't have a `parseForESLint` eslint function, so we don't end
+  // up with a `parsedResult` here.  It also doesn't expose the visitor keys on the parser itself,
+  // so we have to try and infer the visitor-keys module from the parserPath.
+  // This is NOT supported in flat config!
   if (typeof parserPath === 'string' && (/.*babel-eslint.*/).test(parserPath)) {
     return getBabelEslintVisitorKeys(parserPath);
+  }
+  // The espree parser doesn't have the `parseForESLint` function, so we don't ended up with a
+  // `parsedResult` here, but it does expose the visitor keys on the parser instance that we can use.
+  if (parserInstance && parserInstance.VisitorKeys) {
+    return parserInstance.VisitorKeys;
   }
   return null;
 }

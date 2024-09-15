@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - `parse`: remove unneeded extra backticks ([#3057], thanks [@G-Rath])
+- `parse`: espree parser isn't working with flat config ([#3061], thanks [@michaelfaith])
 
 ## v2.11.0 - 2024-09-05
 
@@ -168,6 +169,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3061]: https://github.com/import-js/eslint-plugin-import/pull/3061
 [#3057]: https://github.com/import-js/eslint-plugin-import/pull/3057
 [#3049]: https://github.com/import-js/eslint-plugin-import/pull/3049
 [#3039]: https://github.com/import-js/eslint-plugin-import/pull/3039
