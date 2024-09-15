@@ -92,7 +92,11 @@ export default class ExportMapBuilder {
 
     exportMap.mtime = stats.mtime;
 
-    exportCache.set(cacheKey, exportMap);
+    // If the visitor keys were not populated, then we shouldn't save anything to the cache,
+    // since the parse results may not be reliable.
+    if (exportMap.visitorKeys) {
+      exportCache.set(cacheKey, exportMap);
+    }
     return exportMap;
   }
 

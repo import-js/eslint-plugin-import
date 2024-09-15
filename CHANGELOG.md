@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
 - [`no-named-as-default`]: Allow using an identifier if the export is both a named and a default export ([#3032], thanks [@akwodkiewicz])
 - [`export`]: False positive for exported overloaded functions in TS ([#3065], thanks [@liuxingbaoyu])
+- `exportMap`: export map cache is tainted by unreliable parse results ([#3062], thanks [@michaelfaith])
 
 ### Changed
 - [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
@@ -1146,6 +1147,7 @@ for info on changes for earlier releases.
 [#3068]: https://github.com/import-js/eslint-plugin-import/pull/3068
 [#3066]: https://github.com/import-js/eslint-plugin-import/pull/3066
 [#3065]: https://github.com/import-js/eslint-plugin-import/pull/3065
+[#3062]: https://github.com/import-js/eslint-plugin-import/pull/3062
 [#3052]: https://github.com/import-js/eslint-plugin-import/pull/3052
 [#3043]: https://github.com/import-js/eslint-plugin-import/pull/3043
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036

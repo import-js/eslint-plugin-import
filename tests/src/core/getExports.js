@@ -1,15 +1,18 @@
 import { expect } from  'chai';
+import fs from 'fs';
 import semver from 'semver';
 import sinon from 'sinon';
 import eslintPkg from 'eslint/package.json';
+import { test as testUnambiguous } from 'eslint-module-utils/unambiguous';
 import typescriptPkg from 'typescript/package.json';
 import * as tsConfigLoader from 'tsconfig-paths/lib/tsconfig-loader';
+
 import ExportMapBuilder from '../../../src/exportMap/builder';
-
-import * as fs from 'fs';
-
 import { getFilename } from '../utils';
-import { test as testUnambiguous } from 'eslint-module-utils/unambiguous';
+
+const babelPath = require.resolve('babel-eslint');
+const hypotheticalLocation = babelPath.replace('index.js', 'visitor-keys.js');
+const isVisitorKeysSupported = fs.existsSync(hypotheticalLocation);
 
 describe('ExportMap', function () {
   const fakeContext = Object.assign(
@@ -21,7 +24,7 @@ describe('ExportMap', function () {
     },
     {
       settings: {},
-      parserPath: 'babel-eslint',
+      parserPath: require.resolve('babel-eslint'),
     },
   );
 
@@ -36,9 +39,18 @@ describe('ExportMap', function () {
 
   });
 
-  it('returns a cached copy on subsequent requests', function () {
+  (isVisitorKeysSupported ? it : it.skip)('returns a cached copy on subsequent requests', function () {
     expect(ExportMapBuilder.get('./named-exports', fakeContext))
       .to.exist.and.equal(ExportMapBuilder.get('./named-exports', fakeContext));
+  });
+
+  it('does not return a cached copy if the parse does not yield a visitor keys', function () {
+    const mockContext = {
+      ...fakeContext,
+      parserPath: 'not-real',
+    };
+    expect(ExportMapBuilder.get('./named-exports', mockContext))
+      .to.exist.and.not.equal(ExportMapBuilder.get('./named-exports', mockContext));
   });
 
   it('does not return a cached copy after modification', (done) => {
