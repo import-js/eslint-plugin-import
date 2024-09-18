@@ -36,7 +36,7 @@ function keysFromParser(parserPath, parserInstance, parsedResult) {
   if (typeof parserPath === 'string' && (/.*babel-eslint.*/).test(parserPath)) {
     return getBabelEslintVisitorKeys(parserPath);
   }
-  // The espree parser doesn't have the `parseForESLint` function, so we don't ended up with a
+  // The espree parser doesn't have the `parseForESLint` function, so we don't end up with a
   // `parsedResult` here, but it does expose the visitor keys on the parser instance that we can use.
   if (parserInstance && parserInstance.VisitorKeys) {
     return parserInstance.VisitorKeys;
@@ -113,7 +113,8 @@ exports.default = function parse(path, content, context) {
   if (context == null) { throw new Error('need context to parse properly'); }
 
   // ESLint in "flat" mode only sets context.languageOptions.parserOptions
-  let parserOptions = context.languageOptions && context.languageOptions.parserOptions || context.parserOptions;
+  const languageOptions = context.languageOptions;
+  let parserOptions = languageOptions && languageOptions.parserOptions || context.parserOptions;
   const parserOrPath = getParser(path, context);
 
   if (!parserOrPath) { throw new Error('parserPath or languageOptions.parser is required!'); }
@@ -143,6 +144,17 @@ exports.default = function parse(path, content, context) {
   delete parserOptions.projectService;
   delete parserOptions.project;
   delete parserOptions.projects;
+
+  // If this is a flat config, we need to add ecmaVersion and sourceType (if present) from languageOptions
+  if (languageOptions && languageOptions.ecmaVersion) {
+    parserOptions.ecmaVersion = languageOptions.ecmaVersion;
+  }
+  if (languageOptions && languageOptions.sourceType) {
+    // @ts-expect-error languageOptions is from the flatConfig Linter type in 8.57 while parserOptions is not.
+    // Non-flat config parserOptions.sourceType doesn't have "commonjs" in the type.  Once upgraded to v9 types,
+    // they'll be the same and this expect-error should be removed.
+    parserOptions.sourceType = languageOptions.sourceType;
+  }
 
   // require the parser relative to the main module (i.e., ESLint)
   const parser = typeof parserOrPath === 'string' ? moduleRequire(parserOrPath) : parserOrPath;

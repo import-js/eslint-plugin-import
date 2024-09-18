@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - `parse`: remove unneeded extra backticks ([#3057], thanks [@G-Rath])
 - `parse`: espree parser isn't working with flat config ([#3061], thanks [@michaelfaith])
+- `parse`: add `ecmaVersion` and `sourceType` to `parserOptions` ([#3061], thanks [@michaelfaith])
 
 ## v2.11.0 - 2024-09-05
 
