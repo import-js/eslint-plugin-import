@@ -8,11 +8,13 @@ const rule = require('rules/no-cycle');
 
 const error = (message) => ({ message });
 
-const test = (def) => _test(Object.assign(def, {
+const test = (def) => _test({
   filename: testFilePath('./cycles/depth-zero.js'),
-}));
-const testVersion = (specifier, t) => _testVersion(specifier, () => Object.assign(t(), {
+  ...def,
+});
+const testVersion = (specifier, t) => _testVersion(specifier, () => ({
   filename: testFilePath('./cycles/depth-zero.js'),
+  ...t(),
 }));
 
 const testDialects = ['es6'];
