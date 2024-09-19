@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
 - [`no-named-as-default`]: Allow using an identifier if the export is both a named and a default export ([#3032], thanks [@akwodkiewicz])
+- [`export`]: False positive for exported overloaded functions in TS ([#3065], thanks [@liuxingbaoyu])
 
 ### Changed
 - [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
@@ -1140,6 +1141,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#3066]: https://github.com/import-js/eslint-plugin-import/pull/3066
+[#3065]: https://github.com/import-js/eslint-plugin-import/pull/3065
 [#3052]: https://github.com/import-js/eslint-plugin-import/pull/3052
 [#3043]: https://github.com/import-js/eslint-plugin-import/pull/3043
 [#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
@@ -1875,6 +1877,7 @@ for info on changes for earlier releases.
 [@lilling]: https://github.com/lilling
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx
+[@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma

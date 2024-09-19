@@ -56,6 +56,15 @@ ruleTester.run('export', rule, {
       `,
       parser,
     })),
+    getTSParsers().map((parser) => ({
+      code: `
+        export default function foo(param: string): boolean;
+        export default function foo(param: string, param1?: number): boolean {
+          return param && param1;
+        }
+      `,
+      parser,
+    })),
   ),
 
   invalid: [].concat(
@@ -153,6 +162,19 @@ ruleTester.run('export', rule, {
       parserOptions: {
         ecmaVersion: 2022,
       },
+    })),
+
+    getTSParsers().map((parser) => ({
+      code: `
+        export default function a(): void;
+        export default function a() {}
+        export { x as default };
+      `,
+      errors: [
+        'Multiple default exports.',
+        'Multiple default exports.',
+      ],
+      parser,
     })),
   ),
 });
@@ -510,7 +532,7 @@ context('TypeScript', function () {
           }),
           test({
             code: `
-              export function Foo();
+              export function Foo() { };
               export class Foo { }
               export namespace Foo { }
             `,
@@ -529,7 +551,7 @@ context('TypeScript', function () {
           test({
             code: `
               export const Foo = 'bar';
-              export function Foo();
+              export function Foo() { };
               export namespace Foo { }
             `,
             errors: [
