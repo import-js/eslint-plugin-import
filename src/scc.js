@@ -18,12 +18,18 @@ export default class StronglyConnectedComponentsBuilder {
   }
 
   static for(context) {
-    const cacheKey = context.cacheKey || hashObject(context).digest('hex');
+    const settingsHash = hashObject({
+      settings: context.settings,
+      parserOptions: context.parserOptions,
+      parserPath: context.parserPath,
+    }).digest('hex');
+    const cacheKey = context.path + settingsHash;
     if (cache.has(cacheKey)) {
       return cache.get(cacheKey);
     }
     const scc = StronglyConnectedComponentsBuilder.calculate(context);
-    cache.set(cacheKey, scc);
+    const visitedFiles = Object.keys(scc);
+    visitedFiles.forEach((filePath) => cache.set(filePath + settingsHash, scc));
     return scc;
   }
 
