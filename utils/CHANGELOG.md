@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.11.1 - 2024-09-23
+
 ### Fixed
 - `parse`: remove unneeded extra backticks ([#3057], thanks [@G-Rath])
 - `parse`: espree parser isn't working with flat config ([#3061], thanks [@michaelfaith])
