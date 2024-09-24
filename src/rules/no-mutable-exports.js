@@ -2,6 +2,7 @@ import { getScope } from 'eslint-module-utils/contextCompat';
 
 import docsUrl from '../docsUrl';
 
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -21,41 +22,41 @@ module.exports = {
       }
     }
 
+    /** @type {(scope: import('eslint').Scope.Scope, name: string) => void} */
     function checkDeclarationsInScope({ variables }, name) {
-      for (const variable of variables) {
-        if (variable.name === name) {
-          for (const def of variable.defs) {
-            if (def.type === 'Variable' && def.parent) {
+      variables
+        .filter((variable) => variable.name === name)
+        .forEach((variable) => {
+          variable.defs
+            .filter((def) => def.type === 'Variable' && def.parent)
+            .forEach((def) => {
               checkDeclaration(def.parent);
-            }
-          }
-        }
-      }
-    }
-
-    function handleExportDefault(node) {
-      const scope = getScope(context, node);
-
-      if (node.declaration.name) {
-        checkDeclarationsInScope(scope, node.declaration.name);
-      }
-    }
-
-    function handleExportNamed(node) {
-      const scope = getScope(context, node);
-
-      if (node.declaration)  {
-        checkDeclaration(node.declaration);
-      } else if (!node.source) {
-        for (const specifier of node.specifiers) {
-          checkDeclarationsInScope(scope, specifier.local.name);
-        }
-      }
+            });
+        });
     }
 
     return {
-      ExportDefaultDeclaration: handleExportDefault,
-      ExportNamedDeclaration: handleExportNamed,
+      /** @param {import('estree').ExportDefaultDeclaration} node */
+      ExportDefaultDeclaration(node) {
+        const scope = getScope(context, node);
+
+        if ('name' in node.declaration && node.declaration.name) {
+          checkDeclarationsInScope(scope, node.declaration.name);
+        }
+      },
+
+      /** @param {import('estree').ExportNamedDeclaration} node */
+      ExportNamedDeclaration(node) {
+        const scope = getScope(context, node);
+
+        if ('declaration' in node && node.declaration)  {
+          checkDeclaration(node.declaration);
+        } else if (!('source' in node) || !node.source) {
+          node.specifiers.forEach((specifier) => {
+            checkDeclarationsInScope(scope, specifier.local.name);
+          });
+        }
+      },
     };
   },
 };

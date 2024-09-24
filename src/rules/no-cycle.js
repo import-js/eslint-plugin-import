@@ -152,9 +152,9 @@ module.exports = {
           */
           if (path === myPath && toTraverse.length > 0) { return true; }
           if (route.length + 1 < maxDepth) {
-            for (const { source } of toTraverse) {
+            toTraverse.forEach(({ source }) => {
               untraversed.push({ mget: getter, route: route.concat(source) });
-            }
+            });
           }
         }
       }

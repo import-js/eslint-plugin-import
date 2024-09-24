@@ -6,6 +6,12 @@ function isComma(token) {
   return token.type === 'Punctuator' && token.value === ',';
 }
 
+/**
+ * @param {import('eslint').Rule.Fix[]} fixes
+ * @param {import('eslint').Rule.RuleFixer} fixer
+ * @param {import('eslint').SourceCode.SourceCode} sourceCode
+ * @param {(ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier)[]} specifiers
+ * */
 function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
   for (const specifier of specifiers) {
     // remove the trailing comma
@@ -17,6 +23,7 @@ function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
   }
 }
 
+/** @type {(node: import('estree').Node, sourceCode: import('eslint').SourceCode.SourceCode, specifiers: (ImportSpecifier | ImportNamespaceSpecifier)[], kind: 'type' | 'typeof') => string} */
 function getImportText(
   node,
   sourceCode,
@@ -38,6 +45,7 @@ function getImportText(
   return `import ${kind} {${names.join(', ')}} from ${sourceString};`;
 }
 
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -102,6 +110,7 @@ module.exports = {
 
     // prefer-top-level
     return {
+      /** @param {import('estree').ImportDeclaration} node */
       ImportDeclaration(node) {
         if (
           // already top-level is valid
@@ -120,9 +129,13 @@ module.exports = {
           return;
         }
 
+        /** @type {typeof node.specifiers} */
         const typeSpecifiers = [];
+        /** @type {typeof node.specifiers} */
         const typeofSpecifiers = [];
+        /** @type {typeof node.specifiers} */
         const valueSpecifiers = [];
+        /** @type {typeof node.specifiers[number]} */
         let defaultSpecifier = null;
         for (const specifier of node.specifiers) {
           if (specifier.type === 'ImportDefaultSpecifier') {
@@ -144,6 +157,7 @@ module.exports = {
         const newImports = `${typeImport}\n${typeofImport}`.trim();
 
         if (typeSpecifiers.length + typeofSpecifiers.length === node.specifiers.length) {
+          /** @type {('type' | 'typeof')[]} */
           // all specifiers have inline specifiers - so we replace the entire import
           const kind = [].concat(
             typeSpecifiers.length > 0 ? 'type' : [],
@@ -162,7 +176,7 @@ module.exports = {
           });
         } else {
           // remove specific specifiers and insert new imports for them
-          for (const specifier of typeSpecifiers.concat(typeofSpecifiers)) {
+          typeSpecifiers.concat(typeofSpecifiers).forEach((specifier) => {
             context.report({
               node: specifier,
               message: 'Prefer using a top-level {{kind}}-only import instead of inline {{kind}} specifiers.',
@@ -170,6 +184,7 @@ module.exports = {
                 kind: specifier.importKind,
               },
               fix(fixer) {
+                /** @type {import('eslint').Rule.Fix[]} */
                 const fixes = [];
 
                 // if there are no value specifiers, then the other report fixer will be called, not this one
@@ -215,7 +230,7 @@ module.exports = {
                 );
               },
             });
-          }
+          });
         }
       },
     };

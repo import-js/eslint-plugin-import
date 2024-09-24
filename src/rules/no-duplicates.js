@@ -74,6 +74,7 @@ function hasProblematicComments(node, sourceCode) {
   );
 }
 
+/** @type {(first: import('estree').ImportDeclaration, rest: import('estree').ImportDeclaration[], sourceCode: import('eslint').SourceCode.SourceCode, context: import('eslint').Rule.RuleContext) => import('eslint').Rule.ReportFixer | undefined} */
 function getFix(first, rest, sourceCode, context) {
   // Sorry ESLint <= 3 users, no autofix for you. Autofixing duplicate imports
   // requires multiple `fixer.whatever()` calls in the `fix`: We both need to
@@ -123,7 +124,7 @@ function getFix(first, rest, sourceCode, context) {
         isEmpty: !hasSpecifiers(node),
       };
     })
-    .filter(Boolean);
+    .filter((x) => !!x);
 
   const unnecessaryImports = restWithoutComments.filter((node) => !hasSpecifiers(node)
     && !hasNamespace(node)
@@ -139,6 +140,7 @@ function getFix(first, rest, sourceCode, context) {
     return undefined;
   }
 
+  /** @type {import('eslint').Rule.ReportFixer} */
   return (fixer) => {
     const tokens = sourceCode.getTokens(first);
     const openBrace = tokens.find((token) => isPunctuator(token, '{'));
@@ -185,6 +187,7 @@ function getFix(first, rest, sourceCode, context) {
       ['', !firstHasTrailingComma && !firstIsEmpty, firstExistingIdentifiers],
     );
 
+    /** @type {import('eslint').Rule.Fix[]} */
     const fixes = [];
 
     if (shouldAddSpecifiers && preferInline && first.importKind === 'type') {
@@ -228,7 +231,7 @@ function getFix(first, rest, sourceCode, context) {
     }
 
     // Remove imports whose specifiers have been moved into the first import.
-    for (const specifier of specifiers) {
+    specifiers.forEach((specifier) => {
       const importNode = specifier.importNode;
       fixes.push(fixer.remove(importNode));
 
@@ -237,12 +240,12 @@ function getFix(first, rest, sourceCode, context) {
       if (charAfterImport === '\n') {
         fixes.push(fixer.removeRange(charAfterImportRange));
       }
-    }
+    });
 
     // Remove imports whose default import has been moved to the first import,
     // and side-effect-only imports that are unnecessary due to the first
     // import.
-    for (const node of unnecessaryImports) {
+    unnecessaryImports.forEach((node) => {
       fixes.push(fixer.remove(node));
 
       const charAfterImportRange = [node.range[1], node.range[1] + 1];
@@ -250,12 +253,13 @@ function getFix(first, rest, sourceCode, context) {
       if (charAfterImport === '\n') {
         fixes.push(fixer.removeRange(charAfterImportRange));
       }
-    }
+    });
 
     return fixes;
   };
 }
 
+/** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
@@ -270,16 +274,17 @@ function checkImports(imported, context) {
         fix, // Attach the autofix (if any) to the first import.
       });
 
-      for (const node of rest) {
+      rest.forEach((node) => {
         context.report({
           node: node.source,
           message,
         });
-      }
+      });
     }
   }
 }
 
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     type: 'problem',
@@ -305,10 +310,13 @@ module.exports = {
     ],
   },
 
+  /** @param {import('eslint').Rule.RuleContext} context */
   create(context) {
+    /** @type {boolean} */
     // Prepare the resolver from options.
-    const considerQueryStringOption = context.options[0]
-      && context.options[0].considerQueryString;
+    const considerQueryStringOption = context.options[0] && context.options[0].considerQueryString;
+    /** @type {boolean} */
+    const preferInline = context.options[0] && context.options[0]['prefer-inline'];
     const defaultResolver = (sourcePath) => resolve(sourcePath, context) || sourcePath;
     const resolver = considerQueryStringOption ? (sourcePath) => {
       const parts = sourcePath.match(/^([^?]*)\?(.*)$/);
@@ -318,11 +326,14 @@ module.exports = {
       return `${defaultResolver(parts[1])}?${parts[2]}`;
     } : defaultResolver;
 
+    /** @type {Map<unknown, { imported: Map<string, import('estree').ImportDeclaration[]>, nsImported: Map<string, import('estree').ImportDeclaration[]>, defaultTypesImported: Map<string, import('estree').ImportDeclaration[]>, namedTypesImported: Map<string, import('estree').ImportDeclaration[]>}>} */
     const moduleMaps = new Map();
 
+    /** @param {import('estree').ImportDeclaration} n */
+    /** @returns {typeof moduleMaps[keyof typeof moduleMaps]} */
     function getImportMap(n) {
       if (!moduleMaps.has(n.parent)) {
-        moduleMaps.set(n.parent, {
+        moduleMaps.set(n.parent, /** @type {typeof moduleMaps} */ {
           imported: new Map(),
           nsImported: new Map(),
           defaultTypesImported: new Map(),
@@ -330,7 +341,6 @@ module.exports = {
         });
       }
       const map = moduleMaps.get(n.parent);
-      const preferInline = context.options[0] && context.options[0]['prefer-inline'];
       if (!preferInline && n.importKind === 'type') {
         return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
       }
@@ -342,7 +352,9 @@ module.exports = {
     }
 
     return {
+      /** @param {import('estree').ImportDeclaration} n */
       ImportDeclaration(n) {
+        /** @type {string} */
         // resolved path will cover aliased duplicates
         const resolvedPath = resolver(n.source.value);
         const importMap = getImportMap(n);
