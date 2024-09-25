@@ -1,5 +1,4 @@
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import { test } from '../utils';

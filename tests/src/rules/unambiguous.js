@@ -1,5 +1,4 @@
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import { parsers } from '../utils';
 
 const ruleTester = new RuleTester();

@@ -1,7 +1,7 @@
 import { test } from '../utils';
 import * as path from 'path';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-unassigned-import');

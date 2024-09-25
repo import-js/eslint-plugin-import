@@ -1,5 +1,5 @@
 import path from 'path';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 import { eslintVersionSatisfies, test, testVersion } from '../utils';
 

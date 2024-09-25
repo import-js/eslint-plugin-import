@@ -1,7 +1,6 @@
 import { test, getTSParsers, getNonDefaultParsers, testFilePath, parsers } from '../utils';
 
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';

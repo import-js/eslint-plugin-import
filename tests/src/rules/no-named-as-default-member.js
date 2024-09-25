@@ -1,5 +1,5 @@
 import { test, testVersion, SYNTAX_CASES } from '../utils';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import rule from 'rules/no-named-as-default-member';
 
 const ruleTester = new RuleTester();

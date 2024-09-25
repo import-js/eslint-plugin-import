@@ -1,6 +1,6 @@
 import { parsers, test as _test, testFilePath, testVersion as _testVersion } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();

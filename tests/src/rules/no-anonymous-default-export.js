@@ -1,6 +1,6 @@
 import { test, testVersion, SYNTAX_CASES } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-anonymous-default-export');

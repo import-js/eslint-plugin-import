@@ -1,6 +1,6 @@
 import { test } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import rule from 'rules/exports-last';
 
 const ruleTester = new RuleTester();

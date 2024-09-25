@@ -1,6 +1,6 @@
 import { test, testVersion, getNonDefaultParsers, parsers } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 

@@ -1,6 +1,6 @@
 import path from 'path';
 import { test, testVersion, SYNTAX_CASES, getTSParsers, parsers } from '../utils';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 

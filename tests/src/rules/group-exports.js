@@ -1,5 +1,5 @@
 import { test } from '../utils';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import rule from 'rules/group-exports';
 import { resolve } from 'path';
 import { default as babelPresetFlow } from 'babel-preset-flow';

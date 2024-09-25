@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import { parsers, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester();

@@ -2,8 +2,7 @@ import * as path from 'path';
 import { test as testUtil, getNonDefaultParsers, parsers, tsVersionSatisfies, typescriptEslintParserSatisfies } from '../utils';
 import jsxConfig from '../../../config/react';
 
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';

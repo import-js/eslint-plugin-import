@@ -1,5 +1,4 @@
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';

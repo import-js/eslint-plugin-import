@@ -1,6 +1,5 @@
 import { SYNTAX_CASES, getTSParsers, parsers } from '../utils';
-import { RuleTester } from 'eslint';
-import { withoutAutofixOutput } from '../rule-tester';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import semver from 'semver';
 
 const rule = require('rules/dynamic-import-chunkname');

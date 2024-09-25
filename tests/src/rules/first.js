@@ -2,7 +2,7 @@ import { test, getTSParsers, testVersion } from '../utils';
 import fs from 'fs';
 import path from 'path';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/first');
