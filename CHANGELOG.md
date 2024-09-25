@@ -17,6 +17,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
 - [Performance] [`no-cycle`]: dont scc for each linted file ([#3068], thanks [@soryy708])
+- [Docs] [`no-cycle`]: add `disableScc` to docs ([#3070], thanks [@soryy708])
 
 ## [2.30.0] - 2024-09-02
 
@@ -1141,6 +1142,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3070]: https://github.com/import-js/eslint-plugin-import/pull/3070
 [#3068]: https://github.com/import-js/eslint-plugin-import/pull/3068
 [#3066]: https://github.com/import-js/eslint-plugin-import/pull/3066
 [#3065]: https://github.com/import-js/eslint-plugin-import/pull/3065

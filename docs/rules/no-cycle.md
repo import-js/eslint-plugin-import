@@ -94,6 +94,14 @@ export function getBar() { return import('./bar'); }
 
 > Cyclic dependency are **always** a dangerous anti-pattern as discussed extensively in [#2265](https://github.com/import-js/eslint-plugin-import/issues/2265). Please be extra careful about using this option.
 
+#### `disableScc`
+
+This option disables a pre-processing step that calculates [Strongly Connected Components](https://en.wikipedia.org/wiki/Strongly_connected_component), which are used for avoiding unnecessary work checking files in different SCCs for cycles.
+
+However, under some configurations, this pre-processing may be more expensive than the time it saves.
+
+When this option is `true`, we don't calculate any SCC graph, and check all files for cycles (leading to higher time-complexity). Default is `false`.
+
 ## When Not To Use It
 
 This rule is comparatively computationally expensive. If you are pressed for lint
