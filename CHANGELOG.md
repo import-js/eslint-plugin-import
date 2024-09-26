@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-named-as-default`]: Allow using an identifier if the export is both a named and a default export ([#3032], thanks [@akwodkiewicz])
 - [`export`]: False positive for exported overloaded functions in TS ([#3065], thanks [@liuxingbaoyu])
 - `exportMap`: export map cache is tainted by unreliable parse results ([#3062], thanks [@michaelfaith])
+- `exportMap`: improve cacheKey when using flat config ([#3072], thanks [@michaelfaith])
 
 ### Changed
 - [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
@@ -1144,6 +1145,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
 [#3070]: https://github.com/import-js/eslint-plugin-import/pull/3070
 [#3068]: https://github.com/import-js/eslint-plugin-import/pull/3068
