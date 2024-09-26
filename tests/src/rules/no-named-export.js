@@ -7,6 +7,9 @@ const rule = require('rules/no-named-export');
 ruleTester.run('no-named-export', rule, {
   valid: [].concat(
     test({
+      code: 'module.export.foo = function () {}',
+    }),
+    test({
       code: 'export default function bar() {};',
     }),
     test({

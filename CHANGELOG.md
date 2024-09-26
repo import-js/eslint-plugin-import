@@ -21,7 +21,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Performance] [`no-cycle`]: dont scc for each linted file ([#3068], thanks [@soryy708])
 - [Docs] [`no-cycle`]: add `disableScc` to docs ([#3070], thanks [@soryy708])
 - [Tests] use re-exported `RuleTester` ([#3071], thanks [@G-Rath])
-- [Docs] `no-restricted-paths`: fix grammar ([#3073], thanks [@unbeauvoyage])
+- [Docs] [`no-restricted-paths`]: fix grammar ([#3073], thanks [@unbeauvoyage])
+- [Tests] [`no-default-export`], [`no-named-export`]:  add test case (thanks [@G-Rath])
 
 ## [2.30.0] - 2024-09-02
 

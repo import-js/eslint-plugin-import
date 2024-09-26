@@ -8,6 +8,9 @@ const rule = require('rules/no-default-export');
 ruleTester.run('no-default-export', rule, {
   valid: [
     test({
+      code: 'module.exports = function foo() {}',
+    }),
+    test({
       code: `
         export const foo = 'foo';
         export const bar = 'bar';
