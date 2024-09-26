@@ -21,6 +21,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Performance] [`no-cycle`]: dont scc for each linted file ([#3068], thanks [@soryy708])
 - [Docs] [`no-cycle`]: add `disableScc` to docs ([#3070], thanks [@soryy708])
 - [Tests] use re-exported `RuleTester` ([#3071], thanks [@G-Rath])
+- [Docs] `no-restricted-paths`: fix grammar ([#3073], thanks [@unbeauvoyage])
 
 ## [2.30.0] - 2024-09-02
 
@@ -1145,6 +1146,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
 [#3070]: https://github.com/import-js/eslint-plugin-import/pull/3070
@@ -1997,6 +1999,7 @@ for info on changes for earlier releases.
 [@tomprats]: https://github.com/tomprats
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@ttmarek]: https://github.com/ttmarek
+[@unbeauvoyage]: https://github.com/unbeauvoyage
 [@vikr01]: https://github.com/vikr01
 [@wenfangdu]: https://github.com/wenfangdu
 [@wKich]: https://github.com/wKich

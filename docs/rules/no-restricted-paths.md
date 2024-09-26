@@ -5,7 +5,7 @@
 Some projects contain files which are not always meant to be executed in the same environment.
 For example consider a web application that contains specific code for the server and some specific code for the browser/client. In this case you don’t want to import server-only files in your client code.
 
-In order to prevent such scenarios this rule allows you to define restricted zones where you can forbid files from imported if they match a specific path.
+In order to prevent such scenarios this rule allows you to define restricted zones where you can forbid files from being imported if they match a specific path.
 
 ## Rule Details
 
