@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.12.0 - 2024-09-26
+
 ### Added
 - `hash`: add support for hashing functions ([#3072], thanks [@michaelfaith])
 
