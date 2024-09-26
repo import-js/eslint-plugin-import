@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Added
+- `hash`: add support for hashing functions ([#3072], thanks [@michaelfaith])
+
 ## v2.11.1 - 2024-09-23
 
 ### Fixed
@@ -172,6 +175,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3061]: https://github.com/import-js/eslint-plugin-import/pull/3061
 [#3057]: https://github.com/import-js/eslint-plugin-import/pull/3057
 [#3049]: https://github.com/import-js/eslint-plugin-import/pull/3049

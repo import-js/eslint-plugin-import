@@ -17,6 +17,8 @@ function hashify(value, hash) {
 
   if (Array.isArray(value)) {
     hashArray(value, hash);
+  } else if (typeof value === 'function') {
+    hash.update(String(value));
   } else if (value instanceof Object) {
     hashObject(value, hash);
   } else {
