@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
@@ -6,10 +6,9 @@ import { version as tsEslintVersion } from 'typescript-eslint-parser/package.jso
 import { getTSParsers, parsers, testVersion } from '../utils';
 
 const IMPORT_ERROR_MESSAGE = 'Expected 1 empty line after import statement not followed by another import.';
-const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => {
-  return `Expected ${count} empty lines after import statement not followed by another import.`;
-};
+const IMPORT_ERROR_MESSAGE_MULTIPLE = (count) => `Expected ${count} empty lines after import statement not followed by another import.`;
 const REQUIRE_ERROR_MESSAGE = 'Expected 1 empty line after require statement not followed by another require.';
+const REQUIRE_ERROR_MESSAGE_MULTIPLE = (count) => `Expected ${count} empty lines after require statement not followed by another require.`;
 
 const ruleTester = new RuleTester();
 
@@ -22,21 +21,21 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       code: `
         const x = () => require('baz')
             , y = () => require('bar')`,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     {
       code: `
         const x = () => require('baz')
             , y = () => require('bar')
-            
+
         // some comment here
       `,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
       options: [{ considerComments: true }],
     },
     {
       code: `const x = () => require('baz') && require('bar')`,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     {
       code: `
@@ -45,8 +44,18 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // Some random single line comment
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 6 } ,
-      options: [{ 'considerComments': true }],
+      parserOptions: { ecmaVersion: 6 },
+      options: [{ considerComments: true }],
+    },
+    {
+      code: `
+        const x = () => require('baz') && require('bar')
+
+        // Some random single line comment
+        var bar = 42;
+      `,
+      parserOptions: { ecmaVersion: 6 },
+      options: [{ considerComments: true, count: 1, exactCount: true }],
     },
     {
       code: `
@@ -57,7 +66,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 6 } ,
+      parserOptions: { ecmaVersion: 6 },
     },
     `function x() { require('baz'); }`,
     `a(require('b'), require('c'), require('d'));`,
@@ -122,12 +131,52 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 2 }],
+      options: [{ count: 2 }],
+    },
+    {
+      code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 2, exactCount: true }],
+    },
+    {
+      code: `import foo from 'foo';\n\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 1, exactCount: true }],
+    },
+    {
+      code: `import foo from 'foo';\n\n// Some random comment\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 2, exactCount: true }],
+    },
+    {
+      code: `import foo from 'foo';\n// Some random comment\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 1, exactCount: true }],
+    },
+    {
+      code: `import foo from 'foo';\n\n\n// Some random comment\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+    },
+    {
+      code: `import foo from 'foo';\n\n// Some random comment\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 1, exactCount: true, considerComments: true }],
+    },
+    {
+      code: `/**\n * A leading comment\n */\nimport foo from 'foo';\n\n// Some random comment\nexport {foo};`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 2, exactCount: true }],
+    },
+    {
+      code: `import foo from 'foo';\n\n\nvar bar = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 1 }],
     },
     {
       code: `import foo from 'foo';\n\n\n\n\nvar bar = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 4 }],
+      options: [{ count: 4 }],
     },
     {
       code: `var foo = require('foo-module');\n\nvar foo = 'bar';`,
@@ -136,12 +185,27 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `var foo = require('foo-module');\n\n\nvar foo = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 2 }],
+      options: [{ count: 2 }],
     },
     {
       code: `var foo = require('foo-module');\n\n\n\n\nvar foo = 'bar';`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'count': 4 }],
+      options: [{ count: 4 }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n\n\n\nvar foo = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 4, exactCount: true }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n// Some random comment\n\n\nvar foo = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 4, exactCount: true }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n\n\n\n// Some random comment\nvar foo = 'bar';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ count: 4, exactCount: true, considerComments: true }],
     },
     {
       code: `require('foo-module');\n\nvar foo = 'bar';`,
@@ -202,12 +266,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parser: parsers.BABEL_OLD,
     },
     {
-      code : `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      code: `// issue 1004\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
-      code : `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
+      code: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
@@ -275,6 +339,16 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parser,
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
+      {
+        code: `
+        import { ns } from 'namespace';
+        import Bar = ns.baz.foo.Bar;
+
+        export import Foo = ns.baz.bar.Foo;
+      `,
+        parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      },
     )),
     {
       code: `
@@ -296,30 +370,43 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `
         import path from 'path';import foo from 'foo';
-        
+
         /**
          * some multiline comment here
          * another line of comment
         **/
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true }],
     },
     {
       code: `
         import path from 'path';
         import foo from 'foo';
-        
+
         // Some random single line comment
         var bar = 42;
       `,
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: `var foo = require('foo-module');\n\n\n// Some random comment\nvar foo = 'bar';`,
+      options: [{ count: 2, considerComments: true }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n\n/**\n * Test comment\n */\nvar foo = 'bar';`,
+      options: [{ count: 2, considerComments: true }],
+    },
+    {
+      code: `const foo = require('foo');\n\n\n// some random comment\nconst bar = function() {};`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      parserOptions: { ecmaVersion: 2015 },
     },
   ),
 
@@ -338,13 +425,13 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // some comment
         var foo = 'bar';
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
-      options: [{ 'considerComments': true }],
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -365,13 +452,13 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         **/
         var bar = 42;
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true }],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true }],
     },
     {
       code: `
@@ -386,54 +473,54 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         // Some random single line comment
         var bar = 42;
       `,
-      errors: [ {
+      errors: [{
         line: 3,
         column: 9,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
-      parserOptions: { ecmaVersion: 2015, sourceType: 'module' } ,
-      options: [{ 'considerComments': true, 'count': 1 }],
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true, count: 1 }],
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n\nexport default function() {};`,
       output: `import foo from 'foo';\n\n\nexport default function() {};`,
-      options: [{ 'count': 2 }],
-      errors: [ {
+      options: [{ count: 2 }],
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `var foo = require('foo-module');\nvar something = 123;`,
       output: `var foo = require('foo-module');\n\nvar something = 123;`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\nexport default function() {};`,
       output: `import foo from 'foo';\n\nexport default function() {};`,
-      options: [{ 'count': 1 }],
-      errors: [ {
+      options: [{ count: 1 }],
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
@@ -487,20 +574,20 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `var path = require('path');\nvar foo = require('foo');\nvar bar = 42;`,
       output: `var path = require('path');\nvar foo = require('foo');\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
     },
     {
       code: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\nvar bar = 42;`,
       output: `var assign = Object.assign || require('object-assign');\nvar foo = require('foo');\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
     },
     {
       code: `require('a');\nfoo(require('b'), require('c'), require('d'));\nrequire('d');\nvar foo = 'bar';`,
@@ -527,64 +614,64 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
     {
       code: `import path from 'path';\nimport foo from 'foo';\nvar bar = 42;`,
       output: `import path from 'path';\nimport foo from 'foo';\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import path from 'path';import foo from 'foo';var bar = 42;`,
       output: `import path from 'path';import foo from 'foo';\n\nvar bar = 42;`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 25,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
       code: `import foo from 'foo';\n@SomeDecorator(foo)\nclass Foo {}`,
       output: `import foo from 'foo';\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `var foo = require('foo');\n@SomeDecorator(foo)\nclass Foo {}`,
       output: `var foo = require('foo');\n\n@SomeDecorator(foo)\nclass Foo {}`,
-      errors: [ {
+      errors: [{
         line: 1,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 10042\nimport foo from 'foo';\n@SomeDecorator(foo)\nexport default class Test {}`,
       output: `// issue 10042\nimport foo from 'foo';\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: IMPORT_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
     {
       code: `// issue 1004\nconst foo = require('foo');\n@SomeDecorator(foo)\nexport default class Test {}`,
       output: `// issue 1004\nconst foo = require('foo');\n\n@SomeDecorator(foo)\nexport default class Test {}`,
-      errors: [ {
+      errors: [{
         line: 2,
         column: 1,
         message: REQUIRE_ERROR_MESSAGE,
-      } ],
+      }],
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
@@ -612,5 +699,179 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     })) || [],
+    {
+      code: `import foo from 'foo';\n\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    withoutAutofixOutput({
+      code: `import foo from 'foo';\n\n\n\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    }),
+    withoutAutofixOutput({
+      code: `import foo from 'foo';\n\n\n\n\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    }),
+    {
+      code: `import foo from 'foo';\n// some random comment\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n// some random comment\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    withoutAutofixOutput({
+      code: `import foo from 'foo';\n// some random comment\n\n\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    }),
+    withoutAutofixOutput({
+      code: `import foo from 'foo';\n// some random comment\n\n\n\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    }),
+    {
+      code: `import foo from 'foo';\n// some random comment\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n\n// some random comment\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
+      code: `import foo from 'foo';\n\n// some random comment\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n\n// some random comment\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    withoutAutofixOutput({
+      code: `import foo from 'foo';\n\n\n\n// some random comment\nexport default function() {};`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    }),
+    withoutAutofixOutput({
+      code: `
+        import foo from 'foo';
+
+
+        // Some random single line comment
+        var bar = 42;
+      `,
+      errors: [{
+        line: 2,
+        column: 9,
+        message: IMPORT_ERROR_MESSAGE,
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true, count: 1, exactCount: true }],
+    }),
+    {
+      code: `import foo from 'foo';export default function() {};`,
+      output: `import foo from 'foo';\n\nexport default function() {};`,
+      options: [{ count: 1, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    withoutAutofixOutput({
+      code: `const foo = require('foo');\n\n\n\nconst bar = function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015 },
+    }),
+    withoutAutofixOutput({
+      code: `const foo = require('foo');\n\n\n\n// some random comment\nconst bar = function() {};`,
+      options: [{ count: 2, exactCount: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015 },
+    }),
+    {
+      code: `import foo from 'foo';// some random comment\nexport default function() {};`,
+      output: `import foo from 'foo';\n\n// some random comment\nexport default function() {};`,
+      options: [{ count: 1, exactCount: true, considerComments: true }],
+      errors: [{
+        line: 1,
+        column: 1,
+        message: IMPORT_ERROR_MESSAGE,
+      }],
+      parserOptions: { ecmaVersion: 2015, considerComments: true, sourceType: 'module' },
+    },
+    {
+      code: `var foo = require('foo-module');\nvar foo = require('foo-module');\n\n// Some random comment\nvar foo = 'bar';`,
+      output: `var foo = require('foo-module');\nvar foo = require('foo-module');\n\n\n// Some random comment\nvar foo = 'bar';`,
+      errors: [{
+        line: 2,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true, count: 2 }],
+    },
+    {
+      code: `var foo = require('foo-module');\n\n/**\n * Test comment\n */\nvar foo = 'bar';`,
+      output: `var foo = require('foo-module');\n\n\n/**\n * Test comment\n */\nvar foo = 'bar';`,
+      errors: [{
+        line: 1,
+        column: 1,
+        message: REQUIRE_ERROR_MESSAGE_MULTIPLE(2),
+      }],
+      parserOptions: { ecmaVersion: 2015 },
+      options: [{ considerComments: true, count: 2 }],
+    },
   ),
 });

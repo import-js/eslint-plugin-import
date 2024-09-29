@@ -17,7 +17,7 @@ const parserOptions = {
 };
 
 exports.parse = function parse(content, options) {
-  options = Object.assign({}, options, parserOptions);
+  options = { ...options, ...parserOptions };
 
   if (!options.filePath) {
     throw new Error('no file path provided!');
@@ -30,7 +30,7 @@ exports.parse = function parse(content, options) {
   const key = keyHash.digest('hex');
 
   let ast = cache.get(key);
-  if (ast != null) return ast;
+  if (ast != null) { return ast; }
 
   const realParser = moduleRequire(options.parser);
 

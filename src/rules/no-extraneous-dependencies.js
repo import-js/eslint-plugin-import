@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs';
-import pkgUp from 'eslint-module-utils/pkgUp';
 import minimatch from 'minimatch';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
+import pkgUp from 'eslint-module-utils/pkgUp';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
+
 import importType from '../core/importType';
 import { getFilePackageName } from '../core/packagePath';
 import docsUrl from '../docsUrl';
@@ -42,8 +44,11 @@ function extractDepFields(pkg) {
 
 function getPackageDepFields(packageJsonPath, throwAtRead) {
   if (!depFieldCache.has(packageJsonPath)) {
-    const depFields = extractDepFields(readJSON(packageJsonPath, throwAtRead));
-    depFieldCache.set(packageJsonPath, depFields);
+    const packageJson = readJSON(packageJsonPath, throwAtRead);
+    if (packageJson) {
+      const depFields = extractDepFields(packageJson);
+      depFieldCache.set(packageJsonPath, depFields);
+    }
   }
 
   return depFieldCache.get(packageJsonPath);
@@ -64,22 +69,24 @@ function getDependencies(context, packageDir) {
       if (!Array.isArray(packageDir)) {
         paths = [path.resolve(packageDir)];
       } else {
-        paths = packageDir.map(dir => path.resolve(dir));
+        paths = packageDir.map((dir) => path.resolve(dir));
       }
     }
 
     if (paths.length > 0) {
       // use rule config to find package.json
-      paths.forEach(dir => {
+      paths.forEach((dir) => {
         const packageJsonPath = path.join(dir, 'package.json');
-        const _packageContent = getPackageDepFields(packageJsonPath, true);
-        Object.keys(packageContent).forEach(depsKey =>
-          Object.assign(packageContent[depsKey], _packageContent[depsKey]),
-        );
+        const _packageContent = getPackageDepFields(packageJsonPath, paths.length === 1);
+        if (_packageContent) {
+          Object.keys(packageContent).forEach((depsKey) => {
+            Object.assign(packageContent[depsKey], _packageContent[depsKey]);
+          });
+        }
       });
     } else {
       const packageJsonPath = pkgUp({
-        cwd: context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename(),
+        cwd: getPhysicalFilename(context),
         normalize: false,
       });
 
@@ -110,7 +117,7 @@ function getDependencies(context, packageDir) {
     }
     if (e.name === 'JSONError' || e instanceof SyntaxError) {
       context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
+        message: `The package.json file could not be parsed: ${e.message}`,
         loc: { line: 0, column: 0 },
       });
     }
@@ -120,8 +127,7 @@ function getDependencies(context, packageDir) {
 }
 
 function missingErrorMessage(packageName) {
-  return `'${packageName}' should be listed in the project's dependencies. ` +
-    `Run 'npm i -S ${packageName}' to add it`;
+  return `'${packageName}' should be listed in the project's dependencies. Run 'npm i -S ${packageName}' to add it`;
 }
 
 function devDepErrorMessage(packageName) {
@@ -129,8 +135,7 @@ function devDepErrorMessage(packageName) {
 }
 
 function optDepErrorMessage(packageName) {
-  return `'${packageName}' should be listed in the project's dependencies, ` +
-    `not optionalDependencies.`;
+  return `'${packageName}' should be listed in the project's dependencies, not optionalDependencies.`;
 }
 
 function getModuleOriginalName(name) {
@@ -162,23 +167,26 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
     }
   });
 
-  return packageHierarchy.reduce((result, ancestorName) => {
-    return {
-      isInDeps: result.isInDeps || deps.dependencies[ancestorName] !== undefined,
-      isInDevDeps: result.isInDevDeps || deps.devDependencies[ancestorName] !== undefined,
-      isInOptDeps: result.isInOptDeps || deps.optionalDependencies[ancestorName] !== undefined,
-      isInPeerDeps: result.isInPeerDeps || deps.peerDependencies[ancestorName] !== undefined,
-      isInBundledDeps:
+  return packageHierarchy.reduce((result, ancestorName) => ({
+    isInDeps: result.isInDeps || deps.dependencies[ancestorName] !== undefined,
+    isInDevDeps: result.isInDevDeps || deps.devDependencies[ancestorName] !== undefined,
+    isInOptDeps: result.isInOptDeps || deps.optionalDependencies[ancestorName] !== undefined,
+    isInPeerDeps: result.isInPeerDeps || deps.peerDependencies[ancestorName] !== undefined,
+    isInBundledDeps:
         result.isInBundledDeps || deps.bundledDependencies.indexOf(ancestorName) !== -1,
-    };
-  }, newDeclarationStatus);
+  }), newDeclarationStatus);
 }
 
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types unless option is enabled
   if (
-    !depsOptions.verifyTypeImports &&
-    (node.importKind === 'type' || node.importKind === 'typeof')
+    !depsOptions.verifyTypeImports
+    && (
+      node.importKind === 'type'
+      || node.importKind === 'typeof'
+      || node.exportKind === 'type'
+      || Array.isArray(node.specifiers) && node.specifiers.length && node.specifiers.every((specifier) => specifier.importKind === 'type' || specifier.importKind === 'typeof')
+    )
   ) {
     return;
   }
@@ -199,11 +207,11 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
   let declarationStatus = checkDependencyDeclaration(deps, importPackageName);
 
   if (
-    declarationStatus.isInDeps ||
-    (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
-    (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
-    (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
-    (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
+    declarationStatus.isInDeps
+    || depsOptions.allowDevDeps && declarationStatus.isInDevDeps
+    || depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps
+    || depsOptions.allowOptDeps && declarationStatus.isInOptDeps
+    || depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps
   ) {
     return;
   }
@@ -215,11 +223,11 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     declarationStatus = checkDependencyDeclaration(deps, realPackageName, declarationStatus);
 
     if (
-      declarationStatus.isInDeps ||
-      (depsOptions.allowDevDeps && declarationStatus.isInDevDeps) ||
-      (depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps) ||
-      (depsOptions.allowOptDeps && declarationStatus.isInOptDeps) ||
-      (depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps)
+      declarationStatus.isInDeps
+      || depsOptions.allowDevDeps && declarationStatus.isInDevDeps
+      || depsOptions.allowPeerDeps && declarationStatus.isInPeerDeps
+      || depsOptions.allowOptDeps && declarationStatus.isInOptDeps
+      || depsOptions.allowBundledDeps && declarationStatus.isInBundledDeps
     ) {
       return;
     }
@@ -244,10 +252,9 @@ function testConfig(config, filename) {
     return config;
   }
   // Array of globs.
-  return config.some(c => (
-    minimatch(filename, c) ||
-    minimatch(filename, path.join(process.cwd(), c))
-  ));
+  return config.some((c) => minimatch(filename, c)
+    || minimatch(filename, path.join(process.cwd(), c)),
+  );
 }
 
 module.exports = {
@@ -261,24 +268,24 @@ module.exports = {
 
     schema: [
       {
-        'type': 'object',
-        'properties': {
-          'devDependencies': { 'type': ['boolean', 'array'] },
-          'optionalDependencies': { 'type': ['boolean', 'array'] },
-          'peerDependencies': { 'type': ['boolean', 'array'] },
-          'bundledDependencies': { 'type': ['boolean', 'array'] },
-          'packageDir': { 'type': ['string', 'array'] },
-          'includeInternal': { 'type': ['boolean'] },
-          'includeTypes': { 'type': ['boolean'] },
+        type: 'object',
+        properties: {
+          devDependencies: { type: ['boolean', 'array'] },
+          optionalDependencies: { type: ['boolean', 'array'] },
+          peerDependencies: { type: ['boolean', 'array'] },
+          bundledDependencies: { type: ['boolean', 'array'] },
+          packageDir: { type: ['string', 'array'] },
+          includeInternal: { type: ['boolean'] },
+          includeTypes: { type: ['boolean'] },
         },
-        'additionalProperties': false,
+        additionalProperties: false,
       },
     ],
   },
 
   create(context) {
     const options = context.options[0] || {};
-    const filename = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+    const filename = getPhysicalFilename(context);
     const deps = getDependencies(context, options.packageDir) || extractDepFields({});
 
     const depsOptions = {
@@ -295,7 +302,7 @@ module.exports = {
     }, { commonjs: true });
   },
 
-  'Program:exit': () => {
+  'Program:exit'() {
     depFieldCache.clear();
   },
 };

@@ -11,7 +11,6 @@ describe('paths', function () {
   });
 });
 
-
 describe('core', function () {
   it('returns found, but null path, for core Node modules', function () {
     const resolved = node.resolve('fs', './test/file.js');
@@ -19,7 +18,6 @@ describe('core', function () {
     expect(resolved).has.property('path', null);
   });
 });
-
 
 describe('default options', function () {
 

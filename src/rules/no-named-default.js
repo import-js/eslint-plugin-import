@@ -13,7 +13,7 @@ module.exports = {
 
   create(context) {
     return {
-      'ImportDeclaration': function (node) {
+      ImportDeclaration(node) {
         node.specifiers.forEach(function (im) {
           if (im.importKind === 'type' || im.importKind === 'typeof') {
             return;

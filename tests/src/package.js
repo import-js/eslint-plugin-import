@@ -27,8 +27,7 @@ describe('package', function () {
         expect(err).not.to.exist;
 
         files.filter(isJSFile).forEach(function (f) {
-          expect(module.rules).to.have
-            .property(path.basename(f, '.js'));
+          expect(module.rules).to.have.property(path.basename(f, '.js'));
         });
 
         done();
@@ -38,13 +37,20 @@ describe('package', function () {
   it('exports all configs', function (done) {
     fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
       if (err) { done(err); return; }
-      files.filter(isJSFile).forEach(file => {
-        if (file[0] === '.') return;
+      files.filter(isJSFile).forEach((file) => {
+        if (file[0] === '.') { return; }
         expect(module.configs).to.have.property(path.basename(file, '.js'));
       });
       done();
     });
   });
+
+  function getRulePath(ruleName) {
+    // 'require' does not work with dynamic paths because of the compilation step by babel
+    // (which resolves paths according to the root folder configuration)
+    // the usage of require.resolve on a static path gets around this
+    return path.resolve(require.resolve('rules/no-unresolved'), '..', ruleName);
+  }
 
   it('has configs only for rules that exist', function () {
     for (const configFile in module.configs) {
@@ -55,18 +61,11 @@ describe('package', function () {
           .not.to.throw(Error);
       }
     }
-
-    function getRulePath(ruleName) {
-      // 'require' does not work with dynamic paths because of the compilation step by babel
-      // (which resolves paths according to the root folder configuration)
-      // the usage of require.resolve on a static path gets around this
-      return path.resolve(require.resolve('rules/no-unresolved'), '..', ruleName);
-    }
   });
 
   it('marks deprecated rules in their metadata', function () {
     expect(module.rules['imports-first'].meta.deprecated).to.be.true;
-    expect(module.rules['first'].meta.deprecated).not.to.be.true;
+    expect(module.rules.first.meta.deprecated).not.to.be.true;
   });
 
 });

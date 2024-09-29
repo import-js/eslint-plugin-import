@@ -1,15 +1,14 @@
 import { test, SYNTAX_CASES, getTSParsers, testFilePath, testVersion, parsers } from '../utils';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import path from 'path';
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
-
 
 const ruleTester = new RuleTester();
 const rule = require('rules/named');
 
 function error(name, module, type = 'Identifier') {
-  return { message: name + ' not found in \'' + module + '\'', type };
+  return { message: `${name} not found in '${module}'`, type };
 }
 
 ruleTester.run('named', rule, {
@@ -30,11 +29,10 @@ ruleTester.run('named', rule, {
     test({ code: 'import {RuleTester} from "./re-export-node_modules"' }),
 
     test({ code: 'import { jsxFoo } from "./jsx/AnotherComponent"',
-      settings: { 'import/resolve': { 'extensions': ['.js', '.jsx'] } } }),
+      settings: { 'import/resolve': { extensions: ['.js', '.jsx'] } } }),
 
     // validate that eslint-disable-line silences this properly
-    test({ code: 'import {a, b, d} from "./common"; ' +
-                '// eslint-disable-line named' }),
+    test({ code: 'import {a, b, d} from "./common"; // eslint-disable-line named' }),
 
     test({ code: 'import { foo, bar } from "./re-export-names"' }),
 
@@ -192,7 +190,7 @@ ruleTester.run('named', rule, {
       },
     })),
 
-    testVersion('>=7.8.0', () =>({ code: 'const { something } = require("./dynamic-import-in-commonjs")',
+    testVersion('>=7.8.0', () => ({ code: 'const { something } = require("./dynamic-import-in-commonjs")',
       parserOptions: { ecmaVersion: 2021 },
       options: [{ commonjs: true }],
     })),
@@ -210,7 +208,7 @@ ruleTester.run('named', rule, {
 
   invalid: [].concat(
     test({ code: 'import { somethingElse } from "./test-module"',
-      errors: [ error('somethingElse', './test-module') ] }),
+      errors: [error('somethingElse', './test-module')] }),
 
     test({ code: 'import { baz } from "./bar"',
       errors: [error('baz', './bar')] }),
@@ -323,7 +321,6 @@ ruleTester.run('named', rule, {
       errors: ["bap not found in './re-export-default'"],
     }),
 
-
     // #328: * exports do not include default
     test({
       code: 'import { default as barDefault } from "./re-export"',
@@ -333,7 +330,7 @@ ruleTester.run('named', rule, {
     // es2022: Arbitrary module namespace identifier names
     testVersion('>= 8.7', () => ({
       code: 'import { "somethingElse" as somethingElse } from "./test-module"',
-      errors: [ error('somethingElse', './test-module', 'Literal') ],
+      errors: [error('somethingElse', './test-module', 'Literal')],
       parserOptions: { ecmaVersion: 2022 },
     })),
     testVersion('>= 8.7', () => ({
@@ -380,7 +377,6 @@ ruleTester.run('named (export *)', rule, {
     }),
   ],
 });
-
 
 context('TypeScript', function () {
   getTSParsers().forEach((parser) => {
@@ -459,7 +455,7 @@ context('TypeScript', function () {
           parser,
           settings,
         }),
-        (source === 'typescript-declare'
+        source === 'typescript-declare'
           ? testVersion('> 5', () => ({
             code: `import { getFoo } from "./${source}"`,
             parser,
@@ -470,7 +466,7 @@ context('TypeScript', function () {
             parser,
             settings,
           })
-        ),
+        ,
         test({
           code: `import { MyEnum } from "./${source}"`,
           parser,

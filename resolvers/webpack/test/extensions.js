@@ -6,7 +6,6 @@ const path = require('path');
 
 const resolve = require('../index').resolve;
 
-
 const file = path.join(__dirname, 'files', 'dummy.js');
 const extensions = path.join(__dirname, 'custom-extensions', 'dummy.js');
 

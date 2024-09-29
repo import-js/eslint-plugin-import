@@ -5,6 +5,60 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.12.0 - 2024-09-26
+
+### Added
+- `hash`: add support for hashing functions ([#3072], thanks [@michaelfaith])
+
+## v2.11.1 - 2024-09-23
+
+### Fixed
+- `parse`: remove unneeded extra backticks ([#3057], thanks [@G-Rath])
+- `parse`: espree parser isn't working with flat config ([#3061], thanks [@michaelfaith])
+- `parse`: add `ecmaVersion` and `sourceType` to `parserOptions` ([#3061], thanks [@michaelfaith])
+
+## v2.11.0 - 2024-09-05
+
+### New
+- `declaredScope`: take a `node` for modern eslint versions (thanks [@michaelfaith])
+
+## v2.10.0 - 2024-09-05
+
+### New
+- add context compatibility helpers ([#3049], thanks [@michaelfaith])
+
+## v2.9.0 - 2024-09-02
+
+### New
+- add support for Flat Config ([#3018], thanks [@michaelfaith])
+
+## v2.8.2 - 2024-08-25
+
+### Fixed
+- `parse`: also delete `parserOptions.projectService` ([#3039], thanks [@Mysak0CZ])
+
+### Changed
+- [types] use shared config (thanks [@ljharb])
+- [meta] add `exports`, `main`
+- [meta] add `repository.directory` field
+- [refactor] avoid hoisting
+
+## v2.8.1 - 2024-02-26
+
+### Fixed
+- `parse`: also delete `parserOptions.EXPERIMENTAL_useProjectService` ([#2963], thanks [@JoshuaKGoldberg])
+
+### Changed
+- add types (thanks [@ljharb])
+
+## v2.8.0 - 2023-04-14
+
+### New
+- `parse`: support flat config ([#2714], thanks [@DMartens])
+
+### Fixed
+- Improve performance of `fullResolve` for large projects ([#2755], thanks [@leipert])
+
 ## v2.7.4 - 2022-08-11
 
 ### Fixed
@@ -16,7 +70,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## v2.7.3 - 2022-01-26
 
 ### Fixed
-- [Fix] `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
+- `parse`: restore compatibility by making the return value `ast` again ([#2350], thanks [@ljharb])
 
 ## v2.7.2 - 2022-01-01
 
@@ -123,6 +177,15 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
+[#3061]: https://github.com/import-js/eslint-plugin-import/pull/3061
+[#3057]: https://github.com/import-js/eslint-plugin-import/pull/3057
+[#3049]: https://github.com/import-js/eslint-plugin-import/pull/3049
+[#3039]: https://github.com/import-js/eslint-plugin-import/pull/3039
+[#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
+[#2963]: https://github.com/import-js/eslint-plugin-import/pull/2963
+[#2755]: https://github.com/import-js/eslint-plugin-import/pull/2755
+[#2714]: https://github.com/import-js/eslint-plugin-import/pull/2714
 [#2523]: https://github.com/import-js/eslint-plugin-import/pull/2523
 [#2431]: https://github.com/import-js/eslint-plugin-import/pull/2431
 [#2350]: https://github.com/import-js/eslint-plugin-import/issues/2350
@@ -155,14 +218,20 @@ Yanked due to critical issue with cache key resulting from #839.
 [@bradzacher]: https://github.com/bradzacher
 [@brettz9]: https://github.com/brettz9
 [@christophercurrie]: https://github.com/christophercurrie
+[@DMartens]: https://github.com/DMartens
+[@G-Rath]: https://github.com/G-Rath
 [@hulkish]: https://github.com/hulkish
 [@Hypnosphi]: https://github.com/Hypnosphi
 [@iamnapo]: https://github.com/iamnapo
+[@JoshuaKGoldberg]: https://github.com/JoshuaKGoldberg
 [@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
+[@leipert]: https://github.com/leipert
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@mgwalker]: https://github.com/mgwalker
+[@michaelfaith]: https://github.com/michaelfaith
+[@Mysak0CZ]: https://github.com/Mysak0CZ
 [@nicolo-ribaudo]: https://github.com/nicolo-ribaudo
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@sergei-startsev]: https://github.com/sergei-startsev

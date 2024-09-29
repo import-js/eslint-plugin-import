@@ -30,6 +30,7 @@ redefinition of the namespace in an intermediate scope. Adherence to the ESLint
 For [ES7], reports if an exported namespace would be empty (no names exported from the referenced module.)
 
 Given:
+
 ```js
 // @module ./named-exports
 export const a = 1
@@ -44,7 +45,9 @@ export class ExportedClass { }
 // ES7
 export * as deep from './deep'
 ```
+
 and:
+
 ```js
 // @module ./deep
 export const e = "MC2"
@@ -94,9 +97,9 @@ still can't be statically analyzed any further.
 
 ## Further Reading
 
-- Lee Byron's [ES7] export proposal
-- [`import/ignore`] setting
-- [`jsnext:main`](Rollup)
+ - Lee Byron's [ES7] export proposal
+ - [`import/ignore`] setting
+ - [`jsnext:main`](Rollup)
 
 [ES7]: https://github.com/leebyron/ecmascript-more-export-from
 [`import/ignore`]: ../../README.md#importignore

@@ -3,7 +3,7 @@ import typescriptConfig from '../../../config/typescript';
 import path from 'path';
 import fs from 'fs';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
@@ -26,6 +26,7 @@ const packageDirWithEmpty = path.join(__dirname, '../../files/empty');
 const packageDirBundleDeps = path.join(__dirname, '../../files/bundled-dependencies/as-array-bundle-deps');
 const packageDirBundledDepsAsObject = path.join(__dirname, '../../files/bundled-dependencies/as-object');
 const packageDirBundledDepsRaceCondition = path.join(__dirname, '../../files/bundled-dependencies/race-condition');
+const emptyPackageDir = path.join(__dirname, '../../files/empty-folder');
 
 const {
   dependencies: deps,
@@ -42,11 +43,9 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       test({ code: `export { foo } from "${pkg}"` }),
       test({ code: `export * from "${pkg}"` }),
     ]),
-    test({ code: 'import "eslint"' }),
     test({ code: 'import "eslint/lib/api"' }),
     test({ code: 'import "fs"' }),
     test({ code: 'import "./foo"' }),
-    test({ code: 'import "@org/package"' }),
 
     test({ code: 'import "electron"', settings: { 'import/core-modules': ['electron'] } }),
     test({
@@ -57,7 +56,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     // 'project' type
     test({
       code: 'import "importType"',
-      settings: { 'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } } },
+      settings: { 'import/resolver': { node: { paths: [path.join(__dirname, '../../files')] } } },
     }),
     test({
       code: 'import chai from "chai"',
@@ -103,6 +102,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import leftpad from "left-pad";',
       options: [{ packageDir: packageDirMonoRepoRoot }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: [emptyPackageDir, packageDirMonoRepoRoot] }],
+    }),
+    test({
+      code: 'import leftpad from "left-pad";',
+      options: [{ packageDir: [packageDirMonoRepoRoot, emptyPackageDir] }],
     }),
     test({
       code: 'import react from "react";',
@@ -308,7 +315,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import foo from "foo"',
       options: [{ packageDir: packageDirWithSyntaxError }],
       errors: [{
-        message: 'The package.json file could not be parsed: ' + packageFileWithSyntaxErrorMessage,
+        message: `The package.json file could not be parsed: ${packageFileWithSyntaxErrorMessage}`,
       }],
     }),
     test({
@@ -378,15 +385,6 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
 
     test({
-      code: 'import "not-a-dependency"',
-      filename: path.join(packageDirMonoRepoRoot, 'foo.js'),
-      options: [{ packageDir: packageDirMonoRepoRoot }],
-      errors: [{
-        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
-      }],
-    }),
-
-    test({
       code: 'import "esm-package-not-in-pkg-json/esm-module";',
       errors: [{
         message: `'esm-package-not-in-pkg-json' should be listed in the project's dependencies. Run 'npm i -S esm-package-not-in-pkg-json' to add it`,
@@ -396,7 +394,7 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     test({
       code: 'import "not-a-dependency"',
       settings: {
-        'import/resolver': { node: { paths: [ path.join(__dirname, '../../files') ] } },
+        'import/resolver': { node: { paths: [path.join(__dirname, '../../files')] } },
         'import/internal-regex': '^not-a-dependency.*',
       },
       options: [{ includeInternal: true }],
@@ -422,31 +420,41 @@ describe('TypeScript', () => {
 
       ruleTester.run('no-extraneous-dependencies', rule, {
         valid: [
-          test(Object.assign({
+          test({
             code: 'import type T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-          }, parserConfig)),
+            ...parserConfig,
+          }),
+
+          test({
+            code: 'import type { T } from "a"; export type { T };',
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            ...parserConfig,
+          }),
+
+          test({
+            code: 'export type { T } from "a";',
+            options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
+            ...parserConfig,
+          }),
         ],
         invalid: [
-          test(Object.assign({
+          test({
             code: 'import T from "a";',
             options: [{ packageDir: packageDirWithTypescriptDevDependencies, devDependencies: false }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
+            errors: [{ message: "'a' should be listed in the project's dependencies, not devDependencies." }],
+            ...parserConfig,
+          }),
 
-          test(Object.assign({
-            code: 'import type T from "a";',
-            options: [{ 
+          test({ code: 'import type T from "a";',
+            options: [{
               packageDir: packageDirWithTypescriptDevDependencies,
               devDependencies: false,
               includeTypes: true,
             }],
-            errors: [{
-              message: "'a' should be listed in the project's dependencies, not devDependencies.",
-            }],
-          }, parserConfig)),
+            errors: [{ message: "'a' should be listed in the project's dependencies, not devDependencies." }],
+            ...parserConfig,
+          }),
         ],
       });
     });
@@ -464,11 +472,46 @@ typescriptRuleTester.run('no-extraneous-dependencies typescript type imports', r
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
       parser: parsers.BABEL_OLD,
     }),
+    test({
+      code: 'import { type MyType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+    }),
+    test({
+      code: 'import { type MyType, type OtherType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+    }),
   ],
   invalid: [
     test({
       code: 'import type { MyType } from "not-a-dependency";',
       options: [{ includeTypes: true }],
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+    test({
+      code: `import type { Foo } from 'not-a-dependency';`,
+      options: [{ includeTypes: true }],
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+    test({
+      code: 'import Foo, { type MyType } from "not-a-dependency";',
+      filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
+      parser: parsers.BABEL_OLD,
+      errors: [{
+        message: `'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it`,
+      }],
+    }),
+    test({
+      code: 'import { type MyType, Foo } from "not-a-dependency";',
       filename: testFilePath('./no-unused-modules/typescript/file-ts-a.ts'),
       parser: parsers.BABEL_OLD,
       errors: [{

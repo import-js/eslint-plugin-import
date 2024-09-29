@@ -6,12 +6,12 @@ In exporting files, this rule checks if there is default export or not.
 
 ## Rule Details
 
-##### rule schema:
+### rule schema
 
 ```javascript
 "import/prefer-default-export": [
     ( "off" | "warn" | "error" ),
-	{ "target": "single" | "any" } // default is "single"
+    { "target": "single" | "any" } // default is "single"
 ]
 ```
 
@@ -108,7 +108,6 @@ How to setup config file for this rule:
     ]
 }
 ```
-
 
 The following patterns are *not* considered warnings:
 

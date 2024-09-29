@@ -1,3 +1,5 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -22,19 +24,21 @@ module.exports = {
 
     return {
       ExportDefaultDeclaration(node) {
-        const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
+        const { loc } = getSourceCode(context).getFirstTokens(node)[1] || {};
         context.report({ node, message: preferNamed, loc });
       },
 
       ExportNamedDeclaration(node) {
-        node.specifiers.filter(specifier => (specifier.exported.name || specifier.exported.value) === 'default').forEach(specifier => {
-          const { loc } = context.getSourceCode().getFirstTokens(node)[1] || {};
-          if (specifier.type === 'ExportDefaultSpecifier') {
-            context.report({ node, message: preferNamed, loc });
-          } else if (specifier.type === 'ExportSpecifier') {
-            context.report({ node, message: noAliasDefault(specifier), loc  });
-          }
-        });
+        node.specifiers
+          .filter((specifier) => (specifier.exported.name || specifier.exported.value) === 'default')
+          .forEach((specifier) => {
+            const { loc } = getSourceCode(context).getFirstTokens(node)[1] || {};
+            if (specifier.type === 'ExportDefaultSpecifier') {
+              context.report({ node, message: preferNamed, loc });
+            } else if (specifier.type === 'ExportSpecifier') {
+              context.report({ node, message: noAliasDefault(specifier), loc  });
+            }
+          });
       },
     };
   },

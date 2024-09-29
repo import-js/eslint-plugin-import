@@ -1,4 +1,5 @@
 'use strict';
+
 exports.__esModule = true;
 
 const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
@@ -10,7 +11,7 @@ const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
  *
  * Not perfect, just a fast way to disqualify large non-ES6 modules and
  * avoid a parse.
- * @type {RegExp}
+ * @type {import('./unambiguous').test}
  */
 exports.test = function isMaybeUnambiguousModule(content) {
   return pattern.test(content);
@@ -21,9 +22,8 @@ const unambiguousNodeType = /^(?:(?:Exp|Imp)ort.*Declaration|TSExportAssignment)
 
 /**
  * Given an AST, return true if the AST unambiguously represents a module.
- * @param  {Program node}  ast
- * @return {Boolean}
+ * @type {import('./unambiguous').isModule}
  */
 exports.isModule = function isUnambiguousModule(ast) {
-  return ast.body && ast.body.some(node => unambiguousNodeType.test(node.type));
+  return ast.body && ast.body.some((node) => unambiguousNodeType.test(node.type));
 };

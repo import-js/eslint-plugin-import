@@ -1,12 +1,12 @@
 import { test } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 const isCore = require('is-core-module');
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-nodejs-modules');
 
-const error = message => ({
+const error = (message) => ({
   message,
 });
 
@@ -69,7 +69,7 @@ ruleTester.run('no-nodejs-modules', rule, {
           allow: ['node:events'],
         }],
       }),
-    ]: [],
+    ] : [],
     isCore('node:path') ? [
       test({
         code: 'import path from "node:path"',

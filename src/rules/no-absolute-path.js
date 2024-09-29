@@ -1,4 +1,7 @@
+import path from 'path';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
+
 import { isAbsolute } from '../core/importType';
 import docsUrl from '../docsUrl';
 
@@ -10,17 +13,29 @@ module.exports = {
       description: 'Forbid import of modules using absolute paths.',
       url: docsUrl('no-absolute-path'),
     },
-    schema: [ makeOptionsSchema() ],
+    fixable: 'code',
+    schema: [makeOptionsSchema()],
   },
 
   create(context) {
     function reportIfAbsolute(source) {
       if (isAbsolute(source.value)) {
-        context.report(source, 'Do not import modules using an absolute path');
+        context.report({
+          node: source,
+          message: 'Do not import modules using an absolute path',
+          fix(fixer) {
+            // node.js and web imports work with posix style paths ("/")
+            let relativePath = path.posix.relative(path.dirname(getPhysicalFilename(context)), source.value);
+            if (!relativePath.startsWith('.')) {
+              relativePath = `./${relativePath}`;
+            }
+            return fixer.replaceText(source, JSON.stringify(relativePath));
+          },
+        });
       }
     }
 
-    const options = Object.assign({ esmodule: true, commonjs: true }, context.options[0]);
+    const options = { esmodule: true, commonjs: true, ...context.options[0] };
     return moduleVisitor(reportIfAbsolute, options);
   },
 };

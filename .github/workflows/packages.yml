@@ -2,6 +2,10 @@ name: 'Tests: packages'
 
 on: [pull_request, push]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 permissions:
   contents: read
 
@@ -38,7 +42,7 @@ jobs:
           # - utils
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ljharb/actions/node/install@main
         name: 'nvm install ${{ matrix.node-version }} && npm install'
         env:
@@ -50,7 +54,7 @@ jobs:
           after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh && cd ${{ matrix.package }} && npm install
           skip-ls-check: true
       - run: cd ${{ matrix.package }} && npm run tests-only
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v3.1.5
 
   packages:
     name: 'packages: all tests'

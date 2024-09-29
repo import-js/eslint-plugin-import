@@ -1,6 +1,6 @@
 {
   "name": "eslint-import-resolver-webpack",
-  "version": "0.13.2",
+  "version": "0.13.9",
   "description": "Resolve paths to dependencies, given a webpack.config.js. Plugin for eslint-plugin-import.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,8 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/import-js/eslint-plugin-import.git"
+    "url": "git+https://github.com/import-js/eslint-plugin-import.git",
+    "directory": "resolvers/webpack"
   },
   "keywords": [
     "eslint-plugin-import",
@@ -30,17 +31,16 @@
   },
   "homepage": "https://github.com/import-js/eslint-plugin-import/tree/HEAD/resolvers/webpack",
   "dependencies": {
-    "array-find": "^1.0.0",
     "debug": "^3.2.7",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
-    "has": "^1.0.3",
+    "hasown": "^2.0.0",
     "interpret": "^1.4.0",
-    "is-core-module": "^2.11.0",
+    "is-core-module": "^2.13.1",
     "is-regex": "^1.1.4",
     "lodash": "^4.17.21",
-    "resolve": "^1.22.1",
-    "semver": "^5.7.1"
+    "resolve": "^2.0.0-next.5",
+    "semver": "^5.7.2"
   },
   "peerDependencies": {
     "eslint-plugin-import": ">=1.4.0",

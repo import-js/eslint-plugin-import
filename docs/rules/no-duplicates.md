@@ -7,7 +7,6 @@
 <!-- end auto-generated rule header -->
 
 Reports if a resolved path is imported more than once.
-+(fixable) The `--fix` option on the [command line] automatically fixes some problems reported by this rule.
 
 ESLint core has a similar rule ([`no-duplicate-imports`](https://eslint.org/docs/rules/no-duplicate-imports)), but this version
 is different in two key ways:
@@ -18,6 +17,7 @@ is different in two key ways:
 ## Rule Details
 
 Valid:
+
 ```js
 import SomeDefaultClass, * as names from './mod'
 // Flow `type` import from same module is fine
@@ -53,6 +53,7 @@ Config:
 ```
 
 And then the following code becomes valid:
+
 ```js
 import minifiedMod from './mod?minify'
 import noCommentsMod from './mod?comments=0'
@@ -60,12 +61,45 @@ import originalMod from './mod'
 ```
 
 It will still catch duplicates when using the same module and the exact same query string:
+
 ```js
 import SomeDefaultClass from './mod?minify'
 
 // This is invalid, assuming `./mod` and `./mod.js` are the same target:
 import * from './mod.js?minify'
 ```
+
+### Inline Type imports
+
+TypeScript 4.5 introduced a new [feature](https://devblogs.microsoft.com/typescript/announcing-typescript-4-5/#type-on-import-names) that allows mixing of named value and type imports. In order to support fixing to an inline type import when duplicate imports are detected, `prefer-inline` can be set to true.
+
+Config:
+
+```json
+"import/no-duplicates": ["error", {"prefer-inline": true}]
+```
+
+<!--tabs-->
+
+❌ Invalid `["error", {"prefer-inline": true}]`
+
+```js
+import { AValue, type AType } from './mama-mia'
+import type { BType } from './mama-mia'
+
+import { CValue } from './papa-mia'
+import type { CType } from './papa-mia'
+```
+
+✅ Valid with `["error", {"prefer-inline": true}]`
+
+```js
+import { AValue, type AType, type BType } from './mama-mia'
+
+import { CValue, type CType } from './papa-mia'
+```
+
+<!--tabs-->
 
 ## When Not To Use It
 

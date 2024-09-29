@@ -4,7 +4,7 @@ import { getTSParsers, test, SYNTAX_CASES, testVersion, parsers } from '../utils
 
 import { CASE_SENSITIVE_FS } from 'eslint-module-utils/resolve';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-unresolved');
@@ -17,7 +17,7 @@ function runResolverTests(resolver) {
       ...specs,
       settings: {
         ...specs.settings,
-        'import/resolver': resolver, 
+        'import/resolver': resolver,
         'import/cache': { lifetime: 0 },
       },
     });
@@ -146,22 +146,13 @@ function runResolverTests(resolver) {
         ],
       }),
       rest({
-        code: "import bar from './baz';",
-        errors: [
-          {
-            message: "Unable to resolve path to module './baz'.",
-            type: 'Literal',
-          },
-        ],
-      }),
-      rest({
         code: "import bar from './empty-folder';",
         errors: [
           {
             message: "Unable to resolve path to module './empty-folder'.",
             type: 'Literal',
           },
-        ], 
+        ],
       }),
 
       // sanity check that this module is _not_ found without proper settings
@@ -185,7 +176,7 @@ function runResolverTests(resolver) {
         parser: parsers.BABEL_OLD,
       }),
 
-      rest({ 
+      rest({
         code: 'export { foo } from "./does-not-exist"',
         errors: ["Unable to resolve path to module './does-not-exist'."],
       }),
@@ -359,7 +350,7 @@ ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
       code: "import { DEEP } from 'in-alternate-root';",
       settings: {
         'import/resolve': {
-          'paths': [
+          paths: [
             path.join(process.cwd(), 'tests', 'files', 'alternate-root'),
           ],
         },
@@ -373,21 +364,21 @@ ruleTester.run('no-unresolved (import/resolve legacy)', rule, {
           paths: [
             path.join('tests', 'files', 'src-root'),
             path.join('tests', 'files', 'alternate-root'),
-          ], 
+          ],
         },
       },
     }),
 
     test({
       code: 'import * as foo from "jsx-module/foo"',
-      settings: { 'import/resolve': { 'extensions': ['.jsx'] } },
+      settings: { 'import/resolve': { extensions: ['.jsx'] } },
     }),
   ],
 
   invalid: [
     test({
       code: 'import * as foo from "jsx-module/foo"',
-      errors: [ "Unable to resolve path to module 'jsx-module/foo'." ],
+      errors: ["Unable to resolve path to module 'jsx-module/foo'."],
     }),
   ],
 });
@@ -417,7 +408,6 @@ ruleTester.run('no-unresolved (webpack-specific)', rule, {
   ],
 });
 
-
 ruleTester.run('no-unresolved ignore list', rule, {
   valid: [
     test({
@@ -440,7 +430,7 @@ ruleTester.run('no-unresolved ignore list', rule, {
     }),
   ],
 
-  invalid:[
+  invalid: [
     test({
       code: 'import "./test.gif"',
       options: [{ ignore: ['.png$'] }],
@@ -458,7 +448,7 @@ ruleTester.run('no-unresolved ignore list', rule, {
 ruleTester.run('no-unresolved unknown resolver', rule, {
   valid: [],
 
-  invalid:[
+  invalid: [
 
     // logs resolver load error
     test({
@@ -490,7 +480,7 @@ ruleTester.run('no-unresolved electron', rule, {
       settings: { 'import/core-modules': ['electron'] },
     }),
   ],
-  invalid:[
+  invalid: [
     test({
       code: 'import "electron"',
       errors: [`Unable to resolve path to module 'electron'.`],
@@ -500,7 +490,7 @@ ruleTester.run('no-unresolved electron', rule, {
 
 ruleTester.run('no-unresolved syntax verification', rule, {
   valid: SYNTAX_CASES,
-  invalid:[],
+  invalid: [],
 });
 
 // https://github.com/import-js/eslint-plugin-import/issues/2024
@@ -522,7 +512,7 @@ ruleTester.run('import() with built-in parser', rule, {
 
 context('TypeScript', () => {
   // Type-only imports were added in TypeScript ESTree 2.23.0
-  getTSParsers().filter(x => x !== parsers.TS_OLD).forEach((parser) => {
+  getTSParsers().filter((x) => x !== parsers.TS_OLD).forEach((parser) => {
     ruleTester.run(`${parser}: no-unresolved ignore type-only`, rule, {
       valid: [
         test({
@@ -537,12 +527,12 @@ context('TypeScript', () => {
       invalid: [
         test({
           code: 'import { JSONSchema7Type } from "@types/json-schema";',
-          errors: [ "Unable to resolve path to module '@types/json-schema'." ],
+          errors: ["Unable to resolve path to module '@types/json-schema'."],
           parser,
         }),
         test({
           code: 'export { JSONSchema7Type } from "@types/json-schema";',
-          errors: [ "Unable to resolve path to module '@types/json-schema'." ],
+          errors: ["Unable to resolve path to module '@types/json-schema'."],
           parser,
         }),
       ],

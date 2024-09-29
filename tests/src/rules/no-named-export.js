@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import { parsers, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester();
@@ -6,6 +6,9 @@ const rule = require('rules/no-named-export');
 
 ruleTester.run('no-named-export', rule, {
   valid: [].concat(
+    test({
+      code: 'module.export.foo = function () {}',
+    }),
     test({
       code: 'export default function bar() {};',
     }),

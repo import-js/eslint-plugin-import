@@ -3,7 +3,7 @@ import path from 'path';
 export default {
   resolve: {
     alias: {
-      'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
+      foo: path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
     },
     modules: [
       path.join(__dirname, 'src'),
@@ -17,7 +17,7 @@ export default {
   },
 
   externals: [
-    { 'jquery': 'jQuery' },
+    { jquery: 'jQuery' },
     'bootstrap',
   ],
 };

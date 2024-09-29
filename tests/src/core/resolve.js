@@ -21,32 +21,38 @@ describe('resolve', function () {
   it('resolves via a custom resolver with interface version 1', function () {
     const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v1' });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
 
-    expect(resolve( '../files/exception'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('exception.js'); } }),
+    expect(resolve(
+      '../files/exception',
+      { ...testContext, getFilename() { return utils.getFilename('exception.js'); } },
     )).to.equal(undefined);
 
-    expect(resolve( '../files/not-found'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('not-found.js'); } }),
+    expect(resolve(
+      '../files/not-found',
+      { ...testContext, getFilename() { return utils.getFilename('not-found.js'); } },
     )).to.equal(undefined);
   });
 
   it('resolves via a custom resolver with interface version 1 assumed if not specified', function () {
     const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version' });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
 
-    expect(resolve( '../files/exception'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('exception.js'); } }),
+    expect(resolve(
+      '../files/exception',
+      { ...testContext, getFilename() { return utils.getFilename('exception.js'); } },
     )).to.equal(undefined);
 
-    expect(resolve( '../files/not-found'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('not-found.js'); } }),
+    expect(resolve(
+      '../files/not-found',
+      { ...testContext, getFilename() { return utils.getFilename('not-found.js'); } },
     )).to.equal(undefined);
   });
 
@@ -57,54 +63,61 @@ describe('resolve', function () {
       testContextReports.push(reportInfo);
     };
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
 
     testContextReports.length = 0;
-    expect(resolve( '../files/exception'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('exception.js'); } }),
+    expect(resolve(
+      '../files/exception',
+      { ...testContext, getFilename() { return utils.getFilename('exception.js'); } },
     )).to.equal(undefined);
     expect(testContextReports[0]).to.be.an('object');
     expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: foo-bar-resolver-v2 resolve test exception\n<stack-was-here>');
     expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
 
     testContextReports.length = 0;
-    expect(resolve( '../files/not-found'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('not-found.js'); } }),
+    expect(resolve(
+      '../files/not-found',
+      { ...testContext, getFilename() { return utils.getFilename('not-found.js'); } },
     )).to.equal(undefined);
     expect(testContextReports.length).to.equal(0);
   });
 
   it('respects import/resolver as array of strings', function () {
-    const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] });
+    const testContext = utils.testContext({ 'import/resolver': ['./foo-bar-resolver-v2', './foo-bar-resolver-v1'] });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
   });
 
   it('respects import/resolver as object', function () {
     const testContext = utils.testContext({ 'import/resolver': { './foo-bar-resolver-v2': {} } });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
   });
 
   it('respects import/resolver as array of objects', function () {
-    const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] });
+    const testContext = utils.testContext({ 'import/resolver': [{ './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} }] });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
   });
 
   it('finds resolvers from the source files rather than eslint-module-utils', function () {
-    const testContext = utils.testContext({ 'import/resolver': { 'foo': {} } });
+    const testContext = utils.testContext({ 'import/resolver': { foo: {} } });
 
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
   });
 
@@ -116,8 +129,9 @@ describe('resolve', function () {
     };
 
     testContextReports.length = 0;
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(undefined);
     expect(testContextReports[0]).to.be.an('object');
     expect(testContextReports[0].message).to.equal('Resolve error: invalid resolver config');
@@ -132,8 +146,9 @@ describe('resolve', function () {
       testContextReports.push(reportInfo);
     };
     testContextReports.length = 0;
-    expect(resolve( '../files/foo'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('foo.js'); } }),
+    expect(resolve(
+      '../files/foo',
+      { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(undefined);
     expect(testContextReports[0]).to.be.an('object');
     expect(testContextReports[0].message).to.equal(`Resolve error: ${resolverName} with invalid interface loaded as resolver`);
@@ -141,10 +156,11 @@ describe('resolve', function () {
   });
 
   it('respects import/resolve extensions', function () {
-    const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] } });
+    const testContext = utils.testContext({ 'import/resolve': { extensions: ['.jsx'] } });
 
-    expect(resolve( './jsx/MyCoolComponent'
-      , testContext,
+    expect(resolve(
+      './jsx/MyCoolComponent',
+      testContext,
     )).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'));
   });
 
@@ -155,8 +171,9 @@ describe('resolve', function () {
       testContextReports.push(reportInfo);
     };
 
-    expect(resolve( '../files/exception'
-      , Object.assign({}, testContext, { getFilename() { return utils.getFilename('exception.js'); } }),
+    expect(resolve(
+      '../files/exception',
+      { ...testContext, getFilename() { return utils.getFilename('exception.js'); } },
     )).to.equal(undefined);
     expect(testContextReports[0]).to.be.an('object');
     expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>');
@@ -172,32 +189,38 @@ describe('resolve', function () {
     it('resolves via a custom resolver with interface version 1', function () {
       const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-v1' });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
 
-      expect(resolve( '../files/exception'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } }),
+      expect(resolve(
+        '../files/exception',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } },
       )).to.equal(undefined);
 
-      expect(resolve( '../files/not-found'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } }),
+      expect(resolve(
+        '../files/not-found',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } },
       )).to.equal(undefined);
     });
 
     it('resolves via a custom resolver with interface version 1 assumed if not specified', function () {
       const testContext = utils.testContext({ 'import/resolver': './foo-bar-resolver-no-version' });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
 
-      expect(resolve( '../files/exception'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } }),
+      expect(resolve(
+        '../files/exception',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } },
       )).to.equal(undefined);
 
-      expect(resolve( '../files/not-found'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } }),
+      expect(resolve(
+        '../files/not-found',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } },
       )).to.equal(undefined);
     });
 
@@ -208,54 +231,61 @@ describe('resolve', function () {
         testContextReports.push(reportInfo);
       };
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
 
       testContextReports.length = 0;
-      expect(resolve( '../files/exception'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } }),
+      expect(resolve(
+        '../files/exception',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } },
       )).to.equal(undefined);
       expect(testContextReports[0]).to.be.an('object');
       expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: foo-bar-resolver-v2 resolve test exception\n<stack-was-here>');
       expect(testContextReports[0].loc).to.eql({ line: 1, column: 0 });
 
       testContextReports.length = 0;
-      expect(resolve( '../files/not-found'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } }),
+      expect(resolve(
+        '../files/not-found',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('not-found.js'); } },
       )).to.equal(undefined);
       expect(testContextReports.length).to.equal(0);
     });
 
     it('respects import/resolver as array of strings', function () {
-      const testContext = utils.testContext({ 'import/resolver': [ './foo-bar-resolver-v2', './foo-bar-resolver-v1' ] });
+      const testContext = utils.testContext({ 'import/resolver': ['./foo-bar-resolver-v2', './foo-bar-resolver-v1'] });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
     });
 
     it('respects import/resolver as object', function () {
       const testContext = utils.testContext({ 'import/resolver': { './foo-bar-resolver-v2': {} } });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
     });
 
     it('respects import/resolver as array of objects', function () {
-      const testContext = utils.testContext({ 'import/resolver': [ { './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} } ] });
+      const testContext = utils.testContext({ 'import/resolver': [{ './foo-bar-resolver-v2': {} }, { './foo-bar-resolver-v1': {} }] });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
     });
 
     it('finds resolvers from the source files rather than eslint-module-utils', function () {
-      const testContext = utils.testContext({ 'import/resolver': { 'foo': {} } });
+      const testContext = utils.testContext({ 'import/resolver': { foo: {} } });
 
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(utils.testFilePath('./bar.jsx'));
     });
 
@@ -267,8 +297,9 @@ describe('resolve', function () {
       };
 
       testContextReports.length = 0;
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(undefined);
       expect(testContextReports[0]).to.be.an('object');
       expect(testContextReports[0].message).to.equal('Resolve error: invalid resolver config');
@@ -283,8 +314,9 @@ describe('resolve', function () {
         testContextReports.push(reportInfo);
       };
       testContextReports.length = 0;
-      expect(resolve( '../files/foo'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } }),
+      expect(resolve(
+        '../files/foo',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('foo.js'); } },
       )).to.equal(undefined);
       expect(testContextReports[0]).to.be.an('object');
       expect(testContextReports[0].message).to.equal(`Resolve error: ${resolverName} with invalid interface loaded as resolver`);
@@ -292,10 +324,11 @@ describe('resolve', function () {
     });
 
     it('respects import/resolve extensions', function () {
-      const testContext = utils.testContext({ 'import/resolve': { 'extensions': ['.jsx'] } });
+      const testContext = utils.testContext({ 'import/resolve': { extensions: ['.jsx'] } });
 
-      expect(resolve( './jsx/MyCoolComponent'
-        , testContext,
+      expect(resolve(
+        './jsx/MyCoolComponent',
+        testContext,
       )).to.equal(utils.testFilePath('./jsx/MyCoolComponent.jsx'));
     });
 
@@ -306,8 +339,9 @@ describe('resolve', function () {
         testContextReports.push(reportInfo);
       };
 
-      expect(resolve( '../files/exception'
-        , Object.assign({}, testContext, { getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } }),
+      expect(resolve(
+        '../files/exception',
+        { ...testContext, getFilename: unexpectedCallToGetFilename, getPhysicalFilename() { return utils.getFilename('exception.js'); } },
       )).to.equal(undefined);
       expect(testContextReports[0]).to.be.an('object');
       expect(replaceErrorStackForTest(testContextReports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>');
@@ -315,11 +349,11 @@ describe('resolve', function () {
     });
   });
 
-  const caseDescribe = (!CASE_SENSITIVE_FS ? describe : describe.skip);
+  const caseDescribe = !CASE_SENSITIVE_FS ? describe : describe.skip;
   caseDescribe('case sensitivity', function () {
     let file;
     const testContext = utils.testContext({
-      'import/resolve': { 'extensions': ['.jsx'] },
+      'import/resolve': { extensions: ['.jsx'] },
       'import/cache': { lifetime: 0 },
     });
     const testSettings = testContext.settings;
@@ -333,30 +367,29 @@ describe('resolve', function () {
     });
     it('detects case does not match FS', function () {
       expect(fileExistsWithCaseSync(file, testSettings))
-        .to.be.false;
+        .to.equal(false);
     });
     it('detecting case does not include parent folder path (issue #720)', function () {
       const f = path.join(process.cwd().toUpperCase(), './tests/files/jsx/MyUnCoolComponent.jsx');
       expect(fileExistsWithCaseSync(f, testSettings))
-        .to.be.true;
+        .to.equal(true);
     });
     it('detecting case should include parent folder path', function () {
       const f = path.join(process.cwd().toUpperCase(), './tests/files/jsx/MyUnCoolComponent.jsx');
       expect(fileExistsWithCaseSync(f, testSettings, true))
-        .to.be.false;
+        .to.equal(false);
     });
   });
 
   describe('rename cache correctness', function () {
     const context = utils.testContext({
-      'import/cache': { 'lifetime': 1 },
+      'import/cache': { lifetime: 1 },
     });
 
-    const infiniteContexts = [ '∞', 'Infinity' ].map(inf => [inf,
+    const infiniteContexts = ['∞', 'Infinity'].map((inf) => [inf,
       utils.testContext({
-        'import/cache': { 'lifetime': inf },
+        'import/cache': { lifetime: inf },
       })]);
-
 
     const pairs = [
       ['./CaseyKasem.js', './CASEYKASEM2.js'],
@@ -372,7 +405,7 @@ describe('resolve', function () {
 
         // settings are part of cache key
         before('warm up infinite entries', function () {
-          infiniteContexts.forEach(([,c]) => {
+          infiniteContexts.forEach(([, c]) => {
             expect(resolve(original, c)).to.exist;
           });
         });
@@ -384,10 +417,9 @@ describe('resolve', function () {
             done);
         });
 
-        before('verify rename', (done) =>
-          fs.exists(
-            utils.testFilePath(changed),
-            exists => done(exists ? null : new Error('new file does not exist'))));
+        before('verify rename', (done) => fs.exists(
+          utils.testFilePath(changed),
+          (exists) => done(exists ? null : new Error('new file does not exist'))));
 
         it('gets cached values within cache lifetime', function () {
           // get cached values initially
@@ -426,7 +458,8 @@ describe('resolve', function () {
           fs.rename(
             utils.testFilePath(changed),
             utils.testFilePath(original),
-            done);
+            done,
+          );
         });
       });
     });

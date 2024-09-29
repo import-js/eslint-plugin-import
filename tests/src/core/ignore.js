@@ -19,7 +19,7 @@ describe('ignore', function () {
     });
 
     it('ignores paths with invalid extensions when configured with import/extensions', function () {
-      const testContext = utils.testContext({ 'import/extensions': [ '.js', '.jsx', '.ts' ] });
+      const testContext = utils.testContext({ 'import/extensions': ['.js', '.jsx', '.ts'] });
 
       expect(isIgnored('../files/foo.js', testContext)).to.equal(false);
 
@@ -45,7 +45,7 @@ describe('ignore', function () {
     });
 
     it('can be configured with import/extensions', function () {
-      const testContext = utils.testContext({ 'import/extensions': [ '.foo', '.bar' ] });
+      const testContext = utils.testContext({ 'import/extensions': ['.foo', '.bar'] });
 
       expect(hasValidExtension('../files/foo.foo', testContext)).to.equal(true);
 

@@ -1,16 +1,16 @@
 import { parsers, test } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-empty-named-blocks');
 
-
 function generateSuggestionsTestCases(cases, parser) {
-  return cases.map(code => test({
+  return cases.map((code) => test({
     code,
     parser,
     errors: [{
+      message: 'Unexpected empty named import block',
       suggestions: [
         {
           desc: 'Remove unused import',
@@ -42,9 +42,27 @@ ruleTester.run('no-empty-named-blocks', rule, {
     ] : [],
 
     // Flow
-    test({ code: `import typeof Default from 'mod';`, parser: parsers.BABEL_OLD }),
-    test({ code: `import typeof { Named } from 'mod';`, parser: parsers.BABEL_OLD }),
-    test({ code: `import typeof Default, { Named } from 'mod';`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof Default from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof { Named } from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({ code: `import typeof Default, { Named } from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
+    test({
+      code: `
+        module.exports = {
+          rules: {
+            'keyword-spacing': ['error', {overrides: {}}],
+          }
+        };
+      `,
+    }),
+    test({
+      code: `
+        import { DESCRIPTORS, NODE } from '../helpers/constants';
+        // ...
+        import { timeLimitedPromise } from '../helpers/helpers';
+        // ...
+        import { DESCRIPTORS2 } from '../helpers/constants';
+      `,
+    }),
   ),
   invalid: [].concat(
     test({

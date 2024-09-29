@@ -1,23 +1,25 @@
 import { parsers, test as _test, testFilePath, testVersion as _testVersion } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-cycle');
 
-const error = message => ({ message });
+const error = (message) => ({ message });
 
-const test = def => _test(Object.assign(def, {
+const test = (def) => _test({
   filename: testFilePath('./cycles/depth-zero.js'),
-}));
-const testVersion = (specifier, t) => _testVersion(specifier, () => Object.assign(t(), {
+  ...def,
+});
+const testVersion = (specifier, t) => _testVersion(specifier, () => ({
   filename: testFilePath('./cycles/depth-zero.js'),
+  ...t(),
 }));
 
 const testDialects = ['es6'];
 
-ruleTester.run('no-cycle', rule, {
+const cases = {
   valid: [].concat(
     // this rule doesn't care if the cycle length is 0
     test({ code: 'import foo from "./foo.js"' }),
@@ -233,16 +235,6 @@ ruleTester.run('no-cycle', rule, {
         parser: parsers.BABEL_OLD,
       }),
       test({
-        code: `import { foo } from "./${testDialect}/depth-two"`,
-        options: [{ maxDepth: Infinity }],
-        errors: [error(`Dependency cycle via ./depth-one:1`)],
-      }),
-      test({
-        code: `import { foo } from "./${testDialect}/depth-two"`,
-        options: [{ maxDepth: '∞' }],
-        errors: [error(`Dependency cycle via ./depth-one:1`)],
-      }),
-      test({
         code: `function bar(){ return import("./${testDialect}/depth-one"); } // #2265 5`,
         errors: [error(`Dependency cycle detected.`)],
         parser: parsers.BABEL_OLD,
@@ -290,4 +282,30 @@ ruleTester.run('no-cycle', rule, {
       ],
     }),
   ),
+};
+
+ruleTester.run('no-cycle', rule, {
+  valid: flatMap(cases.valid, (testCase) => [
+    testCase,
+    {
+      ...testCase,
+      code: `${testCase.code} // disableScc=true`,
+      options: [{
+        ...testCase.options && testCase.options[0] || {},
+        disableScc: true,
+      }],
+    },
+  ]),
+
+  invalid: flatMap(cases.invalid, (testCase) => [
+    testCase,
+    {
+      ...testCase,
+      code: `${testCase.code} // disableScc=true`,
+      options: [{
+        ...testCase.options && testCase.options[0] || {},
+        disableScc: true,
+      }],
+    },
+  ]),
 });

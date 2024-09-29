@@ -10,7 +10,7 @@ Use this rule to prevent unnecessary path segments in import and require stateme
 
 Given the following folder structure:
 
-```
+```pt
 my-project
 ├── app.js
 ├── footer.js
@@ -62,6 +62,7 @@ import fs from "fs";
 ### noUselessIndex
 
 If you want to detect unnecessary `/index` or `/index.js` (depending on the specified file extensions, see below) imports in your paths, you can enable the option `noUselessIndex`. By default it is set to `false`:
+
 ```js
 "import/no-useless-path-segments": ["error", {
   noUselessIndex: true,

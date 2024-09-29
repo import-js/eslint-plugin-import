@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import { test } from '../utils';
@@ -20,7 +20,7 @@ const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
       florp(bar);
       florp(baz);
     `.trim(),
-    errors: [ {
+    errors: [{
       line: 1,
       column: 8,
       message: ERROR_MESSAGE,
@@ -43,7 +43,7 @@ const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
       florp(foo_bar);
       florp(foo_baz_1);
     `.trim(),
-    errors: [ {
+    errors: [{
       line: 1,
       column: 8,
       message: ERROR_MESSAGE,
@@ -64,7 +64,7 @@ const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
         florp(foo_arg);
       }
     `.trim(),
-    errors: [ {
+    errors: [{
       line: 1,
       column: 8,
       message: ERROR_MESSAGE,
@@ -82,33 +82,30 @@ ruleTester.run('no-namespace', require('rules/no-namespace'), {
   ],
 
   invalid: [
-    test({
+    test(withoutAutofixOutput({
       code: 'import * as foo from \'foo\';',
-      output: 'import * as foo from \'foo\';',
-      errors: [ {
+      errors: [{
         line: 1,
         column: 8,
         message: ERROR_MESSAGE,
-      } ],
-    }),
-    test({
+      }],
+    })),
+    test(withoutAutofixOutput({
       code: 'import defaultExport, * as foo from \'foo\';',
-      output: 'import defaultExport, * as foo from \'foo\';',
-      errors: [ {
+      errors: [{
         line: 1,
         column: 23,
         message: ERROR_MESSAGE,
-      } ],
-    }),
-    test({
+      }],
+    })),
+    test(withoutAutofixOutput({
       code: 'import * as foo from \'./foo\';',
-      output: 'import * as foo from \'./foo\';',
-      errors: [ {
+      errors: [{
         line: 1,
         column: 8,
         message: ERROR_MESSAGE,
-      } ],
-    }),
+      }],
+    })),
     ...FIX_TESTS,
   ],
 });

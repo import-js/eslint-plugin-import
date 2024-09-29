@@ -1,9 +1,11 @@
+import findLastIndex from 'array.prototype.findlastindex';
+
 import docsUrl from '../docsUrl';
 
 function isNonExportStatement({ type }) {
-  return type !== 'ExportDefaultDeclaration' &&
-    type !== 'ExportNamedDeclaration' &&
-    type !== 'ExportAllDeclaration';
+  return type !== 'ExportDefaultDeclaration'
+    && type !== 'ExportNamedDeclaration'
+    && type !== 'ExportAllDeclaration';
 }
 
 module.exports = {
@@ -20,15 +22,10 @@ module.exports = {
   create(context) {
     return {
       Program({ body }) {
-        const lastNonExportStatementIndex = body.reduce(function findLastIndex(acc, item, index) {
-          if (isNonExportStatement(item)) {
-            return index;
-          }
-          return acc;
-        }, -1);
+        const lastNonExportStatementIndex = findLastIndex(body, isNonExportStatement);
 
         if (lastNonExportStatementIndex !== -1) {
-          body.slice(0, lastNonExportStatementIndex).forEach(function checkNonExport(node) {
+          body.slice(0, lastNonExportStatementIndex).forEach((node) => {
             if (!isNonExportStatement(node)) {
               context.report({
                 node,

@@ -8,7 +8,7 @@ This rule is useful for enforcing tree-like folder structures instead of complex
 
 To fix violations of this rule there are three general strategies. Given this example:
 
-```
+```pt
 numbers
 └── three.js
 add.js
@@ -32,51 +32,51 @@ You can,
 
 1. Move the file to be in a sibling folder (or higher) of the dependency.
 
-`three.js` could be be in the same folder as `add.js`:
+   `three.js` could be be in the same folder as `add.js`:
 
-```
-three.js
-add.js
-```
+   ```pt
+   three.js
+   add.js
+   ```
 
-or since `add` doesn't have any imports, it could be in it's own directory (namespace):
+   or since `add` doesn't have any imports, it could be in it's own directory (namespace):
 
-```
-math
-└── add.js
-three.js
-```
+   ```pt
+   math
+   └── add.js
+   three.js
+   ```
 
 2. Pass the dependency as an argument at runtime (dependency injection)
 
-```js
-// three.js
-export default function three(add) {
-  return add([1, 2]);
-}
+   ```js
+   // three.js
+   export default function three(add) {
+     return add([1, 2]);
+   }
 
-// somewhere else when you use `three.js`:
-import add from './add';
-import three from './numbers/three';
-console.log(three(add));
-```
+   // somewhere else when you use `three.js`:
+   import add from './add';
+   import three from './numbers/three';
+   console.log(three(add));
+   ```
 
 3. Make the dependency a package so it's globally available to all files in your project:
 
-```js
-import add from 'add'; // from https://www.npmjs.com/package/add
-export default function three() {
-  return add([1,2]);
-}
-```
+   ```js
+   import add from 'add'; // from https://www.npmjs.com/package/add
+   export default function three() {
+     return add([1,2]);
+   }
+   ```
 
 These are (respectively) static, dynamic & global solutions to graph-like dependency resolution.
 
-### Examples
+## Examples
 
 Given the following folder structure:
 
-```
+```pt
 my-project
 ├── lib
 │   ├── a.js
@@ -85,7 +85,8 @@ my-project
 ```
 
 And the .eslintrc file:
-```
+
+```json
 {
   ...
   "rules": {

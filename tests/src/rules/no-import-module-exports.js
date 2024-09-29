@@ -1,7 +1,7 @@
 import path from 'path';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
-import { test, testVersion } from '../utils';
+import { eslintVersionSatisfies, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 6, sourceType: 'module' },
@@ -9,8 +9,7 @@ const ruleTester = new RuleTester({
 const rule = require('rules/no-import-module-exports');
 
 const error = {
-  message: `Cannot use import declarations in modules that export using CommonJS ` +
-    `(module.exports = 'foo' or exports.bar = 'hi')`,
+  message: `Cannot use import declarations in modules that export using CommonJS (module.exports = 'foo' or exports.bar = 'hi')`,
   type: 'ImportDeclaration',
 };
 
@@ -40,6 +39,12 @@ ruleTester.run('no-import-module-exports', rule, {
         exports.foo = bar
       `,
     }),
+    eslintVersionSatisfies('>= 4') ? test({
+      code: `
+        import { module } from 'qunit'
+        module.skip('A test', function () {})
+      `,
+    }) : [],
     test({
       code: `
         import foo from 'path';
@@ -69,13 +74,13 @@ ruleTester.run('no-import-module-exports', rule, {
         import fs from 'fs/promises';
 
         const subscriptions = new Map();
-        
+        ${''}
         export default async (client) => {
             /**
              * loads all modules and their subscriptions
              */
             const modules = await fs.readdir('./src/modules');
-        
+        ${''}
             await Promise.all(
                 modules.map(async (moduleName) => {
                     // Loads the module
@@ -92,7 +97,7 @@ ruleTester.run('no-import-module-exports', rule, {
                     }
                 })
             );
-        
+        ${''}
             /**
              * Setting up all events.
              * binds all events inside the subscriptions map to call all functions provided

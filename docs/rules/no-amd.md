@@ -33,5 +33,5 @@ Special thanks to @xjamundx for donating his no-define rule as a start to this.
 
 ## Further Reading
 
-- [`no-commonjs`](./no-commonjs.md): report CommonJS `require` and `exports`
-- Source: https://github.com/xjamundx/eslint-plugin-modules
+ - [`no-commonjs`](./no-commonjs.md): report CommonJS `require` and `exports`
+ - Source: <https://github.com/xjamundx/eslint-plugin-modules>

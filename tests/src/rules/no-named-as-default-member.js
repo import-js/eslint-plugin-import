@@ -1,5 +1,5 @@
 import { test, testVersion, SYNTAX_CASES } from '../utils';
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import rule from 'rules/no-named-as-default-member';
 
 const ruleTester = new RuleTester();
@@ -25,40 +25,28 @@ ruleTester.run('no-named-as-default-member', rule, {
     test({
       code: 'import bar from "./bar"; const foo = bar.foo;',
       errors: [{
-        message: (
-          'Caution: `bar` also has a named export `foo`. ' +
-          'Check if you meant to write `import {foo} from \'./bar\'` instead.'
-        ),
+        message: 'Caution: `bar` also has a named export `foo`. Check if you meant to write `import {foo} from \'./bar\'` instead.',
         type: 'MemberExpression',
       }],
     }),
     test({
       code: 'import bar from "./bar"; bar.foo();',
       errors: [{
-        message: (
-          'Caution: `bar` also has a named export `foo`. ' +
-          'Check if you meant to write `import {foo} from \'./bar\'` instead.'
-        ),
+        message: 'Caution: `bar` also has a named export `foo`. Check if you meant to write `import {foo} from \'./bar\'` instead.',
         type: 'MemberExpression',
       }],
     }),
     test({
       code: 'import bar from "./bar"; const {foo} = bar;',
       errors: [{
-        message: (
-          'Caution: `bar` also has a named export `foo`. ' +
-          'Check if you meant to write `import {foo} from \'./bar\'` instead.'
-        ),
+        message: 'Caution: `bar` also has a named export `foo`. Check if you meant to write `import {foo} from \'./bar\'` instead.',
         type: 'Identifier',
       }],
     }),
     test({
       code: 'import bar from "./bar"; const {foo: foo2, baz} = bar;',
       errors: [{
-        message: (
-          'Caution: `bar` also has a named export `foo`. ' +
-          'Check if you meant to write `import {foo} from \'./bar\'` instead.'
-        ),
+        message: 'Caution: `bar` also has a named export `foo`. Check if you meant to write `import {foo} from \'./bar\'` instead.',
         type: 'Identifier',
       }],
     }),
@@ -66,10 +54,7 @@ ruleTester.run('no-named-as-default-member', rule, {
     testVersion('>= 8.7', () => ({
       code: 'import bar from "./export-default-string-and-named"; const foo = bar.foo;',
       errors: [{
-        message: (
-          'Caution: `bar` also has a named export `foo`. ' +
-          'Check if you meant to write `import {foo} from \'./export-default-string-and-named\'` instead.'
-        ),
+        message: 'Caution: `bar` also has a named export `foo`. Check if you meant to write `import {foo} from \'./export-default-string-and-named\'` instead.',
         type: 'MemberExpression',
       }],
       parserOptions: { ecmaVersion: 2022 },

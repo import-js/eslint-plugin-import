@@ -1,15 +1,16 @@
 import declaredScope from 'eslint-module-utils/declaredScope';
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
+import ExportMap from '../exportMap';
 import importDeclaration from '../importDeclaration';
 import docsUrl from '../docsUrl';
 
 function processBodyStatement(context, namespaces, declaration) {
-  if (declaration.type !== 'ImportDeclaration') return;
+  if (declaration.type !== 'ImportDeclaration') { return; }
 
-  if (declaration.specifiers.length === 0) return;
+  if (declaration.specifiers.length === 0) { return; }
 
-  const imports = Exports.get(declaration.source.value, context);
-  if (imports == null) return null;
+  const imports = ExportMapBuilder.get(declaration.source.value, context);
+  if (imports == null) { return null; }
 
   if (imports.errors.length > 0) {
     imports.reportErrors(context, declaration);
@@ -18,25 +19,26 @@ function processBodyStatement(context, namespaces, declaration) {
 
   declaration.specifiers.forEach((specifier) => {
     switch (specifier.type) {
-    case 'ImportNamespaceSpecifier':
-      if (!imports.size) {
-        context.report(
-          specifier,
-          `No exported names found in module '${declaration.source.value}'.`,
-        );
-      }
-      namespaces.set(specifier.local.name, imports);
-      break;
-    case 'ImportDefaultSpecifier':
-    case 'ImportSpecifier': {
-      const meta = imports.get(
+      case 'ImportNamespaceSpecifier':
+        if (!imports.size) {
+          context.report(
+            specifier,
+            `No exported names found in module '${declaration.source.value}'.`,
+          );
+        }
+        namespaces.set(specifier.local.name, imports);
+        break;
+      case 'ImportDefaultSpecifier':
+      case 'ImportSpecifier': {
+        const meta = imports.get(
         // default to 'default' for default https://i.imgur.com/nj6qAWy.jpg
-        specifier.imported ? (specifier.imported.name || specifier.imported.value) : 'default',
-      );
-      if (!meta || !meta.namespace) { break; }
-      namespaces.set(specifier.local.name, meta.namespace);
-      break;
-    }
+          specifier.imported ? specifier.imported.name || specifier.imported.value : 'default',
+        );
+        if (!meta || !meta.namespace) { break; }
+        namespaces.set(specifier.local.name, meta.namespace);
+        break;
+      }
+      default:
     }
   });
 }
@@ -66,7 +68,6 @@ module.exports = {
   },
 
   create: function namespaceRule(context) {
-
     // read options
     const {
       allowComputed = false,
@@ -81,15 +82,15 @@ module.exports = {
     return {
       // pick up all imports at body entry time, to properly respect hoisting
       Program({ body }) {
-        body.forEach(x => processBodyStatement(context, namespaces, x));
+        body.forEach((x) => { processBodyStatement(context, namespaces, x); });
       },
 
       // same as above, but does not add names to local map
       ExportNamespaceSpecifier(namespace) {
-        const declaration = importDeclaration(context);
+        const declaration = importDeclaration(context, namespace);
 
-        const imports = Exports.get(declaration.source.value, context);
-        if (imports == null) return null;
+        const imports = ExportMapBuilder.get(declaration.source.value, context);
+        if (imports == null) { return null; }
 
         if (imports.errors.length) {
           imports.reportErrors(context, declaration);
@@ -107,9 +108,9 @@ module.exports = {
       // todo: check for possible redefinition
 
       MemberExpression(dereference) {
-        if (dereference.object.type !== 'Identifier') return;
-        if (!namespaces.has(dereference.object.name)) return;
-        if (declaredScope(context, dereference.object.name) !== 'module') return;
+        if (dereference.object.type !== 'Identifier') { return; }
+        if (!namespaces.has(dereference.object.name)) { return; }
+        if (declaredScope(context, dereference.object.name, dereference) !== 'module') { return; }
 
         if (dereference.parent.type === 'AssignmentExpression' && dereference.parent.left === dereference) {
           context.report(
@@ -122,7 +123,7 @@ module.exports = {
         let namespace = namespaces.get(dereference.object.name);
         const namepath = [dereference.object.name];
         // while property is namespace and parent is member expression, keep validating
-        while (namespace instanceof Exports && dereference.type === 'MemberExpression') {
+        while (namespace instanceof ExportMap && dereference.type === 'MemberExpression') {
           if (dereference.computed) {
             if (!allowComputed) {
               context.report(
@@ -142,7 +143,7 @@ module.exports = {
           }
 
           const exported = namespace.get(dereference.property.name);
-          if (exported == null) return;
+          if (exported == null) { return; }
 
           // stash and pop
           namepath.push(dereference.property.name);
@@ -152,18 +153,18 @@ module.exports = {
       },
 
       VariableDeclarator({ id, init }) {
-        if (init == null) return;
-        if (init.type !== 'Identifier') return;
-        if (!namespaces.has(init.name)) return;
+        if (init == null) { return; }
+        if (init.type !== 'Identifier') { return; }
+        if (!namespaces.has(init.name)) { return; }
 
         // check for redefinition in intermediate scopes
-        if (declaredScope(context, init.name) !== 'module') return;
+        if (declaredScope(context, init.name, init) !== 'module') { return; }
 
         // DFS traverse child namespaces
         function testKey(pattern, namespace, path = [init.name]) {
-          if (!(namespace instanceof Exports)) return;
+          if (!(namespace instanceof ExportMap)) { return; }
 
-          if (pattern.type !== 'ObjectPattern') return;
+          if (pattern.type !== 'ObjectPattern') { return; }
 
           for (const property of pattern.properties) {
             if (
@@ -204,7 +205,7 @@ module.exports = {
       },
 
       JSXMemberExpression({ object, property }) {
-        if (!namespaces.has(object.name)) return;
+        if (!namespaces.has(object.name)) { return; }
         const namespace = namespaces.get(object.name);
         if (!namespace.has(property.name)) {
           context.report({

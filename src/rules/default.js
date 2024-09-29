@@ -1,4 +1,4 @@
-import Exports from '../ExportMap';
+import ExportMapBuilder from '../exportMap/builder';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -13,16 +13,14 @@ module.exports = {
   },
 
   create(context) {
-
     function checkDefault(specifierType, node) {
-
       const defaultSpecifier = node.specifiers.find(
-        specifier => specifier.type === specifierType,
+        (specifier) => specifier.type === specifierType,
       );
 
-      if (!defaultSpecifier) return;
-      const imports = Exports.get(node.source.value, context);
-      if (imports == null) return;
+      if (!defaultSpecifier) { return; }
+      const imports = ExportMapBuilder.get(node.source.value, context);
+      if (imports == null) { return; }
 
       if (imports.errors.length) {
         imports.reportErrors(context, node);
@@ -35,8 +33,8 @@ module.exports = {
     }
 
     return {
-      'ImportDeclaration': checkDefault.bind(null, 'ImportDefaultSpecifier'),
-      'ExportNamedDeclaration': checkDefault.bind(null, 'ExportDefaultSpecifier'),
+      ImportDeclaration: checkDefault.bind(null, 'ImportDefaultSpecifier'),
+      ExportNamedDeclaration: checkDefault.bind(null, 'ExportDefaultSpecifier'),
     };
   },
 };

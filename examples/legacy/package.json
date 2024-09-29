@@ -1,0 +1,16 @@
+{
+  "name": "legacy",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint src --ext js,jsx,ts,tsx --report-unused-disable-directives"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.5",
+    "@typescript-eslint/parser": "^7.13.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "file:../..",
+    "typescript": "^5.4.5"
+  }
+}

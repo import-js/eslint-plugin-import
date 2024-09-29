@@ -1,4 +1,4 @@
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 import { test, parsers, tsVersionSatisfies, eslintVersionSatisfies, typescriptEslintParserSatisfies } from '../utils';
 
 const rule = require('rules/consistent-type-specifier-style');
@@ -162,6 +162,33 @@ const COMMON_TESTS = {
     {
       code: "import Foo, { type Bar, Baz } from 'Foo';",
       output: "import Foo, {  Baz } from 'Foo';\nimport type {Bar} from 'Foo';",
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only import instead of inline type specifiers.',
+        type: 'ImportSpecifier',
+      }],
+    },
+    // https://github.com/import-js/eslint-plugin-import/issues/2753
+    {
+      code: `\
+import { Component, type ComponentProps } from "package-1";
+import {
+  Component1,
+  Component2,
+  Component3,
+  Component4,
+  Component5,
+} from "package-2";`,
+      output: `\
+import { Component  } from "package-1";
+import type {ComponentProps} from "package-1";
+import {
+  Component1,
+  Component2,
+  Component3,
+  Component4,
+  Component5,
+} from "package-2";`,
       options: ['prefer-top-level'],
       errors: [{
         message: 'Prefer using a top-level type-only import instead of inline type specifiers.',
@@ -367,14 +394,14 @@ context('TypeScript', () => {
     },
   });
   ruleTester.run('consistent-type-specifier-style', rule, {
-    valid: [
-      ...COMMON_TESTS.valid,
-      ...TS_ONLY.valid,
-    ],
-    invalid: [
-      ...COMMON_TESTS.invalid,
-      ...TS_ONLY.invalid,
-    ],
+    valid: [].concat(
+      COMMON_TESTS.valid,
+      TS_ONLY.valid,
+    ),
+    invalid: [].concat(
+      COMMON_TESTS.invalid,
+      TS_ONLY.invalid,
+    ),
   });
 });
 
@@ -391,13 +418,13 @@ context('Babel/Flow', () => {
     },
   });
   ruleTester.run('consistent-type-specifier-style', rule, {
-    valid: [
-      ...COMMON_TESTS.valid,
-      ...FLOW_ONLY.valid,
-    ],
-    invalid: [
-      ...COMMON_TESTS.invalid,
-      ...FLOW_ONLY.invalid,
-    ],
+    valid: [].concat(
+      COMMON_TESTS.valid,
+      FLOW_ONLY.valid,
+    ),
+    invalid: [].concat(
+      COMMON_TESTS.invalid,
+      FLOW_ONLY.invalid,
+    ),
   });
 });

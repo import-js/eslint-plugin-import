@@ -1,6 +1,7 @@
 import path from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
 
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import resolve from 'eslint-module-utils/resolve';
 import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import importType from '../core/importType';
@@ -26,7 +27,7 @@ function checkImportForRelativePackage(context, importPath, node) {
   }
 
   const resolvedImport = resolve(importPath, context);
-  const resolvedContext = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
+  const resolvedContext = getPhysicalFilename(context);
 
   if (!resolvedImport || !resolvedContext) {
     return;
@@ -47,7 +48,7 @@ function checkImportForRelativePackage(context, importPath, node) {
     context.report({
       node,
       message: `Relative import from another package is not allowed. Use \`${properImport}\` instead of \`${importPath}\``,
-      fix: fixer => fixer.replaceText(node, JSON.stringify(toPosixPath(properImport)))
+      fix: (fixer) => fixer.replaceText(node, JSON.stringify(toPosixPath(properImport)))
       ,
     });
   }

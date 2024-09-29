@@ -16,7 +16,7 @@ module.exports = {
 
     schema: [
       {
-        oneOf: [
+        anyOf: [
           {
             type: 'object',
             properties: {
@@ -48,8 +48,8 @@ module.exports = {
 
   create: function noReachingInside(context) {
     const options = context.options[0] || {};
-    const allowRegexps = (options.allow || []).map(p => minimatch.makeRe(p));
-    const forbidRegexps = (options.forbid || []).map(p => minimatch.makeRe(p));
+    const allowRegexps = (options.allow || []).map((p) => minimatch.makeRe(p));
+    const forbidRegexps = (options.forbid || []).map((p) => minimatch.makeRe(p));
 
     // minimatch patterns are expected to use / path separators, like import
     // statements, so normalize paths to use the same
@@ -58,44 +58,42 @@ module.exports = {
     }
 
     function toSteps(somePath) {
-      return  normalizeSep(somePath)
+      return normalizeSep(somePath)
         .split('/')
+        .filter((step) => step && step !== '.')
         .reduce((acc, step) => {
-          if (!step || step === '.') {
-            return acc;
-          } else if (step === '..') {
+          if (step === '..') {
             return acc.slice(0, -1);
-          } else {
-            return acc.concat(step);
           }
+          return acc.concat(step);
         }, []);
     }
 
     // test if reaching to this destination is allowed
     function reachingAllowed(importPath) {
-      return allowRegexps.some(re => re.test(importPath));
+      return allowRegexps.some((re) => re.test(importPath));
     }
 
     // test if reaching to this destination is forbidden
     function reachingForbidden(importPath) {
-      return forbidRegexps.some(re => re.test(importPath));
+      return forbidRegexps.some((re) => re.test(importPath));
     }
 
     function isAllowViolation(importPath) {
       const steps = toSteps(importPath);
 
-      const nonScopeSteps = steps.filter(step => step.indexOf('@') !== 0);
-      if (nonScopeSteps.length <= 1) return false;
+      const nonScopeSteps = steps.filter((step) => step.indexOf('@') !== 0);
+      if (nonScopeSteps.length <= 1) { return false; }
 
       // before trying to resolve, see if the raw import (with relative
       // segments resolved) matches an allowed pattern
       const justSteps = steps.join('/');
-      if (reachingAllowed(justSteps) || reachingAllowed(`/${justSteps}`)) return false;
+      if (reachingAllowed(justSteps) || reachingAllowed(`/${justSteps}`)) { return false; }
 
       // if the import statement doesn't match directly, try to match the
       // resolved path if the import is resolvable
       const resolved = resolve(importPath, context);
-      if (!resolved || reachingAllowed(normalizeSep(resolved))) return false;
+      if (!resolved || reachingAllowed(normalizeSep(resolved))) { return false; }
 
       // this import was not allowed by the allowed paths, and reaches
       // so it is a violation
@@ -109,12 +107,12 @@ module.exports = {
       // segments resolved) matches a forbidden pattern
       const justSteps = steps.join('/');
 
-      if (reachingForbidden(justSteps) || reachingForbidden(`/${justSteps}`)) return true;
+      if (reachingForbidden(justSteps) || reachingForbidden(`/${justSteps}`)) { return true; }
 
       // if the import statement doesn't match directly, try to match the
       // resolved path if the import is resolvable
       const resolved = resolve(importPath, context);
-      if (resolved && reachingForbidden(normalizeSep(resolved))) return true;
+      if (resolved && reachingForbidden(normalizeSep(resolved))) { return true; }
 
       // this import was not forbidden by the forbidden paths so it is not a violation
       return false;
@@ -125,8 +123,9 @@ module.exports = {
 
     function checkImportForReaching(importPath, node) {
       const potentialViolationTypes = ['parent', 'index', 'sibling', 'external', 'internal'];
-      if (potentialViolationTypes.indexOf(importType(importPath, context)) !== -1 &&
-        isReachViolation(importPath)
+      if (
+        potentialViolationTypes.indexOf(importType(importPath, context)) !== -1
+        && isReachViolation(importPath)
       ) {
         context.report({
           node,
@@ -135,8 +134,11 @@ module.exports = {
       }
     }
 
-    return moduleVisitor((source) => {
-      checkImportForReaching(source.value, source);
-    }, { commonjs: true });
+    return moduleVisitor(
+      (source) => {
+        checkImportForReaching(source.value, source);
+      },
+      { commonjs: true },
+    );
   },
 };

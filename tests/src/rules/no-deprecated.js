@@ -1,6 +1,6 @@
 import { test, SYNTAX_CASES, getTSParsers } from '../utils';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-deprecated');
@@ -37,7 +37,6 @@ ruleTester.run('no-deprecated', rule, {
     test({
       code: "import { deepDep } from './deep-deprecated'; function x(deepDep) { console.log(deepDep.MY_TERRIBLE_ACTION) }",
     }),
-
 
     ...SYNTAX_CASES,
   ],
@@ -210,18 +209,20 @@ describe('TypeScript', function () {
 
     ruleTester.run(parser, rule, {
       valid: [
-        test(Object.assign({
+        test({
           code: 'import * as hasDeprecated from \'./ts-deprecated.ts\'',
-        }, parserConfig)),
+          ...parserConfig,
+        }),
       ],
       invalid: [
-        test(Object.assign({
+        test({
           code: 'import { foo } from \'./ts-deprecated.ts\'; console.log(foo())',
           errors: [
             { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this!' },
             { type: 'Identifier', message: 'Deprecated: don\'t use this!' },
-          ] },
-        parserConfig)),
+          ],
+          ...parserConfig,
+        }),
       ],
     });
   });

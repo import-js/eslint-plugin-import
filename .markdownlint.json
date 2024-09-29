@@ -1,0 +1,10 @@
+{
+  "line-length": false,
+  "ul-indent": {
+    "start_indent": 1,
+    "start_indented": true
+  },
+  "ul-style": {
+    "style": "dash"
+  }
+}

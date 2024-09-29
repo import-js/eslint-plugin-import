@@ -6,7 +6,6 @@ const path = require('path');
 
 const resolve = require('../index').resolve;
 
-
 const file = path.join(__dirname, 'files', 'dummy.js');
 
 describe('inline loader syntax', function () {

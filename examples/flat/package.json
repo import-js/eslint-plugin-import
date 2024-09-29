@@ -1,0 +1,17 @@
+{
+  "name": "flat",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=true eslint src --report-unused-disable-directives"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/node": "^20.14.5",
+    "@typescript-eslint/parser": "^7.13.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "file:../..",
+    "typescript": "^5.4.5"
+  }
+}

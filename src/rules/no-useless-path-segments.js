@@ -3,6 +3,7 @@
  * @author Thomas Grainger
  */
 
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import resolve from 'eslint-module-utils/resolve';
@@ -25,7 +26,7 @@ import docsUrl from '../docsUrl';
 function toRelativePath(relativePath) {
   const stripped = relativePath.replace(/\/$/g, ''); // Remove trailing /
 
-  return /^((\.\.)|(\.))($|\/)/.test(stripped) ? stripped : `./${stripped}`;
+  return (/^((\.\.)|(\.))($|\/)/).test(stripped) ? stripped : `./${stripped}`;
 }
 
 function normalize(fn) {
@@ -33,7 +34,7 @@ function normalize(fn) {
 }
 
 function countRelativeParents(pathSegments) {
-  return pathSegments.reduce((sum, pathSegment) => pathSegment === '..' ? sum + 1 : sum, 0);
+  return pathSegments.filter((x) => x === '..').length;
 }
 
 module.exports = {
@@ -60,7 +61,7 @@ module.exports = {
   },
 
   create(context) {
-    const currentDir = path.dirname(context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename());
+    const currentDir = path.dirname(getPhysicalFilename(context));
     const options = context.options[0];
 
     function checkSourceValue(source) {
@@ -71,7 +72,7 @@ module.exports = {
           node: source,
           // Note: Using messageIds is not possible due to the support for ESLint 2 and 3
           message: `Useless path segments for "${importPath}", should be "${proposedPath}"`,
-          fix: fixer => proposedPath && fixer.replaceText(source, JSON.stringify(proposedPath)),
+          fix: (fixer) => proposedPath && fixer.replaceText(source, JSON.stringify(proposedPath)),
         });
       }
 

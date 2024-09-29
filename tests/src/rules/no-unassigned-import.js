@@ -1,7 +1,7 @@
 import { test } from '../utils';
 import * as path from 'path';
 
-import { RuleTester } from 'eslint';
+import { RuleTester } from '../rule-tester';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-unassigned-import');
@@ -29,48 +29,48 @@ ruleTester.run('no-unassigned-import', rule, {
     test({ code: 'require("lodash")()' }),
     test({
       code: 'import "app.css"',
-      options: [{ 'allow': ['**/*.css'] }],
+      options: [{ allow: ['**/*.css'] }],
     }),
     test({
       code: 'import "app.css";',
-      options: [{ 'allow': ['*.css'] }],
+      options: [{ allow: ['*.css'] }],
     }),
     test({
       code: 'import "./app.css"',
-      options: [{ 'allow': ['**/*.css'] }],
+      options: [{ allow: ['**/*.css'] }],
     }),
     test({
       code: 'import "foo/bar"',
-      options: [{ 'allow': ['foo/**'] }],
+      options: [{ allow: ['foo/**'] }],
     }),
     test({
       code: 'import "foo/bar"',
-      options: [{ 'allow': ['foo/bar'] }],
+      options: [{ allow: ['foo/bar'] }],
     }),
     test({
       code: 'import "../dir/app.css"',
-      options: [{ 'allow': ['**/*.css'] }],
+      options: [{ allow: ['**/*.css'] }],
     }),
     test({
       code: 'import "../dir/app.js"',
-      options: [{ 'allow': ['**/dir/**'] }],
+      options: [{ allow: ['**/dir/**'] }],
     }),
     test({
       code: 'require("./app.css")',
-      options: [{ 'allow': ['**/*.css'] }],
+      options: [{ allow: ['**/*.css'] }],
     }),
     test({
       code: 'import "babel-register"',
-      options: [{ 'allow': ['babel-register'] }],
+      options: [{ allow: ['babel-register'] }],
     }),
     test({
       code: 'import "./styles/app.css"',
-      options: [{ 'allow': ['src/styles/**'] }],
+      options: [{ allow: ['src/styles/**'] }],
       filename: path.join(process.cwd(), 'src/app.js'),
     }),
     test({
       code: 'import "../scripts/register.js"',
-      options: [{ 'allow': ['src/styles/**', '**/scripts/*.js'] }],
+      options: [{ allow: ['src/styles/**', '**/scripts/*.js'] }],
       filename: path.join(process.cwd(), 'src/app.js'),
     }),
   ],
@@ -85,22 +85,22 @@ ruleTester.run('no-unassigned-import', rule, {
     }),
     test({
       code: 'import "./app.css"',
-      options: [{ 'allow': ['**/*.js'] }],
+      options: [{ allow: ['**/*.js'] }],
       errors: [error],
     }),
     test({
       code: 'import "./app.css"',
-      options: [{ 'allow': ['**/dir/**'] }],
+      options: [{ allow: ['**/dir/**'] }],
       errors: [error],
     }),
     test({
       code: 'require("./app.css")',
-      options: [{ 'allow': ['**/*.js'] }],
+      options: [{ allow: ['**/*.js'] }],
       errors: [error],
     }),
     test({
       code: 'import "./styles/app.css"',
-      options: [{ 'allow': ['styles/*.css'] }],
+      options: [{ allow: ['styles/*.css'] }],
       filename: path.join(process.cwd(), 'src/app.js'),
       errors: [error],
     }),

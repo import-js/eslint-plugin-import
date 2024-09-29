@@ -7,6 +7,123 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- [`order`]: allow validating named imports ([#3043], thanks [@manuth])
+
+### Fixed
+- `ExportMap` / flat config: include `languageOptions` in context ([#3052], thanks [@michaelfaith])
+- [`no-named-as-default`]: Allow using an identifier if the export is both a named and a default export ([#3032], thanks [@akwodkiewicz])
+- [`export`]: False positive for exported overloaded functions in TS ([#3065], thanks [@liuxingbaoyu])
+- `exportMap`: export map cache is tainted by unreliable parse results ([#3062], thanks [@michaelfaith])
+- `exportMap`: improve cacheKey when using flat config ([#3072], thanks [@michaelfaith])
+
+### Changed
+- [Docs] [`no-relative-packages`]: fix typo ([#3066], thanks [@joshuaobrien])
+- [Performance] [`no-cycle`]: dont scc for each linted file ([#3068], thanks [@soryy708])
+- [Docs] [`no-cycle`]: add `disableScc` to docs ([#3070], thanks [@soryy708])
+- [Tests] use re-exported `RuleTester` ([#3071], thanks [@G-Rath])
+- [Docs] [`no-restricted-paths`]: fix grammar ([#3073], thanks [@unbeauvoyage])
+- [Tests] [`no-default-export`], [`no-named-export`]:  add test case (thanks [@G-Rath])
+
+## [2.30.0] - 2024-09-02
+
+### Added
+- [`dynamic-import-chunkname`]: add `allowEmpty` option to allow empty leading comments ([#2942], thanks [@JiangWeixian])
+- [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
+- [`no-unused-modules`]: Add `ignoreUnusedTypeExports` option ([#3011], thanks [@silverwind])
+- add support for Flat Config ([#3018], thanks [@michaelfaith])
+
+### Fixed
+- [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
+- [`no-cycle`]: use scc algorithm to optimize ([#2998], thanks [@soryy708])
+- [`no-duplicates`]: Removing duplicates breaks in TypeScript ([#3033], thanks [@yesl-kim])
+- [`newline-after-import`]: fix considerComments option when require ([#2952], thanks [@developer-bandi])
+- [`order`]: do not compare first path segment for relative paths ([#2682]) ([#2885], thanks [@mihkeleidast])
+
+### Changed
+- [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
+- [`no-unused-modules`]: add console message to help debug [#2866]
+- [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
+- [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
+- [Docs] `order`: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
+- [Tests] appveyor -> GHA (run tests on Windows in both pwsh and WSL + Ubuntu) ([#2987], thanks [@joeyguerra])
+- [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
+- [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
+- [Refactor] `ExportMap`: extract "builder" logic to separate files ([#2991], thanks [@soryy708])
+- [Docs] [`order`]: update the description of the `pathGroupsExcludedImportTypes` option ([#3036], thanks [@liby])
+- [readme] Clarify how to install the plugin ([#2993], thanks [@jwbth])
+
+## [2.29.1] - 2023-12-14
+
+### Fixed
+- [`no-extraneous-dependencies`]: ignore `export type { ... } from '...'` when `includeTypes` is `false` ([#2919], thanks [@Pandemic1617])
+- [`no-unused-modules`]: support export patterns with array destructuring ([#2930], thanks [@ljharb])
+- [Deps] update `tsconfig-paths` ([#2447], thanks [@domdomegg])
+
+## [2.29.0] - 2023-10-22
+
+### Added
+- TypeScript config: add .cts and .mts extensions ([#2851], thanks [@Zamiell])
+- [`newline-after-import`]: new option `exactCount` and docs update ([#1933], thanks [@anikethsaha] and [@reosarevok])
+- [`newline-after-import`]: fix `exactCount` with `considerComments` false positive, when there is a leading comment ([#2884], thanks [@kinland])
+
+## [2.28.1] - 2023-08-18
+
+### Fixed
+- [`order`]: revert breaking change to single nested group ([#2854], thanks [@yndajas])
+
+### Changed
+- [Docs] remove duplicate fixable notices in docs ([#2850], thanks [@bmish])
+
+## [2.28.0] - 2023-07-27
+
+### Fixed
+- [`no-duplicates`]: remove duplicate identifiers in duplicate imports ([#2577], thanks [@joe-matsec])
+- [`consistent-type-specifier-style`]: fix accidental removal of comma in certain cases ([#2754], thanks [@bradzacher])
+- [Perf] `ExportMap`: Improve `ExportMap.for` performance on larger codebases ([#2756], thanks [@leipert])
+- [`no-extraneous-dependencies`]/TypeScript: do not error when importing inline type from dev dependencies ([#2735], thanks [@andyogo])
+- [`newline-after-import`]/TypeScript: do not error when re-exporting a namespaced import ([#2832], thanks [@laurens-dg])
+- [`order`]: partial fix for [#2687] (thanks [@ljharb])
+- [`no-duplicates`]: Detect across type and regular imports ([#2835], thanks [@benkrejci])
+- [`extensions`]: handle `.` and `..` properly ([#2778], thanks [@benasher44])
+- [`no-unused-modules`]: improve schema (thanks [@ljharb])
+- [`no-unused-modules`]: report error on binding instead of parent export ([#2842], thanks [@Chamion])
+
+### Changed
+- [Docs] [`no-duplicates`]: fix example schema ([#2684], thanks [@simmo])
+- [Docs] [`group-exports`]: fix syntax highlighting ([#2699], thanks [@devinrhode2])
+- [Docs] [`extensions`]: reference node ESM behavior ([#2748], thanks [@xM8WVqaG])
+- [Refactor] [`exports-last`]: use `array.prototype.findlastindex` (thanks [@ljharb])
+- [Refactor] [`no-anonymous-default-export`]: use `object.fromentries` (thanks [@ljharb])
+- [Refactor] [`no-unused-modules`]: use `array.prototype.flatmap` (thanks [@ljharb])
+
+## [2.27.5] - 2023-01-16
+
+### Fixed
+- [`order]`: Fix group ranks order when alphabetizing ([#2674], thanks [@Pearce-Ropion])
+
+## [2.27.4] - 2023-01-11
+
+### Fixed
+- `semver` should be a prod dep ([#2668])
+
+## [2.27.3] - 2023-01-11
+
+### Fixed
+- [`no-empty-named-blocks`]: rewrite rule to only check import declarations ([#2666])
+
+## [2.27.2] - 2023-01-11
+
+### Fixed
+- [`no-duplicates`]: do not unconditionally require `typescript` ([#2665])
+
+## [2.27.1] - 2023-01-11
+
+### Fixed
+- `array.prototype.flatmap` should be a prod dep ([#2664], thanks [@cristobal])
+
+## [2.27.0] - 2023-01-11
+
+### Added
 - [`newline-after-import`]: add `considerComments` option ([#2399], thanks [@pri1311])
 - [`no-cycle`]: add `allowUnsafeDynamicCyclicDependency` option ([#2387], thanks [@GerkinDev])
 - [`no-restricted-paths`]: support arrays for `from` and `target` options ([#2466], thanks [@AdriAt360])
@@ -18,6 +135,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add rule ([#2473], thanks [@bradzacher])
 - Add [`no-empty-named-blocks`] rule ([#2568], thanks [@guilhermelimak])
 - [`prefer-default-export`]: add "target" option ([#2602], thanks [@azyzz228])
+- [`no-absolute-path`]: add fixer ([#2613], thanks [@adipascu])
+- [`no-duplicates`]: support inline type import with `inlineTypeImport` option ([#2475], thanks [@snewcomer])
 
 ### Fixed
 - [`order`]: move nested imports closer to main import entry ([#2396], thanks [@pri1311])
@@ -32,6 +151,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - `ExportMap`: add missing param to function ([#2589], thanks [@Fdawgs])
 - [`no-unused-modules`]: `checkPkgFieldObject` filters boolean fields from checks ([#2598], thanks [@mpint])
 - [`no-cycle`]: accept Flow `typeof` imports, just like `type` ([#2608], thanks [@gnprice])
+- [`no-import-module-exports`]: avoid a false positive for import variables ([#2315], thanks [@BarryThePenguin])
 
 ### Changed
 - [Tests] [`named`]: Run all TypeScript test ([#2427], thanks [@ProdigySim])
@@ -52,11 +172,12 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] automate docs with eslint-doc-generator ([#2582], thanks [@bmish])
 - [readme] Increase clarity around typescript configuration ([#2588], thanks [@Nfinished])
 - [Docs] update `eslint-doc-generator` to v1.0.0 ([#2605], thanks [@bmish])
+- [Perf] [`no-cycle`], [`no-internal-modules`], [`no-restricted-paths`]: use `anyOf` instead of `oneOf` (thanks [@ljharb], [@remcohaszing])
 
 ## [2.26.0] - 2022-04-05
 
 ### Added
-- [`no-named-default`, `no-default-export`, `prefer-default-export`, `no-named-export`, `export`, `named`, `namespace`, `no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [`no-named-default`], [`no-default-export`], [`prefer-default-export`], [`no-named-export`], [`export`], [`named`], [`namespace`], [`no-unused-modules`]: support arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [`no-dynamic-require`]: support dynamic import with espree ([#2371], thanks [@sosukesuzuki])
 - [`no-relative-packages`]: add fixer ([#2381], thanks [@forivall])
 
@@ -67,13 +188,13 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: avoid a crash when processing re-exports ([#2388], thanks [@ljharb])
 
 ### Changed
-- [Tests] `no-nodejs-modules`: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
-- [Tests] `default`, `no-anonymous-default-export`, `no-mutable-exports`, `no-named-as-default-member`, `no-named-as-default`: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
+- [Tests] [`no-nodejs-modules`]: add tests for node protocol URL ([#2367], thanks [@sosukesuzuki])
+- [Tests] [`default`], [`no-anonymous-default-export`], [`no-mutable-exports`], [`no-named-as-default-member`], [`no-named-as-default`]: add tests for arbitrary module namespace names ([#2358], thanks [@sosukesuzuki])
 - [Docs] [`no-unresolved`]: Fix RegExp escaping in readme ([#2332], thanks [@stephtr])
-- [Refactor] `namespace`: try to improve performance ([#2340], thanks [@ljharb])
+- [Refactor] [`namespace`]: try to improve performance ([#2340], thanks [@ljharb])
 - [Docs] make rule doc titles consistent ([#2393], thanks [@TheJaredWilcurt])
-- [Docs] `order`: TS code examples should use TS code blocks ([#2411], thanks [@MM25Zamanian])
-- [Docs] `no-unresolved`: fix link ([#2417], thanks [@kylemh])
+- [Docs] [`order`]: TS code examples should use TS code blocks ([#2411], thanks [@MM25Zamanian])
+- [Docs] [`no-unresolved`]: fix link ([#2417], thanks [@kylemh])
 
 ## [2.25.4] - 2022-01-02
 
@@ -184,7 +305,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: restore default behavior unless `type` is in groups ([#2087], thanks [@grit96])
 
 ### Changed
-- [Docs] Add `no-relative-packages` to list of to the list of rules ([#2075], thanks [@arvigeus])
+- [Docs] Add [`no-relative-packages`] to list of to the list of rules ([#2075], thanks [@arvigeus])
 
 ## [2.23.2] - 2021-05-15
 
@@ -215,7 +336,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-webpack-loader-syntax`]/TypeScript: avoid crash on missing name ([#1947], thanks [@leonardodino])
 - [`no-extraneous-dependencies`]: Add package.json cache ([#1948], thanks [@fa93hws])
 - [`prefer-default-export`]: handle empty array destructuring ([#1965], thanks [@ljharb])
-- [`no-unused-modules`]: make type imports mark a module as used (fixes #1924) ([#1974], thanks [@cherryblossom000])
+- [`no-unused-modules`]: make type imports mark a module as used (fixes [#1924]) ([#1974], thanks [@cherryblossom000])
 - [`no-cycle`]: fix perf regression ([#1944], thanks [@Blasz])
 - [`first`]: fix handling of `import = require` ([#1963], thanks [@MatthiasKunnen])
 - [`no-cycle`]/[`extensions`]: fix isExternalModule usage ([#1696], thanks [@paztis])
@@ -229,9 +350,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [Generic Import Callback] Make callback for all imports once in rules ([#1237], thanks [@ljqx])
 - [Docs] [`no-named-as-default`]: add semicolon ([#1897], thanks [@bicstone])
-- [Docs] `no-extraneous-dependencies`: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
-- [Docs] `order`: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
-- [Tests] `no-unresolved`: add tests for `import()` ([#2012], thanks [@davidbonnet])
+- [Docs] [`no-extraneous-dependencies`]: correct peerDependencies option default to `true` ([#1993], thanks [@dwardu])
+- [Docs] [`order`]: Document options required to match ordering example ([#1992], thanks [@silviogutierrez])
+- [Tests] [`no-unresolved`]: add tests for `import()` ([#2012], thanks [@davidbonnet])
 - [Docs] Add import/recommended ruleset to README ([#2034], thanks [@edemaine])
 
 ## [2.22.1] - 2020-09-27
@@ -243,7 +364,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: allow single quotes to match Webpack support ([#1848], thanks [@straub])
 
 ### Changed
-- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks @tomprats)
+- [`export`]: add tests for a name collision with `export * from` ([#1704], thanks [@tomprats])
 
 ## [2.22.0] - 2020-06-26
 
@@ -301,12 +422,12 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - TypeScript: [`export`]: avoid a crash with `export =` ([#1801], thanks [@ljharb])
 
 ### Changed
-- [Refactor] `no-extraneous-dependencies`: use moduleVisitor ([#1735], thanks [@adamborowski])
+- [Refactor] [`no-extraneous-dependencies`]: use moduleVisitor ([#1735], thanks [@adamborowski])
 - TypeScript config: Disable [`named`][] ([#1726], thanks [@astorije])
 - [readme] Remove duplicate [`no-unused-modules`] from docs ([#1690], thanks [@arvigeus])
-- [Docs] `order`: fix bad inline config ([#1788], thanks [@nickofthyme])
+- [Docs] [`order`]: fix bad inline config ([#1788], thanks [@nickofthyme])
 - [Tests] Add fix for Windows Subsystem for Linux ([#1786], thanks [@manuth])
-- [Docs] `no-unused-rules`: Fix docs for unused exports ([#1776], thanks [@barbogast])
+- [Docs] [`no-unused-rules`]: Fix docs for unused exports ([#1776], thanks [@barbogast])
 - [eslint] bump minimum v7 version to v7.2.0
 
 ## [2.20.2] - 2020-03-28
@@ -317,7 +438,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: fix fixer on cases with default import ([#1666], thanks [@golopot])
 - [`no-unused-modules`]: Handle `export { default } from` syntax ([#1631], thanks [@richardxia])
 - [`first`]: Add a way to disable `absolute-first` explicitly ([#1664], thanks [@TheCrueltySage])
-- [Docs] `no-webpack-loader-syntax`: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
+- [Docs] [`no-webpack-loader-syntax`]: Updates webpack URLs ([#1751], thanks [@MikeyBeLike])
 
 ## [2.20.1] - 2020-02-01
 
@@ -335,7 +456,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Changed
 - [`import/external-module-folders` setting] behavior is more strict now: it will only match complete path segments ([#1605], thanks [@skozin])
 - [meta] fix "files" field to include/exclude the proper files ([#1635], thanks [@ljharb])
-- [Tests] `order`: Add TS import type tests ([#1736], thanks [@kmui2])
+- [Tests] [`order`]: Add TS import type tests ([#1736], thanks [@kmui2])
 
 ## [2.20.0] - 2020-01-10
 
@@ -434,7 +555,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - Improve support for TypeScript declare structures ([#1356], thanks [@christophercurrie])
 
 ### Docs
-- add missing `no-unused-modules` in README ([#1358], thanks [@golopot])
+- add missing [`no-unused-modules`] in README ([#1358], thanks [@golopot])
 - [`no-unused-modules`]: Indicates usage, plugin defaults to no-op, and add description to main README.md ([#1352], thanks [@johndevedu])
 - Document `env` option for `eslint-import-resolver-webpack` ([#1363], thanks [@kgregory])
 
@@ -1026,6 +1147,52 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
+[#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
+[#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
+[#3070]: https://github.com/import-js/eslint-plugin-import/pull/3070
+[#3068]: https://github.com/import-js/eslint-plugin-import/pull/3068
+[#3066]: https://github.com/import-js/eslint-plugin-import/pull/3066
+[#3065]: https://github.com/import-js/eslint-plugin-import/pull/3065
+[#3062]: https://github.com/import-js/eslint-plugin-import/pull/3062
+[#3052]: https://github.com/import-js/eslint-plugin-import/pull/3052
+[#3043]: https://github.com/import-js/eslint-plugin-import/pull/3043
+[#3036]: https://github.com/import-js/eslint-plugin-import/pull/3036
+[#3033]: https://github.com/import-js/eslint-plugin-import/pull/3033
+[#3032]: https://github.com/import-js/eslint-plugin-import/pull/3032
+[#3018]: https://github.com/import-js/eslint-plugin-import/pull/3018
+[#3012]: https://github.com/import-js/eslint-plugin-import/pull/3012
+[#3011]: https://github.com/import-js/eslint-plugin-import/pull/3011
+[#3004]: https://github.com/import-js/eslint-plugin-import/pull/3004
+[#2998]: https://github.com/import-js/eslint-plugin-import/pull/2998
+[#2993]: https://github.com/import-js/eslint-plugin-import/pull/2993
+[#2991]: https://github.com/import-js/eslint-plugin-import/pull/2991
+[#2989]: https://github.com/import-js/eslint-plugin-import/pull/2989
+[#2987]: https://github.com/import-js/eslint-plugin-import/pull/2987
+[#2985]: https://github.com/import-js/eslint-plugin-import/pull/2985
+[#2982]: https://github.com/import-js/eslint-plugin-import/pull/2982
+[#2952]: https://github.com/import-js/eslint-plugin-import/pull/2952
+[#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
+[#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
+[#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
+[#2885]: https://github.com/import-js/eslint-plugin-import/pull/2885
+[#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
+[#2866]: https://github.com/import-js/eslint-plugin-import/pull/2866
+[#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
+[#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
+[#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
+[#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
+[#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
+[#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832
+[#2778]: https://github.com/import-js/eslint-plugin-import/pull/2778
+[#2756]: https://github.com/import-js/eslint-plugin-import/pull/2756
+[#2754]: https://github.com/import-js/eslint-plugin-import/pull/2754
+[#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
+[#2735]: https://github.com/import-js/eslint-plugin-import/pull/2735
+[#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
+[#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
+[#2640]: https://github.com/import-js/eslint-plugin-import/pull/2640
+[#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613
 [#2608]: https://github.com/import-js/eslint-plugin-import/pull/2608
 [#2605]: https://github.com/import-js/eslint-plugin-import/pull/2605
 [#2602]: https://github.com/import-js/eslint-plugin-import/pull/2602
@@ -1042,6 +1209,7 @@ for info on changes for earlier releases.
 [#2506]: https://github.com/import-js/eslint-plugin-import/pull/2506
 [#2503]: https://github.com/import-js/eslint-plugin-import/pull/2503
 [#2490]: https://github.com/import-js/eslint-plugin-import/pull/2490
+[#2475]: https://github.com/import-js/eslint-plugin-import/pull/2475
 [#2473]: https://github.com/import-js/eslint-plugin-import/pull/2473
 [#2466]: https://github.com/import-js/eslint-plugin-import/pull/2466
 [#2459]: https://github.com/import-js/eslint-plugin-import/pull/2459
@@ -1069,6 +1237,7 @@ for info on changes for earlier releases.
 [#2332]: https://github.com/import-js/eslint-plugin-import/pull/2332
 [#2334]: https://github.com/import-js/eslint-plugin-import/pull/2334
 [#2330]: https://github.com/import-js/eslint-plugin-import/pull/2330
+[#2315]: https://github.com/import-js/eslint-plugin-import/pull/2315
 [#2305]: https://github.com/import-js/eslint-plugin-import/pull/2305
 [#2299]: https://github.com/import-js/eslint-plugin-import/pull/2299
 [#2297]: https://github.com/import-js/eslint-plugin-import/pull/2297
@@ -1329,10 +1498,7 @@ for info on changes for earlier releases.
 [#297]: https://github.com/import-js/eslint-plugin-import/pull/297
 [#296]: https://github.com/import-js/eslint-plugin-import/pull/296
 [#290]: https://github.com/import-js/eslint-plugin-import/pull/290
-[#289]: https://github.com/import-js/eslint-plugin-import/pull/289
 [#288]: https://github.com/import-js/eslint-plugin-import/pull/288
-[#287]: https://github.com/import-js/eslint-plugin-import/pull/287
-[#278]: https://github.com/import-js/eslint-plugin-import/pull/278
 [#261]: https://github.com/import-js/eslint-plugin-import/pull/261
 [#256]: https://github.com/import-js/eslint-plugin-import/pull/256
 [#254]: https://github.com/import-js/eslint-plugin-import/pull/254
@@ -1344,8 +1510,20 @@ for info on changes for earlier releases.
 [#239]: https://github.com/import-js/eslint-plugin-import/pull/239
 [#228]: https://github.com/import-js/eslint-plugin-import/pull/228
 [#211]: https://github.com/import-js/eslint-plugin-import/pull/211
-[#164]: https://github.com/import-js/eslint-plugin-import/pull/164
 [#157]: https://github.com/import-js/eslint-plugin-import/pull/157
+
+[ljharb#37]: https://github.com/ljharb/eslint-plugin-import/pull/37
+
+[#2930]: https://github.com/import-js/eslint-plugin-import/issues/2930
+[#2687]: https://github.com/import-js/eslint-plugin-import/issues/2687
+[#2684]: https://github.com/import-js/eslint-plugin-import/issues/2684
+[#2682]: https://github.com/import-js/eslint-plugin-import/issues/2682
+[#2674]: https://github.com/import-js/eslint-plugin-import/issues/2674
+[#2668]: https://github.com/import-js/eslint-plugin-import/issues/2668
+[#2666]: https://github.com/import-js/eslint-plugin-import/issues/2666
+[#2665]: https://github.com/import-js/eslint-plugin-import/issues/2665
+[#2577]: https://github.com/import-js/eslint-plugin-import/issues/2577
+[#2447]: https://github.com/import-js/eslint-plugin-import/issues/2447
 [#2444]: https://github.com/import-js/eslint-plugin-import/issues/2444
 [#2412]: https://github.com/import-js/eslint-plugin-import/issues/2412
 [#2392]: https://github.com/import-js/eslint-plugin-import/issues/2392
@@ -1444,7 +1622,6 @@ for info on changes for earlier releases.
 [#313]: https://github.com/import-js/eslint-plugin-import/issues/313
 [#311]: https://github.com/import-js/eslint-plugin-import/issues/311
 [#306]: https://github.com/import-js/eslint-plugin-import/issues/306
-[#286]: https://github.com/import-js/eslint-plugin-import/issues/286
 [#283]: https://github.com/import-js/eslint-plugin-import/issues/283
 [#281]: https://github.com/import-js/eslint-plugin-import/issues/281
 [#275]: https://github.com/import-js/eslint-plugin-import/issues/275
@@ -1464,7 +1641,18 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.30.0...HEAD
+[2.30.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.1...v2.30.0
+[2.29.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...v2.29.1
+[2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
+[2.28.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.0...v2.28.1
+[2.28.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.5...v2.28.0
+[2.27.5]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.4...v2.27.5
+[2.27.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.3...v2.27.4
+[2.27.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.2...v2.27.3
+[2.27.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.1...v2.27.2
+[2.27.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.27.0...v2.27.1
+[2.27.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.26.0...v2.27.0
 [2.26.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.4...v2.26.0
 [2.25.4]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.3...v2.25.4
 [2.25.3]: https://github.com/import-js/eslint-plugin-import/compare/v2.25.2...v2.25.3
@@ -1483,10 +1671,9 @@ for info on changes for earlier releases.
 [2.22.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.1...v2.22.0
 [2.21.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.1...v2.21.2
 [2.21.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.21.0...v2.21.1
-[2.21.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.2...v2.21.0
-[2.20.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.1...v2.20.2
-[2.20.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.0...v2.20.1
-[2.19.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.1...v2.20.0
+[2.21.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.1...v2.21.0
+[2.20.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.20.0...v2.20.1
+[2.20.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.1...v2.20.0
 [2.19.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.19.0...v2.19.1
 [2.19.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.18.2...v2.19.0
 [2.18.2]: https://github.com/import-js/eslint-plugin-import/compare/v2.18.1...v2.18.2
@@ -1559,11 +1746,15 @@ for info on changes for earlier releases.
 [@adjerbetian]: https://github.com/adjerbetian
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
+[@aks-]: https://github.com/aks-
+[@akwodkiewicz]: https://github.com/akwodkiewicz
 [@aladdin-add]: https://github.com/aladdin-add
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
+[@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
 [@AndrewLeedham]: https://github.com/AndrewLeedham
+[@andyogo]: https://github.com/andyogo
 [@aravindet]: https://github.com/aravindet
 [@arvigeus]: https://github.com/arvigeus
 [@asapach]: https://github.com/asapach
@@ -1573,8 +1764,11 @@ for info on changes for earlier releases.
 [@atos1990]: https://github.com/atos1990
 [@azyzz228]: https://github.com/azyzz228
 [@barbogast]: https://github.com/barbogast
+[@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
+[@benasher44]: https://github.com/benasher44
+[@benkrejci]: https://github.com/benkrejci
 [@benmosher]: https://github.com/benmosher
 [@benmunro]: https://github.com/benmunro
 [@BenoitZugmeyer]: https://github.com/BenoitZugmeyer
@@ -1582,24 +1776,30 @@ for info on changes for earlier releases.
 [@bicstone]: https://github.com/bicstone
 [@Blasz]: https://github.com/Blasz
 [@bmish]: https://github.com/bmish
+[@developer-bandi]: https://github.com/developer-bandi
 [@borisyankov]: https://github.com/borisyankov
 [@bradennapier]: https://github.com/bradennapier
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@chabb]: https://github.com/chabb
+[@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
 [@charpeni]: https://github.com/charpeni
 [@cherryblossom000]: https://github.com/cherryblossom000
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
 [@christophercurrie]: https://github.com/christophercurrie
+[@cristobal]: https://github.com/cristobal
 [@DamienCassou]: https://github.com/DamienCassou
 [@danny-andrews]: https://github.com/dany-andrews
 [@darkartur]: https://github.com/darkartur
 [@davidbonnet]: https://github.com/davidbonnet
 [@dbrewer5]: https://github.com/dbrewer5
+[@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
+[@domdomegg]: https://github.com/domdomegg
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley
@@ -1649,22 +1849,28 @@ for info on changes for earlier releases.
 [@jeffshaver]: https://github.com/jeffshaver
 [@jf248]: https://github.com/jf248
 [@jfmengels]: https://github.com/jfmengels
+[@JiangWeixian]: https://github.com/JiangWeixian
 [@jimbolla]: https://github.com/jimbolla
 [@jkimbo]: https://github.com/jkimbo
 [@joaovieira]: https://github.com/joaovieira
+[@joe-matsec]: https://github.com/joe-matsec
+[@joeyguerra]: https://github.com/joeyguerra
 [@johndevedu]: https://github.com/johndevedu
 [@johnthagen]: https://github.com/johnthagen
 [@jonboiser]: https://github.com/jonboiser
 [@josh]: https://github.com/josh
+[@joshuaobrien]: https://github.com/joshuaobrien
 [@JounQin]: https://github.com/JounQin
 [@jquense]: https://github.com/jquense
 [@jseminck]: https://github.com/jseminck
 [@julien1619]: https://github.com/julien1619
 [@justinanastos]: https://github.com/justinanastos
+[@jwbth]: https://github.com/jwbth
 [@k15a]: https://github.com/k15a
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory
+[@kinland]: https://github.com/kinland
 [@kirill-konshin]: https://github.com/kirill-konshin
 [@kiwka]: https://github.com/kiwka
 [@klimashkin]: https://github.com/klimashkin
@@ -1672,8 +1878,10 @@ for info on changes for earlier releases.
 [@knpwrs]: https://github.com/knpwrs
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
+[@laurens-dg]: https://github.com/laurens-dg
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
+[@leipert]: https://github.com/leipert
 [@lemonmade]: https://github.com/lemonmade
 [@lencioni]: https://github.com/lencioni
 [@leonardodino]: https://github.com/leonardodino
@@ -1682,6 +1890,7 @@ for info on changes for earlier releases.
 [@lilling]: https://github.com/lilling
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx
+[@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
@@ -1705,11 +1914,15 @@ for info on changes for earlier releases.
 [@meowtec]: https://github.com/meowtec
 [@mgwalker]: https://github.com/mgwalker
 [@mhmadhamster]: https://github.com/MhMadHamster
+[@michaelfaith]: https://github.com/michaelfaith
+[@mihkeleidast]: https://github.com/mihkeleidast
 [@MikeyBeLike]: https://github.com/MikeyBeLike
+[@minervabot]: https://github.com/minervabot
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab
+[@mulztob]: https://github.com/mulztob
 [@mx-bernhard]: https://github.com/mx-bernhard
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
@@ -1720,6 +1933,7 @@ for info on changes for earlier releases.
 [@ombene]: https://github.com/ombene
 [@ota-meshi]: https://github.com/ota-meshi
 [@OutdatedVersion]: https://github.com/OutdatedVersion
+[@Pandemic1617]: https://github.com/Pandemic1617
 [@panrafal]: https://github.com/panrafal
 [@paztis]: https://github.com/paztis
 [@pcorpet]: https://github.com/pcorpet
@@ -1751,12 +1965,15 @@ for info on changes for earlier releases.
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
 [@sheepsteak]: https://github.com/sheepsteak
+[@silverwind]: https://github.com/silverwind
 [@silviogutierrez]: https://github.com/silviogutierrez
 [@SimenB]: https://github.com/SimenB
+[@simmo]: https://github.com/simmo
 [@sindresorhus]: https://github.com/sindresorhus
 [@singles]: https://github.com/singles
 [@skozin]: https://github.com/skozin
 [@skyrpex]: https://github.com/skyrpex
+[@snewcomer]: https://github.com/snewcomer
 [@sompylasar]: https://github.com/sompylasar
 [@soryy708]: https://github.com/soryy708
 [@sosukesuzuki]: https://github.com/sosukesuzuki
@@ -1771,7 +1988,6 @@ for info on changes for earlier releases.
 [@sveyret]: https://github.com/sveyret
 [@swernerx]: https://github.com/swernerx
 [@syymza]: https://github.com/syymza
-[@taion]: https://github.com/taion
 [@TakeScoop]: https://github.com/TakeScoop
 [@tapayne88]: https://github.com/tapayne88
 [@Taranys]: https://github.com/Taranys
@@ -1784,11 +2000,16 @@ for info on changes for earlier releases.
 [@tomprats]: https://github.com/tomprats
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@ttmarek]: https://github.com/ttmarek
+[@unbeauvoyage]: https://github.com/unbeauvoyage
 [@vikr01]: https://github.com/vikr01
 [@wenfangdu]: https://github.com/wenfangdu
 [@wKich]: https://github.com/wKich
 [@wschurman]: https://github.com/wschurman
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
+[@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@yesl-kim]: https://github.com/yesl-kim
+[@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
+[@Zamiell]: https://github.com/Zamiell
 [@zloirock]: https://github.com/zloirock

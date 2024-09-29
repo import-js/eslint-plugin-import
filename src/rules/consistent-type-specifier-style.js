@@ -1,20 +1,29 @@
+import { getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 function isComma(token) {
   return token.type === 'Punctuator' && token.value === ',';
 }
 
+/**
+ * @param {import('eslint').Rule.Fix[]} fixes
+ * @param {import('eslint').Rule.RuleFixer} fixer
+ * @param {import('eslint').SourceCode.SourceCode} sourceCode
+ * @param {(ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier)[]} specifiers
+ * */
 function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
   for (const specifier of specifiers) {
     // remove the trailing comma
-    const comma = sourceCode.getTokenAfter(specifier, isComma);
-    if (comma) {
-      fixes.push(fixer.remove(comma));
+    const token = sourceCode.getTokenAfter(specifier);
+    if (token && isComma(token)) {
+      fixes.push(fixer.remove(token));
     }
     fixes.push(fixer.remove(specifier));
   }
 }
 
+/** @type {(node: import('estree').Node, sourceCode: import('eslint').SourceCode.SourceCode, specifiers: (ImportSpecifier | ImportNamespaceSpecifier)[], kind: 'type' | 'typeof') => string} */
 function getImportText(
   node,
   sourceCode,
@@ -26,7 +35,7 @@ function getImportText(
     return '';
   }
 
-  const names = specifiers.map(s => {
+  const names = specifiers.map((s) => {
     if (s.imported.name === s.local.name) {
       return s.imported.name;
     }
@@ -36,6 +45,7 @@ function getImportText(
   return `import ${kind} {${names.join(', ')}} from ${sourceString};`;
 }
 
+/** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -55,7 +65,7 @@ module.exports = {
   },
 
   create(context) {
-    const sourceCode = context.getSourceCode();
+    const sourceCode = getSourceCode(context);
 
     if (context.options[0] === 'prefer-inline') {
       return {
@@ -67,12 +77,14 @@ module.exports = {
 
           if (
             // no specifiers (import type {} from '') have no specifiers to mark as inline
-            node.specifiers.length === 0 ||
-            (node.specifiers.length === 1 &&
-              // default imports are both "inline" and "top-level"
-              (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-                // namespace imports are both "inline" and "top-level"
-                node.specifiers[0].type === 'ImportNamespaceSpecifier'))
+            node.specifiers.length === 0
+            || node.specifiers.length === 1
+            // default imports are both "inline" and "top-level"
+            && (
+              node.specifiers[0].type === 'ImportDefaultSpecifier'
+              // namespace imports are both "inline" and "top-level"
+              || node.specifiers[0].type === 'ImportNamespaceSpecifier'
+            )
           ) {
             return;
           }
@@ -98,25 +110,32 @@ module.exports = {
 
     // prefer-top-level
     return {
+      /** @param {import('estree').ImportDeclaration} node */
       ImportDeclaration(node) {
         if (
           // already top-level is valid
-          node.importKind === 'type' ||
-          node.importKind === 'typeof' ||
+          node.importKind === 'type'
+          || node.importKind === 'typeof'
           // no specifiers (import {} from '') cannot have inline - so is valid
-          node.specifiers.length === 0 ||
-          (node.specifiers.length === 1 &&
-            // default imports are both "inline" and "top-level"
-            (node.specifiers[0].type === 'ImportDefaultSpecifier' ||
-              // namespace imports are both "inline" and "top-level"
-              node.specifiers[0].type === 'ImportNamespaceSpecifier'))
+          || node.specifiers.length === 0
+          || node.specifiers.length === 1
+          // default imports are both "inline" and "top-level"
+          && (
+            node.specifiers[0].type === 'ImportDefaultSpecifier'
+            // namespace imports are both "inline" and "top-level"
+            || node.specifiers[0].type === 'ImportNamespaceSpecifier'
+          )
         ) {
           return;
         }
 
+        /** @type {typeof node.specifiers} */
         const typeSpecifiers = [];
+        /** @type {typeof node.specifiers} */
         const typeofSpecifiers = [];
+        /** @type {typeof node.specifiers} */
         const valueSpecifiers = [];
+        /** @type {typeof node.specifiers[number]} */
         let defaultSpecifier = null;
         for (const specifier of node.specifiers) {
           if (specifier.type === 'ImportDefaultSpecifier') {
@@ -138,6 +157,7 @@ module.exports = {
         const newImports = `${typeImport}\n${typeofImport}`.trim();
 
         if (typeSpecifiers.length + typeofSpecifiers.length === node.specifiers.length) {
+          /** @type {('type' | 'typeof')[]} */
           // all specifiers have inline specifiers - so we replace the entire import
           const kind = [].concat(
             typeSpecifiers.length > 0 ? 'type' : [],
@@ -156,7 +176,7 @@ module.exports = {
           });
         } else {
           // remove specific specifiers and insert new imports for them
-          for (const specifier of typeSpecifiers.concat(typeofSpecifiers)) {
+          typeSpecifiers.concat(typeofSpecifiers).forEach((specifier) => {
             context.report({
               node: specifier,
               message: 'Prefer using a top-level {{kind}}-only import instead of inline {{kind}} specifiers.',
@@ -164,6 +184,7 @@ module.exports = {
                 kind: specifier.importKind,
               },
               fix(fixer) {
+                /** @type {import('eslint').Rule.Fix[]} */
                 const fixes = [];
 
                 // if there are no value specifiers, then the other report fixer will be called, not this one
@@ -195,7 +216,7 @@ module.exports = {
                   const comma = sourceCode.getTokenAfter(defaultSpecifier, isComma);
                   const closingBrace = sourceCode.getTokenAfter(
                     node.specifiers[node.specifiers.length - 1],
-                    token => token.type === 'Punctuator' && token.value === '}',
+                    (token) => token.type === 'Punctuator' && token.value === '}',
                   );
                   fixes.push(fixer.removeRange([
                     comma.range[0],
@@ -209,7 +230,7 @@ module.exports = {
                 );
               },
             });
-          }
+          });
         }
       },
     };

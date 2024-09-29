@@ -5,7 +5,6 @@
 <!-- end auto-generated rule header -->
 
 Enforce a convention in the order of `require()` / `import` statements.
-+(fixable) The `--fix` option on the [command line] automatically fixes problems reported by this rule.
 
 With the [`groups`](#groups-array) option set to `["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]` the order is as shown in the following example:
 
@@ -37,7 +36,6 @@ Unassigned imports are ignored, as the order they are imported in may be importa
 
 Statements using the ES6 `import` syntax must appear before any `require()` statements.
 
-
 ## Fail
 
 ```ts
@@ -54,7 +52,6 @@ var path = require('path'); // `path` import should occur before import of `loda
 var path = require('path');
 import foo from './foo'; // `import` statements must be before `require` statement
 ```
-
 
 ## Pass
 
@@ -80,15 +77,35 @@ import foo from './foo';
 var path = require('path');
 ```
 
+## Limitations of `--fix`
+
+Unbound imports are assumed to have side effects, and will never be moved/reordered. This can cause other imports to get "stuck" around them, and the fix to fail.
+
+```javascript
+import b from 'b'
+import 'format.css';  // This will prevent --fix from working.
+import a from 'a'
+```
+
+As a workaround, move unbound imports to be entirely above or below bound ones.
+
+```javascript
+import 'format1.css';  // OK
+import b from 'b'
+import a from 'a'
+import 'format2.css';  // OK
+```
+
 ## Options
 
 This rule supports the following options:
 
-### `groups: [array]`:
+### `groups: [array]`
 
 How groups are defined, and the order to respect. `groups` must be an array of `string` or [`string`]. The only allowed `string`s are:
 `"builtin"`, `"external"`, `"internal"`, `"unknown"`, `"parent"`, `"sibling"`, `"index"`, `"object"`, `"type"`.
 The enforced order is the same as the order of each element in a group. Omitted types are implicitly grouped together as the last element. Example:
+
 ```ts
 [
   'builtin', // Built-in types are first
@@ -98,6 +115,7 @@ The enforced order is the same as the order of each element in a group. Omitted 
   // Then the rest: internal and external type
 ]
 ```
+
 The default value is `["builtin", "external", "parent", "sibling", "index"]`.
 
 You can set the options like this:
@@ -120,7 +138,7 @@ You can set the options like this:
 ]
 ```
 
-### `pathGroups: [array of objects]`:
+### `pathGroups: [array of objects]`
 
 To be able to group by paths mostly needed with aliases pathGroups can be defined.
 
@@ -146,7 +164,7 @@ Properties of the objects
 }
 ```
 
-### `distinctGroup: [boolean]`:
+### `distinctGroup: [boolean]`
 
 This changes how `pathGroups[].position` affects grouping. The property is most useful when `newlines-between` is set to `always` and at least 1 `pathGroups` entry has a `position` property set.
 
@@ -155,6 +173,7 @@ By default, in the context of a particular `pathGroup` entry, when setting `posi
 Note that currently, `distinctGroup` defaults to `true`. However, in a later update, the default will change to `false`
 
 Example:
+
 ```json
 {
   "import/order": ["error", {
@@ -171,12 +190,13 @@ Example:
 }
 ```
 
-### `pathGroupsExcludedImportTypes: [array]`:
+### `pathGroupsExcludedImportTypes: [array]`
 
 This defines import types that are not handled by configured pathGroups.
-This is mostly needed when you want to handle path groups that look like external imports.
+If you have added path groups with patterns that look like `"builtin"` or `"external"` imports, you have to remove this group (`"builtin"` and/or `"external"`) from the default exclusion list (e.g., `["builtin", "external", "object"]`, etc) to sort these path groups correctly.
 
 Example:
+
 ```json
 {
   "import/order": ["error", {
@@ -192,36 +212,16 @@ Example:
 }
 ```
 
-You can also use `patterns`(e.g., `react`, `react-router-dom`, etc).
+[Import Type](https://github.com/import-js/eslint-plugin-import/blob/HEAD/src/core/importType.js#L90) is resolved as a fixed string in predefined set, it can't be a `patterns`(e.g., `react`, `react-router-dom`, etc). See [#2156] for details.
 
-Example:
-```json
-{
-  "import/order": [
-    "error",
-    {
-      "pathGroups": [
-        {
-          "pattern": "react",
-          "group": "builtin",
-          "position": "before"
-        }
-      ],
-      "pathGroupsExcludedImportTypes": ["react"]
-    }
-  ]
-}
-```
-The default value is `["builtin", "external", "object"]`.
-
-### `newlines-between: [ignore|always|always-and-inside-groups|never]`:
+### `newlines-between: [ignore|always|always-and-inside-groups|never]`
 
 Enforces or forbids new lines between import groups:
 
-- If set to `ignore`, no errors related to new lines between import groups will be reported.
-- If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
-- If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
-- If set to `never`, no new lines are allowed in the entire import section.
+ - If set to `ignore`, no errors related to new lines between import groups will be reported.
+ - If set to `always`, at least one new line between each group will be enforced, and new lines inside a group will be forbidden. To prevent multiple lines between imports, core `no-multiple-empty-lines` rule can be used.
+ - If set to `always-and-inside-groups`, it will act like `always` except newlines are allowed inside import groups.
+ - If set to `never`, no new lines are allowed in the entire import section.
 
 The default value is `"ignore"`.
 
@@ -285,15 +285,88 @@ import index from './';
 import sibling from './foo';
 ```
 
-### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`:
+### `named: true|false|{ enabled: true|false, import: true|false, export: true|false, require: true|false, cjsExports: true|false, types: mixed|types-first|types-last }`
+
+Enforce ordering of names within imports and exports:
+
+ - If set to `true`, named imports must be ordered according to the `alphabetize` options
+ - If set to `false`, named imports can occur in any order
+
+`enabled` enables the named ordering for all expressions by default.
+Use `import`, `export` and `require` and `cjsExports` to override the enablement for the following kind of expressions:
+
+ - `import`:
+
+   ```ts
+   import { Readline } from "readline";
+   ```
+
+ - `export`:
+
+   ```ts
+   export { Readline };
+   // and
+   export { Readline } from "readline";
+   ```
+
+ - `require`
+
+   ```ts
+   const { Readline } = require("readline");
+   ```
+
+ - `cjsExports`
+
+   ```ts
+   module.exports.Readline = Readline;
+   // and
+   module.exports = { Readline };
+   ```
+
+The `types` option allows you to specify the order of `import`s and `export`s of `type` specifiers.
+Following values are possible:
+
+ - `types-first`: forces `type` specifiers to occur first
+ - `types-last`: forces value specifiers to occur first
+ - `mixed`: sorts all specifiers in alphabetical order
+
+The default value is `false`.
+
+Example setting:
+
+```ts
+{
+  named: true,
+  alphabetize: {
+    order: 'asc'
+  }
+}
+```
+
+This will fail the rule check:
+
+```ts
+/* eslint import/order: ["error", {"named": true, "alphabetize": {"order": "asc"}}] */
+import { compose, apply } from 'xcompose';
+```
+
+While this will pass:
+
+```ts
+/* eslint import/order: ["error", {"named": true, "alphabetize": {"order": "asc"}}] */
+import { apply, compose } from 'xcompose';
+```
+
+### `alphabetize: {order: asc|desc|ignore, orderImportKind: asc|desc|ignore, caseInsensitive: true|false}`
 
 Sort the order within each group in alphabetical manner based on **import path**:
 
-- `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
-- `orderImportKind`: use `asc` to sort in ascending order various import kinds, e.g. imports prefixed with `type` or `typeof`, with same import path. Use `desc` to sort in descending order (default: `ignore`).
-- `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
+ - `order`: use `asc` to sort in ascending order, and `desc` to sort in descending order (default: `ignore`).
+ - `orderImportKind`: use `asc` to sort in ascending order various import kinds, e.g. imports prefixed with `type` or `typeof`, with same import path. Use `desc` to sort in descending order (default: `ignore`).
+ - `caseInsensitive`: use `true` to ignore case, and `false` to consider case (default: `false`).
 
 Example setting:
+
 ```ts
 alphabetize: {
   order: 'asc', /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */
@@ -323,9 +396,9 @@ import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
 ```
 
-### `warnOnUnassignedImports: true|false`:
+### `warnOnUnassignedImports: true|false`
 
-* default: `false`
+ - default: `false`
 
 Warns when unassigned imports are out of order.  These warning will not be fixed
 with `--fix` because unassigned imports are used for side-effects and changing the
@@ -352,9 +425,9 @@ import './styles.css';
 
 ## Related
 
-- [`import/external-module-folders`] setting
+ - [`import/external-module-folders`] setting
 
-- [`import/internal-regex`] setting
+ - [`import/internal-regex`] setting
 
 [`import/external-module-folders`]: ../../README.md#importexternal-module-folders
 

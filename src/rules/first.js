@@ -1,3 +1,5 @@
+import { getDeclaredVariables, getSourceCode } from 'eslint-module-utils/contextCompat';
+
 import docsUrl from '../docsUrl';
 
 function getImportValue(node) {
@@ -25,20 +27,20 @@ module.exports = {
 
   create(context) {
     function isPossibleDirective(node) {
-      return node.type === 'ExpressionStatement' &&
-        node.expression.type === 'Literal' &&
-        typeof node.expression.value === 'string';
+      return node.type === 'ExpressionStatement'
+        && node.expression.type === 'Literal'
+        && typeof node.expression.value === 'string';
     }
 
     return {
-      'Program': function (n) {
+      Program(n) {
         const body = n.body;
         if (!body) {
           return;
         }
         const absoluteFirst = context.options[0] === 'absolute-first';
         const message = 'Import in body of module; reorder to top.';
-        const sourceCode = context.getSourceCode();
+        const sourceCode = getSourceCode(context);
         const originSourceCode = sourceCode.getText();
         let nonImportCount = 0;
         let anyExpressions = false;
@@ -56,7 +58,7 @@ module.exports = {
 
           if (node.type === 'ImportDeclaration' || node.type === 'TSImportEqualsDeclaration') {
             if (absoluteFirst) {
-              if (/^\./.test(getImportValue(node))) {
+              if ((/^\./).test(getImportValue(node))) {
                 anyRelative = true;
               } else if (anyRelative) {
                 context.report({
@@ -66,8 +68,8 @@ module.exports = {
               }
             }
             if (nonImportCount > 0) {
-              for (const variable of context.getDeclaredVariables(node)) {
-                if (!shouldSort) break;
+              for (const variable of getDeclaredVariables(context, node)) {
+                if (!shouldSort) { break; }
                 const references = variable.references;
                 if (references.length) {
                   for (const reference of references) {
@@ -90,7 +92,7 @@ module.exports = {
             nonImportCount++;
           }
         });
-        if (!errorInfos.length) return;
+        if (!errorInfos.length) { return; }
         errorInfos.forEach(function (errorInfo, index) {
           const node = errorInfo.node;
           const infos = {
@@ -112,26 +114,27 @@ module.exports = {
                 const nodeSourceCode = String.prototype.slice.apply(
                   originSourceCode, _errorInfo.range,
                 );
-                if (/\S/.test(nodeSourceCode[0])) {
-                  return '\n' + nodeSourceCode;
+                if ((/\S/).test(nodeSourceCode[0])) {
+                  return `\n${nodeSourceCode}`;
                 }
                 return nodeSourceCode;
               }).join('');
               let insertFixer = null;
               let replaceSourceCode = '';
               if (!lastLegalImp) {
-                insertSourceCode =
-                    insertSourceCode.trim() + insertSourceCode.match(/^(\s+)/)[0];
+                insertSourceCode = insertSourceCode.trim() + insertSourceCode.match(/^(\s+)/)[0];
               }
-              insertFixer = lastLegalImp ?
-                fixer.insertTextAfter(lastLegalImp, insertSourceCode) :
-                fixer.insertTextBefore(body[0], insertSourceCode);
+              insertFixer = lastLegalImp
+                ? fixer.insertTextAfter(lastLegalImp, insertSourceCode)
+                : fixer.insertTextBefore(body[0], insertSourceCode);
+
               const fixers = [insertFixer].concat(removeFixers);
-              fixers.forEach(function (computedFixer, i) {
-                replaceSourceCode += (originSourceCode.slice(
+              fixers.forEach((computedFixer, i) => {
+                replaceSourceCode += originSourceCode.slice(
                   fixers[i - 1] ? fixers[i - 1].range[1] : 0, computedFixer.range[0],
-                ) + computedFixer.text);
+                ) + computedFixer.text;
               });
+
               return fixer.replaceTextRange(range, replaceSourceCode);
             };
           }

@@ -8,7 +8,6 @@ const resolver = require('../');
 
 const file = path.join(__dirname, 'package-mains', 'dummy.js');
 
-
 describe('packageMains', function () {
   it('captures module', function () {
     expect(resolver.resolve('./module', file)).property('path')

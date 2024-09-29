@@ -29,7 +29,7 @@ module.exports = {
           return context.report({ node, message });
         }
 
-        const someNamed = node.specifiers.some(specifier => (specifier.exported.name || specifier.exported.value) !== 'default');
+        const someNamed = node.specifiers.some((specifier) => (specifier.exported.name || specifier.exported.value) !== 'default');
         if (someNamed) {
           context.report({ node, message });
         }

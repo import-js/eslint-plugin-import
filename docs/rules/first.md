@@ -57,6 +57,7 @@ Given that, see [#255] for the reasoning.
 ### With Fixer
 
 This rule contains a fixer to reorder in-body import to top, the following criteria applied:
+
 1. Never re-order relative to each other, even if `absolute-first` is set.
 2. If an import creates an identifier, and that identifier is referenced at module level *before* the import itself, that won't be re-ordered.
 
@@ -67,8 +68,8 @@ enable this rule.
 
 ## Further Reading
 
-- [`import/order`]: a major step up from `absolute-first`
-- Issue [#255]
+ - [`import/order`]: a major step up from `absolute-first`
+ - Issue [#255]
 
 [`import/order`]: ./order.md
 [#255]: https://github.com/import-js/eslint-plugin-import/issues/255

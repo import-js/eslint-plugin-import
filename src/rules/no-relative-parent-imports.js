@@ -1,9 +1,10 @@
-import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
-import docsUrl from '../docsUrl';
 import { basename, dirname, relative } from 'path';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
+import moduleVisitor, { makeOptionsSchema } from 'eslint-module-utils/moduleVisitor';
 import resolve from 'eslint-module-utils/resolve';
 
 import importType from '../core/importType';
+import docsUrl from '../docsUrl';
 
 module.exports = {
   meta: {
@@ -17,8 +18,8 @@ module.exports = {
   },
 
   create: function noRelativePackages(context) {
-    const myPath = context.getPhysicalFilename ? context.getPhysicalFilename() : context.getFilename();
-    if (myPath === '<text>') return {}; // can't check a non-file
+    const myPath = getPhysicalFilename(context);
+    if (myPath === '<text>') { return {}; } // can't check a non-file
 
     function checkSourceValue(sourceNode) {
       const depPath = sourceNode.value;
@@ -38,10 +39,7 @@ module.exports = {
       if (importType(relDepPath, context) === 'parent') {
         context.report({
           node: sourceNode,
-          message: 'Relative imports from parent directories are not allowed. ' +
-            `Please either pass what you're importing through at runtime ` +
-            `(dependency injection), move \`${basename(myPath)}\` to same ` +
-            `directory as \`${depPath}\` or consider making \`${depPath}\` a package.`,
+          message: `Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move \`${basename(myPath)}\` to same directory as \`${depPath}\` or consider making \`${depPath}\` a package.`,
         });
       }
     }

@@ -15,7 +15,7 @@ module.exports = {
     },
     schema: [{
       type: 'object',
-      properties:{
+      properties: {
         target: {
           type: 'string',
           enum: ['single', 'any'],
@@ -51,11 +51,11 @@ module.exports = {
     }
 
     return {
-      'ExportDefaultSpecifier': function () {
+      ExportDefaultSpecifier() {
         hasDefaultExport = true;
       },
 
-      'ExportSpecifier': function (node) {
+      ExportSpecifier(node) {
         if ((node.exported.name || node.exported.value) === 'default') {
           hasDefaultExport = true;
         } else {
@@ -64,17 +64,17 @@ module.exports = {
         }
       },
 
-      'ExportNamedDeclaration': function (node) {
+      ExportNamedDeclaration(node) {
         // if there are specifiers, node.declaration should be null
-        if (!node.declaration) return;
+        if (!node.declaration) { return; }
 
         const { type } = node.declaration;
 
         if (
-          type === 'TSTypeAliasDeclaration' ||
-          type === 'TypeAlias' ||
-          type === 'TSInterfaceDeclaration' ||
-          type === 'InterfaceDeclaration'
+          type === 'TSTypeAliasDeclaration'
+          || type === 'TypeAlias'
+          || type === 'TSInterfaceDeclaration'
+          || type === 'InterfaceDeclaration'
         ) {
           specifierExportCount++;
           hasTypeExport = true;
@@ -93,15 +93,15 @@ module.exports = {
         namedExportNode = node;
       },
 
-      'ExportDefaultDeclaration': function () {
+      ExportDefaultDeclaration() {
         hasDefaultExport = true;
       },
 
-      'ExportAllDeclaration': function () {
+      ExportAllDeclaration() {
         hasStarExport = true;
       },
 
-      'Program:exit': function () {
+      'Program:exit'() {
         if (hasDefaultExport || hasStarExport || hasTypeExport) {
           return;
         }
