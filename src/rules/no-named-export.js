@@ -1,3 +1,4 @@
+import sourceType from '../core/sourceType';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -13,7 +14,7 @@ module.exports = {
 
   create(context) {
     // ignore non-modules
-    if (context.parserOptions.sourceType !== 'module') {
+    if (sourceType(context) !== 'module') {
       return {};
     }
 
