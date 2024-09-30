@@ -9,6 +9,12 @@ ruleTester.run('no-default-export', rule, {
   valid: [
     test({
       code: 'module.exports = function foo() {}',
+      parserOptions: {
+        sourceType: 'script',
+      },
+    }),
+    test({
+      code: 'module.exports = function foo() {}',
     }),
     test({
       code: `

@@ -8,6 +8,12 @@ ruleTester.run('no-named-export', rule, {
   valid: [].concat(
     test({
       code: 'module.export.foo = function () {}',
+      parserOptions: {
+        sourceType: 'script',
+      },
+    }),
+    test({
+      code: 'module.export.foo = function () {}',
     }),
     test({
       code: 'export default function bar() {};',
