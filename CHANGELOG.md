@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.31.0] - 2024-10-03
+
 ### Added
 - support eslint v9 ([#2996], thanks [@G-Rath] [@michaelfaith])
 - [`order`]: allow validating named imports ([#3043], thanks [@manuth])
@@ -1646,7 +1648,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.30.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.31.0...HEAD
+[2.31.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.30.0...v2.31.0
 [2.30.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.1...v2.30.0
 [2.29.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...v2.29.1
 [2.29.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.28.1...v2.29.0
