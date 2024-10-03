@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Changed
+- [refactor] `parse`: avoid using a regex here (thanks [@ljharb])
+
 ## v2.12.0 - 2024-09-26
 
 ### Added
