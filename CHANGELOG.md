@@ -45,11 +45,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: do not compare first path segment for relative paths ([#2682]) ([#2885], thanks [@mihkeleidast])
 
 ### Changed
-- [Docs] `no-extraneous-dependencies`: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
+- [Docs] [`no-extraneous-dependencies`]: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
 - [`no-unused-modules`]: add console message to help debug [#2866]
 - [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
 - [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
-- [Docs] `order`: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
+- [Docs] [`order`]: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
 - [Tests] appveyor -> GHA (run tests on Windows in both pwsh and WSL + Ubuntu) ([#2987], thanks [@joeyguerra])
 - [actions] migrate OSX tests to GHA ([ljharb#37], thanks [@aks-])
 - [Refactor] `exportMapBuilder`: avoid hoisting ([#2989], thanks [@soryy708])
@@ -1831,6 +1831,7 @@ for info on changes for earlier releases.
 [@fsmaia]: https://github.com/fsmaia
 [@fson]: https://github.com/fson
 [@futpib]: https://github.com/futpib
+[@G-Rath]: https://github.com/G-Rath
 [@gajus]: https://github.com/gajus
 [@gausie]: https://github.com/gausie
 [@gavriguy]: https://github.com/gavriguy
