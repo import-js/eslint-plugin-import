@@ -82,7 +82,7 @@ const importPlugin = {
 const createFlatConfig = (baseConfig, configName) => ({
   ...baseConfig,
   name: `import/${configName}`,
-  plugins: { import: importPlugin },
+  plugins: { 'import': importPlugin },
 });
 
 export const flatConfigs = {
