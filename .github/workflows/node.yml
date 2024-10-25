@@ -37,29 +37,9 @@ jobs:
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
           - 9
+          - 9.0.0
           - 8
-          - 7
-          - 6
-          - 5
-          - 4
-          - 3
-          - 2
-        include:
-          - node-version: 'lts/*'
-            os: ubuntu-latest
-            eslint: 7
-            env:
-              TS_PARSER: 4
-          - node-version: 'lts/*'
-            os: ubuntu-latest
-            eslint: 7
-            env:
-              TS_PARSER: 3
-          - node-version: 'lts/*'
-            os: ubuntu-latest
-            eslint: 7
-            env:
-              TS_PARSER: 2
+          - 8.57.0
 
     steps:
       - uses: actions/checkout@v4
