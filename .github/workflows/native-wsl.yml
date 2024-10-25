@@ -29,7 +29,7 @@ jobs:
     - name: 'WSL: do all npm install steps'
       if: matrix.configuration == 'wsl'
       env:
-        ESLINT_VERSION: 7
+        ESLINT_VERSION: 9
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
@@ -52,7 +52,7 @@ jobs:
     - name: copy metafiles in Native
       if: matrix.configuration == 'native'
       env:
-        ESLINT_VERSION: 7
+        ESLINT_VERSION: 9
       run: |
         npm run copy-metafiles
         bash ./tests/dep-time-travel.sh 2>&1
