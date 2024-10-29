@@ -1,6 +1,4 @@
 import docsUrl from '../docsUrl';
-import values from 'object.values';
-import flat from 'array.prototype.flat';
 
 const meta = {
   type: 'suggestion',
@@ -107,8 +105,9 @@ function create(context) {
       }
 
       // Report multiple `aggregated exports` from the same module (ES2015 modules)
-      flat(values(nodes.modules.sources)
-        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
+      Object.values(nodes.modules.sources)
+        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1)
+        .flat()
         .forEach((node) => {
           context.report({
             node,
@@ -127,8 +126,9 @@ function create(context) {
       }
 
       // Report multiple `aggregated type exports` from the same module (FLOW ES2015 modules)
-      flat(values(nodes.types.sources)
-        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1))
+      Object.values(nodes.types.sources)
+        .filter((nodesWithSource) => Array.isArray(nodesWithSource) && nodesWithSource.length > 1)
+        .flat()
         .forEach((node) => {
           context.report({
             node,

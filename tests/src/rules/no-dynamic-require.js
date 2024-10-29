@@ -1,7 +1,6 @@
 import { parsers, test, testVersion } from '../utils';
 
 import { RuleTester } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-dynamic-require');
@@ -29,7 +28,7 @@ ruleTester.run('no-dynamic-require', rule, {
     test({ code: 'var foo = require("@scope/foo")' }),
 
     //dynamic import
-    ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
+    ...[parsers.ESPREE, parsers.BABEL_OLD].flatMap((parser) => {
       const _test = parser === parsers.ESPREE
         ? (testObj) => testVersion('>= 6.2.0', () => testObj)
         : (testObj) => test(testObj);
@@ -141,7 +140,7 @@ ruleTester.run('no-dynamic-require', rule, {
     }),
 
     // dynamic import
-    ...flatMap([parsers.ESPREE, parsers.BABEL_OLD], (parser) => {
+    ...[parsers.ESPREE, parsers.BABEL_OLD].flatMap((parser) => {
       const _test = parser === parsers.ESPREE
         ? (testObj) => testVersion('>= 6.2.0', () => testObj)
         : (testObj) => test(testObj);

@@ -1,6 +1,5 @@
 import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } from '../utils';
 import { RuleTester } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester({ parserOptions: { ecmaVersion: 6 } });
 const rule = require('rules/namespace');
@@ -143,7 +142,7 @@ const valid = [
   }),
 
   // Typescript
-  ...flatMap(getTSParsers(), (parser) => [
+  ...getTSParsers().flatMap((parser) => [
     test({
       code: `
         import * as foo from "./typescript-declare-nested"
