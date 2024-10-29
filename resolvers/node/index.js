@@ -1,7 +1,7 @@
 'use strict';
 
+const { isBuiltin } = require('node:module');
 const resolve = require('resolve/sync');
-const isCoreModule = require('is-core-module');
 const path = require('path');
 
 const log = require('debug')('eslint-plugin-import:resolver:node');
@@ -49,7 +49,7 @@ exports.resolve = function (source, file, config) {
   log('Resolving:', source, 'from:', file);
   let resolvedPath;
 
-  if (isCoreModule(source)) {
+  if (isBuiltin(source)) {
     log('resolved to core');
     return { found: true, path: null };
   }

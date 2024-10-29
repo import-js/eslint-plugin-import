@@ -1,5 +1,5 @@
+import { isBuiltin } from 'node:module';
 import { isAbsolute as nodeIsAbsolute, relative, resolve as nodeResolve } from 'path';
-import isCoreModule from 'is-core-module';
 
 import resolve from 'eslint-module-utils/resolve';
 import { getContextPackagePath } from './packagePath';
@@ -32,7 +32,7 @@ export function isBuiltIn(name, settings, path) {
   if (path || !name) { return false; }
   const base = baseModule(name);
   const extras = settings && settings['import/core-modules'] || [];
-  return isCoreModule(base) || extras.indexOf(base) > -1;
+  return isBuiltin(base) || extras.indexOf(base) > -1;
 }
 
 const moduleRegExp = /^\w/;

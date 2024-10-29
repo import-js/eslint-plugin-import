@@ -1,5 +1,4 @@
 import { RuleTester } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 import rule from 'rules/no-internal-modules';
 
 import { test, testFilePath, getTSParsers } from '../utils';
@@ -130,7 +129,7 @@ ruleTester.run('no-internal-modules', rule, {
         }
       `,
     }),
-    ...flatMap(getTSParsers(), (parser) => [
+    ...getTSParsers().flatMap((parser) => [
       test({
         code: `
           export class AuthHelper {
