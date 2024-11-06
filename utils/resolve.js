@@ -84,7 +84,7 @@ function resolverReducer(resolvers, map) {
 
   if (typeof resolvers === 'object') {
     for (const key in resolvers) {
-      if (resolvers[key] === false) continue;
+      if (resolvers[key] === false) { continue; }
       map.set(key, resolvers[key]);
     }
     return map;
