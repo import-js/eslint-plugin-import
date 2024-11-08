@@ -18,6 +18,9 @@ jobs:
         name: 'npm install'
         with:
           skip-ls-check: true
+      # for some reason we've got to force typescript to install here
+      # even though the npm script has `typescript@latest`
+      - run: npm i --force typescript@latest
       - run: npm run test-types
 
   matrix:
