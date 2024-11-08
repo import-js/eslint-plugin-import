@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
+- add TypeScript types ([#3097], thanks [@G-Rath])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
@@ -1161,6 +1162,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
+[#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
