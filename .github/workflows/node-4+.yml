@@ -10,6 +10,16 @@ permissions:
   contents: read
 
 jobs:
+  types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ljharb/actions/node/install@main
+        name: 'npm install'
+        with:
+          skip-ls-check: true
+      - run: npm run test-types
+
   matrix:
     runs-on: ubuntu-latest
     outputs:
