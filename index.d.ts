@@ -1,32 +1,32 @@
-import ESLint from 'eslint';
+import { ESLint, Linter, Rule } from 'eslint';
 
-declare const plugin: ESLint.ESLint.Plugin & {
+declare const plugin: ESLint.Plugin & {
   meta: {
     name: string;
     version: string;
   };
   configs: {
-    'recommended': ESLint.Linter.LegacyConfig;
-    'errors': ESLint.Linter.LegacyConfig;
-    'warnings': ESLint.Linter.LegacyConfig;
-    'stage-0': ESLint.Linter.LegacyConfig;
-    'react': ESLint.Linter.LegacyConfig;
-    'react-native': ESLint.Linter.LegacyConfig;
-    'electron': ESLint.Linter.LegacyConfig;
-    'typescript': ESLint.Linter.LegacyConfig;
+    'recommended': Linter.LegacyConfig;
+    'errors': Linter.LegacyConfig;
+    'warnings': Linter.LegacyConfig;
+    'stage-0': Linter.LegacyConfig;
+    'react': Linter.LegacyConfig;
+    'react-native': Linter.LegacyConfig;
+    'electron': Linter.LegacyConfig;
+    'typescript': Linter.LegacyConfig;
   };
   flatConfigs: {
-    'recommended': ESLint.Linter.FlatConfig;
-    'errors': ESLint.Linter.FlatConfig;
-    'warnings': ESLint.Linter.FlatConfig;
-    'stage-0': ESLint.Linter.FlatConfig;
-    'react': ESLint.Linter.FlatConfig;
-    'react-native': ESLint.Linter.FlatConfig;
-    'electron': ESLint.Linter.FlatConfig;
-    'typescript': ESLint.Linter.FlatConfig;
+    'recommended': Linter.FlatConfig;
+    'errors': Linter.FlatConfig;
+    'warnings': Linter.FlatConfig;
+    'stage-0': Linter.FlatConfig;
+    'react': Linter.FlatConfig;
+    'react-native': Linter.FlatConfig;
+    'electron': Linter.FlatConfig;
+    'typescript': Linter.FlatConfig;
   };
   rules: {
-    [key: string]: ESLint.Rule.RuleModule;
+    [key: string]: Rule.RuleModule;
   };
 };
 
