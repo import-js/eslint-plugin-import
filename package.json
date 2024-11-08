@@ -6,6 +6,7 @@
     "node": ">=4"
   },
   "main": "lib/index.js",
+  "types": "index.d.ts",
   "directories": {
     "test": "tests"
   },
@@ -16,7 +17,8 @@
     "docs",
     "lib",
     "config",
-    "memo-parser/{*.js,LICENSE,*.md}"
+    "memo-parser/{*.js,LICENSE,*.md}",
+    "index.d.ts"
   ],
   "scripts": {
     "prebuild": "rimraf lib",
