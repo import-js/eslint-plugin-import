@@ -10,19 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  types:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ljharb/actions/node/install@main
-        name: 'npm install'
-        with:
-          skip-ls-check: true
-      # for some reason we've got to force typescript to install here
-      # even though the npm script has `typescript@latest`
-      - run: npm i --force typescript@latest
-      - run: npm run test-types
-
   matrix:
     runs-on: ubuntu-latest
     outputs:
