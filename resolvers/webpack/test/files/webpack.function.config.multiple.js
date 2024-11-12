@@ -7,6 +7,7 @@ module.exports = [function(env) {
       alias: {
         'foo': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
         'bar': env ? path.join(__dirname, 'some', 'goofy', 'path', 'bar.js') : undefined,
+        'baz': path.join(__dirname, 'some', 'goofy', 'path', 'foo.js'),
         'some-alias': path.join(__dirname, 'some'),
       },
       modules: [

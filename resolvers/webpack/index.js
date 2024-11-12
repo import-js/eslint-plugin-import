@@ -311,6 +311,22 @@ function getResolveSync(configPath, webpackConfig, cwd) {
   return cached.value;
 }
 
+const _evalCache = new Map();
+function evaluateFunctionConfigCached(configPath, webpackConfig, env, argv) {
+  const cacheKey = JSON.stringify({ configPath, args: [env, argv] });
+  if (_evalCache.has(cacheKey)) {
+    return _evalCache.get(cacheKey);
+  }
+  const cached = webpackConfig(env, argv);
+  _evalCache.set(cacheKey, cached);
+
+  while (_evalCache.size > MAX_CACHE) {
+    // remove oldest item
+    _evalCache.delete(_evalCache.keys().next().value);
+  }
+  return cached;
+}
+
 /**
  * Find the full path to 'source', given 'file' as a full reference path.
  *
@@ -354,6 +370,7 @@ exports.resolve = function (source, file, settings) {
   const configIndex = settings && settings['config-index'];
   const env = settings && settings.env;
   const argv = settings && typeof settings.argv !== 'undefined' ? settings.argv : {};
+  const shouldCacheFunctionConfig = settings && settings.cache;
   let packageDir;
 
   let configPath = typeof _configPath === 'string' && _configPath.startsWith('.')
@@ -398,7 +415,9 @@ exports.resolve = function (source, file, settings) {
   }
 
   if (typeof webpackConfig === 'function') {
-    webpackConfig = webpackConfig(env, argv);
+    webpackConfig = shouldCacheFunctionConfig
+      ? evaluateFunctionConfigCached(configPath, webpackConfig, env, argv)
+      : webpackConfig(env, argv);
   }
 
   if (isArray(webpackConfig)) {

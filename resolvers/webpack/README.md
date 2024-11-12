@@ -94,6 +94,17 @@ settings:
         production: true
 ```
 
+If your config is set as a function, it will be evaluated at every resolution. You have an option to prevent this by caching it using the `cache` parameter:
+
+```yaml
+---
+settings:
+  import/resolver:
+    webpack:
+      config: 'webpack.config.js'
+      cache: true
+```
+
 ## Support
 
 [Get supported eslint-import-resolver-webpack with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-eslint-import-resolver-webpack?utm_source=npm-eslint-import-resolver-webpack&utm_medium=referral&utm_campaign=readme)
