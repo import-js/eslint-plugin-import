@@ -15,7 +15,7 @@ You can also configure the regex format you'd like to accept for the webpackChun
 
  ```javascript
 {
-  "dynamic-import-chunkname": [2, {
+  "import/dynamic-import-chunkname": [2, {
     importFunctions: ["dynamicImport"],
     webpackChunknameFormat: "[a-zA-Z0-57-9-/_]+",
     allowEmpty: false
