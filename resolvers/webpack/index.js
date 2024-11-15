@@ -2,17 +2,13 @@
 
 const findRoot = require('find-root');
 const path = require('path');
+const { isBuiltin } = require('node:module');
 const isEqual = require('lodash/isEqual');
 const interpret = require('interpret');
 const existsSync = require('fs').existsSync;
-const isCore = require('is-core-module');
 const resolve = require('resolve/sync');
 const semver = require('semver');
-const hasOwn = require('hasown');
 const isRegex = require('is-regex');
-const isArray = Array.isArray;
-const keys = Object.keys;
-const assign = Object.assign;
 
 const log = require('debug')('eslint-plugin-import:resolver:webpack');
 
@@ -22,7 +18,7 @@ function registerCompiler(moduleDescriptor) {
   if (moduleDescriptor) {
     if (typeof moduleDescriptor === 'string') {
       require(moduleDescriptor);
-    } else if (!isArray(moduleDescriptor)) {
+    } else if (!Array.isArray(moduleDescriptor)) {
       moduleDescriptor.register(require(moduleDescriptor.module));
     } else {
       for (let i = 0; i < moduleDescriptor.length; i++) {
@@ -38,7 +34,7 @@ function registerCompiler(moduleDescriptor) {
 }
 
 function findConfigPath(configPath, packageDir) {
-  const extensions = keys(interpret.extensions).sort(function (a, b) {
+  const extensions = Object.keys(interpret.extensions).sort(function (a, b) {
     return a === '.js' ? -1 : b === '.js' ? 1 : a.length - b.length;
   });
   let extension;
@@ -79,7 +75,7 @@ function findExternal(source, externals, context, resolveSync) {
   if (typeof externals === 'string') { return source === externals; }
 
   // array: recurse
-  if (isArray(externals)) {
+  if (Array.isArray(externals)) {
     return externals.some(function (e) { return findExternal(source, e, context, resolveSync); });
   }
 
@@ -133,7 +129,7 @@ function findExternal(source, externals, context, resolveSync) {
 
   // else, vanilla object
   for (const key in externals) {
-    if (hasOwn(externals, key) && source === key) {
+    if (Object.hasOwn(externals, key) && source === key) {
       return true;
     }
   }
@@ -156,7 +152,7 @@ const webpack2DefaultResolveConfig = {
 function createWebpack2ResolveSync(webpackRequire, resolveConfig) {
   const EnhancedResolve = webpackRequire('enhanced-resolve');
 
-  return EnhancedResolve.create.sync(assign({}, webpack2DefaultResolveConfig, resolveConfig));
+  return EnhancedResolve.create.sync(Object.assign({}, webpack2DefaultResolveConfig, resolveConfig));
 }
 
 /**
@@ -178,7 +174,7 @@ function makeRootPlugin(ModulesInRootPlugin, name, root) {
   if (typeof root === 'string') {
     return new ModulesInRootPlugin(name, root);
   }
-  if (isArray(root)) {
+  if (Array.isArray(root)) {
     return function () {
       root.forEach(function (root) {
         this.apply(new ModulesInRootPlugin(name, root));
@@ -238,7 +234,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
       if (
         plugin.constructor
         && plugin.constructor.name === 'ResolverPlugin'
-        && isArray(plugin.plugins)
+        && Array.isArray(plugin.plugins)
       ) {
         resolvePlugins.push.apply(resolvePlugins, plugin.plugins);
       }
@@ -420,7 +416,7 @@ exports.resolve = function (source, file, settings) {
       : webpackConfig(env, argv);
   }
 
-  if (isArray(webpackConfig)) {
+  if (Array.isArray(webpackConfig)) {
     webpackConfig = webpackConfig.map((cfg) => {
       if (typeof cfg === 'function') {
         return cfg(env, argv);
@@ -467,7 +463,7 @@ exports.resolve = function (source, file, settings) {
   try {
     return { found: true, path: resolveSync(path.dirname(file), source) };
   } catch (err) {
-    if (isCore(source)) {
+    if (isBuiltin(source)) {
       return { found: true, path: null };
     }
 
