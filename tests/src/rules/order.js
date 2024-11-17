@@ -3115,7 +3115,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with type group & path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import a from 'foo';
@@ -3145,7 +3144,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import type { A } from 'foo';
@@ -3739,6 +3737,36 @@ context('TypeScript', function () {
               }
             ],
           }),
+          // Ensure the rule doesn't choke and die on absolute paths trying to pass NaN around
+          test({
+            code: `
+              import fs from 'node:fs';
+
+              import '@scoped/package';
+              import type { B } from 'node:fs';
+
+              import type { A1 } from '/bad/bad/bad/bad';
+              import './a/b/c';
+              import type { A2 } from '/bad/bad/bad/bad';
+              import type { A3 } from '/bad/bad/bad/bad';
+              import type { D1 } from '/bad/bad/not/good';
+              import type { D2 } from '/bad/bad/not/good';
+              import type { D3 } from '/bad/bad/not/good';
+
+              import type { C } from '@something/else';
+
+              import type { E } from './index.js';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['builtin', 'type', 'unknown', 'external'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always'
+              },
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
@@ -3992,7 +4020,6 @@ context('TypeScript', function () {
               message: '`A` export should occur before export of `B`',
             }],
           }),
-
           // Options: sortTypesAmongThemselves + newlines-between-types example #1 from the documentation (fail)
           test({
             code: `
@@ -4053,7 +4080,6 @@ context('TypeScript', function () {
               },
             ],
           }),
-
           // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (fail)
           test({
             code: `

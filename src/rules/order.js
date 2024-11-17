@@ -533,8 +533,12 @@ function computeRank(context, ranks, importEntry, excludedImportTypes, isSorting
     rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition);
   }
 
-  if (typeof rank === 'undefined') {
+  if (rank === undefined) {
     rank = ranks.groups[impType];
+
+    if(rank === undefined) {
+      return -1;
+    }
   }
 
   if (isTypeOnlyImport && isSortingTypesAmongThemselves) {
