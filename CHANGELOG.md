@@ -16,6 +16,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Fixed
 - [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
 - configs: added missing name attribute for eslint config inspector ([#3151], thanks [@NishargShah])
+- [`order`]: ensure arcane imports do not cause undefined behavior ([#3128], thanks [@Xunnamius])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
@@ -1173,6 +1174,7 @@ for info on changes for earlier releases.
 
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
+[#3128]: https://github.com/import-js/eslint-plugin-import/pull/3128
 [#3127]: https://github.com/import-js/eslint-plugin-import/pull/3127
 [#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
 [#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122

@@ -535,6 +535,10 @@ function computeRank(context, ranks, importEntry, excludedImportTypes, isSorting
 
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType];
+
+    if (typeof rank === 'undefined') {
+      return -1;
+    }
   }
 
   if (isTypeOnlyImport && isSortingTypesGroup) {
