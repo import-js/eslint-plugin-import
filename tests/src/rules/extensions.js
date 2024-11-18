@@ -736,6 +736,86 @@ describe('TypeScript', () => {
             ],
             parser,
           }),
+
+          // pathGroupOverrides: no patterns match good bespoke specifiers
+          test({
+            code: `
+              import { ErrorMessage as UpstreamErrorMessage } from '@black-flag/core/util';
+
+              import { $instances } from 'rootverse+debug:src.ts';
+              import { $exists } from 'rootverse+bfe:src/symbols.ts';
+
+              import type { Entries } from 'type-fest';
+            `,
+            parser,
+            options: [
+              'always',
+              {
+                ignorePackages: true,
+                checkTypeImports: true,
+                pathGroupOverrides: [
+                  {
+                    pattern: 'multiverse{*,*/**}',
+                    action: 'enforce'
+                  }
+                ]
+              }
+            ]
+          }),
+          // pathGroupOverrides: an enforce pattern matches good bespoke specifiers
+          test({
+            code: `
+              import { ErrorMessage as UpstreamErrorMessage } from '@black-flag/core/util';
+
+              import { $instances } from 'rootverse+debug:src.ts';
+              import { $exists } from 'rootverse+bfe:src/symbols.ts';
+
+              import type { Entries } from 'type-fest';
+            `,
+            parser,
+            options: [
+              'always',
+              {
+                ignorePackages: true,
+                checkTypeImports: true,
+                pathGroupOverrides: [
+                  {
+                    pattern: 'rootverse{*,*/**}',
+                    action: 'enforce'
+                  },
+                ]
+              }
+            ]
+          }),
+          // pathGroupOverrides: an ignore pattern matches bad bespoke specifiers
+          test({
+            code: `
+              import { ErrorMessage as UpstreamErrorMessage } from '@black-flag/core/util';
+
+              import { $instances } from 'rootverse+debug:src';
+              import { $exists } from 'rootverse+bfe:src/symbols';
+
+              import type { Entries } from 'type-fest';
+            `,
+            parser,
+            options: [
+              'always',
+              {
+                ignorePackages: true,
+                checkTypeImports: true,
+                pathGroupOverrides: [
+                  {
+                    pattern: 'multiverse{*,*/**}',
+                    action: 'enforce'
+                  },
+                  {
+                    pattern: 'rootverse{*,*/**}',
+                    action: 'ignore'
+                  },
+                ]
+              }
+            ]
+          }),
         ],
         invalid: [
           test({
@@ -755,6 +835,46 @@ describe('TypeScript', () => {
               { checkTypeImports: true },
             ],
             parser,
+          }),
+
+          // pathGroupOverrides: an enforce pattern matches bad bespoke specifiers
+          test({
+            code: `
+              import { ErrorMessage as UpstreamErrorMessage } from '@black-flag/core/util';
+
+              import { $instances } from 'rootverse+debug:src';
+              import { $exists } from 'rootverse+bfe:src/symbols';
+
+              import type { Entries } from 'type-fest';
+            `,
+            parser,
+            options: [
+              'always',
+              {
+                ignorePackages: true,
+                checkTypeImports: true,
+                pathGroupOverrides: [
+                  {
+                    pattern: 'rootverse{*,*/**}',
+                    action: 'enforce'
+                  },
+                  {
+                    pattern: 'universe{*,*/**}',
+                    action: 'ignore'
+                  }
+                ]
+              }
+            ],
+            errors: [
+              {
+                message: 'Missing file extension for "rootverse+debug:src"',
+                line: 4,
+              },
+              {
+                message: 'Missing file extension for "rootverse+bfe:src/symbols"',
+                line: 5,
+              }
+            ],
           }),
         ],
       });
