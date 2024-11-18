@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Docs] `extensions`, `order`: improve documentation ([#3106], thanks [@Xunnamius])
+
 ## [2.31.0] - 2024-10-03
 
 ### Added
@@ -1152,6 +1155,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3071]: https://github.com/import-js/eslint-plugin-import/pull/3071
@@ -2018,6 +2022,7 @@ for info on changes for earlier releases.
 [@wtgtybhertgeghgtwtg]: https://github.com/wtgtybhertgeghgtwtg
 [@xM8WVqaG]: https://github.com/xM8WVqaG
 [@xpl]: https://github.com/xpl
+[@Xunnamius]: https://github.com/Xunnamius
 [@yesl-kim]: https://github.com/yesl-kim
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
