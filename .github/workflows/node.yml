@@ -1,4 +1,4 @@
-name: 'Tests: packages'
+name: 'Tests: node.js'
 
 on: [pull_request, push]
 
@@ -19,45 +19,67 @@ jobs:
       - uses: ljharb/actions/node/matrix@main
         id: set-matrix
         with:
-          type: 'majors'
-          preset: '^18.18.0 || ^20.9.0 || >=21.1.0'
           versionsAsRoot: true
+          type: majors
+          preset: '^18.18.0 || ^20.9.0 || >=21.1.0'
 
-  tests:
+  latest:
     needs: [matrix]
-    name: 'packages'
-    runs-on: ubuntu-latest
+    name: 'majors'
+    runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
+          - 9
           - 8
           - 7
-        package:
-          - resolvers/node
-          - resolvers/webpack
-          # - memo-parser
-          # - utils
+          - 6
+          - 5
+          - 4
+          - 3
+          - 2
+        include:
+          - node-version: 'lts/*'
+            os: ubuntu-latest
+            eslint: 7
+            env:
+              TS_PARSER: 4
+          - node-version: 'lts/*'
+            os: ubuntu-latest
+            eslint: 7
+            env:
+              TS_PARSER: 3
+          - node-version: 'lts/*'
+            os: ubuntu-latest
+            eslint: 7
+            env:
+              TS_PARSER: 2
 
     steps:
       - uses: actions/checkout@v4
       - uses: ljharb/actions/node/install@main
-        name: 'nvm install ${{ matrix.node-version }} && npm install'
+        continue-on-error: false
+        name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
         env:
           NPM_CONFIG_LEGACY_PEER_DEPS: false
           ESLINT_VERSION: ${{ matrix.eslint }}
         with:
           node-version: ${{ matrix.node-version }}
-          after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh && cd ${{ matrix.package }} && npm install
+          after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh
           skip-ls-check: true
-      - run: cd ${{ matrix.package }} && npm run tests-only
+      - run: npm run pretest
+      - run: npm run tests-only
       - uses: codecov/codecov-action@v3.1.5
 
-  packages:
-    name: 'packages: all tests'
-    needs: [tests]
+  node:
+    name: 'node 18+'
+    needs: [latest]
     runs-on: ubuntu-latest
     steps:
       - run: 'echo tests completed'
