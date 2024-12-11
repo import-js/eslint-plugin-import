@@ -130,7 +130,7 @@
     "object.groupby": "^1.0.3",
     "object.values": "^1.2.0",
     "semver": "^6.3.1",
-    "string.prototype.trimend": "^1.0.8",
+    "string.prototype.trimend": "^1.0.9",
     "tsconfig-paths": "^3.15.0"
   }
 }
