@@ -52,3 +52,6 @@ npm-shrinkwrap.json
 
 # macOS
 .DS_Store
+
+# vscode settings
+.vscode
