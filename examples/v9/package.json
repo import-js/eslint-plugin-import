@@ -1,0 +1,14 @@
+{
+  "name": "v9",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src --report-unused-disable-directives"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "eslint": "^9.17.0",
+    "eslint-plugin-import": "file:../.."
+  }
+}

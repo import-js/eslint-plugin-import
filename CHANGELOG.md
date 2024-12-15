@@ -10,6 +10,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
 - add TypeScript types ([#3097], thanks [@G-Rath])
 
+### Fixed
+- [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
+
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
 - [Docs] add flat config guide for using `tseslint.config()` ([#3125], thanks [@lnuvy])
@@ -1165,6 +1168,7 @@ for info on changes for earlier releases.
 
 [#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
 [#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122
+[#3116]: https://github.com/import-js/eslint-plugin-import/pull/3116
 [#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073

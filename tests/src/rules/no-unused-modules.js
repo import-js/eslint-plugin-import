@@ -3,8 +3,12 @@ import jsxConfig from '../../../config/react';
 import typescriptConfig from '../../../config/typescript';
 
 import { RuleTester } from '../rule-tester';
+import { expect } from 'chai';
+import { execSync } from 'child_process';
 import fs from 'fs';
 import eslintPkg from 'eslint/package.json';
+import path from 'path';
+import process from 'process';
 import semver from 'semver';
 
 let FlatRuleTester;
@@ -14,6 +18,7 @@ try {
 
 // TODO: figure out why these tests fail in eslint 4 and 5
 const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
+const isESLint9 = semver.satisfies(eslintPkg.version, '>=9');
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);
@@ -1481,4 +1486,38 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
       }],
     });
   });
+});
+
+(isESLint9 ? describe : describe.skip)('with eslint 9+', () => {
+  it('provides meaningful error when eslintrc is not present', () => {
+    const tmp = require('tmp');
+
+    // Create temp directory outside of project root
+    const tempDir = tmp.dirSync({ unsafeCleanup: true });
+
+    // Copy example project to temp directory
+    fs.cpSync(path.join(process.cwd(), 'examples/v9'), tempDir.name, { recursive: true });
+
+    let errorMessage = '';
+
+    // Build the plugin
+    try {
+      execSync('npm run build');
+    } catch (_) {
+      /* ignore */
+    }
+
+    // Install the plugin and run the lint command in the temp directory
+    try {
+      execSync(`npm install -D ${process.cwd()} && npm run lint`, { cwd: tempDir.name });
+    } catch (error) {
+      errorMessage = error.stderr.toString();
+    }
+
+    // Verify that the error message is as expected
+    expect(errorMessage).to.contain('the import/no-unused-modules rule requires an .eslintrc file');
+
+    // Cleanup
+    tempDir.removeCallback();
+  }).timeout(100000);
 });
