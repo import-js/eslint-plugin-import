@@ -8,13 +8,12 @@ import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import { getFileExtensions } from 'eslint-module-utils/ignore';
 import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
-import { dirname, join, resolve as resolvePath } from 'path';
+import { dirname, join } from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
 import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
 
-import { walkSync } from '../core/fsWalk';
 import ExportMapBuilder from '../exportMap/builder';
 import recursivePatternCapture from '../exportMap/patternCapture';
 import docsUrl from '../docsUrl';
@@ -51,21 +50,81 @@ function requireFileEnumerator() {
 }
 
 /**
- *
+ * Given a FileEnumerator class, instantiate and load the list of files.
  * @param FileEnumerator the `FileEnumerator` class from `eslint`'s internal api
  * @param {string} src path to the src root
  * @param {string[]} extensions list of supported extensions
  * @returns {{ filename: string, ignored: boolean }[]} list of files to operate on
  */
 function listFilesUsingFileEnumerator(FileEnumerator, src, extensions) {
-  const e = new FileEnumerator({
-    extensions,
-  });
+  // We need to know whether this is being run with flat config in order to
+  // determine whether we need to customize the FileEnumerator or not.
 
-  return Array.from(
-    e.iterateFiles(src),
-    ({ filePath, ignored }) => ({ filename: filePath, ignored }),
-  );
+  // This condition is sufficient to test in v8, since the environment variable
+  // is necessary to turn on flat config
+  let isUsingFlatConfig = process.env.ESLINT_USE_FLAT_CONFIG
+    && process.env.ESLINT_USE_FLAT_CONFIG !== 'false';
+
+  // In the case of using v9, we can check the `shouldUseFlatConfig` function
+  // If this function is present, then we assume it's v9
+  try {
+    const { shouldUseFlatConfig } = require('eslint/use-at-your-own-risk');
+    isUsingFlatConfig = shouldUseFlatConfig();
+  } catch (_) {
+    // We don't want to throw here, since we only want to update the
+    // boolean if the function is available.
+  }
+
+  let enumerator;
+  if (isUsingFlatConfig) {
+    // If this run is using flat config, then we need to create an instance of `CascadingConfigArrayFactory`
+    // with eslintrc turned off, to pass to the `FileEnumerator`.
+    // This prevents the FileEnumerator from looking for an eslintrc file in parent directories.
+    // https://github.com/import-js/eslint-plugin-import/issues/3079
+    try {
+      const {
+        Legacy: { CascadingConfigArrayFactory },
+      } = require('@eslint/eslintrc'); // eslint-disable-line import/no-extraneous-dependencies
+
+      const configArrayFactory = new CascadingConfigArrayFactory({
+        // These are the same as what `FileEnumerator` would normally pass in
+        cwd: process.cwd(),
+        // eslint-disable-next-line import/no-extraneous-dependencies
+        getEslintRecommendedConfig: () => require('@eslint/js').configs.recommended,
+        // eslint-disable-next-line import/no-extraneous-dependencies
+        getEslintAllConfig: () => require('@eslint/js').configs.all,
+
+        // This is what we're doing differently for flat config use
+        useEslintrc: false,
+      });
+
+      enumerator = new FileEnumerator({
+        configArrayFactory,
+        extensions,
+      });
+    } catch (e) {
+      // Absorb this if we weren't able to require the config array factory
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e;
+      }
+      // If we can't load the config array factory, we'll just do our best
+      // and create the enumerator without turning off eslintrc.
+      // This will ultimately result in an error if the project doesn't have an
+      // eslintrc file in a parent directory.
+      enumerator = new FileEnumerator({
+        extensions,
+      });
+    }
+  } else {
+    enumerator = new FileEnumerator({
+      extensions,
+    });
+  }
+
+  return Array.from(enumerator.iterateFiles(src), ({ filePath, ignored }) => ({
+    filename: filePath,
+    ignored,
+  }));
 }
 
 /**
@@ -108,69 +167,13 @@ function listFilesWithLegacyFunctions(src, extensions) {
 }
 
 /**
- * Given a source root and list of supported extensions, use fsWalk and the
- * new `eslint` `context.session` api to build the list of files we want to operate on
- * @param {string[]} srcPaths array of source paths (for flat config this should just be a singular root (e.g. cwd))
- * @param {string[]} extensions list of supported extensions
- * @param {{ isDirectoryIgnored: (path: string) => boolean, isFileIgnored: (path: string) => boolean }} session eslint context session object
- * @returns {string[]} list of files to operate on
- */
-function listFilesWithModernApi(srcPaths, extensions, session) {
-  /** @type {string[]} */
-  const files = [];
-
-  for (let i = 0; i < srcPaths.length; i++) {
-    const src = srcPaths[i];
-    // Use walkSync along with the new session api to gather the list of files
-    const entries = walkSync(src, {
-      deepFilter(entry) {
-        const fullEntryPath = resolvePath(src, entry.path);
-
-        // Include the directory if it's not marked as ignore by eslint
-        return !session.isDirectoryIgnored(fullEntryPath);
-      },
-      entryFilter(entry) {
-        const fullEntryPath = resolvePath(src, entry.path);
-
-        // Include the file if it's not marked as ignore by eslint and its extension is included in our list
-        return (
-          !session.isFileIgnored(fullEntryPath)
-          && extensions.find((extension) => entry.path.endsWith(extension))
-        );
-      },
-    });
-
-    // Filter out directories and map entries to their paths
-    files.push(
-      ...entries
-        .filter((entry) => !entry.dirent.isDirectory())
-        .map((entry) => entry.path),
-    );
-  }
-  return files;
-}
-
-/**
  * Given a src pattern and list of supported extensions, return a list of files to process
  * with this rule.
  * @param {string} src - file, directory, or glob pattern of files to act on
  * @param {string[]} extensions - list of supported file extensions
- * @param {import('eslint').Rule.RuleContext} context - the eslint context object
  * @returns {string[] | { filename: string, ignored: boolean }[]} the list of files that this rule will evaluate.
  */
-function listFilesToProcess(src, extensions, context) {
-  // If the context object has the new session functions, then prefer those
-  // Otherwise, fallback to using the deprecated `FileEnumerator` for legacy support.
-  // https://github.com/eslint/eslint/issues/18087
-  if (
-    context.session
-    && context.session.isFileIgnored
-    && context.session.isDirectoryIgnored
-  ) {
-    return listFilesWithModernApi(src, extensions, context.session);
-  }
-
-  // Fallback to og FileEnumerator
+function listFilesToProcess(src, extensions) {
   const FileEnumerator = requireFileEnumerator();
 
   // If we got the FileEnumerator, then let's go with that
@@ -295,10 +298,10 @@ const isNodeModule = (path) => (/\/(node_modules)\//).test(path);
 function resolveFiles(src, ignoreExports, context) {
   const extensions = Array.from(getFileExtensions(context.settings));
 
-  const srcFileList = listFilesToProcess(src, extensions, context);
+  const srcFileList = listFilesToProcess(src, extensions);
 
   // prepare list of ignored files
-  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions, context);
+  const ignoredFilesList = listFilesToProcess(ignoreExports, extensions);
 
   // The modern api will return a list of file paths, rather than an object
   if (ignoredFilesList.length && typeof ignoredFilesList[0] === 'string') {
