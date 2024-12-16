@@ -2,7 +2,7 @@
 
 exports.__esModule = true;
 
-const pattern = /(^|;)\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
+const pattern = /(^|[;})])\s*(export|import)((\s+\w)|(\s*[{*=]))|import\(/m;
 /**
  * detect possible imports/exports without a full parse.
  *

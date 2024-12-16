@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+- `unambiguous`: detect modules exported from minified code ([#3124], thanks [@michaelfaith])
+
 ### Changed
 - [refactor] `parse`: avoid using a regex here (thanks [@ljharb])
 
@@ -180,6 +183,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3124]: https://github.com/import-js/eslint-plugin-import/pull/3124
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
 [#3061]: https://github.com/import-js/eslint-plugin-import/pull/3061
 [#3057]: https://github.com/import-js/eslint-plugin-import/pull/3057
@@ -230,6 +234,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
 [@leipert]: https://github.com/leipert
+[@ljharb]: https://github.com/ljharb
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
 [@mgwalker]: https://github.com/mgwalker
@@ -238,6 +243,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@nicolo-ribaudo]: https://github.com/nicolo-ribaudo
 [@pmcelhaney]: https://github.com/pmcelhaney
 [@sergei-startsev]: https://github.com/sergei-startsev
+[@silverwind]: https://github.com/silverwind
 [@sompylasar]: https://github.com/sompylasar
 [@timkraut]: https://github.com/timkraut
 [@vikr01]: https://github.com/vikr01

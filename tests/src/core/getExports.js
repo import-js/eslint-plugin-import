@@ -465,6 +465,10 @@ describe('ExportMap', function () {
       ['bar.js', true],
       ['deep-es7/b.js', true],
       ['common.js', false],
+      ['./minified/no-newline.js', true],
+      ['./minified/one-line-no-semi-renamed.js', true],
+      ['./minified/one-line-no-semi.js', true],
+      ['./minified/one-line.js', true],
     ];
 
     for (const [testFile, expectedRegexResult] of testFiles) {
