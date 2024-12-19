@@ -127,7 +127,7 @@ All rules are off by default. However, you may extend one of the preset configs,
 ```jsonc
 {
   "rules": {
-    "import/no-unresolved": ["error", { "commonjs": true, "amd": true }]
+    "import/no-unresolved": ["error", { "commonjs": true, "amd": true }],
     "import/named": "error",
     "import/namespace": "error",
     "import/default": "error",
