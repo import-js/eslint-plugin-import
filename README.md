@@ -191,6 +191,26 @@ Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-r
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 [`eslint-import-resolver-typescript`]: https://github.com/import-js/eslint-import-resolver-typescript
 
+### Config - Flat with `config()` in `typescript-eslint`
+
+If you are using the `config` method from [`typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint), ensure that the `flatConfig` is included within the `extends` array.
+
+```js
+import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
+import js from '@eslint/js';
+
+export default tseslint.config(
+  js.configs.recommended,
+  // other configs...
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [importPlugin.flatConfigs.recommended],
+    // other configs...
+  }
+);
+```
+
 ## Resolvers
 
 With the advent of module bundlers and the current state of modules and module

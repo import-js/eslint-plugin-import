@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
+- [Docs] add flat config guide for using `tseslint.config()` ([#3125], thanks [@lnuvy])
 
 ## [2.31.0] - 2024-10-03
 
@@ -1161,6 +1162,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
 [#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
@@ -1913,6 +1915,7 @@ for info on changes for earlier releases.
 [@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx
+[@lnuvy]: https://github.com/lnuvy
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
