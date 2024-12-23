@@ -3285,6 +3285,188 @@ context('TypeScript', function () {
               }],
             }),
           ] : [],
+          // Option sortTypesAmongThemselves: false (default)
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+              },
+            ],
+          }),
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: false,
+              },
+            ],
+          }),
+          // Option sortTypesAmongThemselves: true and 'type' in pathGroupsExcludedImportTypes
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: ['type'],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option sortTypesAmongThemselves: true and 'type' omitted from groups
+          test({
+            code: `
+              import c from 'Bar';
+              import type { AA } from 'abc';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+                // Becomes a no-op without "type" in groups
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          test({
+            code: `
+              import c from 'Bar';
+              import type { AA } from 'abc';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true puts type imports in the same order as regular imports (from issue #2441, PR #2615)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                alphabetize: {
+                  order: 'asc',
+                  caseInsensitive: true,
+                },
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
