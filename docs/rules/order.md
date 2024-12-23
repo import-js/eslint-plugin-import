@@ -106,6 +106,7 @@ This rule supports the following options (none of which are required):
  - [`alphabetize`][30]
  - [`named`][33]
  - [`warnOnUnassignedImports`][5]
+ - [`sortTypesGroup`][7]
 
 ---
 
@@ -156,7 +157,7 @@ Roughly speaking, the grouping algorithm is as follows:
 
 1. If the import has no corresponding identifiers (e.g. `import './my/thing.js'`), is otherwise "unassigned," or is an unsupported use of `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be ignored entirely since the order of these imports may be important for their [side-effects][31]
 2. If the import is part of an arcane TypeScript declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are ignored entirely
-3. If the import is [type-only][6], and `"type"` is in `groups`, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
+3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesGroup`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
 4. If the import's specifier matches [`import/internal-regex`][28], it will be considered **internal**
 5. If the import's specifier is an absolute path, it will be considered **unknown**
 6. If the import's specifier has the name of a Node.js core module (using [is-core-module][10]), it will be considered **builtin**
@@ -171,7 +172,7 @@ Roughly speaking, the grouping algorithm is as follows:
 15. If the import's specifier has a name that starts with a word character, it will be considered **external**
 16. If this point is reached, the import will be ignored entirely
 
-At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations.
+At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations. Finally, any type-only declarations are potentially reorganized according to [`sortTypesGroup`][7].
 
 ### `pathGroups`
 
@@ -533,6 +534,64 @@ import path from 'path';
 import './styles.css';
 ```
 
+### `sortTypesGroup`
+
+Valid values: `boolean` \
+Default: `false`
+
+> \[!NOTE]
+>
+> This setting is only meaningful when `"type"` is included in [`groups`][18].
+
+Sort [type-only imports][6] separately from normal non-type imports.
+
+When enabled, the intragroup sort order of [type-only imports][6] will mirror the intergroup ordering of normal imports as defined by [`groups`][18], [`pathGroups`][8], etc.
+
+#### Example
+
+Given the following settings:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "alphabetize": { "order": "asc" }
+  }]
+}
+```
+
+This will fail the rule check even though it's logically ordered as we expect (builtins come before parents, parents come before siblings, siblings come before indices), the only difference is we separated type-only imports from normal imports:
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+import b from "path";
+import c from "../foo.js";
+import d from "./bar.js";
+import e from "./";
+```
+
+This happens because [type-only imports][6] are considered part of one global
+[`"type"` group](#how-imports-are-grouped) by default. However, if we set
+`sortTypesGroup` to `true`:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "alphabetize": { "order": "asc" },
+    "sortTypesGroup": true
+  }]
+}
+```
+
+The same example will pass.
+
 ## Related
 
  - [`import/external-module-folders`][29]
@@ -543,6 +602,7 @@ import './styles.css';
 [4]: https://nodejs.org/api/esm.html#terminology
 [5]: #warnonunassignedimports
 [6]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
+[7]: #sorttypesgroup
 [8]: #pathgroups
 [9]: #pathgroupsexcludedimporttypes
 [10]: https://www.npmjs.com/package/is-core-module

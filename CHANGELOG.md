@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
 - add TypeScript types ([#3097], thanks [@G-Rath])
 - [`extensions`]: add `pathGroupOverrides to allow enforcement decision overrides based on specifier ([#3105], thanks [@Xunnamius])
+- [`order`]: add `sortTypesGroup` option to allow intragroup sorting of type-only imports ([#3104], thanks [@Xunnamius])
 
 ### Fixed
 - [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
@@ -1174,6 +1175,7 @@ for info on changes for earlier releases.
 [#3116]: https://github.com/import-js/eslint-plugin-import/pull/3116
 [#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
 [#3105]: https://github.com/import-js/eslint-plugin-import/pull/3105
+[#3104]: https://github.com/import-js/eslint-plugin-import/pull/3104
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
