@@ -107,6 +107,7 @@ This rule supports the following options (none of which are required):
  - [`named`][33]
  - [`warnOnUnassignedImports`][5]
  - [`sortTypesGroup`][7]
+ - [`newlines-between-types`][27]
 
 ---
 
@@ -592,6 +593,135 @@ This happens because [type-only imports][6] are considered part of one global
 
 The same example will pass.
 
+### `newlines-between-types`
+
+Valid values: `"ignore" | "always" | "always-and-inside-groups" | "never"` \
+Default: the value of [`newlines-between`][20]
+
+> \[!NOTE]
+>
+> This setting is only meaningful when [`sortTypesGroup`][7] is enabled.
+
+`newlines-between-types` is functionally identical to [`newlines-between`][20] except it only enforces or forbids new lines between _[type-only][6] import groups_, which exist only when [`sortTypesGroup`][7] is enabled.
+
+In addition, when determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over [`newlines-between`][20].
+
+#### Example
+
+Given the following settings:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "sortTypesGroup": true,
+    "newlines-between": "always"
+  }]
+}
+```
+
+This will fail the rule check:
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+import b from "path";
+
+import c from "../foo.js";
+
+import d from "./bar.js";
+
+import e from "./";
+```
+
+However, if we set `newlines-between-types` to `"ignore"`:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "sortTypesGroup": true,
+    "newlines-between": "always",
+    "newlines-between-types": "ignore"
+  }]
+}
+```
+
+The same example will pass.
+
+Note the new line after `import type E from './';` but before `import a from "fs";`. This new line separates the type-only imports from the normal imports. Its existence is governed by [`newlines-between-types`][27] and _not `newlines-between`_.
+
+> \[!IMPORTANT]
+>
+> In certain situations, `consolidateIslands: true` will take precedence over `newlines-between-types: "never"`, if used, when it comes to the new line separating type-only imports from normal imports.
+
+The next example will pass even though there's a new line preceding the normal import and [`newlines-between`][20] is set to `"never"`:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "sortTypesGroup": true,
+    "newlines-between": "never",
+    "newlines-between-types": "always"
+  }]
+}
+```
+
+```ts
+import type A from "fs";
+
+import type B from "path";
+
+import type C from "../foo.js";
+
+import type D from "./bar.js";
+
+import type E from './';
+
+import a from "fs";
+import b from "path";
+import c from "../foo.js";
+import d from "./bar.js";
+import e from "./";
+```
+
+While the following fails due to the new line between the last type import and the first normal import:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "groups": ["type", "builtin", "parent", "sibling", "index"],
+    "sortTypesGroup": true,
+    "newlines-between": "always",
+    "newlines-between-types": "never"
+  }]
+}
+```
+
+```ts
+import type A from "fs";
+import type B from "path";
+import type C from "../foo.js";
+import type D from "./bar.js";
+import type E from './';
+
+import a from "fs";
+
+import b from "path";
+
+import c from "../foo.js";
+
+import d from "./bar.js";
+
+import e from "./";
+```
+
 ## Related
 
  - [`import/external-module-folders`][29]
@@ -617,6 +747,7 @@ The same example will pass.
 [21]: https://eslint.org/docs/latest/rules/no-multiple-empty-lines
 [22]: https://prettier.io
 [23]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#type-modifiers-on-import-names
+[27]: #newlines-between-types
 [28]: ../../README.md#importinternal-regex
 [29]: ../../README.md#importexternal-module-folders
 [30]: #alphabetize
