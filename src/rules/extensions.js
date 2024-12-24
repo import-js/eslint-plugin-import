@@ -36,7 +36,7 @@ const properties = {
         additionalProperties: false,
         required: ['pattern', 'action'],
       },
-    }
+    },
   },
 };
 
@@ -168,7 +168,7 @@ module.exports = {
       return false;
     }
 
-    function computeOverrideAction(pathGroupOverrides = [], path) {
+    function computeOverrideAction(pathGroupOverrides, path) {
       for (let i = 0, l = pathGroupOverrides.length; i < l; i++) {
         const { pattern, patternOptions, action } = pathGroupOverrides[i];
         if (minimatch(path, pattern, patternOptions || { nocomment: true })) {
@@ -185,11 +185,13 @@ module.exports = {
 
       // If not undefined, the user decided if rules are enforced on this import
       const overrideAction = computeOverrideAction(
-        props.pathGroupOverrides,
-        importPathWithQueryString
+        props.pathGroupOverrides || [],
+        importPathWithQueryString,
       );
 
-      if(overrideAction === 'ignore') { return ; }
+      if (overrideAction === 'ignore') {
+        return;
+      }
 
       // don't enforce anything on builtins
       if (!overrideAction && isBuiltIn(importPathWithQueryString, context.settings)) { return; }
