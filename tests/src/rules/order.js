@@ -3115,7 +3115,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with type group & path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import a from 'foo';
@@ -3145,7 +3144,6 @@ context('TypeScript', function () {
           }),
           // Option alphabetize: {order: 'asc'} with path group
           test({
-            // only: true,
             code: `
               import c from 'Bar';
               import type { A } from 'foo';
@@ -3285,6 +3283,490 @@ context('TypeScript', function () {
               }],
             }),
           ] : [],
+          // Option sortTypesAmongThemselves: false (default)
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+              },
+            ],
+          }),
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: false,
+              },
+            ],
+          }),
+          // Option sortTypesAmongThemselves: true and 'type' in pathGroupsExcludedImportTypes
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+              import type { A } from 'foo';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: ['type'],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option sortTypesAmongThemselves: true and 'type' omitted from groups
+          test({
+            code: `
+              import c from 'Bar';
+              import type { AA } from 'abc';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+                // Becomes a no-op without "type" in groups
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          test({
+            code: `
+              import c from 'Bar';
+              import type { AA } from 'abc';
+              import a from 'foo';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import b from 'dirA/bar';
+              import type { D } from 'dirA/bar';
+
+              import index from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+              },
+            ],
+          }),
+          // Option sortTypesAmongThemselves: true and newlines-between-types defaults to the value of newlines-between
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true and newlines-between-types: 'always' (takes precedence over newlines-between between type-only and normal imports)
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+              import b from 'dirA/bar';
+              import index from './';
+
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'never',
+                'newlines-between-types': 'always',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true and newlines-between-types: 'never' (takes precedence over newlines-between between type-only and normal imports)
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+
+              import b from 'dirA/bar';
+
+              import index from './';
+              import type { AA } from 'abc';
+              import type { A } from 'foo';
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'always',
+                'newlines-between-types': 'never',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true and newlines-between-types: 'ignore'
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+              import b from 'dirA/bar';
+              import index from './';
+              import type { AA } from 'abc';
+
+              import type { A } from 'foo';
+              import type { C } from 'dirA/Bar';
+              import type { D } from 'dirA/bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'never',
+                'newlines-between-types': 'ignore',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true and newlines-between-types: 'always-and-inside-groups'
+          test({
+            code: `
+              import c from 'Bar';
+              import a from 'foo';
+              import b from 'dirA/bar';
+              import index from './';
+
+              import type { AA } from 'abc';
+
+              import type { A } from 'foo';
+
+              import type { C } from 'dirA/Bar';
+
+              import type { D } from 'dirA/bar';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['external', 'internal', 'index', 'type'],
+                pathGroups: [
+                  {
+                    pattern: 'dirA/**',
+                    group: 'internal',
+                  },
+                ],
+                'newlines-between': 'never',
+                'newlines-between-types': 'always-and-inside-groups',
+                pathGroupsExcludedImportTypes: [],
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Option: sortTypesAmongThemselves: true puts type imports in the same order as regular imports (from issue #2441, PR #2615)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                alphabetize: {
+                  order: 'asc',
+                  caseInsensitive: true,
+                },
+                sortTypesAmongThemselves: true,
+              },
+            ],
+          }),
+          // Options: sortTypesAmongThemselves + newlines-between-types example #1 from the documentation (pass)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'ignore'
+              }
+            ],
+          }),
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'ignore'
+              }
+            ],
+          }),
+          // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (pass)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'never',
+                'newlines-between-types': 'always'
+              }
+            ],
+          }),
+          test({
+            code: `
+              import a from "fs";
+              import b from "path";
+              import c from "../foo.js";
+              import d from "./bar.js";
+              import e from "./";
+
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['builtin', 'parent', 'sibling', 'index', 'type'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'never',
+                'newlines-between-types': 'always'
+              }
+            ],
+          }),
+          // Ensure the rule doesn't choke and die on absolute paths trying to pass NaN around
+          test({
+            code: `
+              import fs from 'node:fs';
+
+              import '@scoped/package';
+              import type { B } from 'node:fs';
+
+              import type { A1 } from '/bad/bad/bad/bad';
+              import './a/b/c';
+              import type { A2 } from '/bad/bad/bad/bad';
+              import type { A3 } from '/bad/bad/bad/bad';
+              import type { D1 } from '/bad/bad/not/good';
+              import type { D2 } from '/bad/bad/not/good';
+              import type { D3 } from '/bad/bad/not/good';
+
+              import type { C } from '@something/else';
+
+              import type { E } from './index.js';
+            `,
+            ...parserConfig,
+            options: [
+              {
+                alphabetize: { order: 'asc' },
+                groups: ['builtin', 'type', 'unknown', 'external'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always'
+              },
+            ],
+          }),
         ),
         invalid: [].concat(
           // Option alphabetize: {order: 'asc'}
@@ -3537,6 +4019,115 @@ context('TypeScript', function () {
             }, {
               message: '`A` export should occur before export of `B`',
             }],
+          }),
+          // Options: sortTypesAmongThemselves + newlines-between-types example #1 from the documentation (fail)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            output: `
+              import type A from "fs";
+              import type B from "path";
+
+              import type C from "../foo.js";
+
+              import type D from "./bar.js";
+
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 3,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 4,
+              },
+              {
+                message: 'There should be at least one empty line between import groups',
+                line: 5,
+              },
+            ],
+          }),
+          // Options: sortTypesAmongThemselves + newlines-between-types example #2 from the documentation (fail)
+          test({
+            code: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            output: `
+              import type A from "fs";
+              import type B from "path";
+              import type C from "../foo.js";
+              import type D from "./bar.js";
+              import type E from './';
+              import a from "fs";
+              import b from "path";
+
+              import c from "../foo.js";
+
+              import d from "./bar.js";
+
+              import e from "./";
+            `,
+            ...parserConfig,
+            options: [
+              {
+                groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                sortTypesAmongThemselves: true,
+                'newlines-between': 'always',
+                'newlines-between-types': 'never'
+              }
+            ],
+            errors: [
+              {
+                message: 'There should be no empty line between import groups',
+                line: 6,
+              },
+            ],
           }),
 
           supportsExportTypeSpecifiers ? [
