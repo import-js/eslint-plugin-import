@@ -3,7 +3,7 @@
   "version": "2.31.0",
   "description": "Import with sanity.",
   "engines": {
-    "node": ">=4"
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
   },
   "main": "lib/index.js",
   "types": "index.d.ts",

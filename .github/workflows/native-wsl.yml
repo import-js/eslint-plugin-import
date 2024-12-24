@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-2019]
-        node-version: [18, 16, 14, 12, 10, 8, 6, 4]
+        node-version: [22, 20, 18]
         configuration: [wsl, native]
 
     steps:
@@ -30,80 +30,29 @@ jobs:
       if: matrix.configuration == 'wsl'
       env:
         ESLINT_VERSION: 7
-        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
       run: |
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
         nvm install --latest-npm ${{ matrix.node-version }}
 
-        if [ ${{ matrix.node-version }} -ge 4 ] && [ ${{ matrix.node-version }} -lt 6 ]; then
-          npm install eslint@4 --no-save --ignore-scripts
-          npm install
-          npm install eslint-import-resolver-typescript@1.0.2 --no-save
-          npm uninstall @angular-eslint/template-parser @typescript-eslint/parser --no-save
-        fi
-        if [ ${{ matrix.node-version }} -ge 6 ] && [ ${{ matrix.node-version }} -lt 7 ]; then
-          npm install eslint@5 --no-save --ignore-scripts
-          npm install
-          npm uninstall @angular-eslint/template-parser --no-save
-          npm install eslint-import-resolver-typescript@1.0.2 @typescript-eslint/parser@3 --no-save
-        fi
-        if [ ${{ matrix.node-version }} -ge 7 ] && [ ${{ matrix.node-version }} -lt 8 ]; then
-          npm install eslint@6 --no-save --ignore-scripts
-          npm install
-          npm install eslint-import-resolver-typescript@1.0.2 typescript-eslint-parser@20 --no-save
-          npm uninstall @angular-eslint/template-parser --no-save
-        fi
-        if [ ${{ matrix.node-version }} -eq 8 ]; then
-          npm install eslint@6 --no-save --ignore-scripts
-          npm install
-          npm uninstall @angular-eslint/template-parser --no-save
-          npm install @typescript-eslint/parser@3 --no-save
-        fi
-        if [ ${{ matrix.node-version }} -gt 8 ] && [ ${{ matrix.node-version }} -lt 10 ]; then
-          npm install eslint@7 --no-save --ignore-scripts
-          npm install
-          npm install @typescript-eslint/parser@3 --no-save
-        fi
-        if [ ${{ matrix.node-version }} -ge 10 ] && [ ${{ matrix.node-version }} -lt 12 ]; then
-          npm install
-          npm install @typescript-eslint/parser@4 --no-save
-        fi
-        if [ ${{ matrix.node-version }} -ge 12 ]; then
-          npm install
-        fi
+        npm install
         npm run copy-metafiles
         npm run pretest
         npm run tests-only
 
-    - name: install dependencies for node <= 10
-      if: matrix.node-version <= '10' && matrix.configuration == 'native'
-      run: |
-        npm install --legacy-peer-deps
-        npm install eslint@7 --no-save
-
-    - name: Install dependencies for node > 10
-      if: matrix.node-version > '10'  && matrix.configuration == 'native'
+    - name: Install dependencies in Native
+      if: matrix.configuration == 'native'
       run: npm install
 
-    - name: install the latest version of nyc
+    - name: install the latest version of nyc in Native
       if: matrix.configuration == 'native'
       run: npm install nyc@latest --no-save
 
-    - name: copy metafiles for node <= 8
-      if: matrix.node-version <= 8 && matrix.configuration == 'native'
-      env:
-        ESLINT_VERSION: 6
-        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
-      run: |
-        npm run copy-metafiles
-        bash ./tests/dep-time-travel.sh 2>&1
-    - name: copy metafiles for Node > 8
-      if: matrix.node-version > 8 && matrix.configuration == 'native'
+    - name: copy metafiles in Native
+      if: matrix.configuration == 'native'
       env:
         ESLINT_VERSION: 7
-        TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
       run: |
         npm run copy-metafiles
         bash ./tests/dep-time-travel.sh 2>&1
