@@ -756,11 +756,11 @@ describe('TypeScript', () => {
                 pathGroupOverrides: [
                   {
                     pattern: 'multiverse{*,*/**}',
-                    action: 'enforce'
-                  }
-                ]
-              }
-            ]
+                    action: 'enforce',
+                  },
+                ],
+              },
+            ],
           }),
           // pathGroupOverrides: an enforce pattern matches good bespoke specifiers
           test({
@@ -781,11 +781,11 @@ describe('TypeScript', () => {
                 pathGroupOverrides: [
                   {
                     pattern: 'rootverse{*,*/**}',
-                    action: 'enforce'
+                    action: 'enforce',
                   },
-                ]
-              }
-            ]
+                ],
+              },
+            ],
           }),
           // pathGroupOverrides: an ignore pattern matches bad bespoke specifiers
           test({
@@ -806,15 +806,15 @@ describe('TypeScript', () => {
                 pathGroupOverrides: [
                   {
                     pattern: 'multiverse{*,*/**}',
-                    action: 'enforce'
+                    action: 'enforce',
                   },
                   {
                     pattern: 'rootverse{*,*/**}',
-                    action: 'ignore'
+                    action: 'ignore',
                   },
-                ]
-              }
-            ]
+                ],
+              },
+            ],
           }),
         ],
         invalid: [
@@ -856,14 +856,14 @@ describe('TypeScript', () => {
                 pathGroupOverrides: [
                   {
                     pattern: 'rootverse{*,*/**}',
-                    action: 'enforce'
+                    action: 'enforce',
                   },
                   {
                     pattern: 'universe{*,*/**}',
-                    action: 'ignore'
-                  }
-                ]
-              }
+                    action: 'ignore',
+                  },
+                ],
+              },
             ],
             errors: [
               {
@@ -873,7 +873,7 @@ describe('TypeScript', () => {
               {
                 message: 'Missing file extension for "rootverse+bfe:src/symbols"',
                 line: 5,
-              }
+              },
             ],
           }),
         ],
