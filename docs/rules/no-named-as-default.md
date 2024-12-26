@@ -44,6 +44,18 @@ export foo from './foo.js';
 export bar from './foo.js';
 ```
 
+## Options
+
+This rule has an option for ignoring specific paths. This is useful for cases where the default export is aliased to a named export, or where the default export is not used.
+
+```json
+{
+  "rules": {
+    "import/no-named-as-default": ["warn", { "ignore": ["./foo.js"] }]
+  }
+}
+```
+
 ## Further Reading
 
  - ECMAScript Proposal: [export ns from]
