@@ -1,5 +1,6 @@
 import ExportMapBuilder from '../exportMap/builder';
 import importDeclaration from '../importDeclaration';
+import includes from 'array-includes';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -62,7 +63,7 @@ module.exports = {
         return;
       }
 
-      if (ignorePaths.includes(declaration.source.value)) {
+      if (includes(ignorePaths, declaration.source.value)) {
         // The user has explicitly ignored this path
         return;
       }
