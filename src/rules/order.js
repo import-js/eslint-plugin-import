@@ -416,7 +416,7 @@ const compareString = (a, b) => {
 };
 
 /** Some parsers (languages without types) don't provide ImportKind */
-const DEAFULT_IMPORT_KIND = 'value';
+const DEFAULT_IMPORT_KIND = 'value';
 const getNormalizedValue = (node, toLowerCase) => {
   const value = node.value;
   return toLowerCase ? String(value).toLowerCase() : value;
@@ -462,8 +462,8 @@ function getSorter(alphabetizeOptions) {
     // In case the paths are equal (result === 0), sort them by importKind
     if (!result && multiplierImportKind) {
       result = multiplierImportKind * compareString(
-        nodeA.node.importKind || DEAFULT_IMPORT_KIND,
-        nodeB.node.importKind || DEAFULT_IMPORT_KIND,
+        nodeA.node.importKind || DEFAULT_IMPORT_KIND,
+        nodeB.node.importKind || DEFAULT_IMPORT_KIND,
       );
     }
 
