@@ -3284,6 +3284,34 @@ context('TypeScript', function () {
                 ],
               }],
             }),
+
+            // #2441 - type imports have to be in the same order as regular imports
+            test({
+              code: `
+                import type A from "fs";
+                import type B from "path";
+                import type C from "../foo.js";
+                import type D from "./bar.js";
+                import type E from './';
+
+                import a from "fs";
+                import b from "path";
+                import c from "../foo.js";
+                import d from "./bar.js";
+                import e from "./";
+              `,
+              ...parserConfig,
+              options: [
+                {
+                  groups: ['type', 'builtin', 'parent', 'sibling', 'index'],
+                  alphabetize: {
+                    order: 'asc',
+                    caseInsensitive: true,
+                  },
+                  sortTypesGroup: true,
+                },
+              ],
+            }),
           ] : [],
         ),
         invalid: [].concat(
