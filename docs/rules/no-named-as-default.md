@@ -51,7 +51,7 @@ This rule has an option for ignoring specific paths. This is useful for cases wh
 ```json
 {
   "rules": {
-    "import/no-named-as-default": ["warn", { "ignore": ["./foo.js"] }]
+    "import/no-named-as-default": ["warn", { "ignorePaths": ["./foo.js"] }]
   }
 }
 ```
