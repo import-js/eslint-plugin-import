@@ -527,10 +527,10 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition);
   }
 
-  if (rank === undefined) {
+  if (typeof rank === 'undefined') {
     rank = ranks.groups[impType];
 
-    if (rank === undefined) {
+    if (typeof rank === 'undefined') {
       return -1;
     }
   }
