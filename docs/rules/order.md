@@ -108,6 +108,7 @@ This rule supports the following options (none of which are required):
  - [`warnOnUnassignedImports`][5]
  - [`sortTypesGroup`][7]
  - [`newlines-between-types`][27]
+ - [`consolidateIslands`][25]
 
 ---
 
@@ -184,7 +185,7 @@ Sometimes [the predefined groups][18] are not fine-grained enough, especially wh
 `pathGroups` defines one or more [`PathGroup`][13]s relative to a predefined group.
 Imports are associated with a [`PathGroup`][13] based on path matching against the import specifier (using [minimatch][14]).
 
-> \[!IMPORTANT]
+> [!IMPORTANT]
 >
 > Note that, by default, imports grouped as `"builtin"`, `"external"`, or `"object"` will not be considered for further `pathGroups` matching unless they are removed from [`pathGroupsExcludedImportTypes`][9].
 
@@ -224,7 +225,7 @@ Default: `["builtin", "external", "object"]`
 By default, imports in certain [groups][18] are excluded from being matched against [`pathGroups`][8] to prevent overeager sorting.
 Use `pathGroupsExcludedImportTypes` to modify which groups are excluded.
 
-> \[!TIP]
+> [!TIP]
 >
 > If using imports with custom specifier aliases (e.g.
 > you're using `eslint-import-resolver-alias`, `paths` in `tsconfig.json`, etc) that [end up
@@ -254,7 +255,7 @@ Use `pathGroupsExcludedImportTypes` to modify which groups are excluded.
 Valid values: `boolean` \
 Default: `true`
 
-> \[!CAUTION]
+> [!CAUTION]
 >
 > Currently, `distinctGroup` defaults to `true`. However, in a later update, the
 > default will change to `false`.
@@ -371,7 +372,7 @@ Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false }
 
 Determine the sort order of imports within each [predefined group][18] or [`PathGroup`][8] alphabetically based on specifier.
 
-> \[!NOTE]
+> [!NOTE]
 >
 > Imports will be alphabetized based on their _specifiers_, not by their
 > identifiers. For example, `const a = require('z');` will come _after_ `const z = require('a');` when `alphabetize` is set to `{ order: "asc" }`.
@@ -502,7 +503,7 @@ Default: `false`
 Warn when "unassigned" imports are out of order.
 Unassigned imports are imports with no corresponding identifiers (e.g. `import './my/thing.js'` or `require('./side-effects.js')`).
 
-> \[!NOTE]
+> [!NOTE]
 >
 > These warnings are not fixable with `--fix` since unassigned imports might be used for their [side-effects][31],
 > and changing the order of such imports cannot be done safely.
@@ -540,7 +541,7 @@ import './styles.css';
 Valid values: `boolean` \
 Default: `false`
 
-> \[!NOTE]
+> [!NOTE]
 >
 > This setting is only meaningful when `"type"` is included in [`groups`][18].
 
@@ -598,7 +599,7 @@ The same example will pass.
 Valid values: `"ignore" | "always" | "always-and-inside-groups" | "never"` \
 Default: the value of [`newlines-between`][20]
 
-> \[!NOTE]
+> [!NOTE]
 >
 > This setting is only meaningful when [`sortTypesGroup`][7] is enabled.
 
@@ -656,9 +657,9 @@ The same example will pass.
 
 Note the new line after `import type E from './';` but before `import a from "fs";`. This new line separates the type-only imports from the normal imports. Its existence is governed by [`newlines-between-types`][27] and _not `newlines-between`_.
 
-> \[!IMPORTANT]
+> [!IMPORTANT]
 >
-> In certain situations, `consolidateIslands: true` will take precedence over `newlines-between-types: "never"`, if used, when it comes to the new line separating type-only imports from normal imports.
+> In certain situations, [`consolidateIslands: true`][25] will take precedence over `newlines-between-types: "never"`, if used, when it comes to the new line separating type-only imports from normal imports.
 
 The next example will pass even though there's a new line preceding the normal import and [`newlines-between`][20] is set to `"never"`:
 
@@ -722,6 +723,272 @@ import d from "./bar.js";
 import e from "./";
 ```
 
+### `consolidateIslands`
+
+Valid values: `"inside-groups" | "never"` \
+Default: `"never"`
+
+> [!NOTE]
+>
+> This setting is only meaningful when [`newlines-between`][20] and/or [`newlines-between-types`][27] is set to `"always-and-inside-groups"`.
+
+When set to `"inside-groups"`, this ensures imports spanning multiple lines are separated from other imports with a new line while single-line imports are grouped together (and the space between them consolidated) if they belong to the same [group][18] or [`pathGroups`][8].
+
+> [!IMPORTANT]
+>
+> When all of the following are true:
+>
+>  - [`sortTypesGroup`][7] is set to `true`
+>  - `consolidateIslands` is set to `"inside-groups"`
+>  - [`newlines-between`][20] is set to `"always-and-inside-groups"` when [`newlines-between-types`][27] is set to `"never"` (or vice-versa)
+>
+> Then [`newlines-between`][20]/[`newlines-between-types`][27] will yield to
+> `consolidateIslands` and allow new lines to separate multi-line imports
+> regardless of the `"never"` setting.
+>
+> This configuration is useful, for instance, to keep single-line type-only
+> imports stacked tightly together at the bottom of your import block to
+> preserve space while still logically organizing normal imports for quick and
+> pleasant reference.
+
+#### Example
+
+Given the following settings:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "newlines-between": "always-and-inside-groups",
+    "consolidateIslands": "inside-groups"
+  }]
+}
+```
+
+This will fail the rule check:
+
+```ts
+var fs = require('fs');
+var path = require('path');
+var { util1, util2, util3 } = require('util');
+var async = require('async');
+var relParent1 = require('../foo');
+var {
+  relParent21,
+  relParent22,
+  relParent23,
+  relParent24,
+} = require('../');
+var relParent3 = require('../bar');
+var { sibling1,
+  sibling2, sibling3 } = require('./foo');
+var sibling2 = require('./bar');
+var sibling3 = require('./foobar');
+```
+
+While this will succeed (and is what `--fix` would yield):
+
+```ts
+var fs = require('fs');
+var path = require('path');
+var { util1, util2, util3 } = require('util');
+
+var async = require('async');
+
+var relParent1 = require('../foo');
+
+var {
+  relParent21,
+  relParent22,
+  relParent23,
+  relParent24,
+} = require('../');
+
+var relParent3 = require('../bar');
+
+var { sibling1,
+  sibling2, sibling3 } = require('./foo');
+
+var sibling2 = require('./bar');
+var sibling3 = require('./foobar');
+```
+
+Note the intragroup "islands" of grouped single-line imports, as well as multi-line imports, are surrounded by new lines. At the same time, note the typical new lines separating different groups are still maintained thanks to [`newlines-between`][20].
+
+The same holds true for the next example; when given the following settings:
+
+```jsonc
+{
+  "import/order": ["error", {
+    "alphabetize": { "order": "asc" },
+    "groups": ["external", "internal", "index", "type"],
+    "pathGroups": [
+      {
+        "pattern": "dirA/**",
+        "group": "internal",
+        "position": "after"
+      },
+      {
+        "pattern": "dirB/**",
+        "group": "internal",
+        "position": "before"
+      },
+      {
+        "pattern": "dirC/**",
+        "group": "internal"
+      }
+    ],
+    "newlines-between": "always-and-inside-groups",
+    "newlines-between-types": "never",
+    "pathGroupsExcludedImportTypes": [],
+    "sortTypesGroup": true,
+    "consolidateIslands": "inside-groups"
+  }]
+}
+```
+
+> [!IMPORTANT]
+>
+> **Pay special attention to the value of [`pathGroupsExcludedImportTypes`][9]** in this example's settings.
+> Without it, the successful example below would fail.
+> This is because the imports with specifiers starting with "dirA/", "dirB/", and "dirC/" are all [considered part of the `"external"` group](#how-imports-are-grouped), and imports in that group are excluded from [`pathGroups`][8] matching by default.
+>
+> The fix is to remove `"external"` (and, in this example, the others) from [`pathGroupsExcludedImportTypes`][9].
+
+This will fail the rule check:
+
+```ts
+import c from 'Bar';
+import d from 'bar';
+import {
+  aa,
+  bb,
+  cc,
+  dd,
+  ee,
+  ff,
+  gg
+} from 'baz';
+import {
+  hh,
+  ii,
+  jj,
+  kk,
+  ll,
+  mm,
+  nn
+} from 'fizz';
+import a from 'foo';
+import b from 'dirA/bar';
+import index from './';
+import type { AA,
+  BB, CC } from 'abc';
+import type { Z } from 'fizz';
+import type {
+  A,
+  B
+} from 'foo';
+import type { C2 } from 'dirB/Bar';
+import type {
+  D2,
+  X2,
+  Y2
+} from 'dirB/bar';
+import type { E2 } from 'dirB/baz';
+import type { C3 } from 'dirC/Bar';
+import type {
+  D3,
+  X3,
+  Y3
+} from 'dirC/bar';
+import type { E3 } from 'dirC/baz';
+import type { F3 } from 'dirC/caz';
+import type { C1 } from 'dirA/Bar';
+import type {
+  D1,
+  X1,
+  Y1
+} from 'dirA/bar';
+import type { E1 } from 'dirA/baz';
+import type { F } from './index.js';
+import type { G } from './aaa.js';
+import type { H } from './bbb';
+```
+
+While this will succeed (and is what `--fix` would yield):
+
+```ts
+import c from 'Bar';
+import d from 'bar';
+
+import {
+  aa,
+  bb,
+  cc,
+  dd,
+  ee,
+  ff,
+  gg
+} from 'baz';
+
+import {
+  hh,
+  ii,
+  jj,
+  kk,
+  ll,
+  mm,
+  nn
+} from 'fizz';
+
+import a from 'foo';
+
+import b from 'dirA/bar';
+
+import index from './';
+
+import type { AA,
+  BB, CC } from 'abc';
+
+import type { Z } from 'fizz';
+
+import type {
+  A,
+  B
+} from 'foo';
+
+import type { C2 } from 'dirB/Bar';
+
+import type {
+  D2,
+  X2,
+  Y2
+} from 'dirB/bar';
+
+import type { E2 } from 'dirB/baz';
+import type { C3 } from 'dirC/Bar';
+
+import type {
+  D3,
+  X3,
+  Y3
+} from 'dirC/bar';
+
+import type { E3 } from 'dirC/baz';
+import type { F3 } from 'dirC/caz';
+import type { C1 } from 'dirA/Bar';
+
+import type {
+  D1,
+  X1,
+  Y1
+} from 'dirA/bar';
+
+import type { E1 } from 'dirA/baz';
+import type { F } from './index.js';
+import type { G } from './aaa.js';
+import type { H } from './bbb';
+```
+
 ## Related
 
  - [`import/external-module-folders`][29]
@@ -747,6 +1014,7 @@ import e from "./";
 [21]: https://eslint.org/docs/latest/rules/no-multiple-empty-lines
 [22]: https://prettier.io
 [23]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#type-modifiers-on-import-names
+[25]: #consolidateislands
 [27]: #newlines-between-types
 [28]: ../../README.md#importinternal-regex
 [29]: ../../README.md#importexternal-module-folders

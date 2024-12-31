@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`extensions`]: add `pathGroupOverrides to allow enforcement decision overrides based on specifier ([#3105], thanks [@Xunnamius])
 - [`order`]: add `sortTypesGroup` option to allow intragroup sorting of type-only imports ([#3104], thanks [@Xunnamius])
 - [`order`]: add `newlines-between-types` option to control intragroup sorting of type-only imports ([#3127], thanks [@Xunnamius])
+- [`order`]: add `consolidateIslands` option to collapse excess spacing for aesthetically pleasing imports ([#3129], thanks [@Xunnamius])
 
 ### Fixed
 - [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
@@ -1174,6 +1175,7 @@ for info on changes for earlier releases.
 
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
+[#3129]: https://github.com/import-js/eslint-plugin-import/pull/3129
 [#3128]: https://github.com/import-js/eslint-plugin-import/pull/3128
 [#3127]: https://github.com/import-js/eslint-plugin-import/pull/3127
 [#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
