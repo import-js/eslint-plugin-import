@@ -416,7 +416,7 @@ const compareString = (a, b) => {
 };
 
 /** Some parsers (languages without types) don't provide ImportKind */
-const DEAFULT_IMPORT_KIND = 'value';
+const DEFAULT_IMPORT_KIND = 'value';
 const getNormalizedValue = (node, toLowerCase) => {
   const value = node.value;
   return toLowerCase ? String(value).toLowerCase() : value;
@@ -462,8 +462,8 @@ function getSorter(alphabetizeOptions) {
     // In case the paths are equal (result === 0), sort them by importKind
     if (!result && multiplierImportKind) {
       result = multiplierImportKind * compareString(
-        nodeA.node.importKind || DEAFULT_IMPORT_KIND,
-        nodeB.node.importKind || DEAFULT_IMPORT_KIND,
+        nodeA.node.importKind || DEFAULT_IMPORT_KIND,
+        nodeB.node.importKind || DEFAULT_IMPORT_KIND,
       );
     }
 
@@ -513,22 +513,34 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, ranks, importEntry, excludedImportTypes) {
+function computeRank(context, ranks, importEntry, excludedImportTypes, isSortingTypesAmongThemselves) {
   let impType;
   let rank;
+
+  const isTypeGroupInGroups = ranks.omittedTypes.indexOf('type') === -1;
+  const isTypeOnlyImport = importEntry.node.importKind === 'type';
+  const isExcludedFromPathRank = isTypeOnlyImport && isTypeGroupInGroups && excludedImportTypes.has('type')
+
   if (importEntry.type === 'import:object') {
     impType = 'object';
-  } else if (importEntry.node.importKind === 'type' && ranks.omittedTypes.indexOf('type') === -1) {
+  } else if (isTypeOnlyImport && isTypeGroupInGroups && !isSortingTypesAmongThemselves) {
     impType = 'type';
   } else {
     impType = importType(importEntry.value, context);
   }
-  if (!excludedImportTypes.has(impType)) {
+
+  if (!excludedImportTypes.has(impType) && !isExcludedFromPathRank) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition);
   }
+
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType];
   }
+
+  if (isTypeOnlyImport && isSortingTypesAmongThemselves) {
+    rank = ranks.groups['type'] + rank / 10;
+  }
+
   if (importEntry.type !== 'import' && !importEntry.type.startsWith('import:')) {
     rank += 100;
   }
@@ -536,8 +548,8 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
   return rank;
 }
 
-function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, ranks, importEntry, excludedImportTypes);
+function registerNode(context, importEntry, ranks, imported, excludedImportTypes, isSortingTypesAmongThemselves) {
+  const rank = computeRank(context, ranks, importEntry, excludedImportTypes, isSortingTypesAmongThemselves);
   if (rank !== -1) {
     imported.push({ ...importEntry, rank });
   }
@@ -665,7 +677,7 @@ function removeNewLineAfterImport(context, currentImport, previousImport) {
   return undefined;
 }
 
-function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup) {
+function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves) {
   const getNumberOfEmptyLinesBetween = (currentImport, previousImport) => {
     const linesBetweenImports = getSourceCode(context).lines.slice(
       previousImport.node.loc.end.line,
@@ -678,35 +690,78 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
   let previousImport = imported[0];
 
   imported.slice(1).forEach(function (currentImport) {
-    const emptyLinesBetween = getNumberOfEmptyLinesBetween(currentImport, previousImport);
-    const isStartOfDistinctGroup = getIsStartOfDistinctGroup(currentImport, previousImport);
+    const emptyLinesBetween = getNumberOfEmptyLinesBetween(
+      currentImport,
+      previousImport
+    );
 
-    if (newlinesBetweenImports === 'always'
-        || newlinesBetweenImports === 'always-and-inside-groups') {
-      if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
-        if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
-          context.report({
-            node: previousImport.node,
-            message: 'There should be at least one empty line between import groups',
-            fix: fixNewLineAfterImport(context, previousImport),
-          });
+    const isStartOfDistinctGroup = getIsStartOfDistinctGroup(
+      currentImport,
+      previousImport
+    );
+
+    const isTypeOnlyImport = currentImport.node.importKind === 'type';
+    const isPreviousImportTypeOnlyImport = previousImport.node.importKind === 'type';
+
+    const isNormalImportFollowingTypeOnlyImportAndRelevant =
+      !isTypeOnlyImport && isPreviousImportTypeOnlyImport && isSortingTypesAmongThemselves;
+
+    const isTypeOnlyImportAndRelevant =
+      isTypeOnlyImport && isSortingTypesAmongThemselves;
+
+    const isNotIgnored =
+      (isTypeOnlyImportAndRelevant &&
+        newlinesBetweenTypeOnlyImports !== 'ignore') ||
+      (!isTypeOnlyImportAndRelevant && newlinesBetweenImports !== 'ignore');
+
+    if(isNotIgnored) {
+      const shouldAssertNewlineBetweenGroups =
+        ((isTypeOnlyImportAndRelevant || isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+          (newlinesBetweenTypeOnlyImports === 'always' ||
+            newlinesBetweenTypeOnlyImports === 'always-and-inside-groups')) ||
+        ((!isTypeOnlyImportAndRelevant && !isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+          (newlinesBetweenImports === 'always' ||
+            newlinesBetweenImports === 'always-and-inside-groups'));
+
+      const shouldAssertNoNewlineWithinGroup =
+        ((isTypeOnlyImportAndRelevant || isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+          (newlinesBetweenTypeOnlyImports !== 'always-and-inside-groups')) ||
+        ((!isTypeOnlyImportAndRelevant && !isNormalImportFollowingTypeOnlyImportAndRelevant) &&
+          (newlinesBetweenImports !== 'always-and-inside-groups'));
+
+      const shouldAssertNoNewlineBetweenGroup =
+        !isSortingTypesAmongThemselves ||
+        !isNormalImportFollowingTypeOnlyImportAndRelevant ||
+        newlinesBetweenTypeOnlyImports === 'never';
+
+      if (shouldAssertNewlineBetweenGroups) {
+        if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
+          if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
+            context.report({
+              node: previousImport.node,
+              message: 'There should be at least one empty line between import groups',
+              fix: fixNewLineAfterImport(context, previousImport),
+            });
+          }
+        } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineWithinGroup) {
+          if (
+            (distinctGroup && currentImport.rank === previousImport.rank) ||
+            (!distinctGroup && !isStartOfDistinctGroup)
+          ) {
+            context.report({
+              node: previousImport.node,
+              message: 'There should be no empty line within import group',
+              fix: removeNewLineAfterImport(context, currentImport, previousImport)
+            });
+          }
         }
-      } else if (emptyLinesBetween > 0
-        && newlinesBetweenImports !== 'always-and-inside-groups') {
-        if (distinctGroup && currentImport.rank === previousImport.rank || !distinctGroup && !isStartOfDistinctGroup) {
-          context.report({
-            node: previousImport.node,
-            message: 'There should be no empty line within import group',
-            fix: removeNewLineAfterImport(context, currentImport, previousImport),
-          });
-        }
+      } else if (emptyLinesBetween > 0 && shouldAssertNoNewlineBetweenGroup) {
+        context.report({
+          node: previousImport.node,
+          message: 'There should be no empty line between import groups',
+          fix: removeNewLineAfterImport(context, currentImport, previousImport),
+        });
       }
-    } else if (emptyLinesBetween > 0) {
-      context.report({
-        node: previousImport.node,
-        message: 'There should be no empty line between import groups',
-        fix: removeNewLineAfterImport(context, currentImport, previousImport),
-      });
     }
 
     previousImport = currentImport;
@@ -781,6 +836,18 @@ module.exports = {
               'never',
             ],
           },
+          'newlines-between-types': {
+            enum: [
+              'ignore',
+              'always',
+              'always-and-inside-groups',
+              'never',
+            ],
+          },
+          sortTypesAmongThemselves: {
+            type: 'boolean',
+            default: false,
+          },
           named: {
             default: false,
             oneOf: [{
@@ -836,7 +903,9 @@ module.exports = {
   create(context) {
     const options = context.options[0] || {};
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
+    const newlinesBetweenTypeOnlyImports = options['newlines-between-types'] || newlinesBetweenImports;
     const pathGroupsExcludedImportTypes = new Set(options.pathGroupsExcludedImportTypes || ['builtin', 'external', 'object']);
+    const sortTypesAmongThemselves = options.sortTypesAmongThemselves;
 
     const named = {
       types: 'mixed',
@@ -878,6 +947,9 @@ module.exports = {
     }
     const importMap = new Map();
     const exportMap = new Map();
+
+    const isTypeGroupInGroups = ranks.omittedTypes.indexOf('type') === -1;
+    const isSortingTypesAmongThemselves = isTypeGroupInGroups && sortTypesAmongThemselves;
 
     function getBlockImports(node) {
       if (!importMap.has(node)) {
@@ -932,6 +1004,7 @@ module.exports = {
             ranks,
             getBlockImports(node.parent),
             pathGroupsExcludedImportTypes,
+            isSortingTypesAmongThemselves
           );
 
           if (named.import) {
@@ -983,6 +1056,7 @@ module.exports = {
           ranks,
           getBlockImports(node.parent),
           pathGroupsExcludedImportTypes,
+          isSortingTypesAmongThemselves
         );
       },
       CallExpression(node) {
@@ -1005,6 +1079,7 @@ module.exports = {
           ranks,
           getBlockImports(block),
           pathGroupsExcludedImportTypes,
+          isSortingTypesAmongThemselves
         );
       },
       ...named.require && {
@@ -1092,8 +1167,8 @@ module.exports = {
       },
       'Program:exit'() {
         importMap.forEach((imported) => {
-          if (newlinesBetweenImports !== 'ignore') {
-            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, distinctGroup);
+          if (newlinesBetweenImports !== 'ignore' || newlinesBetweenTypeOnlyImports !== 'ignore') {
+            makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, newlinesBetweenTypeOnlyImports, distinctGroup, isSortingTypesAmongThemselves);
           }
 
           if (alphabetize.order !== 'ignore') {
