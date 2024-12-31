@@ -3309,7 +3309,7 @@ context('TypeScript', function () {
                 alphabetize: { order: 'asc' },
                 groups: ['builtin', 'type', 'unknown', 'external'],
                 sortTypesGroup: true,
-                'newlines-between': 'always'
+                'newlines-between': 'always',
               },
             ],
           }),
