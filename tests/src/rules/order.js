@@ -3308,7 +3308,7 @@ context('TypeScript', function () {
               {
                 alphabetize: { order: 'asc' },
                 groups: ['builtin', 'type', 'unknown', 'external'],
-                sortTypesAmongThemselves: true,
+                sortTypesGroup: true,
                 'newlines-between': 'always'
               },
             ],
