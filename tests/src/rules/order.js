@@ -3285,7 +3285,7 @@ context('TypeScript', function () {
               }],
             }),
           ] : [],
-          // Option sortTypesAmongThemselves: false (default)
+          // Option sortTypesGroup: false (default)
           test({
             code: `
               import c from 'Bar';
@@ -3343,11 +3343,11 @@ context('TypeScript', function () {
                 ],
                 'newlines-between': 'always',
                 pathGroupsExcludedImportTypes: [],
-                sortTypesAmongThemselves: false,
+                sortTypesGroup: false,
               },
             ],
           }),
-          // Option sortTypesAmongThemselves: true and 'type' in pathGroupsExcludedImportTypes
+          // Option sortTypesGroup: true and 'type' in pathGroupsExcludedImportTypes
           test({
             code: `
               import c from 'Bar';
@@ -3375,11 +3375,11 @@ context('TypeScript', function () {
                 ],
                 'newlines-between': 'always',
                 pathGroupsExcludedImportTypes: ['type'],
-                sortTypesAmongThemselves: true,
+                sortTypesGroup: true,
               },
             ],
           }),
-          // Option sortTypesAmongThemselves: true and 'type' omitted from groups
+          // Option sortTypesGroup: true and 'type' omitted from groups
           test({
             code: `
               import c from 'Bar';
@@ -3407,7 +3407,7 @@ context('TypeScript', function () {
                 'newlines-between': 'always',
                 pathGroupsExcludedImportTypes: [],
                 // Becomes a no-op without "type" in groups
-                sortTypesAmongThemselves: true,
+                sortTypesGroup: true,
               },
             ],
           }),
@@ -3440,7 +3440,7 @@ context('TypeScript', function () {
               },
             ],
           }),
-          // Option: sortTypesAmongThemselves: true puts type imports in the same order as regular imports (from issue #2441, PR #2615)
+          // Option: sortTypesGroup: true puts type imports in the same order as regular imports (from issue #2441, PR #2615)
           test({
             code: `
               import type A from "fs";
@@ -3463,7 +3463,7 @@ context('TypeScript', function () {
                   order: 'asc',
                   caseInsensitive: true,
                 },
-                sortTypesAmongThemselves: true,
+                sortTypesGroup: true,
               },
             ],
           }),

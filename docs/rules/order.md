@@ -106,7 +106,7 @@ This rule supports the following options (none of which are required):
  - [`alphabetize`][30]
  - [`named`][33]
  - [`warnOnUnassignedImports`][5]
- - [`sortTypesAmongThemselves`][7]
+ - [`sortTypesGroup`][7]
  - [`newlines-between-types`][27]
  - [`consolidateIslands`][25]
 
@@ -159,7 +159,7 @@ Roughly speaking, the grouping algorithm is as follows:
 
 1. If the import has no corresponding identifiers (e.g. `import './my/thing.js'`), is otherwise "unassigned," or is an unsupported use of `require()`, and [`warnOnUnassignedImports`][5] is disabled, it will be ignored entirely since the order of these imports may be important for their [side-effects][31]
 2. If the import is part of an arcane TypeScript declaration (e.g. `import log = console.log`), it will be considered **object**. However, note that external module references (e.g. `import x = require('z')`) are treated as normal `require()`s and import-exports (e.g. `export import w = y;`) are ignored entirely
-3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesAmongThemselves`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
+3. If the import is [type-only][6], `"type"` is in `groups`, and [`sortTypesGroup`][7] is disabled, it will be considered **type** (with additional implications if using [`pathGroups`][8] and `"type"` is in [`pathGroupsExcludedImportTypes`][9])
 4. If the import's specifier matches [`import/internal-regex`][28], it will be considered **internal**
 5. If the import's specifier is an absolute path, it will be considered **unknown**
 6. If the import's specifier has the name of a Node.js core module (using [is-core-module][10]), it will be considered **builtin**
@@ -174,7 +174,7 @@ Roughly speaking, the grouping algorithm is as follows:
 15. If the import's specifier has a name that starts with a word character, it will be considered **external**
 16. If this point is reached, the import will be ignored entirely
 
-At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations. Finally, any type-only declarations are potentially reorganized according to [`sortTypesAmongThemselves`][7].
+At the end of the process, if they co-exist in the same file, all top-level `require()` statements that haven't been ignored are shifted (with respect to their order) below any ES6 `import` or similar declarations. Finally, any type-only declarations are potentially reorganized according to [`sortTypesGroup`][7].
 
 ### `pathGroups`
 
@@ -545,7 +545,7 @@ import path from 'path';
 import './styles.css';
 ```
 
-### `sortTypesAmongThemselves`
+### `sortTypesGroup`
 
 Valid values: `boolean` \
 Default: `false`
@@ -589,14 +589,14 @@ import e from "./";
 
 This happens because [type-only imports][6] are considered part of one global
 [`"type"` group](#how-imports-are-grouped) by default. However, if we set
-`sortTypesAmongThemselves` to `true`:
+`sortTypesGroup` to `true`:
 
 ```jsonc
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
     "alphabetize": { "order": "asc" },
-    "sortTypesAmongThemselves": true
+    "sortTypesGroup": true
   }]
 }
 ```
@@ -610,9 +610,9 @@ Default: the value of [`newlines-between`][20]
 
 > \[!NOTE]
 >
-> This setting is only meaningful when [`sortTypesAmongThemselves`][7] is enabled.
+> This setting is only meaningful when [`sortTypesGroup`][7] is enabled.
 
-`newlines-between-types` is functionally identical to [`newlines-between`][20] except it only enforces or forbids new lines between _[type-only][6] import groups_, which exist only when [`sortTypesAmongThemselves`][7] is enabled.
+`newlines-between-types` is functionally identical to [`newlines-between`][20] except it only enforces or forbids new lines between _[type-only][6] import groups_, which exist only when [`sortTypesGroup`][7] is enabled.
 
 In addition, when determining if a new line is enforceable or forbidden between the type-only imports and the normal imports, `newlines-between-types` takes precedence over [`newlines-between`][20].
 
@@ -624,7 +624,7 @@ Given the following settings:
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
-    "sortTypesAmongThemselves": true,
+    "sortTypesGroup": true,
     "newlines-between": "always"
   }]
 }
@@ -655,7 +655,7 @@ However, if we set `newlines-between-types` to `"ignore"`:
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
-    "sortTypesAmongThemselves": true,
+    "sortTypesGroup": true,
     "newlines-between": "always",
     "newlines-between-types": "ignore"
   }]
@@ -676,7 +676,7 @@ The next example will pass even though there's a new line preceding the normal i
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
-    "sortTypesAmongThemselves": true,
+    "sortTypesGroup": true,
     "newlines-between": "never",
     "newlines-between-types": "always"
   }]
@@ -707,7 +707,7 @@ While the following fails due to the new line between the last type import and t
 {
   "import/order": ["error", {
     "groups": ["type", "builtin", "parent", "sibling", "index"],
-    "sortTypesAmongThemselves": true,
+    "sortTypesGroup": true,
     "newlines-between": "always",
     "newlines-between-types": "never"
   }]
@@ -750,7 +750,7 @@ When set to `"inside-groups"`, this ensures imports spanning multiple lines are 
 >  - `consolidateIslands` is set to `"inside-groups"`
 >  - [`newlines-between`][20] is set to `"always-and-inside-groups"`
 >  - [`newlines-between-types`][27] is set to `"never"`
->  - [`sortTypesAmongThemselves`][7] is set to `true`
+>  - [`sortTypesGroup`][7] is set to `true`
 >
 > Then [`newlines-between-types`][27] will yield to `consolidateIslands` and allow new lines to separate multi-line imports and a single new line to separate all [type-only imports][6] from all normal imports. Other than that, [`newlines-between-types: "never"`][27] functions as described.
 >
@@ -847,7 +847,7 @@ The same holds true for the next example; when given the following settings:
     "newlines-between": "always-and-inside-groups",
     "newlines-between-types": "never",
     "pathGroupsExcludedImportTypes": [],
-    "sortTypesAmongThemselves": true,
+    "sortTypesGroup": true,
     "consolidateIslands": "inside-groups"
   }]
 }
@@ -1006,7 +1006,7 @@ import type { H } from './bbb';
 [4]: https://nodejs.org/api/esm.html#terminology
 [5]: #warnonunassignedimports
 [6]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html#type-only-imports-and-export
-[7]: #sorttypesamongthemselves
+[7]: #sortTypesGroup
 [8]: #pathgroups
 [9]: #pathgroupsexcludedimporttypes
 [10]: https://www.npmjs.com/package/is-core-module
