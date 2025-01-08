@@ -205,7 +205,7 @@ export default tseslint.config(
   // other configs...
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [importPlugin.flatConfigs.recommended],
+    extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
     // other configs...
   }
 );

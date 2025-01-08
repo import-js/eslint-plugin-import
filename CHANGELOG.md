@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
 - [Docs] add flat config guide for using `tseslint.config()` ([#3125], thanks [@lnuvy])
 - [Docs] add missing comma ([#3122], thanks [@RyanGst])
+- [readme] Update flatConfig example to include typescript config ([#3138], thanks [@intellix])
 
 ## [2.31.0] - 2024-10-03
 
@@ -1167,6 +1168,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
 [#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
 [#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122
 [#3116]: https://github.com/import-js/eslint-plugin-import/pull/3116
@@ -1873,6 +1875,7 @@ for info on changes for earlier releases.
 [@hulkish]: https://github.com/hulkish
 [@hyperupcall]: https://github.com/hyperupcall
 [@Hypnosphi]: https://github.com/Hypnosphi
+[@intellix]: https://github.com/intellix
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@ivo-stefchev]: https://github.com/ivo-stefchev
