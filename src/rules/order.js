@@ -513,22 +513,34 @@ function computePathRank(ranks, pathGroups, path, maxPosition) {
   }
 }
 
-function computeRank(context, ranks, importEntry, excludedImportTypes) {
+function computeRank(context, ranks, importEntry, excludedImportTypes, isSortingTypesGroup) {
   let impType;
   let rank;
+
+  const isTypeGroupInGroups = ranks.omittedTypes.indexOf('type') === -1;
+  const isTypeOnlyImport = importEntry.node.importKind === 'type';
+  const isExcludedFromPathRank = isTypeOnlyImport && isTypeGroupInGroups && excludedImportTypes.has('type');
+
   if (importEntry.type === 'import:object') {
     impType = 'object';
-  } else if (importEntry.node.importKind === 'type' && ranks.omittedTypes.indexOf('type') === -1) {
+  } else if (isTypeOnlyImport && isTypeGroupInGroups && !isSortingTypesGroup) {
     impType = 'type';
   } else {
     impType = importType(importEntry.value, context);
   }
-  if (!excludedImportTypes.has(impType)) {
+
+  if (!excludedImportTypes.has(impType) && !isExcludedFromPathRank) {
     rank = computePathRank(ranks.groups, ranks.pathGroups, importEntry.value, ranks.maxPosition);
   }
+
   if (typeof rank === 'undefined') {
     rank = ranks.groups[impType];
   }
+
+  if (isTypeOnlyImport && isSortingTypesGroup) {
+    rank = ranks.groups.type + rank / 10;
+  }
+
   if (importEntry.type !== 'import' && !importEntry.type.startsWith('import:')) {
     rank += 100;
   }
@@ -536,8 +548,8 @@ function computeRank(context, ranks, importEntry, excludedImportTypes) {
   return rank;
 }
 
-function registerNode(context, importEntry, ranks, imported, excludedImportTypes) {
-  const rank = computeRank(context, ranks, importEntry, excludedImportTypes);
+function registerNode(context, importEntry, ranks, imported, excludedImportTypes, isSortingTypesGroup) {
+  const rank = computeRank(context, ranks, importEntry, excludedImportTypes, isSortingTypesGroup);
   if (rank !== -1) {
     imported.push({ ...importEntry, rank });
   }
@@ -681,8 +693,10 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
     const emptyLinesBetween = getNumberOfEmptyLinesBetween(currentImport, previousImport);
     const isStartOfDistinctGroup = getIsStartOfDistinctGroup(currentImport, previousImport);
 
-    if (newlinesBetweenImports === 'always'
-        || newlinesBetweenImports === 'always-and-inside-groups') {
+    if (
+      newlinesBetweenImports === 'always'
+      || newlinesBetweenImports === 'always-and-inside-groups'
+    ) {
       if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
         if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
           context.report({
@@ -691,8 +705,10 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports, di
             fix: fixNewLineAfterImport(context, previousImport),
           });
         }
-      } else if (emptyLinesBetween > 0
-        && newlinesBetweenImports !== 'always-and-inside-groups') {
+      } else if (
+        emptyLinesBetween > 0
+        && newlinesBetweenImports !== 'always-and-inside-groups'
+      ) {
         if (distinctGroup && currentImport.rank === previousImport.rank || !distinctGroup && !isStartOfDistinctGroup) {
           context.report({
             node: previousImport.node,
@@ -781,6 +797,10 @@ module.exports = {
               'never',
             ],
           },
+          sortTypesGroup: {
+            type: 'boolean',
+            default: false,
+          },
           named: {
             default: false,
             oneOf: [{
@@ -837,6 +857,7 @@ module.exports = {
     const options = context.options[0] || {};
     const newlinesBetweenImports = options['newlines-between'] || 'ignore';
     const pathGroupsExcludedImportTypes = new Set(options.pathGroupsExcludedImportTypes || ['builtin', 'external', 'object']);
+    const sortTypesGroup = options.sortTypesGroup;
 
     const named = {
       types: 'mixed',
@@ -878,6 +899,9 @@ module.exports = {
     }
     const importMap = new Map();
     const exportMap = new Map();
+
+    const isTypeGroupInGroups = ranks.omittedTypes.indexOf('type') === -1;
+    const isSortingTypesGroup = isTypeGroupInGroups && sortTypesGroup;
 
     function getBlockImports(node) {
       if (!importMap.has(node)) {
@@ -932,6 +956,7 @@ module.exports = {
             ranks,
             getBlockImports(node.parent),
             pathGroupsExcludedImportTypes,
+            isSortingTypesGroup,
           );
 
           if (named.import) {
@@ -983,6 +1008,7 @@ module.exports = {
           ranks,
           getBlockImports(node.parent),
           pathGroupsExcludedImportTypes,
+          isSortingTypesGroup,
         );
       },
       CallExpression(node) {
@@ -1005,6 +1031,7 @@ module.exports = {
           ranks,
           getBlockImports(block),
           pathGroupsExcludedImportTypes,
+          isSortingTypesGroup,
         );
       },
       ...named.require && {
