@@ -55,6 +55,6 @@
     "webpack": "https://gist.github.com/ljharb/9cdb687f3806f8e6cb8a365d0b7840eb"
   },
   "engines": {
-    "node": ">= 6"
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
   }
 }
