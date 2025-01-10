@@ -127,7 +127,7 @@ All rules are off by default. However, you may extend one of the preset configs,
 ```jsonc
 {
   "rules": {
-    "import/no-unresolved": ["error", { "commonjs": true, "amd": true }]
+    "import/no-unresolved": ["error", { "commonjs": true, "amd": true }],
     "import/named": "error",
     "import/namespace": "error",
     "import/default": "error",
@@ -190,6 +190,26 @@ Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-r
 
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 [`eslint-import-resolver-typescript`]: https://github.com/import-js/eslint-import-resolver-typescript
+
+### Config - Flat with `config()` in `typescript-eslint`
+
+If you are using the `config` method from [`typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint), ensure that the `flatConfig` is included within the `extends` array.
+
+```js
+import tseslint from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
+import js from '@eslint/js';
+
+export default tseslint.config(
+  js.configs.recommended,
+  // other configs...
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
+    // other configs...
+  }
+);
+```
 
 ## Resolvers
 

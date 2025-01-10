@@ -9,9 +9,16 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
 - add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
 - add TypeScript types ([#3097], thanks [@G-Rath])
+- [`extensions`]: add `pathGroupOverrides to allow enforcement decision overrides based on specifier ([#3105], thanks [@Xunnamius])
+
+### Fixed
+- [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
+- [Docs] add flat config guide for using `tseslint.config()` ([#3125], thanks [@lnuvy])
+- [Docs] add missing comma ([#3122], thanks [@RyanGst])
+- [readme] Update flatConfig example to include typescript config ([#3138], thanks [@intellix])
 
 ## [2.31.0] - 2024-10-03
 
@@ -1161,7 +1168,12 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
+[#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
+[#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122
+[#3116]: https://github.com/import-js/eslint-plugin-import/pull/3116
 [#3106]: https://github.com/import-js/eslint-plugin-import/pull/3106
+[#3105]: https://github.com/import-js/eslint-plugin-import/pull/3105
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
@@ -1863,6 +1875,7 @@ for info on changes for earlier releases.
 [@hulkish]: https://github.com/hulkish
 [@hyperupcall]: https://github.com/hyperupcall
 [@Hypnosphi]: https://github.com/Hypnosphi
+[@intellix]: https://github.com/intellix
 [@isiahmeadows]: https://github.com/isiahmeadows
 [@IvanGoncharov]: https://github.com/IvanGoncharov
 [@ivo-stefchev]: https://github.com/ivo-stefchev
@@ -1913,6 +1926,7 @@ for info on changes for earlier releases.
 [@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx
+[@lnuvy]: https://github.com/lnuvy
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
 [@luczsoma]: https://github.com/luczsoma
@@ -1979,6 +1993,7 @@ for info on changes for earlier releases.
 [@rosswarren]: https://github.com/rosswarren
 [@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon
+[@RyanGst]: https://github.com/
 [@s-h-a-d-o-w]: https://github.com/s-h-a-d-o-w
 [@saschanaz]: https://github.com/saschanaz
 [@schmidsi]: https://github.com/schmidsi
