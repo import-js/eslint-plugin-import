@@ -3648,6 +3648,24 @@ flowRuleTester.run('order', rule, {
         import typeof {foo} from 'common';
         import {bar} from 'common';
       `,
+    }),
+    test({
+      options: [
+        {
+          named: true,
+        },
+      ],
+      code: `
+        const test = {
+          a: 1,
+          browser: 2,
+        };
+
+        module.exports = {
+          ...test,
+          platform: 'node',
+        };
+      `,
     })],
   invalid: [
     test({
