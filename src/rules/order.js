@@ -1055,7 +1055,9 @@ module.exports = {
               if (node.right.type === 'ObjectExpression') {
                 for (let i = 0; i < node.right.properties.length; i++) {
                   if (
-                    node.right.properties[i].key.type !== 'Identifier'
+                    !node.right.properties[i].key
+                    || node.right.properties[i].key.type !== 'Identifier'
+                    || !node.right.properties[i].value
                     || node.right.properties[i].value.type !== 'Identifier'
                   ) {
                     return;
