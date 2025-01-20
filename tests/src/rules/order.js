@@ -23,6 +23,11 @@ const rule = require('rules/order');
 
 ruleTester.run('order', rule, {
   valid: [
+    test({
+      code: `
+        import { platform, a, browser } from './order/spread-export';
+      `,
+    }),
     // Default order using require
     test({
       code: `
