@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
+- configs: added missing name attribute for eslint config inspector ([#3151], thanks [@NishargShah])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
@@ -1169,6 +1170,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
 [#3125]: https://github.com/import-js/eslint-plugin-import/pull/3125
 [#3122]: https://github.com/import-js/eslint-plugin-import/pull/3122
@@ -1965,6 +1967,7 @@ for info on changes for earlier releases.
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
+[@NishargShah]: https://github.com/NishargShah
 [@noelebrun]: https://github.com/noelebrun
 [@ntdb]: https://github.com/ntdb
 [@nwalters512]: https://github.com/nwalters512

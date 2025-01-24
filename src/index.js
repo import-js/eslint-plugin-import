@@ -96,8 +96,8 @@ export const flatConfigs = {
   warnings: createFlatConfig(require('../config/flat/warnings'), 'warnings'),
 
   // useful stuff for folks using various environments
-  react: require('../config/flat/react'),
-  'react-native': configs['react-native'],
-  electron: configs.electron,
-  typescript: configs.typescript,
+  react: createFlatConfig(require('../config/flat/react'), 'react'),
+  'react-native': createFlatConfig(configs['react-native'], 'react-native'),
+  electron: createFlatConfig(configs.electron, 'electron'),
+  typescript: createFlatConfig(configs.typescript, 'typescript'),
 };
