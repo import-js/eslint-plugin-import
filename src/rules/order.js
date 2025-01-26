@@ -858,9 +858,12 @@ module.exports = {
         properties: {
           groups: {
             type: 'array',
+            // Verified manually in the convertGroupsToRanks function
           },
           pathGroupsExcludedImportTypes: {
             type: 'array',
+            uniqueItems: true,
+            items: { enum: types },
           },
           distinctGroup: {
             type: 'boolean',
@@ -918,27 +921,28 @@ module.exports = {
           },
           named: {
             default: false,
-            oneOf: [{
-              type: 'boolean',
-            }, {
-              type: 'object',
-              properties: {
-                enabled: { type: 'boolean' },
-                import: { type: 'boolean' },
-                export: { type: 'boolean' },
-                require: { type: 'boolean' },
-                cjsExports: { type: 'boolean' },
-                types: {
-                  type: 'string',
-                  enum: [
-                    'mixed',
-                    'types-first',
-                    'types-last',
-                  ],
+            oneOf: [
+              { type: 'boolean' },
+              {
+                type: 'object',
+                properties: {
+                  enabled: { type: 'boolean' },
+                  import: { type: 'boolean' },
+                  export: { type: 'boolean' },
+                  require: { type: 'boolean' },
+                  cjsExports: { type: 'boolean' },
+                  types: {
+                    type: 'string',
+                    enum: [
+                      'mixed',
+                      'types-first',
+                      'types-last',
+                    ],
+                  },
                 },
+                additionalProperties: false,
               },
-              additionalProperties: false,
-            }],
+            ],
           },
           alphabetize: {
             type: 'object',
@@ -965,6 +969,38 @@ module.exports = {
         },
         additionalProperties: false,
         dependencies: {
+          sortTypesGroup: {
+            oneOf: [
+              {
+                // When sortTypesGroup is true, groups must NOT be an array that does not contain 'type'
+                properties: {
+                  sortTypesGroup: { enum: [true] },
+                  groups: {
+                    not: {
+                      type: 'array',
+                      uniqueItems: true,
+                      items: {
+                        oneOf: [
+                          { enum: types.filter((t) => t !== 'type') },
+                          {
+                            type: 'array',
+                            uniqueItems: true,
+                            items: { enum: types.filter((t) => t !== 'type') },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                required: ['groups'],
+              },
+              {
+                properties: {
+                  sortTypesGroup: { enum: [false] },
+                }
+              },
+            ],
+          },
           'newlines-between-types': {
             properties: {
               sortTypesGroup: { enum: [true] },
@@ -972,17 +1008,33 @@ module.exports = {
             required: ['sortTypesGroup'],
           },
           consolidateIslands: {
-            anyOf: [{
-              properties: {
-                'newlines-between': { enum: ['always-and-inside-groups'] },
+            oneOf: [
+              {
+                properties: {
+                  consolidateIslands: { enum: ['inside-groups'] },
+                },
+                anyOf: [
+                  {
+                    properties: {
+                      'newlines-between': { enum: ['always-and-inside-groups'] },
+                    },
+                    required: ['newlines-between'],
+                  },
+                  {
+                    properties: {
+                      'newlines-between-types': { enum: ['always-and-inside-groups'] },
+                    },
+                    required: ['newlines-between-types'],
+                  },
+                ],
               },
-              required: ['newlines-between'],
-            }, {
-              properties: {
-                'newlines-between-types': { enum: ['always-and-inside-groups'] },
+              {
+                properties: {
+                  consolidateIslands: { enum: ['never'] },
+                },
               },
-              required: ['newlines-between-types'],
-            }] },
+            ],
+          },
         },
       },
     ],
