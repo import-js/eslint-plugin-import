@@ -997,7 +997,7 @@ module.exports = {
               {
                 properties: {
                   sortTypesGroup: { enum: [false] },
-                }
+                },
               },
             ],
           },
