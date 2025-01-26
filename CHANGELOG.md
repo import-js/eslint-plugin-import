@@ -20,6 +20,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`order`]: ensure arcane imports do not cause undefined behavior ([#3128], thanks [@Xunnamius])
 - [`order`]: resolve undefined property access issue when using `named` ordering ([#3166], thanks [@Xunnamius])
 - [`enforce-node-protocol-usage`]: avoid a crash with some TS code ([#3173], thanks [@ljharb])
+- [`order`]: codify invariants from docs into config schema ([#3152], thanks [@Xunnamius])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
@@ -1183,6 +1184,7 @@ for info on changes for earlier releases.
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
 [#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
+[#3152]: https://github.com/import-js/eslint-plugin-import/pull/3152
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
 [#3129]: https://github.com/import-js/eslint-plugin-import/pull/3129

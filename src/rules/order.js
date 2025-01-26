@@ -590,18 +590,14 @@ function getRequireBlock(node) {
 
 const types = ['builtin', 'external', 'internal', 'unknown', 'parent', 'sibling', 'index', 'object', 'type'];
 
-// Creates an object with type-rank pairs.
-// Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
-// Will throw an error if it contains a type that does not exist, or has a duplicate
+/**
+ * Creates an object with type-rank pairs.
+ *
+ * Example: { index: 0, sibling: 1, parent: 1, external: 1, builtin: 2, internal: 2 }
+ */
 function convertGroupsToRanks(groups) {
   const rankObject = groups.reduce(function (res, group, index) {
     [].concat(group).forEach(function (groupItem) {
-      if (types.indexOf(groupItem) === -1) {
-        throw new Error(`Incorrect configuration of the rule: Unknown type \`${JSON.stringify(groupItem)}\``);
-      }
-      if (res[groupItem] !== undefined) {
-        throw new Error(`Incorrect configuration of the rule: \`${groupItem}\` is duplicated`);
-      }
       res[groupItem] = index * 2;
     });
     return res;
@@ -858,6 +854,17 @@ module.exports = {
         properties: {
           groups: {
             type: 'array',
+            uniqueItems: true,
+            items: {
+              oneOf: [
+                { enum: types },
+                {
+                  type: 'array',
+                  uniqueItems: true,
+                  items: { enum: types },
+                },
+              ],
+            },
           },
           pathGroupsExcludedImportTypes: {
             type: 'array',
@@ -965,6 +972,38 @@ module.exports = {
         },
         additionalProperties: false,
         dependencies: {
+          sortTypesGroup: {
+            oneOf: [
+              {
+                // When sortTypesGroup is true, groups must NOT be an array that does not contain 'type'
+                properties: {
+                  sortTypesGroup: { enum: [true] },
+                  groups: {
+                    not: {
+                      type: 'array',
+                      uniqueItems: true,
+                      items: {
+                        oneOf: [
+                          { enum: types.filter((t) => t !== 'type') },
+                          {
+                            type: 'array',
+                            uniqueItems: true,
+                            items: { enum: types.filter((t) => t !== 'type') },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+                required: ['groups'],
+              },
+              {
+                properties: {
+                  sortTypesGroup: { enum: [false] },
+                },
+              },
+            ],
+          },
           'newlines-between-types': {
             properties: {
               sortTypesGroup: { enum: [true] },
@@ -972,17 +1011,33 @@ module.exports = {
             required: ['sortTypesGroup'],
           },
           consolidateIslands: {
-            anyOf: [{
-              properties: {
-                'newlines-between': { enum: ['always-and-inside-groups'] },
+            oneOf: [
+              {
+                properties: {
+                  consolidateIslands: { enum: ['inside-groups'] },
+                },
+                anyOf: [
+                  {
+                    properties: {
+                      'newlines-between': { enum: ['always-and-inside-groups'] },
+                    },
+                    required: ['newlines-between'],
+                  },
+                  {
+                    properties: {
+                      'newlines-between-types': { enum: ['always-and-inside-groups'] },
+                    },
+                    required: ['newlines-between-types'],
+                  },
+                ],
               },
-              required: ['newlines-between'],
-            }, {
-              properties: {
-                'newlines-between-types': { enum: ['always-and-inside-groups'] },
+              {
+                properties: {
+                  consolidateIslands: { enum: ['never'] },
+                },
               },
-              required: ['newlines-between-types'],
-            }] },
+            ],
+          },
         },
       },
     ],
