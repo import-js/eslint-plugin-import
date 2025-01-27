@@ -34,9 +34,7 @@
     "debug": "^3.2.7",
     "enhanced-resolve": "^0.9.1",
     "find-root": "^1.1.0",
-    "hasown": "^2.0.2",
     "interpret": "^1.4.0",
-    "is-core-module": "^2.15.1",
     "is-regex": "^1.2.0",
     "lodash": "^4.17.21",
     "resolve": "^2.0.0-next.5",
@@ -55,6 +53,6 @@
     "webpack": "https://gist.github.com/ljharb/9cdb687f3806f8e6cb8a365d0b7840eb"
   },
   "engines": {
-    "node": ">= 6"
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
   }
 }

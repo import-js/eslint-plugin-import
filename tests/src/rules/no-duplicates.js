@@ -5,7 +5,6 @@ import jsxConfig from '../../../config/react';
 import { RuleTester, withoutAutofixOutput } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
-import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-duplicates');
@@ -131,7 +130,7 @@ ruleTester.run('no-duplicates', rule, {
     }),
 
     // These test cases use duplicate import identifiers, which causes a fatal parsing error using ESPREE (default) and TS_OLD.
-    ...flatMap([parsers.BABEL_OLD, parsers.TS_NEW], (parser) => {
+    ...[parsers.BABEL_OLD, parsers.TS_NEW].flatMap((parser) => {
       if (!parser) { return []; } // TS_NEW is not always available
       return [
         // #2347: duplicate identifiers should be removed
