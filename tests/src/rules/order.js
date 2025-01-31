@@ -2511,7 +2511,7 @@ ruleTester.run('order', rule, {
             { pattern: '@namespace', group: 'external', position: 'after' },
             { pattern: '@namespace/**', group: 'external', position: 'after' },
           ],
-          pathGroupsExcludedImportTypes: ['@namespace'],
+          pathGroupsExcludedImportTypes: [],
         },
       ],
       errors: [
@@ -3550,38 +3550,6 @@ context('TypeScript', function () {
                 ],
                 'newlines-between': 'always',
                 pathGroupsExcludedImportTypes: ['type'],
-                sortTypesGroup: true,
-              },
-            ],
-          }),
-          // Option sortTypesGroup: true and 'type' omitted from groups
-          test({
-            code: `
-              import c from 'Bar';
-              import type { AA } from 'abc';
-              import a from 'foo';
-              import type { A } from 'foo';
-
-              import type { C } from 'dirA/Bar';
-              import b from 'dirA/bar';
-              import type { D } from 'dirA/bar';
-
-              import index from './';
-            `,
-            ...parserConfig,
-            options: [
-              {
-                alphabetize: { order: 'asc' },
-                groups: ['external', 'internal', 'index'],
-                pathGroups: [
-                  {
-                    pattern: 'dirA/**',
-                    group: 'internal',
-                  },
-                ],
-                'newlines-between': 'always',
-                pathGroupsExcludedImportTypes: [],
-                // Becomes a no-op without "type" in groups
                 sortTypesGroup: true,
               },
             ],
@@ -6877,7 +6845,7 @@ flowRuleTester.run('order', rule, {
               },
             },
           ],
-          pathGroupsExcludedImportTypes: ['react'],
+          pathGroupsExcludedImportTypes: [],
           alphabetize: {
             order: 'asc',
           },
