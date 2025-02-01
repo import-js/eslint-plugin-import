@@ -858,12 +858,9 @@ module.exports = {
         properties: {
           groups: {
             type: 'array',
-            // Verified manually in the convertGroupsToRanks function
           },
           pathGroupsExcludedImportTypes: {
             type: 'array',
-            uniqueItems: true,
-            items: { enum: types },
           },
           distinctGroup: {
             type: 'boolean',
@@ -921,28 +918,27 @@ module.exports = {
           },
           named: {
             default: false,
-            oneOf: [
-              { type: 'boolean' },
-              {
-                type: 'object',
-                properties: {
-                  enabled: { type: 'boolean' },
-                  import: { type: 'boolean' },
-                  export: { type: 'boolean' },
-                  require: { type: 'boolean' },
-                  cjsExports: { type: 'boolean' },
-                  types: {
-                    type: 'string',
-                    enum: [
-                      'mixed',
-                      'types-first',
-                      'types-last',
-                    ],
-                  },
+            oneOf: [{
+              type: 'boolean',
+            }, {
+              type: 'object',
+              properties: {
+                enabled: { type: 'boolean' },
+                import: { type: 'boolean' },
+                export: { type: 'boolean' },
+                require: { type: 'boolean' },
+                cjsExports: { type: 'boolean' },
+                types: {
+                  type: 'string',
+                  enum: [
+                    'mixed',
+                    'types-first',
+                    'types-last',
+                  ],
                 },
-                additionalProperties: false,
               },
-            ],
+              additionalProperties: false,
+            }],
           },
           alphabetize: {
             type: 'object',
