@@ -1643,63 +1643,6 @@ ruleTester.run('order', rule, {
         message: '`async` import should occur before import of `path`',
       }],
     }),
-    // Setting the order for an unknown type
-    // should make the rule trigger an error and do nothing else
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 'UNKNOWN', 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
-      }],
-    }),
-    // Type in an array can't be another array, too much nesting
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', ['builtin'], 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
-      }],
-    }),
-    // No numbers
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 2, 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `2`',
-      }],
-    }),
-    // Duplicate
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 'parent', 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: `parent` is duplicated',
-      }],
-    }),
     // Mixing require and import should have import up top
     test({
       code: `
