@@ -3944,6 +3944,18 @@ context('TypeScript', function () {
               },
             ],
           }),
+          // Ensure the rule doesn't choke and die when right-hand-side AssignmentExpression properties lack a "key" attribute (e.g. SpreadElement)
+          test({
+            code: `
+              // https://prettier.io/docs/en/options.html
+
+              module.exports = {
+                  ...require('@xxxx/.prettierrc.js'),
+              };
+            `,
+            ...parserConfig,
+            options: [{ named: { enabled: true } }],
+          }),
           // Option: sortTypesGroup: true and newlines-between-types: 'always-and-inside-groups' and consolidateIslands: 'inside-groups'
           test({
             code: `

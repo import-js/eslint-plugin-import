@@ -18,6 +18,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: provide more meaningful error message when no .eslintrc is present ([#3116], thanks [@michaelfaith])
 - configs: added missing name attribute for eslint config inspector ([#3151], thanks [@NishargShah])
 - [`order`]: ensure arcane imports do not cause undefined behavior ([#3128], thanks [@Xunnamius])
+- [`order`]: resolve undefined property access issue when using `named` ordering ([#3166], thanks [@Xunnamius])
 
 ### Changed
 - [Docs] [`extensions`], [`order`]: improve documentation ([#3106], thanks [@Xunnamius])
@@ -1173,6 +1174,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
 [#3129]: https://github.com/import-js/eslint-plugin-import/pull/3129
