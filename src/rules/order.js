@@ -770,7 +770,7 @@ function makeNewlinesBetweenReport(context, imported, newlinesBetweenImports_, n
 
       if (shouldAssertNewlineBetweenGroups) {
         if (currentImport.rank !== previousImport.rank && emptyLinesBetween === 0) {
-          if (distinctGroup || !distinctGroup && isStartOfDistinctGroup) {
+          if (distinctGroup || isStartOfDistinctGroup) {
             alreadyReported = true;
             context.report({
               node: previousImport.node,
