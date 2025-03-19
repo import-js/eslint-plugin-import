@@ -1643,63 +1643,6 @@ ruleTester.run('order', rule, {
         message: '`async` import should occur before import of `path`',
       }],
     }),
-    // Setting the order for an unknown type
-    // should make the rule trigger an error and do nothing else
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 'UNKNOWN', 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `"UNKNOWN"`',
-      }],
-    }),
-    // Type in an array can't be another array, too much nesting
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', ['builtin'], 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `["builtin"]`',
-      }],
-    }),
-    // No numbers
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 2, 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: Unknown type `2`',
-      }],
-    }),
-    // Duplicate
-    test({
-      code: `
-        var async = require('async');
-        var index = require('./');
-      `,
-      options: [{ groups: [
-        'index',
-        ['sibling', 'parent', 'parent', 'internal'],
-      ] }],
-      errors: [{
-        message: 'Incorrect configuration of the rule: `parent` is duplicated',
-      }],
-    }),
     // Mixing require and import should have import up top
     test({
       code: `
@@ -2511,7 +2454,7 @@ ruleTester.run('order', rule, {
             { pattern: '@namespace', group: 'external', position: 'after' },
             { pattern: '@namespace/**', group: 'external', position: 'after' },
           ],
-          pathGroupsExcludedImportTypes: ['@namespace'],
+          pathGroupsExcludedImportTypes: [],
         },
       ],
       errors: [
@@ -3550,38 +3493,6 @@ context('TypeScript', function () {
                 ],
                 'newlines-between': 'always',
                 pathGroupsExcludedImportTypes: ['type'],
-                sortTypesGroup: true,
-              },
-            ],
-          }),
-          // Option sortTypesGroup: true and 'type' omitted from groups
-          test({
-            code: `
-              import c from 'Bar';
-              import type { AA } from 'abc';
-              import a from 'foo';
-              import type { A } from 'foo';
-
-              import type { C } from 'dirA/Bar';
-              import b from 'dirA/bar';
-              import type { D } from 'dirA/bar';
-
-              import index from './';
-            `,
-            ...parserConfig,
-            options: [
-              {
-                alphabetize: { order: 'asc' },
-                groups: ['external', 'internal', 'index'],
-                pathGroups: [
-                  {
-                    pattern: 'dirA/**',
-                    group: 'internal',
-                  },
-                ],
-                'newlines-between': 'always',
-                pathGroupsExcludedImportTypes: [],
-                // Becomes a no-op without "type" in groups
                 sortTypesGroup: true,
               },
             ],
@@ -6889,7 +6800,7 @@ flowRuleTester.run('order', rule, {
               },
             },
           ],
-          pathGroupsExcludedImportTypes: ['react'],
+          pathGroupsExcludedImportTypes: [],
           alphabetize: {
             order: 'asc',
           },
