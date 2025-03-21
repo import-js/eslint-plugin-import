@@ -1,7 +1,6 @@
 import { parsers, test as _test, testFilePath, testVersion as _testVersion } from '../utils';
 
 import { RuleTester } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/no-cycle');
@@ -56,7 +55,7 @@ const cases = {
       },
     }),
 
-    flatMap(testDialects, (testDialect) => [
+    testDialects.flatMap((testDialect) => [
       test({
         code: `import { foo } from "./${testDialect}/depth-two"`,
         options: [{ maxDepth: 1 }],
@@ -143,10 +142,10 @@ const cases = {
     }),
 
     // Ensure behavior does not change for those tests, with or without `
-    flatMap(testDialects, (testDialect) => flatMap([
+    testDialects.flatMap((testDialect) => [
       {},
       { allowUnsafeDynamicCyclicDependency: true },
-    ], (opts) => [
+    ].flatMap((opts) => [
       test({
         code: `import { foo } from "./${testDialect}/depth-one"`,
         options: [{ ...opts }],
@@ -285,7 +284,7 @@ const cases = {
 };
 
 ruleTester.run('no-cycle', rule, {
-  valid: flatMap(cases.valid, (testCase) => [
+  valid: cases.valid.flatMap((testCase) => [
     testCase,
     {
       ...testCase,
@@ -297,7 +296,7 @@ ruleTester.run('no-cycle', rule, {
     },
   ]),
 
-  invalid: flatMap(cases.invalid, (testCase) => [
+  invalid: cases.invalid.flatMap((testCase) => [
     testCase,
     {
       ...testCase,

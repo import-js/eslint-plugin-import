@@ -4,7 +4,6 @@ import path from 'path';
 import fs from 'fs';
 
 import { RuleTester } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);
@@ -35,7 +34,7 @@ const {
 
 ruleTester.run('no-extraneous-dependencies', rule, {
   valid: [
-    ...flatMap(Object.keys(deps).concat(Object.keys(devDeps)), (pkg) => [
+    ...Object.keys(deps).concat(Object.keys(devDeps)).flatMap((pkg) => [
       test({ code: `import "${pkg}"` }),
       test({ code: `import foo, { bar } from "${pkg}"` }),
       test({ code: `require("${pkg}")` }),

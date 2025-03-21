@@ -1,6 +1,6 @@
 import { expect } from 'chai';
+import { isBuiltin } from 'node:module';
 import * as path from 'path';
-import isCoreModule from 'is-core-module';
 
 import importType, { isExternalModule, isScoped, isAbsolute } from 'core/importType';
 
@@ -17,9 +17,9 @@ describe('importType(name)', function () {
   });
 
   it("should return 'builtin' for node.js modules", function () {
-    ['fs', 'fs/promises', 'path'].filter((x) => isCoreModule(x)).forEach((x) => {
+    ['fs', 'fs/promises', 'path'].filter((x) => isBuiltin(x)).forEach((x) => {
       expect(importType(x, context)).to.equal('builtin');
-      if (isCoreModule(`node:${x}`)) {
+      if (isBuiltin(`node:${x}`)) {
         expect(importType(`node:${x}`, context)).to.equal('builtin');
       }
     });

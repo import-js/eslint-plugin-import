@@ -1,4 +1,3 @@
-import includes from 'array-includes';
 import { SourceCode } from 'eslint';
 import { availableDocStyleParsers, captureDoc } from './doc';
 import Namespace from './namespace';
@@ -121,11 +120,11 @@ export default class ImportExportVisitorBuilder {
       'TSAbstractClassDeclaration',
       'TSModuleDeclaration',
     ];
-    const exportedDecls = this.ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+    const exportedDecls = this.ast.body.filter(({ type, id, declarations }) => declTypes.includes(type) && (
       id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
     ));
     if (exportedDecls.length === 0) {
-      // Export is not referencing any local declaration, must be re-exporting
+      // Export is not referencing any local declaration, must be re-exported
       this.exportMap.namespace.set('default', captureDoc(this.source, this.docStyleParsers, astNode));
       return;
     }
