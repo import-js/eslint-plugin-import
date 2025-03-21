@@ -48,6 +48,12 @@ ruleTester.run('no-named-as-default', rule, {
       code: 'import variable from "./no-named-as-default/misleading-re-exports.js";',
     }),
     test({
+      code: 'import foo from "./bar";',
+      options: [{
+        ignorePaths: ['./bar'],
+      }],
+    }),
+    test({
       // incorrect import
       code: 'import foobar from "./no-named-as-default/no-default-export.js";',
     }),
