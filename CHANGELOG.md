@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [readme] Update flatConfig example to include typescript config ([#3138], thanks [@intellix])
 - [Refactor] [`order`]: remove unnecessary negative check ([#3167], thanks [@JounQin])
 - [Docs] [`no-unused-modules`]: add missing double quote ([#3191], thanks [@albertpastrana])
+- [Docs] `no-restricted-paths`: clarify wording and fix errors ([#3172], thanks [@greim])
 
 ## [2.31.0] - 2024-10-03
 
@@ -1179,6 +1180,7 @@ for info on changes for earlier releases.
 
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
+[#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
 [#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
@@ -1886,6 +1888,7 @@ for info on changes for earlier releases.
 [@golopot]: https://github.com/golopot
 [@GoodForOneFare]: https://github.com/GoodForOneFare
 [@graingert]: https://github.com/graingert
+[@greim]: https://github.com/greim
 [@grit96]: https://github.com/grit96
 [@guilhermelimak]: https://github.com/guilhermelimak
 [@guillaumewuip]: https://github.com/guillaumewuip
