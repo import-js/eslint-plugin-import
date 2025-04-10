@@ -1,5 +1,6 @@
 import ExportMapBuilder from '../exportMap/builder';
 import importDeclaration from '../importDeclaration';
+import includes from 'array-includes';
 import docsUrl from '../docsUrl';
 
 module.exports = {
@@ -10,10 +11,27 @@ module.exports = {
       description: 'Forbid use of exported name as identifier of default export.',
       url: docsUrl('no-named-as-default'),
     },
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          ignorePaths: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+            uniqueItems: true,
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create(context) {
+    const options = context.options[0] || {};
+    const ignorePaths = options.ignorePaths || [];
+
     function checkDefault(nameKey, defaultSpecifier) {
       /**
        * For ImportDefaultSpecifier we're interested in the "local" name (`foo` for `import {bar as foo} ...`)
@@ -42,6 +60,11 @@ module.exports = {
 
       if (!importedModule.has(analyzedName)) {
         // The name used locally for the default import was not even used in the imported module.
+        return;
+      }
+
+      if (includes(ignorePaths, declaration.source.value)) {
+        // The user has explicitly ignored this path
         return;
       }
 
