@@ -10,9 +10,6 @@ import resolve from 'eslint-module-utils/resolve';
 import visit from 'eslint-module-utils/visit';
 import { dirname, join } from 'path';
 import readPkgUp from 'eslint-module-utils/readPkgUp';
-import values from 'object.values';
-import includes from 'array-includes';
-import flatMap from 'array.prototype.flatmap';
 
 import ExportMapBuilder from '../exportMap/builder';
 import recursivePatternCapture from '../exportMap/patternCapture';
@@ -137,8 +134,7 @@ function listFilesWithLegacyFunctions(src, extensions) {
       listFilesToProcess: originalListFilesToProcess,
     } = require('eslint/lib/util/glob-util');
     const patterns = src.concat(
-      flatMap(
-        src,
+      src.flatMap(
         (pattern) => extensions.map((extension) => (/\*\*|\*\./).test(pattern) ? pattern : `${pattern}/**/*${extension}`),
       ),
     );
@@ -294,7 +290,7 @@ function resolveFiles(src, ignoreExports, context) {
   // prepare list of source files, don't consider files from node_modules
   const resolvedFiles = srcFileList.length && typeof srcFileList[0] === 'string'
     ? srcFileList.filter((filePath) => !isNodeModule(filePath))
-    : flatMap(srcFileList, ({ filename }) => isNodeModule(filename) ? [] : filename);
+    : srcFileList.flatMap(({ filename }) => isNodeModule(filename) ? [] : filename);
 
   return new Set(resolvedFiles);
 }
@@ -478,9 +474,9 @@ const fileIsInPkg = (file) => {
   };
 
   const checkPkgFieldObject = (pkgField) => {
-    const pkgFieldFiles = flatMap(values(pkgField), (value) => typeof value === 'boolean' ? [] : join(basePath, value));
+    const pkgFieldFiles = Object.values(pkgField).flatMap((value) => typeof value === 'boolean' ? [] : join(basePath, value));
 
-    if (includes(pkgFieldFiles, file)) {
+    if (pkgFieldFiles.includes(file)) {
       return true;
     }
   };
