@@ -2,7 +2,7 @@ import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 import { satisfies } from 'semver';
 
-import { test, testVersion } from '../utils';
+import { getTSParsers, test, testVersion } from '../utils';
 
 const ruleTester = new RuleTester();
 const rule = require('rules/enforce-node-protocol-usage');
@@ -342,4 +342,29 @@ ruleTester.run('enforce-node-protocol-usage', rule, {
       settings,
     })),
   ),
+});
+
+context('TypeScript', function () {
+  getTSParsers().forEach((parser) => {
+    ruleTester.run('enforce-node-protocol-usage', rule, {
+      valid: [
+        test({
+          code: `
+            export class Thing {
+              constructor(public readonly name: string) {
+                  // Do nothing.
+              }
+
+              public sayHello(): void {
+                  console.log(\`Hello, \${this.name}!\`);
+              }
+            }
+          `,
+          parser,
+          options: preferUsingProtocol,
+        }),
+      ],
+      invalid: [],
+    });
+  });
 });

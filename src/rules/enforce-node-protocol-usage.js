@@ -29,7 +29,7 @@ function replaceStringLiteral(
 }
 
 function isStringLiteral(node) {
-  return node.type === 'Literal' && typeof node.value === 'string';
+  return node && node.type === 'Literal' && typeof node.value === 'string';
 }
 
 function isStaticRequireWith1Param(node) {
@@ -44,7 +44,7 @@ function isStaticRequireWith1Param(node) {
 
 function checkAndReport(src, context) {
   // TODO use src.quasis[0].value.raw
-  if (src.type === 'TemplateLiteral') { return; }
+  if (!src || src.type === 'TemplateLiteral') { return; }
   const moduleName = 'value' in src ? src.value : src.name;
   if (typeof moduleName !== 'string') { console.log(src, moduleName); }
   const { settings } = context;
