@@ -1,5 +1,7 @@
 # import/extensions
 
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
 <!-- end auto-generated rule header -->
 
 Some file resolve algorithms allow you to omit the file extension within the import source path. For example the `node` resolver (which does not yet support ESM/`import`) can resolve `./foo/bar` to the absolute path `/User/someone/foo/bar.js` because the `.js` extension is resolved automatically by default in CJS. Depending on the resolver you can configure more extensions to get resolved automatically.

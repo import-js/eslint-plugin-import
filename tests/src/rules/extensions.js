@@ -155,6 +155,16 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: ['always'],
     }),
+
+    test({
+      code: "import foo from './foo';",
+      options: [{ fix: true }],
+    }),
+
+    test({
+      code: "import foo from './foo.js';",
+      options: [{ fix: true, pattern: { js: 'always' } }],
+    }),
   ],
 
   invalid: [
@@ -651,6 +661,13 @@ ruleTester.run('extensions', rule, {
           line: 1,
         },
       ],
+    }),
+
+    test({
+      code: 'import foo from "./foo.js";',
+      options: ['always', { pattern: { js: 'never' }, fix: true }],
+      errors: [{ message: 'Unexpected use of file extension "js" for "./foo.js"' }],
+      output: 'import foo from "./foo";',
     }),
   ],
 });
