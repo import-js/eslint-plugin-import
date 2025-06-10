@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Docs] add missing comma ([#3122], thanks [@RyanGst])
 - [readme] Update flatConfig example to include typescript config ([#3138], thanks [@intellix])
 - [Refactor] [`order`]: remove unnecessary negative check ([#3167], thanks [@JounQin])
+- [Docs] [`no-unused-modules`]: add missing double quote ([#3191], thanks [@albertpastrana])
 
 ## [2.31.0] - 2024-10-03
 
@@ -1176,6 +1177,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
 [#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
@@ -1797,6 +1799,7 @@ for info on changes for earlier releases.
 [@aks-]: https://github.com/aks-
 [@akwodkiewicz]: https://github.com/akwodkiewicz
 [@aladdin-add]: https://github.com/aladdin-add
+[@albertpastrana]: https://github.com/albertpastrana
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@amsardesai]: https://github.com/amsardesai

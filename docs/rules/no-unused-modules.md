@@ -17,7 +17,7 @@ In order for this plugin to work, at least one of the options `missingExports` o
 Example:
 
 ```json
-"rules: {
+"rules": {
   ...otherRules,
   "import/no-unused-modules": [1, {"unusedExports": true}]
 }
