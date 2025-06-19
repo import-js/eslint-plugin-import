@@ -1,4 +1,4 @@
-name: 'Tests: node.js'
+name: 'Tests: eslint (old versions)'
 
 on: [pull_request, push]
 
@@ -36,8 +36,6 @@ jobs:
           - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
-          - 9
-          - 8
           - 7
           - 6
           - 5
@@ -64,70 +62,24 @@ jobs:
             env:
               TS_PARSER: 2
         exclude:
-          - node-version: 16
-            eslint: 9
-          - node-version: 15
-            eslint: 9
-          - node-version: 15
-            eslint: 8
-          - node-version: 14
-            eslint: 9
-          - node-version: 13
-            eslint: 9
-          - node-version: 13
-            eslint: 8
-          - node-version: 12
-            eslint: 9
-          - node-version: 11
-            eslint: 9
-          - node-version: 11
-            eslint: 8
-          - node-version: 10
-            eslint: 9
-          - node-version: 10
-            eslint: 8
-          - node-version: 9
-            eslint: 9
-          - node-version: 9
-            eslint: 8
           - node-version: 9
             eslint: 7
           - node-version: 8
-            eslint: 9
-          - node-version: 8
-            eslint: 8
-          - node-version: 8
             eslint: 7
-          - node-version: 7
-            eslint: 9
-          - node-version: 7
-            eslint: 8
           - node-version: 7
             eslint: 7
           - node-version: 7
             eslint: 6
           - node-version: 6
-            eslint: 9
-          - node-version: 6
-            eslint: 8
-          - node-version: 6
             eslint: 7
           - node-version: 6
             eslint: 6
-          - node-version: 5
-            eslint: 9
-          - node-version: 5
-            eslint: 8
           - node-version: 5
             eslint: 7
           - node-version: 5
             eslint: 6
           - node-version: 5
             eslint: 5
-          - node-version: 4
-            eslint: 9
-          - node-version: 4
-            eslint: 8
           - node-version: 4
             eslint: 7
           - node-version: 4
@@ -153,8 +105,8 @@ jobs:
       - uses: codecov/codecov-action@v3.1.5
 
   node:
-    name: 'node 4+'
+    name: 'eslint 2 - 7'
     needs: [latest]
     runs-on: ubuntu-latest
     steps:
-      - run: 'echo tests completed'
+      - run: true

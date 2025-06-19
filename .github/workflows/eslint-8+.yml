@@ -1,0 +1,69 @@
+name: 'Tests: eslint 8+'
+
+on: [pull_request, push]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      latest: ${{ steps.set-matrix.outputs.requireds }}
+      minors: ${{ steps.set-matrix.outputs.optionals }}
+    steps:
+      - uses: ljharb/actions/node/matrix@main
+        id: set-matrix
+        with:
+          versionsAsRoot: true
+          type: majors
+          preset: '^12.22.0 || ^14.17.0 || >=16.0.0' # eslint 8 engines.node
+
+  latest:
+    needs: [matrix]
+    name: majors
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+        node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
+        eslint:
+          - 9
+          - 8
+        exclude:
+          - node-version: 16
+            eslint: 9
+          - node-version: 14
+            eslint: 9
+          - node-version: 12
+            eslint: 9
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ljharb/actions/node/install@main
+        name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
+        env:
+          ESLINT_VERSION: ${{ matrix.eslint }}
+          TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
+        with:
+          node-version: ${{ matrix.node-version }}
+          after_install: npm run copy-metafiles && ./tests/dep-time-travel.sh
+          skip-ls-check: true
+      - run: npm run pretest
+      - run: npm run tests-only
+      - uses: codecov/codecov-action@v3.1.5
+
+  node:
+    name: 'eslint 8+'
+    needs: [latest]
+    runs-on: ubuntu-latest
+    steps:
+      - run: true
