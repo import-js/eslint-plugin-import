@@ -85,7 +85,7 @@ function getParserPath(path, context) {
   return context.parserPath;
 }
 
-/** @type {(path: string, context: import('eslint').Rule.RuleContext) => string | null | (import('eslint').Linter.ParserModule)} */
+/** @type {(path: string, context: import('eslint').Rule.RuleContext) => string | null | import('eslint').Linter.ParserModule | import('eslint').Linter.FlatConfigParserModule} */
 function getParser(path, context) {
   const parserPath = getParserPath(path, context);
   if (parserPath) {
