@@ -5,6 +5,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.12.1 - 2025-06-19
+
 ### Fixed
 - `unambiguous`: detect modules exported from minified code ([#3124], thanks [@michaelfaith])
 
