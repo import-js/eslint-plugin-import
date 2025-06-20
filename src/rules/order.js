@@ -1,10 +1,8 @@
 'use strict';
 
 import minimatch from 'minimatch';
-import includes from 'array-includes';
 import groupBy from 'object.groupby';
 import { getScope, getSourceCode } from 'eslint-module-utils/contextCompat';
-import trimEnd from 'string.prototype.trimend';
 
 import importType from '../core/importType';
 import isStaticRequire from '../core/staticRequire';
@@ -326,7 +324,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order, category) {
     const secondTrivia = sourceCode.text.slice(secondRoot.range[1], secondRootEnd);
 
     if (order === 'before') {
-      const trimmedTrivia = trimEnd(secondTrivia);
+      const trimmedTrivia = secondTrivia.trimEnd();
       const gapCode = sourceCode.text.slice(firstRootEnd, secondRootStart - 1);
       const whitespaces = secondTrivia.slice(trimmedTrivia.length);
       context.report({
@@ -338,7 +336,7 @@ function fixOutOfOrder(context, firstNode, secondNode, order, category) {
         ),
       });
     } else if (order === 'after') {
-      const trimmedTrivia = trimEnd(firstTrivia);
+      const trimmedTrivia = firstTrivia.trimEnd();
       const gapCode = sourceCode.text.slice(secondRootEnd + 1, firstRootStart);
       const whitespaces = firstTrivia.slice(trimmedTrivia.length);
       context.report({
@@ -433,7 +431,7 @@ function getSorter(alphabetizeOptions) {
     const importB = getNormalizedValue(nodeB, alphabetizeOptions.caseInsensitive);
     let result = 0;
 
-    if (!includes(importA, '/') && !includes(importB, '/')) {
+    if (!importA.includes('/') && !importB.includes('/')) {
       result = compareString(importA, importB);
     } else {
       const A = importA.split('/');

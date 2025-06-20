@@ -1,5 +1,4 @@
 import { RuleTester, withoutAutofixOutput } from '../rule-tester';
-import flatMap from 'array.prototype.flatmap';
 import semver from 'semver';
 import { version as tsEslintVersion } from 'typescript-eslint-parser/package.json';
 
@@ -275,7 +274,7 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { sourceType: 'module' },
       parser: parsers.BABEL_OLD,
     },
-    flatMap(getTSParsers(), (parser) => [].concat(
+    getTSParsers().flatMap((parser) => [].concat(
       {
         code: `
           import { ExecaReturnValue } from 'execa';

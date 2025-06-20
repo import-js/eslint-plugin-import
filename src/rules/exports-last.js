@@ -1,5 +1,3 @@
-import findLastIndex from 'array.prototype.findlastindex';
-
 import docsUrl from '../docsUrl';
 
 function isNonExportStatement({ type }) {
@@ -22,7 +20,7 @@ module.exports = {
   create(context) {
     return {
       Program({ body }) {
-        const lastNonExportStatementIndex = findLastIndex(body, isNonExportStatement);
+        const lastNonExportStatementIndex = body.findLastIndex(isNonExportStatement);
 
         if (lastNonExportStatementIndex !== -1) {
           body.slice(0, lastNonExportStatementIndex).forEach((node) => {
