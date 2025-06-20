@@ -6,6 +6,8 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+## [2.32.0] - 2025-06-20
+
 ### Added
 - add [`enforce-node-protocol-usage`] rule and `import/node-version` setting ([#3024], thanks [@GoldStrikeArch] and [@sevenc-nanashi])
 - add TypeScript types ([#3097], thanks [@G-Rath])
@@ -1694,7 +1696,8 @@ for info on changes for earlier releases.
 [#119]: https://github.com/import-js/eslint-plugin-import/issues/119
 [#89]: https://github.com/import-js/eslint-plugin-import/issues/89
 
-[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.31.0...HEAD
+[Unreleased]: https://github.com/import-js/eslint-plugin-import/compare/v2.32.0...HEAD
+[2.32.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.31.0...v2.32.0
 [2.31.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.30.0...v2.31.0
 [2.30.0]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.1...v2.30.0
 [2.29.1]: https://github.com/import-js/eslint-plugin-import/compare/v2.29.0...v2.29.1
