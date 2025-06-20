@@ -46,6 +46,7 @@ function buildProperties(context) {
     defaultConfig: 'never',
     pattern: {},
     ignorePackages: false,
+    fix: false,
   };
 
   context.options.forEach((obj) => {
@@ -70,6 +71,11 @@ function buildProperties(context) {
     // If ignorePackages is provided, transfer it to result
     if (obj.ignorePackages !== undefined) {
       result.ignorePackages = obj.ignorePackages;
+    }
+
+    // If fix is provided, transfer it to result
+    if (obj.fix !== undefined) {
+      result.fix = obj.fix;
     }
 
     if (obj.checkTypeImports !== undefined) {
@@ -97,7 +103,7 @@ module.exports = {
       description: 'Ensure consistent use of file extension within the import path.',
       url: docsUrl('extensions'),
     },
-
+    fixable: 'code',
     schema: {
       anyOf: [
         {
@@ -225,6 +231,14 @@ module.exports = {
             node: source,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPathWithQueryString}"`,
+            ...props.fix && extension ? {
+              fix(fixer) {
+                return fixer.replaceText(
+                  source,
+                  JSON.stringify(`${importPathWithQueryString}.${extension}`),
+                );
+              },
+            } : {},
           });
         }
       } else if (extension) {
@@ -232,6 +246,17 @@ module.exports = {
           context.report({
             node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPathWithQueryString}"`,
+            ...props.fix
+              ? {
+                fix(fixer) {
+                  return fixer.replaceText(
+                    source,
+                    JSON.stringify(
+                      importPath.slice(0, -(extension.length + 1)),
+                    ),
+                  );
+                },
+              } : {},
           });
         }
       }
