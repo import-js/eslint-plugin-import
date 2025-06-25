@@ -552,6 +552,14 @@ context('TypeScript', function () {
           code: "import { type x } from './foo'; import type y from 'foo'",
           ...parserConfig,
         }),
+        test({
+          code: `
+            import type { A } from 'a';
+            import 'a';
+          `,
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
       ]);
 
       const invalid = [
