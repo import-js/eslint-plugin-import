@@ -261,8 +261,20 @@ function getFix(first, rest, sourceCode, context) {
 
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
+  const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
+      if (preferInline) {
+        const typeImports = nodes.filter((node) => node.importKind === 'type');
+        const sideEffectImports = nodes.filter((node) => node.specifiers.length === 0);
+        const valueImports = nodes.filter((node) => !typeImports.includes(node) && !sideEffectImports.includes(node));
+
+        if (typeImports.length > 0 && sideEffectImports.length > 0 && valueImports.length === 0) {
+          continue;
+        }
+      }
+
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = getSourceCode(context);
