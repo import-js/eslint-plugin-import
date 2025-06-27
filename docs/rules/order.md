@@ -367,8 +367,8 @@ import index from './';
 
 ### `alphabetize`
 
-Valid values: `{ order?: "asc" | "desc" | "ignore", orderImportKind?: "asc" | "desc" | "ignore", caseInsensitive?: boolean }` \
-Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false }`
+Valid values: `{ order?: "asc" | "desc" | "ignore", orderImportKind?: "asc" | "desc" | "ignore", caseInsensitive?: boolean, orderBySplitPaths?: boolean }` \
+Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false, orderBySplitPaths: true }`
 
 Determine the sort order of imports within each [predefined group][18] or [`PathGroup`][8] alphabetically based on specifier.
 
@@ -384,6 +384,8 @@ Valid properties and their values include:
  - **`orderImportKind`**: use `"asc"` to sort various _import kinds_, e.g. [type-only and typeof imports][6], in ascending order, `"desc"` to sort them in descending order, or "ignore" to prevent sorting
 
  - **`caseInsensitive`**: use `true` to ignore case and `false` to consider case when sorting
+
+ - **`orderBySplitPaths`**: use `true` to split by paths and sort by each one and `false` to sort by the full un-split path string
 
 #### Example
 
