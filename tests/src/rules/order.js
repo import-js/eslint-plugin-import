@@ -780,6 +780,48 @@ ruleTester.run('order', rule, {
         alphabetize: { order: 'desc' },
       }],
     }),
+    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false`
+    test({
+      code: `
+        import a from "foo";
+        import b from "foo-bar";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+      `,
+      options: [{ alphabetize: { order: 'asc' }, orderBySplitPaths: false }],
+    }),
+    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false
+    test({
+      code: `
+        import a from "foo";
+        import b from "foo-bar";
+        import c from "foo/foobar/bar";
+        import d from "foo/foobar/barfoo";
+      `,
+      options: [{ alphabetize: { order: 'asc' }, orderBySplitPaths: false }],
+    }),
+    // Option alphabetize: {order: 'desc'} with orderBySplitPaths: false
+    test({
+      code: `
+        import d from "foo/barfoo";
+        import c from "foo/bar";
+        import b from "foo-bar";
+        import a from "foo";
+      `,
+      options: [{ alphabetize: { order: 'desc' }, orderBySplitPaths: false }],
+    }),
+    // Option alphabetize: {order: 'desc'} with orderBySplitPaths: false and file names having non-alphanumeric characters.
+    test({
+      code: `
+        import d from "foo/barfoo";
+        import b from "foo-bar";
+        import c from "foo,bar";
+        import a from "foo";`,
+      options: [{
+        alphabetize: { order: 'desc' },
+        orderBySplitPaths: false,
+      }],
+    }),
     // Option alphabetize with newlines-between: {order: 'asc', newlines-between: 'always'}
     test({
       code: `
@@ -2644,6 +2686,28 @@ ruleTester.run('order', rule, {
       `,
       errors: [{
         message: '`foo-bar` import should occur after import of `foo/barfoo`',
+      }],
+    }),
+    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false
+    test({
+      code: `
+        import a from "foo";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+        import b from "foo-bar";
+      `,
+      options: [{
+        alphabetize: { order: 'asc' },
+        orderBySplitPaths: false,
+      }],
+      output: `
+        import a from "foo";
+        import b from "foo-bar";
+        import c from "foo/bar";
+        import d from "foo/barfoo";
+      `,
+      errors: [{
+        message: '`foo/barfoo` import should occur after import of `foo-bar`',
       }],
     }),
     // Option alphabetize {order: 'asc': caseInsensitive: true}
