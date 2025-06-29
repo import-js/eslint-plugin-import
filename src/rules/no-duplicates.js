@@ -266,11 +266,21 @@ function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
       if (preferInline) {
-        const typeImports = nodes.filter((node) => node.importKind === 'type');
-        const sideEffectImports = nodes.filter((node) => node.specifiers.length === 0);
-        const valueImports = nodes.filter((node) => !typeImports.includes(node) && !sideEffectImports.includes(node));
+        let hasType = false;
+        let hasSideEffect = false;
+        let hasOther = false;
+        for (let i = 0; !hasOther && i < nodes.length; i += 1) {
+          const node = nodes[i];
+          if (node.importKind === 'type') {
+            hasType = true;
+          } else if (node.specifiers.length === 0) {
+            hasSideEffect = true;
+          } else {
+            hasOther = true;
+          }
+        }
 
-        if (typeImports.length > 0 && sideEffectImports.length > 0 && valueImports.length === 0) {
+        if (!hasOther && hasType && hasSideEffect) {
           continue;
         }
       }
