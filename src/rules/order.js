@@ -434,7 +434,7 @@ function getSorter(alphabetizeOptions) {
     let result = 0;
 
     if (
-      alphabetizeOptions.orderBySplitPaths === false
+      alphabetizeOptions.orderByFullPathString === true
       || !includes(importA, '/') && !includes(importB, '/')
     ) {
       result = compareString(importA, importB);
@@ -834,9 +834,9 @@ function getAlphabetizeConfig(options) {
   const order = alphabetize.order || 'ignore';
   const orderImportKind = alphabetize.orderImportKind || 'ignore';
   const caseInsensitive = alphabetize.caseInsensitive || false;
-  const orderBySplitPaths = alphabetize.orderBySplitPaths || true;
+  const orderByFullPathString = alphabetize.orderByFullPathString || false;
 
-  return { order, orderImportKind, caseInsensitive, orderBySplitPaths };
+  return { order, orderImportKind, caseInsensitive, orderByFullPathString };
 }
 
 // TODO, semver-major: Change the default of "distinctGroup" from true to false
@@ -966,9 +966,9 @@ module.exports = {
                 enum: ['ignore', 'asc', 'desc'],
                 default: 'ignore',
               },
-              orderBySplitPaths: {
+              orderByFullPathString: {
                 type: 'boolean',
-                default: true,
+                default: false,
               },
             },
             additionalProperties: false,

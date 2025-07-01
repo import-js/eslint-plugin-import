@@ -780,7 +780,7 @@ ruleTester.run('order', rule, {
         alphabetize: { order: 'desc' },
       }],
     }),
-    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false`
+    // Option alphabetize: {order: 'asc'} with orderByFullPathString: true`
     test({
       code: `
         import a from "foo";
@@ -788,9 +788,9 @@ ruleTester.run('order', rule, {
         import c from "foo/bar";
         import d from "foo/barfoo";
       `,
-      options: [{ alphabetize: { order: 'asc' }, orderBySplitPaths: false }],
+      options: [{ alphabetize: { order: 'asc' }, orderByFullPathString: true }],
     }),
-    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false
+    // Option alphabetize: {order: 'asc'} with orderByFullPathString: true
     test({
       code: `
         import a from "foo";
@@ -798,9 +798,9 @@ ruleTester.run('order', rule, {
         import c from "foo/foobar/bar";
         import d from "foo/foobar/barfoo";
       `,
-      options: [{ alphabetize: { order: 'asc' }, orderBySplitPaths: false }],
+      options: [{ alphabetize: { order: 'asc' }, orderByFullPathString: true }],
     }),
-    // Option alphabetize: {order: 'desc'} with orderBySplitPaths: false
+    // Option alphabetize: {order: 'desc'} with orderByFullPathString: true
     test({
       code: `
         import d from "foo/barfoo";
@@ -808,9 +808,9 @@ ruleTester.run('order', rule, {
         import b from "foo-bar";
         import a from "foo";
       `,
-      options: [{ alphabetize: { order: 'desc' }, orderBySplitPaths: false }],
+      options: [{ alphabetize: { order: 'desc' }, orderByFullPathString: true }],
     }),
-    // Option alphabetize: {order: 'desc'} with orderBySplitPaths: false and file names having non-alphanumeric characters.
+    // Option alphabetize: {order: 'desc'} with orderByFullPathString: true and file names having non-alphanumeric characters.
     test({
       code: `
         import d from "foo/barfoo";
@@ -819,7 +819,7 @@ ruleTester.run('order', rule, {
         import a from "foo";`,
       options: [{
         alphabetize: { order: 'desc' },
-        orderBySplitPaths: false,
+        orderByFullPathString: true,
       }],
     }),
     // Option alphabetize with newlines-between: {order: 'asc', newlines-between: 'always'}
@@ -2688,7 +2688,7 @@ ruleTester.run('order', rule, {
         message: '`foo-bar` import should occur after import of `foo/barfoo`',
       }],
     }),
-    // Option alphabetize: {order: 'asc'} with orderBySplitPaths: false
+    // Option alphabetize: {order: 'asc'} with orderByFullPathString: true
     test({
       code: `
         import a from "foo";
@@ -2698,7 +2698,7 @@ ruleTester.run('order', rule, {
       `,
       options: [{
         alphabetize: { order: 'asc' },
-        orderBySplitPaths: false,
+        orderByFullPathString: true,
       }],
       output: `
         import a from "foo";
