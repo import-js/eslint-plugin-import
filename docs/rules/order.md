@@ -386,7 +386,9 @@ Valid properties and their values include:
  - **`caseInsensitive`**: use `true` to ignore case and `false` to consider case when sorting
 
  - **`orderByFullPathString`**: use `true` to sort by the full un-split path string and `false` to split by paths and sort by each one
-   - enabling this flag may better align with the sort algorithm used by certain operating systems and IDE's, e.g. the Organize Imports action in JetBrains IDE's
+   - Enabling this flag may better align with the sort algorithm used by certain IDE's and applications, e.g.
+     - The Organize Imports action in JetBrains IDE's sorts by the full path string
+     - Microsoft's accessibility-insights-web application is [reported](https://github.com/microsoft/accessibility-insights-web/pull/6846) to sort by the full path string as well
 
 #### Example
 
