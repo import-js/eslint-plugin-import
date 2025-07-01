@@ -276,7 +276,13 @@ function checkImports(imported, context) {
             hasType = true;
           } else if (node.specifiers.length === 0) {
             hasSideEffect = true;
-          } else if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
+          } else if (
+            node.specifiers.length === 1
+            && (
+              node.specifiers[0].type === 'ImportDefaultSpecifier'
+              || node.specifiers.some((spec) => spec.importKind === 'type')
+            )
+          ) {
             hasDefault = true;
           } else {
             hasOther = true;
