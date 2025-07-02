@@ -538,37 +538,48 @@ context('TypeScript', function () {
           `,
           ...parserConfig,
         }),
-      ].concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
+      ]
+      // babel-eslint does not support `import type * as`
+        .concat(parser !== parsers.BABEL_OLD ? [
+          test({
+            code: `
+            import type * as A from 'a';
+            import { type B } from 'a';
+          `,
+            options: [{ 'prefer-inline': false }],
+            ...parserConfig,
+          })] : [])
+        .concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
         // #2470: ignore duplicate if is a typescript inline type import
-        test({
-          code: "import { type x } from './foo'; import y from './foo'",
-          ...parserConfig,
-        }),
-        test({
-          code: "import { type x } from './foo'; import { y } from './foo'",
-          ...parserConfig,
-        }),
-        test({
-          code: "import { type x } from './foo'; import type y from 'foo'",
-          ...parserConfig,
-        }),
-        test({
-          code: `
+          test({
+            code: "import { type x } from './foo'; import y from './foo'",
+            ...parserConfig,
+          }),
+          test({
+            code: "import { type x } from './foo'; import { y } from './foo'",
+            ...parserConfig,
+          }),
+          test({
+            code: "import { type x } from './foo'; import type y from 'foo'",
+            ...parserConfig,
+          }),
+          test({
+            code: `
             import type { A } from 'a';
             import 'a';
           `,
-          options: [{ 'prefer-inline': true }],
-          ...parserConfig,
-        }),
-        test({
-          code: `
+            options: [{ 'prefer-inline': true }],
+            ...parserConfig,
+          }),
+          test({
+            code: `
             import type { A } from 'a';
             import B from 'a';
           `,
-          options: [{ 'prefer-inline': true }],
-          ...parserConfig,
-        }),
-      ]);
+            options: [{ 'prefer-inline': true }],
+            ...parserConfig,
+          }),
+        ]);
 
       const invalid = [
         test(withoutAutofixOutput({
@@ -766,7 +777,7 @@ context('TypeScript', function () {
         }),
       ]);
 
-      ruleTester.run('no-duplicates', rule, {
+      ruleTester.run(`no-duplicates${parser}`, rule, {
         valid,
         invalid,
       });

@@ -259,33 +259,41 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
-function shouldSkipDuplicateCheckForInlineTypes(nodes) {
+function shouldSkipDuplicateCheckForInlineTypes(nodes, preferInline = false) {
   const importTypes = {
     hasType: false,
     hasSideEffect: false,
     hasDefault: false,
-    hasTypeSpecifier: false,
+    hasNamespaceTypeImport: false,
+    hasTypeImportSpecifier: false,
     hasOther: false,
   };
 
   for (const node of nodes) {
     if (node.importKind === 'type') {
       importTypes.hasType = true;
+      if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportNamespaceSpecifier') {
+        importTypes.hasNamespaceTypeImport = true;
+      }
     } else if (node.specifiers.length === 0) {
       importTypes.hasSideEffect = true;
     } else if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
       importTypes.hasDefault = true;
     } else if (node.specifiers.some((spec) => spec.importKind === 'type')) {
-      importTypes.hasTypeSpecifier = true;
+      importTypes.hasTypeImportSpecifier = true;
     } else {
       importTypes.hasOther = true;
       break;
     }
   }
 
+  if (!preferInline && importTypes.hasNamespaceTypeImport && importTypes.hasTypeImportSpecifier) {
+    return true;
+  }
+
   return !importTypes.hasOther
     && importTypes.hasType
-    && !importTypes.hasTypeSpecifier
+    && !importTypes.hasTypeImportSpecifier
     && (importTypes.hasSideEffect || importTypes.hasDefault);
 }
 
@@ -295,7 +303,7 @@ function checkImports(imported, context) {
 
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
-      if (preferInline && shouldSkipDuplicateCheckForInlineTypes(nodes)) {
+      if (shouldSkipDuplicateCheckForInlineTypes(nodes, preferInline)) {
         continue;
       }
 
