@@ -259,40 +259,44 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
+function shouldSkipDuplicateCheckForInlineTypes(nodes) {
+  const importTypes = {
+    hasType: false,
+    hasSideEffect: false,
+    hasDefault: false,
+    hasTypeSpecifier: false,
+    hasOther: false,
+  };
+
+  for (const node of nodes) {
+    if (node.importKind === 'type') {
+      importTypes.hasType = true;
+    } else if (node.specifiers.length === 0) {
+      importTypes.hasSideEffect = true;
+    } else if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
+      importTypes.hasDefault = true;
+    } else if (node.specifiers.some((spec) => spec.importKind === 'type')) {
+      importTypes.hasTypeSpecifier = true;
+    } else {
+      importTypes.hasOther = true;
+      break;
+    }
+  }
+
+  return !importTypes.hasOther
+    && importTypes.hasType
+    && !importTypes.hasTypeSpecifier
+    && (importTypes.hasSideEffect || importTypes.hasDefault);
+}
+
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
   const preferInline = context.options[0] && context.options[0]['prefer-inline'];
 
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
-      if (preferInline) {
-        let hasType = false;
-        let hasSideEffect = false;
-        let hasOther = false;
-        let hasTypeSpecifier = false;
-        let hasDefault = false;
-        for (let i = 0; !hasOther && i < nodes.length; i += 1) {
-          const node = nodes[i];
-          if (node.importKind === 'type') {
-            hasType = true;
-          } else if (node.specifiers.length === 0) {
-            hasSideEffect = true;
-          } else if (
-            node.specifiers.length === 1
-            && node.specifiers[0].type === 'ImportDefaultSpecifier'
-
-          ) {
-            hasDefault = true;
-          } else if (node.specifiers.some((spec) => spec.importKind === 'type')) {
-            hasTypeSpecifier = true;
-          } else {
-            hasOther = true;
-          }
-        }
-
-        if (!hasOther && hasType && !hasTypeSpecifier && (hasSideEffect || hasDefault)) {
-          continue;
-        }
+      if (preferInline && shouldSkipDuplicateCheckForInlineTypes(nodes)) {
+        continue;
       }
 
       const message = `'${module}' imported multiple times.`;
