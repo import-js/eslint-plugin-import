@@ -269,6 +269,7 @@ function checkImports(imported, context) {
         let hasType = false;
         let hasSideEffect = false;
         let hasOther = false;
+        let hasTypeSpecifier = false;
         let hasDefault = false;
         for (let i = 0; !hasOther && i < nodes.length; i += 1) {
           const node = nodes[i];
@@ -278,18 +279,18 @@ function checkImports(imported, context) {
             hasSideEffect = true;
           } else if (
             node.specifiers.length === 1
-            && (
-              node.specifiers[0].type === 'ImportDefaultSpecifier'
-              || node.specifiers.some((spec) => spec.importKind === 'type')
-            )
+            && node.specifiers[0].type === 'ImportDefaultSpecifier'
+
           ) {
             hasDefault = true;
+          } else if (node.specifiers.some((spec) => spec.importKind === 'type')) {
+            hasTypeSpecifier = true;
           } else {
             hasOther = true;
           }
         }
 
-        if (!hasOther && hasType && (hasSideEffect || hasDefault)) {
+        if (!hasOther && hasType && !hasTypeSpecifier && (hasSideEffect || hasDefault)) {
           continue;
         }
       }

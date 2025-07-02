@@ -568,14 +568,6 @@ context('TypeScript', function () {
           options: [{ 'prefer-inline': true }],
           ...parserConfig,
         }),
-        test({
-          code: `
-            import type B from 'a';
-            import { type A } from 'a';
-          `,
-          options: [{ 'prefer-inline': true }],
-          ...parserConfig,
-        }),
       ]);
 
       const invalid = [
