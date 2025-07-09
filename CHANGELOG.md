@@ -7,7 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
-- add `exclude` option to `import/no-extraneous-dependencies` to allow excluding dependencies from rule. ([#2317], thanks [@sf0rman])
+- add `exclude` option to `import/no-extraneous-dependencies` to allow excluding dependencies from rule. ([#3198], thanks [@sf0rman])
 
 ## [2.32.0] - 2025-06-20
 
