@@ -20,6 +20,8 @@ Type imports are ignored by default.
 
 `bundledDependencies`: If set to `false`, then the rule will show an error when `bundledDependencies` are imported. Defaults to `true`.
 
+`exclude`: If set, then the rule will exclude errors for the matched patterns. Defaults to `undefined`.
+
 You can set the options like this:
 
 ```js
@@ -57,6 +59,12 @@ folder layouts:
 "import/no-extraneous-dependencies": ["error", {"packageDir": ['./some-dir/', './root-pkg']}]
 ```
 
+You can also exclude errors for specific import paths to support packages that provide its components as nested dependencies.
+
+```js
+"import/no-extraneous-dependencies": ["error", {"exclude": ['@scope/package']}]
+```
+
 ## Rule Details
 
 Given the following `package.json`:
@@ -69,7 +77,8 @@ Given the following `package.json`:
     "builtin-modules": "^1.1.1",
     "lodash.cond": "^4.2.0",
     "lodash.find": "^4.2.0",
-    "pkg-up": "^1.0.0"
+    "pkg-up": "^1.0.0",
+    "radix-ui": "^1.4.2",
   },
   "devDependencies": {
     "ava": "^0.13.0",
@@ -132,6 +141,10 @@ import type { MyType } from 'foo';
 
 /* eslint import/no-extraneous-dependencies: ["error", {"peerDependencies": true}] */
 import react from 'react';
+
+/* eslint import/no-extraneous-dependencies: ["error", {"exclude": ['@radix-ui/react-*']}] */
+import { Alert } from "@radix-ui/react-alert-dialog";
+import { Button } from "@radix-ui/react-button";
 ```
 
 ## When Not To Use It

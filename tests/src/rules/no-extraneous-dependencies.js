@@ -188,6 +188,37 @@ ruleTester.run('no-extraneous-dependencies', rule, {
         },
       },
     }),
+
+    test({
+      code: `import "excluded-package";`,
+      options: [{ exclude: 'excluded-package' }],
+    }),
+
+    test({
+      code: `
+      import "excluded-package";
+      import x from "another-package";
+      `,
+      options: [{ exclude: ['excluded-package', 'another-package'] }],
+    }),
+
+    test({
+      code: `import "@scope/excluded-package";`,
+      options: [{ exclude: '@scope/excluded-*' }],
+    }),
+
+    test({
+      code: `import { item } from "@scope/excluded-package";`,
+      options: [{ exclude: '@scope/excluded-*' }],
+    }),
+
+    test({
+      code: `
+      import { item } from "@scope/some-package";
+      import { a, b } from "@scope/another-package"
+      `,
+      options: [{  exclude: '@scope/*' }],
+    }),
   ],
   invalid: [
     test({
