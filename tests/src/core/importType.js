@@ -370,7 +370,7 @@ describe('isAbsolute', () => {
     expect(() => isAbsolute(false)).not.to.throw();
     expect(() => isAbsolute(0)).not.to.throw();
     expect(() => isAbsolute(NaN)).not.to.throw();
-    });
+  });
 
   it('should not use dynamic regex patterns that could cause ReDoS vulnerabilities', function () {
     // Test that dangerous patterns are blocked by isDangerousPattern
@@ -385,8 +385,8 @@ describe('isAbsolute', () => {
       'a*',          // Too short
       'ab*',         // Too short
     ];
-    
-    dangerousPatterns.forEach(pattern => {
+
+    dangerousPatterns.forEach((pattern) => {
       const context = testContext({ 'import/core-modules': [pattern] });
       // These should all be blocked and not match anything
       expect(isBuiltIn('test-module', context.settings, null)).to.equal(false);
@@ -397,7 +397,6 @@ describe('isAbsolute', () => {
   it('should use safe glob matching instead of regex construction', function () {
     // Verify no dynamic regex patterns like [\\s\\S]*? are created
     const context = testContext({ 'import/core-modules': ['@my-monorepo/*'] });
-    
     // Valid patterns should work safely without regex construction
     expect(isBuiltIn('@my-monorepo/package-a', context.settings, null)).to.equal(true);
     expect(isBuiltIn('@my-monorepo/package-b', context.settings, null)).to.equal(true);
