@@ -139,6 +139,50 @@ describe('importType(name)', function () {
     expect(importType('@org/foobar/some/path/to/resource.json', scopedContext)).to.equal('builtin');
   });
 
+  it("should return 'builtin' for wildcard patterns in core modules", function () {
+    // Test basic wildcard patterns
+    const wildcardContext = testContext({ 'import/core-modules': ['@my-monorepo/*'] });
+    expect(importType('@my-monorepo/package-a', wildcardContext)).to.equal('builtin');
+    expect(importType('@my-monorepo/package-b', wildcardContext)).to.equal('builtin');
+    expect(importType('@my-monorepo/some-long-package-name', wildcardContext)).to.equal('builtin');
+
+    // Test that non-matching patterns return external
+    expect(importType('@other-org/package', wildcardContext)).to.equal('external');
+    expect(importType('regular-package', wildcardContext)).to.equal('external');
+    expect(importType('@my-monorepo-but-not-scoped/package', wildcardContext)).to.equal('external');
+  });
+
+  it("should return 'builtin' for wildcard patterns with multiple wildcards", function () {
+    const multiWildcardContext = testContext({ 'import/core-modules': ['@my-*/*'] });
+    expect(importType('@my-org/package', multiWildcardContext)).to.equal('builtin');
+    expect(importType('@my-company/package', multiWildcardContext)).to.equal('builtin');
+    expect(importType('@my-test/package', multiWildcardContext)).to.equal('builtin');
+    
+    // Should not match different patterns
+    expect(importType('@other-org/package', multiWildcardContext)).to.equal('external');
+    expect(importType('my-org/package', multiWildcardContext)).to.equal('external');
+  });
+
+  it("should return 'builtin' for resources inside wildcard core modules", function () {
+    const wildcardContext = testContext({ 'import/core-modules': ['@my-monorepo/*'] });
+    expect(importType('@my-monorepo/package-a/some/path/to/resource.json', wildcardContext)).to.equal('builtin');
+    expect(importType('@my-monorepo/package-b/nested/module', wildcardContext)).to.equal('builtin');
+  });
+
+  it("should support mixing exact matches and wildcards in core modules", function () {
+    const mixedContext = testContext({ 'import/core-modules': ['electron', '@my-monorepo/*', '@specific/package'] });
+    
+    // Exact matches should work
+    expect(importType('electron', mixedContext)).to.equal('builtin');
+    expect(importType('@specific/package', mixedContext)).to.equal('builtin');
+    
+    // Wildcard matches should work
+    expect(importType('@my-monorepo/any-package', mixedContext)).to.equal('builtin');
+    
+    // Non-matches should be external
+    expect(importType('@other/package', mixedContext)).to.equal('external');
+  });
+
   it("should return 'external' for module from 'node_modules' with default config", function () {
     expect(importType('resolve', context)).to.equal('external');
   });

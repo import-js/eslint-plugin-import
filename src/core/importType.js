@@ -23,6 +23,13 @@ function isInternalRegexMatch(name, settings) {
   return internalScope && new RegExp(internalScope).test(name);
 }
 
+function matchesCoreModulePattern(name, pattern) {
+  const regexPattern = pattern
+    .replace(/[.+^${}()|[\]\\]/g, '\\$&')
+    .replace(/\*/g, '.*');
+  return new RegExp(`^${regexPattern}$`).test(name);
+}
+
 export function isAbsolute(name) {
   return typeof name === 'string' && nodeIsAbsolute(name);
 }
@@ -32,7 +39,9 @@ export function isBuiltIn(name, settings, path) {
   if (path || !name) { return false; }
   const base = baseModule(name);
   const extras = settings && settings['import/core-modules'] || [];
-  return isCoreModule(base) || extras.indexOf(base) > -1;
+  return isCoreModule(base) 
+    || extras.indexOf(base) > -1
+    || extras.some(pattern => pattern.includes('*') && matchesCoreModulePattern(base, pattern));
 }
 
 const moduleRegExp = /^\w/;
