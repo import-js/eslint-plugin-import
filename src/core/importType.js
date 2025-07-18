@@ -24,6 +24,11 @@ function isInternalRegexMatch(name, settings) {
 }
 
 function matchesCoreModulePattern(name, pattern) {
+  // Prevent dangerous bare wildcard patterns
+  if (pattern === '*') {
+    return false;
+  }
+
   const regexPattern = pattern
     .replace(/[.+^${}()|[\]\\]/g, '\\$&')
     .replace(/\*/g, '.*');

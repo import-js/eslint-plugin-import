@@ -183,6 +183,21 @@ describe('importType(name)', function () {
     expect(importType('@other/package', mixedContext)).to.equal('external');
   });
 
+  it('should handle dangerous bare wildcard patterns safely', function () {
+    const bareWildcardContext = testContext({ 'import/core-modules': ['*'] });
+
+    // A bare wildcard should NOT match everything - this would be dangerous
+    expect(importType('react', bareWildcardContext)).to.equal('external');
+    expect(importType('lodash', bareWildcardContext)).to.equal('external');
+    expect(importType('@babel/core', bareWildcardContext)).to.equal('external');
+    expect(importType('any-random-package', bareWildcardContext)).to.equal('external');
+
+    // However, valid wildcard patterns should still work
+    const validWildcardContext = testContext({ 'import/core-modules': ['@my-org/*'] });
+    expect(importType('@my-org/package', validWildcardContext)).to.equal('builtin');
+    expect(importType('react', validWildcardContext)).to.equal('external');
+  });
+
   it("should return 'external' for module from 'node_modules' with default config", function () {
     expect(importType('resolve', context)).to.equal('external');
   });
