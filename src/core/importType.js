@@ -1,5 +1,6 @@
 import { isAbsolute as nodeIsAbsolute, relative, resolve as nodeResolve } from 'path';
 import isCoreModule from 'is-core-module';
+import minimatch from 'minimatch';
 
 import resolve from 'eslint-module-utils/resolve';
 import { getContextPackagePath } from './packagePath';
@@ -36,10 +37,18 @@ function isDangerousPattern(pattern) {
   if (pattern.length <= 2 && pattern.includes('*')) { return true; }
 
   // Block patterns with multiple wildcards that could be too broad
-  const wildcardCount = (pattern.match(/\*/g) || []).length;
+  const wildcardCount = pattern.split('*').length - 1;
   if (wildcardCount > 1) {
     // Allow valid scoped patterns like @namespace/* or @my-*/*, but block overly broad ones
-    if (!pattern.match(/^@[^/]+\/\*$/)) { return true; }
+    const validScopedPatterns = [
+      '@*/*',           // @namespace/package
+      '@*-*/*',         // @my-namespace/package
+      '@*/package-*',   // @namespace/package-name
+    ];
+
+    if (!validScopedPatterns.some((validPattern) => minimatch(pattern, validPattern))) {
+      return true;
+    }
   }
 
   return false;
@@ -51,10 +60,7 @@ function matchesCoreModulePattern(name, pattern) {
     return false;
   }
 
-  const regexPattern = pattern
-    .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-    .replace(/\*/g, '.*');
-  return new RegExp(`^${regexPattern}$`).test(name);
+  return minimatch(name, pattern);
 }
 
 export function isAbsolute(name) {
