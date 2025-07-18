@@ -39,9 +39,9 @@ export function isBuiltIn(name, settings, path) {
   if (path || !name) { return false; }
   const base = baseModule(name);
   const extras = settings && settings['import/core-modules'] || [];
-  return isCoreModule(base) 
+  return isCoreModule(base)
     || extras.indexOf(base) > -1
-    || extras.some(pattern => pattern.includes('*') && matchesCoreModulePattern(base, pattern));
+    || extras.some((pattern) => pattern.includes('*') && matchesCoreModulePattern(base, pattern));
 }
 
 const moduleRegExp = /^\w/;

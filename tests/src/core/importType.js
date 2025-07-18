@@ -157,7 +157,7 @@ describe('importType(name)', function () {
     expect(importType('@my-org/package', multiWildcardContext)).to.equal('builtin');
     expect(importType('@my-company/package', multiWildcardContext)).to.equal('builtin');
     expect(importType('@my-test/package', multiWildcardContext)).to.equal('builtin');
-    
+
     // Should not match different patterns
     expect(importType('@other-org/package', multiWildcardContext)).to.equal('external');
     expect(importType('my-org/package', multiWildcardContext)).to.equal('external');
@@ -169,16 +169,16 @@ describe('importType(name)', function () {
     expect(importType('@my-monorepo/package-b/nested/module', wildcardContext)).to.equal('builtin');
   });
 
-  it("should support mixing exact matches and wildcards in core modules", function () {
+  it('should support mixing exact matches and wildcards in core modules', function () {
     const mixedContext = testContext({ 'import/core-modules': ['electron', '@my-monorepo/*', '@specific/package'] });
-    
+
     // Exact matches should work
     expect(importType('electron', mixedContext)).to.equal('builtin');
     expect(importType('@specific/package', mixedContext)).to.equal('builtin');
-    
+
     // Wildcard matches should work
     expect(importType('@my-monorepo/any-package', mixedContext)).to.equal('builtin');
-    
+
     // Non-matches should be external
     expect(importType('@other/package', mixedContext)).to.equal('external');
   });
