@@ -196,6 +196,7 @@ describe('importType(name)', function () {
       '*a',         // Too short and broad
       '*foo*',      // Multiple wildcards (too broad)
       'foo*bar*',   // Multiple wildcards (too broad)
+      '*/*/*',      // Triple wildcards
     ];
 
     dangerousPatterns.forEach((pattern) => {

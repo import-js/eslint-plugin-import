@@ -38,8 +38,8 @@ function isDangerousPattern(pattern) {
   // Block patterns with multiple wildcards that could be too broad
   const wildcardCount = (pattern.match(/\*/g) || []).length;
   if (wildcardCount > 1) {
-    // Allow @namespace/* patterns but block things like */*/* or *abc*
-    if (!pattern.match(/^@[^*]+\/\*$/)) { return true; }
+    // Allow valid scoped patterns like @namespace/* or @my-*/*, but block overly broad ones
+    if (!pattern.match(/^@[^/]+\/\*$/)) { return true; }
   }
 
   return false;
