@@ -183,19 +183,47 @@ describe('importType(name)', function () {
     expect(importType('@other/package', mixedContext)).to.equal('external');
   });
 
-  it('should handle dangerous bare wildcard patterns safely', function () {
-    const bareWildcardContext = testContext({ 'import/core-modules': ['*'] });
+  it('should handle dangerous wildcard patterns safely', function () {
+    // Test various dangerous patterns that should be blocked
+    const dangerousPatterns = [
+      '*',          // Bare wildcard
+      '**',         // Double wildcard
+      '*/*',        // Any scoped package
+      '.*',         // Regex wildcard
+      '.*foo',      // Regex prefix
+      'foo.*',      // Regex suffix
+      'a*',         // Too short and broad
+      '*a',         // Too short and broad
+      '*foo*',      // Multiple wildcards (too broad)
+      'foo*bar*',   // Multiple wildcards (too broad)
+    ];
 
-    // A bare wildcard should NOT match everything - this would be dangerous
-    expect(importType('react', bareWildcardContext)).to.equal('external');
-    expect(importType('lodash', bareWildcardContext)).to.equal('external');
-    expect(importType('@babel/core', bareWildcardContext)).to.equal('external');
-    expect(importType('any-random-package', bareWildcardContext)).to.equal('external');
+    dangerousPatterns.forEach((pattern) => {
+      const context = testContext({ 'import/core-modules': [pattern] });
+      expect(importType('react', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
+      expect(importType('lodash', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
+      expect(importType('@babel/core', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
+    });
 
-    // However, valid wildcard patterns should still work
-    const validWildcardContext = testContext({ 'import/core-modules': ['@my-org/*'] });
-    expect(importType('@my-org/package', validWildcardContext)).to.equal('builtin');
-    expect(importType('react', validWildcardContext)).to.equal('external');
+    // Test that valid patterns still work
+    const validPatterns = [
+      '@my-org/*',           // Valid scoped wildcard
+      'my-prefix-*',         // Valid prefix wildcard
+      '@namespace/prefix-*', // Valid scoped prefix wildcard
+      'electron',            // Exact match (no wildcard)
+    ];
+
+    validPatterns.forEach((pattern) => {
+      const context = testContext({ 'import/core-modules': [pattern] });
+      // Should not break the system - external packages should still be external
+      expect(importType('totally-different-package', context)).to.equal('external', `Pattern "${pattern}" should not break normal operation`);
+    });
+
+    // Test specific valid matches
+    const validContext = testContext({ 'import/core-modules': ['@my-org/*', 'my-prefix-*'] });
+    expect(importType('@my-org/package', validContext)).to.equal('builtin');
+    expect(importType('my-prefix-tool', validContext)).to.equal('builtin');
+    expect(importType('react', validContext)).to.equal('external');
   });
 
   it("should return 'external' for module from 'node_modules' with default config", function () {

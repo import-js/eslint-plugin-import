@@ -23,9 +23,31 @@ function isInternalRegexMatch(name, settings) {
   return internalScope && new RegExp(internalScope).test(name);
 }
 
+function isDangerousPattern(pattern) {
+  // Block patterns that would match too broadly
+  if (pattern === '*') { return true; }           // Matches everything
+  if (pattern === '**') { return true; }          // Double wildcard
+  if (pattern === '*/*') { return true; }         // Matches any scoped package
+  if (pattern === '.*') { return true; }          // Regex-style wildcard
+  if (pattern.startsWith('.*')) { return true; }  // Regex wildcards
+  if (pattern.endsWith('.*')) { return true; }    // Regex wildcards
+
+  // Block patterns that are too short and broad
+  if (pattern.length <= 2 && pattern.includes('*')) { return true; }
+
+  // Block patterns with multiple wildcards that could be too broad
+  const wildcardCount = (pattern.match(/\*/g) || []).length;
+  if (wildcardCount > 1) {
+    // Allow @namespace/* patterns but block things like */*/* or *abc*
+    if (!pattern.match(/^@[^*]+\/\*$/)) { return true; }
+  }
+
+  return false;
+}
+
 function matchesCoreModulePattern(name, pattern) {
-  // Prevent dangerous bare wildcard patterns
-  if (pattern === '*') {
+  // Prevent dangerous patterns that could match too broadly
+  if (isDangerousPattern(pattern)) {
     return false;
   }
 
