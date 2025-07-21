@@ -24,44 +24,6 @@ function isInternalRegexMatch(name, settings) {
   return internalScope && new RegExp(internalScope).test(name);
 }
 
-function isDangerousPattern(pattern) {
-  // Block patterns that would match too broadly
-  if (pattern === '*') { return true; }           // Matches everything
-  if (pattern === '**') { return true; }          // Double wildcard
-  if (pattern === '*/*') { return true; }         // Matches any scoped package
-  if (pattern === '.*') { return true; }          // Regex-style wildcard
-  if (pattern.startsWith('.*')) { return true; }  // Regex wildcards
-  if (pattern.endsWith('.*')) { return true; }    // Regex wildcards
-
-  // Block patterns that are too short and broad
-  if (pattern.length <= 2 && pattern.includes('*')) { return true; }
-
-  // Block patterns with multiple wildcards that could be too broad
-  const wildcardCount = pattern.split('*').length - 1;
-  if (wildcardCount > 1) {
-    // Allow valid scoped patterns like @namespace/* or @my-*/*, but block overly broad ones
-    const validScopedPatterns = [
-      '@*/*',           // @namespace/package
-      '@*-*/*',         // @my-namespace/package
-      '@*/package-*',   // @namespace/package-name
-    ];
-
-    if (!validScopedPatterns.some((validPattern) => minimatch(pattern, validPattern))) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function matchesCoreModulePattern(name, pattern) {
-  // Prevent dangerous patterns that could match too broadly
-  if (isDangerousPattern(pattern)) {
-    return false;
-  }
-
-  return minimatch(name, pattern);
-}
 
 export function isAbsolute(name) {
   return typeof name === 'string' && nodeIsAbsolute(name);
@@ -74,7 +36,7 @@ export function isBuiltIn(name, settings, path) {
   const extras = settings && settings['import/core-modules'] || [];
   return isCoreModule(base)
     || extras.indexOf(base) > -1
-    || extras.some((pattern) => pattern.includes('*') && matchesCoreModulePattern(base, pattern));
+    || extras.some((pattern) => pattern.includes('*') && minimatch(base, pattern));
 }
 
 const moduleRegExp = /^\w/;
