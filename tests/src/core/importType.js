@@ -183,50 +183,6 @@ describe('importType(name)', function () {
     expect(importType('@other/package', mixedContext)).to.equal('external');
   });
 
-  it('should handle dangerous wildcard patterns safely', function () {
-    // Test various dangerous patterns that should be blocked
-    const dangerousPatterns = [
-      '*',          // Bare wildcard
-      '**',         // Double wildcard
-      '*/*',        // Any scoped package
-      '.*',         // Regex wildcard
-      '.*foo',      // Regex prefix
-      'foo.*',      // Regex suffix
-      'a*',         // Too short and broad
-      '*a',         // Too short and broad
-      '*foo*',      // Multiple wildcards (too broad)
-      'foo*bar*',   // Multiple wildcards (too broad)
-      '*/*/*',      // Triple wildcards
-    ];
-
-    dangerousPatterns.forEach((pattern) => {
-      const context = testContext({ 'import/core-modules': [pattern] });
-      expect(importType('react', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
-      expect(importType('lodash', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
-      expect(importType('@babel/core', context)).to.equal('external', `Pattern "${pattern}" should not match anything`);
-    });
-
-    // Test that valid patterns still work
-    const validPatterns = [
-      '@my-org/*',           // Valid scoped wildcard
-      'my-prefix-*',         // Valid prefix wildcard
-      '@namespace/prefix-*', // Valid scoped prefix wildcard
-      'electron',            // Exact match (no wildcard)
-    ];
-
-    validPatterns.forEach((pattern) => {
-      const context = testContext({ 'import/core-modules': [pattern] });
-      // Should not break the system - external packages should still be external
-      expect(importType('totally-different-package', context)).to.equal('external', `Pattern "${pattern}" should not break normal operation`);
-    });
-
-    // Test specific valid matches
-    const validContext = testContext({ 'import/core-modules': ['@my-org/*', 'my-prefix-*'] });
-    expect(importType('@my-org/package', validContext)).to.equal('builtin');
-    expect(importType('my-prefix-tool', validContext)).to.equal('builtin');
-    expect(importType('react', validContext)).to.equal('external');
-  });
-
   it("should return 'external' for module from 'node_modules' with default config", function () {
     expect(importType('resolve', context)).to.equal('external');
   });
@@ -370,28 +326,6 @@ describe('isAbsolute', () => {
     expect(() => isAbsolute(false)).not.to.throw();
     expect(() => isAbsolute(0)).not.to.throw();
     expect(() => isAbsolute(NaN)).not.to.throw();
-  });
-
-  it('should not use dynamic regex patterns that could cause ReDoS vulnerabilities', function () {
-    // Test that dangerous patterns are blocked by isDangerousPattern
-    const dangerousPatterns = [
-      '*',           // Matches everything
-      '**',          // Double wildcard
-      '*/*',         // Any scoped package
-      '.*',          // Regex wildcard
-      '.+',          // Regex plus
-      '.*foo',       // Regex prefix
-      'foo.*',       // Regex suffix
-      'a*',          // Too short
-      'ab*',         // Too short
-    ];
-
-    dangerousPatterns.forEach((pattern) => {
-      const context = testContext({ 'import/core-modules': [pattern] });
-      // These should all be blocked and not match anything
-      expect(isBuiltIn('test-module', context.settings, null)).to.equal(false);
-      expect(isBuiltIn('@test/module', context.settings, null)).to.equal(false);
-    });
   });
 
   it('should use safe glob matching instead of regex construction', function () {

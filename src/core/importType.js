@@ -24,7 +24,6 @@ function isInternalRegexMatch(name, settings) {
   return internalScope && new RegExp(internalScope).test(name);
 }
 
-
 export function isAbsolute(name) {
   return typeof name === 'string' && nodeIsAbsolute(name);
 }
