@@ -1,6 +1,6 @@
 # import/no-relative-packages
 
-🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) using [`--fix-type suggestion`](https://eslint.org/docs/latest/use/command-line-interface#--fix-type).
 
 <!-- end auto-generated rule header -->
 
