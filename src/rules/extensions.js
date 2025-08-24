@@ -183,6 +183,33 @@ module.exports = {
       }
     }
 
+    function replaceImportPath(source, importPath) {
+      return source.replace(
+        /^(['"])(.+)\1$/,
+        (_, quote) => `${quote}${importPath}${quote}`,
+      )
+    }
+
+    const parsePath = (path) => {
+      const hashIndex = path.indexOf('#')
+      const queryIndex = path.indexOf('?')
+      const hasHash = hashIndex !== -1
+      const hash = hasHash ? path.slice(hashIndex) : ''
+      const hasQuery = queryIndex !== -1 && (!hasHash || queryIndex < hashIndex)
+      const query = hasQuery
+        ? path.slice(queryIndex, hasHash ? hashIndex : undefined)
+        : ''
+      const pathname = hasQuery
+        ? path.slice(0, queryIndex)
+        : hasHash
+          ? path.slice(0, hashIndex)
+          : path
+      return { pathname, query, hash }
+    }
+
+    const stringifyPath = ({ pathname, query, hash }) =>
+      pathname + query + hash
+
     function checkFileExtension(source, node) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) { return; }
@@ -202,7 +229,11 @@ module.exports = {
       // don't enforce anything on builtins
       if (!overrideAction && isBuiltIn(importPathWithQueryString, context.settings)) { return; }
 
-      const importPath = importPathWithQueryString.replace(/\?(.*)$/, '');
+      const {
+        pathname: importPath,
+        query,
+        hash,
+      } = parsePath(importPathWithQueryString)
 
       // don't enforce in root external packages as they may have names with `.js`.
       // Like `import Decimal from decimal.js`)
@@ -227,6 +258,19 @@ module.exports = {
         const extensionRequired = isUseOfExtensionRequired(extension, !overrideAction && isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {
+          const fixedImportPath = stringifyPath({
+              pathname: `${
+                /([\\/]|[\\/]?\.?\.)$/.test(importPath)
+                  ? `${
+                      importPath.endsWith('/')
+                        ? importPath.slice(0, -1)
+                        : importPath
+                    }/index.${extension}`
+                  : `${importPath}.${extension}`
+              }`,
+              query,
+              hash,
+            })
           context.report({
             node: source,
             message:
@@ -235,7 +279,7 @@ module.exports = {
               fix(fixer) {
                 return fixer.replaceText(
                   source,
-                  JSON.stringify(`${importPathWithQueryString}.${extension}`),
+                  replaceImportPath(source.raw, fixedImportPath),
                 );
               },
             } : {},
@@ -251,9 +295,14 @@ module.exports = {
                 fix(fixer) {
                   return fixer.replaceText(
                     source,
-                    JSON.stringify(
-                      importPath.slice(0, -(extension.length + 1)),
-                    ),
+                    replaceImportPath(
+                            source.raw,
+                            stringifyPath({
+                              pathname: importPath.slice(0, -(extension.length + 1)),
+                              query,
+                              hash,
+                            }),
+                          ),
                   );
                 },
               } : {},
