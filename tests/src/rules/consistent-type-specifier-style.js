@@ -54,6 +54,70 @@ const COMMON_TESTS = {
     }),
 
     //
+    // prefer-top-level-if-only-type-imports
+    //
+    test({
+      code: "import Foo from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import type Foo from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import { Foo } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import { Foo as Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import * as Foo from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import {} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import type {} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import type { Foo } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import type { Foo as Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import type { Foo, Bar, Baz, Bam } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import { Foo, type Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import { type Foo, Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import Foo, { type Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+    test({
+      code: "import Foo, { type Bar, Baz } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    }),
+
+    //
     // prefer-inline
     //
     test({
@@ -197,6 +261,37 @@ import {
     },
 
     //
+    // prefer-top-level-if-only-type-imports
+    //
+    {
+      code: "import { type Foo } from 'Foo';",
+      output: "import type {Foo} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level type-only import instead of inline type specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+    {
+      code: "import { type Foo as Bar } from 'Foo';",
+      output: "import type {Foo as Bar} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level type-only import instead of inline type specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+    {
+      code: "import { type Foo, type Bar } from 'Foo';",
+      output: "import type {Foo, Bar} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level type-only import instead of inline type specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+
+    //
     // prefer-inline
     //
     {
@@ -242,6 +337,26 @@ const FLOW_ONLY = {
     {
       code: "import typeof { Foo, Bar, Baz, Bam } from 'Foo';",
       options: ['prefer-top-level'],
+    },
+
+    //
+    // prefer-top-level-if-only-type-imports
+    //
+    {
+      code: "import typeof Foo from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    },
+    {
+      code: "import typeof { Foo, Bar, Baz, Bam } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    },
+    {
+      code: "import { Foo, typeof Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    },
+    {
+      code: "import Foo, { typeof Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
     },
 
     //
@@ -353,6 +468,46 @@ const FLOW_ONLY = {
       errors: [{
         message: 'Prefer using a top-level typeof-only import instead of inline typeof specifiers.',
         type: 'ImportSpecifier',
+      }],
+    },
+
+    //
+    // prefer-top-level-if-only-type-imports
+    //
+    {
+      code: "import { typeof Foo } from 'Foo';",
+      output: "import typeof {Foo} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level typeof-only import instead of inline typeof specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+    {
+      code: "import { typeof Foo as Bar } from 'Foo';",
+      output: "import typeof {Foo as Bar} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level typeof-only import instead of inline typeof specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+    {
+      code: "import { typeof Foo, typeof Bar } from 'Foo';",
+      output: "import typeof {Foo, Bar} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level typeof-only import instead of inline typeof specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
+      }],
+    },
+    {
+      code: "import { type Foo, typeof Bar } from 'Foo';",
+      output: "import type {Foo} from 'Foo';\nimport typeof {Bar} from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level type/typeof-only import instead of inline type/typeof specifiers when there are only type imports.',
+        type: 'ImportDeclaration',
       }],
     },
 

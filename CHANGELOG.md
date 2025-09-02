@@ -8,6 +8,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Added
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
+- [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1202,6 +1203,7 @@ for info on changes for earlier releases.
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3235]: https://github.com/import-js/eslint-plugin-import/issues/3235
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
+[#3210]: https://github.com/import-js/eslint-plugin-import/pull/3210
 [#3208]: https://github.com/import-js/eslint-plugin-import/issues/3208
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
@@ -1831,6 +1833,7 @@ for info on changes for earlier releases.
 [@akwodkiewicz]: https://github.com/akwodkiewicz
 [@aladdin-add]: https://github.com/aladdin-add
 [@albertpastrana]: https://github.com/albertpastrana
+[@aldeed]: https://github.com/aldeed
 [@alex-page]: https://github.com/alex-page
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@amsardesai]: https://github.com/amsardesai
