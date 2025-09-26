@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- ensure plugin exports are equal to the `plugin` object on flat configs ([#3213], thanks [@soren121])
+
 ## [2.32.0] - 2025-06-20
 
 ### Added
@@ -1181,6 +1184,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3213]: https://github.com/import-js/eslint-plugin-import/pull/3213
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
@@ -2042,6 +2046,7 @@ for info on changes for earlier releases.
 [@skyrpex]: https://github.com/skyrpex
 [@snewcomer]: https://github.com/snewcomer
 [@sompylasar]: https://github.com/sompylasar
+[@soren121]: https://github.com/soren121
 [@soryy708]: https://github.com/soryy708
 [@sosukesuzuki]: https://github.com/sosukesuzuki
 [@spalger]: https://github.com/spalger
