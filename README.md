@@ -608,5 +608,5 @@ project folder max depth.
 
 [codecov-image]: https://codecov.io/gh/import-js/eslint-plugin-import/branch/main/graphs/badge.svg
 [codecov-url]: https://app.codecov.io/gh/import-js/eslint-plugin-import/
-[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/import-js/eslint-plugin-import
+[actions-image]: https://img.shields.io/github/check-runs/import-js/eslint-plugin-import/main
 [actions-url]: https://github.com/import-js/eslint-plugin-import
