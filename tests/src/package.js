@@ -20,7 +20,6 @@ describe('package', function () {
   });
 
   it('has every rule', function (done) {
-
     fs.readdir(
       path.join(pkg, 'rules')
       , function (err, files) {
@@ -34,7 +33,7 @@ describe('package', function () {
       });
   });
 
-  it('exports all configs', function (done) {
+  it('exports all legacy configs', function (done) {
     fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
       if (err) { done(err); return; }
       files.filter(isJSFile).forEach((file) => {
@@ -43,6 +42,34 @@ describe('package', function () {
       });
       done();
     });
+  });
+
+  it('exports all flat configs', function (done) {
+    fs.readdir(path.join(process.cwd(), 'config'), function (err, files) {
+      if (err) { done(err); return; }
+      files.filter(isJSFile).forEach((file) => {
+        if (file[0] === '.') { return; }
+
+        const basename = path.basename(file, '.js');
+        // stage-0 is not included in flat configs
+        if (basename === 'stage-0') { return; }
+
+        expect(module.flatConfigs).to.have.property(basename);
+      });
+      done();
+    });
+  });
+
+  it('exports plugin meta object', function () {
+    expect(module.meta).to.be.an('object').that.has.all.keys('name', 'version');
+    expect(module.meta.name).to.equal('eslint-plugin-import');
+    expect(module.meta.version).to.be.a('string');
+  });
+
+  it('ensures the plugin object in the flat configs is identical to the module', function () {
+    for (const configFile in module.flatConfigs) {
+      expect(module.flatConfigs[configFile].plugins.import).to.equal(module);
+    }
   });
 
   function getRulePath(ruleName) {
