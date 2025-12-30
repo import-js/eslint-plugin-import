@@ -155,6 +155,23 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       code: 'import "@generated/bar/and/sub/path"',
       settings: { 'import/core-modules': ['@generated/bar'] },
     }),
+    // Test wildcard patterns in core-modules
+    test({
+      code: 'import "@my-monorepo/package-a"',
+      settings: { 'import/core-modules': ['@my-monorepo/*'] },
+    }),
+    test({
+      code: 'import "@my-monorepo/package-b/nested/module"',
+      settings: { 'import/core-modules': ['@my-monorepo/*'] },
+    }),
+    test({
+      code: 'import "@my-org/any-package"',
+      settings: { 'import/core-modules': ['@my-*/*'] },
+    }),
+    test({
+      code: 'import "@namespace/any-package"',
+      settings: { 'import/core-modules': ['@namespace/*', 'specific-module'] },
+    }),
     // check if "rxjs" dependency declaration fix the "rxjs/operators subpackage
     test({
       code: 'import "rxjs/operators"',
