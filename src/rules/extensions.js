@@ -46,6 +46,7 @@ function buildProperties(context) {
     defaultConfig: 'never',
     pattern: {},
     ignorePackages: false,
+    fix: false,
   };
 
   context.options.forEach((obj) => {
@@ -70,6 +71,11 @@ function buildProperties(context) {
     // If ignorePackages is provided, transfer it to result
     if (obj.ignorePackages !== undefined) {
       result.ignorePackages = obj.ignorePackages;
+    }
+
+    // If fix is provided, transfer it to result
+    if (obj.fix !== undefined) {
+      result.fix = obj.fix;
     }
 
     if (obj.checkTypeImports !== undefined) {
@@ -97,7 +103,7 @@ module.exports = {
       description: 'Ensure consistent use of file extension within the import path.',
       url: docsUrl('extensions'),
     },
-
+    fixable: 'code',
     schema: {
       anyOf: [
         {
@@ -177,6 +183,33 @@ module.exports = {
       }
     }
 
+    function replaceImportPath(source, importPath) {
+      return source.replace(
+        /^(['"])(.+)\1$/,
+        (_, quote) => `${quote}${importPath}${quote}`,
+      )
+    }
+
+    const parsePath = (path) => {
+      const hashIndex = path.indexOf('#')
+      const queryIndex = path.indexOf('?')
+      const hasHash = hashIndex !== -1
+      const hash = hasHash ? path.slice(hashIndex) : ''
+      const hasQuery = queryIndex !== -1 && (!hasHash || queryIndex < hashIndex)
+      const query = hasQuery
+        ? path.slice(queryIndex, hasHash ? hashIndex : undefined)
+        : ''
+      const pathname = hasQuery
+        ? path.slice(0, queryIndex)
+        : hasHash
+          ? path.slice(0, hashIndex)
+          : path
+      return { pathname, query, hash }
+    }
+
+    const stringifyPath = ({ pathname, query, hash }) =>
+      pathname + query + hash
+
     function checkFileExtension(source, node) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) { return; }
@@ -196,7 +229,11 @@ module.exports = {
       // don't enforce anything on builtins
       if (!overrideAction && isBuiltIn(importPathWithQueryString, context.settings)) { return; }
 
-      const importPath = importPathWithQueryString.replace(/\?(.*)$/, '');
+      const {
+        pathname: importPath,
+        query,
+        hash,
+      } = parsePath(importPathWithQueryString)
 
       // don't enforce in root external packages as they may have names with `.js`.
       // Like `import Decimal from decimal.js`)
@@ -221,10 +258,31 @@ module.exports = {
         const extensionRequired = isUseOfExtensionRequired(extension, !overrideAction && isPackage);
         const extensionForbidden = isUseOfExtensionForbidden(extension);
         if (extensionRequired && !extensionForbidden) {
+          const fixedImportPath = stringifyPath({
+              pathname: `${
+                /([\\/]|[\\/]?\.?\.)$/.test(importPath)
+                  ? `${
+                      importPath.endsWith('/')
+                        ? importPath.slice(0, -1)
+                        : importPath
+                    }/index.${extension}`
+                  : `${importPath}.${extension}`
+              }`,
+              query,
+              hash,
+            })
           context.report({
             node: source,
             message:
               `Missing file extension ${extension ? `"${extension}" ` : ''}for "${importPathWithQueryString}"`,
+            ...props.fix && extension ? {
+              fix(fixer) {
+                return fixer.replaceText(
+                  source,
+                  replaceImportPath(source.raw, fixedImportPath),
+                );
+              },
+            } : {},
           });
         }
       } else if (extension) {
@@ -232,6 +290,22 @@ module.exports = {
           context.report({
             node: source,
             message: `Unexpected use of file extension "${extension}" for "${importPathWithQueryString}"`,
+            ...props.fix
+              ? {
+                fix(fixer) {
+                  return fixer.replaceText(
+                    source,
+                    replaceImportPath(
+                            source.raw,
+                            stringifyPath({
+                              pathname: importPath.slice(0, -(extension.length + 1)),
+                              query,
+                              hash,
+                            }),
+                          ),
+                  );
+                },
+              } : {},
           });
         }
       }
