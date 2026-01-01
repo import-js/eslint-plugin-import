@@ -14,6 +14,7 @@ export default class ExportMap {
      * @type {Map<string, () => ExportMap>}
      */
     this.imports = new Map();
+    this.exports = new Map();
     this.errors = [];
     /**
      * type {'ambiguous' | 'Module' | 'Script'}
