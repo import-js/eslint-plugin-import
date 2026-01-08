@@ -259,10 +259,54 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
+function shouldSkipDuplicateCheckForInlineTypes(nodes, preferInline = false) {
+  const importTypes = {
+    hasType: false,
+    hasSideEffect: false,
+    hasDefault: false,
+    hasNamespaceTypeImport: false,
+    hasTypeImportSpecifier: false,
+    hasOther: false,
+  };
+
+  for (const node of nodes) {
+    if (node.importKind === 'type') {
+      importTypes.hasType = true;
+      if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportNamespaceSpecifier') {
+        importTypes.hasNamespaceTypeImport = true;
+      }
+    } else if (node.specifiers.length === 0) {
+      importTypes.hasSideEffect = true;
+    } else if (node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
+      importTypes.hasDefault = true;
+    } else if (node.specifiers.some((spec) => spec.importKind === 'type')) {
+      importTypes.hasTypeImportSpecifier = true;
+    } else {
+      importTypes.hasOther = true;
+      break;
+    }
+  }
+
+  if (!preferInline && importTypes.hasNamespaceTypeImport && importTypes.hasTypeImportSpecifier) {
+    return true;
+  }
+
+  return !importTypes.hasOther
+    && importTypes.hasType
+    && !importTypes.hasTypeImportSpecifier
+    && (importTypes.hasSideEffect || importTypes.hasDefault);
+}
+
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
+  const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
+      if (shouldSkipDuplicateCheckForInlineTypes(nodes, preferInline)) {
+        continue;
+      }
+
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = getSourceCode(context);
