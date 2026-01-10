@@ -177,6 +177,17 @@ function checkDependencyDeclaration(deps, packageName, declarationStatus) {
   }), newDeclarationStatus);
 }
 
+function isInExcludeList(packageName, exclude) {
+  if (!exclude) {
+    return false;
+  }
+
+  if (Array.isArray(exclude)) {
+    return exclude.some((pattern) => minimatch(packageName, pattern));
+  }
+  return minimatch(packageName, exclude);
+}
+
 function reportIfMissing(context, deps, depsOptions, node, name) {
   // Do not report when importing types unless option is enabled
   if (
@@ -197,6 +208,10 @@ function reportIfMissing(context, deps, depsOptions, node, name) {
     typeOfImport !== 'external'
     && (typeOfImport !== 'internal' || !depsOptions.verifyInternalDeps)
   ) {
+    return;
+  }
+
+  if (isInExcludeList(name, depsOptions.exclude)) {
     return;
   }
 
@@ -277,6 +292,7 @@ module.exports = {
           packageDir: { type: ['string', 'array'] },
           includeInternal: { type: ['boolean'] },
           includeTypes: { type: ['boolean'] },
+          exclude: { type: ['string', 'array'] },
         },
         additionalProperties: false,
       },
@@ -295,6 +311,7 @@ module.exports = {
       allowBundledDeps: testConfig(options.bundledDependencies, filename) !== false,
       verifyInternalDeps: !!options.includeInternal,
       verifyTypeImports: !!options.includeTypes,
+      exclude: options.exclude,
     };
 
     return moduleVisitor((source, node) => {
