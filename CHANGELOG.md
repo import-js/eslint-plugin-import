@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+- [`order`]: add `orderByFullPathString` option
+
 ## [2.32.0] - 2025-06-20
 
 ### Added

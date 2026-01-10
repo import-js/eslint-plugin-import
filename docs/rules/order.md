@@ -367,8 +367,8 @@ import index from './';
 
 ### `alphabetize`
 
-Valid values: `{ order?: "asc" | "desc" | "ignore", orderImportKind?: "asc" | "desc" | "ignore", caseInsensitive?: boolean }` \
-Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false }`
+Valid values: `{ order?: "asc" | "desc" | "ignore", orderImportKind?: "asc" | "desc" | "ignore", caseInsensitive?: boolean, orderByFullPathString?: boolean }` \
+Default: `{ order: "ignore", orderImportKind: "ignore", caseInsensitive: false, orderByFullPathString: false }`
 
 Determine the sort order of imports within each [predefined group][18] or [`PathGroup`][8] alphabetically based on specifier.
 
@@ -385,6 +385,11 @@ Valid properties and their values include:
 
  - **`caseInsensitive`**: use `true` to ignore case and `false` to consider case when sorting
 
+ - **`orderByFullPathString`**: use `true` to sort by the full un-split path string and `false` to split by paths and sort by each one
+   - Enabling this flag may better align with the sort algorithm used by certain IDE's and applications, e.g.
+     - The Organize Imports action in JetBrains IDE's sorts by the full path string
+     - Microsoft's accessibility-insights-web application is [reported](https://github.com/microsoft/accessibility-insights-web/pull/6846) to sort by the full path string as well
+
 #### Example
 
 Given the following settings:
@@ -394,7 +399,8 @@ Given the following settings:
   "import/order": ["error", {
     "alphabetize": {
       "order": "asc",
-      "caseInsensitive": true
+      "caseInsensitive": true,
+      "orderByFullPathString": true,
     }
   }]
 }
@@ -408,6 +414,8 @@ import aTypes from 'prop-types';
 import { compose, apply } from 'xcompose';
 import * as classnames from 'classnames';
 import blist from 'BList';
+import timeUtils1 from '../utils/time'
+import timeUtils2 from '../utils-time'
 ```
 
 While this will pass:
@@ -418,6 +426,11 @@ import * as classnames from 'classnames';
 import aTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { compose, apply } from 'xcompose';
+// Below the '../utils-time' and '../utils/time' path are not split before ordering ("orderByFullPathString": true).
+// Instead, during comparison the "-" in "../utils-time" occurs lexicographically before the
+// second "/" in "../utils/time"
+import timeUtils2 from '../utils-time'
+import timeUtils1 from '../utils/time'
 ```
 
 ### `named`
