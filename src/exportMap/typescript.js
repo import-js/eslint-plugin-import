@@ -7,7 +7,7 @@ const tsconfigCache = new Map();
 
 function readTsConfig(context) {
   const tsconfigInfo = tsConfigLoader({
-    cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+    cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || context.languageOptions && context.languageOptions.parserOptions && context.languageOptions.parserOptions.tsconfigRootDir || process.cwd(),
     getEnv: (key) => process.env[key],
   });
   try {
@@ -31,7 +31,9 @@ function readTsConfig(context) {
 
 export function isEsModuleInterop(context) {
   const cacheKey = hashObject({
-    tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+    tsconfigRootDir: context.parserOptions
+      ? context.parserOptions.tsconfigRootDir
+      : context.languageOptions && context.languageOptions.parserOptions && context.languageOptions.parserOptions.tsconfigRootDir,
   }).digest('hex');
   let tsConfig = tsconfigCache.get(cacheKey);
   if (typeof tsConfig === 'undefined') {

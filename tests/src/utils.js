@@ -9,8 +9,24 @@ import 'babel-eslint';
 export const parsers = {
   ESPREE: require.resolve('espree'),
   TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && semver.satisfies(typescriptPkg.version, '<4') && require.resolve('typescript-eslint-parser'),
-  TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && require.resolve('@typescript-eslint/parser'),
-  BABEL_OLD: require.resolve('babel-eslint'),
+  TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && (() => {
+    try {
+      const parserPkg = require('@typescript-eslint/parser/package.json');
+      // @typescript-eslint/parser v8.56+ supports ESLint v10; older versions do not
+      if (semver.major(eslintPkg.version) >= 10 && !semver.satisfies(parserPkg.version, '>=8.56.0')) {
+        return false;
+      }
+      return require.resolve('@typescript-eslint/parser');
+    } catch (e) {
+      return false;
+    }
+  })(),
+  // babel-eslint does not support ESLint v10 (unmaintained; replaced by @babel/eslint-parser)
+  BABEL_OLD: semver.major(eslintPkg.version) < 10 && require.resolve('babel-eslint'),
+  // TODO: re-enable when @angular-eslint/template-parser supports v10 (https://github.com/angular-eslint/angular-eslint/issues/2896)
+  ANGULAR: semver.major(eslintPkg.version) < 10 && (() => {
+    try { return require.resolve('@angular-eslint/template-parser'); } catch (e) { return false; }
+  })(),
 };
 
 export function tsVersionSatisfies(specifier) {
