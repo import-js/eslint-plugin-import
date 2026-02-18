@@ -19,6 +19,7 @@ try {
 // TODO: figure out why these tests fail in eslint 4 and 5
 const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
 const isESLint9 = semver.satisfies(eslintPkg.version, '>=9');
+const isESLint9Only = semver.satisfies(eslintPkg.version, '>=9 <10');
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);
@@ -1488,7 +1489,7 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
   });
 });
 
-(isESLint9 ? describe : describe.skip)('with eslint 9+', () => {
+(isESLint9Only ? describe : describe.skip)('with eslint 9+', () => {
   it('provides meaningful error when eslintrc is not present', () => {
     const tmp = require('tmp');
 
