@@ -6,7 +6,7 @@ const { getScope } = require('./contextCompat');
 
 /** @type {import('./declaredScope').default} */
 exports.default = function declaredScope(context, name, node) {
-  const references = (node ? getScope(context, node) : context.getScope()).references;
+  const references = getScope(context, node).references;
   const reference = references.find((x) => x.identifier.name === name);
   if (!reference || !reference.resolved) { return undefined; }
   return reference.resolved.scope.type;

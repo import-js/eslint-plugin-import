@@ -20,8 +20,9 @@ export default class StronglyConnectedComponentsBuilder {
   static for(context) {
     const settingsHash = hashObject({
       settings: context.settings,
-      parserOptions: context.parserOptions,
+      parserOptions: context.parserOptions || context.languageOptions && context.languageOptions.parserOptions,
       parserPath: context.parserPath,
+      languageOptions: context.languageOptions,
     }).digest('hex');
     const cacheKey = context.path + settingsHash;
     if (cache.has(cacheKey)) {

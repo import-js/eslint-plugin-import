@@ -64,7 +64,8 @@ describe('CLI regression tests', function () {
     let eslint;
     let cli;
     beforeEach(function () {
-      if (semver.satisfies(eslintPkg.version, '< 6')) {
+      if (semver.satisfies(eslintPkg.version, '< 6') || semver.satisfies(eslintPkg.version, '>= 10')) {
+        // TODO: re-enable when eslint-plugin-json supports v10 (https://github.com/azeemba/eslint-plugin-json/issues/97)
         this.skip();
       } else {
         if (ESLint) {

@@ -57,9 +57,12 @@ export default class ImportExportVisitorBuilder {
       },
       ExportAllDeclaration() {
         const getter = captureDependency(astNode, astNode.exportKind === 'type', this.remotePathResolver, this.exportMap, this.context, this.thunkFor);
-        if (getter) { this.exportMap.dependencies.add(getter); }
         if (astNode.exported) {
+          // `export * as ns from './mod'` — named namespace, not a star-export
           processSpecifier(astNode, astNode.exported, this.exportMap, this.namespace);
+        } else if (getter) {
+          // `export * from './mod'` — star-export flattens into current module
+          this.exportMap.dependencies.add(getter);
         }
       },
       /** capture namespaces in case of later export */
