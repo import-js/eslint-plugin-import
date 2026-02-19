@@ -50,3 +50,9 @@ if [ "${ESLINT_VERSION}" = '8' ]; then
   echo "Build self"
   npm run build
 fi
+
+# ESLint 10 requires newer parsers and @babel/eslint-parser (babel-eslint is incompatible)
+if [[ "$ESLINT_VERSION" -ge "10" ]]; then
+  echo "Installing ESLint 10 parser dependencies..."
+  npm i --no-save @typescript-eslint/parser@8 @babel/core@'^8.0.0-rc.2' @babel/eslint-parser@'^8.0.0-rc.2'
+fi
