@@ -7,7 +7,10 @@ const tsconfigCache = new Map();
 
 function readTsConfig(context) {
   const tsconfigInfo = tsConfigLoader({
-    cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || context.languageOptions && context.languageOptions.parserOptions && context.languageOptions.parserOptions.tsconfigRootDir || process.cwd(),
+    cwd: (context.parserOptions
+      ? context.parserOptions.tsconfigRootDir
+      : context.languageOptions && context.languageOptions.parserOptions && context.languageOptions.parserOptions.tsconfigRootDir
+    ) || process.cwd(),
     getEnv: (key) => process.env[key],
   });
   try {
