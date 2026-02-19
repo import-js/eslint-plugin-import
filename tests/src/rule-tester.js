@@ -65,8 +65,7 @@ class FlatCompatRuleTester {
     if (eslintV10 && converted && typeof converted === 'object' && Array.isArray(converted.errors)) {
       converted.errors = converted.errors.map((error) => {
         if (error && typeof error === 'object') {
-          const { type, ...rest } = error;
-          return rest;
+          return Object.fromEntries(Object.entries(error).filter(([key]) => key !== 'type'));
         }
         return error;
       });

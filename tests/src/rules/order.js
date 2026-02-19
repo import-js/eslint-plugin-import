@@ -5097,7 +5097,7 @@ context('TypeScript', function () {
           }),
           // named import order
           // `import type Default, { Named }` syntax was removed in TypeScript 5.0 / @typescript-eslint/parser v8
-          ...(!typescriptEslintParserSatisfies('< 8') ? [] : [test({
+          ...!typescriptEslintParserSatisfies('< 8') ? [] : [test({
             code: `
               import { type Z, A } from "./Z";
               import type N, { E, D } from "./Z";
@@ -5118,7 +5118,7 @@ context('TypeScript', function () {
               { message: '`D` import should occur before import of `E`' },
               { message: '`G` import should occur before import of `L`' },
             ],
-          })]),
+          })],
           test({
             code: `
               const { B, /* Hello World */ A } = require("./Z");
