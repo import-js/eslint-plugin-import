@@ -1489,7 +1489,9 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
   });
 });
 
-(isESLint9Only ? describe : describe.skip)('with eslint 9+', () => {
+// On v9, FileEnumerator requires an .eslintrc even under flat config; verify the error message.
+// On v10, FileEnumerator is gone and listFilesWithNodeFs doesn't need .eslintrc, so this is moot.
+(isESLint9Only ? describe : describe.skip)('with eslint 9 (FileEnumerator + flat config)', () => {
   it('provides meaningful error when eslintrc is not present', () => {
     const tmp = require('tmp');
 

@@ -195,7 +195,7 @@ function listFilesWithNodeFs(src, extensions) {
   const { resolve, extname } = require('path');
   const isGlob = require('is-glob');
 
-  const extensionSet = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
+  extensions = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
   const results = [];
 
   src.forEach((pattern) => {
@@ -204,7 +204,7 @@ function listFilesWithNodeFs(src, extensions) {
       // Extract the base directory from the glob (everything before the first glob character)
       const base = pattern.replace(/[*?{[].*/g, '').replace(/\/[^/]*$/, '') || '.';
       const resolvedBase = resolve(base);
-      const allFiles = walkDirectory(resolvedBase, extensionSet, []);
+      const allFiles = walkDirectory(resolvedBase, extensions, []);
       allFiles.forEach((file) => {
         if (minimatch(file, resolve(pattern)) || minimatch(file, pattern)) {
           results.push(file);
@@ -215,8 +215,8 @@ function listFilesWithNodeFs(src, extensions) {
       try {
         const stat = fs.statSync(resolved);
         if (stat.isDirectory()) {
-          walkDirectory(resolved, extensionSet, results);
-        } else if (stat.isFile() && extensionSet.indexOf(extname(resolved)) > -1) {
+          walkDirectory(resolved, extensions, results);
+        } else if (stat.isFile() && extensions.indexOf(extname(resolved)) > -1) {
           results.push(resolved);
         }
       } catch (e) {
