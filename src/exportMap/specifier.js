@@ -14,7 +14,9 @@ export default function processSpecifier(specifier, astNode, exportMap, namespac
       }));
       return;
     case 'ExportAllDeclaration':
-      exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
+      exportMap.namespace.set(specifier.exported.name || specifier.exported.value, Object.defineProperty(exportMeta, 'namespace', {
+        get() { return namespace.resolveImport(specifier.source.value); },
+      }));
       return;
     case 'ExportSpecifier':
       if (!astNode.source) {

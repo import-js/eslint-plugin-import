@@ -33,18 +33,21 @@ class FlatCompatRuleTester {
       return;
     }
 
+    // Pass constructor parser so per-test configs can inherit babel options
+    const ctorParser = this._constructorConfig && this._constructorConfig.parser;
+
     this._tester.run(ruleName, rule, {
       valid: tests.valid
         .filter((t) => !FlatCompatRuleTester._hasUnavailableParser(t))
-        .map((t) => FlatCompatRuleTester._flatCompatValid(t)),
+        .map((t) => FlatCompatRuleTester._flatCompatValid(t, ctorParser)),
       invalid: tests.invalid
         .filter((t) => !FlatCompatRuleTester._hasUnavailableParser(t))
-        .map((t) => FlatCompatRuleTester._flatCompatInvalid(t)),
+        .map((t) => FlatCompatRuleTester._flatCompatInvalid(t, ctorParser)),
     });
   }
 
-  static _flatCompatValid(config) {
-    const converted = FlatCompatRuleTester._flatCompat(config);
+  static _flatCompatValid(config, ctorParser) {
+    const converted = FlatCompatRuleTester._flatCompat(config, ctorParser);
 
     // ESLint v10 RuleTester does not allow 'errors' or 'output' on valid test cases
     if (eslintV10 && converted && typeof converted === 'object') {
@@ -55,8 +58,8 @@ class FlatCompatRuleTester {
     return converted;
   }
 
-  static _flatCompatInvalid(config) {
-    const converted = FlatCompatRuleTester._flatCompat(config);
+  static _flatCompatInvalid(config, ctorParser) {
+    const converted = FlatCompatRuleTester._flatCompat(config, ctorParser);
 
     // ESLint v10 removed the 'type' property from invalid test case error assertions
     if (eslintV10 && converted && typeof converted === 'object' && Array.isArray(converted.errors)) {
@@ -72,7 +75,25 @@ class FlatCompatRuleTester {
     return converted;
   }
 
-  static _flatCompat(config) {
+  // @babel/eslint-parser requires explicit config; babel-eslint enabled all syntax by default.
+  // When tests use @babel/eslint-parser (via parsers.BABEL_OLD on v10), inject the equivalent config.
+  static _babelParserOptions(parser) {
+    if (typeof parser !== 'string' || !parser.includes('@babel/eslint-parser')) {
+      return null;
+    }
+    return {
+      requireConfigFile: false,
+      babelOptions: {
+        configFile: false,
+        babelrc: false, // the project's .babelrc is for babel-register (Babel 6 build toolchain), not for parsing test snippets
+        parserOpts: {
+          plugins: ['flow', ['decorators', { decoratorsBeforeExport: true }], 'exportDefaultFrom'],
+        },
+      },
+    };
+  }
+
+  static _flatCompat(config, ctorParser) {
     if (!config || !usingFlatConfig || typeof config !== 'object') {
       return config;
     }
@@ -81,6 +102,23 @@ class FlatCompatRuleTester {
     const { ecmaVersion, sourceType, ...remainingParserOptions } = parserOptions;
     const parserObj = typeof parser === 'string' ? require(parser) : parser;
 
+    // Inject babelOptions if either this test or the constructor uses @babel/eslint-parser.
+    // Deep-merge babelOptions so test-specific values override defaults but babelrc/configFile survive.
+    const babelOpts = FlatCompatRuleTester._babelParserOptions(parser)
+      || FlatCompatRuleTester._babelParserOptions(ctorParser);
+    let flatParserOptions;
+    if (babelOpts) {
+      const { babelOptions: defaultBabelOptions, ...defaultRest } = babelOpts;
+      const { babelOptions: testBabelOptions, ...testRest } = remainingParserOptions;
+      flatParserOptions = {
+        ...defaultRest,
+        ...testRest,
+        babelOptions: { ...defaultBabelOptions, ...testBabelOptions },
+      };
+    } else {
+      flatParserOptions = { ...remainingParserOptions };
+    }
+
     return {
       ...remainingConfig,
       languageOptions: {
@@ -88,9 +126,8 @@ class FlatCompatRuleTester {
         ...parserObj ? { parser: parserObj } : {},
         ...ecmaVersion ? { ecmaVersion } : {},
         ...sourceType ? { sourceType } : {},
-        parserOptions: {
-          ...remainingParserOptions,
-        },
+        // Only set parserOptions if non-empty, to avoid overriding constructor parserOptions
+        ...Object.keys(flatParserOptions).length > 0 ? { parserOptions: flatParserOptions } : {},
       },
     };
   }
