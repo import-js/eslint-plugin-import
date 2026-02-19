@@ -65,6 +65,8 @@
   "homepage": "https://github.com/import-js/eslint-plugin-import",
   "devDependencies": {
     "@angular-eslint/template-parser": "^13.5.0",
+    "@babel/core": "^8.0.0-rc.2",
+    "@babel/eslint-parser": "^8.0.0-rc.2",
     "@eslint/import-test-order-redirect-scoped": "file:./tests/files/order-redirect-scoped",
     "@test-scope/some-module": "file:./tests/files/symlinked-module",
     "@types/eslint": "^8.56.12",

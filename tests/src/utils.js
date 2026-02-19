@@ -21,8 +21,14 @@ export const parsers = {
       return false;
     }
   })(),
-  // babel-eslint does not support ESLint v10 (unmaintained; replaced by @babel/eslint-parser)
-  BABEL_OLD: semver.major(eslintPkg.version) < 10 && require.resolve('babel-eslint'),
+  // babel-eslint is unmaintained; on ESLint v10+ use @babel/eslint-parser instead
+  BABEL_OLD: (() => {
+    if (semver.major(eslintPkg.version) < 10) { return require.resolve('babel-eslint'); }
+    try { return require.resolve('@babel/eslint-parser'); } catch (e) { return false; }
+  })(),
+  BABEL_NEW: (() => {
+    try { return require.resolve('@babel/eslint-parser'); } catch (e) { return false; }
+  })(),
   // TODO: re-enable when @angular-eslint/template-parser supports v10 (https://github.com/angular-eslint/angular-eslint/issues/2896)
   ANGULAR: semver.major(eslintPkg.version) < 10 && (() => {
     try { return require.resolve('@angular-eslint/template-parser'); } catch (e) { return false; }

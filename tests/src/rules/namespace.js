@@ -332,6 +332,7 @@ const invalid = [].concat(
 // deep dereferences //
 //////////////////////
 [['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
+  if (!parser) { return; }
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),

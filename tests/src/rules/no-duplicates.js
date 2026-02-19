@@ -130,9 +130,10 @@ ruleTester.run('no-duplicates', rule, {
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
-    // These test cases use duplicate import identifiers, which causes a fatal parsing error using ESPREE (default) and TS_OLD.
+    // These test cases use duplicate import identifiers, which causes a fatal parsing error using ESPREE (default), TS_OLD,
+    // and @babel/eslint-parser (which correctly rejects duplicate bindings unlike the legacy babel-eslint).
     ...flatMap([parsers.BABEL_OLD, parsers.TS_NEW], (parser) => {
-      if (!parser) { return []; } // TS_NEW is not always available
+      if (!parser || parser === parsers.BABEL_NEW) { return []; }
       return [
         // #2347: duplicate identifiers should be removed
         test({
@@ -571,7 +572,8 @@ context('TypeScript', function () {
             },
           ],
         })),
-        test({
+        // @babel/eslint-parser correctly rejects duplicate import bindings as syntax errors
+        ...(parser !== parsers.BABEL_NEW ? [test({
           code: "import type x from './foo'; import type x from './foo'",
           output: "import type x from './foo'; ",
           ...parserConfig,
@@ -587,7 +589,7 @@ context('TypeScript', function () {
               message: "'./foo' imported multiple times.",
             },
           ],
-        }),
+        })] : []),
         test({
           code: "import type {x} from './foo'; import type {y} from './foo'",
           ...parserConfig,
