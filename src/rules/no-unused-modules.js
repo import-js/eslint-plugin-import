@@ -154,12 +154,12 @@ function listFilesWithLegacyFunctions(src, extensions) {
  * @param {string} dir - directory to walk
  * @param {string[]} extensions - list of supported file extensions
  * @param {string[]} results - accumulator for matched file paths
+ * @param {object} fs - Node.js fs module
+ * @param {Function} join - path.join
+ * @param {Function} extname - path.extname
  * @returns {string[]} list of matched file paths
  */
-function walkDirectory(dir, extensions, results) {
-  const fs = require('fs');
-  const { join, extname } = require('path');
-
+function walkDirectory(dir, extensions, results, fs, join, extname) {
   let entries;
   try {
     entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -174,7 +174,7 @@ function walkDirectory(dir, extensions, results) {
     }
     const fullPath = join(dir, entry.name);
     if (entry.isDirectory()) {
-      walkDirectory(fullPath, extensions, results);
+      walkDirectory(fullPath, extensions, results, fs, join, extname);
     } else if (entry.isFile() && extensions.indexOf(extname(fullPath)) > -1) {
       results.push(fullPath);
     }
@@ -192,7 +192,7 @@ function walkDirectory(dir, extensions, results) {
  */
 function listFilesWithNodeFs(src, extensions) {
   const fs = require('fs');
-  const { resolve, extname } = require('path');
+  const { join, resolve, extname } = require('path');
   const isGlob = require('is-glob');
 
   extensions = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
@@ -204,7 +204,7 @@ function listFilesWithNodeFs(src, extensions) {
       // Extract the base directory from the glob (everything before the first glob character)
       const base = pattern.replace(/[*?{[].*/g, '').replace(/\/[^/]*$/, '') || '.';
       const resolvedBase = resolve(base);
-      const allFiles = walkDirectory(resolvedBase, extensions, []);
+      const allFiles = walkDirectory(resolvedBase, extensions, [], fs, join, extname);
       allFiles.forEach((file) => {
         if (minimatch(file, resolve(pattern)) || minimatch(file, pattern)) {
           results.push(file);
@@ -215,7 +215,7 @@ function listFilesWithNodeFs(src, extensions) {
       try {
         const stat = fs.statSync(resolved);
         if (stat.isDirectory()) {
-          walkDirectory(resolved, extensions, results);
+          walkDirectory(resolved, extensions, results, fs, join, extname);
         } else if (stat.isFile() && extensions.indexOf(extname(resolved)) > -1) {
           results.push(resolved);
         }
