@@ -18,7 +18,6 @@ try {
 
 // TODO: figure out why these tests fail in eslint 4 and 5
 const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
-const isESLint9 = semver.satisfies(eslintPkg.version, '>=9');
 const isESLint9Only = semver.satisfies(eslintPkg.version, '>=9 <10');
 
 const ruleTester = new RuleTester();

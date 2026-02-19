@@ -573,7 +573,7 @@ context('TypeScript', function () {
           ],
         })),
         // @babel/eslint-parser correctly rejects duplicate import bindings as syntax errors
-        ...(parser !== parsers.BABEL_NEW ? [test({
+        ...parser !== parsers.BABEL_NEW ? [test({
           code: "import type x from './foo'; import type x from './foo'",
           output: "import type x from './foo'; ",
           ...parserConfig,
@@ -589,7 +589,7 @@ context('TypeScript', function () {
               message: "'./foo' imported multiple times.",
             },
           ],
-        })] : []),
+        })] : [],
         test({
           code: "import type {x} from './foo'; import type {y} from './foo'",
           ...parserConfig,
