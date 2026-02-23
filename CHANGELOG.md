@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Changed
+- [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
+
 ## [2.32.0] - 2025-06-20
 
 ### Added
@@ -1181,6 +1184,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
@@ -1863,6 +1867,7 @@ for info on changes for earlier releases.
 [@echenley]: https://github.com/echenley
 [@edemaine]: https://github.com/edemaine
 [@eelyafi]: https://github.com/eelyafi
+[@ej612]: https://github.com/ej612
 [@Ephem]: https://github.com/Ephem
 [@ephys]: https://github.com/ephys
 [@eps1lon]: https://github.com/eps1lon
