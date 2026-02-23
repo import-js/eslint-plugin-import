@@ -127,7 +127,7 @@
     "hasown": "^2.0.2",
     "is-core-module": "^2.16.1",
     "is-glob": "^4.0.3",
-    "minimatch": "^3.1.2",
+    "minimatch": "^3.1.3",
     "object.fromentries": "^2.0.8",
     "object.groupby": "^1.0.3",
     "object.values": "^1.2.1",
