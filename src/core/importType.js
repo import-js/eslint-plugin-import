@@ -1,4 +1,5 @@
 import { isAbsolute as nodeIsAbsolute, relative, resolve as nodeResolve } from 'path';
+import { statSync } from 'fs';
 import isCoreModule from 'is-core-module';
 
 import resolve from 'eslint-module-utils/resolve';
@@ -108,6 +109,31 @@ function isExternalLookingName(name) {
   return isModule(name) || isScoped(name);
 }
 
+function isInExternalModuleFolder(name, context) {
+  const packagePath = getContextPackagePath(context);
+  const { settings } = context;
+  const folders = settings && settings['import/external-module-folders'] || ['node_modules'];
+  const base = baseModule(name);
+
+  return folders.some((folder) => {
+    if (nodeIsAbsolute(folder)) {
+      try { statSync(nodeResolve(folder, base)); return true; } catch (e) { return false; }
+    }
+    // Walk up directories checking each external module folder
+    let dir = packagePath;
+    while (true) { // eslint-disable-line no-constant-condition
+      try {
+        statSync(nodeResolve(dir, folder, base));
+        return true;
+      } catch (e) { /* continue */ }
+      const parent = nodeResolve(dir, '..');
+      if (parent === dir) { break; }
+      dir = parent;
+    }
+    return false;
+  });
+}
+
 function typeTest(name, context, path) {
   const { settings } = context;
   if (isInternalRegexMatch(name, settings)) { return 'internal'; }
@@ -117,6 +143,9 @@ function typeTest(name, context, path) {
   if (isIndex(name, settings, path)) { return 'index'; }
   if (isRelativeToSibling(name, settings, path)) { return 'sibling'; }
   if (isExternalPath(path, context)) { return 'external'; }
+  // Symlinked external modules may realpath outside node_modules.
+  // Check if the base module exists in any external module folder.
+  if (path && isExternalLookingName(name) && isInExternalModuleFolder(name, context)) { return 'external'; }
   if (isInternalPath(path, context)) { return 'internal'; }
   if (isExternalLookingName(name)) { return 'external'; }
   return 'unknown';
