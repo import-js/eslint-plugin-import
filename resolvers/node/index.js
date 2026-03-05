@@ -12,6 +12,8 @@ function opts(file, config, packageFilter) {
   return Object.assign({ // more closely matches Node (#333)
     // plus 'mjs' for native modules! (#939)
     extensions: ['.mjs', '.js', '.json', '.node'],
+    // TODO: semver-major: remove this to match Node's default behavior
+    preserveSymlinks: true,
   }, config, {
     // path.resolve will handle paths relative to CWD
     basedir: path.dirname(path.resolve(file)),
@@ -55,7 +57,7 @@ exports.resolve = function (source, file, config) {
   }
 
   try {
-    const cachedFilter = function (pkg, dir) { return packageFilter(pkg, dir, config); };
+    const cachedFilter = function (pkg, _pkgFile, dir) { return packageFilter(pkg, dir, config); };
     resolvedPath = resolve(source, opts(file, config, cachedFilter));
     log('Resolved to:', resolvedPath);
     return { found: true, path: resolvedPath };
