@@ -1,6 +1,7 @@
 import { isAbsolute as nodeIsAbsolute, relative, resolve as nodeResolve } from 'path';
 import { statSync } from 'fs';
 import isCoreModule from 'is-core-module';
+import minimatch from 'minimatch';
 
 import resolve from 'eslint-module-utils/resolve';
 import { getContextPackagePath } from './packagePath';
@@ -33,7 +34,9 @@ export function isBuiltIn(name, settings, path) {
   if (path || !name) { return false; }
   const base = baseModule(name);
   const extras = settings && settings['import/core-modules'] || [];
-  return isCoreModule(base) || extras.indexOf(base) > -1;
+  return isCoreModule(base)
+    || extras.indexOf(base) > -1
+    || extras.some((pattern) => pattern.includes('*') && minimatch(base, pattern));
 }
 
 const moduleRegExp = /^\w/;
