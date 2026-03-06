@@ -63,6 +63,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`dynamic-import-chunkname`]: Allow empty chunk name when webpackMode: 'eager' is set; add suggestions to remove name in eager mode ([#3004], thanks [@amsardesai])
 - [`no-unused-modules`]: Add `ignoreUnusedTypeExports` option ([#3011], thanks [@silverwind])
 - add support for Flat Config ([#3018], thanks [@michaelfaith])
+- [`no-rename-default`]: Forbid importing a default export by a different name ([#3006], thanks [@whitneyit])
 
 ### Fixed
 - [`no-extraneous-dependencies`]: allow wrong path ([#3012], thanks [@chabb])
