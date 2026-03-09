@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236])
+
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
 
@@ -1184,6 +1187,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
