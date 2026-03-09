@@ -156,6 +156,8 @@ function getFix(first, rest, sourceCode, context) {
         .split(',')
         .map((x) => x.trim()),
       );
+    // snapshot of first import's original specifiers before reduce mutates firstExistingIdentifiers
+    const firstSpecifierNames = new Set(firstExistingIdentifiers);
 
     const [specifiersText] = specifiers.reduce(
       ([result, needsComma, existingIdentifiers], specifier) => {
@@ -196,7 +198,7 @@ function getFix(first, rest, sourceCode, context) {
       fixes.push(fixer.removeRange([typeIdentifierToken.range[0], typeIdentifierToken.range[1] + 1]));
 
       tokens
-        .filter((token) => firstExistingIdentifiers.has(token.value))
+        .filter((token) => firstSpecifierNames.has(token.value))
         .forEach((identifier) => {
           fixes.push(fixer.replaceTextRange([identifier.range[0], identifier.range[1]], `type ${identifier.value}`));
         });

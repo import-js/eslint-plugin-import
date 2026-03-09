@@ -748,6 +748,25 @@ context('TypeScript', function () {
             },
           ],
         }),
+        // #3224 prefer-inline: fix should not corrupt imports named 'from'
+        test({
+          code: "import type {Observable} from './foo'; import {from} from './foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import {type Observable,from} from './foo'; `,
+          errors: [
+            {
+              line: 1,
+              column: 31,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 59,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
       ]);
 
       ruleTester.run('no-duplicates', rule, {
