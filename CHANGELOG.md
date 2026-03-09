@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Fixed
+- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3224])
+
 ## [2.32.0] - 2025-06-20
 
 ### Added
@@ -1181,6 +1184,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3224]: https://github.com/import-js/eslint-plugin-import/issues/3224
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
