@@ -29,11 +29,11 @@ export const parsers = {
   BABEL_NEW: (() => {
     try { return require.resolve('@babel/eslint-parser'); } catch (e) { return false; }
   })(),
-  // used by first.js for issue #2210; v21+ supports ESLint v10, v13 does not
+  // used by first.js for issue #2210; v21.3.0+ supports ESLint v10, v13 does not
   ANGULAR: (() => {
     try {
       const parserPkg = require('@angular-eslint/template-parser/package.json');
-      if (semver.major(eslintPkg.version) >= 10 && !semver.satisfies(parserPkg.version, '>=21.0.0')) {
+      if (semver.major(eslintPkg.version) >= 10 && !semver.satisfies(parserPkg.version, '>=21.3.0')) {
         return false;
       }
       return require.resolve('@angular-eslint/template-parser');

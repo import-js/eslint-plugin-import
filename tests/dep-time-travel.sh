@@ -56,8 +56,8 @@ if [[ "$ESLINT_VERSION" -ge "10" ]]; then
   echo "Installing @typescript-eslint/parser v8 for ESLint 10..."
   npm i --no-save @typescript-eslint/parser@8
 
-  echo "Installing @angular-eslint/template-parser v21 for ESLint 10..."
-  npm i --no-save @angular-eslint/template-parser@21
+  echo "Installing @angular-eslint/template-parser v21.3.0+ for ESLint 10..."
+  npm i --no-save '@angular-eslint/template-parser@^21.3.0'
 
   # @babel/eslint-parser v8 requires Node ^20.19.0 || >=22.12.0; v7 doesn't support ESLint 10
   if [[ "$TRAVIS_NODE_VERSION" -eq "20" ]] || [[ "$TRAVIS_NODE_VERSION" -ge "22" ]]; then
