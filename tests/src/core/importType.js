@@ -82,6 +82,7 @@ describe('importType(name)', function () {
   });
 
   it("should return 'internal' for aliased internal modules that look like core modules (webpack resolver)", function () {
+    this.timeout(10000); // initial load of the webpack resolver is slow on old Node + macOS CI
     const webpackConfig = { resolve: { modules: [pathToTestFiles, 'node_modules'] } };
     const pathContext = testContext({ 'import/resolver': { webpack: { config: webpackConfig } } });
     expect(importType('constants/index', pathContext)).to.equal('internal');

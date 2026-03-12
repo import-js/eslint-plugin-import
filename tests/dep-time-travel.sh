@@ -43,6 +43,14 @@ if [[ "$TRAVIS_NODE_VERSION" -lt "8" ]]; then
   npm i --no-save eslint-import-resolver-typescript@1.0.2
 fi
 
+# linklocal (pretest) symlinks the local resolver source, but old npm doesn't install its nested deps
+if [[ "$TRAVIS_NODE_VERSION" -lt "10" ]]; then
+  for dir in resolvers/*/; do
+    echo "Installing dependencies for ${dir}..."
+    (cd "$dir" && npm install)
+  done
+fi
+
 if [ "${ESLINT_VERSION}" = '8' ]; then
   # This is a workaround for the crash in the initial processing of the ESLint class.
   echo "Installing self"
