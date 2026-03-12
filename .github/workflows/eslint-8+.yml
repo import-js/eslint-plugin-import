@@ -36,9 +36,18 @@ jobs:
           - macos-latest
         node-version: ${{ fromJson(needs.matrix.outputs.latest) }}
         eslint:
+          - 10
           - 9
           - 8
         exclude:
+          - node-version: 17
+            eslint: 10
+          - node-version: 16
+            eslint: 10
+          - node-version: 14
+            eslint: 10
+          - node-version: 12
+            eslint: 10
           - node-version: 16
             eslint: 9
           - node-version: 14

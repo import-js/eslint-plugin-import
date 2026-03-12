@@ -35,6 +35,10 @@ function getFilename(context) {
 
 /** @type {import('./contextCompat').getPhysicalFilename} */
 function getPhysicalFilename(context) {
+  if ('physicalFilename' in context) {
+    return context.physicalFilename;
+  }
+
   if (context.getPhysicalFilename) {
     return context.getPhysicalFilename();
   }

@@ -1,4 +1,4 @@
-import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers } from '../utils';
+import { test, SYNTAX_CASES, getTSParsers, testVersion, testFilePath, parsers, typescriptEslintParserSatisfies } from '../utils';
 import { RuleTester } from '../rule-tester';
 import flatMap from 'array.prototype.flatmap';
 
@@ -143,8 +143,9 @@ const valid = [
   }),
 
   // Typescript
-  ...flatMap(getTSParsers(), (parser) => [
-    test({
+  ...flatMap(getTSParsers(), (parser) => [].concat(
+    // @typescript-eslint/parser v8 changed how dotted namespace declarations are resolved
+    !typescriptEslintParserSatisfies('< 8') ? [] : test({
       code: `
         import * as foo from "./typescript-declare-nested"
         foo.bar.MyFunction()
@@ -182,7 +183,7 @@ const valid = [
         'import/resolver': { 'eslint-import-resolver-typescript': true },
       },
     }),
-  ]),
+  )),
 
   ...SYNTAX_CASES,
 
@@ -331,6 +332,7 @@ const invalid = [].concat(
 // deep dereferences //
 //////////////////////
 [['deep', require.resolve('espree')], ['deep-es7', parsers.BABEL_OLD]].forEach(function ([folder, parser]) { // close over params
+  if (!parser) { return; }
   valid.push(
     test({ parser, code: `import * as a from "./${folder}/a"; console.log(a.b.c.d.e)` }),
     test({ parser, code: `import { b } from "./${folder}/a"; console.log(b.c.d.e)` }),
