@@ -65,9 +65,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@ljharb/tsconfig": "^0.3.2",
-    "@types/debug": "^4.1.12",
-    "@types/eslint": "^8.56.3",
-    "@types/node": "^20.19.1",
+    "@types/debug": "^4.1.13",
+    "@types/eslint": "^8.56.12",
+    "@types/node": "^20.19.37",
     "typescript": "next"
   },
   "peerDependenciesMeta": {
