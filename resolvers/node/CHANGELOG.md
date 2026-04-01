@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v0.3.10 - 2026-04-01
+ - [deps] update `is-core-module`, `resolve`
+ - [meta] add `repository.directory` field
+ - [refactor] avoid hoisting
+
 ## v0.3.9 - 2023-08-08
  - [fix] restore node 6 compatibility
 
