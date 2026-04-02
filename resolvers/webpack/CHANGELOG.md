@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+- [deps] update `is-core-module`, `is-regex`, `lodash`, `resolve`
 
 ## 0.13.10 - 2024-12-10
 - [new] add cache option ([#3100], thanks [@seiyab])
