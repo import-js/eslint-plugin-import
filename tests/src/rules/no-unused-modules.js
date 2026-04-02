@@ -1509,7 +1509,7 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
 
     // Install the plugin and run the lint command in the temp directory
     try {
-      execSync(`npm install -D ${process.cwd()} && npm run lint`, { cwd: tempDir.name });
+      execSync(`npm install -D "${process.cwd()}" && npm run lint`, { cwd: tempDir.name });
     } catch (error) {
       errorMessage = error.stderr.toString();
     }
