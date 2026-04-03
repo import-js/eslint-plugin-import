@@ -73,9 +73,13 @@ export const configs = {
   typescript: require('../config/typescript'),
 };
 
+export const meta = { name, version };
+
 // Base Plugin Object
 const importPlugin = {
-  meta: { name, version },
+  meta,
+  configs,
+  flatConfigs: {},
   rules,
 };
 
@@ -86,7 +90,7 @@ const createFlatConfig = (baseConfig, configName) => ({
   plugins: { import: importPlugin },
 });
 
-export const flatConfigs = {
+export const flatConfigs = importPlugin.flatConfigs = {
   recommended: createFlatConfig(
     require('../config/flat/recommended'),
     'recommended',
@@ -101,3 +105,5 @@ export const flatConfigs = {
   electron: createFlatConfig(configs.electron, 'electron'),
   typescript: createFlatConfig(configs.typescript, 'typescript'),
 };
+
+module.exports = importPlugin;
