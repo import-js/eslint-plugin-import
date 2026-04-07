@@ -65,7 +65,7 @@ jobs:
             eslint: 5
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
       - uses: ljharb/actions/node/install@main
         continue-on-error: ${{ matrix.eslint == 4 && matrix.node-version == 4 }}
         name: 'nvm install ${{ matrix.node-version }} && npm install, with eslint ${{ matrix.eslint }}'
