@@ -57,7 +57,16 @@ export default class ImportExportVisitorBuilder {
       },
       ExportAllDeclaration() {
         const getter = captureDependency(astNode, astNode.exportKind === 'type', this.remotePathResolver, this.exportMap, this.context, this.thunkFor);
-        if (getter) { this.exportMap.dependencies.add(getter); }
+        if (getter) {
+          // `export * as NS from '...'` aliases the entire module as a namespace binding.
+          // Its internal names are NOT re-exported into the flat namespace of the current
+          // module, so we must not add it to `dependencies` (which are iterated as
+          // flat star-exports). The namespace binding is handled separately by
+          // processSpecifier below. See: https://github.com/import-js/eslint-plugin-import/issues/3220
+          if (!astNode.exported) {
+            this.exportMap.dependencies.add(getter);
+          }
+        }
         if (astNode.exported) {
           processSpecifier(astNode, astNode.exported, this.exportMap, this.namespace);
         }
