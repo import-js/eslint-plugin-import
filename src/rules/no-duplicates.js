@@ -171,7 +171,7 @@ function getFix(first, rest, sourceCode, context) {
         // Add *only* the new identifiers that don't already exist, and track any new identifiers so we don't add them again in the next loop
         const [specifierText, updatedExistingIdentifiers] = specifier.identifiers.reduce(([text, set], cur) => {
           const trimmed = cur.trim(); // Trim whitespace before/after to compare to our set of existing identifiers
-          const curWithType = trimmed.length > 0 && preferInline && isTypeSpecifier ? `type ${cur}` : cur;
+          const curWithType = trimmed.length > 0 && preferInline && isTypeSpecifier ? `type ${trimmed}` : trimmed;
           if (existingIdentifiers.has(trimmed)) {
             return [text, set];
           }
