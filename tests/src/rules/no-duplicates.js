@@ -53,20 +53,20 @@ ruleTester.run('no-duplicates', rule, {
   invalid: [
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
-      output: "import { x , y } from './foo'; ",
+      output: "import { x ,y} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import {y} from './foo'; import { z } from './foo'",
-      output: "import {x,y, z } from './foo';  ",
+      output: "import {x,y,z} from './foo';  ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     // ensure resolved path results in warnings
     test({
       code: "import { x } from './bar'; import { y } from 'bar';",
-      output: "import { x , y } from './bar'; ",
+      output: "import { x ,y} from './bar'; ",
       settings: {
         'import/resolve': {
           paths: [path.join(process.cwd(), 'tests', 'files')],
@@ -107,7 +107,7 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
-      output: "import type { x , y } from './foo'; ",
+      output: "import type { x ,y} from './foo'; ",
       parser: parsers.BABEL_OLD,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
@@ -145,7 +145,7 @@ ruleTester.run('no-duplicates', rule, {
         // #2347: duplicate identifiers should be removed
         test({
           code: "import {a,b} from './foo'; import { b, c } from './foo'; import {b,c,d} from './foo'",
-          output: "import {a,b, c ,d} from './foo';  ",
+          output: "import {a,b,c,d} from './foo';  ",
           errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
           parser,
         }),
@@ -153,7 +153,7 @@ ruleTester.run('no-duplicates', rule, {
         // #2347: duplicate identifiers should be removed, but not if they are adjacent to comments
         test({
           code: "import {a} from './foo'; import { a/*,b*/ } from './foo'",
-          output: "import {a, a/*,b*/ } from './foo'; ",
+          output: "import {a,a/*,b*/} from './foo'; ",
           errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
           parser,
         }),
@@ -373,7 +373,7 @@ import {x,y} from './foo'
     // #2027 long import list generate empty lines
     test({
       code: "import { Foo } from './foo';\nimport { Bar } from './foo';\nexport const value = {}",
-      output: "import { Foo , Bar } from './foo';\nexport const value = {}",
+      output: "import { Foo ,Bar} from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -402,22 +402,7 @@ import {x,y} from './foo'
         ${''}
         export default TestComponent;
       `,
-      output: `
-        import {
-          DEFAULT_FILTER_KEYS,
-          BULK_DISABLED,
-        ${''}
-          BULK_ACTIONS_ENABLED
-        } from '../constants';
-        import React from 'react';
-                ${''}
-        const TestComponent = () => {
-          return <div>
-          </div>;
-        }
-        ${''}
-        export default TestComponent;
-      `,
+      output: `\n        import {DEFAULT_FILTER_KEYS,BULK_ACTIONS_ENABLED} from '../constants';\n        import React from 'react';\n                ${''}\n        const TestComponent = () => {\n          return <div>\n          </div>;\n        }\n        ${''}\n        export default TestComponent;\n      `,
       errors: ["'../constants' imported multiple times.", "'../constants' imported multiple times."],
       ...jsxConfig,
     }),
@@ -439,16 +424,7 @@ import {x,y} from './foo'
         } from 'bar';
 
       `,
-      output: `
-        import {A1,B1,C1} from 'foo';
-                ${''}
-        import {
-          A2,
-        ${''}
-          B2,
-          C2} from 'bar';
-                ${''}
-      `,
+      output: `\n        import {A1,B1,C1} from 'foo';\n                ${''}\n        import {A2,B2,C2} from 'bar';\n                ${''}\n      `,
       errors: [
         {
           message: "'foo' imported multiple times.",
