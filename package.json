@@ -124,7 +124,7 @@
     "doctrine": "^2.1.0",
     "eslint-import-resolver-node": "^0.3.10",
     "eslint-module-utils": "^2.12.1",
-    "hasown": "^2.0.2",
+    "hasown": "^2.0.3",
     "is-core-module": "^2.16.1",
     "is-glob": "^4.0.3",
     "minimatch": "^3.1.5",
