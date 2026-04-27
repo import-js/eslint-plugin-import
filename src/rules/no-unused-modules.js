@@ -13,6 +13,7 @@ import readPkgUp from 'eslint-module-utils/readPkgUp';
 import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
+import minimatch from 'minimatch';
 
 import ExportMapBuilder from '../exportMap/builder';
 import recursivePatternCapture from '../exportMap/patternCapture';
@@ -148,6 +149,86 @@ function listFilesWithLegacyFunctions(src, extensions) {
 }
 
 /**
+ * Walk a directory recursively, collecting file paths that match the given extensions.
+ * Skips node_modules and dot-directories.
+ * @param {string} dir - directory to walk
+ * @param {string[]} extensions - list of supported file extensions
+ * @param {string[]} results - accumulator for matched file paths
+ * @param {object} fs - Node.js fs module
+ * @param {Function} join - path.join
+ * @param {Function} extname - path.extname
+ * @returns {string[]} list of matched file paths
+ */
+function walkDirectory(dir, extensions, results, fs, join, extname) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch (e) {
+    return results;
+  }
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    if (entry.name[0] === '.' || entry.name === 'node_modules') {
+      continue;
+    }
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkDirectory(fullPath, extensions, results, fs, join, extname);
+    } else if (entry.isFile() && extensions.indexOf(extname(fullPath)) > -1) {
+      results.push(fullPath);
+    }
+  }
+
+  return results;
+}
+
+/**
+ * List files using Node.js fs and minimatch as a fallback when FileEnumerator
+ * and legacy ESLint APIs are unavailable (ESLint v10+).
+ * @param {string[]} src - list of file paths, directories, or glob patterns
+ * @param {string[]} extensions - list of supported file extensions
+ * @returns {string[]} list of matched file paths
+ */
+function listFilesWithNodeFs(src, extensions) {
+  const fs = require('fs');
+  const { join, resolve, extname } = require('path');
+  const isGlob = require('is-glob');
+
+  extensions = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
+  const results = [];
+
+  src.forEach((pattern) => {
+    if (isGlob(pattern)) {
+      // For glob patterns, walk the base directory and filter with minimatch
+      // Extract the base directory from the glob (everything before the first glob character)
+      const base = pattern.replace(/[*?{[].*/g, '').replace(/\/[^/]*$/, '') || '.';
+      const resolvedBase = resolve(base);
+      const allFiles = walkDirectory(resolvedBase, extensions, [], fs, join, extname);
+      allFiles.forEach((file) => {
+        if (minimatch(file, resolve(pattern)) || minimatch(file, pattern)) {
+          results.push(file);
+        }
+      });
+    } else {
+      const resolved = resolve(pattern);
+      try {
+        const stat = fs.statSync(resolved);
+        if (stat.isDirectory()) {
+          walkDirectory(resolved, extensions, results, fs, join, extname);
+        } else if (stat.isFile() && extensions.indexOf(extname(resolved)) > -1) {
+          results.push(resolved);
+        }
+      } catch (e) {
+        // Path doesn't exist, skip it
+      }
+    }
+  });
+
+  return results;
+}
+
+/**
  * Given a src pattern and list of supported extensions, return a list of files to process
  * with this rule.
  * @param {string} src - file, directory, or glob pattern of files to act on
@@ -162,7 +243,15 @@ function listFilesToProcess(src, extensions) {
     return listFilesUsingFileEnumerator(FileEnumerator, src, extensions);
   }
   // If not, then we can try even older versions of this capability (listFilesToProcess)
-  return listFilesWithLegacyFunctions(src, extensions);
+  try {
+    return listFilesWithLegacyFunctions(src, extensions);
+  } catch (e) {
+    // If legacy functions are also unavailable (ESLint v10+), use Node.js fs as a fallback
+    if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED') {
+      return listFilesWithNodeFs(src, extensions);
+    }
+    throw e;
+  }
 }
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration';
