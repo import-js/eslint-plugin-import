@@ -362,6 +362,23 @@ context('TypeScript', function () {
             'import/extensions': ['.js', '.ts', '.jsx'],
           },
         }),
+
+        // issue #3220: namespaced wildcard re-exports (export * as NS from '...') should not
+        // contribute their internal names to the flat namespace of the re-exporting module
+        semver.satisfies(eslintPkg.version, '>= 6') ? [
+          test({
+            code: `
+              export * from './ABFeature';
+              export * from './foo';
+            `,
+            filename: testFilePath('issue-3220-namespace-re-export/index.ts'),
+            settings: {
+              ...parserConfig.settings,
+              'import/extensions': ['.ts'],
+            },
+            ...parserConfig,
+          }),
+        ] : [],
       ),
       invalid: [].concat(
         // type/value name clash
