@@ -404,6 +404,21 @@ core module:
 }
 ```
 
+Wildcard patterns are supported to match multiple modules, using `*` as a wildcard:
+
+```jsonc
+// .eslintrc
+{
+  "settings": {
+    "import/core-modules": [
+      "electron",
+      "@my-monorepo/*", // matches @my-monorepo/package-a, @my-monorepo/package-b, etc.
+      "@my-*/*", // matches @my-org/package, @my-company/package, etc.
+    ],
+  },
+}
+```
+
 In Electron's specific case, there is a shared config named `electron`
 that specifies this for you.
 
