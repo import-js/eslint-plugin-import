@@ -52,6 +52,27 @@ export default class ImportExportVisitorBuilder {
         const exportMeta = captureDoc(this.source, this.docStyleParsers, astNode);
         if (astNode.declaration.type === 'Identifier') {
           this.namespace.add(exportMeta, astNode.declaration);
+          // If the export has no JSDoc, look for it on the referenced declaration
+          if (!exportMeta.doc) {
+            const exportName = astNode.declaration.name;
+            const decl = this.ast.body.find((node) => {
+              if (node.type === 'VariableDeclaration') {
+                return node.declarations.some((d) => d.id.name === exportName);
+              }
+              return (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration')
+                && node.id && node.id.name === exportName;
+            });
+            if (decl) {
+              if (decl.type === 'VariableDeclaration') {
+                const varDecl = decl.declarations.find((d) => d.id.name === exportName);
+                const varMeta = captureDoc(this.source, this.docStyleParsers, varDecl, decl);
+                if (varMeta.doc) { exportMeta.doc = varMeta.doc; }
+              } else {
+                const fnMeta = captureDoc(this.source, this.docStyleParsers, decl);
+                if (fnMeta.doc) { exportMeta.doc = fnMeta.doc; }
+              }
+            }
+          }
         }
         this.exportMap.namespace.set('default', exportMeta);
       },
