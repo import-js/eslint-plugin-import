@@ -6,6 +6,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## [Unreleased]
 
+### Added
+- [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247])
+
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236])
 
@@ -1187,6 +1190,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191

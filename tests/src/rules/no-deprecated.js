@@ -55,6 +55,12 @@ ruleTester.run('no-deprecated', rule, {
       errors: ['Deprecated: this is awful, use NotAsBadClass.'],
     }),
 
+    // default export via identifier reference to a locally-deprecated binding
+    test({
+      code: "import Button from './deprecated-default-indirect'",
+      errors: ['Deprecated: Use the new one'],
+    }),
+
     test({
       code: "import { MY_TERRIBLE_ACTION } from './deprecated'",
       errors: ['Deprecated: please stop sending/handling this action type.'],
