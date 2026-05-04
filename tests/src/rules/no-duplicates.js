@@ -186,7 +186,8 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import './foo'; import { /*x*/} from './foo'; import {//y\n} from './foo'; import {z} from './foo'",
-      output: "import { /*x*///y\nz} from './foo';   ",
+      output: "import {/*x*///y\nz} from './foo';   ",
+
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -402,7 +403,7 @@ import {x,y} from './foo'
         ${''}
         export default TestComponent;
       `,
-      output: `\n        import {DEFAULT_FILTER_KEYS,BULK_ACTIONS_ENABLED} from '../constants';\n        import React from 'react';\n                ${''}\n        const TestComponent = () => {\n          return <div>\n          </div>;\n        }\n        ${''}\n        export default TestComponent;\n      `,
+      output: `\n        import {\n          DEFAULT_FILTER_KEYS,\n          BULK_DISABLED,\n        BULK_ACTIONS_ENABLED} from '../constants';\n        import React from 'react';\n                ${''}\n        const TestComponent = () => {\n          return <div>\n          </div>;\n        }\n        ${''}\n        export default TestComponent;\n      `,
       errors: ["'../constants' imported multiple times.", "'../constants' imported multiple times."],
       ...jsxConfig,
     }),
@@ -424,7 +425,7 @@ import {x,y} from './foo'
         } from 'bar';
 
       `,
-      output: `\n        import {A1,B1,C1} from 'foo';\n                ${''}\n        import {A2,B2,C2} from 'bar';\n                ${''}\n      `,
+      output: `\n        import {A1,B1,C1} from 'foo';\n                ${''}\n        import {\n          A2,\n        B2,C2} from 'bar';\n                ${''}\n      `,
       errors: [
         {
           message: "'foo' imported multiple times.",
