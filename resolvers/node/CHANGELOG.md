@@ -5,6 +5,10 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v0.4.0 - 2026-05-15
+ - [breaking] by default, support the `exports` field
+ - [deps] update `is-core-module`, `resolve`
+
 ## v0.3.10 - 2026-04-01
  - [deps] update `is-core-module`, `resolve`
  - [meta] add `repository.directory` field
