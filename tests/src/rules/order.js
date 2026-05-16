@@ -23,6 +23,11 @@ const rule = require('rules/order');
 
 ruleTester.run('order', rule, {
   valid: [
+    test({
+      code: `
+        import { platform, a, browser } from './order/spread-export';
+      `,
+    }),
     // Default order using require
     test({
       code: `
@@ -6681,6 +6686,24 @@ flowRuleTester.run('order', rule, {
         import type {Bar} from 'common';
         import typeof {foo} from 'common';
         import {bar} from 'common';
+      `,
+    }),
+    test({
+      options: [
+        {
+          named: true,
+        },
+      ],
+      code: `
+        const test = {
+          a: 1,
+          browser: 2,
+        };
+
+        module.exports = {
+          ...test,
+          platform: 'node',
+        };
       `,
     })],
   invalid: [
