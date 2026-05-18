@@ -100,7 +100,6 @@ ruleTester.run('no-dynamic-require', rule, {
         }),
         _test({
           code: 'import("../" + name)',
-          errors: [dynamicImportError],
           parser,
           parserOptions: {
             ecmaVersion: 2020,
@@ -108,7 +107,6 @@ ruleTester.run('no-dynamic-require', rule, {
         }),
         _test({
           code: 'import(`../${name}`)',
-          errors: [dynamicImportError],
           parser,
           parserOptions: {
             ecmaVersion: 2020,

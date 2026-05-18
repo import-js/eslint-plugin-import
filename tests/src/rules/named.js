@@ -165,12 +165,10 @@ ruleTester.run('named', rule, {
 
     test({
       code: 'const { baz } = require("./bar")',
-      errors: [error('baz', './bar')],
     }),
 
     test({
       code: 'const { baz } = require("./bar")',
-      errors: [error('baz', './bar')],
       options: [{ commonjs: false }],
     }),
 
