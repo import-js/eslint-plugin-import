@@ -1,13 +1,9 @@
-var jsonPlugin = require('eslint-plugin-json');
-
-if (!jsonPlugin.processors.json) {
-  jsonPlugin.processors.json = jsonPlugin.processors['.json'];
-}
+var jsonPlugin = require('./fixture-json-plugin');
 
 module.exports = [
   {
     files: ['tests/files/just-json-files/*.json'],
-    plugins:{
+    plugins: {
       json: jsonPlugin,
     },
     processor: 'json/json',
@@ -23,6 +19,6 @@ module.exports = [
         ],
       },
       jsonPlugin.configs.recommended.rules
-    )
+    ),
   },
 ];

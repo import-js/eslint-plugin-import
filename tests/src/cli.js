@@ -8,6 +8,7 @@ import { CLIEngine, ESLint } from 'eslint';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 import * as importPlugin from '../../src/index';
+import jsonFixture from '../files/just-json-files/fixture-json-plugin';
 
 describe('CLI regression tests', function () {
   describe('issue #210', function () {
@@ -79,7 +80,20 @@ describe('CLI regression tests', function () {
               overrideConfigFile: './tests/files/just-json-files/.eslintrc.json',
               rulePaths: ['./src/rules'],
               ignore: false,
-              plugins: { 'eslint-plugin-import': importPlugin },
+              overrideConfig: {
+                plugins: ['json'],
+                overrides: [
+                  {
+                    files: ['*.json'],
+                    processor: 'json/json',
+                    rules: { 'json/*': 'error' },
+                  },
+                ],
+              },
+              plugins: {
+                'eslint-plugin-import': importPlugin,
+                'eslint-plugin-json': jsonFixture,
+              },
             });
           }
         } else {
@@ -88,8 +102,19 @@ describe('CLI regression tests', function () {
             configFile: './tests/files/just-json-files/.eslintrc.json',
             rulePaths: ['./src/rules'],
             ignore: false,
+            baseConfig: {
+              plugins: ['json'],
+              overrides: [
+                {
+                  files: ['*.json'],
+                  processor: 'json/json',
+                  rules: { 'json/*': 'error' },
+                },
+              ],
+            },
           });
           cli.addPlugin('eslint-plugin-import', importPlugin);
+          cli.addPlugin('eslint-plugin-json', jsonFixture);
         }
       }
     });
@@ -104,15 +129,14 @@ describe('CLI regression tests', function () {
                 filePath: path.resolve(invalidJSON),
                 messages: [
                   {
-                    column: 2,
-                    endColumn: 3,
+                    column: 1,
+                    endColumn: 2,
                     endLine: 1,
                     line: 1,
-                    message: 'Expected a JSON object, array or literal.',
+                    message: 'Invalid JSON',
                     nodeType: results[0].messages[0].nodeType, // we don't care about this one
                     ruleId: 'json/*',
                     severity: 2,
-                    source: results[0].messages[0].source, // NewLine-characters might differ depending on git-settings
                   },
                 ],
                 errorCount: 1,
@@ -139,15 +163,14 @@ describe('CLI regression tests', function () {
               filePath: path.resolve(invalidJSON),
               messages: [
                 {
-                  column: 2,
-                  endColumn: 3,
+                  column: 1,
+                  endColumn: 2,
                   endLine: 1,
                   line: 1,
-                  message: 'Expected a JSON object, array or literal.',
+                  message: 'Invalid JSON',
                   nodeType: results.results[0].messages[0].nodeType, // we don't care about this one
                   ruleId: 'json/*',
                   severity: 2,
-                  source: results.results[0].messages[0].source, // NewLine-characters might differ depending on git-settings
                 },
               ],
               errorCount: 1,

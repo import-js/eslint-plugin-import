@@ -1,7 +1,7 @@
 {
   "root": true,
 
-  "plugins": ["import", "json"],
+  "plugins": ["import"],
 
   "rules": {
     "import/no-unused-modules": [
@@ -11,12 +11,5 @@
         "unusedExports": true
       }
     ]
-  },
-
-  "overrides": [
-    {
-      "files": "*.json",
-      "extends": "plugin:json/recommended"
-    }
-  ]
+  }
 }
