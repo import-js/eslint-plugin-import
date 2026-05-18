@@ -548,13 +548,52 @@ context('TypeScript', function () {
           code: "import { type x } from './foo'; import { y } from './foo'",
           ...parserConfig,
         }),
+        ...parser === parsers.TS_NEW ? [
+          // #3195: namespace type imports cannot be merged with named type imports.
+          test({
+            code: "import type * as React from 'react'; import { type ReactElement } from 'react'",
+            ...parserConfig,
+          }),
+          test({
+            code: "import type * as ReactTypes from 'react'; import * as ReactRuntime from 'react'",
+            ...parserConfig,
+          }),
+        ] : [],
         test({
           code: "import { type x } from './foo'; import type y from 'foo'",
           ...parserConfig,
         }),
+        // #3195: default type imports cannot be merged with inline named type imports.
+        test({
+          code: "import type React from 'react'; import { type ReactElement } from 'react'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
+        test({
+          code: "import type ReactTypes from 'react'; import ReactRuntime from 'react'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
       ]);
 
-      const invalid = [
+      const invalid = [].concat(parser === parsers.TS_NEW ? [
+        test(withoutAutofixOutput({
+          code: "import type * as React from './foo'; import type * as ReactDOM from './foo'",
+          ...parserConfig,
+          errors: [
+            {
+              line: 1,
+              column: 29,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 69,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        })),
+      ] : [], [
         test(withoutAutofixOutput({
           code: "import type x from './foo'; import type y from './foo'",
           ...parserConfig,
@@ -605,7 +644,7 @@ context('TypeScript', function () {
             },
           ],
         }),
-      ].concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
+      ]).concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
         test({
           code: "import {type x} from './foo'; import type {y} from './foo'",
           ...parserConfig,

@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236])
+- [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195])
 
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
@@ -1193,6 +1194,7 @@ for info on changes for earlier releases.
 [#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
+[#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172

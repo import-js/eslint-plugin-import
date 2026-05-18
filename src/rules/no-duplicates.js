@@ -328,7 +328,7 @@ module.exports = {
       return `${defaultResolver(parts[1])}?${parts[2]}`;
     } : defaultResolver;
 
-    /** @type {Map<unknown, { imported: Map<string, import('estree').ImportDeclaration[]>, nsImported: Map<string, import('estree').ImportDeclaration[]>, defaultTypesImported: Map<string, import('estree').ImportDeclaration[]>, namedTypesImported: Map<string, import('estree').ImportDeclaration[]>}>} */
+    /** @type {Map<unknown, { imported: Map<string, import('estree').ImportDeclaration[]>, nsImported: Map<string, import('estree').ImportDeclaration[]>, defaultTypesImported: Map<string, import('estree').ImportDeclaration[]>, namedTypesImported: Map<string, import('estree').ImportDeclaration[]>, namespaceTypesImported: Map<string, import('estree').ImportDeclaration[]>}>} */
     const moduleMaps = new Map();
 
     /** @param {import('estree').ImportDeclaration} n */
@@ -340,11 +340,18 @@ module.exports = {
           nsImported: new Map(),
           defaultTypesImported: new Map(),
           namedTypesImported: new Map(),
+          namespaceTypesImported: new Map(),
         });
       }
       const map = moduleMaps.get(n.parent);
-      if (!preferInline && n.importKind === 'type') {
-        return n.specifiers.length > 0 && n.specifiers[0].type === 'ImportDefaultSpecifier' ? map.defaultTypesImported : map.namedTypesImported;
+      if (n.importKind === 'type') {
+        if (hasNamespace(n)) {
+          return map.namespaceTypesImported;
+        }
+        if (getDefaultImportName(n) != null) {
+          return map.defaultTypesImported;
+        }
+        return preferInline ? map.imported : map.namedTypesImported;
       }
       if (!preferInline && n.specifiers.some((spec) => spec.importKind === 'type')) {
         return map.namedTypesImported;
@@ -374,6 +381,7 @@ module.exports = {
           checkImports(map.nsImported, context);
           checkImports(map.defaultTypesImported, context);
           checkImports(map.namedTypesImported, context);
+          checkImports(map.namespaceTypesImported, context);
         }
       },
     };
