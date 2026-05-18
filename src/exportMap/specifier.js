@@ -9,16 +9,27 @@ export default function processSpecifier(specifier, astNode, exportMap, namespac
       local = 'default';
       break;
     case 'ExportNamespaceSpecifier':
-      exportMap.namespace.set(specifier.exported.name, Object.defineProperty(exportMeta, 'namespace', {
+      Object.defineProperty(exportMeta, 'namespace', {
         get() { return namespace.resolveImport(nsource); },
-      }));
+      });
+      exportMap.namespace.set(specifier.exported.name, exportMeta);
       return;
     case 'ExportAllDeclaration':
-      exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.source.value));
+      Object.defineProperty(exportMeta, 'namespace', {
+        get() { return namespace.resolveImport(specifier.source.value); },
+      });
+      exportMap.namespace.set(
+        specifier.exported.name || specifier.exported.value,
+        exportMeta,
+      );
       return;
     case 'ExportSpecifier':
       if (!astNode.source) {
-        exportMap.namespace.set(specifier.exported.name || specifier.exported.value, namespace.add(exportMeta, specifier.local));
+        namespace.add(exportMeta, specifier.local);
+        exportMap.namespace.set(
+          specifier.exported.name || specifier.exported.value,
+          exportMeta,
+        );
         return;
       }
     // else falls through

@@ -325,6 +325,18 @@ const invalid = [].concat(
     errors: ["'e' not found in deeply imported namespace 'b.c'."],
     parserOptions: { ecmaVersion: 2022 },
   })),
+
+  // #3250: `export * as` re-export resolves under espree
+  testVersion('>= 6', () => ({
+    code: `
+      import * as middle from './middle';
+
+      console.log(middle.myName.b);
+    `,
+    filename: testFilePath('export-star-2/downstream.js'),
+    parserOptions: { ecmaVersion: 2020 },
+    errors: ["'b' not found in deeply imported namespace 'middle.myName'."],
+  })),
 );
 
 ///////////////////////
