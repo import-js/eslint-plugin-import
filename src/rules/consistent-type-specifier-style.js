@@ -58,7 +58,11 @@ module.exports = {
     schema: [
       {
         type: 'string',
-        enum: ['prefer-inline', 'prefer-top-level'],
+        enum: [
+          'prefer-inline',
+          'prefer-top-level',
+          'prefer-top-level-if-only-type-imports',
+        ],
         default: 'prefer-inline',
       },
     ],
@@ -66,8 +70,9 @@ module.exports = {
 
   create(context) {
     const sourceCode = getSourceCode(context);
+    const preference = context.options[0];
 
-    if (context.options[0] === 'prefer-inline') {
+    if (preference === 'prefer-inline') {
       return {
         ImportDeclaration(node) {
           if (node.importKind === 'value' || node.importKind == null) {
@@ -108,7 +113,7 @@ module.exports = {
       };
     }
 
-    // prefer-top-level
+    // prefer-top-level or prefer-top-level-if-only-type-imports
     return {
       /** @param {import('estree').ImportDeclaration} node */
       ImportDeclaration(node) {
@@ -164,9 +169,10 @@ module.exports = {
             typeofSpecifiers.length > 0 ? 'typeof' : [],
           );
 
+          const messageSuffix = preference === 'prefer-top-level-if-only-type-imports' ? ' when there are only type imports' : '';
           context.report({
             node,
-            message: 'Prefer using a top-level {{kind}}-only import instead of inline {{kind}} specifiers.',
+            message: `Prefer using a top-level {{kind}}-only import instead of inline {{kind}} specifiers${messageSuffix}.`,
             data: {
               kind: kind.join('/'),
             },
@@ -174,7 +180,7 @@ module.exports = {
               return fixer.replaceText(node, newImports);
             },
           });
-        } else {
+        } else if (preference !== 'prefer-top-level-if-only-type-imports') {
           // remove specific specifiers and insert new imports for them
           typeSpecifiers.concat(typeofSpecifiers).forEach((specifier) => {
             context.report({
