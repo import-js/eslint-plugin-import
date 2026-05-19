@@ -37,6 +37,7 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 | [no-mutable-exports](docs/rules/no-mutable-exports.md)                 | Forbid the use of mutable exports with `var` or `let`.                                |      |       |    |    |    |    |
 | [no-named-as-default](docs/rules/no-named-as-default.md)               | Forbid use of exported name as identifier of default export.                          |      | ☑️ 🚸 |    |    |    |    |
 | [no-named-as-default-member](docs/rules/no-named-as-default-member.md) | Forbid use of exported name as property of default export.                            |      | ☑️ 🚸 |    |    |    |    |
+| [no-rename-default](docs/rules/no-rename-default.md)                   | Forbid importing a default export by a different name.                                |      |       |    |    |    |    |
 | [no-unused-modules](docs/rules/no-unused-modules.md)                   | Forbid modules without exports, or exports without matching import in another module. |      |       |    |    |    |    |
 
 ### Module systems
