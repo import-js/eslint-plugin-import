@@ -289,7 +289,7 @@ describe('dynamic imports', function () {
     return;
   }
 
-  this.timeout(10e3);
+  this.timeout(Number(process.env.ESLINT_IMPORT_WSL_TEST_TIMEOUT) || 10e3);
 
   // test for unused exports with `import()`
   ruleTester.run('no-unused-modules', rule, {

@@ -18,16 +18,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019]
+        os: [windows-2022]
         node-version: [18, 16, 14, 12, 10, 8, 6, 4]
         configuration: [wsl, native]
 
     steps:
     - uses: actions/checkout@v4
-    - uses: Vampire/setup-wsl@v3
+    - uses: Vampire/setup-wsl@v7
       if: matrix.configuration == 'wsl'
       with:
         distribution: Ubuntu-22.04
+        wsl-version: 2
     - run: curl --version
     - name: 'WSL: do all npm install steps'
       if: matrix.configuration == 'wsl'
@@ -35,6 +36,7 @@ jobs:
         ESLINT_VERSION: 7
         TRAVIS_NODE_VERSION: ${{ matrix.node-version }}
       run: |
+        export ESLINT_IMPORT_WSL_TEST_TIMEOUT=60000
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
         export NVM_DIR="$HOME/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -78,7 +80,7 @@ jobs:
         fi
         npm run copy-metafiles
         npm run pretest
-        npm run tests-only
+        npm run mocha -- tests/src --timeout "$ESLINT_IMPORT_WSL_TEST_TIMEOUT"
 
     - name: install dependencies for node <= 10
       if: matrix.node-version <= '10' && matrix.configuration == 'native'
