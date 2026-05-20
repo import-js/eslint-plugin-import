@@ -723,7 +723,11 @@ module.exports = {
           if (specifiers.length > 0) {
             specifiers.forEach((specifier) => {
               if (specifier.exported) {
-                newExportIdentifiers.add(specifier.exported.name || specifier.exported.value);
+                const exportedName = specifier.exported.name || specifier.exported.value;
+                // `export { X as default }` uses the string "default" as the exported name,
+                // but the exports map stores default exports under IMPORT_DEFAULT_SPECIFIER.
+                // Normalize here so that the map key lookup is consistent.
+                newExportIdentifiers.add(exportedName === DEFAULT ? IMPORT_DEFAULT_SPECIFIER : exportedName);
               }
             });
           }
