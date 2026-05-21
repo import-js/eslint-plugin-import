@@ -610,7 +610,9 @@ context('TypeScript', function () {
             },
           ],
         })),
-        test({
+        // @babel/eslint-parser (BABEL_NEW) rejects duplicate default type imports as a duplicate
+        // binding; babel-eslint (BABEL_OLD) tolerated it and TS_NEW handles it, so skip only for BABEL_NEW.
+        ...parser === parsers.BABEL_NEW ? [] : [test({
           code: "import type x from './foo'; import type x from './foo'",
           output: "import type x from './foo'; ",
           ...parserConfig,
@@ -626,7 +628,7 @@ context('TypeScript', function () {
               message: "'./foo' imported multiple times.",
             },
           ],
-        }),
+        })],
         test({
           code: "import type {x} from './foo'; import type {y} from './foo'",
           ...parserConfig,
