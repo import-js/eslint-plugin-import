@@ -13,6 +13,7 @@ import readPkgUp from 'eslint-module-utils/readPkgUp';
 import values from 'object.values';
 import includes from 'array-includes';
 import flatMap from 'array.prototype.flatmap';
+import minimatch from 'minimatch';
 
 import ExportMapBuilder from '../exportMap/builder';
 import recursivePatternCapture from '../exportMap/patternCapture';
@@ -47,6 +48,102 @@ function requireFileEnumerator() {
     }
   }
   return FileEnumerator;
+}
+
+/**
+ * Walk a directory collecting file paths that match the given extensions.
+ * Skips node_modules and dot-directories. Recurses unless `recursive` is `false`.
+ * @param {string} dir - directory to walk
+ * @param {string[]} extensions - list of supported file extensions
+ * @param {string[]} results - accumulator for matched file paths
+ * @param {object} fs - Node.js fs module
+ * @param {Function} join - path.join
+ * @param {Function} extname - path.extname
+ * @param {boolean} [recursive] - if `false`, do not descend into subdirectories
+ * @returns {string[]} list of matched file paths
+ */
+function walkDirectory(dir, extensions, results, fs, join, extname, recursive) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch (e) {
+    return results;
+  }
+
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    if (entry.name[0] === '.' || entry.name === 'node_modules') {
+      continue;
+    }
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (recursive !== false) {
+        walkDirectory(fullPath, extensions, results, fs, join, extname, recursive);
+      }
+    } else if (entry.isFile() && extensions.indexOf(extname(fullPath)) > -1) {
+      results.push(fullPath);
+    }
+  }
+
+  return results;
+}
+
+/**
+ * List files with Node.js fs + minimatch — the last tier of listFilesToProcess,
+ * used when neither FileEnumerator nor the legacy APIs are requireable.
+ * @param {string[]} src - list of file paths, directories, or glob patterns
+ * @param {string[]} extensions - list of supported file extensions
+ * @returns {string[]} list of matched file paths
+ */
+function listFilesWithNodeFs(src, extensions) {
+  const fs = require('fs');
+  const { join, resolve, extname } = require('path');
+  const isGlob = require('is-glob');
+
+  extensions = extensions.map((ext) => ext.startsWith('.') ? ext : `.${ext}`);
+  const results = [];
+
+  const { Minimatch, GLOBSTAR } = minimatch;
+  const minimatchOpts = { dot: true, matchBase: true };
+
+  src.forEach((pattern) => {
+    if (isGlob(pattern)) {
+      // Expand braces, then take the base from the parsed pattern's leading
+      // literal segments, mirroring how ESLint's FileEnumerator resolves globs.
+      minimatch.braceExpand(pattern).forEach((expanded) => {
+        const mm = new Minimatch(resolve(expanded), minimatchOpts);
+        const segments = mm.set[0] || [];
+        const baseParts = [];
+        while (baseParts.length < segments.length && typeof segments[baseParts.length] === 'string') {
+          baseParts.push(segments[baseParts.length]);
+        }
+        const base = baseParts.join('/') || '/';
+        const globPart = segments.slice(baseParts.length);
+        // `src/*.js` stays in `src/`; `src/**/*.js` recurses.
+        const recursive = globPart.length > 1 || globPart.indexOf(GLOBSTAR) !== -1;
+        const allFiles = walkDirectory(base, extensions, [], fs, join, extname, recursive);
+        allFiles.forEach((file) => {
+          if (mm.match(file)) {
+            results.push(file);
+          }
+        });
+      });
+    } else {
+      const resolved = resolve(pattern);
+      try {
+        const stat = fs.statSync(resolved);
+        if (stat.isDirectory()) {
+          walkDirectory(resolved, extensions, results, fs, join, extname);
+        } else if (stat.isFile() && extensions.indexOf(extname(resolved)) > -1) {
+          results.push(resolved);
+        }
+      } catch (e) {
+        // Path doesn't exist, skip it
+      }
+    }
+  });
+
+  return results;
 }
 
 /**
@@ -162,7 +259,15 @@ function listFilesToProcess(src, extensions) {
     return listFilesUsingFileEnumerator(FileEnumerator, src, extensions);
   }
   // If not, then we can try even older versions of this capability (listFilesToProcess)
-  return listFilesWithLegacyFunctions(src, extensions);
+  try {
+    return listFilesWithLegacyFunctions(src, extensions);
+  } catch (e) {
+    // If legacy functions are also unavailable (ESLint v10+), use Node.js fs as a fallback
+    if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED') {
+      return listFilesWithNodeFs(src, extensions);
+    }
+    throw e;
+  }
 }
 
 const EXPORT_DEFAULT_DECLARATION = 'ExportDefaultDeclaration';

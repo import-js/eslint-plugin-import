@@ -48,7 +48,7 @@ export default function childContext(path, context) {
   return {
     cacheKey: optionsToken + settingsHash + String(path),
     settings,
-    parserOptions,
+    parserOptions: parserOptions || languageOptions && languageOptions.parserOptions,
     parserPath,
     path,
     languageOptions,
