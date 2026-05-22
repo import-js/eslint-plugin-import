@@ -182,25 +182,13 @@ function listFilesUsingFileEnumerator(FileEnumerator, src, extensions) {
       ({ filePath, ignored }) => ({ filename: filePath, ignored }),
     );
   } catch (e) {
-    // If we're using flat config, and FileEnumerator throws due to a lack of eslintrc,
-    // then we want to throw an error so that the user knows about this rule's reliance on
-    // the legacy config.
+    // #3079: flat config without .eslintrc — use the `listFilesWithNodeFs` fallback.
     if (
       isUsingFlatConfig
       && e.message.includes('No ESLint configuration found')
     ) {
-      throw new Error(`
-Due to the exclusion of certain internal ESLint APIs when using flat config,
-the import/no-unused-modules rule requires an .eslintrc file to know which
-files to ignore (even when using flat config).
-The .eslintrc file only needs to contain "ignorePatterns", or can be empty if
-you do not want to ignore any files.
-
-See https://github.com/import-js/eslint-plugin-import/issues/3079
-for additional context.
-`);
+      return listFilesWithNodeFs(src, extensions);
     }
-    // If this isn't the case, then we'll just let the error bubble up
     throw e;
   }
 }
