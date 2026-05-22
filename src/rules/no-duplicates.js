@@ -2,6 +2,7 @@ import { getSourceCode } from 'eslint-module-utils/contextCompat';
 import resolve from 'eslint-module-utils/resolve';
 import semver from 'semver';
 import flatMap from 'array.prototype.flatmap';
+import trimEnd from 'string.prototype.trimend';
 
 import docsUrl from '../docsUrl';
 
@@ -171,7 +172,21 @@ function getFix(first, rest, sourceCode, context) {
         // Add *only* the new identifiers that don't already exist, and track any new identifiers so we don't add them again in the next loop
         const [specifierText, updatedExistingIdentifiers] = specifier.identifiers.reduce(([text, set], cur) => {
           const trimmed = cur.trim(); // Trim whitespace before/after to compare to our set of existing identifiers
-          const curWithType = trimmed.length > 0 && preferInline && isTypeSpecifier ? `type ${cur}` : cur;
+          const hasLineComment = (/\/\/[^\n]*$/).test(trimmed);
+          let curWithType;
+          if (trimmed.length > 0 && preferInline && isTypeSpecifier) {
+            curWithType = `type ${trimmed}`;
+          } else if (hasLineComment && trimmed.length > 0) {
+            // Preserve a trailing newline after line comments so the closing brace
+            // is not accidentally commented out when the specifier is spliced in.
+            curWithType = `${trimmed}\n`;
+          } else if (cur.includes('\n')) {
+            // Preserve leading newline+indentation for multiline import specifiers
+            // so merged specifiers stay on their own lines.
+            curWithType = trimEnd(cur).replace(/^[^\S\n]+/, '');
+          } else {
+            curWithType = trimmed;
+          }
           if (existingIdentifiers.has(trimmed)) {
             return [text, set];
           }
@@ -217,7 +232,22 @@ function getFix(first, rest, sourceCode, context) {
       fixes.push(fixer.insertTextAfter(firstToken, ` ${defaultImportName},`));
       if (shouldAddSpecifiers) {
         // `import def, {...} from './foo'` → `import def, {..., ...} from './foo'`
-        fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
+        const textBeforeClose2 = sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]);
+        const trailingMatch2 = textBeforeClose2.match(/(\s+)$/);
+        const trailingWhitespace2 = trailingMatch2 ? trailingMatch2[1] : '';
+        if (textBeforeClose2.trim() === '') {
+          fixes.push(fixer.replaceTextRange(
+            [openBrace.range[1], closeBrace.range[0]],
+            specifiersText,
+          ));
+        } else if (trailingWhitespace2) {
+          fixes.push(fixer.replaceTextRange(
+            [closeBrace.range[0] - trailingWhitespace2.length, closeBrace.range[1]],
+            `${specifiersText}${trailingWhitespace2}}`,
+          ));
+        } else {
+          fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
+        }
       }
     } else if (!shouldAddDefault && openBrace == null && shouldAddSpecifiers) {
       if (first.specifiers.length === 0) {
@@ -229,7 +259,24 @@ function getFix(first, rest, sourceCode, context) {
       }
     } else if (!shouldAddDefault && openBrace != null && closeBrace != null) {
       // `import {...} './foo'` → `import {..., ...} from './foo'`
-      fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
+      // Preserve trailing whitespace before the closing brace (symmetric spacing, multiline formatting).
+      // For empty or whitespace-only imports, replace all content between braces instead.
+      const textBeforeClose = sourceCode.text.slice(openBrace.range[1], closeBrace.range[0]);
+      const trailingMatch = textBeforeClose.match(/(\s+)$/);
+      const trailingWhitespace = trailingMatch ? trailingMatch[1] : '';
+      if (textBeforeClose.trim() === '') {
+        fixes.push(fixer.replaceTextRange(
+          [openBrace.range[1], closeBrace.range[0]],
+          specifiersText,
+        ));
+      } else if (trailingWhitespace) {
+        fixes.push(fixer.replaceTextRange(
+          [closeBrace.range[0] - trailingWhitespace.length, closeBrace.range[1]],
+          `${specifiersText}${trailingWhitespace}}`,
+        ));
+      } else {
+        fixes.push(fixer.insertTextBefore(closeBrace, specifiersText));
+      }
     }
 
     // Remove imports whose specifiers have been moved into the first import.

@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250])
 - [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235])
+- [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg])
 
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
@@ -1194,6 +1195,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
+[#3246]: https://github.com/import-js/eslint-plugin-import/pull/3246
 [#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3235]: https://github.com/import-js/eslint-plugin-import/issues/3235
@@ -2000,6 +2002,7 @@ for info on changes for earlier releases.
 [@mihkeleidast]: https://github.com/mihkeleidast
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@minervabot]: https://github.com/minervabot
+[@mixelburg]: https://github.com/mixelburg
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb

@@ -53,20 +53,20 @@ ruleTester.run('no-duplicates', rule, {
   invalid: [
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
-      output: "import { x , y } from './foo'; ",
+      output: "import { x,y } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     test({
       code: "import {x} from './foo'; import {y} from './foo'; import { z } from './foo'",
-      output: "import {x,y, z } from './foo';  ",
+      output: "import {x,y,z} from './foo';  ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
     // ensure resolved path results in warnings
     test({
       code: "import { x } from './bar'; import { y } from 'bar';",
-      output: "import { x , y } from './bar'; ",
+      output: "import { x,y } from './bar'; ",
       settings: {
         'import/resolve': {
           paths: [path.join(process.cwd(), 'tests', 'files')],
@@ -107,7 +107,7 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import type { x } from './foo'; import type { y } from './foo'",
-      output: "import type { x , y } from './foo'; ",
+      output: "import type { x,y } from './foo'; ",
       parser: parsers.BABEL_OLD,
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
@@ -120,7 +120,7 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import { x, /* x */ } from './foo'; import {//y\ny//y2\n} from './foo'",
-      output: "import { x, /* x */ //y\ny//y2\n} from './foo'; ",
+      output: "import { x, /* x *///y\ny//y2\n } from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -145,7 +145,7 @@ ruleTester.run('no-duplicates', rule, {
         // #2347: duplicate identifiers should be removed
         test({
           code: "import {a,b} from './foo'; import { b, c } from './foo'; import {b,c,d} from './foo'",
-          output: "import {a,b, c ,d} from './foo';  ",
+          output: "import {a,b,c,d} from './foo';  ",
           errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
           parser,
         }),
@@ -153,7 +153,7 @@ ruleTester.run('no-duplicates', rule, {
         // #2347: duplicate identifiers should be removed, but not if they are adjacent to comments
         test({
           code: "import {a} from './foo'; import { a/*,b*/ } from './foo'",
-          output: "import {a, a/*,b*/ } from './foo'; ",
+          output: "import {a,a/*,b*/} from './foo'; ",
           errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
           parser,
         }),
@@ -168,7 +168,7 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import { } from './foo'; import {x} from './foo'",
-      output: "import { x} from './foo'; ",
+      output: "import {x} from './foo'; ",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -186,7 +186,8 @@ ruleTester.run('no-duplicates', rule, {
 
     test({
       code: "import './foo'; import { /*x*/} from './foo'; import {//y\n} from './foo'; import {z} from './foo'",
-      output: "import { /*x*///y\nz} from './foo';   ",
+      output: "import {/*x*///y\nz} from './foo';   ",
+
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -373,7 +374,7 @@ import {x,y} from './foo'
     // #2027 long import list generate empty lines
     test({
       code: "import { Foo } from './foo';\nimport { Bar } from './foo';\nexport const value = {}",
-      output: "import { Foo , Bar } from './foo';\nexport const value = {}",
+      output: "import { Foo,Bar } from './foo';\nexport const value = {}",
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     }),
 
@@ -406,7 +407,6 @@ import {x,y} from './foo'
         import {
           DEFAULT_FILTER_KEYS,
           BULK_DISABLED,
-        ${''}
           BULK_ACTIONS_ENABLED
         } from '../constants';
         import React from 'react';
@@ -444,9 +444,9 @@ import {x,y} from './foo'
                 ${''}
         import {
           A2,
-        ${''}
           B2,
-          C2} from 'bar';
+          C2
+        } from 'bar';
                 ${''}
       `,
       errors: [
