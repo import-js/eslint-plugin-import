@@ -46,6 +46,28 @@ ruleTester.run('export', rule, {
       },
     })) || [],
 
+    // #2289 (closed by #3250): `export * from` of a barrel that uses `export * as`
+    // must not flag same-named exports in unrelated sibling chains as duplicates.
+    testVersion('>= 6', () => ({
+      code: `
+        export * from './A';
+        export * from './B';
+      `,
+      filename: testFilePath('./issue-2289/index.js'),
+      parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
+    })) || [],
+
+    // #2002 (closed by #3250): `export * from` of a `export * as` barrel must not
+    // conflict with same-named exports from a sibling barrel.
+    testVersion('>= 6', () => ({
+      code: `
+        export * from './processors';
+        export * from './rules';
+      `,
+      filename: testFilePath('./issue-2002/index.js'),
+      parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
+    })) || [],
+
     getTSParsers().map((parser) => ({
       code: `
         export default function foo(param: string): boolean;

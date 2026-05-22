@@ -205,6 +205,18 @@ const valid = [
       ecmaVersion: 2020,
     },
   })),
+  // #1845 (closed by #3250): deep access through multiple `export * as` re-exports
+  // must resolve real properties (no false positives).
+  testVersion('>= 6', () => ({
+    code: `
+      import * as alpha from './alpha';
+
+      console.log(alpha.abc.A);
+      console.log(alpha.def.D);
+    `,
+    filename: testFilePath('./issue-1845/consumer.js'),
+    parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
+  })),
   // es2022: Arbitrary module namespace identifier names
   testVersion('>= 8.7', () => ({
     code: "import * as names from './default-export-string';",
@@ -336,6 +348,17 @@ const invalid = [].concat(
     filename: testFilePath('export-star-2/downstream.js'),
     parserOptions: { ecmaVersion: 2020 },
     errors: ["'b' not found in deeply imported namespace 'middle.myName'."],
+  })),
+  // #3250: same fixture via named import — missing property on the re-exported namespace
+  testVersion('>= 6', () => ({
+    code: `
+      import { myName } from './middle';
+
+      console.log(myName.b);
+    `,
+    filename: testFilePath('export-star-2/downstream.js'),
+    parserOptions: { ecmaVersion: 2020 },
+    errors: ["'b' not found in imported namespace 'myName'."],
   })),
 );
 
