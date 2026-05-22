@@ -24,11 +24,23 @@ function reverse(array) {
   return array.map((v) => ({ ...v, rank: -v.rank })).reverse();
 }
 
+function getTokenOrCommentAfterCompat(sourceCode, nodeOrToken) {
+  return sourceCode.getTokenOrCommentAfter
+    ? sourceCode.getTokenOrCommentAfter(nodeOrToken)
+    : sourceCode.getTokenAfter(nodeOrToken, { includeComments: true });
+}
+
+function getTokenOrCommentBeforeCompat(sourceCode, nodeOrToken) {
+  return sourceCode.getTokenOrCommentBefore
+    ? sourceCode.getTokenOrCommentBefore(nodeOrToken)
+    : sourceCode.getTokenBefore(nodeOrToken, { includeComments: true });
+}
+
 function getTokensOrCommentsAfter(sourceCode, node, count) {
   let currentNodeOrToken = node;
   const result = [];
   for (let i = 0; i < count; i++) {
-    currentNodeOrToken = sourceCode.getTokenOrCommentAfter(currentNodeOrToken);
+    currentNodeOrToken = getTokenOrCommentAfterCompat(sourceCode, currentNodeOrToken);
     if (currentNodeOrToken == null) {
       break;
     }
@@ -41,7 +53,7 @@ function getTokensOrCommentsBefore(sourceCode, node, count) {
   let currentNodeOrToken = node;
   const result = [];
   for (let i = 0; i < count; i++) {
-    currentNodeOrToken = sourceCode.getTokenOrCommentBefore(currentNodeOrToken);
+    currentNodeOrToken = getTokenOrCommentBeforeCompat(sourceCode, currentNodeOrToken);
     if (currentNodeOrToken == null) {
       break;
     }

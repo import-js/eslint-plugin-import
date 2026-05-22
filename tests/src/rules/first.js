@@ -1,4 +1,4 @@
-import { test, getTSParsers, testVersion } from '../utils';
+import { test, getTSParsers, testVersion, parsers } from '../utils';
 import fs from 'fs';
 import path from 'path';
 
@@ -26,7 +26,7 @@ ruleTester.run('first', rule, {
     testVersion('>= 7', () => ({
       // issue #2210
       code: String(fs.readFileSync(path.join(__dirname, '../../files/component.html'))),
-      parser: require.resolve('@angular-eslint/template-parser'),
+      parser: parsers.ANGULAR,
     })),
   ),
   invalid: [
