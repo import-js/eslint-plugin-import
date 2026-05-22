@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250])
+- [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235])
 
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
@@ -1195,6 +1196,7 @@ for info on changes for earlier releases.
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
+[#3235]: https://github.com/import-js/eslint-plugin-import/issues/3235
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191

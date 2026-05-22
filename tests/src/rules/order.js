@@ -193,6 +193,20 @@ ruleTester.run('order', rule, {
         warnOnUnassignedImports: true,
       }],
     }),
+    // https://github.com/import-js/eslint-plugin-import/issues/3235
+    test({
+      code: `
+        import { fromAbi } from '../../.checkpoint/models';
+        import { handleVotingPowerValidationMetadata } from '../common/ipfs';
+        import ExecutionStrategyAbi from './abis/executionStrategy.json';
+        import L1AvatarExecutionStrategyAbi from './abis/l1/L1AvatarExectionStrategy';
+        import { FullConfig } from './config';
+      `,
+      options: [{
+        groups: ['builtin', 'external', 'internal', 'type'],
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      }],
+    }),
     // Omitted types should implicitly be considered as the last type
     test({
       code: `
@@ -1304,6 +1318,24 @@ ruleTester.run('order', rule, {
       `,
       errors: [{
         message: '`fs` import should occur before import of `async`',
+      }],
+    }),
+    // https://github.com/import-js/eslint-plugin-import/issues/3235
+    test({
+      code: `
+        import a from './foo';
+        import b from '../bar';
+      `,
+      output: `
+        import b from '../bar';
+        import a from './foo';
+      `,
+      options: [{
+        groups: ['builtin', 'external', 'internal', 'type'],
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      }],
+      errors: [{
+        message: '`../bar` import should occur before import of `./foo`',
       }],
     }),
     // fix order with spaces on the end of line
