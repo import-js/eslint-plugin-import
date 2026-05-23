@@ -7,13 +7,13 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
-- [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247])
+- [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg])
 
 ### Fixed
-- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236])
-- [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195])
-- ExportMap: resolve export * as ns re-exports under modern parsers ([#3250])
-- [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235])
+- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth])
+- [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714])
+- ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi])
+- [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235], thanks [@Sekhmet])
 - [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg])
 
 ### Changed
@@ -86,7 +86,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Changed
 - [Docs] [`no-extraneous-dependencies`]: Make glob pattern description more explicit ([#2944], thanks [@mulztob])
-- [`no-unused-modules`]: add console message to help debug [#2866]
+- [`no-unused-modules`]: add console message to help debug ([#2866], thanks [@magic-m-johnson])
 - [Refactor] `ExportMap`: make procedures static instead of monkeypatching exportmap ([#2982], thanks [@soryy708])
 - [Refactor] `ExportMap`: separate ExportMap instance from its builder logic ([#2985], thanks [@soryy708])
 - [Docs] [`order`]: Add a quick note on how unbound imports and --fix ([#2640], thanks [@minervabot])
@@ -149,17 +149,17 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [2.27.4] - 2023-01-11
 
 ### Fixed
-- `semver` should be a prod dep ([#2668])
+- `semver` should be a prod dep ([#2668], thanks [@ddolcimascolo])
 
 ## [2.27.3] - 2023-01-11
 
 ### Fixed
-- [`no-empty-named-blocks`]: rewrite rule to only check import declarations ([#2666])
+- [`no-empty-named-blocks`]: rewrite rule to only check import declarations ([#2666], thanks [@EvHaus])
 
 ## [2.27.2] - 2023-01-11
 
 ### Fixed
-- [`no-duplicates`]: do not unconditionally require `typescript` ([#2665])
+- [`no-duplicates`]: do not unconditionally require `typescript` ([#2665], thanks [@DerekWW])
 
 ## [2.27.1] - 2023-01-11
 
@@ -613,7 +613,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [2.17.1] - 2019-04-13
 
 ### Fixed
-- require v2.4 of `eslint-module-utils` ([#1322])
+- require v2.4 of `eslint-module-utils` ([#1322], thanks [@mlenser])
 
 ## [2.17.0] - 2019-04-13
 
@@ -772,7 +772,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Add support to specify the package.json [`no-extraneous-dependencies`] ([#685], thanks [@ramasilveyra])
 
 ### Fixed
-- attempt to fix crash in [`no-mutable-exports`]. ([#660])
+- attempt to fix crash in [`no-mutable-exports`]. ([#660], thanks [@NullDivision])
 - "default is a reserved keyword" in no-maned-default tests by locking down babylon to 6.15.0 (#756, thanks @gmathieu)
 - support scoped modules containing non word characters
 
@@ -783,7 +783,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   with projects that did not explicitly ignore `node_modules`. ([#654])
 - [`import/ignore` setting] was only being respected if the ignored module didn't start with
   an `import` or `export` JS statement
-- [`prefer-default-export`]: fixed crash on export extensions ([#653])
+- [`prefer-default-export`]: fixed crash on export extensions ([#653], thanks [@adascal])
 
 ## [2.1.0] - 2016-11-02
 
@@ -793,15 +793,15 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 
 ### Fixed
 - [`prefer-default-export`] handles flow `export type` ([#484] + [#639], thanks [@jakubsta])
-- [`prefer-default-export`] handles re-exported default exports ([#609])
-- Fix crash when using [`newline-after-import`] with decorators ([#592])
+- [`prefer-default-export`] handles re-exported default exports ([#609], thanks [@danielkcz])
+- Fix crash when using [`newline-after-import`] with decorators ([#592], thanks [@lukekarrys])
 - Properly report [`newline-after-import`] when next line is a decorator
-- Fixed documentation for the default values for the [`order`] rule ([#601])
+- Fixed documentation for the default values for the [`order`] rule ([#601], thanks [@mpalmer685])
 
 ## [2.0.1] - 2016-10-06
 
 ### Fixed
-- Fixed code that relied on removed dependencies. ([#604])
+- Fixed code that relied on removed dependencies. ([#604], thanks [@moeriki])
 
 ## [2.0.0]! - 2016-09-30
 
@@ -811,14 +811,14 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   with some `parserOptions` in the mix. ([#402])
 - `react` shared config: added `jsx: true` to `parserOptions.ecmaFeatures`.
 - Added [`no-webpack-loader-syntax`] rule: forbid custom Webpack loader syntax in imports. ([#586], thanks [@fson]!)
-- Add option `newlines-between: "ignore"` to [`order`] ([#519])
-- Added [`no-unassigned-import`] rule ([#529])
+- Add option `newlines-between: "ignore"` to [`order`] ([#519], thanks [@sompylasar])
+- Added [`no-unassigned-import`] rule ([#529], thanks [@jfmengels])
 
 ### Breaking
-- [`import/extensions` setting] defaults to `['.js']`. ([#306])
-- [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270])
-- [`newline-after-import`]: Removed need for an empty line after an inline `require` call ([#570])
-- [`order`]: Default value for `newlines-between` option is now `ignore` ([#519])
+- [`import/extensions` setting] defaults to `['.js']`. ([#306], thanks [@benmosher])
+- [`import/ignore` setting] defaults to nothing, and ambiguous modules are ignored natively. This means importing from CommonJS modules will no longer be reported by [`default`], [`named`], or [`namespace`], regardless of `import/ignore`. ([#270], thanks [@benmosher])
+- [`newline-after-import`]: Removed need for an empty line after an inline `require` call ([#570], thanks [@sindresorhus])
+- [`order`]: Default value for `newlines-between` option is now `ignore` ([#519], thanks [@sompylasar])
 
 ### Changed
 - `imports-first` is renamed to [`first`]. `imports-first` alias will continue to
@@ -832,7 +832,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ## [1.16.0] - 2016-09-22
 
 ### Added
-- Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568])
+- Added [`no-dynamic-require`] rule: forbid `require()` calls with expressions. ([#567], [#568], thanks [@jfmengels])
 - Added [`no-internal-modules`] rule: restrict deep package imports to specific folders. ([#485], thanks [@spalger]!)
 - [`extensions`]: allow override of a chosen default with options object ([#555], thanks [@ljharb]!)
 
@@ -843,8 +843,8 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ## [1.15.0] - 2016-09-12
 
 ### Added
-- Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509]).
-- Added [`no-absolute-path`] rule ([#530], [#538])
+- Added an `allow` option to [`no-nodejs-modules`] to allow exceptions ([#452], [#509], thanks [@jfmengels] and [@ljharb]).
+- Added [`no-absolute-path`] rule ([#530], [#538], thanks [@jfmengels])
 - [`max-dependencies`] for specifying the maximum number of dependencies (both `import` and `require`) a module can have. (see [#489], thanks [@tizmagik])
 - Added glob option to config for [`no-extraneous-dependencies`], after much bikeshedding. Thanks, [@knpwrs]! ([#527])
 
@@ -854,7 +854,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ## [1.14.0] - 2016-08-22
 
 ### Added
-- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser. ([#503])
+- [`import/parsers` setting]: parse some dependencies (i.e. TypeScript!) with a different parser than the ESLint-configured parser. ([#503], thanks [@benmosher])
 
 ### Fixed
 - [`namespace`] exception for get property from `namespace` import, which are re-export from commonjs module ([#499] fixes [#416], thanks [@wKich])
@@ -866,7 +866,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
   computed member references to namespaces. (see [#456])
 
 ### Changed
-- Modified [`no-nodejs-modules`] error message to include the module's name ([#453], [#461])
+- Modified [`no-nodejs-modules`] error message to include the module's name ([#453], [#461], thanks [@jfmengels] and [@ljharb])
 
 ### Fixed
 - [`import/extensions` setting] is respected in spite of the appearance of imports
@@ -915,7 +915,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - Added new rule [`no-restricted-paths`]. ([#155]/[#371], thanks [@lo1tuma])
 - [`import/core-modules` setting]: allow configuration of additional module names,
   to be treated as builtin modules (a la `path`, etc. in Node). ([#275] + [#365], thanks [@sindresorhus] for driving)
-- React Native shared config (based on comment from [#283])
+- React Native shared config (based on comment from [#283], thanks [@benmosher])
 
 ### Fixed
 - Fixed crash with `newline-after-import` related to the use of switch cases. (fixes [#386], thanks [@ljharb] for reporting) ([#395])
@@ -923,12 +923,12 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 ## [1.9.2] - 2016-06-21
 
 ### Fixed
-- Issues with ignored/CJS files in [`export`] and [`no-deprecated`] rules. ([#348], [#370])
+- Issues with ignored/CJS files in [`export`] and [`no-deprecated`] rules. ([#348], [#370], thanks [@sohkai] and [@wKich])
 
 ## [1.9.1] - 2016-06-16
 
 ### Fixed
-- Reordered precedence for loading resolvers. ([#373])
+- Reordered precedence for loading resolvers. ([#373], thanks [@benmosher])
 
 ## [1.9.0] - 2016-06-10
 
@@ -989,7 +989,7 @@ Yanked due to critical issue in eslint-module-utils with cache key resulting fro
 - add [`extensions`] rule ([#250], thanks [@lo1tuma])
 - add [`no-nodejs-modules`] rule ([#261], thanks [@jfmengels])
 - add [`order`] rule ([#247], thanks [@jfmengels])
-- consider `resolve.fallback` config option in the webpack resolver ([#254])
+- consider `resolve.fallback` config option in the webpack resolver ([#254], thanks [@yp])
 
 ### Changed
 - [`imports-first`] now allows directives (i.e. `'use strict'`) strictly before
@@ -1033,7 +1033,7 @@ My test project takes 17s to lint completely, down from 55s, when using the
 memoizing parser, and takes only 27s with naked `babel-eslint` (thus, reparsing local modules).
 
 ### Added
-- This change log ([#216])
+- This change log ([#216], thanks [@gajus])
 - Experimental memoizing [parser](./memo-parser/README.md)
 
 ### Fixed
@@ -1049,26 +1049,26 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 [`no-unresolved`] in isolation, and ~35% total reduction in lint time.
 
 ### Changed
-- added caching to core/resolve via [#214], configured via [`import/cache` setting]
+- added caching to core/resolve via [#214] (thanks [@lencioni]), configured via [`import/cache` setting]
 
 ## [1.1.0] - 2016-03-15
 
 ### Added
-- Added an [`ignore`](./docs/rules/no-unresolved.md#ignore) option to [`no-unresolved`] for those pesky files that no resolver can find. (still prefer enhancing the Webpack and Node resolvers to using it, though). See [#89] for details.
+- Added an [`ignore`](./docs/rules/no-unresolved.md#ignore) option to [`no-unresolved`] for those pesky files that no resolver can find. (still prefer enhancing the Webpack and Node resolvers to using it, though). See [#89] for details (thanks [@jbe456]).
 
 ## [1.0.4] - 2016-03-11
 
 ### Changed
-- respect hoisting for deep namespaces ([`namespace`]/[`no-deprecated`]) ([#211])
+- respect hoisting for deep namespaces ([`namespace`]/[`no-deprecated`]) ([#211], thanks [@benmosher])
 
 ### Fixed
-- don't crash on self references ([#210])
-- correct cache behavior in `eslint_d` for deep namespaces ([#200])
+- don't crash on self references ([#210], thanks [@AndrewRayCode])
+- correct cache behavior in `eslint_d` for deep namespaces ([#200], thanks [@benmosher])
 
 ## [1.0.3] - 2016-02-26
 
 ### Changed
-- no-deprecated follows deep namespaces ([#191])
+- no-deprecated follows deep namespaces ([#191], thanks [@benmosher])
 
 ### Fixed
 - [`namespace`] no longer flags modules with only a default export as having no names. (ns.default is valid ES6)
@@ -1076,14 +1076,14 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 ## [1.0.2] - 2016-02-26
 
 ### Fixed
-- don't parse imports with no specifiers ([#192])
+- don't parse imports with no specifiers ([#192], thanks [@steida])
 
 ## [1.0.1] - 2016-02-25
 
 ### Fixed
 - export `stage-0` shared config
 - documented [`no-deprecated`]
-- deep namespaces are traversed regardless of how they get imported ([#189])
+- deep namespaces are traversed regardless of how they get imported ([#189], thanks [@benmosher])
 
 ## [1.0.0] - 2016-02-24
 
@@ -1091,7 +1091,7 @@ I'm seeing 62% improvement over my normal test codebase when executing only
 - [`no-deprecated`]: WIP rule to let you know at lint time if you're using deprecated functions, constants, classes, or modules.
 
 ### Changed
-- [`namespace`]: support deep namespaces ([#119] via [#157])
+- [`namespace`]: support deep namespaces ([#119] via [#157], thanks [@benmosher])
 
 ## [1.0.0-beta.0] - 2016-02-13
 
@@ -1195,6 +1195,7 @@ for info on changes for earlier releases.
 [`memo-parser`]: ./memo-parser/README.md
 
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
+[#3247]: https://github.com/import-js/eslint-plugin-import/pull/3247
 [#3246]: https://github.com/import-js/eslint-plugin-import/pull/3246
 [#3237]: https://github.com/import-js/eslint-plugin-import/pull/3237
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
@@ -1820,6 +1821,7 @@ for info on changes for earlier releases.
 [@aamulumi]: https://github.com/aamulumi
 [@aberezkin]: https://github.com/aberezkin
 [@adamborowski]: https://github.com/adamborowski
+[@adascal]: https://github.com/adascal
 [@adjerbetian]: https://github.com/adjerbetian
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
@@ -1832,6 +1834,7 @@ for info on changes for earlier releases.
 [@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
 [@AndrewLeedham]: https://github.com/AndrewLeedham
+[@AndrewRayCode]: https://github.com/AndrewRayCode
 [@andyogo]: https://github.com/andyogo
 [@aravindet]: https://github.com/aravindet
 [@arvigeus]: https://github.com/arvigeus
@@ -1869,15 +1872,19 @@ for info on changes for earlier releases.
 [@christophercurrie]: https://github.com/christophercurrie
 [@cristobal]: https://github.com/cristobal
 [@DamienCassou]: https://github.com/DamienCassou
+[@danielkcz]: https://github.com/danielkcz
 [@danny-andrews]: https://github.com/dany-andrews
 [@darkartur]: https://github.com/darkartur
 [@davidbonnet]: https://github.com/davidbonnet
 [@dbrewer5]: https://github.com/dbrewer5
+[@ddolcimascolo]: https://github.com/ddolcimascolo
+[@DerekWW]: https://github.com/DerekWW
 [@developer-bandi]: https://github.com/developer-bandi
 [@devinrhode2]: https://github.com/devinrhode2
 [@devongovett]: https://github.com/devongovett
 [@dmnd]: https://github.com/dmnd
 [@domdomegg]: https://github.com/domdomegg
+[@DukeDeSouth]: https://github.com/DukeDeSouth
 [@duncanbeevers]: https://github.com/duncanbeevers
 [@dwardu]: https://github.com/dwardu
 [@echenley]: https://github.com/echenley
@@ -1889,6 +1896,7 @@ for info on changes for earlier releases.
 [@eps1lon]: https://github.com/eps1lon
 [@ernestostifano]: https://github.com/ernestostifano
 [@ertrzyiks]: https://github.com/ertrzyiks
+[@EvHaus]: https://github.com/EvHaus
 [@fa93hws]: https://github.com/fa93hws
 [@Fdawgs]: https://github.com/Fdawgs
 [@fengkfengk]: https://github.com/fengkfengk
@@ -1929,6 +1937,7 @@ for info on changes for earlier releases.
 [@ivo-stefchev]: https://github.com/ivo-stefchev
 [@jablko]: https://github.com/jablko
 [@jakubsta]: https://github.com/jakubsta
+[@jbe456]: https://github.com/jbe456
 [@jeffshaver]: https://github.com/jeffshaver
 [@jf248]: https://github.com/jf248
 [@jfmengels]: https://github.com/jfmengels
@@ -1981,8 +1990,10 @@ for info on changes for earlier releases.
 [@ludofischer]: https://github.com/ludofischer
 [@Lukas-Kullmann]: https://github.com/Lukas-Kullmann
 [@lukeapage]: https://github.com/lukeapage
+[@lukekarrys]: https://github.com/lukekarrys
 [@lydell]: https://github.com/lydell
 [@magarcia]: https://github.com/magarcia
+[@magic-m-johnson]: https://github.com/magic-m-johnson
 [@Mairu]: https://github.com/Mairu
 [@malykhinvi]: https://github.com/malykhinvi
 [@manovotny]: https://github.com/manovotny
@@ -2003,6 +2014,9 @@ for info on changes for earlier releases.
 [@MikeyBeLike]: https://github.com/MikeyBeLike
 [@minervabot]: https://github.com/minervabot
 [@mixelburg]: https://github.com/mixelburg
+[@mlenser]: https://github.com/mlenser
+[@moeriki]: https://github.com/moeriki
+[@mpalmer685]: https://github.com/mpalmer685
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
 [@mrmckeb]: https://github.com/mrmckeb
@@ -2015,6 +2029,7 @@ for info on changes for earlier releases.
 [@NishargShah]: https://github.com/NishargShah
 [@noelebrun]: https://github.com/noelebrun
 [@ntdb]: https://github.com/ntdb
+[@NullDivision]: https://github.com/NullDivision
 [@nwalters512]: https://github.com/nwalters512
 [@ombene]: https://github.com/ombene
 [@ota-meshi]: https://github.com/ota-meshi
@@ -2033,6 +2048,7 @@ for info on changes for earlier releases.
 [@pzhine]: https://github.com/pzhine
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr
+[@rasmi]: https://github.com/rasmi
 [@redbugz]: https://github.com/redbugz
 [@remcohaszing]: https://github.com/remcohaszing
 [@rfermann]: https://github.com/rfermann
@@ -2050,6 +2066,7 @@ for info on changes for earlier releases.
 [@schmod]: https://github.com/schmod
 [@Schweinepriester]: https://github.com/Schweinepriester
 [@scottnonnenberg]: https://github.com/scottnonnenberg
+[@Sekhmet]: https://github.com/Sekhmet
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@sevenc-nanashi]: https://github.com/sevenc-nanashi
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
@@ -2060,14 +2077,17 @@ for info on changes for earlier releases.
 [@simmo]: https://github.com/simmo
 [@sindresorhus]: https://github.com/sindresorhus
 [@singles]: https://github.com/singles
+[@sjh9714]: https://github.com/sjh9714
 [@skozin]: https://github.com/skozin
 [@skyrpex]: https://github.com/skyrpex
 [@snewcomer]: https://github.com/snewcomer
+[@sohkai]: https://github.com/sohkai
 [@sompylasar]: https://github.com/sompylasar
 [@soryy708]: https://github.com/soryy708
 [@sosukesuzuki]: https://github.com/sosukesuzuki
 [@spalger]: https://github.com/spalger
 [@st-sloth]: https://github.com/st-sloth
+[@steida]: https://github.com/steida
 [@stekycz]: https://github.com/stekycz
 [@stenin-nikita]: https://github.com/stenin-nikita
 [@stephtr]: https://github.com/stephtr
@@ -2101,5 +2121,6 @@ for info on changes for earlier releases.
 [@yesl-kim]: https://github.com/yesl-kim
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
+[@yp]: https://github.com/yp
 [@Zamiell]: https://github.com/Zamiell
 [@zloirock]: https://github.com/zloirock
