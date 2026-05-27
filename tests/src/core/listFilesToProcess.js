@@ -1,7 +1,9 @@
 import { expect } from 'chai';
 import path from 'path';
 
-import { listFilesUsingFileEnumerator } from 'core/listFilesToProcess';
+import listFilesToProcess, {
+  listFilesUsingFileEnumerator,
+} from 'core/listFilesToProcess';
 import { getFilename } from '../utils';
 
 // Reuses the listFilesWithNodeFs fixtures (see tests/src/core/listFilesWithNodeFs.js
@@ -23,6 +25,12 @@ function makeThrowingEnumerator(message) {
     throw new Error(message);
   };
   return ThrowingFileEnumerator;
+}
+
+function moduleNotFound() {
+  const e = new Error('Cannot find module');
+  e.code = 'MODULE_NOT_FOUND';
+  throw e;
 }
 
 describe('listFilesToProcess', function () {
@@ -62,6 +70,34 @@ describe('listFilesToProcess', function () {
       process.env.ESLINT_USE_FLAT_CONFIG = 'true';
       const Enumerator = makeThrowingEnumerator('some other failure');
       expect(() => listFilesUsingFileEnumerator(Enumerator, [root], ['.js'])).to.throw('some other failure');
+    });
+  });
+
+  describe('listFilesToProcess fallback cascade', function () {
+    it('uses the FileEnumerator when one is available', function () {
+      const result = listFilesToProcess([root], ['.js'], {
+        getFileEnumerator: () => StubFileEnumerator,
+      });
+      expect(result).to.deep.equal([
+        { filename: f('src', 'a.js'), ignored: false },
+        { filename: f('src', 'b.js'), ignored: true },
+      ]);
+    });
+
+    // ESLint v10+: neither FileEnumerator nor the legacy glob-utils are requireable.
+    it('falls back to listFilesWithNodeFs when both enumerator and legacy APIs are absent', function () {
+      const result = listFilesToProcess([f('src', 'a*.js')], ['.js'], {
+        getFileEnumerator: () => undefined,
+        getLegacyFiles: moduleNotFound,
+      });
+      expect(result).to.deep.equal([f('src', 'a.js')]);
+    });
+
+    it('rethrows non-module-resolution errors from the legacy path', function () {
+      expect(() => listFilesToProcess([root], ['.js'], {
+        getFileEnumerator: () => undefined,
+        getLegacyFiles() { throw new Error('boom'); },
+      })).to.throw('boom');
     });
   });
 });

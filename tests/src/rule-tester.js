@@ -3,6 +3,7 @@ import { version as eslintVersion } from 'eslint/package.json';
 import semver from 'semver';
 
 export const usingFlatConfig = semver.major(eslintVersion) >= 9;
+const eslintV10 = semver.major(eslintVersion) >= 10;
 
 export function withoutAutofixOutput(test) {
   return { ...test, ...usingFlatConfig || { output: test.code } };
@@ -41,8 +42,24 @@ class FlatCompatRuleTester {
         .map((t) => FlatCompatRuleTester._flatCompat(t, ctorParser)),
       invalid: tests.invalid
         .filter((t) => !FlatCompatRuleTester._hasUnavailableParser(t))
-        .map((t) => FlatCompatRuleTester._flatCompat(t, ctorParser)),
+        .map((t) => FlatCompatRuleTester._flatCompatInvalid(t, ctorParser)),
     });
+  }
+
+  static _flatCompatInvalid(config, ctorParser) {
+    const converted = FlatCompatRuleTester._flatCompat(config, ctorParser);
+
+    // ESLint v10 removed the 'type' property from invalid test case error assertions
+    if (eslintV10 && converted && typeof converted === 'object' && Array.isArray(converted.errors)) {
+      converted.errors = converted.errors.map((error) => {
+        if (error && typeof error === 'object') {
+          return Object.fromEntries(Object.entries(error).filter(([key]) => key !== 'type'));
+        }
+        return error;
+      });
+    }
+
+    return converted;
   }
 
   // @babel/eslint-parser requires explicit config; babel-eslint enabled all syntax by default.

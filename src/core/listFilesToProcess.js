@@ -124,15 +124,30 @@ function listFilesWithLegacyFunctions(src, extensions) {
  * with this rule.
  * @param {string} src - file, directory, or glob pattern of files to act on
  * @param {string[]} extensions - list of supported file extensions
+ * @param {{ getFileEnumerator?: () => any, getLegacyFiles?: typeof listFilesWithLegacyFunctions }} [internals]
+ *   injection seam for tests; production callers pass only `(src, extensions)`.
  * @returns {string[] | { filename: string, ignored: boolean }[]} the list of files that this rule will evaluate.
  */
-export default function listFilesToProcess(src, extensions) {
-  const FileEnumerator = requireFileEnumerator();
+export default function listFilesToProcess(src, extensions, internals) {
+  const {
+    getFileEnumerator = requireFileEnumerator,
+    getLegacyFiles = listFilesWithLegacyFunctions,
+  } = internals || {};
+
+  const FileEnumerator = getFileEnumerator();
 
   // If we got the FileEnumerator, then let's go with that
   if (FileEnumerator) {
     return listFilesUsingFileEnumerator(FileEnumerator, src, extensions);
   }
   // If not, then we can try even older versions of this capability (listFilesToProcess)
-  return listFilesWithLegacyFunctions(src, extensions);
+  try {
+    return getLegacyFiles(src, extensions);
+  } catch (e) {
+    // If legacy functions are also unavailable (ESLint v10+), use Node.js fs as a fallback
+    if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED') {
+      return listFilesWithNodeFs(src, extensions);
+    }
+    throw e;
+  }
 }

@@ -5,9 +5,16 @@ import { hashObject } from 'eslint-module-utils/hash';
 let ts;
 const tsconfigCache = new Map();
 
+// flat config exposes parser options under `languageOptions.parserOptions`; legacy config uses `parserOptions`.
+// Resolve the object first (mirroring childContext/scc) so a present-but-falsy `tsconfigRootDir` is preserved.
+function getParserOptions(context) {
+  return context.parserOptions || context.languageOptions && context.languageOptions.parserOptions;
+}
+
 function readTsConfig(context) {
+  const parserOptions = getParserOptions(context);
   const tsconfigInfo = tsConfigLoader({
-    cwd: context.parserOptions && context.parserOptions.tsconfigRootDir || process.cwd(),
+    cwd: parserOptions && parserOptions.tsconfigRootDir || process.cwd(),
     getEnv: (key) => process.env[key],
   });
   try {
@@ -30,8 +37,9 @@ function readTsConfig(context) {
 }
 
 export function isEsModuleInterop(context) {
+  const parserOptions = getParserOptions(context);
   const cacheKey = hashObject({
-    tsconfigRootDir: context.parserOptions && context.parserOptions.tsconfigRootDir,
+    tsconfigRootDir: parserOptions && parserOptions.tsconfigRootDir,
   }).digest('hex');
   let tsConfig = tsconfigCache.get(cacheKey);
   if (typeof tsConfig === 'undefined') {
