@@ -5,6 +5,11 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+## v2.13.0 - 2026-05-27
+
+### Added
+ - pass `moduleSystem` through resolve for exports-aware resolution
+
 ## v2.12.1 - 2025-06-19
 
 ### Fixed
