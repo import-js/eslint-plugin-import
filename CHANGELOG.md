@@ -7,14 +7,14 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
-- [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg])
+- [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 
 ### Fixed
-- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth])
-- [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714])
-- ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi])
+- [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
+- [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
+- ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
 - [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235], thanks [@Sekhmet])
-- [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg])
+- [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg] [@shastaxc])
 
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
@@ -1862,6 +1862,7 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@butterybread]: https://github.com/butterybread
 [@chabb]: https://github.com/chabb
 [@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
@@ -1896,6 +1897,7 @@ for info on changes for earlier releases.
 [@eps1lon]: https://github.com/eps1lon
 [@ernestostifano]: https://github.com/ernestostifano
 [@ertrzyiks]: https://github.com/ertrzyiks
+[@etyrrell22]: https://github.com/etyrrell22
 [@EvHaus]: https://github.com/EvHaus
 [@fa93hws]: https://github.com/fa93hws
 [@Fdawgs]: https://github.com/Fdawgs
@@ -2046,6 +2048,7 @@ for info on changes for earlier releases.
 [@pri1311]: https://github.com/pri1311
 [@ProdigySim]: https://github.com/ProdigySim
 [@pzhine]: https://github.com/pzhine
+[@Quantaly]: https://github.com/Quantaly
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr
 [@rasmi]: https://github.com/rasmi
@@ -2056,6 +2059,7 @@ for info on changes for earlier releases.
 [@rhys-vdw]: https://github.com/rhys-vdw
 [@richardxia]: https://github.com/richardxia
 [@robertrossmann]: https://github.com/robertrossmann
+[@robyoder]: https://github.com/robyoder
 [@rosswarren]: https://github.com/rosswarren
 [@rperello]: https://github.com/rperello
 [@rsolomon]: https://github.com/rsolomon
@@ -2070,6 +2074,7 @@ for info on changes for earlier releases.
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@sevenc-nanashi]: https://github.com/sevenc-nanashi
 [@sharmilajesupaul]: https://github.com/sharmilajesupaul
+[@shastaxc]: https://github.com/shastaxc
 [@sheepsteak]: https://github.com/sheepsteak
 [@silverwind]: https://github.com/silverwind
 [@silviogutierrez]: https://github.com/silviogutierrez
