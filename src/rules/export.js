@@ -194,7 +194,7 @@ module.exports = {
         remoteExports.forEach((v, name) => {
           if (name !== 'default') {
             any = true; // poor man's filter
-            addNamed(name, node, parent);
+            addNamed(name, node, parent, node.exportKind === 'type');
           }
         });
 

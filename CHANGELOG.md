@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 
 ### Fixed
+- [`export`]: Fixed false positives for duplicate exports when a value export and `export type *` expose the same name. ([#3260], [#3136], thanks [@mykola-mokhnach] [@morgan-coded])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1195,6 +1196,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3260]: https://github.com/import-js/eslint-plugin-import/pull/3260
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3247]: https://github.com/import-js/eslint-plugin-import/pull/3247
 [#3246]: https://github.com/import-js/eslint-plugin-import/pull/3246
@@ -1212,6 +1214,7 @@ for info on changes for earlier releases.
 [#3152]: https://github.com/import-js/eslint-plugin-import/pull/3152
 [#3151]: https://github.com/import-js/eslint-plugin-import/pull/3151
 [#3138]: https://github.com/import-js/eslint-plugin-import/pull/3138
+[#3136]: https://github.com/import-js/eslint-plugin-import/issues/3136
 [#3129]: https://github.com/import-js/eslint-plugin-import/pull/3129
 [#3128]: https://github.com/import-js/eslint-plugin-import/pull/3128
 [#3127]: https://github.com/import-js/eslint-plugin-import/pull/3127
@@ -2029,6 +2032,7 @@ for info on changes for earlier releases.
 [@msvab]: https://github.com/msvab
 [@mulztob]: https://github.com/mulztob
 [@mx-bernhard]: https://github.com/mx-bernhard
+[@mykola-mokhnach]: https://github.com/mykola-mokhnach
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
