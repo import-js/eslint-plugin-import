@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@types/babel__core": "*",
+    "@types/qs": "*"
+  }
+}

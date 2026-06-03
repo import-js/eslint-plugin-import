@@ -20,6 +20,7 @@ const packageFileWithSyntaxErrorMessage = (() => {
 })();
 const packageDirWithFlowTyped = path.join(__dirname, '../../files/with-flow-typed');
 const packageDirWithTypescriptDevDependencies = path.join(__dirname, '../../files/with-typescript-dev-dependencies');
+const packageDirWithResolvedTypesDependencies = path.join(__dirname, '../../files/with-resolved-types-dependencies');
 const packageDirMonoRepoRoot = path.join(__dirname, '../../files/monorepo');
 const packageDirMonoRepoWithNested = path.join(__dirname, '../../files/monorepo/packages/nested-package');
 const packageDirWithEmpty = path.join(__dirname, '../../files/empty');
@@ -402,6 +403,27 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       errors: [{
         // missing dependency is chai not alias
         message: "'chai' should be listed in the project's dependencies. Run 'npm i -S chai' to add it",
+      }],
+    }),
+
+    // https://github.com/import-js/eslint-plugin-import/issues/3208
+    // when `qs` resolves only through the `@types/qs` devDependency, the missing
+    // runtime package is `qs`, not the `@types/qs` package the resolver landed on
+    test({
+      code: 'import qs from "qs";',
+      filename: path.join(packageDirWithResolvedTypesDependencies, 'foo.js'),
+      options: [{ packageDir: packageDirWithResolvedTypesDependencies, devDependencies: false }],
+      errors: [{
+        message: "'qs' should be listed in the project's dependencies. Run 'npm i -S qs' to add it",
+      }],
+    }),
+
+    test({
+      code: 'import babel from "@babel/core";',
+      filename: path.join(packageDirWithResolvedTypesDependencies, 'foo.js'),
+      options: [{ packageDir: packageDirWithResolvedTypesDependencies, devDependencies: false }],
+      errors: [{
+        message: "'@babel/core' should be listed in the project's dependencies. Run 'npm i -S @babel/core' to add it",
       }],
     }),
 

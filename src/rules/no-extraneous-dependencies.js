@@ -147,6 +147,13 @@ function getModuleRealName(resolved) {
   return getFilePackageName(resolved);
 }
 
+// derive the runtime package a DefinitelyTyped `@types/*` package provides types for,
+// mirroring TypeScript's `getPackageNameFromTypesPackageName`: `@types/babel__core` -> `@babel/core`
+function runtimePackageNameFromTypesPackageName(packageName) {
+  const innerPackageName = packageName.slice('@types/'.length);
+  return innerPackageName.includes('__') ? `@${innerPackageName.replace('__', '/')}` : innerPackageName;
+}
+
 function checkDependencyDeclaration(deps, packageName, declarationStatus) {
   const newDeclarationStatus = declarationStatus || {
     isInDeps: false,
@@ -231,6 +238,11 @@ function reportIfMissing(context, deps, depsOptions, node, name, moduleSystem) {
     ) {
       return;
     }
+  }
+
+  if (realPackageName && realPackageName.startsWith('@types/')) {
+    context.report(node, missingErrorMessage(runtimePackageNameFromTypesPackageName(realPackageName)));
+    return;
   }
 
   if (declarationStatus.isInDevDeps && !depsOptions.allowDevDeps) {

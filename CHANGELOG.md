@@ -15,6 +15,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
 - [`order`]: make the alphabetize comparator transitive for sibling/parent imports in the same group, so the autofix converges under Node 25's updated V8 sort ([#3235], thanks [@Sekhmet])
 - [`no-duplicates`]: remove extra space when merging import specifiers ([#3246], thanks [@mixelburg] [@shastaxc])
+- [`no-extraneous-dependencies`]: report runtime package name, not `@types/*`, when an import resolves via a `@types` devDependency ([#3208], thanks [@morgan-coded] [@cakoose] [@JounQin])
 
 ### Changed
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
@@ -1201,6 +1202,7 @@ for info on changes for earlier releases.
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3235]: https://github.com/import-js/eslint-plugin-import/issues/3235
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
+[#3208]: https://github.com/import-js/eslint-plugin-import/issues/3208
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
@@ -1863,6 +1865,7 @@ for info on changes for earlier releases.
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
 [@butterybread]: https://github.com/butterybread
+[@cakoose]: https://github.com/cakoose
 [@chabb]: https://github.com/chabb
 [@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
@@ -2018,6 +2021,7 @@ for info on changes for earlier releases.
 [@mixelburg]: https://github.com/mixelburg
 [@mlenser]: https://github.com/mlenser
 [@moeriki]: https://github.com/moeriki
+[@morgan-coded]: https://github.com/morgan-coded
 [@mpalmer685]: https://github.com/mpalmer685
 [@mpint]: https://github.com/mpint
 [@mplewis]: https://github.com/mplewis
