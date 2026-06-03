@@ -155,6 +155,19 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: ['always'],
     }),
+
+    // a relative import that resolves to a directory with its own package.json
+    // is a package, so `ignorePackages` should not require an extension (#2844)
+    test({
+      code: 'import * as test from "."',
+      filename: testFilePath('./internal-modules/test.js'),
+      options: ['ignorePackages'],
+    }),
+    test({
+      code: 'import * as test from ".."',
+      filename: testFilePath('./internal-modules/plugins/plugin.js'),
+      options: ['ignorePackages'],
+    }),
   ],
 
   invalid: [
@@ -620,35 +633,6 @@ ruleTester.run('extensions', rule, {
         {
           message: 'Unexpected use of file extension "js" for "@test-scope/some-module/index.js"',
           line: 3,
-        },
-      ],
-    }),
-
-    // TODO: properly ignore packages resolved via relative imports
-    test({
-      code: [
-        'import * as test from "."',
-      ].join('\n'),
-      filename: testFilePath('./internal-modules/test.js'),
-      options: ['ignorePackages'],
-      errors: [
-        {
-          message: 'Missing file extension for "."',
-          line: 1,
-        },
-      ],
-    }),
-    // TODO: properly ignore packages resolved via relative imports
-    test({
-      code: [
-        'import * as test from ".."',
-      ].join('\n'),
-      filename: testFilePath('./internal-modules/plugins/plugin.js'),
-      options: ['ignorePackages'],
-      errors: [
-        {
-          message: 'Missing file extension for ".."',
-          line: 1,
         },
       ],
     }),
