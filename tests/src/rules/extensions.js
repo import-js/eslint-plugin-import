@@ -636,6 +636,34 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
+
+    // without a resolvable filename (e.g. a `<text>` buffer) we can't tell
+    // whether a relative import points at a package root, so `ignorePackages`
+    // still requires the extension (#2844)
+    test({
+      code: 'import foo from "./foo"',
+      filename: '<text>',
+      options: ['ignorePackages'],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+        },
+      ],
+    }),
+    // when a relative import resolves above any package.json, looking up its
+    // package root throws; treat it as not-a-package instead of crashing (#2844)
+    test({
+      code: 'import * as test from "."',
+      filename: '/x.js',
+      options: ['ignorePackages'],
+      errors: [
+        {
+          message: 'Missing file extension for "."',
+          line: 1,
+        },
+      ],
+    }),
   ],
 });
 
