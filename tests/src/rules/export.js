@@ -351,6 +351,27 @@ context('TypeScript', function () {
           ...parserConfig,
         }) : [],
 
+        // https://github.com/import-js/eslint-plugin-import/issues/3136
+        // Named type-only re-exports (`export type { x }`) and inline type specifiers
+        // (`export { type x }`) also land in the type namespace, so they must not be
+        // reported as duplicates of a same-named value re-export.
+        typescriptEslintParserSatisfies('>= 5.54') ? test({
+          code: `
+            export { f } from './m';
+            export type { f } from './m';
+          `,
+          filename: testFilePath('export-type-star/index.ts'),
+          ...parserConfig,
+        }) : [],
+        typescriptEslintParserSatisfies('>= 5.54') ? test({
+          code: `
+            export { f } from './m';
+            export { type f } from './m';
+          `,
+          filename: testFilePath('export-type-star/index.ts'),
+          ...parserConfig,
+        }) : [],
+
         semver.satisfies(eslintPkg.version, '>= 6') ? [
           test({
             code: `

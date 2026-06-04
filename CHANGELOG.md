@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
 - [`export`]: Fixed false positives for duplicate exports when a value export and `export type *` expose the same name. ([#3260], [#3136], thanks [@mykola-mokhnach] [@morgan-coded])
+- [`export`]: Fixed false positives for duplicate exports when a value export and a type-only named re-export (`export type { x }` or `export { type x }`) expose the same name. ([#3136], thanks [@mykola-mokhnach] [@ljharb])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
