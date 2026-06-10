@@ -878,5 +878,64 @@ describe('TypeScript', () => {
           }),
         ],
       });
+
+      ruleTesterWithTypeScriptImports.run(`${parser}: allow importing JS extension when a TS file is resolved`, rule, {
+        valid: [
+          test({
+            code: 'import { foo } from "./typescript.js";',
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript-tsx.jsx";',
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript-tsx.js";',
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript-with-index/index.js";',
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript.js";',
+            options: [
+              'always',
+              { ts: 'never', tsx: 'never', js: 'always', jsx: 'always' },
+            ],
+          }),
+        ],
+        invalid: [
+          test({
+            code: 'import { foo } from "./typescript";',
+            errors: ['Missing file extension "ts" for "./typescript"'],
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript-tsx";',
+            errors: ['Missing file extension "tsx" for "./typescript-tsx"'],
+            options: [
+              'always',
+            ],
+          }),
+          test({
+            code: 'import { foo } from "./typescript-with-index";',
+            errors: ['Missing file extension "ts" for "./typescript-with-index"'],
+            options: [
+              'always',
+            ],
+          }),
+        ],
+      });
     });
 });
