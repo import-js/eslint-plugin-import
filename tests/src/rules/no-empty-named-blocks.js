@@ -1,4 +1,4 @@
-import { parsers, test } from '../utils';
+import { parsers, test, typescriptEslintParserSatisfies } from '../utils';
 
 import { RuleTester } from '../rule-tester';
 
@@ -34,12 +34,13 @@ ruleTester.run('no-empty-named-blocks', rule, {
     test({ code: `import * as Namespace from 'mod';` }),
 
     // Typescript
-    parsers.TS_NEW ? [
+    parsers.TS_NEW ? [].concat(
       test({ code: `import type Default from 'mod';`, parser: parsers.TS_NEW }),
       test({ code: `import type { Named } from 'mod';`, parser: parsers.TS_NEW }),
-      test({ code: `import type Default, { Named } from 'mod';`, parser: parsers.TS_NEW }),
+      // `import type Default, { Named }` syntax was removed in TypeScript 5.0 / @typescript-eslint/parser v8
+      !typescriptEslintParserSatisfies('< 8') ? [] : test({ code: `import type Default, { Named } from 'mod';`, parser: parsers.TS_NEW }),
       test({ code: `import type * as Namespace from 'mod';`, parser: parsers.TS_NEW }),
-    ] : [],
+    ) : [],
 
     // Flow
     test({ code: `import typeof Default from 'mod'; // babel old`, parser: parsers.BABEL_OLD }),
@@ -88,7 +89,8 @@ ruleTester.run('no-empty-named-blocks', rule, {
         ],
         parsers.TS_NEW,
       ),
-      test({
+      // `import type Default, {}` syntax was removed in TypeScript 5.0 / @typescript-eslint/parser v8
+      !typescriptEslintParserSatisfies('< 8') ? [] : test({
         code: `import type Default, {} from 'mod';`,
         output: `import type Default from 'mod';`,
         parser: parsers.TS_NEW,

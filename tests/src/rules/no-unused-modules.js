@@ -18,7 +18,7 @@ try {
 
 // TODO: figure out why these tests fail in eslint 4 and 5
 const isESLint4TODO = semver.satisfies(eslintPkg.version, '^4 || ^5');
-const isESLint9 = semver.satisfies(eslintPkg.version, '>=9');
+const isESLint9Only = semver.satisfies(eslintPkg.version, '>=9 <10');
 
 const ruleTester = new RuleTester();
 const typescriptRuleTester = new RuleTester(typescriptConfig);
@@ -1488,8 +1488,9 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
   });
 });
 
-(isESLint9 ? describe : describe.skip)('with eslint 9+', () => {
-  it('provides meaningful error when eslintrc is not present', () => {
+// #3079: v9 flat config without .eslintrc — rule runs via `listFilesWithNodeFs` instead of throwing.
+(isESLint9Only ? describe : describe.skip)('with eslint 9 (FileEnumerator + flat config)', () => {
+  it('runs against flat config without an .eslintrc and reports unused exports', () => {
     const tmp = require('tmp');
 
     // Create temp directory outside of project root
@@ -1497,8 +1498,6 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
 
     // Copy example project to temp directory
     fs.cpSync(path.join(process.cwd(), 'examples/v9'), tempDir.name, { recursive: true });
-
-    let errorMessage = '';
 
     // Build the plugin
     try {
@@ -1508,14 +1507,19 @@ describe('parser ignores prefixes like BOM and hashbang', () => {
     }
 
     // Install the plugin and run the lint command in the temp directory
+    let stdout = '';
+    let stderr = '';
     try {
-      execSync(`npm install -D "${process.cwd()}" && npm run lint`, { cwd: tempDir.name });
+      stdout = execSync(`npm install -D "${process.cwd()}" && npm run lint`, { cwd: tempDir.name }).toString();
     } catch (error) {
-      errorMessage = error.stderr.toString();
+      stdout = error.stdout ? error.stdout.toString() : '';
+      stderr = error.stderr ? error.stderr.toString() : '';
     }
+    const output = stdout + stderr;
 
-    // Verify that the error message is as expected
-    expect(errorMessage).to.contain('the import/no-unused-modules rule requires an .eslintrc file');
+    // Verify the rule runs (does not throw the legacy eslintrc error) and reports the unused export
+    expect(output).to.not.contain('requires an .eslintrc file');
+    expect(output).to.contain('exports-unused.js');
 
     // Cleanup
     tempDir.removeCallback();

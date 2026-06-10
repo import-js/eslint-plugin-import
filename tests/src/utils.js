@@ -9,8 +9,34 @@ import 'babel-eslint';
 export const parsers = {
   ESPREE: require.resolve('espree'),
   TS_OLD: semver.satisfies(eslintPkg.version, '>=4.0.0 <6.0.0') && semver.satisfies(typescriptPkg.version, '<4') && require.resolve('typescript-eslint-parser'),
-  TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && require.resolve('@typescript-eslint/parser'),
-  BABEL_OLD: require.resolve('babel-eslint'),
+  TS_NEW: semver.satisfies(eslintPkg.version, '> 5') && (() => {
+    try {
+      const parserPkg = require('@typescript-eslint/parser/package.json');
+      // @typescript-eslint/parser v8.56+ supports ESLint v10; older versions do not
+      if (semver.major(eslintPkg.version) >= 10 && !semver.satisfies(parserPkg.version, '>=8.56.0')) {
+        return false;
+      }
+      return require.resolve('@typescript-eslint/parser');
+    } catch (e) {
+      return false;
+    }
+  })(),
+  // babel-eslint is unmaintained and is not compatible with ESLint v10+; tests that need
+  // babel parsing on v10 should use parsers.BABEL_NEW (`@babel/eslint-parser`) explicitly.
+  BABEL_OLD: semver.major(eslintPkg.version) < 10 ? require.resolve('babel-eslint') : false,
+  BABEL_NEW: (() => {
+    try { return require.resolve('@babel/eslint-parser'); } catch (e) { return false; }
+  })(),
+  // used by first.js for issue #2210; v21.3.0+ supports ESLint v10, v13 does not
+  ANGULAR: (() => {
+    try {
+      const parserPkg = require('@angular-eslint/template-parser/package.json');
+      if (semver.major(eslintPkg.version) >= 10 && !semver.satisfies(parserPkg.version, '>=21.3.0')) {
+        return false;
+      }
+      return require.resolve('@angular-eslint/template-parser');
+    } catch (e) { return false; }
+  })(),
 };
 
 export function tsVersionSatisfies(specifier) {
@@ -33,7 +59,8 @@ export function getTSParsers() {
 }
 
 export function getNonDefaultParsers() {
-  return getTSParsers().concat(parsers.BABEL_OLD).filter(Boolean);
+  // babel-eslint (BABEL_OLD) is unavailable on ESLint v10+; fall back to @babel/eslint-parser (BABEL_NEW)
+  return getTSParsers().concat(parsers.BABEL_OLD || parsers.BABEL_NEW).filter(Boolean);
 }
 
 export const FILENAME = testFilePath('foo.js');
