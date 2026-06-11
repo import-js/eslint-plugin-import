@@ -119,7 +119,8 @@ describe('CLI regression tests', function () {
       }
     });
 
-    it('throws an error on invalid JSON', () => {
+    it('throws an error on invalid JSON', function () {
+      this.timeout(10000); // slow on old Node + macOS CI
       const invalidJSON = './tests/files/just-json-files/invalid.json';
       if (eslint) {
         return eslint.lintFiles([invalidJSON]).then((results) => {
