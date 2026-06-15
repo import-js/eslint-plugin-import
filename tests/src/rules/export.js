@@ -1,4 +1,4 @@
-import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion } from '../utils';
+import { test, testFilePath, SYNTAX_CASES, getTSParsers, testVersion, typescriptEslintParserSatisfies } from '../utils';
 
 import { RuleTester } from '../rule-tester';
 import eslintPkg from 'eslint/package.json';
@@ -336,6 +336,41 @@ context('TypeScript', function () {
           filename: testFilePath('typescript-d-ts/file-2.ts'),
           ...parserConfig,
         }),
+
+        // https://github.com/import-js/eslint-plugin-import/issues/3136
+        // `export type *` re-exports names into the type namespace, so they must
+        // not be reported as duplicates of a same-named value re-export.
+        // `export type *` is TypeScript 5.0 syntax, first parsed by `@typescript-eslint/parser` 5.54,
+        // so this is gated on the parser version (below), not on the TypeScript version.
+        typescriptEslintParserSatisfies('>= 5.54') ? test({
+          code: `
+            export { f } from './m';
+            export type * from './m';
+          `,
+          filename: testFilePath('export-type-star/index.ts'),
+          ...parserConfig,
+        }) : [],
+
+        // https://github.com/import-js/eslint-plugin-import/issues/3136
+        // Named type-only re-exports (`export type { x }`) and inline type specifiers
+        // (`export { type x }`) also land in the type namespace, so they must not be
+        // reported as duplicates of a same-named value re-export.
+        typescriptEslintParserSatisfies('>= 5.54') ? test({
+          code: `
+            export { f } from './m';
+            export type { f } from './m';
+          `,
+          filename: testFilePath('export-type-star/index.ts'),
+          ...parserConfig,
+        }) : [],
+        typescriptEslintParserSatisfies('>= 5.54') ? test({
+          code: `
+            export { f } from './m';
+            export { type f } from './m';
+          `,
+          filename: testFilePath('export-type-star/index.ts'),
+          ...parserConfig,
+        }) : [],
 
         semver.satisfies(eslintPkg.version, '>= 6') ? [
           test({

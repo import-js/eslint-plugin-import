@@ -142,10 +142,14 @@ module.exports = {
       },
 
       ExportSpecifier(node) {
+        // `export type { x }` sets exportKind on the declaration; `export { type x }` sets it on the specifier.
+        // Either way the name belongs to the type namespace and must not clash with a value re-export.
+        const isType = node.exportKind === 'type' || node.parent.exportKind === 'type';
         addNamed(
           node.exported.name || node.exported.value,
           node.exported,
           getParent(node.parent),
+          isType,
         );
       },
 
@@ -194,7 +198,7 @@ module.exports = {
         remoteExports.forEach((v, name) => {
           if (name !== 'default') {
             any = true; // poor man's filter
-            addNamed(name, node, parent);
+            addNamed(name, node, parent, node.exportKind === 'type');
           }
         });
 
