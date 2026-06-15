@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 
 ### Fixed
+- Fixed `extensions` false positives for relative package-root imports when `ignorePackages` is enabled. ([#2844], thanks [@benasher44])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1260,6 +1261,7 @@ for info on changes for earlier releases.
 [#2854]: https://github.com/import-js/eslint-plugin-import/pull/2854
 [#2851]: https://github.com/import-js/eslint-plugin-import/pull/2851
 [#2850]: https://github.com/import-js/eslint-plugin-import/pull/2850
+[#2844]: https://github.com/import-js/eslint-plugin-import/issues/2844
 [#2842]: https://github.com/import-js/eslint-plugin-import/pull/2842
 [#2835]: https://github.com/import-js/eslint-plugin-import/pull/2835
 [#2832]: https://github.com/import-js/eslint-plugin-import/pull/2832

@@ -155,6 +155,23 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: ['always'],
     }),
+
+    // a relative import that resolves to a directory with its own package.json
+    // is a package, so `ignorePackages` should not require an extension (#2844)
+    test({
+      code: [
+        'import * as test from "."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/test.js'),
+      options: ['ignorePackages'],
+    }),
+    test({
+      code: [
+        'import * as test from ".."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/plugins/plugin.js'),
+      options: ['ignorePackages'],
+    }),
   ],
 
   invalid: [
@@ -410,6 +427,34 @@ ruleTester.run('extensions', rule, {
       ],
     }),
 
+    // without a resolvable filename (e.g. a `<text>` buffer) we can't tell
+    // whether a relative import points at a package root, so `ignorePackages`
+    // still requires the extension (#2844)
+    test({
+      code: 'import foo from "./foo"',
+      filename: '<text>',
+      options: ['ignorePackages'],
+      errors: [
+        {
+          message: 'Missing file extension for "./foo"',
+          line: 1,
+        },
+      ],
+    }),
+    // when a relative import resolves above any package.json, looking up its
+    // package root throws; treat it as not-a-package instead of crashing (#2844)
+    test({
+      code: 'import * as test from "."',
+      filename: '/x.js',
+      options: ['ignorePackages'],
+      errors: [
+        {
+          message: 'Missing file extension for "."',
+          line: 1,
+        },
+      ],
+    }),
+
     test({
       code: `
         import foo from './foo.js'
@@ -624,34 +669,6 @@ ruleTester.run('extensions', rule, {
       ],
     }),
 
-    // TODO: properly ignore packages resolved via relative imports
-    test({
-      code: [
-        'import * as test from "."',
-      ].join('\n'),
-      filename: testFilePath('./internal-modules/test.js'),
-      options: ['ignorePackages'],
-      errors: [
-        {
-          message: 'Missing file extension for "."',
-          line: 1,
-        },
-      ],
-    }),
-    // TODO: properly ignore packages resolved via relative imports
-    test({
-      code: [
-        'import * as test from ".."',
-      ].join('\n'),
-      filename: testFilePath('./internal-modules/plugins/plugin.js'),
-      options: ['ignorePackages'],
-      errors: [
-        {
-          message: 'Missing file extension for ".."',
-          line: 1,
-        },
-      ],
-    }),
   ],
 });
 
