@@ -97,7 +97,7 @@ function buildProperties(context) {
  * current one, so `ignorePackages` should not require an extension for it.
  * https://github.com/import-js/eslint-plugin-import/issues/2844
  */
-function isRelativeToPackage(importPath, context) {
+function isRelativeToPackage(importPath, context, packagePathCache) {
   if (!(/^[.]{1,2}([\\/]|$)/).test(importPath)) {
     return false;
   }
@@ -106,11 +106,17 @@ function isRelativeToPackage(importPath, context) {
     return false;
   }
   const targetPath = path.resolve(path.dirname(physicalFilename), importPath);
-  try {
-    return getFilePackagePath(targetPath) === targetPath;
-  } catch (e) {
-    return false;
+  if (packagePathCache.has(targetPath)) {
+    return packagePathCache.get(targetPath);
   }
+  let isPackageRoot = false;
+  try {
+    isPackageRoot = getFilePackagePath(targetPath) === targetPath;
+  } catch (e) {
+    isPackageRoot = false;
+  }
+  packagePathCache.set(targetPath, isPackageRoot);
+  return isPackageRoot;
 }
 
 module.exports = {
@@ -162,6 +168,7 @@ module.exports = {
   create(context) {
 
     const props = buildProperties(context);
+    const packagePathCache = new Map();
 
     function getModifier(extension) {
       return props.pattern[extension] || props.defaultConfig;
@@ -238,7 +245,7 @@ module.exports = {
         resolve(importPath, context, moduleSystem),
         context,
       ) || isScoped(importPath)
-        || isRelativeToPackage(importPath, context);
+        || props.ignorePackages && isRelativeToPackage(importPath, context, packagePathCache);
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports and exports

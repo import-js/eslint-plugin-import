@@ -161,6 +161,7 @@ ruleTester.run('extensions', rule, {
     test({
       code: [
         'import * as test from "."',
+        'import * as testAgain from "."',
       ].join('\n'),
       filename: testFilePath('./internal-modules/test.js'),
       options: ['ignorePackages'],
