@@ -669,7 +669,33 @@ ruleTester.run('extensions', rule, {
         },
       ],
     }),
-
+    // relative package roots still need extensions unless packages are ignored
+    test({
+      code: [
+        'import * as test from "."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/test.js'),
+      options: ['always'],
+      errors: [
+        {
+          message: 'Missing file extension for "."',
+          line: 1,
+        },
+      ],
+    }),
+    test({
+      code: [
+        'import * as test from ".."',
+      ].join('\n'),
+      filename: testFilePath('./internal-modules/plugins/plugin.js'),
+      options: ['always'],
+      errors: [
+        {
+          message: 'Missing file extension for ".."',
+          line: 1,
+        },
+      ],
+    }),
   ],
 });
 

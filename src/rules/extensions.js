@@ -97,7 +97,7 @@ function buildProperties(context) {
  * current one, so `ignorePackages` should not require an extension for it.
  * https://github.com/import-js/eslint-plugin-import/issues/2844
  */
-function isRelativeToPackage(importPath, context, packagePathCache) {
+const isRelativeToPackage = (importPath, context, packagePathCache) => {
   if (!(/^[.]{1,2}([\\/]|$)/).test(importPath)) {
     return false;
   }
@@ -117,7 +117,7 @@ function isRelativeToPackage(importPath, context, packagePathCache) {
   }
   packagePathCache.set(targetPath, isPackageRoot);
   return isPackageRoot;
-}
+};
 
 module.exports = {
   meta: {
