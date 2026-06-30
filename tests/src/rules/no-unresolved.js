@@ -142,6 +142,62 @@ function runResolverTests(resolver) {
         code: 'require(foo)',
         options: [{ commonjs: true }],
       }),
+
+      // requireResolve setting
+      rest({
+        code: 'require.resolve("./bar")',
+        options: [{ requireResolve: true }],
+      }),
+      rest({
+        code: 'var foo = require.resolve("./bar")',
+        options: [{ requireResolve: true }],
+      }),
+      // resolves independently of the commonjs option
+      rest({
+        code: 'require.resolve("./bar")',
+        options: [{ commonjs: false, requireResolve: true }],
+      }),
+      rest({
+        code: 'require.resolve("./bar")',
+        options: [{ esmodule: false, requireResolve: true }],
+      }),
+      // off by default
+      rest({ code: 'require.resolve("./does-not-exist")' }),
+      rest({
+        code: 'require.resolve("./does-not-exist")',
+        options: [{ requireResolve: false }],
+      }),
+      // require.resolve does not opt into plain require() checking
+      rest({
+        code: 'require("./does-not-exist")',
+        options: [{ requireResolve: true }],
+      }),
+      // ignored forms
+      rest({
+        code: 'require.resolve(0)',
+        options: [{ requireResolve: true }],
+      }),
+      // 2-arg form: `paths` overrides the resolution base, which resolvers cannot honor
+      rest({
+        code: 'require.resolve("./does-not-exist", { paths: [__dirname] })',
+        options: [{ requireResolve: true }],
+      }),
+      rest({
+        code: 'require.resolve(foo)',
+        options: [{ requireResolve: true }],
+      }),
+      rest({
+        code: 'require["resolve"]("./does-not-exist")',
+        options: [{ requireResolve: true }],
+      }),
+      rest({
+        code: 'foo.require.resolve("./does-not-exist")',
+        options: [{ requireResolve: true }],
+      }),
+      rest({
+        code: 'var x = require.resolve',
+        options: [{ requireResolve: true }],
+      }),
     ),
 
     invalid: [].concat(
@@ -290,6 +346,39 @@ function runResolverTests(resolver) {
           },
           {
             message: "Unable to resolve path to module './does-not-exist'.",
+            type: 'Literal',
+          },
+        ],
+      }),
+
+      // requireResolve setting
+      rest({
+        code: 'require.resolve("./baz")',
+        options: [{ requireResolve: true }],
+        errors: [
+          {
+            message: "Unable to resolve path to module './baz'.",
+            type: 'Literal',
+          },
+        ],
+      }),
+      rest({
+        code: 'var bar = require.resolve("./baz")',
+        options: [{ requireResolve: true }],
+        errors: [
+          {
+            message: "Unable to resolve path to module './baz'.",
+            type: 'Literal',
+          },
+        ],
+      }),
+      // resolves with commonjs/esmodule disabled
+      rest({
+        code: 'require.resolve("./baz")',
+        options: [{ commonjs: false, esmodule: false, requireResolve: true }],
+        errors: [
+          {
+            message: "Unable to resolve path to module './baz'.",
             type: 'Literal',
           },
         ],
