@@ -49,6 +49,13 @@ ruleTester.run('no-absolute-path', rule, {
       code: 'define(["./some/path"], function (f) { /* ... */ })',
       options: [{ amd: true }],
     }),
+
+    // require.resolve not checked unless requireResolve is enabled
+    test({ code: 'var f = require.resolve("/some/path")' }),
+    test({
+      code: 'var f = require.resolve("./some/path")',
+      options: [{ requireResolve: true }],
+    }),
   ],
   invalid: [
     test({
@@ -87,6 +94,13 @@ ruleTester.run('no-absolute-path', rule, {
       filename: '/foo/bar/index.js',
       errors: [error],
       output: 'var f = require("..")',
+    }),
+    test({
+      code: 'var f = require.resolve("/foo/path")',
+      filename: '/foo/bar/index.js',
+      options: [{ requireResolve: true }],
+      errors: [error],
+      output: 'var f = require.resolve("../path")',
     }),
     test({
       code: 'var f = require("/foo/path")',
