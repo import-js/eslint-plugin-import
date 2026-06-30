@@ -76,6 +76,14 @@ module.exports = {
     const fileScc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context);
 
     function checkSourceValue(sourceNode, importer, moduleSystem) {
+      if (
+        importer.type === 'CallExpression'
+        && importer.callee.type === 'MemberExpression'
+        && importer.callee.object.name === 'require'
+        && importer.callee.property.name === 'resolve'
+      ) {
+        return; // require.resolve computes a path, not a load-time cycle edge
+      }
       if (ignoreModule(sourceNode.value, moduleSystem)) {
         return; // ignore external modules
       }
