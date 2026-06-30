@@ -73,6 +73,11 @@ ruleTester.run('no-internal-modules', rule, {
         forbid: ['**/api/*'],
       }],
     }),
+    // require.resolve reaching is not checked unless requireResolve is enabled
+    test({
+      code: 'require.resolve("./app/index.js")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
+    }),
     test({
       code: 'import b from "app/a"',
       filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
@@ -193,6 +198,16 @@ ruleTester.run('no-internal-modules', rule, {
         message: 'Reaching to "./app/index.js" is not allowed.',
         line: 1,
         column: 8,
+      }],
+    }),
+    test({
+      code: 'require.resolve("./app/index.js")',
+      filename: testFilePath('./internal-modules/plugins/plugin2/internal.js'),
+      options: [{ requireResolve: true }],
+      errors: [{
+        message: 'Reaching to "./app/index.js" is not allowed.',
+        line: 1,
+        column: 17,
       }],
     }),
     test({

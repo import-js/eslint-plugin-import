@@ -83,3 +83,7 @@ Note: `noUselessIndex` only avoids ambiguous imports for `.js` files if you have
 ### commonjs
 
 When set to `true`, this rule checks CommonJS imports. Default to `false`.
+
+### requireResolve
+
+When set to `true`, this rule checks the path argument of `require.resolve()` calls. Defaults to `false`.
