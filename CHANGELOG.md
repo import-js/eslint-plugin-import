@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- [Deps] let user know `eslint-import-resolver-node` needs to be in root of node_modules (important when using `install-strategy=linked`) ([#3266], thanks [@nikolawork])
 - support eslint v10 ([#3230], thanks [@rasmi])
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
