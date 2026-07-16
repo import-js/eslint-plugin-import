@@ -422,7 +422,7 @@ import { compose, apply } from 'xcompose';
 
 ### `named`
 
-Valid values: `boolean | { enabled: boolean, import?: boolean, export?: boolean, require?: boolean, cjsExports?: boolean, types?: "mixed" | "types-first" | "types-last" }` \
+Valid values: `boolean | { enabled: boolean, import?: boolean, export?: boolean, require?: boolean, cjsExports?: boolean, sortBy?: "name" | "alias", types?: "mixed" | "types-first" | "types-last" }` \
 Default: `false`
 
 Enforce ordering of names within imports and exports.
@@ -467,6 +467,25 @@ Further, the `named.types` option allows you to specify the order of [import ide
  - `types-first`: forces type-only identifiers to occur first
  - `types-last`: forces type-only identifiers to occur last
  - `mixed`: sorts all identifiers in alphabetical order
+
+The `named.sortBy` option allows you to specify which name aliased identifiers are sorted by, e.g. `import { originalName as aliasName } from 'specifier';`.
+
+`named.sortBy` accepts the following values:
+
+ - `name` (default): sorts aliased identifiers by their original name (the name to the left of `as`)
+ - `alias`: sorts aliased identifiers by their alias (the name to the right of `as`, i.e. the local name of an aliased import, or the exported name of an aliased export)
+
+For example, with `{ "named": { "enabled": true, "sortBy": "alias" }, "alphabetize": { "order": "asc" } }`, this will pass the rule check:
+
+```ts
+import { b, a as c } from 'specifier';
+```
+
+While this will fail the rule check:
+
+```ts
+import { a as c, b } from 'specifier';
+```
 
 #### Example
 
