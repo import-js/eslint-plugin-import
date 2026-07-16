@@ -168,6 +168,7 @@ export default [
 You may use the following snippet or assemble your own config using the granular settings described below it.
 
 Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-resolver-typescript`] which are used in the following configuration.
+Note that the `plugin:import/typescript` config (and its flat counterpart, `importPlugin.flatConfigs.typescript`) only adds the TypeScript extensions and parser settings; it does not set up the TypeScript resolver, since [`eslint-import-resolver-typescript`] is a separate package that is not a dependency of this plugin. You must install it and enable it via the `import/resolver` setting yourself, as shown below.
 
 ```jsonc
 {
@@ -195,6 +196,8 @@ Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-r
 
 If you are using the `config` method from [`typescript-eslint`](https://github.com/typescript-eslint/typescript-eslint), ensure that the `flatConfig` is included within the `extends` array.
 
+As explained above, `importPlugin.flatConfigs.typescript` does not enable the TypeScript resolver, so [`eslint-import-resolver-typescript`] must still be installed and configured via the `import/resolver` setting. Without it, imports resolved through `tsconfig.json` `paths` or a package's `exports` field (such as `typescript-eslint` itself) will fail `import/no-unresolved`.
+
 ```js
 import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
@@ -206,6 +209,14 @@ export default tseslint.config(
   {
     files: ['**/*.{ts,tsx}'],
     extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
+    settings: {
+      'import/resolver': {
+        // You will also need to install and configure the TypeScript resolver
+        // See also https://github.com/import-js/eslint-import-resolver-typescript#configuration
+        typescript: true,
+        node: true,
+      },
+    },
     // other configs...
   }
 );

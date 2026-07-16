@@ -2,6 +2,11 @@
  * This config:
  * 1) adds `.jsx`, `.ts`, `.cts`, `.mts`, and `.tsx` as an extension
  * 2) enables JSX/TSX parsing
+ *
+ * It does NOT set up the TypeScript resolver: `eslint-import-resolver-typescript`
+ * is not a dependency of this plugin, so it must be installed and enabled
+ * separately, via the `import/resolver` setting.
+ * See https://github.com/import-js/eslint-import-resolver-typescript#configuration
  */
 
 // Omit `.d.ts` because 1) TypeScript compilation already confirms that
