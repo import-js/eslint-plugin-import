@@ -192,6 +192,18 @@ describe('importType(name)', function () {
     expect(importType('@my-monorepo/package-b/nested/module', wildcardContext)).to.equal('builtin');
   });
 
+  it('does not apply negation or comment glob semantics to core module patterns', function () {
+    const negatedContext = testContext({ 'import/core-modules': ['!@my-monorepo/*'] });
+    expect(importType('@other-org/package', negatedContext)).to.equal('external');
+    expect(importType('@my-monorepo/package-a', negatedContext)).to.equal('external');
+  });
+
+  it('does not throw on non-string entries in core modules', function () {
+    const bogusContext = testContext({ 'import/core-modules': [42, null, '@my-monorepo/*'] });
+    expect(importType('@my-monorepo/package-a', bogusContext)).to.equal('builtin');
+    expect(importType('@other-org/package', bogusContext)).to.equal('external');
+  });
+
   it('should support mixing exact matches and wildcards in core modules', function () {
     const mixedContext = testContext({ 'import/core-modules': ['electron', '@my-monorepo/*', '@specific/package'] });
 

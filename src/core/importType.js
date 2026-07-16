@@ -36,7 +36,7 @@ export function isBuiltIn(name, settings, path) {
   const extras = settings && settings['import/core-modules'] || [];
   return isCoreModule(base)
     || extras.indexOf(base) > -1
-    || extras.some((pattern) => pattern.includes('*') && minimatch(base, pattern));
+    || extras.some((pattern) => typeof pattern === 'string' && pattern.includes('*') && minimatch(base, pattern, { nocomment: true, nonegate: true }));
 }
 
 const moduleRegExp = /^\w/;
