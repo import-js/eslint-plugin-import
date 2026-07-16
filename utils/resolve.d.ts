@@ -28,5 +28,6 @@ declare function fileExistsWithCaseSync(
 
 declare function relative(modulePath: string, sourceFile: string, settings: ESLintSettings, moduleSystem?: ModuleSystem): ResolvedResult['path'];
 
+declare function registerResolverRequire(requireFn: NodeJS.Require): void;
 
-export { fileExistsWithCaseSync, relative };
+export { fileExistsWithCaseSync, registerResolverRequire, relative };

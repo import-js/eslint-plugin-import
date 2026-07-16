@@ -95,12 +95,53 @@ function getBaseDir(sourceFile) {
   return pkgDir(sourceFile) || process.cwd();
 }
 
+/** @type {NodeJS.Require[]} */
+const resolverRequires = [];
+
+/**
+ * Registers a `require` from a package that declares resolvers among its own dependencies,
+ * for isolated `node_modules` layouts, where this package can not see them.
+ * @type {import('./resolve').registerResolverRequire}
+ */
+exports.registerResolverRequire = function registerResolverRequire(requireFn) {
+  if (typeof requireFn === 'function' && resolverRequires.indexOf(requireFn) === -1) {
+    resolverRequires.push(requireFn);
+  }
+};
+
+/** @type {(target: string) => undefined | ReturnType<typeof require>} */
+function requireFromRegistered(target) {
+  for (let i = 0; i < resolverRequires.length; i++) {
+    const requireFn = resolverRequires[i];
+    let resolved;
+    try {
+      resolved = requireFn.resolve(target);
+    } catch (e) {
+      continue; // this `require` can not see `target`
+    }
+    return requireFn(resolved); // load errors propagate, as they do above
+  }
+
+  return undefined;
+}
+
+/** @type {(name: string) => undefined | ReturnType<typeof require>} */
+function tryRegisteredRequires(name) {
+  // these belong to the source file's package
+  if (name.charAt(0) === '.' || path.isAbsolute(name)) { return undefined; }
+
+  return requireFromRegistered(`eslint-import-resolver-${name}`)
+    || requireFromRegistered(name);
+}
+
 /** @type {(name: string, sourceFile: string) => import('./resolve').Resolver} */
 function requireResolver(name, sourceFile) {
   // Try to resolve package with conventional name
   const resolver = tryRequire(`eslint-import-resolver-${name}`, sourceFile)
     || tryRequire(name, sourceFile)
-    || tryRequire(path.resolve(getBaseDir(sourceFile), name));
+    || tryRequire(path.resolve(getBaseDir(sourceFile), name))
+    // last, so that a resolver reachable from the source file always wins
+    || tryRegisteredRequires(name);
 
   if (!resolver) {
     const err = new Error(`unable to load resolver "${name}".`);
