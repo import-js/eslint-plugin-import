@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import eslintPkg from 'eslint/package.json';
 import semver from 'semver';
 
-import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync } from 'eslint-module-utils/resolve';
+import resolve, { CASE_SENSITIVE_FS, fileExistsWithCaseSync, registerResolverRequire } from 'eslint-module-utils/resolve';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -119,6 +119,80 @@ describe('resolve', function () {
       '../files/foo',
       { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
     )).to.equal(utils.testFilePath('./bar.jsx'));
+  });
+
+  describe('registerResolverRequire', function () {
+    const resolverName = 'not-reachable-from-the-source-file';
+
+    function reportsFor(settings) {
+      const testContext = utils.testContext(settings);
+      const testContextReports = [];
+      testContext.report = function (reportInfo) {
+        testContextReports.push(reportInfo);
+      };
+      const resolved = resolve(
+        '../files/foo',
+        { ...testContext, getFilename() { return utils.getFilename('foo.js'); } },
+      );
+      return { reports: testContextReports, resolved };
+    }
+
+    /** a `require` that only knows `targets`, recording every request it is asked to resolve */
+    function fakeRequire(targets) {
+      const requested = [];
+      function fake(request) { return targets[request](); }
+      fake.resolve = function (request) {
+        requested.push(request);
+        if (!(request in targets)) { throw new Error(`Cannot find module '${request}'`); }
+        return request;
+      };
+      fake.requested = requested;
+      return fake;
+    }
+
+    it('loads a resolver that is unreachable from the source file', function () {
+      const before = reportsFor({ 'import/resolver': { [resolverName]: {} } });
+      expect(before.resolved).to.equal(undefined);
+      expect(before.reports[0].message).to.equal(`Resolve error: unable to load resolver "${resolverName}".`);
+
+      registerResolverRequire(fakeRequire({
+        [`eslint-import-resolver-${resolverName}`]() { return require('../../files/node_modules/eslint-import-resolver-foo'); },
+      }));
+
+      const after = reportsFor({ 'import/resolver': { [resolverName]: {} } });
+      expect(after.reports).to.have.lengthOf(0);
+      expect(after.resolved).to.equal(utils.testFilePath('./bar.jsx'));
+    });
+
+    it('still prefers a resolver found from the source file', function () {
+      const registered = fakeRequire({});
+      registerResolverRequire(registered);
+
+      const { reports, resolved } = reportsFor({ 'import/resolver': { foo: {} } });
+      expect(reports).to.have.lengthOf(0);
+      expect(resolved).to.equal(utils.testFilePath('./bar.jsx'));
+      expect(registered.requested).to.have.lengthOf(0);
+    });
+
+    it('never consults registered requires for relative or absolute resolver names', function () {
+      const registered = fakeRequire({});
+      registerResolverRequire(registered);
+
+      ['./no-such-resolver', path.join(__dirname, 'no-such-resolver')].forEach(function (name) {
+        expect(reportsFor({ 'import/resolver': name }).resolved).to.equal(undefined);
+      });
+      expect(registered.requested).to.have.lengthOf(0);
+    });
+
+    it('surfaces a load exception from a registered resolver', function () {
+      registerResolverRequire(fakeRequire({
+        'eslint-import-resolver-throws-on-load'() { throw new SyntaxError('TEST SYNTAX ERROR'); },
+      }));
+
+      const { reports, resolved } = reportsFor({ 'import/resolver': 'throws-on-load' });
+      expect(resolved).to.equal(undefined);
+      expect(replaceErrorStackForTest(reports[0].message)).to.equal('Resolve error: SyntaxError: TEST SYNTAX ERROR\n<stack-was-here>');
+    });
   });
 
   it('reports invalid import/resolver config', function () {
