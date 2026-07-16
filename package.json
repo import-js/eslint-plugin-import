@@ -37,7 +37,7 @@
     "test-example:legacy": "cd examples/legacy && npm install && npm run lint",
     "test-example:flat": "cd examples/flat && npm install && npm run lint",
     "test-example:v9": "cd examples/v9 && npm install && npm run lint",
-    "test-types": "npx --package typescript@latest tsc --noEmit index.d.ts",
+    "test-types": "npx --package typescript@latest tsc --noEmit index.d.ts && npx --package typescript@latest tsc -p tests/types",
     "prepublishOnly": "safe-publish-latest && npm run build",
     "prepublish": "not-in-publish || npm run prepublishOnly",
     "preupdate:eslint-docs": "npm run build",
