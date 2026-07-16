@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - support eslint v10 ([#3230], thanks [@rasmi])
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
+- support wildcard patterns in the `import/core-modules` setting ([#3274], thanks [@andymai])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1205,6 +1206,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3274]: https://github.com/import-js/eslint-plugin-import/pull/3274
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3230]: https://github.com/import-js/eslint-plugin-import/pull/3230
@@ -1850,6 +1852,7 @@ for info on changes for earlier releases.
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
+[@andymai]: https://github.com/andymai
 [@AndrewLeedham]: https://github.com/AndrewLeedham
 [@AndrewRayCode]: https://github.com/AndrewRayCode
 [@andyogo]: https://github.com/andyogo
