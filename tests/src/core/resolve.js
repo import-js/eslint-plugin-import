@@ -184,6 +184,17 @@ describe('resolve', function () {
       expect(registered.requested).to.have.lengthOf(0);
     });
 
+    it('registers each `require` once, and ignores anything else', function () {
+      const registered = fakeRequire({});
+      registerResolverRequire(registered);
+      registerResolverRequire(registered);
+      registerResolverRequire(null);
+      registerResolverRequire('not a require');
+
+      expect(reportsFor({ 'import/resolver': 'nope-not-here' }).resolved).to.equal(undefined);
+      expect(registered.requested).to.eql(['eslint-import-resolver-nope-not-here', 'nope-not-here']);
+    });
+
     it('surfaces a load exception from a registered resolver', function () {
       registerResolverRequire(fakeRequire({
         'eslint-import-resolver-throws-on-load'() { throw new SyntaxError('TEST SYNTAX ERROR'); },
