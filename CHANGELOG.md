@@ -24,6 +24,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: honor the flat config's global `ignores` in the `listFilesWithNodeFs` fallback, restoring parity with the file set ESLint lints ([#3230], thanks [@ljharb])
 - [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
 - [`newline-after-import`]: ignore comments between consecutive imports when `considerComments` is enabled ([#2673], thanks [@raisulchowdhury])
+- [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1211,6 +1212,7 @@ for info on changes for earlier releases.
 
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
+[#3276]: https://github.com/import-js/eslint-plugin-import/pull/3276
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3230]: https://github.com/import-js/eslint-plugin-import/pull/3230
@@ -2072,6 +2074,7 @@ for info on changes for earlier releases.
 [@Pessimistress]: https://github.com/Pessimistress
 [@phryneas]: https://github.com/phryneas
 [@pmcelhaney]: https://github.com/pmcelhaney
+[@pratyushsinghal7]: https://github.com/pratyushsinghal7
 [@preco21]: https://github.com/preco21
 [@pri1311]: https://github.com/pri1311
 [@ProdigySim]: https://github.com/ProdigySim

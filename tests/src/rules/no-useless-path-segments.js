@@ -44,6 +44,14 @@ function runResolverTests(resolver) {
         options: [{ commonjs: true }],
         errors: ['Useless path segments for "./../files/malformed.js", should be "../files/malformed.js"'],
       }),
+      // template literal requires are visited too, and the fix normalizes the quoting
+      test({
+        code: 'require(`./../files/malformed.js`)',
+        output: 'require("../files/malformed.js")',
+        options: [{ commonjs: true }],
+        parserOptions: { ecmaVersion: 6 },
+        errors: ['Useless path segments for "./../files/malformed.js", should be "../files/malformed.js"'],
+      }),
       test({
         code: 'require("./../files/malformed")',
         output: 'require("../files/malformed")',

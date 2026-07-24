@@ -69,6 +69,23 @@ function runResolverTests(resolver) {
         options: [{ commonjs: true }],
       }),
       rest({
+        code: 'require(`./bar`)',
+        options: [{ commonjs: true }],
+        parserOptions: { ecmaVersion: 6 },
+      }),
+      // the cooked (not raw) template value is what must be resolved
+      rest({
+        code: 'require(`./\\u0062ar`)',
+        options: [{ commonjs: true }],
+        parserOptions: { ecmaVersion: 6 },
+      }),
+      // templates with expressions must remain ignored, even when the leading quasi does not resolve
+      rest({
+        code: 'const x = "bar"; require(`./does-not-exist-${x}`)',
+        options: [{ commonjs: true }],
+        parserOptions: { ecmaVersion: 6 },
+      }),
+      rest({
         code: 'require("./does-not-exist")',
         options: [{ commonjs: false }],
       }),
@@ -227,6 +244,17 @@ function runResolverTests(resolver) {
           {
             message: "Unable to resolve path to module './baz'.",
             type: 'Literal',
+          },
+        ],
+      }),
+      rest({
+        code: 'require(`./baz`)',
+        options: [{ commonjs: true }],
+        parserOptions: { ecmaVersion: 6 },
+        errors: [
+          {
+            message: "Unable to resolve path to module './baz'.",
+            type: 'TemplateLiteral',
           },
         ],
       }),

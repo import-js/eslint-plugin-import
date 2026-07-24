@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Fixed
+ - `moduleVisitor`: visit `require` calls whose argument is a no-substitution template literal ([#3276], thanks [@pratyushsinghal7])
+
 ## v2.14.0 - 2026-07-02
 
 ### Added
@@ -199,6 +202,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3276]: https://github.com/import-js/eslint-plugin-import/pull/3276
 [#3240]: https://github.com/import-js/eslint-plugin-import/pull/3240
 [#3124]: https://github.com/import-js/eslint-plugin-import/pull/3124
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
@@ -259,6 +263,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@Mysak0CZ]: https://github.com/Mysak0CZ
 [@nicolo-ribaudo]: https://github.com/nicolo-ribaudo
 [@pmcelhaney]: https://github.com/pmcelhaney
+[@pratyushsinghal7]: https://github.com/pratyushsinghal7
 [@sergei-startsev]: https://github.com/sergei-startsev
 [@silverwind]: https://github.com/silverwind
 [@sompylasar]: https://github.com/sompylasar

@@ -21,7 +21,7 @@ exports.default = function visitModules(visitor, options) {
 
   const ignoreRegExps = ignore == null ? [] : ignore.map((p) => new RegExp(p));
 
-  /** @type {(source: undefined | null | import('estree').Literal, importer: Parameters<typeof visitor>[1], moduleSystem?: 'import' | 'require') => void} */
+  /** @type {(source: undefined | null | import('estree').Literal | (import('estree').TemplateLiteral & { value: string }), importer: Parameters<typeof visitor>[1], moduleSystem?: 'import' | 'require') => void} */
   function checkSourceValue(source, importer, moduleSystem) {
     if (source == null) { return; } //?
 
@@ -71,10 +71,17 @@ exports.default = function visitModules(visitor, options) {
     if (call.arguments.length !== 1) { return; }
 
     const modulePath = call.arguments[0];
-    if (modulePath.type !== 'Literal') { return; }
-    if (typeof modulePath.value !== 'string') { return; }
+    if (modulePath.type === 'Literal') {
+      if (typeof modulePath.value !== 'string') { return; }
+      checkSourceValue(modulePath, call, 'require');
+      return;
+    }
+    if (modulePath.type !== 'TemplateLiteral') { return; }
+    if (modulePath.expressions.length !== 0 || modulePath.quasis.length !== 1) { return; }
 
-    checkSourceValue(modulePath, call, 'require');
+    const value = modulePath.quasis[0].value.cooked;
+    if (typeof value !== 'string') { return; }
+    checkSourceValue(Object.assign({}, modulePath, { value }), call, 'require');
   }
 
   /** @type {(call: Call) => void} */
