@@ -10,7 +10,7 @@ function isComma(token) {
  * @param {import('eslint').Rule.Fix[]} fixes
  * @param {import('eslint').Rule.RuleFixer} fixer
  * @param {import('eslint').SourceCode.SourceCode} sourceCode
- * @param {(ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier)[]} specifiers
+ * @param {(ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier | ExportSpecifier)[]} specifiers
  * */
 function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
   for (const specifier of specifiers) {
@@ -21,6 +21,34 @@ function removeSpecifiers(fixes, fixer, sourceCode, specifiers) {
     }
     fixes.push(fixer.remove(specifier));
   }
+}
+
+/**
+ * @param {import('eslint').Rule.RuleFixer} fixer
+ * @param {import('eslint').SourceCode.SourceCode} sourceCode
+ * @param {import('eslint').AST.Token} kindToken
+ */
+function removeKindToken(fixer, sourceCode, kindToken) {
+  const trailingCharacter = sourceCode.text[kindToken.range[1]];
+  const end = trailingCharacter && (/\s/).test(trailingCharacter)
+    ? kindToken.range[1] + 1
+    : kindToken.range[1];
+  return fixer.removeRange([kindToken.range[0], end]);
+}
+
+/**
+ * Leading comments may describe the type specifier being extracted. Splitting
+ * the export cannot safely determine whether to move or retain those comments.
+ * @param {import('eslint').SourceCode.SourceCode} sourceCode
+ * @param {ExportSpecifier[]} specifiers
+ */
+function hasLeadingComments(sourceCode, specifiers) {
+  // `getCommentsBefore` was added in ESLint 4. Avoid an unsafe fix when the
+  // installed ESLint cannot provide the comment ownership information.
+  if (typeof sourceCode.getCommentsBefore !== 'function') {
+    return true;
+  }
+  return specifiers.some((specifier) => sourceCode.getCommentsBefore(specifier).length > 0);
 }
 
 /** @type {(node: import('estree').Node, sourceCode: import('eslint').SourceCode.SourceCode, specifiers: (ImportSpecifier | ImportNamespaceSpecifier)[], kind: 'type' | 'typeof') => string} */
@@ -45,13 +73,47 @@ function getImportText(
   return `import ${kind} {${names.join(', ')}} from ${sourceString};`;
 }
 
+/** @type {(node: import('estree').ExportNamedDeclaration, sourceCode: import('eslint').SourceCode.SourceCode, specifiers: ExportSpecifier[]) => string} */
+function getExportText(
+  node,
+  sourceCode,
+  specifiers,
+) {
+  const names = specifiers.map((specifier) => {
+    const kindToken = sourceCode.getFirstToken(specifier);
+    return sourceCode.text.slice(kindToken.range[1], specifier.range[1]).replace(/^\s+/, '');
+  });
+  const closingBrace = sourceCode.getTokenAfter(
+    node.specifiers[node.specifiers.length - 1],
+    (token) => token.type === 'Punctuator' && token.value === '}',
+  );
+  const suffix = sourceCode.text.slice(closingBrace.range[1], node.range[1]);
+  return `export type {${names.join(', ')}}${suffix}`;
+}
+
+/**
+ * Flow supports top-level type exports but not inline type export specifiers.
+ * TypeScript-ESTree identifies its export specifiers with an `exportKind`.
+ * @param {import('estree').ExportNamedDeclaration} node
+ */
+function isTypeScriptExport(node) {
+  return node.specifiers.length > 0
+    && node.specifiers.every((specifier) => specifier.exportKind === 'type' || specifier.exportKind === 'value');
+}
+
+/** @param {import('estree').ExportNamedDeclaration} node */
+function hasExportAttributes(node) {
+  return node.assertions && node.assertions.length > 0
+    || node.attributes && node.attributes.length > 0;
+}
+
 /** @type {import('eslint').Rule.RuleModule} */
 module.exports = {
   meta: {
     type: 'suggestion',
     docs: {
       category: 'Style guide',
-      description: 'Enforce or ban the use of inline type-only markers for named imports.',
+      description: 'Enforce or ban the use of inline type-only markers for named imports and exports.',
       url: docsUrl('consistent-type-specifier-style'),
     },
     fixable: 'code',
@@ -106,6 +168,28 @@ module.exports = {
               return [].concat(
                 kindToken ? fixer.remove(kindToken) : [],
                 node.specifiers.map((specifier) => fixer.insertTextBefore(specifier, `${node.importKind} `)),
+              );
+            },
+          });
+        },
+        ExportNamedDeclaration(node) {
+          if (!isTypeScriptExport(node) || node.exportKind !== 'type') {
+            return;
+          }
+
+          context.report({
+            node,
+            message: 'Prefer using inline type specifiers instead of a top-level type-only export.',
+            fix(fixer) {
+              if (hasExportAttributes(node)) {
+                return null;
+              }
+
+              const kindToken = sourceCode.getFirstToken(node, { skip: 1 });
+
+              return [].concat(
+                kindToken ? removeKindToken(fixer, sourceCode, kindToken) : [],
+                node.specifiers.map((specifier) => fixer.insertTextBefore(specifier, 'type ')),
               );
             },
           });
@@ -233,6 +317,84 @@ module.exports = {
                 return fixes.concat(
                   // insert the new imports after the old declaration
                   fixer.insertTextAfter(node, `\n${newImports}`),
+                );
+              },
+            });
+          });
+        }
+      },
+      /** @param {import('estree').ExportNamedDeclaration} node */
+      ExportNamedDeclaration(node) {
+        if (
+          !isTypeScriptExport(node)
+          // already top-level is valid
+          || node.exportKind === 'type'
+        ) {
+          return;
+        }
+
+        /** @type {ExportSpecifier[]} */
+        const typeSpecifiers = [];
+        /** @type {ExportSpecifier[]} */
+        const valueSpecifiers = [];
+        for (const specifier of node.specifiers) {
+          if (specifier.exportKind === 'type') {
+            typeSpecifiers.push(specifier);
+          } else {
+            valueSpecifiers.push(specifier);
+          }
+        }
+
+        if (typeSpecifiers.length === 0) {
+          return;
+        }
+
+        const typeExport = getExportText(node, sourceCode, typeSpecifiers);
+
+        if (typeSpecifiers.length === node.specifiers.length) {
+          const messageSuffix = preference === 'prefer-top-level-if-only-type-imports' ? ' when there are only type exports' : '';
+          context.report({
+            node,
+            message: `Prefer using a top-level type-only export instead of inline type specifiers${messageSuffix}.`,
+            fix(fixer) {
+              if (hasExportAttributes(node)) {
+                return null;
+              }
+
+              const exportToken = sourceCode.getFirstToken(node);
+              return [].concat(
+                fixer.insertTextAfter(exportToken, ' type'),
+                typeSpecifiers.map((specifier) => {
+                  const kindToken = sourceCode.getFirstToken(specifier);
+                  return removeKindToken(fixer, sourceCode, kindToken);
+                }),
+              );
+            },
+          });
+        } else if (preference !== 'prefer-top-level-if-only-type-imports') {
+          typeSpecifiers.forEach((specifier) => {
+            context.report({
+              node: specifier,
+              message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+              fix(fixer) {
+                if (hasExportAttributes(node) || hasLeadingComments(sourceCode, typeSpecifiers)) {
+                  return null;
+                }
+
+                /** @type {import('eslint').Rule.Fix[]} */
+                const fixes = [];
+
+                removeSpecifiers(fixes, fixer, sourceCode, typeSpecifiers);
+
+                // Remove the trailing comma after the last value export so the
+                // original declaration does not retain an empty final slot.
+                const maybeComma = sourceCode.getTokenAfter(valueSpecifiers[valueSpecifiers.length - 1]);
+                if (isComma(maybeComma)) {
+                  fixes.push(fixer.remove(maybeComma));
+                }
+
+                return fixes.concat(
+                  fixer.insertTextAfter(node, `\n${typeExport}`),
                 );
               },
             });

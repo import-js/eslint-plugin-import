@@ -321,8 +321,193 @@ const TS_ONLY = {
     // always valid
     //
     test({ code: "import type * as Foo from 'Foo';" }),
+    {
+      code: 'export { Foo };',
+      options: ['prefer-top-level'],
+    },
+    {
+      code: 'export { Foo };',
+      options: ['prefer-inline'],
+    },
+    {
+      code: 'export const Foo = 1;',
+      options: ['prefer-top-level'],
+    },
+    {
+      code: 'export type Foo = string;',
+      options: ['prefer-inline'],
+    },
+    {
+      code: 'export interface Foo {}',
+      options: ['prefer-top-level'],
+    },
+
+    //
+    // prefer-top-level
+    //
+    {
+      code: 'export type { Foo };',
+      options: ['prefer-top-level'],
+    },
+    {
+      code: "export type { Foo as Bar } from 'Foo';",
+      options: ['prefer-top-level'],
+    },
+
+    //
+    // prefer-top-level-if-only-type-imports
+    //
+    {
+      code: 'export { Foo, type Bar };',
+      options: ['prefer-top-level-if-only-type-imports'],
+    },
+    {
+      code: "export { Foo, type Bar } from 'Foo';",
+      options: ['prefer-top-level-if-only-type-imports'],
+    },
+
+    //
+    // prefer-inline
+    //
+    {
+      code: 'export { type Foo };',
+      options: ['prefer-inline'],
+    },
+    {
+      code: "export { type Foo as Bar } from 'Foo';",
+      options: ['prefer-inline'],
+    },
   ],
-  invalid: [],
+  invalid: [
+    //
+    // prefer-top-level
+    //
+    {
+      code: 'export { type Foo };',
+      output: 'export type { Foo };',
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: "export { type Foo as Bar } from 'Foo';",
+      output: "export type { Foo as Bar } from 'Foo';",
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: 'export { type Foo, type Bar };',
+      output: 'export type { Foo, Bar };',
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: "export { type Foo /* keep */ } from 'Foo';",
+      output: "export type { Foo /* keep */ } from 'Foo';",
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: 'export { Foo, type Bar };',
+      output: 'export { Foo  };\nexport type {Bar};',
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportSpecifier',
+      }],
+    },
+    {
+      code: "export { type Foo, Bar as Baz } from 'Foo';",
+      output: "export {  Bar as Baz } from 'Foo';\nexport type {Foo} from 'Foo';",
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportSpecifier',
+      }],
+    },
+    {
+      code: "export { Foo, type Bar /* keep */ } from 'Foo'",
+      output: "export { Foo  /* keep */ } from 'Foo'\nexport type {Bar} from 'Foo'",
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportSpecifier',
+      }],
+    },
+    {
+      code: "export { Foo, /* Bar docs */ type Bar } from 'Foo';",
+      output: null,
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportSpecifier',
+      }],
+    },
+    {
+      code: 'export {\n  Foo,\n  // Bar docs\n  type Bar,\n};',
+      output: null,
+      options: ['prefer-top-level'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers.',
+        type: 'ExportSpecifier',
+      }],
+    },
+
+    //
+    // prefer-top-level-if-only-type-imports
+    //
+    {
+      code: 'export { type Foo, type Bar };',
+      output: 'export type { Foo, Bar };',
+      options: ['prefer-top-level-if-only-type-imports'],
+      errors: [{
+        message: 'Prefer using a top-level type-only export instead of inline type specifiers when there are only type exports.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+
+    //
+    // prefer-inline
+    //
+    {
+      code: 'export type { Foo };',
+      output: 'export { type Foo };',
+      options: ['prefer-inline'],
+      errors: [{
+        message: 'Prefer using inline type specifiers instead of a top-level type-only export.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: "export type { Foo as Bar } from 'Foo';",
+      output: "export { type Foo as Bar } from 'Foo';",
+      options: ['prefer-inline'],
+      errors: [{
+        message: 'Prefer using inline type specifiers instead of a top-level type-only export.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+    {
+      code: "export type { Foo /* keep */ } from 'Foo'",
+      output: "export { type Foo /* keep */ } from 'Foo'",
+      options: ['prefer-inline'],
+      errors: [{
+        message: 'Prefer using inline type specifiers instead of a top-level type-only export.',
+        type: 'ExportNamedDeclaration',
+      }],
+    },
+  ],
 };
 
 const FLOW_ONLY = {
@@ -376,6 +561,10 @@ const FLOW_ONLY = {
     },
     {
       code: "import { type Foo, type Bar, typeof Baz, typeof Bam } from 'Foo';",
+      options: ['prefer-inline'],
+    },
+    {
+      code: 'export type { Foo };',
       options: ['prefer-inline'],
     },
   ],
