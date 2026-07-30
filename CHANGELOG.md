@@ -23,6 +23,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unused-modules`]: normalize path separators so `listFilesWithNodeFs` glob matching works on Windows ([#3230], thanks [@ljharb])
 - [`no-unused-modules`]: honor the flat config's global `ignores` in the `listFilesWithNodeFs` fallback, restoring parity with the file set ESLint lints ([#3230], thanks [@ljharb])
 - [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
+- [`newline-after-import`]: ignore comments between consecutive imports when `considerComments` is enabled ([#2673], thanks [@raisulchowdhury])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1284,6 +1285,7 @@ for info on changes for earlier releases.
 [#2748]: https://github.com/import-js/eslint-plugin-import/pull/2748
 [#2735]: https://github.com/import-js/eslint-plugin-import/pull/2735
 [#2699]: https://github.com/import-js/eslint-plugin-import/pull/2699
+[#2673]: https://github.com/import-js/eslint-plugin-import/issues/2673
 [#2664]: https://github.com/import-js/eslint-plugin-import/pull/2664
 [#2640]: https://github.com/import-js/eslint-plugin-import/pull/2640
 [#2613]: https://github.com/import-js/eslint-plugin-import/pull/2613

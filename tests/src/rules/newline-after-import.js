@@ -117,6 +117,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
     {
+      code: `import foo from 'foo';\n// Bar.\n// Baz.\nimport qux from 'qux';\n\nconst quux = 'quux';`,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      options: [{ considerComments: true }],
+    },
+    {
       code: `import path from 'path';import foo from 'foo';\n`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },
@@ -285,6 +290,12 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
         parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
       },
       {
+        code: `import { ExecaReturnValue } from 'execa';\n// intermediate comment\nimport execa = require('execa');\n\nconst foo = 1;`,
+        parser,
+        parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+        options: [{ considerComments: true }],
+      },
+      {
         code: `
           import execa = require('execa');
           import { ExecaReturnValue } from 'execa';
@@ -411,6 +422,14 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
   ),
 
   invalid: [].concat(
+    // an `export import` following a TS import-equals must still require a newline
+    flatMap(getTSParsers(), (parser) => [{
+      code: `import { ns } from 'namespace';\nimport Bar = ns.baz.foo.Bar;\nexport import Foo = ns.baz.bar.Foo;\n`,
+      output: `import { ns } from 'namespace';\nimport Bar = ns.baz.foo.Bar;\n\nexport import Foo = ns.baz.bar.Foo;\n`,
+      parser,
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+      errors: [{ line: 2, message: IMPORT_ERROR_MESSAGE }],
+    }]),
     {
       code: `
         import { A, B, C, D } from

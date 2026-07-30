@@ -179,9 +179,17 @@ module.exports = {
         return;
       }
 
+      if (nextNode && nextNode.type === 'ImportDeclaration') {
+        return;
+      }
+
+      if (nextNode && nextNode.type === 'TSImportEqualsDeclaration' && !nextNode.isExport) {
+        return;
+      }
+
       if (nextComment && typeof nextComment !== 'undefined') {
         commentAfterImport(node, nextComment, 'import');
-      } else if (nextNode && nextNode.type !== 'ImportDeclaration' && (nextNode.type !== 'TSImportEqualsDeclaration' || nextNode.isExport)) {
+      } else if (nextNode) {
         checkForNewLine(node, nextNode, 'import');
       }
     }
