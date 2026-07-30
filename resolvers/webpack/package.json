@@ -53,7 +53,7 @@
     "chai": "^3.5.0",
     "mocha": "^3.5.3",
     "nyc": "^11.9.0",
-    "webpack": "file://./webpack-stub"
+    "webpack": "file:./webpack-stub"
   },
   "engines": {
     "node": ">= 6"
