@@ -5,6 +5,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 - [tests] replace gist dep with local file dep
+- [fix] use a valid `file:` spec for the webpack stub ([#3279], thanks [@manzoorwanijk])
 - [deps] update `hasown`
 
 ## 0.13.11 - 2026-04-01
@@ -190,6 +191,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ### Added
  - `interpret` configs (such as `.babel.js`). Thanks to [@gausie] for the initial PR ([#164], ages ago! 😅) and [@jquense] for tests ([#278]).
 
+[#3279]: https://github.com/import-js/eslint-plugin-import/pull/3279
 [#3100]: https://github.com/import-js/eslint-plugin-import/pull/3100
 [#3029]: https://github.com/import-js/eslint-plugin-import/pull/3029
 [#2287]: https://github.com/import-js/eslint-plugin-import/pull/2287
@@ -249,6 +251,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 [@kesne]: https://github.com/kesne
 [@Kovensky]: https://github.com/Kovensky
 [@ljharb]: https://github.com/ljharb
+[@manzoorwanijk]: https://github.com/manzoorwanijk
 [@mattkrick]: https://github.com/mattkrick
 [@migueloller]: https://github.com/migueloller
 [@ogonkov]: https://github.com/ogonkov
