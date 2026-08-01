@@ -163,6 +163,24 @@ export default [
 ];
 ```
 
+ - Configuring rules without a preset:
+
+```js
+import importPlugin from 'eslint-plugin-import';
+
+export default [
+  {
+    files: ['**/*.{js,mjs,cjs,jsx,mjsx}'],
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      'import/no-cycle': 'warn',
+    },
+  },
+];
+```
+
 ## TypeScript
 
 You may use the following snippet or assemble your own config using the granular settings described below it.
@@ -190,6 +208,34 @@ Make sure you have installed [`@typescript-eslint/parser`] and [`eslint-import-r
 
 [`@typescript-eslint/parser`]: https://github.com/typescript-eslint/typescript-eslint/tree/HEAD/packages/parser
 [`eslint-import-resolver-typescript`]: https://github.com/import-js/eslint-import-resolver-typescript
+
+### Config - Flat
+
+```js
+import importPlugin from 'eslint-plugin-import';
+import tsParser from '@typescript-eslint/parser';
+
+export default [
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+    },
+    plugins: {
+      import: importPlugin,
+    },
+    settings: {
+      'import/resolver': {
+        typescript: true,
+        node: true,
+      },
+    },
+    rules: {
+      'import/no-unresolved': 'error',
+    },
+  },
+];
+```
 
 ### Config - Flat with `config()` in `typescript-eslint`
 
