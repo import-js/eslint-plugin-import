@@ -122,6 +122,11 @@ ruleTester.run('newline-after-import', require('rules/newline-after-import'), {
       options: [{ considerComments: true }],
     },
     {
+      code: `import './index.scss';\n\n// other imports\nimport { ErrorBoundary } from 'react-error-boundary';`,
+      options: [{ count: 2, exactCount: true, considerComments: true }],
+      parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
+    },
+    {
       code: `import path from 'path';import foo from 'foo';\n`,
       parserOptions: { ecmaVersion: 2015, sourceType: 'module' },
     },

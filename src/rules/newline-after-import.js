@@ -179,7 +179,12 @@ module.exports = {
         return;
       }
 
-      if (nextNode && nextNode.type === 'ImportDeclaration') {
+      if (
+        nextNode && (
+          nextNode.type === 'ImportDeclaration'
+          || nextNode.type === 'TSImportEqualsDeclaration' && !nextNode.isExport
+        )
+      ) {
         return;
       }
 

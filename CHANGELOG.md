@@ -27,6 +27,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`newline-after-import`]: ignore comments between consecutive imports when `considerComments` is enabled ([#2673], thanks [@raisulchowdhury])
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
+- [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1214,6 +1215,7 @@ for info on changes for earlier releases.
 
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
+[#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
 [#3276]: https://github.com/import-js/eslint-plugin-import/pull/3276
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
