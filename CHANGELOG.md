@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - support eslint v10 ([#3230], thanks [@rasmi])
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
+- [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1235,6 +1236,7 @@ for info on changes for earlier releases.
 [#3105]: https://github.com/import-js/eslint-plugin-import/pull/3105
 [#3104]: https://github.com/import-js/eslint-plugin-import/pull/3104
 [#3097]: https://github.com/import-js/eslint-plugin-import/pull/3097
+[#3094]: https://github.com/import-js/eslint-plugin-import/issues/3094
 [#3079]: https://github.com/import-js/eslint-plugin-import/issues/3079
 [#3073]: https://github.com/import-js/eslint-plugin-import/pull/3073
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
@@ -2069,6 +2071,7 @@ for info on changes for earlier releases.
 [@ProdigySim]: https://github.com/ProdigySim
 [@pzhine]: https://github.com/pzhine
 [@Quantaly]: https://github.com/Quantaly
+[@raisulchowdhury]: https://github.com/raisulchowdhury
 [@ramasilveyra]: https://github.com/ramasilveyra
 [@randallreedjr]: https://github.com/randallreedjr
 [@rasmi]: https://github.com/rasmi

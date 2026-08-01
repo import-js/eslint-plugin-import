@@ -219,6 +219,10 @@ describe('TypeScript', function () {
           code: 'import * as hasDeprecated from \'./ts-deprecated.ts\'',
           ...parserConfig,
         }),
+        test({
+          code: 'import { NotDeprecatedSandwichClass } from \'./ts-deprecated.ts\'',
+          ...parserConfig,
+        }),
       ],
       invalid: [
         test({
@@ -226,6 +230,27 @@ describe('TypeScript', function () {
           errors: [
             { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this!' },
             { type: 'Identifier', message: 'Deprecated: don\'t use this!' },
+          ],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { DeprecatedClass } from \'./ts-deprecated.ts\'',
+          errors: [
+            { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this class!' },
+          ],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import DeprecatedDefaultClass from \'./ts-deprecated.ts\'',
+          errors: [
+            { type: 'ImportDefaultSpecifier', message: 'Deprecated: don\'t use this default class!' },
+          ],
+          ...parserConfig,
+        }),
+        test({
+          code: 'import { DeprecatedBetweenClass } from \'./ts-deprecated.ts\'',
+          errors: [
+            { type: 'ImportSpecifier', message: 'Deprecated: don\'t use this between class!' },
           ],
           ...parserConfig,
         }),

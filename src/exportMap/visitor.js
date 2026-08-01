@@ -49,7 +49,11 @@ export default class ImportExportVisitorBuilder {
   build(astNode) {
     return {
       ExportDefaultDeclaration() {
-        const exportMeta = captureDoc(this.source, this.docStyleParsers, astNode);
+        // A decorated export's doc may sit above the first decorator, outside the export node's range.
+        // The export node is checked first, so a doc between decorator and `export` still wins;
+        // later decorators are ignored, since a doc between decorators does not document the export.
+        const decorators = astNode.declaration.decorators || [];
+        const exportMeta = captureDoc(this.source, this.docStyleParsers, astNode, ...decorators.slice(0, 1));
         if (astNode.declaration.type === 'Identifier') {
           this.namespace.add(exportMeta, astNode.declaration);
           // If the export has no JSDoc, look for it on the referenced declaration
@@ -98,6 +102,10 @@ export default class ImportExportVisitorBuilder {
         captureDependencyWithSpecifiers(astNode, this.remotePathResolver, this.exportMap, this.context, this.thunkFor);
         // capture declaration
         if (astNode.declaration != null) {
+          // A decorated export's doc may sit above the first decorator, outside the export node's range.
+          // The export node is checked first, so a doc between decorator and `export` still wins;
+          // later decorators are ignored, since a doc between decorators does not document the export.
+          const decorators = astNode.declaration.decorators || [];
           switch (astNode.declaration.type) {
             case 'FunctionDeclaration':
             case 'ClassDeclaration':
@@ -110,7 +118,10 @@ export default class ImportExportVisitorBuilder {
             case 'TSInterfaceDeclaration':
             case 'TSAbstractClassDeclaration':
             case 'TSModuleDeclaration':
-              this.exportMap.namespace.set(astNode.declaration.id.name, captureDoc(this.source, this.docStyleParsers, astNode));
+              this.exportMap.namespace.set(
+                astNode.declaration.id.name,
+                captureDoc(this.source, this.docStyleParsers, astNode, ...decorators.slice(0, 1)),
+              );
               break;
             case 'VariableDeclaration':
               astNode.declaration.declarations.forEach((d) => {
