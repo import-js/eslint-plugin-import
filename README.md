@@ -211,6 +211,8 @@ export default tseslint.config(
 );
 ```
 
+`importPlugin.flatConfigs.recommended` does not specify a `files` pattern. Scope it to JavaScript and TypeScript files in projects that also lint other file types. For Angular projects, use the Angular-specific parser and apply the import plugin configuration only to the files it can parse, rather than to Angular HTML templates.
+
 ## Resolvers
 
 With the advent of module bundlers and the current state of modules and module
