@@ -39,6 +39,15 @@ const cases = {
       code: 'var bar = require("./bar")',
       filename: '<text>',
     }),
+    // A filename that does not resolve to a file on disk, which is the normal
+    // case for `eslint --stdin --stdin-filename=not-yet-written.js` and for
+    // `ESLint#lintText`. `<text>` above only covers the eslintrc sentinel; flat
+    // config passes the given name through, so this used to throw a TypeError
+    // out of the rule and abort the whole run.
+    test({
+      code: 'import { foo } from "./es6/depth-one"',
+      filename: testFilePath('./cycles/does-not-exist-on-disk.js'),
+    }),
     test({
       code: 'import { foo } from "cycles/external/depth-one"',
       options: [{ ignoreExternal: true }],

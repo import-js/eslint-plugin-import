@@ -70,7 +70,13 @@ module.exports = {
       context,
     );
 
-    const scc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context);
+    // `StronglyConnectedComponentsBuilder.get` returns null when `myPath` does not
+    // resolve, which happens whenever the linted text has no file on disk — e.g.
+    // `eslint --stdin --stdin-filename=not-yet-written.js`, or `ESLint#lintText`.
+    // The SCC map is only an optimisation for skipping unreachable imports, so an
+    // empty one is the correct fallback: every lookup is `undefined`, which makes
+    // each pair compare equal and traverses everything, exactly as `disableScc` does.
+    const scc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context) || {};
 
     function checkSourceValue(sourceNode, importer, moduleSystem) {
       if (ignoreModule(sourceNode.value, moduleSystem)) {
