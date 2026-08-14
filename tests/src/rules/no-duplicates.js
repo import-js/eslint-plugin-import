@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { expect } from 'chai';
 import { test as testUtil, getNonDefaultParsers, parsers, tsVersionSatisfies, typescriptEslintParserSatisfies } from '../utils';
 import jsxConfig from '../../../config/react';
 
@@ -483,6 +484,29 @@ import {x,y} from './foo'
       ],
       ...jsxConfig,
     }),
+
+    // #2757: a trailing comma in a merged import must not become a bare comma
+    // in the merged specifier list, which does not parse.
+    test({
+      code: `
+import { Foo } from "someImport";
+import {
+  BarLongNameToEnsureLineBreak,
+  BazManLongNameToEnsureLineBreak,
+} from "someImport";
+import { Qux } from "someImport";
+`,
+      output: `
+import { Foo,
+  BarLongNameToEnsureLineBreak,
+  BazManLongNameToEnsureLineBreak,Qux } from "someImport";
+`,
+      errors: [
+        "'someImport' imported multiple times.",
+        "'someImport' imported multiple times.",
+        "'someImport' imported multiple times.",
+      ],
+    }),
   ],
 });
 
@@ -815,4 +839,48 @@ context('TypeScript', function () {
         invalid,
       });
     });
+});
+
+context('fixer output re-parses', function () {
+  // An `output` assertion compares strings and cannot tell that the string is
+  // not valid JavaScript, which is how a fixer emitting unparseable source
+  // survived (#2757). Run the fixer for real and re-parse what it produced.
+  const fixAndReparse = (code) => {
+    const { Linter } = require('eslint');
+    const linter = new Linter();
+    let config;
+    if (semver.major(eslintPkg.version) >= 9) {
+      config = {
+        languageOptions: { ecmaVersion: 2018, sourceType: 'module' },
+        plugins: { import: { rules: { 'no-duplicates': rule } } },
+        rules: { 'import/no-duplicates': 'error' },
+      };
+    } else {
+      linter.defineRule('import/no-duplicates', rule);
+      config = {
+        // eslint 4/5 (espree <6) reject ecmaVersion values above 2018/2019
+        parserOptions: { ecmaVersion: 2018, sourceType: 'module' },
+        rules: { 'import/no-duplicates': 'error' },
+      };
+    }
+    const { output } = linter.verifyAndFix(code, config);
+    const parseOnly = semver.major(eslintPkg.version) >= 9
+      ? { languageOptions: config.languageOptions, plugins: config.plugins }
+      : { parserOptions: config.parserOptions };
+    const fatal = linter.verify(output, parseOnly).filter((m) => m.fatal);
+    return { output, fatal };
+  };
+
+  it('#2757: merged import with a trailing comma', function () {
+    // autofix needs eslint 4+
+    if (semver.satisfies(eslintPkg.version, '< 4')) { this.skip(); }
+    const { output, fatal } = fixAndReparse(`import { Foo } from "someImport";
+import {
+  BarLongNameToEnsureLineBreak,
+  BazManLongNameToEnsureLineBreak,
+} from "someImport";
+import { Qux } from "someImport";
+`);
+    expect(fatal, `fixed output does not parse:\n${output}`).to.deep.equal([]);
+  });
 });

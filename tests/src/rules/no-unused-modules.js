@@ -1372,35 +1372,39 @@ describe('support (nested) destructuring assignment', () => {
   });
 });
 
-describe('support ES2022 Arbitrary module namespace identifier names', () => {
-  ruleTester.run('no-unused-module', rule, {
-    valid: [].concat(
-      testVersion('>= 8.7', () => ({
-        options: unusedExportsOptions,
-        code: `import { "foo" as foo } from "./arbitrary-module-namespace-identifier-name-a"`,
-        parserOptions: { ecmaVersion: 2022 },
-        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-b.js'),
-      })),
-      testVersion('>= 8.7', () => ({
-        options: unusedExportsOptions,
-        code: 'const foo = 333;\nexport { foo as "foo" }',
-        parserOptions: { ecmaVersion: 2022 },
-        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-a.js'),
-      })),
-    ),
-    invalid: [].concat(
-      testVersion('>= 8.7', () => ({
-        options: unusedExportsOptions,
-        code: 'const foo = 333\nexport { foo as "foo" }',
-        parserOptions: { ecmaVersion: 2022 },
-        filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-c.js'),
-        errors: [
-          error(`exported declaration 'foo' not used within other modules`),
-        ],
-      })),
-    ),
-  });
-});
+describe(
+  'support ES2022 Arbitrary module namespace identifier names',
+  { skip: !semver.satisfies(eslintPkg.version, '>=8.7') },
+  () => {
+    ruleTester.run('no-unused-module', rule, {
+      valid: [].concat(
+        testVersion('>= 8.7', () => ({
+          options: unusedExportsOptions,
+          code: `import { "foo" as foo } from "./arbitrary-module-namespace-identifier-name-a"`,
+          parserOptions: { ecmaVersion: 2022 },
+          filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-b.js'),
+        })),
+        testVersion('>= 8.7', () => ({
+          options: unusedExportsOptions,
+          code: 'const foo = 333;\nexport { foo as "foo" }',
+          parserOptions: { ecmaVersion: 2022 },
+          filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-a.js'),
+        })),
+      ),
+      invalid: [].concat(
+        testVersion('>= 8.7', () => ({
+          options: unusedExportsOptions,
+          code: 'const foo = 333\nexport { foo as "foo" }',
+          parserOptions: { ecmaVersion: 2022 },
+          filename: testFilePath('./no-unused-modules/arbitrary-module-namespace-identifier-name-c.js'),
+          errors: [
+            error(`exported declaration 'foo' not used within other modules`),
+          ],
+        })),
+      ),
+    });
+  },
+);
 
 describe('parser ignores prefixes like BOM and hashbang', () => {
   // bom, hashbang

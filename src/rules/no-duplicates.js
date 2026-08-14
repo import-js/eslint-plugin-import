@@ -172,6 +172,11 @@ function getFix(first, rest, sourceCode, context) {
         // Add *only* the new identifiers that don't already exist, and track any new identifiers so we don't add them again in the next loop
         const [specifierText, updatedExistingIdentifiers] = specifier.identifiers.reduce(([text, set], cur) => {
           const trimmed = cur.trim(); // Trim whitespace before/after to compare to our set of existing identifiers
+          if (trimmed.length === 0) {
+            // A whitespace-only segment comes from a trailing comma; emitting it
+            // would splice a bare comma into the merged specifier list (#2757).
+            return [text, set];
+          }
           const hasLineComment = (/\/\/[^\n]*$/).test(trimmed);
           let curWithType;
           if (trimmed.length > 0 && preferInline && isTypeSpecifier) {
