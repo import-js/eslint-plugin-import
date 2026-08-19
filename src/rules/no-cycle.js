@@ -70,7 +70,10 @@ module.exports = {
       context,
     );
 
-    const scc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context);
+    // `StronglyConnectedComponentsBuilder.get` returns null when `myPath` does not resolve,
+    // e.g. an unsaved buffer (`eslint --stdin --stdin-filename=not-yet-written.js`, `ESLint#lintText`),
+    // or a resolver that cannot resolve the linted file's own path (#3221).
+    const fileScc = options.disableScc ? {} : StronglyConnectedComponentsBuilder.get(myPath, context);
 
     function checkSourceValue(sourceNode, importer, moduleSystem) {
       if (ignoreModule(sourceNode.value, moduleSystem)) {
@@ -107,6 +110,19 @@ module.exports = {
       if (imported.path === myPath) {
         return;  // no-self-import territory
       }
+
+      // When `myPath` did not resolve, the same-SCC shortcut is unavailable,
+      // but the keys of a graph rooted at the imported module hold every module the traversal below could visit,
+      // so when `myPath` is absent from them, no cycle is possible and all work can be skipped.
+      // The graph's components must not feed the checks below,
+      // since the graph cannot see the linted buffer's own edges.
+      // If no graph can be built either (#3221), an empty map traverses everything,
+      // exactly as `disableScc` does: every lookup is `undefined`, so every pair compares equal.
+      const importScc = fileScc ? null : StronglyConnectedComponentsBuilder.get(imported.path, context);
+      if (importScc && !(myPath in importScc)) {
+        return; // `myPath` is unreachable from this import, so no cycle is possible
+      }
+      const scc = fileScc || {};
 
       /* If we're in the same Strongly Connected Component,
        * Then there exists a path from each node in the SCC to every other node in the SCC,

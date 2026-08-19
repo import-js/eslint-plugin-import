@@ -39,6 +39,16 @@ const cases = {
       code: 'var bar = require("./bar")',
       filename: '<text>',
     }),
+    // A filename that is not on disk used to throw a TypeError and abort the whole run;
+    // it is the normal case for `eslint --stdin --stdin-filename=not-yet-written.js` and `ESLint#lintText`,
+    // and the `<text>` case above does not cover it, only linting text with no filename at all.
+    // The distinct settings keep this test's SCC cache entries away from the other tests',
+    // since the cycle fixtures' on-disk contents differ from the `code` being linted.
+    test({
+      code: 'import { foo } from "./es6/depth-one"',
+      filename: testFilePath('./cycles/does-not-exist-on-disk.js'),
+      settings: { 'import/cache': { lifetime: 30 } },
+    }),
     test({
       code: 'import { foo } from "cycles/external/depth-one"',
       options: [{ ignoreExternal: true }],
@@ -140,6 +150,22 @@ const cases = {
         'import/resolver': 'webpack',
         'import/external-module-folders': ['cycles/external'],
       },
+    }),
+    // When the resolver cannot resolve the linted file's own path (#3221),
+    // no SCC graph can be built from either end,
+    // and the rule must fall back to traversing everything rather than skipping the check.
+    test({
+      code: 'import { foo } from "./es6/depth-one"',
+      settings: { 'import/resolver': './cycles/own-path-blind-resolver' },
+      errors: [error(`Dependency cycle detected.`)],
+    }),
+    // Same, but only the linted file's own path fails to resolve;
+    // the graph rooted at the import cannot see the linted buffer's own edges,
+    // so it must not feed the same-SCC shortcut, and the cycle must still be found.
+    test({
+      code: 'import { foo } from "./es6/depth-one"',
+      settings: { 'import/resolver': { './cycles/own-path-blind-resolver': { onlyFilename: 'depth-zero.js' } } },
+      errors: [error(`Dependency cycle detected.`)],
     }),
 
     // Ensure behavior does not change for those tests, with or without `
