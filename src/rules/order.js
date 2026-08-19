@@ -937,6 +937,13 @@ module.exports = {
                 export: { type: 'boolean' },
                 require: { type: 'boolean' },
                 cjsExports: { type: 'boolean' },
+                sortBy: {
+                  type: 'string',
+                  enum: [
+                    'name',
+                    'alias',
+                  ],
+                },
                 types: {
                   type: 'string',
                   enum: [
@@ -1055,6 +1062,7 @@ module.exports = {
 
     const named = {
       types: 'mixed',
+      sortBy: 'name',
       ...typeof options.named === 'object' ? {
         ...options.named,
         import: 'import' in options.named ? options.named.import : options.named.enabled,
@@ -1117,12 +1125,17 @@ module.exports = {
           (namedImport) => {
             const kind = namedImport.kind || 'value';
             const rank = namedGroups.findIndex((entry) => [].concat(entry).indexOf(kind) > -1);
+            const sortByAlias = named.sortBy === 'alias';
 
             return {
-              displayName: namedImport.value,
+              displayName: sortByAlias && namedImport.alias
+                ? `${namedImport.value} as ${namedImport.alias}`
+                : namedImport.value,
               rank: rank === -1 ? namedGroups.length : rank,
               ...namedImport,
-              value: `${namedImport.value}:${namedImport.alias || ''}`,
+              value: sortByAlias
+                ? `${namedImport.alias || namedImport.value}:${namedImport.value}`
+                : `${namedImport.value}:${namedImport.alias || ''}`,
             };
           });
 

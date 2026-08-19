@@ -10,6 +10,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - support eslint v10 ([#3230], thanks [@rasmi])
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
+- [`order`]: add `named.sortBy` option to sort named imports/exports by their alias instead of their name ([#3181], thanks [@KAMRONBEK])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1218,6 +1219,7 @@ for info on changes for earlier releases.
 [#3208]: https://github.com/import-js/eslint-plugin-import/issues/3208
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
+[#3181]: https://github.com/import-js/eslint-plugin-import/issues/3181
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
@@ -1980,6 +1982,7 @@ for info on changes for earlier releases.
 [@justinanastos]: https://github.com/justinanastos
 [@jwbth]: https://github.com/jwbth
 [@k15a]: https://github.com/k15a
+[@KAMRONBEK]: https://github.com/KAMRONBEK
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory

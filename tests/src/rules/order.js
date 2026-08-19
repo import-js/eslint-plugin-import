@@ -1303,6 +1303,47 @@ ruleTester.run('order', rule, {
         alphabetize: { order: 'asc' },
       }],
     }),
+    // sortBy: 'alias' sorts aliased names by their alias instead of their name
+    test({
+      code: `
+        import { b, a as c } from "./Z";
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'alias',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+    }),
+    test({
+      code: `
+        import { B, Z } from "./Z";
+        export { Z as A, B };
+        const { x: a, b } = require("./Z");
+        module.exports = { b: B, a: Z };
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'alias',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+    }),
+    // sortBy: 'name' is the default behavior
+    test({
+      code: `
+        import { a as c, b } from "./Z";
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'name',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+    }),
   ],
   invalid: [
     // builtin before external module (require)
@@ -2951,6 +2992,86 @@ ruleTester.run('order', rule, {
       }],
       errors: [{
         message: '`A.C` export should occur after export of `A.B`',
+      }],
+    }),
+    // sortBy: 'alias' sorts aliased names by their alias instead of their name
+    test({
+      code: `
+        import { c as z, b } from "./Z";
+      `,
+      output: `
+        import { b, c as z } from "./Z";
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'alias',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+      errors: [{
+        message: '`b` import should occur before import of `c as z`',
+      }],
+    }),
+    test({
+      code: `
+        import { b, z } from "./Z";
+        export { b, z as a };
+        const { b: y, a: x } = require("./Z");
+      `,
+      output: `
+        import { b, z } from "./Z";
+        export { z as a, b };
+        const { a: x, b: y } = require("./Z");
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'alias',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+      errors: [{
+        message: '`z as a` export should occur before export of `b`',
+      }, {
+        message: '`a as x` import should occur before import of `b as y`',
+      }],
+    }),
+    test({
+      code: `
+        module.exports = { a: C, b: B };
+      `,
+      output: `
+        module.exports = { b: B, a: C };
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'alias',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+      errors: [{
+        message: '`b as B` export should occur before export of `a as C`',
+      }],
+    }),
+    // sortBy: 'name' is the default behavior
+    test({
+      code: `
+        import { b, a as c } from "./Z";
+      `,
+      output: `
+        import { a as c, b } from "./Z";
+      `,
+      options: [{
+        named: {
+          enabled: true,
+          sortBy: 'name',
+        },
+        alphabetize: { order: 'asc' },
+      }],
+      errors: [{
+        message: '`a` import should occur before import of `b`',
       }],
     }),
     // multi-line named specifiers & trailing commas
