@@ -30,6 +30,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [Tests] cover ESLint 10 `getTokenOrComment` and `listFilesToProcess` API fallbacks ([#3230], thanks [@captaindonald])
 - [Docs] `no-unused-modules`: Fix docs of `ignoreUnusedTypeExports` option ([#3233], thanks [@ej612])
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
+- [Docs] clarify that the `typescript` config (legacy and flat) does not set up the TypeScript resolver ([#3170], thanks [@KAMRONBEK])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1221,6 +1222,7 @@ for info on changes for earlier releases.
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
+[#3170]: https://github.com/import-js/eslint-plugin-import/issues/3170
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
 [#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
 [#3152]: https://github.com/import-js/eslint-plugin-import/pull/3152
@@ -1982,6 +1984,7 @@ for info on changes for earlier releases.
 [@justinanastos]: https://github.com/justinanastos
 [@jwbth]: https://github.com/jwbth
 [@k15a]: https://github.com/k15a
+[@KAMRONBEK]: https://github.com/KAMRONBEK
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory
