@@ -25,6 +25,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-deprecated`], [`namespace`]: route `declaredScope` through the `getScope` compat shim instead of the removed `context.getScope()` (ESLint 9+) ([#3230], thanks [@ljharb])
 - [`newline-after-import`]: ignore comments between consecutive imports when `considerComments` is enabled ([#2673], thanks [@raisulchowdhury])
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
+- [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1228,6 +1229,7 @@ for info on changes for earlier releases.
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
+[#3169]: https://github.com/import-js/eslint-plugin-import/issues/3169
 [#3167]: https://github.com/import-js/eslint-plugin-import/pull/3167
 [#3166]: https://github.com/import-js/eslint-plugin-import/pull/3166
 [#3152]: https://github.com/import-js/eslint-plugin-import/pull/3152
@@ -1990,6 +1992,7 @@ for info on changes for earlier releases.
 [@justinanastos]: https://github.com/justinanastos
 [@jwbth]: https://github.com/jwbth
 [@k15a]: https://github.com/k15a
+[@KAMRONBEK]: https://github.com/KAMRONBEK
 [@kentcdodds]: https://github.com/kentcdodds
 [@kevin940726]: https://github.com/kevin940726
 [@kgregory]: https://github.com/kgregory

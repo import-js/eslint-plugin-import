@@ -19,7 +19,6 @@ declare const plugin: ESLint.Plugin & {
     'recommended': Linter.FlatConfig;
     'errors': Linter.FlatConfig;
     'warnings': Linter.FlatConfig;
-    'stage-0': Linter.FlatConfig;
     'react': Linter.FlatConfig;
     'react-native': Linter.FlatConfig;
     'electron': Linter.FlatConfig;

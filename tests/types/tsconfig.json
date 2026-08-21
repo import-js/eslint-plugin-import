@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "types": [],
+    "paths": {
+      "eslint-plugin-import": ["../../index.d.ts"]
+    }
+  },
+  "files": ["index.test-d.ts"]
+}
