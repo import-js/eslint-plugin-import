@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 ## [Unreleased]
 
 ### Added
+- add `requireResolve` option to resolve `require.resolve()` paths ([`no-unresolved`], [`no-absolute-path`], [`no-extraneous-dependencies`], [`no-internal-modules`], [`no-relative-packages`], [`no-relative-parent-imports`], [`no-self-import`], [`no-useless-path-segments`], [`no-webpack-loader-syntax`]) ([#3264], thanks [@manzoorwanijk])
 - support eslint v10 ([#3230], thanks [@rasmi])
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
@@ -1208,6 +1209,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3264]: https://github.com/import-js/eslint-plugin-import/pull/3264
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
@@ -2025,6 +2027,7 @@ for info on changes for earlier releases.
 [@malykhinvi]: https://github.com/malykhinvi
 [@manovotny]: https://github.com/manovotny
 [@manuth]: https://github.com/manuth
+[@manzoorwanijk]: https://github.com/manzoorwanijk
 [@marcusdarmstrong]: https://github.com/marcusdarmstrong
 [@mastilver]: https://github.com/mastilver
 [@mathieudutour]: https://github.com/mathieudutour

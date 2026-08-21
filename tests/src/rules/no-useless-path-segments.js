@@ -10,6 +10,9 @@ function runResolverTests(resolver) {
       // CommonJS modules with default options
       test({ code: 'require("./../files/malformed.js")' }),
 
+      // require.resolve not checked unless requireResolve is enabled
+      test({ code: 'require.resolve("./../files/malformed.js")' }),
+
       // ES modules with default options
       test({ code: 'import "./malformed.js"' }),
       test({ code: 'import "./test-module"' }),
@@ -85,6 +88,14 @@ function runResolverTests(resolver) {
         output: 'require("./deep/a")',
         options: [{ commonjs: true }],
         errors: ['Useless path segments for "./deep//a", should be "./deep/a"'],
+      }),
+
+      // require.resolve
+      test({
+        code: 'require.resolve("./../files/malformed.js")',
+        output: 'require.resolve("../files/malformed.js")',
+        options: [{ requireResolve: true }],
+        errors: ['Useless path segments for "./../files/malformed.js", should be "../files/malformed.js"'],
       }),
 
       // CommonJS modules + noUselessIndex

@@ -16,6 +16,7 @@ exports.default = function visitModules(visitor, options) {
   const ignore = options && options.ignore;
   const amd = !!(options && options.amd);
   const commonjs = !!(options && options.commonjs);
+  const requireResolve = !!(options && options.requireResolve);
   // if esmodule is not explicitly disabled, it is assumed to be enabled
   const esmodule = !!Object.assign({ esmodule: true }, options).esmodule;
 
@@ -77,6 +78,23 @@ exports.default = function visitModules(visitor, options) {
     checkSourceValue(modulePath, call, 'require');
   }
 
+  // for CommonJS `require.resolve` calls
+  /** @type {(call: Call) => void} */
+  function checkRequireResolve(call) {
+    if (call.callee.type !== 'MemberExpression') { return; }
+    if (call.callee.computed) { return; }
+    if (call.callee.object.type !== 'Identifier' || call.callee.object.name !== 'require') { return; }
+    if (call.callee.property.type !== 'Identifier' || call.callee.property.name !== 'resolve') { return; }
+    // skip the 2-arg form: `paths` overrides the resolution base, which resolvers cannot honor
+    if (call.arguments.length !== 1) { return; }
+
+    const modulePath = call.arguments[0];
+    if (modulePath.type !== 'Literal') { return; }
+    if (typeof modulePath.value !== 'string') { return; }
+
+    checkSourceValue(modulePath, call, 'require');
+  }
+
   /** @type {(call: Call) => void} */
   function checkAMD(call) {
     if (call.callee.type !== 'Identifier') { return; }
@@ -113,12 +131,13 @@ exports.default = function visitModules(visitor, options) {
     });
   }
 
-  if (commonjs || amd) {
+  if (commonjs || amd || requireResolve) {
     const currentCallExpression = visitors.CallExpression;
     visitors.CallExpression = /** @type {(call: Call) => void} */ function (call) {
       if (currentCallExpression) { currentCallExpression(call); }
       if (commonjs) { checkCommon(call); }
       if (amd) { checkAMD(call); }
+      if (requireResolve) { checkRequireResolve(call); }
     };
   }
 
@@ -137,6 +156,7 @@ function makeOptionsSchema(additionalProperties) {
       commonjs: { type: 'boolean' },
       amd: { type: 'boolean' },
       esmodule: { type: 'boolean' },
+      requireResolve: { type: 'boolean' },
       ignore: {
         type: 'array',
         minItems: 1,
