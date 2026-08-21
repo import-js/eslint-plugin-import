@@ -74,8 +74,10 @@ export const configs = {
 };
 
 // Base Plugin Object
+export const meta = { name, version };
+
 const importPlugin = {
-  meta: { name, version },
+  meta,
   rules,
 };
 

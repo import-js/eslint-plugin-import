@@ -6,15 +6,20 @@ import importPlugin from 'eslint-plugin-import';
 import { ESLint, Linter, Rule } from 'eslint';
 
 type IsAny<T> = 0 extends 1 & T ? true : false;
+type NoAnyValues<T> = { [K in keyof T]: IsAny<T[K]> };
 
 // the plugin object itself is a usable, fully-typed ESLint plugin
 const plugin: ESLint.Plugin = importPlugin;
 
-// `flatConfigs` and its entries must not be optional or `any` (#3169)
-const flatConfigsNotAny: IsAny<typeof importPlugin.flatConfigs> = false;
-const recommendedNotAny: IsAny<typeof importPlugin.flatConfigs.recommended> = false;
+// the plugin exports its metadata at the top level
+const meta: { name: string, version: string } = importPlugin.meta;
 
-// the README flat-config examples: every flat config is a defined `Linter.FlatConfig`
+// `flatConfigs`/`configs` and every one of their entries must not be optional or `any` (#3169)
+const flatConfigsNotAny: IsAny<typeof importPlugin.flatConfigs> = false;
+const flatConfigEntriesNotAny: NoAnyValues<typeof importPlugin.flatConfigs> extends Record<string, false> ? true : false = true;
+const configEntriesNotAny: NoAnyValues<typeof importPlugin.configs> extends Record<string, false> ? true : false = true;
+
+// every flat config exported by the runtime module is a defined `Linter.FlatConfig`
 const flatConfigs: Linter.FlatConfig[] = [
   importPlugin.flatConfigs.recommended,
   importPlugin.flatConfigs.errors,
@@ -40,5 +45,6 @@ const legacyConfigs: Linter.LegacyConfig[] = [
   importPlugin.configs.typescript,
 ];
 
-// every rule is a fully-typed rule module
+// rule modules are fully typed
+// (`rules` is an index signature, so this does not pin that any particular rule exists)
 const orderRule: Rule.RuleModule = importPlugin.rules.order;

@@ -11,6 +11,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-deprecated`]: detect `@deprecated` on default-exported identifier declarations ([#3247], thanks [@mixelburg] [@etyrrell22])
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 - [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
+- export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])

@@ -19,6 +19,12 @@ describe('package', function () {
     expect(module).to.exist;
   });
 
+  it('exports top-level metadata, as the types declare', function () {
+    expect(module).to.have.property('meta');
+    expect(module.meta).to.have.property('name', 'eslint-plugin-import');
+    expect(module.meta).to.have.property('version');
+  });
+
   it('has every rule', function (done) {
 
     fs.readdir(
