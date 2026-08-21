@@ -13,6 +13,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
 
 ### Fixed
+- load the default `node` resolver under an isolated `node_modules` layout, where `eslint-module-utils` cannot see our dependencies ([#3269], thanks [@manzoorwanijk])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1208,6 +1209,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3269]: https://github.com/import-js/eslint-plugin-import/pull/3269
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
@@ -2025,6 +2027,7 @@ for info on changes for earlier releases.
 [@malykhinvi]: https://github.com/malykhinvi
 [@manovotny]: https://github.com/manovotny
 [@manuth]: https://github.com/manuth
+[@manzoorwanijk]: https://github.com/manzoorwanijk
 [@marcusdarmstrong]: https://github.com/marcusdarmstrong
 [@mastilver]: https://github.com/mastilver
 [@mathieudutour]: https://github.com/mathieudutour

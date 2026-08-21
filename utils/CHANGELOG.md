@@ -5,6 +5,9 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ## Unreleased
 
+### Added
+ - `resolve`: add `registerResolverRequire`, so a consuming plugin can lend its own `require` for loading resolvers it depends on ([#3269], thanks [@manzoorwanijk])
+
 ## v2.14.0 - 2026-07-02
 
 ### Added
@@ -199,6 +202,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3269]: https://github.com/import-js/eslint-plugin-import/pull/3269
 [#3240]: https://github.com/import-js/eslint-plugin-import/pull/3240
 [#3124]: https://github.com/import-js/eslint-plugin-import/pull/3124
 [#3072]: https://github.com/import-js/eslint-plugin-import/pull/3072
@@ -254,6 +258,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@ljharb]: https://github.com/ljharb
 [@manuth]: https://github.com/manuth
 [@maxkomarychev]: https://github.com/maxkomarychev
+[@manzoorwanijk]: https://github.com/manzoorwanijk
 [@mgwalker]: https://github.com/mgwalker
 [@michaelfaith]: https://github.com/michaelfaith
 [@Mysak0CZ]: https://github.com/Mysak0CZ
