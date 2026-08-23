@@ -2,7 +2,9 @@ import path from 'path';
 
 import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
+import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
+import { getFilePackagePath } from '../core/packagePath';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
 
@@ -89,6 +91,34 @@ function buildProperties(context) {
   return result;
 }
 
+/**
+ * A relative specifier that resolves to a directory which is itself a package
+ * root (it has its own `package.json`) imports that package, not a file in the
+ * current one, so `ignorePackages` should not require an extension for it.
+ * https://github.com/import-js/eslint-plugin-import/issues/2844
+ */
+const isRelativeToPackage = (importPath, context, packagePathCache) => {
+  if (!(/^[.]{1,2}([\\/]|$)/).test(importPath)) {
+    return false;
+  }
+  const physicalFilename = getPhysicalFilename(context);
+  if (!physicalFilename || physicalFilename === '<text>') {
+    return false;
+  }
+  const targetPath = path.resolve(path.dirname(physicalFilename), importPath);
+  if (packagePathCache.has(targetPath)) {
+    return packagePathCache.get(targetPath);
+  }
+  let isPackageRoot = false;
+  try {
+    isPackageRoot = getFilePackagePath(targetPath) === targetPath;
+  } catch (e) {
+    isPackageRoot = false;
+  }
+  packagePathCache.set(targetPath, isPackageRoot);
+  return isPackageRoot;
+};
+
 module.exports = {
   meta: {
     type: 'suggestion',
@@ -138,6 +168,7 @@ module.exports = {
   create(context) {
 
     const props = buildProperties(context);
+    const packagePathCache = new Map();
 
     function getModifier(extension) {
       return props.pattern[extension] || props.defaultConfig;
@@ -213,7 +244,8 @@ module.exports = {
         importPath,
         resolve(importPath, context, moduleSystem),
         context,
-      ) || isScoped(importPath);
+      ) || isScoped(importPath)
+        || props.ignorePackages && isRelativeToPackage(importPath, context, packagePathCache);
 
       if (!extension || !importPath.endsWith(`.${extension}`)) {
         // ignore type-only imports and exports
