@@ -742,6 +742,45 @@ describe('renameDefault', () => {
   });
 });
 
+describe('export { X as default } syntax (issue #3216)', () => {
+  const exportAsDefaultOptions = [{
+    unusedExports: true,
+    src: [testFilePath('./no-unused-modules/export-as-default/**/*.js')],
+  }];
+
+  // First lint: establishes the export/import maps via doPreparation
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: exportAsDefaultOptions,
+        code: `import handler from '${testFilePath('./no-unused-modules/export-as-default/test-export.js')}'`,
+        filename: testFilePath('./no-unused-modules/export-as-default/usage.js'),
+      }),
+      test({
+        options: exportAsDefaultOptions,
+        code: 'function testHandler() {}\nexport { testHandler as default };',
+        filename: testFilePath('./no-unused-modules/export-as-default/test-export.js'),
+      }),
+    ],
+    invalid: [],
+  });
+
+  // Second lint of the same file with the same options (same prepareKey, so doPreparation
+  // is skipped). The bug caused updateExportUsage to corrupt the export map on the first
+  // lint, so checkUsage would fail to find the IMPORT_DEFAULT_SPECIFIER key on the second
+  // lint.
+  ruleTester.run('no-unused-modules', rule, {
+    valid: [
+      test({
+        options: exportAsDefaultOptions,
+        code: 'function testHandler() {}\nexport { testHandler as default };',
+        filename: testFilePath('./no-unused-modules/export-as-default/test-export.js'),
+      }),
+    ],
+    invalid: [],
+  });
+});
+
 describe('test behavior for new file', () => {
   before(() => {
     fs.writeFileSync(testFilePath('./no-unused-modules/file-added-0.js'), '', { encoding: 'utf8', flag: 'w' });
