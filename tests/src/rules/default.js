@@ -264,13 +264,13 @@ context('TypeScript', function () {
 
       invalid: [
         test({
-          code: `import foobar from "./typescript"`,
+          code: `import foobar from "./typescript-no-default-export"`,
           parser,
           settings: {
             'import/parsers': { [parser]: ['.ts'] },
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
-          errors: ['No default export found in imported module "./typescript".'],
+          errors: ['No default export found in imported module "./typescript-no-default-export".'],
         }),
         test({
           code: `import React from "./typescript-export-assign-default-namespace"`,
