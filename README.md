@@ -71,26 +71,26 @@ This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, a
 
 ### Style guide
 
-| Name                                                                             | Description                                                                | 💼 | ⚠️    | 🚫 | 🔧 | 💡 | ❌  |
-| :------------------------------------------------------------------------------- | :------------------------------------------------------------------------- | :- | :---- | :- | :- | :- | :- |
-| [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports.      |    |       |    | 🔧 |    |    |
-| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.   |    |       |    |    | 💡 |    |
-| [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                          |    |       |    |    |    |    |
-| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.            |    |       |    |    |    |    |
-| [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                         |    |       |    | 🔧 |    |    |
-| [group-exports](docs/rules/group-exports.md)                                     | Prefer named exports to be grouped together in a single export declaration |    |       |    |    |    |    |
-| [imports-first](docs/rules/imports-first.md)                                     | Replaced by `import/first`.                                                |    |       |    | 🔧 |    | ❌  |
-| [max-dependencies](docs/rules/max-dependencies.md)                               | Enforce the maximum number of dependencies a module can have.              |    |       |    |    |    |    |
-| [newline-after-import](docs/rules/newline-after-import.md)                       | Enforce a newline after import statements.                                 |    |       |    | 🔧 |    |    |
-| [no-anonymous-default-export](docs/rules/no-anonymous-default-export.md)         | Forbid anonymous values as default exports.                                |    |       |    |    |    |    |
-| [no-default-export](docs/rules/no-default-export.md)                             | Forbid default exports.                                                    |    |       |    |    |    |    |
-| [no-duplicates](docs/rules/no-duplicates.md)                                     | Forbid repeated import of the same module in multiple places.              |    | ☑️ 🚸 |    | 🔧 |    |    |
-| [no-named-default](docs/rules/no-named-default.md)                               | Forbid named default exports.                                              |    |       |    |    |    |    |
-| [no-named-export](docs/rules/no-named-export.md)                                 | Forbid named exports.                                                      |    |       |    |    |    |    |
-| [no-namespace](docs/rules/no-namespace.md)                                       | Forbid namespace (a.k.a. "wildcard" `*`) imports.                          |    |       |    | 🔧 |    |    |
-| [no-unassigned-import](docs/rules/no-unassigned-import.md)                       | Forbid unassigned imports                                                  |    |       |    |    |    |    |
-| [order](docs/rules/order.md)                                                     | Enforce a convention in module import order.                               |    |       |    | 🔧 |    |    |
-| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name or multiple names. |    |       |    |    |    |    |
+| Name                                                                             | Description                                                                       | 💼 | ⚠️    | 🚫 | 🔧 | 💡 | ❌  |
+| :------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------- | :- | :---- | :- | :- | :- | :- |
+| [consistent-type-specifier-style](docs/rules/consistent-type-specifier-style.md) | Enforce or ban the use of inline type-only markers for named imports and exports. |    |       |    | 🔧 |    |    |
+| [dynamic-import-chunkname](docs/rules/dynamic-import-chunkname.md)               | Enforce a leading comment with the webpackChunkName for dynamic imports.          |    |       |    |    | 💡 |    |
+| [exports-last](docs/rules/exports-last.md)                                       | Ensure all exports appear after other statements.                                 |    |       |    |    |    |    |
+| [extensions](docs/rules/extensions.md)                                           | Ensure consistent use of file extension within the import path.                   |    |       |    |    |    |    |
+| [first](docs/rules/first.md)                                                     | Ensure all imports appear before other statements.                                |    |       |    | 🔧 |    |    |
+| [group-exports](docs/rules/group-exports.md)                                     | Prefer named exports to be grouped together in a single export declaration        |    |       |    |    |    |    |
+| [imports-first](docs/rules/imports-first.md)                                     | Replaced by `import/first`.                                                       |    |       |    | 🔧 |    | ❌  |
+| [max-dependencies](docs/rules/max-dependencies.md)                               | Enforce the maximum number of dependencies a module can have.                     |    |       |    |    |    |    |
+| [newline-after-import](docs/rules/newline-after-import.md)                       | Enforce a newline after import statements.                                        |    |       |    | 🔧 |    |    |
+| [no-anonymous-default-export](docs/rules/no-anonymous-default-export.md)         | Forbid anonymous values as default exports.                                       |    |       |    |    |    |    |
+| [no-default-export](docs/rules/no-default-export.md)                             | Forbid default exports.                                                           |    |       |    |    |    |    |
+| [no-duplicates](docs/rules/no-duplicates.md)                                     | Forbid repeated import of the same module in multiple places.                     |    | ☑️ 🚸 |    | 🔧 |    |    |
+| [no-named-default](docs/rules/no-named-default.md)                               | Forbid named default exports.                                                     |    |       |    |    |    |    |
+| [no-named-export](docs/rules/no-named-export.md)                                 | Forbid named exports.                                                             |    |       |    |    |    |    |
+| [no-namespace](docs/rules/no-namespace.md)                                       | Forbid namespace (a.k.a. "wildcard" `*`) imports.                                 |    |       |    | 🔧 |    |    |
+| [no-unassigned-import](docs/rules/no-unassigned-import.md)                       | Forbid unassigned imports                                                         |    |       |    |    |    |    |
+| [order](docs/rules/order.md)                                                     | Enforce a convention in module import order.                                      |    |       |    | 🔧 |    |    |
+| [prefer-default-export](docs/rules/prefer-default-export.md)                     | Prefer a default export if module exports a single name or multiple names.        |    |       |    |    |    |    |
 
 <!-- end auto-generated rules list -->
 
