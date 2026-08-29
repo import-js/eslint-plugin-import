@@ -5,6 +5,7 @@ import resolve from 'eslint-module-utils/resolve';
 import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
+import has from 'has';
 
 const enumValues = { enum: ['always', 'ignorePackages', 'never'] };
 const patternProperties = {
@@ -206,7 +207,7 @@ module.exports = {
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.
-      const extension = path.extname(resolvedPath || importPath).substring(1);
+      const extension = path.extname(resolvedPath || importPath).slice(1);
 
       // determine if this is a module
       const isPackage = isExternalModule(
@@ -215,7 +216,8 @@ module.exports = {
         context,
       ) || isScoped(importPath);
 
-      if (!extension || !importPath.endsWith(`.${extension}`)) {
+      const validExtensions = getValidExtensionFor(context, importPath, extension);
+      if (!extension || !validExtensions.some((extension) => importPath.endsWith(`.${extension}`))) {
         // ignore type-only imports and exports
         if (!props.checkTypeImports && (node.importKind === 'type' || node.exportKind === 'type')) { return; }
         const extensionRequired = isUseOfExtensionRequired(extension, !overrideAction && isPackage);
@@ -240,3 +242,39 @@ module.exports = {
     return moduleVisitor(checkFileExtension, { commonjs: true });
   },
 };
+
+/**
+ * Taken from `eslint-import-resolver-typescript`.
+ * This could be imported from current versions of that plugin,
+ * but this project still depends on an older version.
+ * Also, importing it would add a dependency, or at least an
+ * optional peer dependency - copying the code seems like the
+ * more sane option.
+ * [LICENSE](https://github.com/import-js/eslint-import-resolver-typescript/blob/71b23a206514842fef70a99220e5ffb1d6da2a0e/LICENSE)
+ */
+const defaultExtensionAlias = {
+  '.js': [
+    '.ts',
+    // `.tsx` can also be compiled as `.js`
+    '.tsx',
+    '.d.ts',
+    '.js',
+  ],
+  '.jsx': ['.tsx', '.d.ts', '.jsx'],
+  '.cjs': ['.cts', '.d.cts', '.cjs'],
+  '.mjs': ['.mts', '.d.mts', '.mjs'],
+};
+
+function getValidExtensionFor(context, importPath, resolvedExtension) {
+  let extensionAlias = {};
+  if (context.settings['import/resolver']  && context.settings['import/resolver'].typescript) {
+    extensionAlias = context.settings['import/resolver'].typescript.extensionAlias || defaultExtensionAlias;
+  }
+
+  const importedExtension = path.extname(importPath);
+  if (has(extensionAlias, importedExtension)) {
+    return extensionAlias[importedExtension].map((ext) => ext.slice(1));
+  }
+  return [resolvedExtension];
+}
+
