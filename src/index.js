@@ -1,4 +1,14 @@
+import { registerResolverRequire } from 'eslint-module-utils/resolve';
+
 import { name, version } from '../package.json';
+
+/**
+ * Lend our `require` to `eslint-module-utils`, which can not see our
+ * `eslint-import-resolver-node` under an isolated `node_modules` layout.
+ */
+if (typeof registerResolverRequire === 'function') { // older versions lack this API
+  registerResolverRequire(require);
+}
 
 export const rules = {
   'no-unresolved': require('./rules/no-unresolved'),
