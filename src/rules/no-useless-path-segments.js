@@ -53,6 +53,7 @@ module.exports = {
         type: 'object',
         properties: {
           commonjs: { type: 'boolean' },
+          requireResolve: { type: 'boolean' },
           noUselessIndex: { type: 'boolean' },
         },
         additionalProperties: false,

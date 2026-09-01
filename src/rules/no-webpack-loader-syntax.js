@@ -15,12 +15,21 @@ module.exports = {
       description: 'Forbid webpack loader syntax in imports.',
       url: docsUrl('no-webpack-loader-syntax'),
     },
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          requireResolve: { type: 'boolean' },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create(context) {
+    const options = context.options[0] || {};
     return moduleVisitor((source, node) => {
       reportIfNonStandard(context, node, source.value);
-    }, { commonjs: true });
+    }, { commonjs: true, requireResolve: options.requireResolve });
   },
 };

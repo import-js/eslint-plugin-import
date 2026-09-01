@@ -66,6 +66,12 @@ const cases = {
       },
     }),
 
+    // require.resolve computes a path, so it is never a cycle edge
+    test({
+      code: 'var foo = require.resolve("./es6/depth-one")',
+      options: [{ requireResolve: true }],
+    }),
+
     flatMap(testDialects, (testDialect) => [
       test({
         code: `import { foo } from "./${testDialect}/depth-two"`,
