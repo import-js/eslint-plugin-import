@@ -313,10 +313,36 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
+/**
+ * A type-only import cannot be merged into a side-effect import (`import 'foo'`) nor into a
+ * default-only import (`import foo from 'foo'`), since neither has a brace to inline it into,
+ * so reporting such a pair is a false positive.
+ * @type {(nodes: import('estree').ImportDeclaration[]) => boolean}
+ */
+function hasUnmergeableTypeImport(nodes) {
+  let hasType = false;
+  let hasUnmergeable = false;
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    if (node.importKind === 'type') {
+      hasType = true;
+    } else if (node.specifiers.length === 0 || node.specifiers.length === 1 && node.specifiers[0].type === 'ImportDefaultSpecifier') {
+      hasUnmergeable = true;
+    } else {
+      return false;
+    }
+  }
+  return hasType && hasUnmergeable;
+}
+
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
+      if (hasUnmergeableTypeImport(nodes)) {
+        continue;
+      }
+
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = getSourceCode(context);
