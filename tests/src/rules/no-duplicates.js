@@ -587,6 +587,17 @@ context('TypeScript', function () {
           code: "import { type x } from './foo'; import type y from 'foo'",
           ...parserConfig,
         }),
+        // #3130: type imports cannot be merged with side-effect or default-only imports.
+        test({
+          code: "import type { A } from 'a'; import 'a'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
+        test({
+          code: "import type { A } from 'a'; import B from 'a'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
         // #3195: default type imports cannot be merged with inline named type imports.
         test({
           code: "import type React from 'react'; import { type ReactElement } from 'react'",
