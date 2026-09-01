@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
 
 ### Fixed
+- [`no-duplicates`]: avoid false positives for type imports that cannot be merged with side-effect or default-only imports ([#3194], thanks [@todor-a])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1229,6 +1230,7 @@ for info on changes for earlier releases.
 [#3210]: https://github.com/import-js/eslint-plugin-import/pull/3210
 [#3208]: https://github.com/import-js/eslint-plugin-import/issues/3208
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
+[#3194]: https://github.com/import-js/eslint-plugin-import/pull/3194
 [#3191]: https://github.com/import-js/eslint-plugin-import/pull/3191
 [#3173]: https://github.com/import-js/eslint-plugin-import/pull/3173
 [#3172]: https://github.com/import-js/eslint-plugin-import/pull/3172
@@ -2150,6 +2152,7 @@ for info on changes for earlier releases.
 [@tihonove]: https://github.com/tihonove
 [@timkraut]: https://github.com/timkraut
 [@tizmagik]: https://github.com/tizmagik
+[@todor-a]: https://github.com/todor-a
 [@tomprats]: https://github.com/tomprats
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@ttmarek]: https://github.com/ttmarek
