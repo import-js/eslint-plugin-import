@@ -300,6 +300,40 @@ ruleTester.run('no-duplicates', rule, {
       errors: ['\'./foo\' imported multiple times.', '\'./foo\' imported multiple times.'],
     })),
 
+    // #1838: a default binding must stay with an import that cannot be removed.
+    test(withoutAutofixOutput({
+      code: "import { set } from '@ember/object';\nimport EmberObject, { observer, computed } from '@ember/object'; // some comment",
+      errors: ["'@ember/object' imported multiple times.", "'@ember/object' imported multiple times."],
+    })),
+    test(withoutAutofixOutput({
+      code: "import {x} from './foo';\n// keep this import\nimport def, {y} from './foo';",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    })),
+    test(withoutAutofixOutput({
+      code: "import {x} from './foo';\nimport /* keep this import */ def, {y} from './foo';",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    })),
+    test(withoutAutofixOutput({
+      code: "import './foo';\nimport def from './foo'; /* keep this import */",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    })),
+    test({
+      code: "import {x} from './foo';\nimport def, {y} from './foo'; // keep this import\n\nimport {z} from './foo';",
+      output: "import {x,z} from './foo';\nimport def, {y} from './foo'; // keep this import\n\n",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    }),
+    // Keep the existing ambiguity guard even when one default import has comments.
+    test(withoutAutofixOutput({
+      code: "import {x} from './foo';\nimport def from './foo'; // keep this import\n\nimport other from './foo';",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    })),
+    // Comments inside named specifiers can still move with a default import.
+    test({
+      code: "import {x} from './foo';\nimport def, {/* keep y */ y} from './foo';",
+      output: "import def, {x,/* keep y */ y} from './foo';\n",
+      errors: ["'./foo' imported multiple times.", "'./foo' imported multiple times."],
+    }),
+
     test({
       code: `
 import {x} from './foo'
