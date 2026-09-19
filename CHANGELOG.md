@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
 
 ### Fixed
+- [`no-duplicates`]: avoid duplicating default bindings when comments prevent merging imports ([#1838], thanks [@ZelinZhu-Richard])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1649,6 +1650,7 @@ for info on changes for earlier releases.
 [#1924]: https://github.com/import-js/eslint-plugin-import/issues/1924
 [#1854]: https://github.com/import-js/eslint-plugin-import/issues/1854
 [#1841]: https://github.com/import-js/eslint-plugin-import/issues/1841
+[#1838]: https://github.com/import-js/eslint-plugin-import/issues/1838
 [#1834]: https://github.com/import-js/eslint-plugin-import/issues/1834
 [#1814]: https://github.com/import-js/eslint-plugin-import/issues/1814
 [#1811]: https://github.com/import-js/eslint-plugin-import/issues/1811
@@ -2167,4 +2169,5 @@ for info on changes for earlier releases.
 [@yordis]: https://github.com/yordis
 [@yp]: https://github.com/yp
 [@Zamiell]: https://github.com/Zamiell
+[@ZelinZhu-Richard]: https://github.com/ZelinZhu-Richard
 [@zloirock]: https://github.com/zloirock

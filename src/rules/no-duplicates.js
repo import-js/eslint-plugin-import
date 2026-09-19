@@ -132,7 +132,8 @@ function getFix(first, rest, sourceCode, context) {
     && !specifiers.some((specifier) => specifier.importNode === node),
   );
 
-  const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1;
+  const shouldAddDefault = getDefaultImportName(first) == null && defaultImportNames.size === 1
+    && restWithoutComments.some((node) => getDefaultImportName(node) != null);
   const shouldAddSpecifiers = specifiers.length > 0;
   const shouldRemoveUnnecessary = unnecessaryImports.length > 0;
   const preferInline = context.options[0] && context.options[0]['prefer-inline'];
