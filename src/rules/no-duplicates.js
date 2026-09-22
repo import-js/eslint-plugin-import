@@ -38,6 +38,25 @@ function hasSpecifiers(node) {
 
 // Checks whether `node` has a comment (that ends) on the previous line or on
 // the same line as `node` (starts).
+
+function getImportAttributes(node) {
+  const attributes = node.attributes || node.assertions || [];
+  return attributes
+    .map((attribute) => {
+      const key = attribute.key;
+      const value = attribute.value;
+      return [
+        key && key.name != null ? key.name : key && key.value != null ? key.value : '',
+        value && value.value != null ? value.value : '',
+      ];
+    })
+    .sort((left, right) => {
+      const leftKey = JSON.stringify(left);
+      const rightKey = JSON.stringify(right);
+      return leftKey < rightKey ? -1 : leftKey > rightKey ? 1 : 0;
+    });
+}
+
 function hasCommentBefore(node, sourceCode) {
   return sourceCode.getCommentsBefore(node)
     .some((comment) => comment.loc.end.line >= node.loc.start.line - 1);
@@ -315,8 +334,9 @@ function getFix(first, rest, sourceCode, context) {
 
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
-  for (const [module, nodes] of imported.entries()) {
+  for (const [importKey, nodes] of imported.entries()) {
     if (nodes.length > 1) {
+      const [module] = JSON.parse(importKey);
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = getSourceCode(context);
@@ -418,12 +438,13 @@ module.exports = {
         /** @type {string} */
         // resolved path will cover aliased duplicates
         const resolvedPath = resolver(n.source.value);
+        const importKey = JSON.stringify([resolvedPath, getImportAttributes(n)]);
         const importMap = getImportMap(n);
 
-        if (importMap.has(resolvedPath)) {
-          importMap.get(resolvedPath).push(n);
+        if (importMap.has(importKey)) {
+          importMap.get(importKey).push(n);
         } else {
-          importMap.set(resolvedPath, [n]);
+          importMap.set(importKey, [n]);
         }
       },
 
