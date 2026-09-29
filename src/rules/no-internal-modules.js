@@ -26,6 +26,7 @@ module.exports = {
                   type: 'string',
                 },
               },
+              requireResolve: { type: 'boolean' },
             },
             additionalProperties: false,
           },
@@ -38,6 +39,7 @@ module.exports = {
                   type: 'string',
                 },
               },
+              requireResolve: { type: 'boolean' },
             },
             additionalProperties: false,
           },
@@ -138,7 +140,7 @@ module.exports = {
       (source, node, moduleSystem) => {
         checkImportForReaching(source.value, source, moduleSystem);
       },
-      { commonjs: true },
+      { commonjs: true, requireResolve: options.requireResolve },
     );
   },
 };

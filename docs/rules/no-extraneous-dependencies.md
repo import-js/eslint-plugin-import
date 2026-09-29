@@ -40,6 +40,12 @@ There are 2 boolean options to opt into checking extra imports that are normally
 "import/no-extraneous-dependencies": ["error", {"includeInternal": true, "includeTypes": true}]
 ```
 
+The `requireResolve` boolean option (off by default) additionally checks the path argument of `require.resolve()` calls:
+
+```js
+"import/no-extraneous-dependencies": ["error", {"requireResolve": true}]
+```
+
 Also there is one more option called `packageDir`, this option is to specify the path to the folder containing package.json.
 
 If provided as a relative path string, will be computed relative to the current working directory at linter execution time. If this is not ideal (does not work with some editor integrations), consider using `__dirname` to provide a path relative to your configuration.

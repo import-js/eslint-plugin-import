@@ -21,6 +21,13 @@ ruleTester.run('no-webpack-loader-syntax', rule, {
     test({ code: 'var foo = require("foo")' }),
     test({ code: 'var foo = require("./")' }),
     test({ code: 'var foo = require("@scope/foo")' }),
+
+    // require.resolve not checked unless requireResolve is enabled
+    test({ code: 'var foo = require.resolve("babel!lodash")' }),
+    test({
+      code: 'var foo = require.resolve("./foo.css")',
+      options: [{ requireResolve: true }],
+    }),
   ],
   invalid: [
     test({
@@ -69,6 +76,13 @@ ruleTester.run('no-webpack-loader-syntax', rule, {
       code: 'var data = require("json!@scope/my-package/data.json")',
       errors: [
         { message: `Unexpected '!' in 'json!@scope/my-package/data.json'. ${message}` },
+      ],
+    }),
+    test({
+      code: 'var foo = require.resolve("style!css!./foo.css")',
+      options: [{ requireResolve: true }],
+      errors: [
+        { message: `Unexpected '!' in 'style!css!./foo.css'. ${message}` },
       ],
     }),
   ],

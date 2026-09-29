@@ -8,6 +8,7 @@ type Options = {
     amd?: boolean;
     commonjs?: boolean;
     esmodule?: boolean;
+    requireResolve?: boolean;
     ignore?: string[];
 };
 

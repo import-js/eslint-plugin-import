@@ -289,6 +289,7 @@ module.exports = {
           packageDir: { type: ['string', 'array'] },
           includeInternal: { type: ['boolean'] },
           includeTypes: { type: ['boolean'] },
+          requireResolve: { type: ['boolean'] },
         },
         additionalProperties: false,
       },
@@ -311,7 +312,7 @@ module.exports = {
 
     return moduleVisitor((source, node, moduleSystem) => {
       reportIfMissing(context, deps, depsOptions, node, source.value, moduleSystem);
-    }, { commonjs: true });
+    }, { commonjs: true, requireResolve: !!options.requireResolve });
   },
 
   'Program:exit'() {

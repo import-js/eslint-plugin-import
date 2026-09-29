@@ -31,11 +31,20 @@ module.exports = {
       url: docsUrl('no-self-import'),
     },
 
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          requireResolve: { type: 'boolean' },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
   create(context) {
+    const options = context.options[0] || {};
     return moduleVisitor((source, node, moduleSystem) => {
       isImportingSelf(context, node, source.value, moduleSystem);
-    }, { commonjs: true });
+    }, { commonjs: true, requireResolve: options.requireResolve });
   },
 };

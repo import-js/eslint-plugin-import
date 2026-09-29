@@ -34,6 +34,16 @@ var myModule = require('my-module');
 var theme = require('./theme.css');
 ```
 
+## Options
+
+### requireResolve
+
+When set to `true`, this rule also checks the path argument of `require.resolve()` calls. Defaults to `false`.
+
+```js
+"import/no-webpack-loader-syntax": ["error", { "requireResolve": true }]
+```
+
 ## When Not To Use It
 
 If you have a project that doesn't use Webpack you can safely disable this rule.

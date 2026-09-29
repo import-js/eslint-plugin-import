@@ -75,6 +75,14 @@ ruleTester.run('no-extraneous-dependencies', rule, {
       filename: path.join(process.cwd(), 'foo.spec.js'),
     }),
     test({ code: 'require(6)' }),
+
+    // requireResolve option
+    test({
+      code: 'require.resolve("lodash.cond")',
+      options: [{ requireResolve: true }],
+    }),
+    // off by default: require.resolve is not checked
+    test({ code: 'require.resolve("not-a-dependency")' }),
     test({
       code: 'import "doctrine"',
       options: [{ packageDir: path.join(__dirname, '../../../') }],
@@ -269,6 +277,13 @@ ruleTester.run('no-extraneous-dependencies', rule, {
     }),
     test({
       code: 'var foo = require("not-a-dependency")',
+      errors: [{
+        message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
+      }],
+    }),
+    test({
+      code: 'require.resolve("not-a-dependency")',
+      options: [{ requireResolve: true }],
       errors: [{
         message: '\'not-a-dependency\' should be listed in the project\'s dependencies. Run \'npm i -S not-a-dependency\' to add it',
       }],

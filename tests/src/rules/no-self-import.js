@@ -79,10 +79,21 @@ ruleTester.run('no-self-import', rule, {
       code: 'var bar = require("./bar")',
       filename: '<text>',
     }),
+    // require.resolve to self is not reported unless requireResolve is enabled
+    test({
+      code: 'var bar = require.resolve("./no-self-import")',
+      filename: testFilePath('./no-self-import.js'),
+    }),
   ],
   invalid: [
     test({
       code: 'import bar from "./no-self-import"',
+      errors: [error],
+      filename: testFilePath('./no-self-import.js'),
+    }),
+    test({
+      code: 'var bar = require.resolve("./no-self-import")',
+      options: [{ requireResolve: true }],
       errors: [error],
       filename: testFilePath('./no-self-import.js'),
     }),
