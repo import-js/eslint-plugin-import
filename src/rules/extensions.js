@@ -2,9 +2,22 @@ import path from 'path';
 
 import minimatch from 'minimatch';
 import resolve from 'eslint-module-utils/resolve';
+import { getFileExtensions } from 'eslint-module-utils/ignore';
 import { isBuiltIn, isExternalModule, isScoped } from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
+
+const STANDARD_EXTENSIONS = new Set([
+  'js', 'mjs', 'cjs', 'jsx',
+  'ts', 'mts', 'cts', 'tsx',
+  'json', 'json5',
+  'node', 'wasm',
+  'vue', 'svelte', 'astro',
+  'css', 'scss', 'sass', 'less',
+  'html', 'htm', 'md', 'mdx',
+  'svg', 'png', 'jpg', 'jpeg', 'gif', 'webp',
+  'graphql', 'gql',
+]);
 
 const enumValues = { enum: ['always', 'ignorePackages', 'never'] };
 const patternProperties = {
@@ -177,6 +190,43 @@ module.exports = {
       }
     }
 
+    function isKnownOrConfiguredExtension(ext) {
+      if (!ext) { return false; }
+      if (props.pattern && props.pattern[ext] !== undefined) {
+        return true;
+      }
+      if (STANDARD_EXTENSIONS.has(ext)) {
+        return true;
+      }
+      if (context.settings) {
+        try {
+          const fileExtensions = getFileExtensions(context.settings);
+          if (fileExtensions.has(`.${ext}`) || fileExtensions.has(ext)) {
+            return true;
+          }
+        } catch (e) {
+          // ignore
+        }
+        if (context.settings['import/resolve'] && Array.isArray(context.settings['import/resolve'].extensions)) {
+          if (context.settings['import/resolve'].extensions.some((e) => e === `.${ext}` || e === ext)) {
+            return true;
+          }
+        }
+        if (context.settings['import/resolver'] && typeof context.settings['import/resolver'] === 'object') {
+          const resolvers = context.settings['import/resolver'];
+          for (const key of Object.keys(resolvers)) {
+            const resolverOpts = resolvers[key];
+            if (resolverOpts && Array.isArray(resolverOpts.extensions)) {
+              if (resolverOpts.extensions.some((e) => e === `.${ext}` || e === ext)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    }
+
     function checkFileExtension(source, node, moduleSystem) {
       // bail if the declaration doesn't have a source, e.g. "export { foo };", or if it's only partially typed like in an editor
       if (!source || !source.value) { return; }
@@ -206,7 +256,10 @@ module.exports = {
 
       // get extension from resolved path, if possible.
       // for unresolved, use source value.
-      const extension = path.extname(resolvedPath || importPath).substring(1);
+      let extension = path.extname(resolvedPath || importPath).substring(1);
+      if (!resolvedPath && extension && !isKnownOrConfiguredExtension(extension)) {
+        extension = '';
+      }
 
       // determine if this is a module
       const isPackage = isExternalModule(

@@ -155,6 +155,43 @@ ruleTester.run('extensions', rule, {
       ].join('\n'),
       options: ['always'],
     }),
+
+    // dots in filenames with unresolved/aliased imports (#3211, #2147)
+    test({
+      code: 'import { SUPPORTED_NETWORKS } from "$env/networks/networks.env";',
+      options: [{ js: 'never' }],
+    }),
+    test({
+      code: 'import { userProfileStore } from "$lib/stores/user-profile.store";',
+      options: [{ js: 'never' }],
+    }),
+    test({
+      code: 'import { mapUserNetworks } from "$lib/utils/user-networks.utils";',
+      options: [{ js: 'never' }],
+    }),
+    test({
+      code: 'import { mockUserProfile } from "$tests/mocks/user-profile.mock";',
+      options: [{ js: 'never' }],
+    }),
+    test({
+      code: 'import { service } from "~/shared/my-package/my-service.class";',
+      options: [{ js: 'never' }],
+    }),
+    test({
+      code: 'import dot from "./unresolved.with.dot";',
+      options: ['never'],
+    }),
+    test({
+      code: 'import dot from "./unresolved.with.dot";',
+    }),
+    test({
+      code: 'import { userProfileStore } from "$lib/stores/user-profile.store";',
+      options: ['never'],
+    }),
+    test({
+      code: 'import component from "@/components/button.component";',
+      options: ['never'],
+    }),
   ],
 
   invalid: [
@@ -649,6 +686,50 @@ ruleTester.run('extensions', rule, {
         {
           message: 'Missing file extension for ".."',
           line: 1,
+        },
+      ],
+    }),
+    test({
+      code: 'import { userProfileStore } from "$lib/stores/user-profile.store.js";',
+      options: [{ js: 'never' }],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "js" for "$lib/stores/user-profile.store.js"',
+          line: 1,
+          column: 34,
+        },
+      ],
+    }),
+    test({
+      code: 'import { userProfileStore } from "$lib/stores/user-profile.store.ts";',
+      options: [{ ts: 'never' }],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "ts" for "$lib/stores/user-profile.store.ts"',
+          line: 1,
+          column: 34,
+        },
+      ],
+    }),
+    test({
+      code: 'import { userProfileStore } from "$lib/stores/user-profile.store";',
+      options: ['always'],
+      errors: [
+        {
+          message: 'Missing file extension for "$lib/stores/user-profile.store"',
+          line: 1,
+          column: 34,
+        },
+      ],
+    }),
+    test({
+      code: 'import custom from "$lib/custom.store";',
+      options: [{ store: 'never' }],
+      errors: [
+        {
+          message: 'Unexpected use of file extension "store" for "$lib/custom.store"',
+          line: 1,
+          column: 20,
         },
       ],
     }),

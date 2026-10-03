@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`extensions`]: avoid false positives on filenames with dots in unresolved imports ([#3211], thanks [@aipd506])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1226,6 +1227,7 @@ for info on changes for earlier releases.
 [#3236]: https://github.com/import-js/eslint-plugin-import/pull/3236
 [#3235]: https://github.com/import-js/eslint-plugin-import/issues/3235
 [#3233]: https://github.com/import-js/eslint-plugin-import/pull/3233
+[#3211]: https://github.com/import-js/eslint-plugin-import/issues/3211
 [#3210]: https://github.com/import-js/eslint-plugin-import/pull/3210
 [#3208]: https://github.com/import-js/eslint-plugin-import/issues/3208
 [#3195]: https://github.com/import-js/eslint-plugin-import/issues/3195
@@ -1856,6 +1858,7 @@ for info on changes for earlier releases.
 [@adjerbetian]: https://github.com/adjerbetian
 [@AdriAt360]: https://github.com/AdriAt360
 [@ai]: https://github.com/ai
+[@aipd506]: https://github.com/aipd506
 [@aks-]: https://github.com/aks-
 [@akwodkiewicz]: https://github.com/akwodkiewicz
 [@aladdin-add]: https://github.com/aladdin-add
