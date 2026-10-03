@@ -37,6 +37,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 - [Docs] clarify flat config file scoping ([#3283], thanks [@raisulchowdhury])
 - [Docs] show bare plugin flat config usage ([#3284], thanks [@raisulchowdhury])
+- [Docs] replace deprecated `tseslint.config()` with `defineConfig()` ([#3295], thanks [@unrevised6419])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3295]: https://github.com/import-js/eslint-plugin-import/pull/3295
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -2154,6 +2156,7 @@ for info on changes for earlier releases.
 [@TrevorBurnham]: https://github.com/TrevorBurnham
 [@ttmarek]: https://github.com/ttmarek
 [@unbeauvoyage]: https://github.com/unbeauvoyage
+[@unrevised6419]: https://github.com/unrevised6419
 [@vikr01]: https://github.com/vikr01
 [@wenfangdu]: https://github.com/wenfangdu
 [@wKich]: https://github.com/wKich
