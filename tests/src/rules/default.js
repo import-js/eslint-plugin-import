@@ -260,9 +260,26 @@ context('TypeScript', function () {
             'import/resolver': { 'eslint-import-resolver-typescript': true },
           },
         }),
+        test({
+          code: `import defaultFunction from "./typescript-declare-module-all"`,
+          parser,
+          settings: {
+            'import/parsers': { [parser]: ['.ts', '.d.ts'] },
+            'import/resolver': { 'eslint-import-resolver-typescript': true },
+          },
+        }),
       ),
 
       invalid: [
+        test({
+          code: `import foobar from "./typescript-declare-module"`,
+          parser,
+          settings: {
+            'import/parsers': { [parser]: ['.ts', '.d.ts'] },
+            'import/resolver': { 'eslint-import-resolver-typescript': true },
+          },
+          errors: ['No default export found in imported module "./typescript-declare-module".'],
+        }),
         test({
           code: `import foobar from "./typescript"`,
           parser,

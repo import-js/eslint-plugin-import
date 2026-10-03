@@ -59,11 +59,11 @@ export default class ImportExportVisitorBuilder {
           // If the export has no JSDoc, look for it on the referenced declaration
           if (!exportMeta.doc) {
             const exportName = astNode.declaration.name;
-            const decl = this.ast.body.find((node) => {
+            const decl = this.getTopLevelAndModuleDecls().find((node) => {
               if (node.type === 'VariableDeclaration') {
                 return node.declarations.some((d) => d.id.name === exportName);
               }
-              return (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration')
+              return (node.type === 'FunctionDeclaration' || node.type === 'ClassDeclaration' || node.type === 'TSDeclareFunction')
                 && node.id && node.id.name === exportName;
             });
             if (decl) {
@@ -138,7 +138,40 @@ export default class ImportExportVisitorBuilder {
       },
       TSExportAssignment: () => this.typeScriptExport(astNode),
       ...this.isEsModuleInteropTrue && { TSNamespaceExportDeclaration: () => this.typeScriptExport(astNode) },
+      TSModuleDeclaration: () => {
+        if (
+          astNode.id
+          && (astNode.id.type === 'Literal' || astNode.id.type === 'StringLiteral')
+          && astNode.body
+        ) {
+          const bodyNodes = astNode.body.type === 'TSModuleDeclaration'
+            ? [astNode.body]
+            : astNode.body.body;
+          if (Array.isArray(bodyNodes)) {
+            bodyNodes.forEach((childNode) => {
+              const visitor = this.build(childNode);
+              if (visitor[childNode.type]) {
+                visitor[childNode.type].call(this);
+              }
+            });
+          }
+        }
+      },
     };
+  }
+
+  getTopLevelAndModuleDecls() {
+    const decls = [...this.ast.body];
+    this.ast.body.forEach((node) => {
+      if (
+        node.type === 'TSModuleDeclaration'
+        && node.body
+        && Array.isArray(node.body.body)
+      ) {
+        decls.push(...node.body.body);
+      }
+    });
+    return decls;
   }
 
   // This doesn't declare anything, but changes what's being exported.
@@ -156,7 +189,7 @@ export default class ImportExportVisitorBuilder {
       'TSAbstractClassDeclaration',
       'TSModuleDeclaration',
     ];
-    const exportedDecls = this.ast.body.filter(({ type, id, declarations }) => includes(declTypes, type) && (
+    const exportedDecls = this.getTopLevelAndModuleDecls().filter(({ type, id, declarations }) => includes(declTypes, type) && (
       id && id.name === exportedName || declarations && declarations.find((d) => d.id.name === exportedName)
     ));
     if (exportedDecls.length === 0) {

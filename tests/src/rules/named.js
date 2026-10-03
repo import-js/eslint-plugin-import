@@ -510,6 +510,75 @@ context('TypeScript', function () {
       );
     });
 
+    valid.push(
+      test({
+        code: 'import { foo } from "./typescript-declare-module"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { someConst } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { someFunction } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { SomeType } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { SomeInterface } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { SomeEnum } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { SomeClass } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { SomeAbstractClass } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+      test({
+        code: 'import { otherConst } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+      }),
+    );
+
+    invalid.push(
+      test({
+        code: 'import { bar } from "./typescript-declare-module"',
+        parser,
+        settings,
+        errors: [{
+          message: "bar not found in './typescript-declare-module'",
+          type: 'Identifier',
+        }],
+      }),
+      test({
+        code: 'import { notExported } from "./typescript-declare-module-all"',
+        parser,
+        settings,
+        errors: [{
+          message: "notExported not found in './typescript-declare-module-all'",
+          type: 'Identifier',
+        }],
+      }),
+    );
+
     ruleTester.run(`named [TypeScript]`, rule, {
       valid,
       invalid,

@@ -442,8 +442,14 @@ describe('ExportMap', function () {
           expect(tsConfigLoader.tsConfigLoader.callCount).to.equal(2);
         });
 
+        it('has exported member from declare module', function () {
+          const declareModuleImports = ExportMapBuilder.get('./typescript-declare-module.ts', context);
+          expect(declareModuleImports).to.exist;
+          expect(declareModuleImports.has('foo')).to.be.true;
+        });
+
         it('should cache after parsing for an ambiguous module', function () {
-          const source = './typescript-declare-module.ts';
+          const source = './typescript-ambiguous.ts';
           const parseSpy = sinon.spy(ExportMapBuilder, 'parse');
 
           expect(ExportMapBuilder.get(source, context)).to.be.null;
