@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`export`]: allow TypeScript default interfaces to merge with default classes, functions, and interfaces ([#1549], thanks [@fredrikblau] [@bspot])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1665,6 +1666,7 @@ for info on changes for earlier releases.
 [#1590]: https://github.com/import-js/eslint-plugin-import/issues/1590
 [#1589]: https://github.com/import-js/eslint-plugin-import/issues/1589
 [#1565]: https://github.com/import-js/eslint-plugin-import/issues/1565
+[#1549]: https://github.com/import-js/eslint-plugin-import/issues/1549
 [#1366]: https://github.com/import-js/eslint-plugin-import/issues/1366
 [#1334]: https://github.com/import-js/eslint-plugin-import/issues/1334
 [#1323]: https://github.com/import-js/eslint-plugin-import/issues/1323
@@ -1894,6 +1896,7 @@ for info on changes for earlier releases.
 [@bradzacher]: https://github.com/bradzacher
 [@brendo]: https://github.com/brendo
 [@brettz9]: https://github.com/brettz9
+[@bspot]: https://github.com/bspot
 [@butterybread]: https://github.com/butterybread
 [@cakoose]: https://github.com/cakoose
 [@captaindonald]: https://github.com/captaindonald
@@ -1943,6 +1946,7 @@ for info on changes for earlier releases.
 [@fooloomanzoo]: https://github.com/fooloomanzoo
 [@foray1010]: https://github.com/foray1010
 [@forivall]: https://github.com/forivall
+[@fredrikblau]: https://github.com/fredrikblau
 [@fsmaia]: https://github.com/fsmaia
 [@fson]: https://github.com/fson
 [@futpib]: https://github.com/futpib

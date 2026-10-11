@@ -48,6 +48,30 @@ function removeTypescriptFunctionOverloads(nodes) {
 }
 
 /**
+ * remove default interfaces merged with default classes, functions, or interfaces like:
+ * ```ts
+ * export default interface Foo {}
+ * export default class Foo {}
+ * ```
+ * @param {Set<Object>} nodes
+ */
+function removeTypescriptDefaultInterfaces(nodes) {
+  const isDefaultOf = (node, types) => node.type === 'ExportDefaultDeclaration' && includes(types, node.declaration.type);
+  const isInterface = (node) => isDefaultOf(node, ['TSInterfaceDeclaration']);
+
+  // an interface cannot merge with a default expression, e.g. `export default 1`
+  if (!Array.from(nodes).every((node) => isDefaultOf(node, ['TSInterfaceDeclaration', 'ClassDeclaration', 'FunctionDeclaration']))) {
+    return;
+  }
+
+  nodes.forEach((node) => {
+    if (isInterface(node)) {
+      nodes.delete(node);
+    }
+  });
+}
+
+/**
  * Detect merging Namespaces with Classes, Functions, or Enums like:
  * ```ts
  * export class Foo { }
@@ -210,6 +234,7 @@ module.exports = {
         for (const [, named] of namespace) {
           for (const [name, nodes] of named) {
             removeTypescriptFunctionOverloads(nodes);
+            removeTypescriptDefaultInterfaces(nodes);
 
             if (nodes.size <= 1) { continue; }
 
