@@ -229,6 +229,35 @@ context('TypeScript', function () {
           ...parserConfig,
         }),
 
+        // default interface merged with a default class, function, or interface
+        test({
+          code: `
+            export default interface Foo {
+              a: number;
+            }
+            export default class Foo {}
+          `,
+          ...parserConfig,
+        }),
+        test({
+          code: `
+            export default interface Foo {}
+            export default function Foo() {}
+          `,
+          ...parserConfig,
+        }),
+        test({
+          code: `
+            export default interface Foo {
+              a: number;
+            }
+            export default interface Foo {
+              b: number;
+            }
+          `,
+          ...parserConfig,
+        }),
+
         semver.satisfies(tsEslintVersion, '>= 22') ? test({
           code: `
             export function fff(a: string);
@@ -627,6 +656,44 @@ context('TypeScript', function () {
             {
               message: 'Multiple default exports.',
               line: 9,
+            },
+          ],
+          ...parserConfig,
+        }),
+
+        // default interface does not make multiple default classes valid
+        test({
+          code: `
+            export default interface Foo {}
+            export default class Foo {}
+            export default class Foo {}
+          `,
+          errors: [
+            {
+              message: 'Multiple default exports.',
+              line: 3,
+            },
+            {
+              message: 'Multiple default exports.',
+              line: 4,
+            },
+          ],
+          ...parserConfig,
+        }),
+        // default interface cannot merge with a default expression
+        test({
+          code: `
+            export default interface Foo {}
+            export default 1;
+          `,
+          errors: [
+            {
+              message: 'Multiple default exports.',
+              line: 2,
+            },
+            {
+              message: 'Multiple default exports.',
+              line: 3,
             },
           ],
           ...parserConfig,
