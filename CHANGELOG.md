@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 - [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
+- [`consistent-type-specifier-style`]: support named TypeScript type exports ([#3297], thanks [@musjj] and [@ColumbusLabs])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3297]: https://github.com/import-js/eslint-plugin-import/pull/3297
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -1905,6 +1907,7 @@ for info on changes for earlier releases.
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
 [@christophercurrie]: https://github.com/christophercurrie
+[@ColumbusLabs]: https://github.com/ColumbusLabs
 [@cristobal]: https://github.com/cristobal
 [@DamienCassou]: https://github.com/DamienCassou
 [@danielkcz]: https://github.com/danielkcz
@@ -2060,6 +2063,7 @@ for info on changes for earlier releases.
 [@mrmckeb]: https://github.com/mrmckeb
 [@msvab]: https://github.com/msvab
 [@mulztob]: https://github.com/mulztob
+[@musjj]: https://github.com/musjj
 [@mx-bernhard]: https://github.com/mx-bernhard
 [@Nfinished]: https://github.com/Nfinished
 [@nickofthyme]: https://github.com/nickofthyme
