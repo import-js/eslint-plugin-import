@@ -7,6 +7,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 
 ### Fixed
  - `moduleVisitor`: visit `require` calls whose argument is a no-substitution template literal ([#3276], thanks [@pratyushsinghal7])
+ - `unambiguous`: detect modules whose only imports are side-effect imports ([#3299], thanks [@kerdofficial])
 
 ## v2.14.0 - 2026-07-02
 
@@ -202,6 +203,7 @@ Yanked due to critical issue with cache key resulting from #839.
 ### Fixed
 - `unambiguous.test()` regex is now properly in multiline mode
 
+[#3299]: https://github.com/import-js/eslint-plugin-import/pull/3299
 [#3276]: https://github.com/import-js/eslint-plugin-import/pull/3276
 [#3240]: https://github.com/import-js/eslint-plugin-import/pull/3240
 [#3124]: https://github.com/import-js/eslint-plugin-import/pull/3124
@@ -254,6 +256,7 @@ Yanked due to critical issue with cache key resulting from #839.
 [@JoshuaKGoldberg]: https://github.com/JoshuaKGoldberg
 [@JounQin]: https://github.com/JounQin
 [@kaiyoma]: https://github.com/kaiyoma
+[@kerdofficial]: https://github.com/kerdofficial
 [@leipert]: https://github.com/leipert
 [@ljharb]: https://github.com/ljharb
 [@manuth]: https://github.com/manuth

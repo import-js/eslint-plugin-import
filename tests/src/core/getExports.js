@@ -460,6 +460,15 @@ describe('ExportMap', function () {
 
   // todo: move to utils
   describe('unambiguous regex', function () {
+    for (const quote of ['"', "'"]) {
+      for (const space of ['', ' ']) {
+        const content = `import${space}${quote}./foo.js${quote};`;
+        it(`detects side-effect imports: ${content}`, function () {
+          expect(testUnambiguous(content)).to.equal(true);
+        });
+      }
+    }
+
     const testFiles = [
       ['deep/b.js', true],
       ['bar.js', true],

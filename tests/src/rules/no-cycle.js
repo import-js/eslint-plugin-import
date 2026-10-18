@@ -131,6 +131,16 @@ const cases = {
 
   invalid: [].concat(
     test({
+      code: 'import "./side-effect-b.js";',
+      filename: testFilePath('./cycles/es6/side-effect-a.js'),
+      errors: [error('Dependency cycle detected.')],
+    }),
+    test({
+      code: 'import {} from "./side-effect-b.js";',
+      filename: testFilePath('./cycles/es6/side-effect-a.js'),
+      errors: [error('Dependency cycle detected.')],
+    }),
+    test({
       code: 'import { bar } from "./flow-types-some-type-imports"',
       parser: parsers.BABEL_OLD,
       errors: [error(`Dependency cycle detected.`)],

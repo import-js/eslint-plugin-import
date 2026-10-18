@@ -95,7 +95,7 @@ module.exports = {
           // import type { Foo } (TS and Flow)
           importer.importKind === 'type'
           // import { type Foo } (Flow)
-          || importer.specifiers.every(({ importKind }) => importKind === 'type')
+          || importer.specifiers.length > 0 && importer.specifiers.every(({ importKind }) => importKind === 'type')
         )
       ) {
         return; // ignore type imports
