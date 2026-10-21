@@ -2608,6 +2608,44 @@ ruleTester.run('order', rule, {
         message: '`fs` import should occur before import of `async`',
       }],
     })),
+    // cannot reorder in case of not assignment import, with more than 10 statements (#2876)
+    test(withoutAutofixOutput({
+      code: `
+        import path from 'path';
+        import util from 'util';
+        import async from 'async';
+        import './aa';
+        import a from './a';
+        import b from './b';
+        import c from './c';
+        import d from './d';
+        import e from './e';
+        import f from './f';
+        import fs from 'fs';
+      `,
+      errors: [{
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
+    // reorder fix cannot cross function call, with more than 10 statements
+    test(withoutAutofixOutput({
+      code: `
+        var path = require('path');
+        var util = require('util');
+        var async = require('async');
+        fn_call();
+        var a = require('./a');
+        var b = require('./b');
+        var c = require('./c');
+        var d = require('./d');
+        var e = require('./e');
+        var f = require('./f');
+        var fs = require('fs');
+      `,
+      errors: [{
+        message: '`fs` import should occur before import of `async`',
+      }],
+    })),
     // Option alphabetize: {order: 'asc'}
     test({
       code: `

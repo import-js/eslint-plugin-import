@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`order`]: compare statement indices numerically, so the autofix no longer moves imports across side-effect imports or other statements in files with more than 10 statements ([#3301], thanks [@nk-batman21] [@loucadufault])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3301]: https://github.com/import-js/eslint-plugin-import/pull/3301
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -2023,6 +2025,7 @@ for info on changes for earlier releases.
 [@lnuvy]: https://github.com/lnuvy
 [@lo1tuma]: https://github.com/lo1tuma
 [@loganfsmyth]: https://github.com/loganfsmyth
+[@loucadufault]: https://github.com/loucadufault
 [@luczsoma]: https://github.com/luczsoma
 [@ludofischer]: https://github.com/ludofischer
 [@Lukas-Kullmann]: https://github.com/Lukas-Kullmann
@@ -2065,6 +2068,7 @@ for info on changes for earlier releases.
 [@nickofthyme]: https://github.com/nickofthyme
 [@nicolashenry]: https://github.com/nicolashenry
 [@NishargShah]: https://github.com/NishargShah
+[@nk-batman21]: https://github.com/nk-batman21
 [@noelebrun]: https://github.com/noelebrun
 [@ntdb]: https://github.com/ntdb
 [@NullDivision]: https://github.com/NullDivision
