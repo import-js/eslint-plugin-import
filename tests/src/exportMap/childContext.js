@@ -1,4 +1,6 @@
 import { expect } from 'chai';
+import sinon from 'sinon';
+import * as hash from 'eslint-module-utils/hash';
 import { hashObject } from 'eslint-module-utils/hash';
 
 import childContext from '../../../src/exportMap/childContext';
@@ -105,6 +107,96 @@ describe('childContext', () => {
     const secondCacheKey = hashObject({ languageOptions: mockContext.languageOptions }).digest('hex') + settingsHash + path;
     expect(result.cacheKey).to.not.equal(firstCacheKey);
     expect(result.cacheKey).to.equal(secondCacheKey);
+  });
+
+  it('should update cacheKey if different settings are passed in', () => {
+    const mockContext = {
+      settings,
+      languageOptions,
+    };
+
+    let result = childContext(path, mockContext);
+    expect(result.cacheKey).to.equal(languageOptionsHash + settingsHash + path);
+
+    mockContext.settings = { ...settings, setting2: true };
+
+    result = childContext(path, mockContext);
+
+    const secondSettingsHash = hashObject({ settings: mockContext.settings }).digest('hex');
+    expect(secondSettingsHash).to.not.equal(settingsHash);
+    expect(result.cacheKey).to.equal(languageOptionsHash + secondSettingsHash + path);
+  });
+
+  it('should update cacheKey if settings differ only in a function value', () => {
+    const mockContext = {
+      settings: { resolver() { return 1; } },
+      languageOptions,
+    };
+
+    const firstCacheKey = childContext(path, mockContext).cacheKey;
+
+    mockContext.settings = { resolver() { return 2; } };
+
+    expect(childContext(path, mockContext).cacheKey).to.not.equal(firstCacheKey);
+  });
+
+  it('should keep cacheKey if equal settings arrive in a new object', () => {
+    const mockContext = {
+      settings,
+      languageOptions,
+    };
+
+    const firstCacheKey = childContext(path, mockContext).cacheKey;
+
+    mockContext.settings = { ...settings };
+
+    expect(childContext(path, mockContext).cacheKey).to.equal(firstCacheKey);
+  });
+
+  it('should not rehash settings and options it has already seen', () => {
+    const flatContext = {
+      settings: { ...settings },
+      languageOptions: { ...languageOptions },
+    };
+    const legacyContext = {
+      settings: { ...settings },
+      parserOptions: { ...parserOptions },
+      parserPath,
+    };
+
+    const hashSpy = sinon.spy(hash, 'hashObject');
+    try {
+      [flatContext, legacyContext].forEach((mockContext) => {
+        childContext(path, mockContext);
+        const hashCount = hashSpy.callCount;
+
+        childContext(path, mockContext);
+        childContext('path/to/other/file', mockContext);
+
+        expect(hashSpy.callCount).to.equal(hashCount);
+      });
+    } finally {
+      hashSpy.restore();
+    }
+  });
+
+  it('should update cacheKey if different parserOptions are passed in', () => {
+    const mockContext = {
+      settings,
+      parserOptions,
+      parserPath,
+    };
+
+    let result = childContext(path, mockContext);
+    expect(result.cacheKey).to.equal(String(parserPath) + parserOptionsHash + settingsHash + path);
+
+    mockContext.parserOptions = { ...parserOptions, sourceType: 'script' };
+
+    result = childContext(path, mockContext);
+
+    const secondParserOptionsHash = hashObject({ parserOptions: mockContext.parserOptions }).digest('hex');
+    expect(secondParserOptionsHash).to.not.equal(parserOptionsHash);
+    expect(result.cacheKey).to.equal(String(parserPath) + secondParserOptionsHash + settingsHash + path);
   });
 
   it('should construct cache key out of parserOptions and parserPath if no languageOptions', () => {

@@ -5,14 +5,6 @@ let prevOptions = '';
 let settingsHash = '';
 let prevSettings = '';
 
-// Replacer function helps us with serializing the parser nested within `languageOptions`.
-function stringifyReplacerFn(_, value) {
-  if (typeof value === 'function') {
-    return String(value);
-  }
-  return value;
-}
-
 /**
  * don't hold full context object in memory, just grab what we need.
  * also calculate a cacheKey, where parts of the cacheKey hash are memoized
@@ -20,25 +12,29 @@ function stringifyReplacerFn(_, value) {
 export default function childContext(path, context) {
   const { settings, parserOptions, parserPath, languageOptions } = context;
 
-  if (JSON.stringify(settings) !== prevSettings) {
+  // ESLint reuses these objects across files: flat config shares settings and languageOptions
+  // between files that match the same config blocks, and eslintrc shares settings and rebuilds
+  // parserOptions per file. Comparing references skips serializing them on every lookup, and
+  // assumes nothing mutates them in place during a lint run.
+  if (settings !== prevSettings) {
     settingsHash = hashObject({ settings }).digest('hex');
-    prevSettings = JSON.stringify(settings);
+    prevSettings = settings;
   }
 
   // We'll use either a combination of `parserOptions` and `parserPath` or `languageOptions`
   // to construct the cache key, depending on whether this is using a flat config or not.
   let optionsToken;
   if (!parserPath && languageOptions) {
-    if (JSON.stringify(languageOptions, stringifyReplacerFn) !== prevOptions) {
+    if (languageOptions !== prevOptions) {
       optionsHash = hashObject({ languageOptions }).digest('hex');
-      prevOptions = JSON.stringify(languageOptions, stringifyReplacerFn);
+      prevOptions = languageOptions;
     }
     // For languageOptions, we're just using the hashed options as the options token
     optionsToken = optionsHash;
   } else {
-    if (JSON.stringify(parserOptions) !== prevOptions) {
+    if (parserOptions !== prevOptions) {
       optionsHash = hashObject({ parserOptions }).digest('hex');
-      prevOptions = JSON.stringify(parserOptions);
+      prevOptions = parserOptions;
     }
     // When not using flat config, we use a combination of the hashed parserOptions
     // and parserPath as the token

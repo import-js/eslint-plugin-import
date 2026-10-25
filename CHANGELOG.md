@@ -37,6 +37,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 - [Docs] clarify flat config file scoping ([#3283], thanks [@raisulchowdhury])
 - [Docs] show bare plugin flat config usage ([#3284], thanks [@raisulchowdhury])
+- [Perf] `ExportMap`: compare `settings`, `languageOptions` and `parserOptions` by reference when building the cache key, instead of serializing them on every lookup ([#3302], thanks [@Cayan])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3302]: https://github.com/import-js/eslint-plugin-import/pull/3302
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -1897,6 +1899,7 @@ for info on changes for earlier releases.
 [@butterybread]: https://github.com/butterybread
 [@cakoose]: https://github.com/cakoose
 [@captaindonald]: https://github.com/captaindonald
+[@Cayan]: https://github.com/Cayan
 [@chabb]: https://github.com/chabb
 [@Chamion]: https://github.com/Chamion
 [@charlessuh]: https://github.com/charlessuh
