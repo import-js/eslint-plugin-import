@@ -4,7 +4,10 @@ import resolve from 'eslint-module-utils/resolve';
 import ExportMapBuilder from './exportMap/builder';
 import childContext from './exportMap/childContext';
 
+// One dependency graph per settings hash, shared by every linted file, so that a file is only ever expanded once.
 let cache = new Map();
+
+const hasOwn = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
 export default class StronglyConnectedComponentsBuilder {
   static clearCache() {
@@ -24,26 +27,45 @@ export default class StronglyConnectedComponentsBuilder {
       parserPath: context.parserPath,
       languageOptions: context.languageOptions,
     }).digest('hex');
-    const cacheKey = context.path + settingsHash;
-    if (cache.has(cacheKey)) {
-      return cache.get(cacheKey);
+    if (!cache.has(settingsHash)) {
+      cache.set(settingsHash, { adjacencyList: new Map(), scc: {}, sccCount: 0 });
     }
-    const scc = StronglyConnectedComponentsBuilder.calculate(context);
-    const visitedFiles = Object.keys(scc);
-    visitedFiles.forEach((filePath) => cache.set(filePath + settingsHash, scc));
-    return scc;
+    const graph = cache.get(settingsHash);
+    if (hasOwn(graph.scc, context.path)) {
+      return graph.scc;
+    }
+    StronglyConnectedComponentsBuilder.calculate(context, graph);
+    return graph.scc;
   }
 
-  static calculate(context) {
+  /**
+   * Adds everything reachable from the context's file to the shared graph, and assigns an SCC to each new file.
+   * Files already in `graph.scc` are final: they can only reach files that already have an SCC (otherwise those
+   * files would have been reachable from them when they were added), so they can never share an SCC with a new file.
+   * That lets us run the SCC algorithm over just the new files, instead of over the whole graph for every root.
+   */
+  static calculate(context, graph) {
     const exportMap = ExportMapBuilder.for(context);
-    const adjacencyList = this.exportMapToAdjacencyList(exportMap);
-    const calculatedScc = calculateScc(adjacencyList);
-    return StronglyConnectedComponentsBuilder.calculatedSccToPlainObject(calculatedScc);
+    StronglyConnectedComponentsBuilder.exportMapToAdjacencyList(exportMap, graph.adjacencyList);
+    if (!exportMap || !graph.adjacencyList.has(exportMap.path)) { return; }
+
+    const unassigned = new Map();
+    const toVisit = [exportMap.path];
+    while (toVisit.length > 0) {
+      const node = toVisit.pop();
+      if (unassigned.has(node) || hasOwn(graph.scc, node)) { continue; }
+      const dependencies = graph.adjacencyList.get(node) || new Set();
+      unassigned.set(node, new Set([...dependencies].filter((dependency) => !hasOwn(graph.scc, dependency))));
+      toVisit.push(...dependencies);
+    }
+
+    const calculatedScc = calculateScc(unassigned);
+    StronglyConnectedComponentsBuilder.calculatedSccToPlainObject(calculatedScc, graph.scc, graph.sccCount);
+    graph.sccCount += calculatedScc.length;
   }
 
-  /** @returns {Map<string, Set<string>>} for each dep, what are its direct deps */
-  static exportMapToAdjacencyList(initialExportMap) {
-    const adjacencyList = new Map();
+  /** @returns {Map<string, Set<string>>} for each dep, what are its direct deps. Files without deps may have no entry. */
+  static exportMapToAdjacencyList(initialExportMap, adjacencyList = new Map()) {
     // BFS
     function visitNode(exportMap) {
       if (!exportMap) {
@@ -69,23 +91,14 @@ export default class StronglyConnectedComponentsBuilder {
       });
     }
     visitNode(initialExportMap);
-    // Fill gaps
-    adjacencyList.forEach((values) => {
-      values.forEach((value) => {
-        if (!adjacencyList.has(value)) {
-          adjacencyList.set(value, new Set());
-        }
-      });
-    });
     return adjacencyList;
   }
 
-  /** @returns {Record<string, number>} for each key, its SCC's index */
-  static calculatedSccToPlainObject(sccs) {
-    const obj = {};
+  /** @returns {Record<string, number>} for each key, its SCC's index (plus `offset`) */
+  static calculatedSccToPlainObject(sccs, obj = {}, offset = 0) {
     sccs.forEach((scc, index) => {
       scc.forEach((node) => {
-        obj[node] = index;
+        obj[node] = offset + index;
       });
     });
     return obj;
