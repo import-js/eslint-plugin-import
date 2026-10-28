@@ -37,6 +37,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 - [Docs] clarify flat config file scoping ([#3283], thanks [@raisulchowdhury])
 - [Docs] show bare plugin flat config usage ([#3284], thanks [@raisulchowdhury])
+- [Performance] [`no-cycle`]: share one SCC graph between all linted files, instead of walking the whole graph again for every file that no earlier file reaches ([#3303], thanks [@eyalr])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3303]: https://github.com/import-js/eslint-plugin-import/pull/3303
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -1926,6 +1928,7 @@ for info on changes for earlier releases.
 [@edemaine]: https://github.com/edemaine
 [@eelyafi]: https://github.com/eelyafi
 [@ej612]: https://github.com/ej612
+[@eyalr]: https://github.com/eyalr
 [@Ephem]: https://github.com/Ephem
 [@ephys]: https://github.com/ephys
 [@eps1lon]: https://github.com/eps1lon
