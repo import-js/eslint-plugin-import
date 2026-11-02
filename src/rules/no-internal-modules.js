@@ -1,9 +1,51 @@
-import minimatch from 'minimatch';
+import { Minimatch, GLOBSTAR } from 'minimatch';
 
 import resolve from 'eslint-module-utils/resolve';
 import importType from '../core/importType';
 import moduleVisitor from 'eslint-module-utils/moduleVisitor';
 import docsUrl from '../docsUrl';
+
+const lineTerminator = /[\n\r\u2028\u2029]/;
+
+// Each separator in a configured import pattern denotes a module boundary.
+// Keep those boundaries when globstars span several components: collapsing
+// adjacent globstars would change the permitted depth of internal imports.
+// The reachable positions advance iteratively, in O(pattern parts * path parts).
+function matchesImportPath(pattern, components) {
+  let reachable = new Set([0]);
+  pattern.forEach((part) => {
+    const next = new Set();
+    let spanning = false;
+    components.forEach((component, index) => {
+      if (part === GLOBSTAR) {
+        // A literal pattern separator may precede a dotfile. A globstar
+        // cannot itself cross a separator followed by a dotfile.
+        const startsHere = reachable.has(index) && (index > 0 || !component.startsWith('.'));
+        spanning = !lineTerminator.test(component)
+          && (startsHere || spanning && !component.startsWith('.'));
+        if (spanning) { next.add(index + 1); }
+      } else if (reachable.has(index)) {
+        const matchesComponent = typeof part === 'string'
+          ? part === component
+          : (component !== '' || index < components.length - 1)
+            && !lineTerminator.test(component.charAt(0))
+            && part.test(component);
+        if (matchesComponent) { next.add(index + 1); }
+      }
+    });
+    reachable = next;
+  });
+  return reachable.has(components.length);
+}
+
+function importPattern(pattern) {
+  const matcher = new Minimatch(pattern);
+  const alternatives = matcher.globSet.map((glob) => glob.split(/\/+/).map((part) => matcher.parse(part)));
+  return (importPath) => {
+    const matches = alternatives.some((parts) => matchesImportPath(parts, importPath.split('/')));
+    return matcher.negate ? !lineTerminator.test(importPath) && !matches : matches;
+  };
+}
 
 module.exports = {
   meta: {
@@ -48,8 +90,8 @@ module.exports = {
 
   create: function noReachingInside(context) {
     const options = context.options[0] || {};
-    const allowRegexps = (options.allow || []).map((p) => minimatch.makeRe(p));
-    const forbidRegexps = (options.forbid || []).map((p) => minimatch.makeRe(p));
+    const allowMatchers = (options.allow || []).map(importPattern);
+    const forbidMatchers = (options.forbid || []).map(importPattern);
 
     // minimatch patterns are expected to use / path separators, like import
     // statements, so normalize paths to use the same
@@ -71,12 +113,12 @@ module.exports = {
 
     // test if reaching to this destination is allowed
     function reachingAllowed(importPath) {
-      return allowRegexps.some((re) => re.test(importPath));
+      return allowMatchers.some((match) => match(importPath));
     }
 
     // test if reaching to this destination is forbidden
     function reachingForbidden(importPath) {
-      return forbidRegexps.some((re) => re.test(importPath));
+      return forbidMatchers.some((match) => match(importPath));
     }
 
     function isAllowViolation(importPath, moduleSystem) {

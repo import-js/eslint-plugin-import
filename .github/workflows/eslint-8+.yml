@@ -21,7 +21,7 @@ jobs:
         with:
           versionsAsRoot: true
           type: majors
-          preset: '^12.22.0 || ^14.17.0 || >=16.0.0' # eslint 8 engines.node
+          preset: '20 || >=22'
 
   latest:
     needs: [matrix]

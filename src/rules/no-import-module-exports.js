@@ -1,4 +1,4 @@
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import path from 'path';
 import { getPhysicalFilename, getSourceCode } from 'eslint-module-utils/contextCompat';
 import pkgUp from 'eslint-module-utils/pkgUp';

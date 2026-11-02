@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 import pkgUp from 'eslint-module-utils/pkgUp';
 import resolve from 'eslint-module-utils/resolve';

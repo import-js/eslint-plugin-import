@@ -1,11 +1,10 @@
 import fs from 'fs';
 import { extname, join, resolve } from 'path';
 import isGlob from 'is-glob';
-import minimatch from 'minimatch';
+import { braceExpand, Minimatch, GLOBSTAR } from 'minimatch';
 
 import getFlatConfigIgnores from './flatConfigIgnores';
 
-const { Minimatch, GLOBSTAR } = minimatch;
 const minimatchOpts = { dot: true, matchBase: true };
 
 /**
@@ -72,7 +71,7 @@ export default function listFilesWithNodeFs(src, extensions, cwd) {
     if (isGlob(pattern)) {
       // Expand braces, then take the base from the parsed pattern's leading
       // literal segments, mirroring how ESLint's FileEnumerator resolves globs.
-      minimatch.braceExpand(pattern).forEach((expanded) => {
+      braceExpand(pattern).forEach((expanded) => {
         // `minimatch` only understands `/` separators; on Windows `resolve` yields `\`,
         // which it would treat as escapes, so normalize before parsing/matching.
         const mm = new Minimatch(resolve(expanded).replace(/\\/g, '/'), minimatchOpts);
