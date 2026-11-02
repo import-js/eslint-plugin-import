@@ -1,5 +1,5 @@
 import path from 'path';
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import { getPhysicalFilename } from 'eslint-module-utils/contextCompat';
 
 import isStaticRequire from '../core/staticRequire';

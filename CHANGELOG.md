@@ -30,6 +30,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
 
 ### Changed
+- [Breaking] require Node.js 20 or 22+ and minimatch 11, preserving internal-module pattern boundaries without regular-expression matching ([#3304](https://github.com/import-js/eslint-plugin-import/pull/3304)).
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
 - [Tests] add parser version guards for ESLint v10 (TS_NEW / ANGULAR / BABEL_NEW) ([#3230], thanks [@rasmi])
 - [Tests] cover ESLint 10 `getTokenOrComment` and `listFilesToProcess` API fallbacks ([#3230], thanks [@captaindonald])

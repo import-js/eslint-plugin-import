@@ -3,7 +3,7 @@
   "version": "2.32.0",
   "description": "Import with sanity.",
   "engines": {
-    "node": ">=4"
+    "node": "20 || >=22"
   },
   "main": "lib/index.js",
   "types": "index.d.ts",
@@ -127,7 +127,7 @@
     "hasown": "^2.0.4",
     "is-core-module": "^2.16.2",
     "is-glob": "^4.0.3",
-    "minimatch": "^3.1.5",
+    "minimatch": "^11.0.4",
     "object.fromentries": "^2.0.8",
     "object.groupby": "^1.0.3",
     "object.values": "^1.2.1",

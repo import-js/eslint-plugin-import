@@ -3,7 +3,7 @@
  * @author Radek Benkel
  */
 
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import { getScope, getSourceCode } from 'eslint-module-utils/contextCompat';
 
 import docsUrl from '../docsUrl';

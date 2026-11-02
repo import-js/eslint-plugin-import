@@ -1,6 +1,6 @@
 'use strict';
 
-import minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import includes from 'array-includes';
 import groupBy from 'object.groupby';
 import { getScope, getSourceCode } from 'eslint-module-utils/contextCompat';

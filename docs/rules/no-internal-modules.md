@@ -11,6 +11,10 @@ This rule has two mutally exclusive options that are arrays of [minimatch/glob p
  - `allow` that include paths and import statements that can be imported with reaching.
  - `forbid` that exclude paths and import statements that can be imported with reaching.
 
+Separators in these patterns preserve module boundaries, including between
+adjacent globstars. With `forbid: ['app/**/**']`, the rule forbids `app/a/b` and deeper imports,
+but allows `app/a`. This distinguishes a module's entry point from its internals.
+
 ### Examples
 
 Given the following folder structure:
