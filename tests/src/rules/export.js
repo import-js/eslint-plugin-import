@@ -330,6 +330,48 @@ context('TypeScript', function () {
             `,
             ...parserConfig,
           }),
+          // namespaces with only types have no value (#2901)
+          test({
+            code: `
+              export namespace Foo {
+                export type Bar = string;
+              }
+              export const Foo = {};
+            `,
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
+                interface Hidden {}
+                export interface Bar {}
+                export namespace Baz {
+                  export type Qux = number;
+                }
+                namespace Empty {}
+              }
+              export const Foo = 1;
+            `,
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export declare namespace Foo {
+                export type Bar = string;
+              }
+              export declare const Foo: number;
+            `,
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo.Bar {
+                export type Baz = string;
+              }
+              export const Foo = {};
+            `,
+            ...parserConfig,
+          }),
         ] : [],
         test({
           code: 'export * from "./file1.ts"',
@@ -601,6 +643,85 @@ context('TypeScript', function () {
               {
                 message: `Multiple exports of name 'Foo'.`,
                 line: 3,
+              },
+            ],
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
+                export const bar = 1;
+              }
+              export const Foo = 'bar';
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 5,
+              },
+            ],
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
+                export type Bar = string;
+                const hidden = 1;
+              }
+              export const Foo = 'bar';
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 6,
+              },
+            ],
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
+                export enum Bar { }
+              }
+              export const Foo = 'bar';
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 5,
+              },
+            ],
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
+                export namespace Bar {
+                  export const baz = 1;
+                }
+              }
+              export const Foo = 'bar';
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 7,
               },
             ],
             ...parserConfig,
