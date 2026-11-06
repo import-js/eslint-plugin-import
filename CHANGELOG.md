@@ -14,6 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
 
 ### Fixed
+- [`export`]: don't report a TypeScript namespace that only contains types when it shares a name with a value ([#2901], thanks [@thelastbackspace])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
@@ -1280,6 +1281,7 @@ for info on changes for earlier releases.
 [#2944]: https://github.com/import-js/eslint-plugin-import/pull/2944
 [#2942]: https://github.com/import-js/eslint-plugin-import/pull/2942
 [#2919]: https://github.com/import-js/eslint-plugin-import/pull/2919
+[#2901]: https://github.com/import-js/eslint-plugin-import/issues/2901
 [#2885]: https://github.com/import-js/eslint-plugin-import/pull/2885
 [#2884]: https://github.com/import-js/eslint-plugin-import/pull/2884
 [#2866]: https://github.com/import-js/eslint-plugin-import/pull/2866
@@ -2147,6 +2149,7 @@ for info on changes for earlier releases.
 [@taye]: https://github.com/taye
 [@TheCrueltySage]: https://github.com/TheCrueltySage
 [@TheJaredWilcurt]: https://github.com/TheJaredWilcurt
+[@thelastbackspace]: https://github.com/thelastbackspace
 [@tihonove]: https://github.com/tihonove
 [@timkraut]: https://github.com/timkraut
 [@tizmagik]: https://github.com/tizmagik

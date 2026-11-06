@@ -95,6 +95,43 @@ function shouldSkipTypescriptNamespace(node, nodes) {
     );
 }
 
+/**
+ * Get the statements of a namespace, unwrapping `namespace Foo.Bar {}` for older parsers
+ * @param {Object} node TSModuleDeclaration
+ * @returns {Array<Object> | null}
+ */
+function getNamespaceStatements(node) {
+  let { body } = node;
+  while (body && body.type === 'TSModuleDeclaration') { body = body.body; }
+  return body && body.body ? body.body : null;
+}
+
+/**
+ * Detect a namespace that only holds types, like:
+ * ```ts
+ * export namespace Foo {
+ *   export type Bar = string;
+ * }
+ * ```
+ * TypeScript doesn't emit a value for it, so it can share its name with a value.
+ * @param {Object} node TSModuleDeclaration
+ * @param {boolean} allowEmpty
+ * @returns {boolean}
+ */
+function isTypeOnlyNamespace(node, allowEmpty) {
+  const statements = getNamespaceStatements(node);
+  if (!statements || !allowEmpty && statements.length === 0) { return false; }
+
+  return statements.every((statement) => {
+    const declaration = statement.type === 'ExportNamedDeclaration' ? statement.declaration : statement;
+    if (!declaration) { return false; }
+
+    return declaration.type === 'TSInterfaceDeclaration'
+      || declaration.type === 'TSTypeAliasDeclaration'
+      || declaration.type === 'TSModuleDeclaration' && isTypeOnlyNamespace(declaration, true);
+  });
+}
+
 module.exports = {
   meta: {
     type: 'problem',
@@ -162,6 +199,12 @@ module.exports = {
             'TSInterfaceDeclaration',
           ], node.declaration.type)) {
             addNamed(node.declaration.id.name, node.declaration.id, parent, true);
+          } else if (
+            node.declaration.type === 'TSModuleDeclaration'
+            // an empty namespace is still reported, as before
+            && isTypeOnlyNamespace(node.declaration, false)
+          ) {
+            // a namespace with only types has no value, so it can't clash with one
           } else {
             addNamed(node.declaration.id.name, node.declaration.id, parent, isTypeVariableDecl);
           }
