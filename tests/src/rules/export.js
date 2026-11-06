@@ -708,6 +708,26 @@ context('TypeScript', function () {
           test({
             code: `
               export namespace Foo {
+                type Bar = string;
+                export { Bar };
+              }
+              export const Foo = 'bar';
+            `,
+            errors: [
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 2,
+              },
+              {
+                message: `Multiple exports of name 'Foo'.`,
+                line: 6,
+              },
+            ],
+            ...parserConfig,
+          }),
+          test({
+            code: `
+              export namespace Foo {
                 export namespace Bar {
                   export const baz = 1;
                 }
