@@ -44,7 +44,7 @@ export default class StronglyConnectedComponentsBuilder {
   /** @returns {Map<string, Set<string>>} for each dep, what are its direct deps */
   static exportMapToAdjacencyList(initialExportMap) {
     const adjacencyList = new Map();
-    // An explicit stack, because the length of an import path can exceed the maximum call stack size
+    // An explicit stack, because the length of a chain of dependencies can exceed the maximum call stack size
     const toVisit = [initialExportMap];
     function visitNode(exportMap) {
       if (!exportMap) {

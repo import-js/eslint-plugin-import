@@ -198,7 +198,7 @@ describe('Strongly Connected Components Builder: exportMapToAdjacencyList', () =
     return nodes[0];
   }
 
-  it('does not overflow the stack on a very long import path', () => {
+  it('does not overflow the stack on a very long chain of dependencies', () => {
     const adjacencyList = StronglyConnectedComponentsBuilder.exportMapToAdjacencyList(exportMapRing());
 
     expect(adjacencyList.size).to.equal(size);
