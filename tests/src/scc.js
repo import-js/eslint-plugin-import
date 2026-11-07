@@ -177,3 +177,33 @@ describe('Strongly Connected Components Builder', () => {
     });
   });
 });
+
+describe('Strongly Connected Components Builder: exportMapToAdjacencyList', () => {
+  const size = 20000;
+  const fileName = (i) => `f${i}.js`;
+
+  function exportMapRing() {
+    const nodes = [];
+    for (let i = 0; i < size; i++) {
+      nodes.push({
+        path: fileName(i),
+        imports: new Map([
+          [
+            fileName((i + 1) % size),
+            { getter: () => nodes[(i + 1) % size], declarations: new Set([{ isOnlyImportingTypes: false }]) },
+          ],
+        ]),
+      });
+    }
+    return nodes[0];
+  }
+
+  it('does not overflow the stack on a very long import path', () => {
+    const adjacencyList = StronglyConnectedComponentsBuilder.exportMapToAdjacencyList(exportMapRing());
+
+    expect(adjacencyList.size).to.equal(size);
+    for (let i = 0; i < size; i++) {
+      expect([...adjacencyList.get(fileName(i))]).to.deep.equal([fileName((i + 1) % size)]);
+    }
+  });
+});

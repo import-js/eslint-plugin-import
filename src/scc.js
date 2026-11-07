@@ -44,7 +44,8 @@ export default class StronglyConnectedComponentsBuilder {
   /** @returns {Map<string, Set<string>>} for each dep, what are its direct deps */
   static exportMapToAdjacencyList(initialExportMap) {
     const adjacencyList = new Map();
-    // BFS
+    // An explicit stack, because the length of an import path can exceed the maximum call stack size
+    const toVisit = [initialExportMap];
     function visitNode(exportMap) {
       if (!exportMap) {
         return;
@@ -65,10 +66,12 @@ export default class StronglyConnectedComponentsBuilder {
           return; // prevent endless loop
         }
         adjacencyList.get(from).add(to);
-        visitNode(v.getter());
+        toVisit.push(v.getter());
       });
     }
-    visitNode(initialExportMap);
+    while (toVisit.length > 0) {
+      visitNode(toVisit.pop());
+    }
     // Fill gaps
     adjacencyList.forEach((values) => {
       values.forEach((value) => {
