@@ -28,7 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
-- [`no-cycle`]: avoid a stack overflow while building the SCC adjacency list ([#NNNN], thanks [@vyacheslavmeyerzon])
+- [`no-cycle`]: avoid a stack overflow while building the SCC adjacency list ([#3306], thanks [@vyacheslavmeyerzon])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1214,7 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-[#NNNN]: https://github.com/import-js/eslint-plugin-import/pull/NNNN
+[#3306]: https://github.com/import-js/eslint-plugin-import/pull/3306
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
