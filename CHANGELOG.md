@@ -37,7 +37,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 - [Docs] clarify flat config file scoping ([#3283], thanks [@raisulchowdhury])
 - [Docs] show bare plugin flat config usage ([#3284], thanks [@raisulchowdhury])
-- [Tests] `no-unused-modules`: scope the re-export crash test to its fixture directory ([#NNNN], thanks [@vyacheslavmeyerzon])
+- [Tests] `no-unused-modules`: scope the re-export crash test to its fixture directory ([#3308], thanks [@vyacheslavmeyerzon])
 
 ## [2.32.0] - 2025-06-20
 
@@ -1214,7 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
-[#NNNN]: https://github.com/import-js/eslint-plugin-import/pull/NNNN
+[#3308]: https://github.com/import-js/eslint-plugin-import/pull/3308
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
