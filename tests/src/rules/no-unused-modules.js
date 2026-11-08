@@ -349,6 +349,7 @@ describe('dynamic imports', function () {
         parser: parsers.TS_NEW,
         options: [{
           unusedExports: true,
+          src: [testFilePath('./unused-modules-reexport-crash/src')],
           ignoreExports: ['**/magic/**'],
         }],
       }),
