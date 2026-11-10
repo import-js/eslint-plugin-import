@@ -6,7 +6,7 @@ Use this rule to prevent importing the submodules of other modules.
 
 ## Rule Details
 
-This rule has two mutally exclusive options that are arrays of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer) patterns:
+This rule has two mutually exclusive options that are arrays of [minimatch/glob patterns](https://github.com/isaacs/node-glob#glob-primer):
 
  - `allow` that include paths and import statements that can be imported with reaching.
  - `forbid` that exclude paths and import statements that can be imported with reaching.

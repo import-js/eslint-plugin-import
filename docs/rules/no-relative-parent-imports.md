@@ -32,7 +32,7 @@ You can,
 
 1. Move the file to be in a sibling folder (or higher) of the dependency.
 
-   `three.js` could be be in the same folder as `add.js`:
+   `three.js` could be in the same folder as `add.js`:
 
    ```pt
    three.js
