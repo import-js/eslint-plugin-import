@@ -74,6 +74,11 @@ module.exports = {
 
     return {
       ImportDeclaration(node) {
+        // type-only imports (TS `import type`, Flow `import type` / `import typeof`)
+        // are erased at compile time, so they can't conflict with CommonJS exports
+        if (node.importKind === 'type' || node.importKind === 'typeof') {
+          return;
+        }
         importDeclarations.push(node);
       },
       MemberExpression(node) {

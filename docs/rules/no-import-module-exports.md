@@ -74,6 +74,10 @@ module.exports = foo;
 // eslint import/no-import-module-exports: ["error", {"exceptions": ["**/*/some-file.js"]}]
 import foo from 'path';
 module.exports = foo;
+
+// type-only imports are removed at compile time, so they are allowed
+import type { Foo } from './foo';
+module.exports = function (foo: Foo) {};
 ```
 
 ### Further Reading
