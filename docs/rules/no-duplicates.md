@@ -69,6 +69,39 @@ import SomeDefaultClass from './mod?minify'
 import * from './mod.js?minify'
 ```
 
+### Re-exports
+
+By default, this rule only looks at imports. Set `considerExports` to `true` to also report named re-exports of the same module, which can be merged into one `export { ... } from` statement.
+
+Config:
+
+```json
+"import/no-duplicates": ["error", {"considerExports": true}]
+```
+
+<!--tabs-->
+
+❌ Invalid `["error", {"considerExports": true}]`
+
+```js
+export { a } from './mod'
+export { b as c } from './mod'
+```
+
+✅ Valid with `["error", {"considerExports": true}]`
+
+```js
+export { a, b as c } from './mod'
+
+// type re-exports are checked separately from value re-exports
+export type { T } from './mod'
+
+// `export *` and `export * as ns` cannot be merged, so they are ignored
+export * from './mod'
+```
+
+<!--tabs-->
+
 ### Inline Type imports
 
 TypeScript 4.5 introduced a new [feature](https://devblogs.microsoft.com/typescript/announcing-typescript-4-5/#type-on-import-names) that allows mixing of named value and type imports. In order to support fixing to an inline type import when duplicate imports are detected, `prefer-inline` can be set to true.

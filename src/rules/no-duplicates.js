@@ -32,7 +32,7 @@ function hasNamespace(node) {
 // Checks whether `node` has any non-default specifiers.
 function hasSpecifiers(node) {
   const specifiers = node.specifiers
-    .filter((specifier) => specifier.type === 'ImportSpecifier');
+    .filter((specifier) => specifier.type === 'ImportSpecifier' || specifier.type === 'ExportSpecifier');
   return specifiers.length > 0;
 }
 
@@ -313,11 +313,11 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
-/** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
-function checkImports(imported, context) {
+/** @type {(imported: Map<string, (import('estree').ImportDeclaration | import('estree').ExportNamedDeclaration)[]>, context: import('eslint').Rule.RuleContext, verb?: string) => void} */
+function checkImports(imported, context, verb = 'imported') {
   for (const [module, nodes] of imported.entries()) {
     if (nodes.length > 1) {
-      const message = `'${module}' imported multiple times.`;
+      const message = `'${module}' ${verb} multiple times.`;
       const [first, ...rest] = nodes;
       const sourceCode = getSourceCode(context);
       const fix = getFix(first, rest, sourceCode, context);
@@ -358,6 +358,9 @@ module.exports = {
           'prefer-inline': {
             type: 'boolean',
           },
+          considerExports: {
+            type: 'boolean',
+          },
         },
         additionalProperties: false,
       },
@@ -371,6 +374,8 @@ module.exports = {
     const considerQueryStringOption = context.options[0] && context.options[0].considerQueryString;
     /** @type {boolean} */
     const preferInline = context.options[0] && context.options[0]['prefer-inline'];
+    /** @type {boolean} */
+    const considerExports = context.options[0] && context.options[0].considerExports;
     const defaultResolver = (sourcePath) => resolve(sourcePath, context) || sourcePath;
     const resolver = considerQueryStringOption ? (sourcePath) => {
       const parts = sourcePath.match(/^([^?]*)\?(.*)$/);
@@ -380,22 +385,29 @@ module.exports = {
       return `${defaultResolver(parts[1])}?${parts[2]}`;
     } : defaultResolver;
 
-    /** @type {Map<unknown, { imported: Map<string, import('estree').ImportDeclaration[]>, nsImported: Map<string, import('estree').ImportDeclaration[]>, defaultTypesImported: Map<string, import('estree').ImportDeclaration[]>, namedTypesImported: Map<string, import('estree').ImportDeclaration[]>, namespaceTypesImported: Map<string, import('estree').ImportDeclaration[]>}>} */
+    /** @type {Map<unknown, { imported: Map<string, import('estree').ImportDeclaration[]>, nsImported: Map<string, import('estree').ImportDeclaration[]>, defaultTypesImported: Map<string, import('estree').ImportDeclaration[]>, namedTypesImported: Map<string, import('estree').ImportDeclaration[]>, namespaceTypesImported: Map<string, import('estree').ImportDeclaration[]>, reexported: Map<string, import('estree').ExportNamedDeclaration[]>, typesReexported: Map<string, import('estree').ExportNamedDeclaration[]>}>} */
     const moduleMaps = new Map();
 
-    /** @param {import('estree').ImportDeclaration} n */
-    /** @returns {typeof moduleMaps[keyof typeof moduleMaps]} */
-    function getImportMap(n) {
-      if (!moduleMaps.has(n.parent)) {
-        moduleMaps.set(n.parent, /** @type {typeof moduleMaps} */ {
+    /** @param {import('estree').Node} parent */
+    function getModuleMaps(parent) {
+      if (!moduleMaps.has(parent)) {
+        moduleMaps.set(parent, /** @type {typeof moduleMaps} */ {
           imported: new Map(),
           nsImported: new Map(),
           defaultTypesImported: new Map(),
           namedTypesImported: new Map(),
           namespaceTypesImported: new Map(),
+          reexported: new Map(),
+          typesReexported: new Map(),
         });
       }
-      const map = moduleMaps.get(n.parent);
+      return moduleMaps.get(parent);
+    }
+
+    /** @param {import('estree').ImportDeclaration} n */
+    /** @returns {typeof moduleMaps[keyof typeof moduleMaps]} */
+    function getImportMap(n) {
+      const map = getModuleMaps(n.parent);
       if (n.importKind === 'type') {
         if (hasNamespace(n)) {
           return map.namespaceTypesImported;
@@ -412,19 +424,23 @@ module.exports = {
       return hasNamespace(n) ? map.nsImported : map.imported;
     }
 
-    return {
+    /** @type {(map: Map<string, (import('estree').ImportDeclaration | import('estree').ExportNamedDeclaration)[]>, n: import('estree').ImportDeclaration | import('estree').ExportNamedDeclaration) => void} */
+    function addToMap(map, n) {
+      /** @type {string} */
+      // resolved path will cover aliased duplicates
+      const resolvedPath = resolver(n.source.value);
+
+      if (map.has(resolvedPath)) {
+        map.get(resolvedPath).push(n);
+      } else {
+        map.set(resolvedPath, [n]);
+      }
+    }
+
+    const visitors = {
       /** @param {import('estree').ImportDeclaration} n */
       ImportDeclaration(n) {
-        /** @type {string} */
-        // resolved path will cover aliased duplicates
-        const resolvedPath = resolver(n.source.value);
-        const importMap = getImportMap(n);
-
-        if (importMap.has(resolvedPath)) {
-          importMap.get(resolvedPath).push(n);
-        } else {
-          importMap.set(resolvedPath, [n]);
-        }
+        addToMap(getImportMap(n), n);
       },
 
       'Program:exit'() {
@@ -434,8 +450,24 @@ module.exports = {
           checkImports(map.defaultTypesImported, context);
           checkImports(map.namedTypesImported, context);
           checkImports(map.namespaceTypesImported, context);
+          checkImports(map.reexported, context, 'exported');
+          checkImports(map.typesReexported, context, 'exported');
         }
       },
     };
+
+    if (considerExports) {
+      /** @param {import('estree').ExportNamedDeclaration} n */
+      visitors.ExportNamedDeclaration = function (n) {
+        // only re-exports (`export { a } from './foo'`) can be merged
+        if (n.source == null) {
+          return;
+        }
+        const map = getModuleMaps(n.parent);
+        addToMap(n.exportKind === 'type' ? map.typesReexported : map.reexported, n);
+      };
+    }
+
+    return visitors;
   },
 };
