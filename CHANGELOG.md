@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`no-import-module-exports`]: ignore type-only imports ([#3309], thanks [@bardrop] [@lior-frezi])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3309]: https://github.com/import-js/eslint-plugin-import/pull/3309
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -1877,6 +1879,7 @@ for info on changes for earlier releases.
 [@atos1990]: https://github.com/atos1990
 [@azyzz228]: https://github.com/azyzz228
 [@barbogast]: https://github.com/barbogast
+[@bardrop]: https://github.com/bardrop
 [@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
@@ -2017,6 +2020,7 @@ for info on changes for earlier releases.
 [@Librazy]: https://github.com/Librazy
 [@liby]: https://github.com/liby
 [@lilling]: https://github.com/lilling
+[@lior-frezi]: https://github.com/lior-frezi
 [@liuxingbaoyu]: https://github.com/liuxingbaoyu
 [@ljharb]: https://github.com/ljharb
 [@ljqx]: https://github.com/ljqx

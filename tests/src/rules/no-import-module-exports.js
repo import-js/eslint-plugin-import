@@ -1,7 +1,7 @@
 import path from 'path';
 import { RuleTester } from '../rule-tester';
 
-import { eslintVersionSatisfies, test, testVersion } from '../utils';
+import { eslintVersionSatisfies, getNonDefaultParsers, getTSParsers, parsers, test, testVersion, tsVersionSatisfies, typescriptEslintParserSatisfies } from '../utils';
 
 const ruleTester = new RuleTester({
   parserOptions: { ecmaVersion: 6, sourceType: 'module' },
@@ -160,4 +160,82 @@ ruleTester.run('no-import-module-exports', rule, {
       errors: [error],
     }),
   ],
+});
+
+context('TypeScript', function () {
+  getTSParsers()
+    // Type-only imports were added in TypeScript ESTree 2.23.0
+    .filter((parser) => parser !== parsers.TS_OLD)
+    .forEach((parser) => {
+      ruleTester.run('no-import-module-exports', rule, {
+        valid: [
+          test({
+            code: `
+              import type { Foo } from './foo';
+              module.exports = function (foo: Foo) {};
+            `,
+            parser,
+          }),
+          test({
+            code: `
+              import type Foo from './foo';
+              import type * as Bar from './bar';
+              exports.baz = function (foo: Foo, bar: Bar.Baz) {};
+            `,
+            parser,
+          }),
+        ],
+        invalid: [
+          test({
+            code: `
+              import type { Foo } from './foo';
+              import { bar } from './bar';
+              module.exports = function (foo: Foo) { return bar; };
+            `,
+            parser,
+            errors: [{ ...error, line: 3 }],
+          }),
+        ].concat(!tsVersionSatisfies('>= 4.5') || !typescriptEslintParserSatisfies('>= 5.7.0') ? [] : [
+          // inline type specifiers don't make the whole declaration type-only
+          test({
+            code: `
+              import { type Foo } from './foo';
+              module.exports = function (foo: Foo) {};
+            `,
+            parser,
+            errors: [error],
+          }),
+        ]),
+      });
+    });
+});
+
+context('Flow', function () {
+  getNonDefaultParsers()
+    .filter((parser) => parser === parsers.BABEL_OLD)
+    .forEach((parser) => {
+      ruleTester.run('no-import-module-exports', rule, {
+        valid: [
+          test({
+            code: `
+              import type { Foo } from './foo';
+              import typeof Bar from './bar';
+              module.exports = function (foo: Foo, bar: Bar) {};
+            `,
+            parser,
+          }),
+        ],
+        invalid: [
+          test({
+            code: `
+              import type { Foo } from './foo';
+              import bar from './bar';
+              module.exports = function (foo: Foo) { return bar; };
+            `,
+            parser,
+            errors: [{ ...error, line: 3 }],
+          }),
+        ],
+      });
+    });
 });
