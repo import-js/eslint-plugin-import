@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 - [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
+- [`no-duplicates`]: add `considerExports` option to also report duplicate `export … from` re-exports ([#3310], thanks [@bardrop] [@langonja])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3310]: https://github.com/import-js/eslint-plugin-import/pull/3310
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -1877,6 +1879,7 @@ for info on changes for earlier releases.
 [@atos1990]: https://github.com/atos1990
 [@azyzz228]: https://github.com/azyzz228
 [@barbogast]: https://github.com/barbogast
+[@bardrop]: https://github.com/bardrop
 [@BarryThePenguin]: https://github.com/BarryThePenguin
 [@be5invis]: https://github.com/be5invis
 [@beatrizrezener]: https://github.com/beatrizrezener
@@ -2008,6 +2011,7 @@ for info on changes for earlier releases.
 [@KostyaZgara]: https://github.com/KostyaZgara
 [@kylemh]: https://github.com/kylemh
 [@laurens-dg]: https://github.com/laurens-dg
+[@langonja]: https://github.com/langonja
 [@laysent]: https://github.com/laysent
 [@le0nik]: https://github.com/le0nik
 [@leipert]: https://github.com/leipert

@@ -50,8 +50,83 @@ ruleTester.run('no-duplicates', rule, {
     test({
       code: "import {y} from './foo'; import * as ns from './foo'",
     }),
+
+    // #2958: re-exports are only checked with `considerExports`
+    test({ code: "export { x } from './foo'; export { y } from './foo'" }),
+    test({
+      code: "export { x } from './foo'; export { y } from './bar'",
+      options: [{ considerExports: true }],
+    }),
+    // imports and re-exports of the same module cannot be merged
+    test({
+      code: "import { x } from './foo'; export { y } from './foo'",
+      options: [{ considerExports: true }],
+    }),
+    // local exports have no source
+    test({
+      code: 'const x = 1, y = 2; export { x }; export { y }',
+      options: [{ considerExports: true }],
+    }),
+    // `export * from` is not a named re-export
+    test({
+      code: "export * from './foo'; export { y } from './foo'",
+      options: [{ considerExports: true }],
+    }),
   ],
   invalid: [
+    // #2958
+    test({
+      code: "export { x } from './foo'; export { y } from './foo'",
+      output: "export { x,y } from './foo'; ",
+      options: [{ considerExports: true }],
+      errors: ["'./foo' exported multiple times.", "'./foo' exported multiple times."],
+    }),
+    test({
+      code: "export { x as a } from './foo'; export { default as b, y } from './foo'; export { z } from './foo'",
+      output: "export { x as a,default as b,y,z } from './foo';  ",
+      options: [{ considerExports: true }],
+      errors: [
+        "'./foo' exported multiple times.",
+        "'./foo' exported multiple times.",
+        "'./foo' exported multiple times.",
+      ],
+    }),
+    test({
+      code: "export { x } from './foo'; import { a } from './foo'; export { y } from './foo'; import { b } from './foo'",
+      // the overlapping import fix is applied in a later pass
+      output: "export { x,y } from './foo'; import { a } from './foo';  import { b } from './foo'",
+      options: [{ considerExports: true }],
+      errors: [
+        "'./foo' exported multiple times.",
+        "'./foo' imported multiple times.",
+        "'./foo' exported multiple times.",
+        "'./foo' imported multiple times.",
+      ],
+    }),
+    test({
+      code: "export { x } from './bar'; export { y } from 'bar';",
+      output: "export { x,y } from './bar'; ",
+      options: [{ considerExports: true }],
+      settings: {
+        'import/resolve': {
+          paths: [path.join(process.cwd(), 'tests', 'files')],
+        },
+      },
+      errors: 2, // path ends up hardcoded
+    }),
+    test({
+      code: "export {} from './foo'; export { y } from './foo'",
+      output: "export {y} from './foo'; ",
+      options: [{ considerExports: true }],
+      errors: ["'./foo' exported multiple times.", "'./foo' exported multiple times."],
+    }),
+    // Autofix bail because of comments.
+    test(withoutAutofixOutput({
+      code: "export { x } from './foo'; // comment\nexport { y } from './foo'",
+      options: [{ considerExports: true }],
+      errors: ["'./foo' exported multiple times.", "'./foo' exported multiple times."],
+    })),
+
     test({
       code: "import { x } from './foo'; import { y } from './foo'",
       output: "import { x,y } from './foo'; ",
@@ -524,6 +599,12 @@ context('TypeScript', function () {
       };
 
       const valid = [
+        // #2958: type re-exports are kept apart from value re-exports
+        test({
+          code: "export type { x } from './foo'; export { y } from './foo'",
+          options: [{ considerExports: true }],
+          ...parserConfig,
+        }),
         // #1667: ignore duplicate if is a typescript type import
         test({
           code: "import type { x } from './foo'; import y from './foo'",
@@ -600,7 +681,16 @@ context('TypeScript', function () {
         }),
       ]);
 
-      const invalid = [].concat(parser === parsers.TS_NEW ? [
+      const invalid = [].concat([
+        // #2958
+        test({
+          code: "export type { x } from './foo'; export type { y } from './foo'",
+          output: "export type { x,y } from './foo'; ",
+          options: [{ considerExports: true }],
+          ...parserConfig,
+          errors: ["'./foo' exported multiple times.", "'./foo' exported multiple times."],
+        }),
+      ], parser === parsers.TS_NEW ? [
         test(withoutAutofixOutput({
           code: "import type * as React from './foo'; import type * as ReactDOM from './foo'",
           ...parserConfig,
