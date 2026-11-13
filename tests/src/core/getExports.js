@@ -469,6 +469,7 @@ describe('ExportMap', function () {
       ['./minified/one-line-no-semi-renamed.js', true],
       ['./minified/one-line-no-semi.js', true],
       ['./minified/one-line.js', true],
+      ['export-after-block-comment.js', true],
     ];
 
     for (const [testFile, expectedRegexResult] of testFiles) {
