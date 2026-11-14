@@ -37,9 +37,46 @@ const {
 
 // #3311: the linted file has to exist. The node resolver stops when a parent
 // directory is missing, and then this rule never reaches the glob check.
-const dotGlobFixture = fs.mkdtempSync(path.join(os.tmpdir(), 'eslint-plugin-import-3311-'));
-fs.mkdirSync(path.join(dotGlobFixture, '.worktrees/feature/libs/my-lib/src'), { recursive: true });
-fs.mkdirSync(path.join(dotGlobFixture, '.worktrees/feature/apps/my-app/src'), { recursive: true });
+// `fs.mkdirSync(path, { recursive: true })` is Node 10.12+, and
+// `fs.mkdtempSync` is Node 5.10 / 6.2. CI still runs Node 4, where the
+// latter throws, and Node 6, 7, 8, and 9, which ignore the options object
+// and then throw ENOENT on a nested path.
+function mkdirpSync(dir) {
+  if (fs.existsSync(dir)) {
+    return;
+  }
+  const parent = path.dirname(dir);
+  if (parent !== dir) {
+    mkdirpSync(parent);
+  }
+  try {
+    fs.mkdirSync(dir);
+  } catch (error) {
+    if (!error || error.code !== 'EEXIST') {
+      throw error;
+    }
+  }
+}
+function makeTempDir(prefix) {
+  const root = os.tmpdir();
+  let attempt = 0;
+  while (attempt < 16) {
+    attempt += 1;
+    const dir = path.join(root, prefix + Date.now().toString(36) + Math.random().toString(36).slice(2));
+    try {
+      fs.mkdirSync(dir);
+      return dir;
+    } catch (error) {
+      if (!error || error.code !== 'EEXIST') {
+        throw error;
+      }
+    }
+  }
+  throw new Error('Could not create the #3311 fixture directory');
+}
+const dotGlobFixture = makeTempDir('eslint-plugin-import-3311-');
+mkdirpSync(path.join(dotGlobFixture, '.worktrees/feature/libs/my-lib/src'));
+mkdirpSync(path.join(dotGlobFixture, '.worktrees/feature/apps/my-app/src'));
 fs.writeFileSync(path.join(dotGlobFixture, 'package.json'), `${JSON.stringify({
   devDependencies: { glob: '1.0.0', eslint: '1.0.0' },
   peerDependencies: { eslint: '1.0.0' },
