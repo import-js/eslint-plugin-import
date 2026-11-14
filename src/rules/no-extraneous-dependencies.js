@@ -264,8 +264,10 @@ function testConfig(config, filename) {
     return config;
   }
   // Array of globs.
-  return config.some((c) => minimatch(filename, c)
-    || minimatch(filename, path.join(process.cwd(), c)),
+  // `dot: true` lets `*` and `**` match a path segment whose name starts with `.`,
+  // such as a checkout under `.worktrees/`. minimatch skips those segments otherwise.
+  return config.some((c) => minimatch(filename, c, { dot: true })
+    || minimatch(filename, path.join(process.cwd(), c), { dot: true }),
   );
 }
 
