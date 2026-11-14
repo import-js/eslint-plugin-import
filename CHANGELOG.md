@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`no-extraneous-dependencies`]: match dependency globs through directories whose names start with a dot ([#3311], thanks [@Yurii201811])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1213,6 +1214,7 @@ for info on changes for earlier releases.
 
 [`memo-parser`]: ./memo-parser/README.md
 
+[#3311]: https://github.com/import-js/eslint-plugin-import/issues/3311
 [#3284]: https://github.com/import-js/eslint-plugin-import/pull/3284
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
@@ -2166,5 +2168,6 @@ for info on changes for earlier releases.
 [@yndajas]: https://github.com/yndajas
 [@yordis]: https://github.com/yordis
 [@yp]: https://github.com/yp
+[@Yurii201811]: https://github.com/Yurii201811
 [@Zamiell]: https://github.com/Zamiell
 [@zloirock]: https://github.com/zloirock
