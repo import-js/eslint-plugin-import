@@ -1,3 +1,4 @@
+import { getScope } from 'eslint-module-utils/contextCompat';
 import declaredScope from 'eslint-module-utils/declaredScope';
 import ExportMapBuilder from '../exportMap/builder';
 import ExportMap from '../exportMap';
@@ -105,8 +106,6 @@ module.exports = {
         }
       },
 
-      // todo: check for possible redefinition
-
       MemberExpression(dereference) {
         if (dereference.object.type !== 'Identifier') { return; }
         if (!namespaces.has(dereference.object.name)) { return; }
@@ -204,8 +203,27 @@ module.exports = {
         testKey(id, namespaces.get(init.name));
       },
 
-      JSXMemberExpression({ object, property }) {
+      JSXMemberExpression(node) {
+        const { object, property } = node;
         if (!namespaces.has(object.name)) { return; }
+
+        // Some parsers do not record JSX identifiers as references.
+        for (let scope = getScope(context, node); scope && scope.type !== 'module'; scope = scope.upper) {
+          const variable = scope.set.get(object.name);
+          if (!variable) { continue; }
+
+          // Parameter defaults cannot see declarations in the function body.
+          const functionBody = scope.type === 'function' && scope.block.type !== 'Program' && scope.block.body;
+          const inParameterDefault = functionBody && object.range[0] < functionBody.range[0];
+
+          // A type declaration does not shadow a value binding in JSX.
+          if (variable.defs.some((def) => def.isVariableDefinition !== false
+            && def.type !== 'TypeParameter'
+            && def.node.type !== 'TypeAlias'
+            && def.node.type !== 'InterfaceDeclaration'
+            && (!inParameterDefault || def.name.range[0] < functionBody.range[0]))) { return; }
+        }
+
         const namespace = namespaces.get(object.name);
         if (!namespace.has(property.name)) {
           context.report({

@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`namespace`]: respect local bindings in JSX member expressions ([#1167])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1675,6 +1676,7 @@ for info on changes for earlier releases.
 [#1256]: https://github.com/import-js/eslint-plugin-import/issues/1256
 [#1233]: https://github.com/import-js/eslint-plugin-import/issues/1233
 [#1175]: https://github.com/import-js/eslint-plugin-import/issues/1175
+[#1167]: https://github.com/import-js/eslint-plugin-import/issues/1167
 [#1166]: https://github.com/import-js/eslint-plugin-import/issues/1166
 [#1144]: https://github.com/import-js/eslint-plugin-import/issues/1144
 [#1058]: https://github.com/import-js/eslint-plugin-import/issues/1058
