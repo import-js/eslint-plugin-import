@@ -23,9 +23,7 @@ A module path that is [ignored] or not [unambiguously an ES module] will not be 
 
 ## Rule Details
 
-Currently, this rule does not check for possible
-redefinition of the namespace in an intermediate scope. Adherence to the ESLint
-`no-shadow` rule for namespaces will prevent this from being a problem.
+The rule skips member references when a local binding shadows the imported namespace.
 
 For [ES7], reports if an exported namespace would be empty (no names exported from the referenced module.)
 

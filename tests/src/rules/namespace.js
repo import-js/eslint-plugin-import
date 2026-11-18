@@ -141,6 +141,16 @@ const valid = [
       },
     },
   }),
+  // #1167: a parameter can shadow the import from an enclosing scope
+  test({
+    code: `
+      import * as Names from './export-star-2/upstream';
+      function render({ Names }) {
+        return () => <Names.e />;
+      }
+    `,
+    parserOptions: { ecmaFeatures: { jsx: true } },
+  }),
 
   // Typescript
   ...flatMap(getTSParsers(), (parser) => [].concat(
@@ -327,6 +337,30 @@ const invalid = [].concat(
       },
     },
   }),
+  // The declaration in the function body does not shadow the import in a parameter default.
+  test({
+    code: `
+      import * as Names from './export-star-2/upstream';
+      function render(view = <Names.e />) {
+        const Names = {};
+        return view;
+      }
+    `,
+    errors: [error('e', 'Names')],
+    parserOptions: { ecmaFeatures: { jsx: true } },
+  }),
+  testVersion('< 10', () => ({
+    code: `
+      import * as Names from './export-star-2/upstream';
+      function render() {
+        type Names = {};
+        return <Names.e />;
+      }
+    `,
+    errors: [error('e', 'Names')],
+    parser: parsers.BABEL_OLD,
+    parserOptions: { ecmaFeatures: { jsx: true } },
+  })),
 
   // es2022: Arbitrary module namespace identifier names
   testVersion('>= 8.7', () => ({
