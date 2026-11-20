@@ -70,6 +70,52 @@ const FIX_TESTS = semver.satisfies(eslintPkg.version, '>5.0.0') ? [
       message: ERROR_MESSAGE,
     }],
   }),
+  test({
+    code: `
+      import * as ns from './foo';
+      florp(ns.default, ns.a);
+      florp(ns.enum, ns['class'], ns.eval);
+    `.trim(),
+    output: `
+      import { default as ns_default, a, enum as ns_enum, class as ns_class, eval as ns_eval } from './foo';
+      florp(ns_default, a);
+      florp(ns_enum, ns_class, ns_eval);
+    `.trim(),
+    errors: [{
+      line: 1,
+      column: 8,
+      message: ERROR_MESSAGE,
+    }],
+  }),
+  test({
+    code: `
+      import * as ns from './foo';
+      const ns_default = 'name conflict';
+      florp(ns.default);
+    `.trim(),
+    output: `
+      import { default as ns_default_1 } from './foo';
+      const ns_default = 'name conflict';
+      florp(ns_default_1);
+    `.trim(),
+    errors: [{
+      line: 1,
+      column: 8,
+      message: ERROR_MESSAGE,
+    }],
+  }),
+  // a key that is not an identifier has no named import equivalent, so there is no fix
+  test(withoutAutofixOutput({
+    code: `
+      import * as ns from './foo';
+      florp(ns['my-key'], ns.a);
+    `.trim(),
+    errors: [{
+      line: 1,
+      column: 8,
+      message: ERROR_MESSAGE,
+    }],
+  })),
 ] : [];
 
 ruleTester.run('no-namespace', require('rules/no-namespace'), {
