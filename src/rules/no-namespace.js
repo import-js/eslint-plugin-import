@@ -18,6 +18,35 @@ function getMemberPropertyName(memberExpression) {
     : memberExpression.property.value;
 }
 
+const IDENTIFIER_NAME = /^[$A-Z_a-z][$\w]*$/;
+
+// Names that are valid as an imported name but not as a local binding in a
+// module, e.g. `import { default as x }` or `import { enum as x }`.
+const RESERVED_BINDING_NAMES = new Set([
+  'arguments', 'await', 'break', 'case', 'catch', 'class', 'const', 'continue',
+  'debugger', 'default', 'delete', 'do', 'else', 'enum', 'eval', 'export',
+  'extends', 'false', 'finally', 'for', 'function', 'if', 'implements', 'import',
+  'in', 'instanceof', 'interface', 'let', 'new', 'null', 'package', 'private',
+  'protected', 'public', 'return', 'static', 'super', 'switch', 'this', 'throw',
+  'true', 'try', 'typeof', 'var', 'void', 'while', 'with', 'yield',
+]);
+
+/**
+ * @param {string} name
+ * @returns {boolean} `true` if `name` can be written as an imported name without quotes
+ */
+function isIdentifierName(name) {
+  return typeof name === 'string' && IDENTIFIER_NAME.test(name);
+}
+
+/**
+ * @param {string} name
+ * @returns {boolean} `true` if `name` can also be used as the local binding
+ */
+function isBindableName(name) {
+  return isIdentifierName(name) && !RESERVED_BINDING_NAMES.has(name);
+}
+
 /**
  * @param {ScopeManager} scopeManager
  * @param {ASTNode} node
@@ -43,7 +72,7 @@ function generateLocalNames(names, nameConflicts, namespaceName) {
   const localNames = {};
   names.forEach((name) => {
     let localName;
-    if (!nameConflicts[name].has(name)) {
+    if (isBindableName(name) && !nameConflicts[name].has(name)) {
       localName = name;
     } else if (!nameConflicts[name].has(`${namespaceName}_${name}`)) {
       localName = `${namespaceName}_${name}`;
@@ -68,11 +97,13 @@ function usesNamespaceAsObject(namespaceIdentifiers) {
   return !namespaceIdentifiers.every((identifier) => {
     const parent = identifier.parent;
 
-    // `namespace.x` or `namespace['x']`
+    // `namespace.x` or `namespace['x']`, where `x` can be written as an
+    // imported name: `namespace['my-key']` has no named import equivalent
     return (
       parent
       && parent.type === 'MemberExpression'
       && (parent.property.type === 'Identifier' || parent.property.type === 'Literal')
+      && isIdentifierName(getMemberPropertyName(parent))
     );
   });
 }
