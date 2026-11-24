@@ -12,6 +12,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`consistent-type-specifier-style`]: add `prefer-top-level-if-only-type-imports` option ([#3210], thanks [@aldeed])
 - [`no-deprecated`]: detect `@deprecated` on decorated TypeScript exports ([#3094], thanks [@raisulchowdhury])
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
+- support wildcard patterns in the `import/core-modules` setting ([#3275], thanks [@andymai])
 
 ### Fixed
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
@@ -1217,6 +1218,7 @@ for info on changes for earlier releases.
 [#3283]: https://github.com/import-js/eslint-plugin-import/pull/3283
 [#3282]: https://github.com/import-js/eslint-plugin-import/pull/3282
 [#3276]: https://github.com/import-js/eslint-plugin-import/pull/3276
+[#3275]: https://github.com/import-js/eslint-plugin-import/pull/3275
 [#3262]: https://github.com/import-js/eslint-plugin-import/pull/3262
 [#3250]: https://github.com/import-js/eslint-plugin-import/pull/3250
 [#3230]: https://github.com/import-js/eslint-plugin-import/pull/3230
@@ -1865,6 +1867,7 @@ for info on changes for earlier releases.
 [@alexgorbatchev]: https://github.com/alexgorbatchev
 [@amsardesai]: https://github.com/amsardesai
 [@andreubotella]: https://github.com/andreubotella
+[@andymai]: https://github.com/andymai
 [@AndrewLeedham]: https://github.com/AndrewLeedham
 [@AndrewRayCode]: https://github.com/AndrewRayCode
 [@andyogo]: https://github.com/andyogo
