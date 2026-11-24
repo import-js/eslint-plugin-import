@@ -212,7 +212,7 @@ function getFix(first, rest, sourceCode, context) {
     /** @type {import('eslint').Rule.Fix[]} */
     const fixes = [];
 
-    if (shouldAddSpecifiers && preferInline && first.importKind === 'type') {
+    if ((shouldAddSpecifiers || shouldAddDefault) && preferInline && first.importKind === 'type') {
       // `import type {a} from './foo'` → `import {type a} from './foo'`
       const typeIdentifierToken = tokens.find((token) => token.type === 'Identifier' && token.value === 'type');
       fixes.push(fixer.removeRange([typeIdentifierToken.range[0], typeIdentifierToken.range[1] + 1]));
@@ -313,9 +313,42 @@ function getFix(first, rest, sourceCode, context) {
   };
 }
 
+/**
+ * Type imports are erased at compile time, so a side-effect import (`import 'foo'`) next to only
+ * type imports (`import type { a } from 'foo'`, `import { type a } from 'foo'`) is not redundant.
+ * Such side-effect imports are grouped apart from the type imports, so neither is merged into the other.
+ * @type {(imported: Map<string, import('estree').ImportDeclaration[]>) => [string, import('estree').ImportDeclaration[]][]}
+ */
+function splitSideEffectImports(imported) {
+  /** @type {[string, import('estree').ImportDeclaration[]][]} */
+  const groups = [];
+  for (const [module, nodes] of imported.entries()) {
+    const sideEffects = [];
+    const others = [];
+    let hasValue = false;
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      if (node.importKind !== 'type' && node.specifiers.length === 0) {
+        sideEffects.push(node);
+      } else {
+        others.push(node);
+        if (node.importKind !== 'type' && node.specifiers.some((specifier) => specifier.importKind !== 'type')) {
+          hasValue = true;
+        }
+      }
+    }
+    if (hasValue || sideEffects.length === 0) {
+      groups.push([module, nodes]);
+    } else {
+      groups.push([module, sideEffects], [module, others]);
+    }
+  }
+  return groups;
+}
+
 /** @type {(imported: Map<string, import('estree').ImportDeclaration[]>, context: import('eslint').Rule.RuleContext) => void} */
 function checkImports(imported, context) {
-  for (const [module, nodes] of imported.entries()) {
+  for (const [module, nodes] of splitSideEffectImports(imported)) {
     if (nodes.length > 1) {
       const message = `'${module}' imported multiple times.`;
       const [first, ...rest] = nodes;

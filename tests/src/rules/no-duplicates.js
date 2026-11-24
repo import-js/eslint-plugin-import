@@ -587,6 +587,22 @@ context('TypeScript', function () {
           code: "import { type x } from './foo'; import type y from 'foo'",
           ...parserConfig,
         }),
+        // #3130: type imports are erased, so a side-effect import next to only type imports is not redundant.
+        test({
+          code: "import type { A } from 'a'; import 'a'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
+        test({
+          code: "import 'a'; import type { A } from 'a'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
+        test({
+          code: "import { type A } from 'a'; import 'a'",
+          options: [{ 'prefer-inline': true }],
+          ...parserConfig,
+        }),
         // #3195: default type imports cannot be merged with inline named type imports.
         test({
           code: "import type React from 'react'; import { type ReactElement } from 'react'",
@@ -828,6 +844,81 @@ context('TypeScript', function () {
             {
               line: 1,
               column: 59,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
+        // #3130: a type import merged with a default import is inlined.
+        test({
+          code: "import type { A } from './foo'; import B from './foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import B, { type A } from './foo'; `,
+          errors: [
+            {
+              line: 1,
+              column: 24,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 47,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
+        test({
+          code: "import B from './foo'; import type { A } from './foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import B, {type A} from './foo'; `,
+          errors: [
+            {
+              line: 1,
+              column: 15,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 47,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
+        // #3130: type imports are still merged with each other, and the side-effect import is kept.
+        test({
+          code: "import type { A } from './foo'; import type { C } from './foo'; import './foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import { type A,type C } from './foo';  import './foo'`,
+          errors: [
+            {
+              line: 1,
+              column: 24,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 56,
+              message: "'./foo' imported multiple times.",
+            },
+          ],
+        }),
+        // #3130: side-effect imports are still merged with each other, and the type import is kept.
+        test({
+          code: "import './foo'; import './foo'; import type { A } from './foo'",
+          ...parserConfig,
+          options: [{ 'prefer-inline': true }],
+          output: `import './foo';  import type { A } from './foo'`,
+          errors: [
+            {
+              line: 1,
+              column: 8,
+              message: "'./foo' imported multiple times.",
+            },
+            {
+              line: 1,
+              column: 24,
               message: "'./foo' imported multiple times.",
             },
           ],
