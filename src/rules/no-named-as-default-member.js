@@ -51,9 +51,11 @@ module.exports = {
       },
 
       MemberExpression(node) {
-        const objectName = node.object.name;
-        const propName = node.property.name;
-        storePropertyLookup(objectName, propName, node);
+        if (node.computed || node.object.type !== 'Identifier' || node.property.type !== 'Identifier') {
+          return;
+        }
+
+        storePropertyLookup(node.object.name, node.property.name, node);
       },
 
       VariableDeclarator(node) {
@@ -63,8 +65,8 @@ module.exports = {
         if (!isDestructure) { return; }
 
         const objectName = node.init.name;
-        for (const { key } of node.id.properties) {
-          if (key == null) { continue; }  // true for rest properties
+        for (const { key, computed } of node.id.properties) {
+          if (key == null || computed || key.type !== 'Identifier') { continue; }
           storePropertyLookup(objectName, key.name, key);
         }
       },
