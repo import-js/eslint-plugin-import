@@ -14,7 +14,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - export a top-level `meta` object, matching the declared types, and strengthen the type tests ([#3169], thanks [@ljharb])
 
 ### Fixed
-- [`no-duplicates`]: avoid false positives for type imports that cannot be merged with side-effect or default-only imports ([#3194], thanks [@todor-a])
+- [`no-duplicates`]: with `prefer-inline`, keep side-effect imports next to type-only imports, and inline the type when merging a type import with a default import ([#3194], thanks [@todor-a])
 - [`no-duplicates`]: fix `prefer-inline` autofix producing invalid syntax when an identifier named `from` is imported ([#3236], thanks [@DukeDeSouth] [@Quantaly])
 - [`no-duplicates`]: avoid false positives for TypeScript namespace and default type imports that cannot be merged ([#3195], thanks [@sjh9714] [@robyoder])
 - ExportMap: resolve export * as ns re-exports under modern parsers ([#3250], thanks [@rasmi] [@JounQin] [@butterybread])
