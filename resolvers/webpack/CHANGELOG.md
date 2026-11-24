@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 This change log adheres to standards from [Keep a CHANGELOG](https://keepachangelog.com).
 
 ## Unreleased
+- [fix] use the module system to resolve conditional package exports with Webpack 5 ([#3319](https://github.com/import-js/eslint-plugin-import/pull/3319))
 - [tests] replace gist dep with local file dep
 - [deps] update `hasown`
 
