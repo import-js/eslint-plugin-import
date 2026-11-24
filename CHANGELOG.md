@@ -28,6 +28,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [`no-unresolved`], [`no-useless-path-segments`]: handle template literal requires ([#3276], thanks [@pratyushsinghal7])
 - [types] remove `stage-0` from the `flatConfigs` types, since it does not exist at runtime, and add type tests for the plugin's exports ([#3169], thanks [@KAMRONBEK])
 - [`newline-after-import`]: skip comment checks between imports ([#3282], thanks [@raisulchowdhury])
+- [`no-named-as-default-member`]: ignore computed property access and destructuring ([#1952], thanks [@CHX606])
 
 ### Changed
 - [Refactor] [`order`]: extract the ESLint 10 token/comment compatibility shims into a reusable `getTokenOrComment` util ([#3230], thanks [@captaindonald])
@@ -1396,6 +1397,7 @@ for info on changes for earlier releases.
 [#1983]: https://github.com/import-js/eslint-plugin-import/pull/1983
 [#1974]: https://github.com/import-js/eslint-plugin-import/pull/1974
 [#1958]: https://github.com/import-js/eslint-plugin-import/pull/1958
+[#1952]: https://github.com/import-js/eslint-plugin-import/issues/1952
 [#1948]: https://github.com/import-js/eslint-plugin-import/pull/1948
 [#1947]: https://github.com/import-js/eslint-plugin-import/pull/1947
 [#1944]: https://github.com/import-js/eslint-plugin-import/pull/1944
@@ -1905,6 +1907,7 @@ for info on changes for earlier releases.
 [@chrislloyd]: https://github.com/chrislloyd
 [@christianvuerings]: https://github.com/christianvuerings
 [@christophercurrie]: https://github.com/christophercurrie
+[@CHX606]: https://github.com/CHX606
 [@cristobal]: https://github.com/cristobal
 [@DamienCassou]: https://github.com/DamienCassou
 [@danielkcz]: https://github.com/danielkcz
