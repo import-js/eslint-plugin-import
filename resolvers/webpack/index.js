@@ -252,7 +252,7 @@ function createWebpack1ResolveSync(webpackRequire, resolveConfig, plugins) {
   };
 }
 
-function createResolveSync(configPath, webpackConfig, cwd) {
+function createResolveSync(configPath, webpackConfig, cwd, moduleSystem) {
   let webpackRequire;
   let basedir = null;
 
@@ -282,8 +282,13 @@ function createResolveSync(configPath, webpackConfig, cwd) {
   log('enhanced-resolve version:', enhancedResolveVersion);
 
   const resolveConfig = webpackConfig.resolve || {};
+  const enhancedResolveMajor = semver.major(enhancedResolveVersion);
 
-  if (semver.major(enhancedResolveVersion) >= 2) {
+  if (enhancedResolveMajor >= 5 && moduleSystem && resolveConfig.conditionNames === undefined) {
+    return createWebpack2ResolveSync(webpackRequire, assign({}, resolveConfig, { conditionNames: [moduleSystem] }));
+  }
+
+  if (enhancedResolveMajor >= 2) {
     return createWebpack2ResolveSync(webpackRequire, resolveConfig);
   }
 
@@ -292,8 +297,8 @@ function createResolveSync(configPath, webpackConfig, cwd) {
 
 const MAX_CACHE = 10;
 const _cache = [];
-function getResolveSync(configPath, webpackConfig, cwd) {
-  const cacheKey = { configPath, webpackConfig };
+function getResolveSync(configPath, webpackConfig, cwd, moduleSystem) {
+  const cacheKey = { configPath, webpackConfig, moduleSystem };
   for (let i = 0; i < _cache.length; i++) {
     if (isEqual(_cache[i].key, cacheKey)) {
       return _cache[i].value;
@@ -302,7 +307,7 @@ function getResolveSync(configPath, webpackConfig, cwd) {
 
   const cached = {
     key: cacheKey,
-    value: createResolveSync(configPath, webpackConfig, cwd),
+    value: createResolveSync(configPath, webpackConfig, cwd, moduleSystem),
   };
   // put in front and pop last item
   if (_cache.unshift(cached) > MAX_CACHE) {
@@ -455,7 +460,7 @@ exports.resolve = function (source, file, settings) {
 
   log('Using config: ', webpackConfig);
 
-  const resolveSync = getResolveSync(configPath, webpackConfig, cwd);
+  const resolveSync = getResolveSync(configPath, webpackConfig, cwd, settings && settings.moduleSystem);
 
   // externals
   if (findExternal(source, webpackConfig.externals, path.dirname(file), resolveSync)) {

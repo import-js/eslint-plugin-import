@@ -9,6 +9,42 @@ const resolve = require('../index').resolve;
 const file = path.join(__dirname, 'files', 'src', 'jsx', 'dummy.js');
 
 describe('cache', function () {
+  it('keeps Webpack 5 import and require conditions separate', function () {
+    const enhancedResolve = require('enhanced-resolve');
+    const metadata = require('enhanced-resolve/package.json');
+    const originalVersion = metadata.version;
+    const originalCreate = Object.getOwnPropertyDescriptor(enhancedResolve, 'create');
+
+    // The default test dependency targets Webpack 1.
+    metadata.version = '5.0.0';
+    Object.defineProperty(enhancedResolve, 'create', {
+      configurable: true,
+      value: {
+        sync(options) {
+          return function () {
+            return (options.conditionNames || []).join(',') || 'default';
+          };
+        },
+      },
+    });
+
+    try {
+      const config = { resolve: { conditionNames: undefined } };
+      const explicit = { resolve: { conditionNames: ['webpack'] } };
+      expect(resolve('entry', file, { config }).path).to.equal('default');
+      expect(resolve('entry', file, { config, moduleSystem: 'import' }).path).to.equal('import');
+      expect(resolve('entry', file, { config, moduleSystem: 'require' }).path).to.equal('require');
+      expect(resolve('entry', file, { config: explicit, moduleSystem: 'import' }).path).to.equal('webpack');
+    } finally {
+      metadata.version = originalVersion;
+      if (originalCreate) {
+        Object.defineProperty(enhancedResolve, 'create', originalCreate);
+      } else {
+        delete enhancedResolve.create;
+      }
+    }
+  });
+
   it('can distinguish different config files', function () {
     const setting1 = {
       config: require(path.join(__dirname, './files/webpack.function.config.js')),

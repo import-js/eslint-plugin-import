@@ -105,6 +105,12 @@ settings:
       cache: true
 ```
 
+## Conditional package exports
+
+With Webpack 5, the resolver uses the `import` or `require` condition when ESLint supplies the module system and `resolve.conditionNames` is unset.
+For additional conditions, set `resolve.conditionNames` in the config object passed to the ESLint resolver.
+For example, an ESM project with a custom condition can use `['import', 'my-condition']`.
+
 ## Support
 
 [Get supported eslint-import-resolver-webpack with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-eslint-import-resolver-webpack?utm_source=npm-eslint-import-resolver-webpack&utm_medium=referral&utm_campaign=readme)
