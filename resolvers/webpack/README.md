@@ -105,6 +105,14 @@ settings:
       cache: true
 ```
 
+## Conditional package exports
+
+Webpack 5 can resolve an `import`-only package export even when `import/no-unresolved` reports it as missing.
+The resolver passes the configured conditions to enhanced-resolve without computing Webpack's defaults.
+
+For an ESM project, set `resolve.conditionNames` to `['import']` in the config object passed to the ESLint resolver.
+Include any additional conditions needed by your project.
+
 ## Support
 
 [Get supported eslint-import-resolver-webpack with the Tidelift Subscription](https://tidelift.com/subscription/pkg/npm-eslint-import-resolver-webpack?utm_source=npm-eslint-import-resolver-webpack&utm_medium=referral&utm_campaign=readme)
