@@ -37,7 +37,7 @@ This change log adheres to standards from [Keep a CHANGELOG](https://keepachange
 - [actions] update `codecov/codecov-action` to v7, for reliable tokenless coverage uploads from fork PRs ([#3262], thanks [@captaindonald])
 - [Docs] clarify flat config file scoping ([#3283], thanks [@raisulchowdhury])
 - [Docs] show bare plugin flat config usage ([#3284], thanks [@raisulchowdhury])
-- [Docs] document explicit Webpack resolver conditions for conditional package exports ([#3318](https://github.com/import-js/eslint-plugin-import/issues/3318), thanks [@hassan-baig](https://github.com/hassan-baig))
+- [Docs] document explicit Webpack resolver conditions for conditional package exports ([#3319](https://github.com/import-js/eslint-plugin-import/pull/3319), thanks [@hassan-baig](https://github.com/hassan-baig))
 
 ## [2.32.0] - 2025-06-20
 
